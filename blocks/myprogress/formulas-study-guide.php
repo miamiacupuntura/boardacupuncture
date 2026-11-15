@@ -2200,6 +2200,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     var sectionSelect = reader.querySelector('[data-formula-read-section-select]');
     var voiceSelect = reader.querySelector('[data-formula-read-voice]');
     var englishVoiceSelect = reader.querySelector('[data-formula-read-english-voice]');
+    var explanationModeSelect = reader.querySelector('[data-formula-read-mode]');
     var fullButton = reader.querySelector('[data-formula-read-full]');
     var sectionButton = reader.querySelector('[data-formula-read-section]');
     var selectionButton = reader.querySelector('[data-formula-read-selection]');
@@ -2219,6 +2220,16 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     var selectedVoice = null;
     var selectedEnglishVoice = null;
     var cachedSelection = '';
+
+    if (explanationModeSelect) {
+        try {
+            explanationModeSelect.value = window.localStorage.getItem('acupuncturetests-formula-reader-mode') === 'extended'
+                ? 'extended'
+                : 'summary';
+        } catch (error) {
+            explanationModeSelect.value = 'summary';
+        }
+    }
 
     function setStatus(message) {
         status.textContent = message;
@@ -2475,6 +2486,99 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         });
         addSentenceBoundaries(clone);
         return (clone.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function formulaSummaryField(element, labelPattern) {
+        if (!element) return '';
+        var clone = element.cloneNode(true);
+        installEnglishFormulaNarrations(clone);
+        clone.querySelectorAll('[data-read-aloud-ignore],[aria-hidden="true"]').forEach(function(node) {
+            node.remove();
+        });
+        return (clone.textContent || '')
+            .replace(labelPattern || /^$/, '')
+            .replace(/[*＊]+/g, '')
+            .replace(/\s+/g, ' ')
+            .replace(/[.;:,\s]+$/, '')
+            .trim();
+    }
+
+    function guidelineFormulaSummary(root) {
+        if (!root) return '';
+        var allCards = Array.from(page.querySelectorAll('[data-formula-summary-card]'));
+        if (!allCards.length) return '';
+        var categoryNode = root.matches && root.matches('[data-formula-summary-category]')
+            ? root
+            : (root.closest ? root.closest('[data-formula-summary-category]') : null);
+        if (!categoryNode && root !== page && root.querySelector) {
+            categoryNode = root.querySelector('[data-formula-summary-category]');
+        }
+        var categoryKey = categoryNode ? (categoryNode.getAttribute('data-formula-summary-category') || '') : '';
+        var categoryName = categoryNode ? (categoryNode.getAttribute('data-formula-summary-category-name') || '') : '';
+        var officialCards = allCards.filter(function(card) {
+            return card.getAttribute('data-guideline-formula') === '1'
+                && (!categoryKey || card.getAttribute('data-formula-summary-category') === categoryKey);
+        });
+        if (!categoryKey && root !== page) {
+            var cardsInsideRoot = officialCards.filter(function(card) { return root.contains(card); });
+            if (cardsInsideRoot.length) officialCards = cardsInsideRoot;
+        }
+        if (categoryKey && !officialCards.length) {
+            return isSpanish
+                ? 'Resumen de diferencias decisivas de la categoría ' + categoryName
+                    + '. Esta categoría no contiene fórmulas incluidas en el guideline vigente.'
+                : 'Summary of decisive differences for the category ' + categoryName
+                    + '. This category has no formulas included in the current guideline.';
+        }
+        if (!officialCards.length) return '';
+        var groups = [];
+        officialCards.forEach(function(card) {
+            var key = card.getAttribute('data-formula-summary-category') || 'category';
+            var group = groups.find(function(item) { return item.key === key; });
+            if (!group) {
+                group = {
+                    key: key,
+                    name: card.getAttribute('data-formula-summary-category-name') || categoryName,
+                    cards: []
+                };
+                groups.push(group);
+            }
+            group.cards.push(card);
+        });
+        var narration = [];
+        groups.forEach(function(group) {
+            narration.push(isSpanish
+                ? 'Resumen de diferencias decisivas de la categoría ' + group.name
+                    + '. Se mencionan solamente las fórmulas incluidas en el guideline vigente.'
+                : 'Summary of decisive differences for the category ' + group.name
+                    + '. Only formulas included in the current guideline are mentioned.');
+            group.cards.forEach(function(card) {
+                var name = card.getAttribute('data-formula-name') || '';
+                var englishName = card.getAttribute('data-formula-english-name') || '';
+                var pattern = formulaSummaryField(
+                    card.querySelector('.formula-study-guide__formula-pattern'),
+                    /^\s*(?:Patrón|Pattern)\s*:\s*/i
+                );
+                var facts = card.querySelectorAll('.formula-study-guide__fact');
+                var action = formulaSummaryField(facts[0] ? facts[0].querySelector('span') : null);
+                var clue = formulaSummaryField(facts[1] ? facts[1].querySelector('span') : null);
+                var spokenName = name + (isSpanish && englishName ? ' ([[en:' + englishName + ']])' : (englishName ? ' (' + englishName + ')' : ''));
+                narration.push(isSpanish
+                    ? 'La fórmula ' + spokenName + ' trata ' + pattern + '. Su acción principal es ' + action
+                        + '. Se distingue por ' + clue + '.'
+                    : 'The formula ' + spokenName + ' treats ' + pattern + '. Its main action is ' + action
+                        + '. Its decisive features are ' + clue + '.');
+            });
+        });
+        return narration.join(' ');
+    }
+
+    function readerText(root) {
+        if (explanationModeSelect && explanationModeSelect.value === 'summary') {
+            var summary = guidelineFormulaSummary(root);
+            if (summary) return summary;
+        }
+        return extractText(root);
     }
 
     function pronounceQiForSpeech(value) {
@@ -2965,19 +3069,24 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             }
         } catch (error) {}
     });
+    if (explanationModeSelect) explanationModeSelect.addEventListener('change', function() {
+        try {
+            window.localStorage.setItem('acupuncturetests-formula-reader-mode', explanationModeSelect.value);
+        } catch (error) {}
+    });
     sectionSelect.addEventListener('change', function() {
         var section = sections[Number(sectionSelect.value || 0)];
         if (!section) return;
         revealSelectedSection(section);
     });
     fullButton.addEventListener('click', function() {
-        startReading(extractText(page), isSpanish ? 'página completa' : 'full page');
+        startReading(readerText(page), isSpanish ? 'página completa' : 'full page');
     });
     sectionButton.addEventListener('click', function() {
         var section = sections[Number(sectionSelect.value || 0)];
         if (!section) return;
         revealSelectedSection(section);
-        startReading(extractText(section.root), section.label);
+        startReading(readerText(section.root), section.label);
     });
     selectionButton.addEventListener('click', function() {
         startReading(selectedText(), isSpanish ? 'texto seleccionado' : 'selected text');
@@ -3029,7 +3138,7 @@ echo $OUTPUT->header();
 .formula-study-guide__study-route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 18px;padding:11px 14px;border:1px solid #d9e2e7;border-radius:9px;background:#fff;color:#64748b;font-size:12px;font-weight:750}.formula-study-guide__study-route a{color:#315fa5;text-decoration:none}.formula-study-guide__study-route a:hover{text-decoration:underline}.formula-study-guide__study-route-current{color:#17232a}
 .formula-study-reader{position:sticky;top:70px;z-index:1020;margin:0 0 18px;border:1px solid #9ed3ce;border-left:5px solid #0b8f87;border-radius:12px;background:#f4fbfa;box-shadow:0 4px 14px rgba(15,23,42,.08)}
 .formula-study-reader[hidden]{display:none}.formula-study-reader__disclosure>summary{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 15px;cursor:pointer;list-style:none}.formula-study-reader__disclosure>summary::-webkit-details-marker{display:none}.formula-study-reader__disclosure>summary:after{display:flex;width:28px;height:28px;flex:0 0 28px;align-items:center;justify-content:center;border:1px solid #85c8c1;border-radius:50%;background:#fff;color:#08746f;content:'+';font-size:20px;font-weight:800}.formula-study-reader__disclosure[open]>summary:after{content:'−'}
-.formula-study-reader__title{display:block;color:#163247;font-size:19px;font-weight:900}.formula-study-reader__description{display:block;margin-top:2px;color:#607487;font-size:12px;font-weight:500}.formula-study-reader__panel{padding:0 15px 13px}.formula-study-reader__fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px}.formula-study-reader__fields--bilingual{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)}.formula-study-reader label>span{display:block;margin:0 0 4px;color:#26445a;font-size:12px;font-weight:800}.formula-study-reader select{width:100%;min-height:40px;padding:7px 32px 7px 10px;border:1px solid #a9c7d2;border-radius:8px;background:#fff;color:#243b53;font-size:13px}
+.formula-study-reader__title{display:block;color:#163247;font-size:19px;font-weight:900}.formula-study-reader__description{display:block;margin-top:2px;color:#607487;font-size:12px;font-weight:500}.formula-study-reader__panel{padding:0 15px 13px}.formula-study-reader__fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px}.formula-study-reader__fields--bilingual{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)}.formula-study-reader__mode{grid-column:1/-1}.formula-study-reader__mode small{display:block;margin-top:4px;color:#52677a;font-size:11px;line-height:1.35}.formula-study-reader label>span{display:block;margin:0 0 4px;color:#26445a;font-size:12px;font-weight:800}.formula-study-reader select{width:100%;min-height:40px;padding:7px 32px 7px 10px;border:1px solid #a9c7d2;border-radius:8px;background:#fff;color:#243b53;font-size:13px}
 .formula-study-reader__actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:9px}.formula-study-reader button{min-height:40px;padding:7px 9px;border:1px solid #0b8f87;border-radius:8px;background:#fff;color:#08746f;font-size:13px;font-weight:850;line-height:1.2}.formula-study-reader button:hover:not(:disabled){background:#e7f7f3}.formula-study-reader__actions button:first-child,.formula-study-reader__actions button:nth-child(2){background:#0b8f87;color:#fff}.formula-study-reader__actions button:first-child:hover:not(:disabled),.formula-study-reader__actions button:nth-child(2):hover:not(:disabled){border-color:#076d68;background:#076d68;color:#fff}.formula-study-reader button:disabled{cursor:not-allowed;opacity:.48}
 .formula-study-reader__progress{display:grid;grid-template-columns:auto minmax(160px,1fr) auto;gap:10px;align-items:end;margin-top:10px}.formula-study-reader__progress button{min-width:104px}.formula-study-reader__range-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.formula-study-reader__range input{width:100%;margin:4px 0 0;accent-color:#0b8f87}.formula-study-reader__status{margin:8px 0 0;color:#607487;font-size:12px;font-weight:700}
 .formula-study-guide__chapter-path{display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,1.15fr) minmax(0,1fr);gap:12px;align-items:stretch;margin:0 0 20px;padding:13px;border:1px solid #d5e0e5;border-radius:12px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
@@ -3152,6 +3261,16 @@ echo $OUTPUT->header();
                         <select data-formula-read-english-voice aria-label="Voz para los nombres de fórmulas en inglés"></select>
                     </label>
                     <?php endif; ?>
+                    <label class="formula-study-reader__mode">
+                        <span><?php echo s($ises ? 'Explicación de tablas, recuadros y fórmulas' : 'Tables, cards, and formulas explanation'); ?></span>
+                        <select data-formula-read-mode aria-label="<?php echo s($ises ? 'Nivel de detalle de la explicación' : 'Explanation detail level'); ?>">
+                            <option value="summary"><?php echo s($ises ? 'Resumida · diferencias decisivas' : 'Summary · decisive differences'); ?></option>
+                            <option value="extended"><?php echo s($ises ? 'Extendida · razonamiento completo' : 'Extended · full reasoning'); ?></option>
+                        </select>
+                        <small><?php echo s($ises
+                            ? 'El resumen incluye solamente las fórmulas marcadas con asterisco porque pertenecen al guideline vigente.'
+                            : 'The summary includes only formulas marked with an asterisk because they belong to the current guideline.'); ?></small>
+                    </label>
                 </div>
                 <div class="formula-study-reader__actions">
                     <button type="button" data-formula-read-full><?php echo s($ises ? '▶ Página completa' : '▶ Full Page'); ?></button>
@@ -4305,6 +4424,13 @@ echo $OUTPUT->header();
                 if ($formulaenglishname === '') {
                     $formulaenglishname = $getformulaenglishname($formula['name']);
                 }
+                $iscurrentguidelineformula = $isofficialformula($formula['name']);
+                $summarycategorykey = (string) ($formulacategory['key'] ?? ($clinicalsection['key'] ?? $selected['key']));
+                $summarycategoryname = $formulacategory !== null
+                    ? (string) ($ises ? $formulacategory['nameEs'] : $formulacategory['name'])
+                    : ($clinicalsection !== null
+                        ? (string) ($ises ? $clinicalsection['nameEs'] : $clinicalsection['name'])
+                        : (string) ($ises ? $selected['nameEs'] : $selected['name']));
                 $formulaid = preg_replace('/[^a-zA-Z0-9_-]/', '-', (string) $formula['number']);
                 $practiceurl = null;
                 if (!$issupplemental && !$isintegratedofficialprofile) {
@@ -4331,7 +4457,7 @@ echo $OUTPUT->header();
                 }
                 ?>
                 <?php if ($newchaptersection && $formulacategory !== null): ?>
-                    <section class="formula-study-guide__chapter-section" id="chapter-section-<?php echo s($formulacategory['key']); ?>">
+                    <section class="formula-study-guide__chapter-section" id="chapter-section-<?php echo s($formulacategory['key']); ?>" data-formula-summary-category="<?php echo s($summarycategorykey); ?>" data-formula-summary-category-name="<?php echo s($summarycategoryname); ?>">
                         <p class="formula-study-guide__eyebrow"><?php echo s($ises
                             ? 'Sección del capítulo ' . $selected['sourceChapter']
                             : 'Chapter ' . $selected['sourceChapter'] . ' section'); ?></p>
@@ -4386,7 +4512,7 @@ echo $OUTPUT->header();
                     <?php endif; ?>
                 <?php endif; ?>
                 <?php if ($newclinicalsection): ?>
-                    <section class="formula-study-guide__chapter-section" id="clinical-section-<?php echo s($clinicalsection['key']); ?>">
+                    <section class="formula-study-guide__chapter-section" id="clinical-section-<?php echo s($clinicalsection['key']); ?>" data-formula-summary-category="<?php echo s($summarycategorykey); ?>" data-formula-summary-category-name="<?php echo s($summarycategoryname); ?>">
                         <p class="formula-study-guide__eyebrow"><?php echo s($issupplemental
                             ? ($ises ? 'Sección clínica del capítulo' : 'Chapter clinical section')
                             : ($ises ? 'Sección clínica del guideline' : 'Guideline clinical section')); ?></p>
@@ -4394,7 +4520,7 @@ echo $OUTPUT->header();
                         <p><?php echo s($ises ? $clinicalsection['copyEs'] : $clinicalsection['copy']); ?></p>
                     </section>
                 <?php endif; ?>
-                <article class="formula-study-guide__formula" id="formula-<?php echo s($formulaid); ?>">
+                <article class="formula-study-guide__formula" id="formula-<?php echo s($formulaid); ?>" data-formula-summary-card data-guideline-formula="<?php echo $iscurrentguidelineformula ? '1' : '0'; ?>" data-formula-name="<?php echo s($formula['name']); ?>" data-formula-english-name="<?php echo s($formulaenglishname); ?>" data-formula-summary-category="<?php echo s($summarycategorykey); ?>" data-formula-summary-category-name="<?php echo s($summarycategoryname); ?>">
                     <header class="formula-study-guide__formula-heading">
                         <div>
                             <span class="formula-study-guide__formula-label"><?php echo s($formulalabel . ' —'); ?></span>
