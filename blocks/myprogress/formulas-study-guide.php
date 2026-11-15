@@ -59,6 +59,32 @@ if (!is_array($officialroster)
     throw new moodle_exception('The official 2026 NCBAHM Appendix C roster is temporarily unavailable.');
 }
 
+$duiyaosmartfile = __DIR__ . '/dui-yao-smart-data.json';
+$duiyaosmart = is_readable($duiyaosmartfile)
+    ? json_decode((string) file_get_contents($duiyaosmartfile), true)
+    : null;
+$herbpropertiesfile = __DIR__ . '/single-herb-properties.json';
+$herbproperties = is_readable($herbpropertiesfile)
+    ? json_decode((string) file_get_contents($herbpropertiesfile), true)
+    : null;
+if (!is_array($duiyaosmart)
+        || ($duiyaosmart['total'] ?? null) !== 51
+        || count($duiyaosmart['pairs'] ?? []) !== 51
+        || !is_array($herbproperties)
+        || ($herbproperties['total'] ?? null) !== 304
+        || count($herbproperties['herbs'] ?? []) !== 304) {
+    throw new moodle_exception('The Duì Yào pharmaceutical-name data is temporarily unavailable.');
+}
+$duiyaosmartbyslug = [];
+foreach ($duiyaosmart['pairs'] as $duiyaosmartpair) {
+    $duiyaosmartbyslug[$duiyaosmartpair['slug']] = $duiyaosmartpair;
+}
+$herblatinbyname = [];
+foreach ($herbproperties['herbs'] as $herbproperty) {
+    $herblatinbyname[$herbproperty['name']] = $herbproperty['latin'];
+}
+$herblatinbyname['Xin Yi Hua'] = $herblatinbyname['Xin Yi'] ?? 'Magnoliae Flos';
+
 $categorycopy = [
     'release-exterior' => [
         'Release external pathogens and distinguish Wind-Cold from Wind-Heat presentations.',
@@ -1937,6 +1963,10 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             var title = titleElement ? (titleElement.textContent || '').trim() : '';
             var action = actionElement ? (actionElement.textContent || '').trim().replace(/[.]+$/, '') : '';
             var position = Math.max(1, Number(card.getAttribute('data-dui-yao-related-position') || 1));
+            var firstName = card.getAttribute('data-dui-yao-first-name') || '';
+            var firstLatin = card.getAttribute('data-dui-yao-first-latin') || '';
+            var secondName = card.getAttribute('data-dui-yao-second-name') || '';
+            var secondLatin = card.getAttribute('data-dui-yao-second-latin') || '';
             var formulas = (card.getAttribute('data-dui-yao-formulas') || '')
                 .split(/\s*;\s*/)
                 .map(function(name) { return name.trim().replace(/[.]+$/, ''); })
@@ -1946,9 +1976,20 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             var ordinal = isSpanish
                 ? (spanishOrdinals[position - 1] || String(position))
                 : (englishOrdinals[position - 1] || String(position));
-            var introduction = isSpanish
-                ? 'El ' + ordinal + ' Duì Yào relacionado combina ' + title + '.'
-                : 'The ' + ordinal + ' related Duì Yào combines ' + title + '.';
+            var introduction;
+            if (firstName && firstLatin && secondName && secondLatin) {
+                introduction = isSpanish
+                    ? 'El ' + ordinal + ' Duì Yào relacionado que analizaremos combina ' + firstName
+                        + ', cuyo nombre farmacéutico es ' + firstLatin + ', con ' + secondName
+                        + ', cuyo nombre farmacéutico es ' + secondLatin + '.'
+                    : 'The ' + ordinal + ' related Duì Yào we will analyze combines ' + firstName
+                        + ', whose pharmaceutical name is ' + firstLatin + ', with ' + secondName
+                        + ', whose pharmaceutical name is ' + secondLatin + '.';
+            } else {
+                introduction = isSpanish
+                    ? 'El ' + ordinal + ' Duì Yào relacionado que analizaremos combina ' + title + '.'
+                    : 'The ' + ordinal + ' related Duì Yào we will analyze combines ' + title + '.';
+            }
             var relation = '';
             if (formulas.length === 1) {
                 relation = (isSpanish
@@ -2326,7 +2367,7 @@ echo $OUTPUT->header();
 .formula-study-guide__chapter-section{margin:18px 0 0;padding:20px 22px;border-left:6px solid #0b817d;border-radius:11px;background:linear-gradient(135deg,#eaf8f5,#fff7ed)}.formula-study-guide__chapter-section .formula-study-guide__eyebrow{margin-bottom:5px}.formula-study-guide__chapter-section h4{margin:0 0 7px;font-size:25px}.formula-study-guide__chapter-section>p{margin:0;color:#496474;line-height:1.55}.formula-study-guide__chapter-section-meta{display:inline-block;margin-top:9px;padding:5px 9px;border-radius:999px;background:#fff;color:#52677a;font-size:12px;font-weight:800}
 .formula-study-guide__priority{margin:0 0 18px;padding:20px 22px;border:1px solid #b9dfd7;border-left:5px solid #0b817d;border-radius:11px;background:#eef9f6}.formula-study-guide__priority h4{margin:0 0 7px;font-size:20px}.formula-study-guide__priority h5{margin:17px 0 0;font-size:15px}.formula-study-guide__priority>p{margin:0;color:#496474;line-height:1.55}
 .formula-study-guide__route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:17px}.formula-study-guide__route-step{padding:13px;border-radius:9px;background:#fff}.formula-study-guide__route-step b{display:flex;align-items:center;gap:8px;color:#123246}.formula-study-guide__route-number{display:inline-flex;width:25px;height:25px;flex:0 0 25px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-size:12px}.formula-study-guide__route-step p{margin:7px 0 0;color:#52677a;font-size:13px;line-height:1.45}
-.formula-study-guide__dui-yao{margin:0 0 20px;padding:22px;border:1px solid #d8d4f0;border-top:5px solid #6d4bc3;border-radius:12px;background:linear-gradient(135deg,#faf8ff,#f3fbfa)}.formula-study-guide__dui-yao-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}.formula-study-guide__dui-yao-header h4{margin:2px 0 7px;font-size:22px}.formula-study-guide__dui-yao-header p{max-width:790px;margin:0;color:#52677a;line-height:1.55}.formula-study-guide__dui-yao-count{flex:0 0 auto;padding:6px 10px;border-radius:999px;background:#ece7fb;color:#5a37ac;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}.formula-study-guide__dui-yao-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.formula-study-guide__dui-yao-card{display:flex;min-height:212px;flex-direction:column;padding:14px;border:1px solid #e2def3;border-radius:10px;background:#fff;color:inherit;text-decoration:none}.formula-study-guide__dui-yao-card:hover{border-color:#8b6bd1;color:inherit;text-decoration:none;box-shadow:0 5px 14px rgba(71,50,122,.12)}.formula-study-guide__dui-yao-number{color:#6d4bc3;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}.formula-study-guide__dui-yao-card h5{margin:6px 0 2px;font-size:16px;line-height:1.3}.formula-study-guide__dui-yao-characters{color:#7a6b8d;font-size:13px}.formula-study-guide__dui-yao-card p{margin:10px 0;color:#52677a;font-size:13px;line-height:1.45}.formula-study-guide__dui-yao-card small{display:block;margin-top:auto;color:#394b5a;font-size:11px;line-height:1.4}.formula-study-guide__dui-yao-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:16px;padding-top:15px;border-top:1px solid #ded9ef}.formula-study-guide__dui-yao-footer p{margin:0;color:#5f5670;font-size:12px;line-height:1.5}
+.formula-study-guide__dui-yao{margin:0 0 20px;padding:22px;border:1px solid #d8d4f0;border-top:5px solid #6d4bc3;border-radius:12px;background:linear-gradient(135deg,#faf8ff,#f3fbfa)}.formula-study-guide__dui-yao-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}.formula-study-guide__dui-yao-header h4{margin:2px 0 7px;font-size:22px}.formula-study-guide__dui-yao-header p{max-width:790px;margin:0;color:#52677a;line-height:1.55}.formula-study-guide__dui-yao-header .formula-study-guide__dui-yao-study-intro{margin-top:9px;color:#304d60;font-weight:750}.formula-study-guide__dui-yao-count{flex:0 0 auto;padding:6px 10px;border-radius:999px;background:#ece7fb;color:#5a37ac;font-size:11px;font-weight:900;text-transform:uppercase;white-space:nowrap}.formula-study-guide__dui-yao-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.formula-study-guide__dui-yao-card{display:flex;min-height:212px;flex-direction:column;padding:14px;border:1px solid #e2def3;border-radius:10px;background:#fff;color:inherit;text-decoration:none}.formula-study-guide__dui-yao-card:hover{border-color:#8b6bd1;color:inherit;text-decoration:none;box-shadow:0 5px 14px rgba(71,50,122,.12)}.formula-study-guide__dui-yao-number{color:#6d4bc3;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}.formula-study-guide__dui-yao-card h5{margin:6px 0 2px;font-size:16px;line-height:1.3}.formula-study-guide__dui-yao-characters{color:#7a6b8d;font-size:13px}.formula-study-guide__dui-yao-card p{margin:10px 0;color:#52677a;font-size:13px;line-height:1.45}.formula-study-guide__dui-yao-card small{display:block;margin-top:auto;color:#394b5a;font-size:11px;line-height:1.4}.formula-study-guide__dui-yao-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:16px;padding-top:15px;border-top:1px solid #ded9ef}.formula-study-guide__dui-yao-footer p{margin:0;color:#5f5670;font-size:12px;line-height:1.5}
 .formula-study-guide__compare{margin:0 0 20px;border:1px solid #d8e1e7;border-radius:11px;background:#fff;overflow:hidden}.formula-study-guide__compare h4{margin:0;padding:16px 18px;background:#f5f8fa;font-size:18px}.formula-study-guide__table-wrap{overflow-x:auto}.formula-study-guide__table{width:100%;border-collapse:collapse}.formula-study-guide__table th,.formula-study-guide__table td{padding:11px 14px;border-top:1px solid #e2e8ec;text-align:left;vertical-align:top}.formula-study-guide__table th{color:#334155;font-size:12px;text-transform:uppercase}.formula-study-guide__table td{color:#52677a;line-height:1.4}.formula-study-guide__table td:first-child{color:#17232a;font-weight:800;white-space:nowrap}
 .formula-study-guide__domain-badge{display:inline-flex;align-items:center;margin:5px 0 0;padding:4px 7px;border-radius:999px;background:#e0edff;color:#134eaf;font-size:10px;font-weight:900;letter-spacing:.04em;text-decoration:none;text-transform:uppercase;white-space:nowrap}.formula-study-guide__domain-badge:hover{background:#c9ddff;color:#0b3b8c;text-decoration:none}
 .formula-study-guide__formula-translation{display:block;margin-top:5px;color:#315fa5;font-size:12px;font-weight:750;line-height:1.35}
@@ -2808,6 +2849,9 @@ echo $OUTPUT->header();
                             <p class="formula-study-guide__eyebrow" data-read-aloud-ignore><?php echo s($ises ? 'Appendix B · Parejas oficiales' : 'Appendix B · Official pairs'); ?></p>
                             <h4 id="related-dui-yao-title"><?php echo s($ises ? $selectedguide['relatedDuiYaoTitleEs'] : $selectedguide['relatedDuiYaoTitle']); ?></h4>
                             <p><?php echo s($ises ? $selectedguide['relatedDuiYaoTextEs'] : $selectedguide['relatedDuiYaoText']); ?></p>
+                            <p class="formula-study-guide__dui-yao-study-intro"><?php echo s($ises
+                                ? 'A continuación, comenzaremos a estudiar individualmente los Duì Yào relacionados con esta categoría.'
+                                : 'Next, we will begin studying the Duì Yào related to this category one at a time.'); ?></p>
                         </div>
                         <span class="formula-study-guide__dui-yao-count" data-read-aloud-ignore><?php echo s(count($selectedguide['relatedDuiYao']) . ($ises ? ' parejas relacionadas' : ' related pairs')); ?></span>
                     </header>
@@ -2816,8 +2860,15 @@ echo $OUTPUT->header();
                             <?php
                             $duiyaopath = '/study-guide/comparisons/' . $duiyaopair['slug'] . ($ises ? '-es' : '') . '.html';
                             $duiyaourl = new moodle_url($duiyaopath, $duiyaoreturnparams);
+                            $duiyaosmartpair = $duiyaosmartbyslug[$duiyaopair['slug']] ?? null;
+                            $duiyaopinyinherbs = preg_split('/\s*\+\s*/u', $duiyaopair['title']) ?: [];
+                            $duiyaoplainherbs = is_array($duiyaosmartpair['herbs'] ?? null) ? $duiyaosmartpair['herbs'] : [];
+                            $duiyaofirstname = trim((string) ($duiyaopinyinherbs[0] ?? ''));
+                            $duiyaosecondname = trim((string) ($duiyaopinyinherbs[1] ?? ''));
+                            $duiyaofirstlatin = (string) ($herblatinbyname[$duiyaoplainherbs[0] ?? ''] ?? '');
+                            $duiyaosecondlatin = (string) ($herblatinbyname[$duiyaoplainherbs[1] ?? ''] ?? '');
                             ?>
-                            <a class="formula-study-guide__dui-yao-card" data-formula-dui-yao-card data-dui-yao-related-position="<?php echo (int) $duiyaoindex + 1; ?>" data-dui-yao-formulas="<?php echo s($duiyaopair['formulas']); ?>" href="<?php echo $duiyaourl->out(false); ?>">
+                            <a class="formula-study-guide__dui-yao-card" data-formula-dui-yao-card data-dui-yao-related-position="<?php echo (int) $duiyaoindex + 1; ?>" data-dui-yao-formulas="<?php echo s($duiyaopair['formulas']); ?>" data-dui-yao-first-name="<?php echo s($duiyaofirstname); ?>" data-dui-yao-first-latin="<?php echo s($duiyaofirstlatin); ?>" data-dui-yao-second-name="<?php echo s($duiyaosecondname); ?>" data-dui-yao-second-latin="<?php echo s($duiyaosecondlatin); ?>" href="<?php echo $duiyaourl->out(false); ?>">
                                 <span class="formula-study-guide__dui-yao-number" data-read-aloud-ignore><?php echo s(($ises ? 'Pareja oficial ' : 'Official pair ') . $duiyaopair['number'] . ' / 51'); ?></span>
                                 <h5><?php echo s($duiyaopair['title']); ?></h5>
                                 <span class="formula-study-guide__dui-yao-characters" data-read-aloud-ignore><?php echo s($duiyaopair['characters']); ?></span>
