@@ -191,8 +191,8 @@ $categorycopy = [
         'Compara las 20 fórmulas principales del capítulo 12 de Bensky por estancamiento de Qi, localización orgánica, Frío, Calor, Flema, deficiencia y dirección del Qi rebelde.',
     ],
     'regulate-blood-chapter-13' => [
-        'Compare all 23 principal formulas in Bensky Chapter 13 across Blood stasis and bleeding patterns, with Heat, Cold, deficiency, location, and urgency as decisive separators.',
-        'Compara las 23 fórmulas principales del capítulo 13 de Bensky entre patrones de estasis y sangrado, usando Calor, Frío, deficiencia, localización y urgencia como separadores decisivos.',
+        'Compare all 23 principal formulas in Bensky Chapter 13 across Blood stasis and bleeding patterns, using Heat, Cold, deficiency, location, and urgency as key distinguishing features.',
+        'Compara las 23 fórmulas principales del capítulo 13 de Bensky entre patrones de estasis y sangrado, usando Calor, Frío, deficiencia, localización y urgencia como datos clave para diferenciarlas.',
     ],
     'expel-wind-chapter-14' => [
         'Compare all 17 principal formulas in Bensky Chapter 14 by external versus internal Wind, Heat, Cold, Phlegm, Blood-Yin deficiency, channel location, and urgency.',
@@ -1989,11 +1989,11 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                     pattern = pattern.replace(/^Viento-Frío de exceso$/i, 'Viento-Frío en Exceso');
                     rows.push('La fórmula ' + formula
                         + (englishName ? ', ' + englishName + ',' : '')
-                        + ' tiene un patrón de ' + pattern + '. Sus síntomas diferenciales son ' + signs + '.');
+                        + ' tiene un patrón de ' + pattern + '. Sus síntomas clave son ' + signs + '.');
                 } else {
                     rows.push('The formula ' + formula
                         + (englishName ? ', ' + englishName + ',' : '')
-                        + ' is used for a pattern of ' + pattern + '. Its decisive differentiating signs are ' + signs + '.');
+                        + ' is used for a pattern of ' + pattern + '. Its key symptoms are ' + signs + '.');
                 }
             });
             if (!rows.length) return;
@@ -3005,14 +3005,14 @@ echo $OUTPUT->header();
                     </header>
                     <div class="formula-study-guide__table-wrap">
                         <table class="formula-study-guide__table" data-formula-context-table data-table-narration="<?php echo s($ises
-                            ? 'Esta tabla compara las clases terapéuticas de la categoría. Para cada clase indica qué hace, qué fórmulas la representan y qué rasgo permite diferenciarla de las demás.'
-                            : 'This table compares the category therapeutic classes. For each class, it explains what it does, which formulas represent it, and which feature distinguishes it from the others.'); ?>">
+                            ? 'Esta tabla compara las clases terapéuticas de la categoría. Para cada clase indica qué hace, qué fórmulas la representan y cuáles son sus síntomas clave.'
+                            : 'This table compares the category therapeutic classes. For each class, it explains what it does, which formulas represent it, and its key symptoms.'); ?>">
                             <thead>
                                 <tr>
                                     <th><?php echo $ises ? 'Clase terapéutica:' : 'Therapeutic class:'; ?></th>
                                     <th><?php echo $ises ? 'Qué hace:' : 'What it does:'; ?></th>
                                     <th><?php echo $ises ? 'Fórmulas representativas:' : 'Representative formulas:'; ?></th>
-                                    <th><?php echo $ises ? 'Separador crítico:' : 'Critical separator:'; ?></th>
+                                    <th><?php echo $ises ? 'Síntomas clave:' : 'Key symptoms:'; ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -3168,7 +3168,7 @@ echo $OUTPUT->header();
                         : ($ises ? $selectedguide['quickCompareTitleEs'] : $selectedguide['quickCompareTitle'])); ?></h4>
                     <div class="formula-study-guide__table-wrap">
                         <table class="formula-study-guide__table" data-formula-comparison-table>
-                            <thead><tr><th><?php echo $ises ? 'Fórmula:' : 'Formula:'; ?></th><th><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></th><th><?php echo $ises ? 'Separador decisivo:' : 'Decisive separator:'; ?></th></tr></thead>
+                            <thead><tr><th><?php echo $ises ? 'Fórmula:' : 'Formula:'; ?></th><th><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></th><th><?php echo $ises ? 'Síntomas clave:' : 'Key symptoms:'; ?></th></tr></thead>
                             <tbody>
                                 <?php foreach ($comparerows as $row): ?>
                                     <?php
@@ -3261,7 +3261,7 @@ echo $OUTPUT->header();
                 <h5><?php echo s($ises ? 'Ruta de estudio del capítulo' : 'Chapter study route'); ?></h5>
                 <div class="formula-study-guide__route">
                     <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">1</span><?php echo s($ises ? 'Define deficiencia o exceso' : 'Define deficiency or excess'); ?></b><p><?php echo s($ises ? 'Qi, Sangre y Yin frente a Fuego, Flema o Yang ascendente.' : 'Qi, Blood, and Yin versus Fire, Phlegm, or ascendant Yang.'); ?></p></div>
-                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">2</span><?php echo s($ises ? 'Busca el separador' : 'Find the separator'); ?></b><p><?php echo s($ises ? 'Sudor nocturno, miedo, saburra grasosa, tinnitus, mareo o signos sensoriales.' : 'Night sweating, fright, greasy coat, tinnitus, dizziness, or sensory signs.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">2</span><?php echo s($ises ? 'Busca los síntomas clave' : 'Find the key symptoms'); ?></b><p><?php echo s($ises ? 'Sudor nocturno, miedo, saburra grasosa, tinnitus, mareo o signos sensoriales.' : 'Night sweating, fright, greasy coat, tinnitus, dizziness, or sensory signs.'); ?></p></div>
                     <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">3</span><?php echo s($ises ? 'Distingue la estrategia' : 'Distinguish the strategy'); ?></b><p><?php echo s($ises ? 'Nutrir y armonizar frente a asentar, aclarar Fuego y transformar Flema.' : 'Nourish and harmonize versus settle, clear Fire, and transform Phlegm.'); ?></p></div>
                     <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">4</span><?php echo s($ises ? 'Aplica el filtro de seguridad' : 'Apply the safety filter'); ?></b><p><?php echo s($ises ? 'Excluye cinabrio, especies amenazadas y cuadros psiquiátricos o neurológicos urgentes.' : 'Exclude cinnabar, endangered species, and urgent psychiatric or neurologic presentations.'); ?></p></div>
                 </div>
@@ -3397,7 +3397,7 @@ echo $OUTPUT->header();
                     <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">1</span><?php echo s($ises ? 'Movimiento o descenso' : 'Movement or descent'); ?></b><p><?php echo s($ises ? 'Dolor y distensión apuntan a estancamiento; tos, sibilancia, hipo o vómito indican rebelión.' : 'Pain and distention point to stagnation; cough, wheezing, hiccup, or vomiting indicate rebellion.'); ?></p></div>
                     <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">2</span><?php echo s($ises ? 'Localiza el órgano' : 'Locate the organ'); ?></b><p><?php echo s($ises ? 'Hígado y canales, pecho y garganta, Pulmón o Estómago.' : 'Liver and channels, chest and throat, Lung, or Stomach.'); ?></p></div>
                     <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">3</span><?php echo s($ises ? 'Identifica el acompañante' : 'Identify the companion'); ?></b><p><?php echo s($ises ? 'Frío, Calor, Flema, Humedad, Sangre, alimento, sequedad o deficiencia.' : 'Cold, Heat, Phlegm, Dampness, Blood, food, dryness, or deficiency.'); ?></p></div>
-                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">4</span><?php echo s($ises ? 'Usa el separador decisivo' : 'Use the decisive separator'); ?></b><p><?php echo s($ises ? 'Momento del vómito, tipo de esputo, sed, lengua, pulso y relación con emociones, comida o frío.' : 'Timing of vomiting, sputum quality, thirst, tongue, pulse, and relationship to emotion, food, or Cold.'); ?></p></div>
+                    <div class="formula-study-guide__route-step"><b><span class="formula-study-guide__route-number">4</span><?php echo s($ises ? 'Usa los síntomas clave' : 'Use the key symptoms'); ?></b><p><?php echo s($ises ? 'Momento del vómito, tipo de esputo, sed, lengua, pulso y relación con emociones, comida o frío.' : 'Timing of vomiting, sputum quality, thirst, tongue, pulse, and relationship to emotion, food, or Cold.'); ?></p></div>
                 </div>
             </section>
             <section class="formula-study-guide__board-verification" aria-labelledby="chapter-twelve-board-title">
@@ -3842,7 +3842,7 @@ echo $OUTPUT->header();
                             <h4><?php echo s($ises ? $formulacategoryguide['quickCompareTitleEs'] : $formulacategoryguide['quickCompareTitle']); ?></h4>
                             <div class="formula-study-guide__table-wrap">
                                 <table class="formula-study-guide__table" data-formula-comparison-table>
-                                    <thead><tr><th><?php echo $ises ? 'Fórmula:' : 'Formula:'; ?></th><th><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></th><th><?php echo $ises ? 'Separador decisivo:' : 'Decisive separator:'; ?></th></tr></thead>
+                                    <thead><tr><th><?php echo $ises ? 'Fórmula:' : 'Formula:'; ?></th><th><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></th><th><?php echo $ises ? 'Síntomas clave:' : 'Key symptoms:'; ?></th></tr></thead>
                                     <tbody>
                                         <?php foreach ($formulacategoryguide['quickCompare'] as $row): ?>
                                             <?php
@@ -3895,7 +3895,7 @@ echo $OUTPUT->header();
                     <p class="formula-study-guide__formula-pattern"><strong><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></strong> <?php echo s($ises ? $formula['patternEs'] : $formula['pattern']); ?></p>
                     <div class="formula-study-guide__facts">
                         <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Acción:' : 'Action:'; ?></strong> <span><?php echo s($ises ? $formula['actionEs'] : $formula['action']); ?></span></div>
-                        <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Pista decisiva:' : 'Decisive clue:'; ?></strong> <span><?php echo s($ises ? $formula['clueEs'] : $formula['clue']); ?></span></div>
+                        <div class="formula-study-guide__fact"><strong><?php echo $ises ? 'Síntomas clave:' : 'Key symptoms:'; ?></strong> <span><?php echo s($ises ? $formula['clueEs'] : $formula['clue']); ?></span></div>
                         <div class="formula-study-guide__fact"><strong><?php echo s($ises
                             ? ($kingherbsplural ? 'Hierbas emperador:' : 'Hierba emperador:')
                             : ($kingherbsplural ? 'King herbs:' : 'King herb:')); ?></strong> <span><?php echo s($formula['kings']); ?></span></div>
@@ -3996,7 +3996,7 @@ echo $OUTPUT->header();
                             <h4 id="annex-comparison-<?php echo s($comparesection['key']); ?>-title"><?php echo s(($ises ? 'Comparación · ' : 'Comparison · ') . ($ises ? $comparesection['nameEs'] : $comparesection['name'])); ?></h4>
                             <div class="formula-study-guide__table-wrap">
                                 <table class="formula-study-guide__table" data-formula-comparison-table>
-                                    <thead><tr><th><?php echo $ises ? 'Fórmula:' : 'Formula:'; ?></th><th><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></th><th><?php echo $ises ? 'Separador decisivo:' : 'Decisive separator:'; ?></th></tr></thead>
+                                    <thead><tr><th><?php echo $ises ? 'Fórmula:' : 'Formula:'; ?></th><th><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></th><th><?php echo $ises ? 'Síntomas clave:' : 'Key symptoms:'; ?></th></tr></thead>
                                     <tbody>
                                         <?php foreach ($comparerows as $row): ?>
                                             <?php

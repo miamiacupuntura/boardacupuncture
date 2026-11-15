@@ -154,7 +154,7 @@ grep -Fq "<?php echo s(\$formulalabel . ' —'); ?>" "$TEMP_DIR/moodle/formulas-
 grep -Fq "\$ises ? 'Funciones de ingredientes:' : 'Ingredient roles:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$ises ? 'Comparación decisiva:' : 'Decisive comparison:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$ises ? 'Acción:' : 'Action:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "\$ises ? 'Pista decisiva:' : 'Decisive clue:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "\$ises ? 'Síntomas clave:' : 'Key symptoms:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "\$kingherbsplural ? 'Hierbas emperador:' : 'Hierba emperador:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "' clases terapéuticas:' : ' therapeutic classes:'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-context-table data-table-narration=' "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -192,7 +192,11 @@ fi
 grep -Fq "pattern = pattern.replace(/^Viento-Frío de exceso\$/i, 'Viento-Frío en Exceso')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "rows.push('La fórmula ' + formula" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "+ (englishName ? ', ' + englishName + ',' : '')" "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "'. Sus síntomas diferenciales son ' + signs" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "'. Sus síntomas clave son ' + signs" "$TEMP_DIR/moodle/formulas-study-guide.php"
+if grep -Eiq 'Separador (crítico|decisivo)|Separadores de|Pista decisiva|Critical separator|Decisive separator|Decisive clue|síntomas diferenciales|decisive differentiating signs' "$TEMP_DIR/moodle/formulas-study-guide.php" "$TEMP_DIR/data/formulas-study-guide-data.json"; then
+    echo "ERROR: la guía de fórmulas conserva terminología antigua para los síntomas clave." >&2
+    exit 1
+fi
 grep -Fq 'data-formula-english-name' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "s('(' . \$formulaenglishname . ')')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'formula-study-guide__formula-translation' "$TEMP_DIR/moodle/formulas-study-guide.php"

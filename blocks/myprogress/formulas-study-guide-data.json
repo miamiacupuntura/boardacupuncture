@@ -579,8 +579,8 @@
           ]
         },
         {
-          "title": "Organ Heat separators",
-          "titleEs": "Separadores de Calor de órganos",
+          "title": "Key symptoms of organ Heat",
+          "titleEs": "Síntomas clave del Calor de órganos",
           "items": [
             [
               "Xie Xin Tang",
@@ -1093,8 +1093,8 @@
           ]
         },
         {
-          "title": "Liver-Spleen and middle-burner separators",
-          "titleEs": "Separadores de Hígado-Bazo y Jiao Medio",
+          "title": "Key symptoms of Liver-Spleen and middle-burner patterns",
+          "titleEs": "Síntomas clave de los patrones de Hígado-Bazo y Jiao Medio",
           "items": [
             [
               "Tong Xie Yao Fang",
@@ -1620,8 +1620,8 @@
           ]
         },
         {
-          "title": "Cold-side separator",
-          "titleEs": "Separador del lado Frío",
+          "title": "Key symptoms of the Cold presentation",
+          "titleEs": "Síntomas clave de la presentación Fría",
           "items": [
             [
               "Wu Ji San",
@@ -2903,7 +2903,7 @@
       "formulaSections": [
         {"key":"dry-damp-transform","name":"Dry Dampness and Transform Phlegm","nameEs":"Secar Humedad y transformar Flema","formulaNames":["Er Chen Tang","Dao Tan Tang","Di Tan Tang","Fu Ling Wan","Wen Dan Tang","Xiang Fu Xuan Fu Hua Tang"],"copy":"Regulate Qi and restore fluid movement when Phlegm-Dampness obstructs the Lung, Middle Burner, channels or sensory orifices.","copyEs":"Regula Qi y restaura el movimiento de líquidos cuando Flema-Humedad obstruye Pulmón, Jiao Medio, canales u orificios sensoriales.","diagnostic":"White or copious sputum, nausea, fullness, greasy coat and slippery pulse; Heat or orifice signs select the stronger branches.","diagnosticEs":"Esputo blanco o abundante, náusea, plenitud, saburra grasosa y pulso resbaladizo; Calor u orificios seleccionan ramas más fuertes."},
         {"key":"clear-heat-transform","name":"Clear Heat and Transform Phlegm","nameEs":"Aclarar Calor y transformar Flema","formulaNames":["Qing Qi Hua Tan Wan","Xiao Xian Xiong Tang","Gun Tan Wan"],"copy":"Clear the Heat that condenses fluids while moving Qi and directing Phlegm downward.","copyEs":"Aclara el Calor que condensa líquidos mientras mueve Qi y dirige Flema hacia abajo.","diagnostic":"Yellow viscous sputum, red tongue with yellow greasy coat, slippery rapid pulse, constipation or marked irritability.","diagnosticEs":"Esputo amarillo viscoso, lengua roja con saburra amarilla grasosa, pulso rápido resbaladizo, estreñimiento o irritabilidad marcada."},
-        {"key":"disperse-clumping","name":"Transform Phlegm and Disperse Clumping","nameEs":"Transformar Flema y dispersar aglomeraciones","formulaNames":["Xiao Luo Wan","Hai Zao Yu Hu Tang"],"copy":"Soften hardness and combine Phlegm treatment with Heat, Qi or Blood regulation according to the nodule.","copyEs":"Ablanda dureza y combina tratamiento de Flema con regulación de Calor, Qi o Sangre según el nódulo.","diagnostic":"Firm superficial masses, usually in the neck; rubbery mobile versus rock-hard immobile is the key separator.","diagnosticEs":"Masas superficiales firmes, usualmente cervicales; gomosa y móvil frente a dura como roca e inmóvil es el separador clave."},
+        {"key":"disperse-clumping","name":"Transform Phlegm and Disperse Clumping","nameEs":"Transformar Flema y dispersar aglomeraciones","formulaNames":["Xiao Luo Wan","Hai Zao Yu Hu Tang"],"copy":"Soften hardness and combine Phlegm treatment with Heat, Qi or Blood regulation according to the nodule.","copyEs":"Ablanda dureza y combina tratamiento de Flema con regulación de Calor, Qi o Sangre según el nódulo.","diagnostic":"Firm superficial masses, usually in the neck; rubbery and mobile versus rock-hard and immobile are the key distinguishing signs.","diagnosticEs":"Masas superficiales firmes, usualmente cervicales; gomosa y móvil frente a dura como roca e inmóvil son los signos clave para diferenciarlas."},
         {"key":"moisten-dryness","name":"Moisten Dryness and Transform Phlegm","nameEs":"Humedecer Sequedad y transformar Flema","formulaNames":["Bei Mu Gua Lou San"],"copy":"Moisten the Lung without cloying while clearing Heat and transforming deep, sticky dry Phlegm.","copyEs":"Humedece Pulmón sin empalagar mientras aclara Calor y transforma Flema-Seca profunda y pegajosa.","diagnostic":"Dry sore throat and cough with deep-seated scant sputum that is difficult to expectorate.","diagnosticEs":"Garganta seca y dolorida y tos con esputo escaso, profundo y difícil de expectorar."},
         {"key":"warm-phlegm-cold","name":"Warm and Transform Phlegm-Cold","nameEs":"Calentar y transformar Flema-Frío","formulaNames":["Ling Gan Wu Wei Jiang Xin Tang","San Zi Yang Qin Tang"],"copy":"Warm and move cold thin mucus while distinguishing Yang deficiency from Phlegm plus food and Qi stagnation.","copyEs":"Calienta y moviliza líquidos claros fríos distinguiendo deficiencia de Yang de Flema con estancamiento de alimento y Qi.","diagnostic":"Copious thin white sputum, chest discomfort, white greasy or slippery coat and slippery pulse.","diagnosticEs":"Esputo blanco fino abundante, molestia torácica, saburra blanca grasosa o resbaladiza y pulso resbaladizo."},
         {"key":"transform-extinguish-wind","name":"Transform Phlegm and Extinguish Wind","nameEs":"Transformar Flema y extinguir Viento","formulaNames":["Ban Xia Bai Zhu Tian Ma Tang","Ding Xian Wan","Zhi Sou San"],"copy":"Separate internal Wind-Phlegm vertigo or seizure from the gentle exterior-dispersing treatment of a residual cough.","copyEs":"Separa vértigo o convulsión por Viento-Flema interno del tratamiento exterior suave de una tos residual.","diagnostic":"Greasy coat and wiry-slippery pulse for internal Wind-Phlegm; itchy throat and floating pulse for residual exterior cough.","diagnosticEs":"Saburra grasosa y pulso cuerda-resbaladizo para Viento-Flema interno; picor de garganta y pulso flotante para tos exterior residual."},
@@ -5428,7 +5428,7 @@
       "clue": "Vomiting long after eating that brings relief, firm epigastric fullness, fatigue, emaciation, and either sheep-dropping dry stools or scant loose stools.", "clueEs": "Vómito mucho después de comer que trae alivio, plenitud epigástrica firme, fatiga, emaciación y heces secas como bolitas o heces sueltas escasas.",
       "ingredients": "Zhi Ban Xia 15–30 g, Ren Shen 9 g and honey 9–15 g in the source formula.", "ingredientsEs": "Zhi Ban Xia 15–30 g, Ren Shen 9 g y miel 9–15 g en la fórmula fuente.",
       "safety": "Processed Ban Xia and professional dosing are essential. Delayed vomiting of retained food, progressive weight loss, dehydration, severe constipation, abdominal mass, blood, or suspected obstruction requires urgent medical investigation.", "safetyEs": "Ban Xia procesada y dosificación profesional son esenciales. Vómito tardío de alimento retenido, pérdida progresiva de peso, deshidratación, estreñimiento grave, masa abdominal, sangre o sospecha de obstrucción requiere investigación médica urgente.", "safetyTier": "high",
-      "examFocus": "Timing is the separator: vomiting occurs a considerable time after eating and relieves the patient; deficiency, Phlegm, and damaged fluids coexist.", "examFocusEs": "El momento es el separador: el vómito ocurre mucho después de comer y alivia; coexisten deficiencia, Flema y líquidos lesionados.",
+      "examFocus": "Timing is the key sign: vomiting occurs a considerable time after eating and relieves the patient; deficiency, Phlegm, and damaged fluids coexist.", "examFocusEs": "El momento es el dato clave: el vómito ocurre mucho después de comer y alivia; coexisten deficiencia, Flema y líquidos lesionados.",
       "comparison": "Xiao Ban Xia Tang treats excess thin fluids with more immediate vomiting; Da Ban Xia Tang treats chronic delayed vomiting with deficiency and dryness.", "comparisonEs": "Xiao Ban Xia Tang trata líquidos finos de exceso con vómito más inmediato; Da Ban Xia Tang trata vómito crónico tardío con deficiencia y sequedad.",
       "associated": [["Xiao Ban Xia Tang", "Ban Xia and Sheng Jiang for vomiting from thin mucus in the Stomach without deficiency dryness.", "Ban Xia y Sheng Jiang para vómito por moco fino en Estómago sin sequedad por deficiencia."], ["Xiao Ban Xia Jia Fu Ling Tang", "Adds Fu Ling when habitual thin-fluid accumulation, thirst, palpitations, or focal epigastric distention is more prominent.", "Añade Fu Ling cuando predominan acumulación habitual de líquidos finos, sed, palpitaciones o distensión focal epigástrica."], ["Gan Jiang Ren Shen Ban Xia Wan", "Warms and tonifies the Middle for pregnancy vomiting or Spleen-Stomach deficiency-Cold with Phlegm.", "Calienta y tonifica el Centro para vómito del embarazo o Frío-deficiencia de Bazo-Estómago con Flema."]]
     },
@@ -8769,8 +8769,8 @@
       "safety": "Contraindicated during pregnancy and in significant Yin or fluid deficiency. DO NOT USE Dai Mao/hawksbill turtle, rhinoceros horn, Zhu Sha/Cinnabaris or Xiong Huang/Realgar: they are endangered/illegal or toxic. She Xiang and Niu Huang are animal-derived and trade-regulated. The formula's drying aromatics may consume Yin and fluids. This historical emergency profile is not a self-treatment; coma and respiratory distress require emergency care.",
       "safetyEs": "Contraindicada durante embarazo y en deficiencia importante de Yin o líquidos. NO USAR Dai Mao/tortuga carey, cuerno de rinoceronte, Zhu Sha/Cinabrio ni Xiong Huang/Rejalgar: están amenazados/prohibidos o son tóxicos. She Xiang y Niu Huang son de origen animal y de comercio regulado. Sus aromáticos secantes pueden consumir Yin y líquidos. Este perfil histórico de urgencia no es autotratamiento; coma y dificultad respiratoria exigen atención urgente.",
       "safetyTier": "critical",
-      "examFocus": "Its orifice-opening and Phlegm-transforming actions outweigh its Heat-clearing action; abundant sputum and rough breathing are the separator.",
-      "examFocusEs": "Abrir orificios y transformar Flema pesan más que aclarar Calor; esputo abundante y respiración áspera son el separador.",
+      "examFocus": "Its orifice-opening and Phlegm-transforming actions outweigh its Heat-clearing action; abundant sputum and rough breathing are the key symptoms.",
+      "examFocusEs": "Abrir orificios y transformar Flema pesan más que aclarar Calor; el esputo abundante y la respiración áspera son los síntomas clave.",
       "comparison": "An Gong Niu Huang Wan is colder and more Heat-focused; Zi Xue Dan adds prominent spasms and convulsions; Zhi Bao Dan is the most aromatic and Phlegm-centered of the Three Treasures.",
       "comparisonEs": "An Gong Niu Huang Wan es más fría y centrada en Calor; Zi Xue Dan añade espasmos y convulsiones prominentes; Zhi Bao Dan es la más aromática y centrada en Flema de los Tres Tesoros."
     },
@@ -9242,7 +9242,7 @@
       "clue":"Pain or numbness in both arms, shoulders or hands, inability to lift the hands, or superficial edema with a white greasy coat and submerged thin or wiry-slippery pulse.","clueEs":"Dolor o entumecimiento en ambos brazos, hombros o manos, incapacidad de levantar las manos o edema superficial con saburra blanca grasosa y pulso sumergido fino o cuerda-resbaladizo.",
       "ingredients":"Fu Ling, Zhi Ban Xia, Zhi Ke and Mang Xiao, prepared with Sheng Jiang.","ingredientsEs":"Fu Ling, Zhi Ban Xia, Zhi Ke y Mang Xiao, preparados con Sheng Jiang.",
       "safety":"New arm weakness, chest pain, unilateral numbness or neurologic change requires urgent evaluation. Mang Xiao is contraindicated in pregnancy without specialist direction.","safetyEs":"Debilidad nueva de brazo, dolor torácico, entumecimiento unilateral o cambio neurológico requieren urgencias. Mang Xiao está contraindicado en embarazo sin indicación especializada.","safetyTier":"critical",
-      "examFocus":"The unusual separator is Phlegm-related painful obstruction or numbness in both upper limbs.","examFocusEs":"El separador inusual es obstrucción dolorosa o entumecimiento de ambos miembros superiores por Flema."
+      "examFocus":"The unusual key symptom is Phlegm-related painful obstruction or numbness in both upper limbs.","examFocusEs":"El síntoma clave inusual es la obstrucción dolorosa o el entumecimiento de ambos miembros superiores por Flema."
     },
     {
       "number":"C17-06","sequence":6,"name":"Xiang Fu Xuan Fu Hua Tang","englishName":"Cyperus and Inula Decoction","categoryKey":"transform-phlegm-ch17","group":"Dry Dampness and Transform Phlegm","groupEs":"Secar Humedad y transformar Flema","sourcePages":"789–790","kings":"Xiang Fu, Xuan Fu Hua",
