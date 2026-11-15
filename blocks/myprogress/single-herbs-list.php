@@ -404,6 +404,36 @@ uasort($groups, static function(array $left, array $right) use ($sortmode): int 
     return strnatcasecmp($left['title'], $right['title']);
 });
 $autoopen = $herbfocus !== '' || ($query !== '' && count($cards) <= 12);
+$buildcardnarration = static function(array $card, bool $ises): string {
+    $segments = [];
+    $append = static function(array &$target, string $label, string $value): void {
+        $value = trim($value);
+        if ($value === '') {
+            return;
+        }
+        $target[] = $label . ': ' . rtrim($value, ". ") . '.';
+    };
+    $append($segments, $ises ? 'Hierba' : 'Herb', (string)($card['name'] ?? ''));
+    $append($segments, $ises ? 'Nombre farmacéutico' : 'Pharmaceutical name', (string)($card['latin'] ?? ''));
+    $append($segments, $ises ? 'Categoría' : 'Category', (string)($card['categorylabel'] ?? ''));
+    if (trim((string)($card['properties'] ?? '')) !== '') {
+        $append($segments, $ises ? 'Propiedades de la hierba' : 'Herb properties', (string)$card['properties']);
+    } else {
+        $append($segments, $ises ? 'Sabores' : 'Flavors', (string)($card['flavor'] ?? ''));
+        $append($segments, $ises ? 'Temperatura' : 'Temperature', (string)($card['temperature'] ?? ''));
+    }
+    $append($segments, $ises ? 'Meridianos que penetra' : 'Channels entered', (string)($card['channels'] ?? ''));
+    $append($segments, $ises ? 'Dosis de estudio' : 'Study dose', (string)($card['dose'] ?? ''));
+    $append($segments, $ises ? 'Acciones' : 'Actions', (string)($card['identity'] ?? ''));
+    $append($segments, $ises ? 'Indicaciones' : 'Indications', (string)($card['clue'] ?? ''));
+    $append($segments, $ises ? 'Recurso de memoria' : 'Memory aid', (string)($card['memory'] ?? ''));
+    $append($segments, $ises ? 'Huella única' : 'Unique fingerprint', (string)($card['unique'] ?? ''));
+    $append($segments, $ises ? 'Precaución' : 'Caution', (string)($card['safety'] ?? ''));
+    $append($segments, $ises ? 'Preparación segura' : 'Safe preparation', (string)($card['preparation'] ?? ''));
+    $append($segments, $ises ? 'Embarazo' : 'Pregnancy', (string)($card['pregnancy'] ?? ''));
+    $append($segments, $ises ? 'Interacciones' : 'Interactions', (string)($card['interactions'] ?? ''));
+    return implode(' ', $segments);
+};
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
@@ -445,6 +475,289 @@ document.querySelectorAll('[data-herb-list-collapse]').forEach(function(button) 
         window.scrollTo({top: 0, behavior: 'smooth'});
     });
 });
+(function() {
+    'use strict';
+    var reader = document.querySelector('[data-herb-list-reader]');
+    if (!reader) {
+        return;
+    }
+    var supported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+    var language = reader.getAttribute('data-language') || 'en-US';
+    var isSpanish = language.toLowerCase().indexOf('es') === 0;
+    var voiceSelect = reader.querySelector('[data-herb-list-voice]');
+    var readDisplayedButton = reader.querySelector('[data-herb-list-read-displayed]');
+    var pauseButton = reader.querySelector('[data-herb-list-pause]');
+    var stopButton = reader.querySelector('[data-herb-list-stop]');
+    var backButton = reader.querySelector('[data-herb-list-back]');
+    var forwardButton = reader.querySelector('[data-herb-list-forward]');
+    var progress = reader.querySelector('[data-herb-list-progress]');
+    var progressValue = reader.querySelector('[data-herb-list-progress-value]');
+    var status = reader.querySelector('[data-herb-list-status]');
+    var speechChunks = [];
+    var currentChunk = 0;
+    var sessionId = 0;
+    var activeCard = null;
+    var paused = false;
+    var selectedVoice = null;
+
+    function setStatus(message) {
+        status.textContent = message;
+    }
+
+    function cleanSpeechText(value) {
+        var text = String(value || '')
+            .replace(/\*/g, '')
+            .replace(/[\u3400-\u9fff\uf900-\ufaff]/g, ' ')
+            .replace(/[→⇒➜➝]/g, isSpanish ? '. Luego, ' : '. Then, ')
+            .replace(/\b(\d+(?:[.,]\d+)?)\s*[–—-]\s*(\d+(?:[.,]\d+)?)\s*mg\b/gi, isSpanish ? '$1 a $2 miligramos' : '$1 to $2 milligrams')
+            .replace(/\b(\d+(?:[.,]\d+)?)\s*[–—-]\s*(\d+(?:[.,]\d+)?)\s*g\b/gi, isSpanish ? '$1 a $2 gramos' : '$1 to $2 grams')
+            .replace(/\b(\d+(?:[.,]\d+)?)\s*[–—-]\s*(\d+(?:[.,]\d+)?)\s*ml\b/gi, isSpanish ? '$1 a $2 mililitros' : '$1 to $2 milliliters')
+            .replace(/\b(\d+(?:[.,]\d+)?)\s*mg\b/gi, isSpanish ? '$1 miligramos' : '$1 milligrams')
+            .replace(/\b(\d+(?:[.,]\d+)?)\s*g\b/gi, isSpanish ? '$1 gramos' : '$1 grams')
+            .replace(/\b(\d+(?:[.,]\d+)?)\s*ml\b/gi, isSpanish ? '$1 mililitros' : '$1 milliliters')
+            .replace(/[•·|]+/g, '. ')
+            .replace(/[()\[\]{}]/g, ' ')
+            .replace(/\s*\/\s*/g, isSpanish ? ' o ' : ' or ')
+            .replace(/\s*;\s*/g, '. ')
+            .replace(/\s*:\s*/g, ': ')
+            .replace(/\s+/g, ' ')
+            .trim();
+        var pronunciations = isSpanish ? {
+            'Bo He': 'Bó Ge', 'Niu Bang Zi': 'Niú, Bang, Tzí', 'Chan Tui': 'Chan, Tuéi',
+            'Sang Ye': 'Sang, Yé', 'Ju Hua': 'Yú, Juá', 'Man Jing Zi': 'Man, Ying, Tzí',
+            'Ge Gen': 'Gue, Guen', 'Chai Hu': 'Chái, Jú', 'Sheng Ma': 'Sheng, Má',
+            'Dan Dou Chi': 'Dan, Dou, Chi', 'Mu Zei': 'Mu, Tsei', 'Ma Huang': 'Má, Juáng',
+            'Gui Zhi': 'Guéi, Yí', 'Zi Su Ye': 'Tzí, Su, Yé', 'Xi Xin': 'Shí, Shín',
+            'Bai Zhi': 'Bái, Yí', 'Fang Feng': 'Fang, Feng', 'Qiang Huo': 'Chiang, Juó',
+            'Jing Jie': 'Ying, Yie', 'Sheng Jiang': 'Sheng, Chiang'
+        } : {
+            'Bo He': 'Bo Huh', 'Niu Bang Zi': 'Nee-oh, Bahng, Dzuh', 'Chan Tui': 'Chahn, Tway',
+            'Sang Ye': 'Sahng, Yeh', 'Ju Hua': 'Joo, Hwah', 'Man Jing Zi': 'Mahn, Jing, Dzuh',
+            'Ge Gen': 'Guh, Gun', 'Chai Hu': 'Chai, Hoo', 'Sheng Ma': 'Shung, Mah',
+            'Dan Dou Chi': 'Dahn, Doh, Chir', 'Mu Zei': 'Moo, Dzay', 'Ma Huang': 'Mah, Hwahng',
+            'Gui Zhi': 'Gway, Jir', 'Zi Su Ye': 'Dzuh, Soo, Yeh', 'Xi Xin': 'Shee, Sheen',
+            'Bai Zhi': 'Bye, Jir', 'Fang Feng': 'Fahng, Fung', 'Qiang Huo': 'Chyahng, Hwoh',
+            'Jing Jie': 'Jing, Jyeh', 'Sheng Jiang': 'Shung, Jyahng'
+        };
+        Object.keys(pronunciations).sort(function(a, b) { return b.length - a.length; }).forEach(function(name) {
+            text = text.replace(new RegExp('\\b' + name.replace(/\s+/g, '\\s+') + '\\b', 'gi'), pronunciations[name]);
+        });
+        return text.replace(/\s+([,.])/g, '$1').replace(/([.!?])\s*([.!?])+/g, '$1').trim();
+    }
+
+    function splitSpeechText(text) {
+        var cleaned = cleanSpeechText(text);
+        var sentences = cleaned.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
+        var chunks = [];
+        sentences.forEach(function(sentence) {
+            sentence = sentence.trim();
+            if (!sentence) return;
+            if (sentence.length <= 260) {
+                chunks.push(sentence);
+                return;
+            }
+            var parts = sentence.split(/,\s+/);
+            var current = '';
+            parts.forEach(function(part) {
+                var candidate = current ? current + ', ' + part : part;
+                if (candidate.length > 260 && current) {
+                    chunks.push(current + '.');
+                    current = part;
+                } else {
+                    current = candidate;
+                }
+            });
+            if (current) chunks.push(current);
+        });
+        return chunks;
+    }
+
+    function preferredVoice(voices) {
+        var stored = '';
+        try {
+            stored = window.localStorage.getItem('acupuncturetests-reader-voice-' + language.slice(0, 2).toLowerCase()) || '';
+        } catch (error) {}
+        if (stored) {
+            var saved = voices.find(function(voice) { return voice.name === stored; });
+            if (saved) return saved;
+        }
+        var naturalPattern = /natural|neural|premium|enhanced|online|google|microsoft|samantha|daniel|ava|aria|jorge|helena|monica/i;
+        return voices.find(function(voice) { return naturalPattern.test(voice.name); }) || voices[0] || null;
+    }
+
+    function loadVoices() {
+        if (!supported) return;
+        var prefix = language.slice(0, 2).toLowerCase();
+        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
+            return (voice.lang || '').slice(0, 2).toLowerCase() === prefix;
+        });
+        if (!voices.length) voices = window.speechSynthesis.getVoices();
+        selectedVoice = preferredVoice(voices);
+        voiceSelect.innerHTML = '';
+        var automatic = document.createElement('option');
+        automatic.value = '';
+        automatic.textContent = isSpanish ? 'Automática — recomendada' : 'Automatic — recommended';
+        voiceSelect.appendChild(automatic);
+        voices.forEach(function(voice) {
+            var option = document.createElement('option');
+            option.value = voice.name;
+            option.textContent = voice.name + ' (' + voice.lang + ')' + (voice.localService ? '' : ' · online');
+            if (selectedVoice && voice.name === selectedVoice.name) option.selected = true;
+            voiceSelect.appendChild(option);
+        });
+    }
+
+    function updateControls() {
+        var active = speechChunks.length > 0;
+        pauseButton.disabled = !active;
+        stopButton.disabled = !active;
+        backButton.disabled = !active || currentChunk <= 0;
+        forwardButton.disabled = !active || currentChunk >= speechChunks.length - 1;
+        progress.disabled = !active;
+        progress.max = Math.max(0, speechChunks.length - 1);
+        progress.value = Math.min(currentChunk, Math.max(0, speechChunks.length - 1));
+        progressValue.textContent = active
+            ? (currentChunk + 1) + ' / ' + speechChunks.length
+            : (isSpanish ? 'Sin lectura' : 'Not reading');
+        pauseButton.textContent = paused
+            ? (isSpanish ? '▶ Continuar' : '▶ Resume')
+            : (isSpanish ? '⏸ Pausar' : '⏸ Pause');
+    }
+
+    function clearActiveCard() {
+        if (activeCard) activeCard.classList.remove('is-reading');
+        activeCard = null;
+    }
+
+    function finishReading(message) {
+        window.speechSynthesis.cancel();
+        speechChunks = [];
+        currentChunk = 0;
+        paused = false;
+        clearActiveCard();
+        setStatus(message || (isSpanish ? 'Lectura terminada.' : 'Reading finished.'));
+        updateControls();
+    }
+
+    function speakCurrent(activeSession) {
+        if (activeSession !== sessionId || !speechChunks.length) return;
+        if (currentChunk >= speechChunks.length) {
+            finishReading();
+            return;
+        }
+        var utterance = new SpeechSynthesisUtterance(speechChunks[currentChunk]);
+        utterance.lang = language;
+        utterance.rate = 1;
+        if (selectedVoice) utterance.voice = selectedVoice;
+        utterance.onend = function() {
+            if (activeSession !== sessionId || paused) return;
+            currentChunk += 1;
+            if (currentChunk >= speechChunks.length) {
+                finishReading();
+                return;
+            }
+            updateControls();
+            speakCurrent(activeSession);
+        };
+        utterance.onerror = function(event) {
+            if (activeSession !== sessionId || event.error === 'canceled' || event.error === 'interrupted') return;
+            finishReading(isSpanish ? 'No se pudo continuar la lectura.' : 'Reading could not continue.');
+        };
+        setStatus(isSpanish ? 'Leyendo…' : 'Reading…');
+        updateControls();
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function startReading(text, card, label) {
+        sessionId += 1;
+        window.speechSynthesis.cancel();
+        clearActiveCard();
+        speechChunks = splitSpeechText(text);
+        currentChunk = 0;
+        paused = false;
+        if (!speechChunks.length) {
+            setStatus(isSpanish ? 'No hay texto disponible para leer.' : 'No text is available to read.');
+            updateControls();
+            return;
+        }
+        if (card) {
+            activeCard = card;
+            card.open = true;
+            card.classList.add('is-reading');
+        }
+        setStatus((isSpanish ? 'Preparando: ' : 'Preparing: ') + label + '.');
+        updateControls();
+        var activeSession = sessionId;
+        window.setTimeout(function() { speakCurrent(activeSession); }, 80);
+    }
+
+    if (!supported) {
+        reader.hidden = false;
+        reader.classList.add('is-unsupported');
+        setStatus(isSpanish ? 'Este navegador no ofrece lectura en voz alta.' : 'This browser does not provide read aloud.');
+        reader.querySelectorAll('button, select, input').forEach(function(control) { control.disabled = true; });
+        return;
+    }
+    reader.hidden = false;
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    voiceSelect.addEventListener('change', function() {
+        var prefix = language.slice(0, 2).toLowerCase();
+        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
+            return (voice.lang || '').slice(0, 2).toLowerCase() === prefix;
+        });
+        if (!voices.length) voices = window.speechSynthesis.getVoices();
+        selectedVoice = voices.find(function(voice) { return voice.name === voiceSelect.value; }) || preferredVoice(voices);
+        try {
+            window.localStorage.setItem('acupuncturetests-reader-voice-' + language.slice(0, 2).toLowerCase(), voiceSelect.value);
+        } catch (error) {}
+    });
+    document.querySelectorAll('[data-herb-read-button]').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var card = button.closest('[data-herb-read-text]');
+            startReading(card.getAttribute('data-herb-read-text'), card, card.getAttribute('data-herb-read-label'));
+        });
+    });
+    readDisplayedButton.addEventListener('click', function() {
+        var cards = Array.prototype.slice.call(document.querySelectorAll('[data-herb-read-text]'));
+        var text = cards.map(function(card, index) {
+            return (isSpanish ? 'Hierba número ' : 'Herb number ') + (index + 1) + '. ' + card.getAttribute('data-herb-read-text');
+        }).join(' ');
+        startReading(text, null, isSpanish ? 'hierbas mostradas' : 'displayed herbs');
+    });
+    pauseButton.addEventListener('click', function() {
+        if (!speechChunks.length) return;
+        if (paused) {
+            paused = false;
+            window.speechSynthesis.resume();
+            setStatus(isSpanish ? 'Lectura reanudada.' : 'Reading resumed.');
+        } else {
+            paused = true;
+            window.speechSynthesis.pause();
+            setStatus(isSpanish ? 'Lectura en pausa.' : 'Reading paused.');
+        }
+        updateControls();
+    });
+    stopButton.addEventListener('click', function() {
+        sessionId += 1;
+        finishReading(isSpanish ? 'Lectura detenida.' : 'Reading stopped.');
+    });
+    function seekTo(index) {
+        if (!speechChunks.length) return;
+        sessionId += 1;
+        window.speechSynthesis.cancel();
+        paused = false;
+        currentChunk = Math.max(0, Math.min(index, speechChunks.length - 1));
+        updateControls();
+        var activeSession = sessionId;
+        window.setTimeout(function() { speakCurrent(activeSession); }, 80);
+    }
+    backButton.addEventListener('click', function() { seekTo(currentChunk - 1); });
+    forwardButton.addEventListener('click', function() { seekTo(currentChunk + 1); });
+    progress.addEventListener('change', function() { seekTo(Number(progress.value)); });
+    window.addEventListener('beforeunload', function() { window.speechSynthesis.cancel(); });
+    updateControls();
+})();
 JS);
 
 echo $OUTPUT->header();
@@ -459,6 +772,9 @@ echo $OUTPUT->header();
 .single-herbs-list__button{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:8px 14px;border:1px solid #b9c9d5;border-radius:9px;background:#fff;color:#0f4c81!important;font-weight:850;text-decoration:none!important;cursor:pointer}
 .single-herbs-list__button:hover{background:#eef7f5}
 .single-herbs-list__button.is-active{border-color:#087c69;background:#087c69;color:#fff!important}
+.single-herbs-list-reader{position:sticky;top:70px;z-index:1020;margin:0 0 18px;padding:13px 16px;border:1px solid #9ed3ce;border-left:5px solid #0b8f87;border-radius:12px;background:#f4fbfa;box-shadow:0 5px 16px rgba(15,76,81,.08)}
+.single-herbs-list-reader[hidden]{display:none}.single-herbs-list-reader__disclosure>summary{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-right:40px;cursor:pointer;list-style:none}.single-herbs-list-reader__disclosure>summary::-webkit-details-marker{display:none}.single-herbs-list-reader__disclosure>summary:after{content:'+';position:absolute;right:0;top:0;display:flex;width:27px;height:27px;align-items:center;justify-content:center;border:1px solid #8fc9c4;border-radius:50%;background:#fff;color:#0b6f69;font-size:19px;font-weight:900}.single-herbs-list-reader__disclosure[open]>summary:after{content:'−'}
+.single-herbs-list-reader__title{display:block;font-size:17px;font-weight:900}.single-herbs-list-reader__description{display:block;margin-top:2px;color:#5c7184;font-size:12px}.single-herbs-list-reader__panel{padding-top:11px}.single-herbs-list-reader__controls{display:grid;grid-template-columns:minmax(210px,1.4fr) repeat(3,auto);gap:8px;align-items:end}.single-herbs-list-reader__field{display:grid;gap:4px;color:#294b63;font-size:11px;font-weight:850}.single-herbs-list-reader select{box-sizing:border-box;min-height:39px;width:100%;padding:6px 9px;border:1px solid #9db8c8;border-radius:8px;background:#fff;color:#102a43;font:inherit}.single-herbs-list-reader button{min-height:39px;padding:6px 11px;border:1px solid #0b8f87;border-radius:8px;background:#fff;color:#087c69;font-weight:900;cursor:pointer}.single-herbs-list-reader button[data-herb-list-read-displayed]{background:#0b8f87;color:#fff}.single-herbs-list-reader button:disabled{cursor:not-allowed;opacity:.45}.single-herbs-list-reader__progress{display:grid;grid-template-columns:auto minmax(180px,1fr) auto;gap:8px;align-items:end;margin-top:8px}.single-herbs-list-reader__progress-field{display:grid;grid-template-columns:1fr auto;gap:3px 8px;color:#526b84;font-size:10px;font-weight:800}.single-herbs-list-reader__progress-field input{grid-column:1/-1;width:100%;accent-color:#0b8f87}.single-herbs-list-reader__status{min-height:18px;margin:7px 0 0;color:#526b84;font-size:11px;font-weight:750}
 .single-herbs-list__controls{margin-bottom:18px;padding:16px;border:1px solid #c7ddd9;border-radius:12px;background:#f8fcfb}
 .single-herbs-list__modes{margin-bottom:13px}
 .single-herbs-list__form{display:grid;grid-template-columns:minmax(220px,1.5fr) minmax(220px,1fr) auto;gap:10px;align-items:end}
@@ -475,7 +791,7 @@ echo $OUTPUT->header();
 .single-herbs-list__group-header span{color:#526b84;font-weight:800}
 .single-herbs-list__cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}
 .single-herbs-list__card{overflow:hidden;border:1px solid #cbd9df;border-top:4px solid #f47b20;border-radius:11px;background:#fff}
-.single-herbs-list__card[open]{box-shadow:0 6px 18px rgba(23,50,77,.08)}
+.single-herbs-list__card[open]{box-shadow:0 6px 18px rgba(23,50,77,.08)}.single-herbs-list__card.is-reading{outline:3px solid rgba(11,143,135,.35);box-shadow:0 8px 24px rgba(11,143,135,.18)}
 .single-herbs-list__card summary{position:relative;display:block;min-height:108px;padding:15px 48px 14px 16px;cursor:pointer;list-style:none}
 .single-herbs-list__card summary::-webkit-details-marker{display:none}
 .single-herbs-list__card summary::after{content:'+';position:absolute;top:15px;right:15px;display:grid;width:27px;height:27px;place-items:center;border-radius:50%;background:#eaf5f3;color:#087c69;font-size:18px;font-weight:900}
@@ -490,12 +806,12 @@ echo $OUTPUT->header();
 .single-herbs-list__body dt{font-size:12px;font-weight:900}
 .single-herbs-list__body dd{margin:0;color:#52657a;font-size:13px;line-height:1.5}
 .single-herbs-list__body dd.is-safety{color:#a64b13}
-.single-herbs-list__connections{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid #d8e2e7}.single-herbs-list__connection{display:inline-flex;min-height:38px;align-items:center;padding:7px 11px;border:1px solid #6d28d9;border-radius:8px;background:#f5f0ff;color:#4c1d95!important;font-size:12px;font-weight:900;text-decoration:none!important}.single-herbs-list__connection:hover,.single-herbs-list__connection:focus{background:#6d28d9;color:#fff!important}
+.single-herbs-list__connections{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid #d8e2e7}.single-herbs-list__connection{display:inline-flex;min-height:38px;align-items:center;padding:7px 11px;border:1px solid #6d28d9;border-radius:8px;background:#f5f0ff;color:#4c1d95!important;font:inherit;font-size:12px;font-weight:900;text-decoration:none!important;cursor:pointer}.single-herbs-list__connection--audio{border-color:#0b8f87;background:#eefaf8;color:#087c69!important}.single-herbs-list__connection:hover,.single-herbs-list__connection:focus{background:#6d28d9;color:#fff!important}.single-herbs-list__connection--audio:hover,.single-herbs-list__connection--audio:focus{background:#0b8f87;color:#fff!important}
 .single-herbs-list__profile-note{margin:12px 0 0;padding:10px;border-radius:8px;background:#fff7e8;color:#7a5412;font-size:12px;line-height:1.45}
 .single-herbs-list__memory{color:#075f60!important;font-weight:800}
 .single-herbs-list__empty{padding:30px;border:1px dashed #9db8c8;border-radius:11px;background:#fff;color:#526b84;text-align:center;font-weight:750}
 @media(max-width:930px){.single-herbs-list__cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:700px){.single-herbs-list__top{display:block}.single-herbs-list__actions{margin-top:15px}.single-herbs-list__form,.single-herbs-list__summary,.single-herbs-list__cards{grid-template-columns:1fr}.single-herbs-list__tools{justify-content:flex-start}.single-herbs-list__body dl{grid-template-columns:1fr}.single-herbs-list__body dd{margin-top:-5px}}
+@media(max-width:700px){.single-herbs-list{width:min(100% - 14px,1220px);margin-top:10px}.single-herbs-list__top{display:block;padding:15px}.single-herbs-list__actions{margin-top:12px;gap:6px}.single-herbs-list__button{min-height:35px;padding:6px 9px;font-size:12px}.single-herbs-list__form,.single-herbs-list__summary,.single-herbs-list__cards{grid-template-columns:1fr}.single-herbs-list__tools{justify-content:flex-start}.single-herbs-list__body dl{grid-template-columns:1fr}.single-herbs-list__body dd{margin-top:-5px}.single-herbs-list-reader{top:58px;padding:10px 11px}.single-herbs-list-reader__disclosure>summary{padding-right:34px}.single-herbs-list-reader__disclosure>summary:after{width:24px;height:24px;font-size:17px}.single-herbs-list-reader__title{font-size:15px}.single-herbs-list-reader__description{font-size:11px;line-height:1.3}.single-herbs-list-reader__panel{padding-top:8px}.single-herbs-list-reader__controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.single-herbs-list-reader__field{grid-column:1/-1;font-size:10px}.single-herbs-list-reader select,.single-herbs-list-reader button{min-height:34px;padding:5px 6px;font-size:11px;line-height:1.15}.single-herbs-list-reader__progress{grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}.single-herbs-list-reader__progress-field{grid-column:1/-1;grid-row:1}.single-herbs-list-reader__status{margin-top:6px}.single-herbs-list__connections{gap:6px}.single-herbs-list__connection{min-height:34px;padding:5px 8px;font-size:11px}}
 </style>
 <main class="single-herbs-list">
     <?php if ($fromlibrary) {
@@ -539,6 +855,38 @@ echo $OUTPUT->header();
             <a class="single-herbs-list__button" href="<?php echo $dashboardurl->out(false); ?>"><?php echo $ises ? 'Guía de estudio' : 'Study Guide'; ?></a>
         </div>
     </header>
+
+    <section class="single-herbs-list-reader" data-herb-list-reader data-language="<?php echo $ises ? 'es-ES' : 'en-US'; ?>" hidden>
+        <details class="single-herbs-list-reader__disclosure" open>
+            <summary>
+                <span>
+                    <span class="single-herbs-list-reader__title"><?php echo $ises ? 'Escuchar lista de hierbas' : 'Listen to Single Herbs List'; ?></span>
+                    <span class="single-herbs-list-reader__description"><?php echo $ises ? 'Escucha todas las fichas mostradas o una hierba individual.' : 'Listen to every displayed card or one individual herb.'; ?></span>
+                </span>
+            </summary>
+            <div class="single-herbs-list-reader__panel">
+                <div class="single-herbs-list-reader__controls">
+                    <label class="single-herbs-list-reader__field">
+                        <span><?php echo $ises ? 'Voz' : 'Voice'; ?></span>
+                        <select data-herb-list-voice aria-label="<?php echo $ises ? 'Voz de lectura' : 'Reading voice'; ?>"></select>
+                    </label>
+                    <button type="button" data-herb-list-read-displayed>▶ <?php echo $ises ? 'Hierbas mostradas' : 'Displayed herbs'; ?></button>
+                    <button type="button" data-herb-list-pause disabled>⏸ <?php echo $ises ? 'Pausar' : 'Pause'; ?></button>
+                    <button type="button" data-herb-list-stop disabled>■ <?php echo $ises ? 'Detener' : 'Stop'; ?></button>
+                </div>
+                <div class="single-herbs-list-reader__progress">
+                    <button type="button" data-herb-list-back disabled>↶ <?php echo $ises ? 'Retroceder' : 'Back'; ?></button>
+                    <label class="single-herbs-list-reader__progress-field">
+                        <span><?php echo $ises ? 'Progreso de lectura' : 'Reading progress'; ?></span>
+                        <span data-herb-list-progress-value><?php echo $ises ? 'Sin lectura' : 'Not reading'; ?></span>
+                        <input type="range" min="0" max="0" value="0" data-herb-list-progress disabled>
+                    </label>
+                    <button type="button" data-herb-list-forward disabled><?php echo $ises ? 'Avanzar' : 'Forward'; ?> ↷</button>
+                </div>
+                <p class="single-herbs-list-reader__status" data-herb-list-status aria-live="polite"><?php echo $ises ? 'Lista para escuchar.' : 'Ready to listen.'; ?></p>
+            </div>
+        </details>
+    </section>
 
     <section class="single-herbs-list__controls" aria-label="<?php echo $ises ? 'Controles de la lista' : 'List controls'; ?>">
         <nav class="single-herbs-list__modes" aria-label="<?php echo $ises ? 'Organizar tarjetas' : 'Organize cards'; ?>">
@@ -623,8 +971,9 @@ echo $OUTPUT->header();
                         $metaparts = $card['properties'] !== ''
                             ? array_values(array_filter([$card['properties'], $card['channels']]))
                             : array_values(array_filter([$card['flavor'], $card['temperature'], $card['channels']]));
+                        $cardnarration = $buildcardnarration($card, $ises);
                     ?>
-                        <details class="single-herbs-list__card"<?php echo $autoopen ? ' open' : ''; ?>>
+                        <details class="single-herbs-list__card" data-herb-read-text="<?php echo s($cardnarration); ?>" data-herb-read-label="<?php echo s($card['name']); ?>"<?php echo $autoopen ? ' open' : ''; ?>>
                             <summary>
                                 <span class="single-herbs-list__name"><?php echo s($card['name']); ?>*</span>
                                 <span class="single-herbs-list__latin"><?php echo s($card['latin']); ?></span>
@@ -649,6 +998,7 @@ echo $OUTPUT->header();
                                         : 'Official guideline herb with verified pharmaceutical identity, properties and category; the source does not yet include a detailed clinical profile.'; ?></p>
                                 <?php } ?>
                                 <nav class="single-herbs-list__connections" aria-label="<?php echo $ises ? 'Enlaces relacionados' : 'Related links'; ?>">
+                                    <button class="single-herbs-list__connection single-herbs-list__connection--audio" type="button" data-herb-read-button><?php echo $ises ? '🔊 Escuchar esta hierba' : '🔊 Listen to this herb'; ?></button>
                                     <a class="single-herbs-list__connection" href="<?php echo $cardsmarturl->out(false); ?>"><?php echo $ises ? '✨ Encontrar hierbas similares' : '✨ Find similar herbs'; ?></a>
                                 </nav>
                             </div>
