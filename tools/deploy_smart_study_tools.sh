@@ -102,6 +102,12 @@ if grep -REiq 'study dose|dosis de estudio' "$TEMP_DIR/moodle" "$TEMP_DIR/data";
     echo "ERROR: todavía queda la terminología Study dose / Dosis de estudio." >&2
     exit 1
 fi
+if grep -RFq 'Yang, the book author, gives it' "$TEMP_DIR/moodle" "$TEMP_DIR/data"; then
+    echo "ERROR: todavía queda una puntuación de Yang presentada sin interpretación comparativa." >&2
+    exit 1
+fi
+grep -Fq 'Bai Shao muestra una acción fuerte para nutrir Sangre' "$TEMP_DIR/data/single-herb-rich-profiles.json"
+grep -Fq 'Bai Zhu es una tónica moderada de Qi centrada en Bazo' "$TEMP_DIR/data/single-herb-rich-profiles.json"
 grep -Fq "\$ises ? 'Dosis' : 'Dosage'" "$TEMP_DIR/moodle/single-herbs-list.php"
 
 grep -Fq 'data-single-herbs-reader' "$TEMP_DIR/moodle/single-herbs-study-guide.php"

@@ -16,7 +16,7 @@ $bindherbs = [
         'identity' => $bindtext('Restrains Lung, binds intestines, generates fluids, stops bleeding and quiets roundworms.', 'Contiene Pulmón, liga intestinos, genera líquidos, detiene sangrado y calma áscaris.'),
         'clue' => $bindtext('Chronic cough or diarrhea with thirst, plus possible roundworm abdominal pain or irregular bleeding.', 'Tos o diarrea crónica con sed, más posible dolor por áscaris o sangrado irregular.'),
         'memory' => $bindtext('The sour plum closes the Lung and bowel doors, then distracts worms with its acid bite.', 'La ciruela ácida cierra puertas de Pulmón e intestino y distrae gusanos con su mordida agria.'),
-        'unique' => $bindtext('The only current herb combining Lung/bowel containment, fluid generation and a classic roundworm clue; Yang, the book author, gives it 100 for Lung-Qi.', 'La única que combina contención Pulmón/intestino, líquidos y pista clásica de áscaris; Yang, autor del libro, le da 100 para Qi de Pulmón.'),
+        'unique' => $bindtext('Wu Mei is the only current herb combining Lung and bowel containment, fluid generation and a classic roundworm clue. The comparison by Yang, the book author, emphasizes its very strong containment of Lung Qi.', 'Wu Mei es la única hierba actual que combina contención de Pulmón e intestino, generación de líquidos y una pista clásica de áscaris. La comparación de Yang, autor del libro, destaca su contención muy fuerte de Qi de Pulmón.'),
         'caution' => $bindtext('Do not use early in unresolved Exterior disease, acute cough with Phlegm, food stagnation or Damp-Heat diarrhea.', 'No usar temprano en Exterior no resuelto, tos aguda con Flema, estancamiento de alimentos o diarrea por Humedad-Calor.'),
     ],
     [
@@ -40,7 +40,7 @@ $bindherbs = [
         'identity' => $bindtext('Tonifies Liver-Kidney while securing Essence, urine and sweat; can support deficiency collapse.', 'Tonifica Hígado-Riñón mientras asegura Esencia, orina y sudor; puede apoyar colapso por deficiencia.'),
         'clue' => $bindtext('Weak back, dizziness or tinnitus together with urinary/seminal leakage, sweating or deficiency-type uterine bleeding.', 'Espalda débil, mareo o tinnitus con pérdida urinaria/seminal, sudor o sangrado uterino por deficiencia.'),
         'memory' => $bindtext('The mountain cornelian dogwood both fills the Kidney reservoir and tightens its valve.', 'El cornejo de montaña llena el depósito del Riñón y aprieta su válvula.'),
-        'unique' => $bindtext('Unlike pure astringents, it tonifies while stabilizing; Yang, the book author, gives it 80 for Bladder and 100 for Kidney Essence.', 'A diferencia de astringentes puras, tonifica mientras estabiliza; Yang, autor del libro, le da 80 para Vejiga y 100 para Esencia.'),
+        'unique' => $bindtext('Unlike pure astringents, Shan Zhu Yu tonifies while stabilizing. The comparison by Yang, the book author, shows strong Bladder stabilization and an especially strong containment of Kidney Essence.', 'A diferencia de las astringentes puras, Shan Zhu Yu tonifica mientras estabiliza. La comparación de Yang, autor del libro, muestra una estabilización fuerte de Vejiga y una contención especialmente fuerte de Esencia de Riñón.'),
         'caution' => $bindtext('Avoid with Damp-Heat, painful urination or unresolved pathogen; its warm astringency can retain excess.', 'Evitar con Humedad-Calor, micción dolorosa o patógeno no resuelto; su astringencia tibia puede retener exceso.'),
     ],
     [
@@ -113,7 +113,7 @@ $bindherbs = [
         'identity' => $bindtext('Restrains Lung, binds intestines and benefits the throat and voice.', 'Contiene Pulmón, liga intestinos y beneficia garganta y voz.'),
         'clue' => $bindtext('Chronic cough or diarrhea with hoarseness, loss of voice or chronic sore throat.', 'Tos o diarrea crónica con ronquera, pérdida de voz o dolor crónico de garganta.'),
         'memory' => $bindtext('The terminalia fruit closes the Lung–colon tube but leaves a microphone at the throat.', 'El fruto terminalia cierra el tubo Pulmón–colon, pero deja un micrófono en la garganta.'),
-        'unique' => $bindtext('Only current binder with a decisive throat/voice clue; Yang, the book author, gives it 100 for both Lung-Qi and intestinal leakage.', 'La única con pista decisiva de garganta/voz; Yang, autor del libro, le da 100 para Qi de Pulmón y pérdida intestinal.'),
+        'unique' => $bindtext('He Zi is the only current binder with a decisive throat and voice clue. The comparison by Yang, the book author, emphasizes its very strong containment of both Lung Qi and intestinal leakage.', 'He Zi es la única astringente actual con una pista decisiva de garganta y voz. La comparación de Yang, autor del libro, destaca su contención muy fuerte tanto de Qi de Pulmón como de pérdidas intestinales.'),
         'caution' => $bindtext('Avoid early in cough with Exterior pathogen or Phlegm and in acute Damp-Heat diarrhea.', 'Evitar temprano en tos con Exterior/Flema y en diarrea aguda por Humedad-Calor.'),
     ],
 ];

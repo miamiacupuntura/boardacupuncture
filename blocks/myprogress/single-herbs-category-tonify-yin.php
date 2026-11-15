@@ -40,7 +40,7 @@ $yintonifyherbs = [
         'identity' => $yintonifytext('Nourishes Liver-Kidney Yin and Blood, replenishes Essence and moistens dry intestines.', 'Nutre Yin y Sangre de Hígado-Riñón, repone Esencia y humedece intestinos secos.'),
         'clue' => $yintonifytext('Premature graying, dizziness, tinnitus or blurred vision with dry constipation in an older or depleted patient.', 'Canas prematuras, mareo, tinnitus o visión borrosa con estreñimiento seco en paciente mayor o agotado.'),
         'memory' => $yintonifytext('Black sesame oil darkens the Essence reservoir and lubricates the bowel track.', 'El aceite negro de sésamo oscurece el depósito de Esencia y lubrica la vía intestinal.'),
-        'unique' => $yintonifytext('The only neutral food-medicine in this list; Yang, the book author, gives it 60 for Kidney Yin/Essence, with a distinctive bowel-moistening route.', 'La única alimento-medicina neutra de esta lista; Yang, autor del libro, le da 60 para Yin/Esencia de Riñón y añade humectación intestinal.'),
+        'unique' => $yintonifytext('Hei Zhi Ma is the only neutral food-medicine in this list. The comparison by Yang, the book author, shows moderate support of Kidney Yin and Essence, with a distinctive bowel-moistening route.', 'Hei Zhi Ma es la única alimento-medicina neutra de esta lista. La comparación de Yang, autor del libro, muestra un apoyo moderado de Yin y Esencia de Riñón, con una vía distintiva de humectación intestinal.'),
         'caution' => $yintonifytext('Avoid or reduce with chronic loose stool or Dampness; food allergy and product quality still matter.', 'Evitar o reducir con heces sueltas crónicas o Humedad; también importan alergia alimentaria y calidad del producto.'),
     ],
     [
@@ -88,7 +88,7 @@ $yintonifyherbs = [
         'identity' => $yintonifytext('Gently nourishes Liver-Kidney Yin, clears deficiency Heat and benefits eyes and hair without cloying.', 'Nutre suavemente Yin de Hígado-Riñón, aclara Calor por deficiencia y beneficia ojos/cabello sin empalagar.'),
         'clue' => $yintonifytext('Dizziness, tinnitus, blurred vision or premature graying with mild deficiency Heat in a chronic case.', 'Mareo, tinnitus, visión borrosa o canas prematuras con Calor leve por deficiencia en cuadro crónico.'),
         'memory' => $yintonifytext('The evergreen privet keeps the Liver-Kidney mirror clear through a long dry season.', 'El ligustro perenne mantiene claro el espejo Hígado-Riñón durante una larga estación seca.'),
-        'unique' => $yintonifytext('Gentle, steady and non-cloying; Yang, the book author, gives it 70 for Liver Yin and 60 for Kidney Yin, and distinguishes it from the stronger Heat-clearing Mo Han Lian.', 'Suave, sostenida y no empalagosa; Yang, autor del libro, le da 70 para Hígado y 60 para Riñón, y la distingue de Mo Han Lian, que aclara más Calor.'),
+        'unique' => $yintonifytext('Nu Zhen Zi is gentle, steady and non-cloying. The comparison by Yang, the book author, shows a somewhat stronger emphasis on Liver Yin than Kidney Yin and distinguishes it from Mo Han Lian, which clears Heat more strongly.', 'Nu Zhen Zi es suave, sostenida y no empalagosa. La comparación de Yang, autor del libro, muestra un énfasis algo mayor sobre Yin de Hígado que sobre Yin de Riñón y la distingue de Mo Han Lian, que aclara Calor con más fuerza.'),
         'caution' => $yintonifytext('Use cautiously with diarrhea, Spleen deficiency Cold or marked Dampness.', 'Cautela con diarrea, Frío por deficiencia de Bazo o Humedad marcada.'),
     ],
 ];

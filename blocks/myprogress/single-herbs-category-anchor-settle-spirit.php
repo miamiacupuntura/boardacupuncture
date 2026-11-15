@@ -16,7 +16,7 @@ $spiritherbs = [
         'identity' => $spirittext('Anchors Liver Yang, calms the Spirit, restrains leakage and softens hardness.', 'Ancla Yang de Hígado, calma Shen, contiene pérdidas y suaviza dureza.'),
         'clue' => $spirittext('Dizziness or irritability with night sweating, seminal leakage, acid regurgitation or a hard nodule.', 'Mareo o irritabilidad con sudor nocturno, pérdida seminal, regurgitación ácida o nódulo duro.'),
         'memory' => $spirittext('The cold oyster shell is ballast that cools, closes leaks and grinds down hard knots.', 'La concha fresca de ostra es lastre que enfría, cierra fugas y desgasta nudos duros.'),
-        'unique' => $spirittext('Yang, the book author, gives it 50 for direct calming and 60 for anchoring; its decisive extras are softening hardness and restraining sweating.', 'Yang, autor del libro, le da 50 para calma directa y 60 para anclar; sus extras decisivos son suavizar dureza y contener sudor.'),
+        'unique' => $spirittext('The comparison by Yang, the book author, presents Mu Li as moderate for direct calming and anchoring. Its decisive additional actions are softening hardness and restraining sweating.', 'La comparación de Yang, autor del libro, presenta a Mu Li con una acción moderada para calmar directamente y anclar. Sus acciones adicionales decisivas son suavizar dureza y contener sudor.'),
         'caution' => $spirittext('Use authenticated, contaminant-tested shell. Its heavy, cooling nature may burden weak digestion or worsen constipation.', 'Usar concha autenticada y analizada. Su naturaleza pesada/fresca puede sobrecargar digestión débil o empeorar estreñimiento.'),
     ],
     [
