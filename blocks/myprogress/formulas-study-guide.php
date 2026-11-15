@@ -2087,13 +2087,13 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         risks.forEach(function(risk) {
             var card = risk.closest('.formula-study-guide__formula');
             var pattern = card ? card.querySelector('.formula-study-guide__formula-pattern') : null;
-            var riskText = (risk.textContent || '').replace(/[.:;,]+\s*$/, '').trim();
+            var riskText = (risk.textContent || '').replace(/[.:;,—-]+\s*$/, '').trim();
             if (!pattern || !riskText) return;
             var patternText = (pattern.textContent || '')
                 .replace(/^\s*(?:Patrón|Pattern)\s*:\s*/i, '')
                 .trim();
             if (!patternText) return;
-            pattern.textContent = riskText + (isSpanish ? '. Patrón: ' : '. Pattern: ') + patternText;
+            pattern.textContent = riskText + (isSpanish ? ' — Patrón: ' : ' — Pattern: ') + patternText;
             risk.remove();
         });
     }
@@ -3847,7 +3847,7 @@ echo $OUTPUT->header();
                                 : (is_numeric($formula['number'])
                                     ? (($ises ? 'Ficha del núcleo · Fórmula #' : 'Core profile · Formula #') . $formula['number'])
                                     : (($ises ? 'Bensky · Capítulo ' : 'Bensky · Chapter ') . $selected['sourceChapter']))); ?></span><?php endif; ?>
-                            <?php if ($risklabel !== ''): ?><span class="formula-study-guide__risk formula-study-guide__risk--<?php echo s($tier); ?>"><?php echo s($risklabel); ?></span><?php endif; ?>
+                            <?php if ($risklabel !== ''): ?><span class="formula-study-guide__risk formula-study-guide__risk--<?php echo s($tier); ?>"><?php echo s($risklabel . ' —'); ?></span><?php endif; ?>
                         </div>
                     </header>
                     <p class="formula-study-guide__formula-pattern"><strong><?php echo $ises ? 'Patrón:' : 'Pattern:'; ?></strong> <?php echo s($ises ? $formula['patternEs'] : $formula['pattern']); ?></p>
