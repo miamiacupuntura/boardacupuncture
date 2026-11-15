@@ -2039,11 +2039,9 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
             if (firstName && firstLatin && secondName && secondLatin) {
                 introduction = isSpanish
                     ? 'El ' + ordinal + ' Duì Yào relacionado que analizaremos combina ' + firstName
-                        + ', cuyo nombre farmacéutico es ' + firstLatin + ', con ' + secondName
-                        + ', cuyo nombre farmacéutico es ' + secondLatin + '.'
+                        + ', ' + firstLatin + ', con ' + secondName + ', ' + secondLatin + '.'
                     : 'The ' + ordinal + ' related Duì Yào we will analyze combines ' + firstName
-                        + ', whose pharmaceutical name is ' + firstLatin + ', with ' + secondName
-                        + ', whose pharmaceutical name is ' + secondLatin + '.';
+                        + ', ' + firstLatin + ', with ' + secondName + ', ' + secondLatin + '.';
             } else {
                 introduction = isSpanish
                     ? 'El ' + ordinal + ' Duì Yào relacionado que analizaremos combina ' + title + '.'
@@ -2168,7 +2166,7 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
                 ['Tao Ren', 'Táo Rén', 'Táo Rén'],
                 ['Tian Ma', 'Tiān Má', 'Tián Má'],
                 ['Ting Li Zi', 'Tíng Lì Zǐ', 'Ting Lí Tzí'],
-                ['Xing Ren', 'Xìng Rén', 'Xing, Rén'],
+                ['Xing Ren', 'Xìng Rén', 'Xing Ren'],
                 ['Xiang Fu', 'Xiāng Fù', 'Shiáng Fú'],
                 ['Xie Bai', 'Xiè Bái', 'Shié Bái'],
                 ['Xin Yi Hua', 'Xīn Yí Huā', 'Shin Yí Juá'],

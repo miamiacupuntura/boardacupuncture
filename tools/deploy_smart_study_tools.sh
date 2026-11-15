@@ -151,7 +151,7 @@ grep -Fq 'A continuación, comenzaremos a estudiar individualmente los Duì Yào
 grep -Fq "title.replace(/\\s*\\+\\s*/g, isSpanish ? ' y ' : ' and ')" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "var spanishOrdinals = ['primer', 'segundo', 'tercer', 'cuarto', 'quinto', 'sexto', 'séptimo']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "' Duì Yào relacionado que analizaremos combina ' + firstName" "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "cuyo nombre farmacéutico es ' + firstLatin" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "', ' + firstLatin + ', con ' + secondName + ', ' + secondLatin + '.'" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Su acción principal es ' + normalizedAction" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Este Duì Yào está relacionado con la fórmula '" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'formula-study-guide__dui-yao-number" data-read-aloud-ignore' "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -176,15 +176,22 @@ grep -Fq "El apéndice B del guideline es el listado oficial de parejas de hierb
 grep -Fq "El apéndice C del guideline es el listado oficial de fórmulas" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "apéndice D, que es el listado de sustancias obsoletas" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "String(value || '').normalize('NFC')" "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "['Xing Ren', 'Xìng Rén', 'Xing, Rén']" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "['Xing Ren', 'Xìng Rén', 'Xing Ren']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Gui Zhi', 'Guì Zhī', 'Guéi Yí']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Niu Bang Zi', 'Niú Bàng Zǐ', 'Niú Bang Tzí']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Cang Er Zi', 'Cāng Ěr Zǐ', 'Tsang Er Tzí']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Ai Ye', 'Ài Yè', 'Ái Yé']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Zi Wan', 'Zǐ Wǎn', 'Tzí Uán']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "var namePattern = new RegExp('(^|[^A-Za-zÀ-ž])' + escapedName" "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq "'Xing Ren': 'Xing, Rén'" "$TEMP_DIR/moodle/single-herbs-list.php"
-grep -Fq "'Xing Ren': 'Xing, Rén'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+grep -Fq "'Xing Ren': 'Xing Ren'" "$TEMP_DIR/moodle/single-herbs-list.php"
+grep -Fq "'Xing Ren': 'Xing Ren'" "$TEMP_DIR/moodle/single-herbs-study-guide.php"
+if grep -Fq 'cuyo nombre farmacéutico es' "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq 'whose pharmaceutical name is' "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq 'Shing' "$TEMP_DIR/moodle/formulas-study-guide.php" \
+    || grep -Fq 'Xing, Rén' "$TEMP_DIR/moodle/formulas-study-guide.php"; then
+    echo "ERROR: la narración Duì Yào conserva una pronunciación o frase farmacéutica descartada." >&2
+    exit 1
+fi
 grep -Fq "Este Duì Yào está relacionado con la fórmula '" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-dui-yao-related-formulas="<?php echo s($duiyaorelatedformulasjson' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Qing Shu Yi Qi Tang' => 'Qing Shu Yi Qi Tang (Wang Shi-Xiong)'" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -972,9 +979,9 @@ for file in "${MOODLE_FILES[@]}"; do
     cmp -s "$TEMP_DIR/moodle/$file" "$target"
     php -l "$target" >/dev/null
 done
-grep -Fq "['Xing Ren', 'Xìng Rén', 'Xing, Rén']" "$TARGET_DIR/formulas-study-guide.php"
-grep -Fq "'Xing Ren': 'Xing, Rén'" "$TARGET_DIR/single-herbs-study-guide.php"
-grep -Fq "'Xing Ren': 'Xing, Rén'" "$TARGET_DIR/single-herbs-list.php"
+grep -Fq "['Xing Ren', 'Xìng Rén', 'Xing Ren']" "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq "'Xing Ren': 'Xing Ren'" "$TARGET_DIR/single-herbs-study-guide.php"
+grep -Fq "'Xing Ren': 'Xing Ren'" "$TARGET_DIR/single-herbs-list.php"
 
 MENU_TARGET_DIR="$MOODLE_ROOT/blocks/menu"
 [[ -d "$MENU_TARGET_DIR" ]] || { echo "ERROR: no existe $MENU_TARGET_DIR" >&2; exit 1; }
@@ -1190,7 +1197,7 @@ echo "OK: Selección conserva el texto marcado y no usa la sección elegida en e
 echo "OK: la selección se reconstruye por elementos para incluir barras, tarjetas y cajas internas."
 echo "OK: cada lectura usa una sesión aislada; al terminar no continúa con fragmentos anteriores."
 echo "OK: el último fragmento cierra la lectura inmediatamente y nunca reinicia desde el principio."
-echo "OK: revisión instalada $REVISION; Xìng Rén se envía a la voz española como ‘Xing, Rén’."
+echo "OK: revisión instalada $REVISION; Xìng Rén se envía a la voz española como ‘Xing Ren’, sin acento añadido."
 echo "OK: todas las categorías identifican a Yang como autor del libro sin alterar Yang Qi, Yangming, Liver-Yang, Yin Yang Huo ni las deficiencias de Yang."
 echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video ni API externa."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
