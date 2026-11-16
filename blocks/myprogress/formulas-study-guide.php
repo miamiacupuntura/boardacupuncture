@@ -2181,6 +2181,7 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($pagetitle);
+$PAGE->set_cacheable(false);
 $PAGE->requires->js_init_code(<<<'JS'
 document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function(select) {
     select.addEventListener('change', function() {
@@ -2197,6 +2198,9 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     var supported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
     var language = reader.getAttribute('data-language') || 'en-US';
     var isSpanish = language.toLowerCase().indexOf('es') === 0;
+    var mobileVoiceMenu = !!(window.matchMedia && (
+        window.matchMedia('(max-width: 760px)').matches || window.matchMedia('(pointer: coarse)').matches
+    ));
     var sectionSelect = reader.querySelector('[data-formula-read-section-select]');
     var voiceSelect = reader.querySelector('[data-formula-read-voice]');
     var englishVoiceSelect = reader.querySelector('[data-formula-read-english-voice]');
@@ -2819,11 +2823,33 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         return !noveltyOrEffect.test(identity) && !obsoleteOrRobotic.test(identity);
     }
 
+    function isProfessionalMobileVoice(voice) {
+        var identity = (String((voice && voice.name) || '') + ' ' + String((voice && voice.voiceURI) || '')).toLowerCase();
+        return /google|microsoft|samsung|amazon|natural|neural|premium|enhanced|studio|online|siri|mónica|monica|paulina|dalia|jorge|helena|lucía|lucia|isabela|sofía|sofia|carlos|samantha|daniel|ava|aria|jenny|sonia|ryan|emma|natasha/.test(identity);
+    }
+
+    function mobileVoiceScore(voice, targetLanguage) {
+        var identity = (String((voice && voice.name) || '') + ' ' + String((voice && voice.voiceURI) || '')).toLowerCase();
+        var target = String(targetLanguage || '').toLowerCase();
+        var voiceLanguage = String((voice && voice.lang) || '').toLowerCase();
+        var score = voiceLanguage === target ? 35 : 15;
+        if (/natural|neural|premium|enhanced|studio|online/.test(identity)) score += 100;
+        if (/google|microsoft|samsung|amazon/.test(identity)) score += 70;
+        if (/mónica|monica|paulina|dalia|jorge|helena|lucía|lucia|isabela|sofía|sofia|carlos|samantha|daniel|ava|aria|jenny|sonia|ryan|emma|natasha/.test(identity)) score += 60;
+        if (voice && voice.default) score += 20;
+        return score;
+    }
+
     function educationalVoicesForLanguage(targetLanguage) {
         var prefix = String(targetLanguage || '').slice(0, 2).toLowerCase();
-        return window.speechSynthesis.getVoices().filter(function(voice) {
+        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
             return (voice.lang || '').slice(0, 2).toLowerCase() === prefix && isEducationalVoice(voice);
         });
+        if (!mobileVoiceMenu) return voices;
+        return voices.filter(isProfessionalMobileVoice).sort(function(first, second) {
+            return mobileVoiceScore(second, targetLanguage) - mobileVoiceScore(first, targetLanguage)
+                || first.name.localeCompare(second.name);
+        }).slice(0, 6);
     }
 
     function bestNaturalVoice(voices, targetLanguage, referenceVoice) {
