@@ -355,6 +355,11 @@ grep -Fq '"relatedDuiYaoTextEs": "En esta categoría aparecen siete parejas ofic
 grep -Fq '"separatorEs": "Estreñimiento o plenitud dura y dolorosa con signos de Calor/exceso; las tres fórmulas Cheng Qi estudiadas en detalle forman la escala gradual central."' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq '"nameEs": "Fórmulas purgantes"' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq '"classificationTitleEs": "La categoría de fórmulas purgantes contiene cinco clases terapéuticas diferentes"' "$TEMP_DIR/data/formulas-study-guide-data.json"
+grep -Fq '"routeTitleEs": "Para elegir entre las fórmulas Cheng Qi, debemos hacernos cuatro preguntas en orden"' "$TEMP_DIR/data/formulas-study-guide-data.json"
+grep -Fq '"Primera pregunta: ¿Es un patrón de exceso interior?"' "$TEMP_DIR/data/formulas-study-guide-data.json"
+grep -Fq '"Segunda pregunta: ¿Están presentes los cuatro rasgos: distensión focal, plenitud, sequedad y dureza?"' "$TEMP_DIR/data/formulas-study-guide-data.json"
+grep -Fq '"Tercera pregunta: ¿Hay aglomeración sin sequedad marcada?"' "$TEMP_DIR/data/formulas-study-guide-data.json"
+grep -Fq '"Cuarta pregunta: ¿Predomina la sequedad sin distensión focal ni plenitud marcadas?"' "$TEMP_DIR/data/formulas-study-guide-data.json"
 if grep -Fq 'La categoría Purge' "$TEMP_DIR/data/formulas-study-guide-data.json"; then
     echo "ERROR: la categoría de fórmulas purgantes conserva el nombre inglés en el contenido español." >&2
     exit 1
@@ -370,6 +375,7 @@ grep -Fq 'Resumida · diferencias decisivas' "$TEMP_DIR/moodle/formulas-study-gu
 grep -Fq 'acupuncturetests-formula-reader-mode' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'function guidelineFormulaSummary(root)' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "[data-formula-summary-card][data-guideline-formula=\"1\"]" "$TEMP_DIR/moodle/formulas-study-guide.php" || grep -Fq "card.getAttribute('data-guideline-formula') === '1'" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "if (!cardsInsideRoot.length) return '';" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'Se mencionan solamente las fórmulas incluidas en el guideline vigente.' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-guideline-formula="<?php echo $iscurrentguidelineformula' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "utterance.rate = chunkLanguage.slice(0, 2).toLowerCase() === 'en' ? 0.96 : 1;" "$TEMP_DIR/moodle/formulas-study-guide.php"

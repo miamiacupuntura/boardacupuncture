@@ -2521,7 +2521,8 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         });
         if (!categoryKey && root !== page) {
             var cardsInsideRoot = officialCards.filter(function(card) { return root.contains(card); });
-            if (cardsInsideRoot.length) officialCards = cardsInsideRoot;
+            if (!cardsInsideRoot.length) return '';
+            officialCards = cardsInsideRoot;
         }
         if (categoryKey && !officialCards.length) {
             return isSpanish

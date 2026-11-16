@@ -802,36 +802,36 @@
           "diagnosticEs": "Estreñimiento leve con sequedad e irritabilidad, poca distensión focal o plenitud, sin dureza pronunciada y pulso resbaladizo-rápido."
         }
       ],
-      "routeTitle": "Four-step Cheng Qi decision route",
-      "routeTitleEs": "Ruta de decisión Cheng Qi en cuatro pasos",
+      "routeTitle": "To choose among the Cheng Qi formulas, ask four questions in order",
+      "routeTitleEs": "Para elegir entre las fórmulas Cheng Qi, debemos hacernos cuatro preguntas en orden",
       "route": [
         [
           "1",
-          "Is this interior excess?",
-          "Look for constipation or circumfluence, abdominal resistance to pressure, a dry yellow-to-black coat and a deep, excessive pulse—not an unresolved exterior pattern or pure deficiency.",
-          "¿Es exceso interior?",
-          "Busca estreñimiento o desbordamiento, abdomen resistente a la presión, capa seca amarilla a negra y pulso profundo-excesivo; no un patrón exterior sin resolver ni deficiencia pura."
+          "First question: Is this interior excess?",
+          "To answer it, look for constipation or circumfluence, abdominal resistance to pressure, a dry yellow-to-black coat, and a deep, excessive pulse—not an unresolved exterior pattern or pure deficiency. If the answer is yes, this is interior excess and the Cheng Qi comparison can continue. If the answer is no, do not use this decision route.",
+          "Primera pregunta: ¿Es un patrón de exceso interior?",
+          "Para responderla, busca estreñimiento o desbordamiento, abdomen resistente a la presión, capa seca amarilla a negra y pulso profundo-excesivo; no un patrón exterior sin resolver ni deficiencia pura. Si la respuesta es afirmativa, estamos ante un exceso interior y podemos continuar con la comparación Cheng Qi. Si la respuesta es negativa, esta ruta de decisión no corresponde."
         ],
         [
           "2",
-          "All four: focal distention, fullness, dryness and hardness?",
-          "When all four are severe, especially with pain worse on pressure and a deep-forceful pulse, choose Da Cheng Qi Tang.",
-          "¿Están los cuatro: distensión focal, plenitud, sequedad y dureza?",
-          "Cuando los cuatro son intensos, especialmente con dolor peor a la presión y pulso profundo-fuerte, elige Da Cheng Qi Tang."
+          "Second question: Are all four present: focal distention, fullness, dryness, and hardness?",
+          "If all four are severe, especially with pain worse on pressure and a deep-forceful pulse, choose Da Cheng Qi Tang. If all four are not present, continue to the third question.",
+          "Segunda pregunta: ¿Están presentes los cuatro rasgos: distensión focal, plenitud, sequedad y dureza?",
+          "Si los cuatro son intensos, especialmente con dolor que empeora a la presión y pulso profundo-fuerte, la fórmula indicada es Da Cheng Qi Tang. Si no están presentes los cuatro rasgos, continúa con la tercera pregunta."
         ],
         [
           "3",
-          "Clumping without marked dryness?",
-          "Focal distention, fullness and hardness with less dryness and no need for Mang Xiao points to Xiao Cheng Qi Tang.",
-          "¿Aglomeración sin sequedad marcada?",
-          "Distensión focal, plenitud y dureza con menos sequedad y sin necesidad de Mang Xiao apuntan a Xiao Cheng Qi Tang."
+          "Third question: Is there clumping without marked dryness?",
+          "Focal distention, fullness, and hardness with less dryness and no need for Mang Xiao point to Xiao Cheng Qi Tang. If clumping does not predominate, continue to the fourth question.",
+          "Tercera pregunta: ¿Hay aglomeración sin sequedad marcada?",
+          "Si predominan distensión focal, plenitud y dureza, pero la sequedad es menor y no se necesita Mang Xiao, la fórmula indicada es Xiao Cheng Qi Tang. Si no predomina la aglomeración, continúa con la cuarta pregunta."
         ],
         [
           "4",
-          "Dryness without marked focal distention or fullness?",
-          "Mild constipation with irritability and dryness, but little focal distention or fullness, points to Tiao Wei Cheng Qi Tang.",
-          "¿Sequedad sin distensión focal ni plenitud marcadas?",
-          "Estreñimiento leve con irritabilidad y sequedad, pero poca distensión focal o plenitud, apunta a Tiao Wei Cheng Qi Tang."
+          "Fourth question: Does dryness predominate without marked focal distention or fullness?",
+          "Mild constipation with irritability and dryness, but little focal distention or fullness, points to Tiao Wei Cheng Qi Tang. This distinguishes Dry-Heat predominance from the stronger clumping treated by the other two formulas.",
+          "Cuarta pregunta: ¿Predomina la sequedad sin distensión focal ni plenitud marcadas?",
+          "Si hay estreñimiento leve con irritabilidad y sequedad, pero poca distensión focal o plenitud, la fórmula indicada es Tiao Wei Cheng Qi Tang. Así se diferencia el predominio de Calor-Sequedad de la aglomeración más fuerte tratada por las otras dos fórmulas."
         ]
       ],
       "quickCompareTitle": "The three Cheng Qi formulas at a glance",
