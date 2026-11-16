@@ -75,12 +75,21 @@ foreach ($courseids as $courseid) {
         'u.lastname ASC,u.firstname ASC',
         0,
         0,
-        true
+        false
     );
-    $enrolled = array_filter($enrolled, static function($user) use ($coursecontext): bool {
-        return !is_siteadmin($user->id)
-            && !has_capability('mod/scorm:viewreport', $coursecontext, $user->id)
-            && !has_capability('moodle/course:update', $coursecontext, $user->id);
+    $attemptstudents = $DB->get_records_sql(
+        "SELECT DISTINCT u.id, u.firstname, u.lastname, u.email, u.lastaccess
+           FROM {user} u
+           JOIN {scorm_attempt} a ON a.userid = u.id
+           JOIN {scorm} s ON s.id = a.scormid
+          WHERE s.course = :attemptcourseid
+            AND u.deleted = 0
+       ORDER BY u.lastname ASC, u.firstname ASC",
+        ['attemptcourseid' => (int)$courseid]
+    );
+    $enrolled += $attemptstudents;
+    $enrolled = array_filter($enrolled, static function($user): bool {
+        return !is_siteadmin($user->id);
     });
     $coursestudents[(int)$courseid] = $enrolled;
     foreach ($enrolled as $student) {
