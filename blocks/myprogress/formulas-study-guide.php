@@ -2807,16 +2807,30 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     }
 
     function voiceProvider(voice) {
-        var name = String((voice && voice.name) || '').toLowerCase();
+        var name = (String((voice && voice.name) || '') + ' ' + String((voice && voice.voiceURI) || '')).toLowerCase();
         var providers = ['google', 'microsoft', 'apple', 'amazon', 'samsung'];
         return providers.find(function(provider) { return name.indexOf(provider) !== -1; }) || '';
+    }
+
+    function isEducationalVoice(voice) {
+        var identity = String((voice && voice.name) || '') + ' ' + String((voice && voice.voiceURI) || '');
+        var noveltyOrEffect = /\b(?:albert|bad news|bahh|bells|boing|bubbles|cellos|child|cute|eddy|flo|good news|grandma|grandpa|hysterical|jester|kid|niña|niño|organ|princess|ralph|reed|rocko|sandy|shelley|superstar|trinoids|whisper|wobble|zarvox|alien|character|demon|effect|fantasma|ghost|horror|juego|game|monster|monstruo|novelty|robot|scary|singing|susurro|witch|zombie)\b/i;
+        var obsoleteOrRobotic = /\b(?:espeak|festival|flite|eloquence|desktop)\b/i;
+        return !noveltyOrEffect.test(identity) && !obsoleteOrRobotic.test(identity);
+    }
+
+    function educationalVoicesForLanguage(targetLanguage) {
+        var prefix = String(targetLanguage || '').slice(0, 2).toLowerCase();
+        return window.speechSynthesis.getVoices().filter(function(voice) {
+            return (voice.lang || '').slice(0, 2).toLowerCase() === prefix && isEducationalVoice(voice);
+        });
     }
 
     function bestNaturalVoice(voices, targetLanguage, referenceVoice) {
         var target = String(targetLanguage || '').toLowerCase();
         var targetPrefix = target.slice(0, 2);
         var referenceProvider = voiceProvider(referenceVoice);
-        var naturalNames = /natural|neural|premium|enhanced|studio|online|google|aria|ava|jenny|sonia|ryan|emma|guy|samantha|daniel|natasha/i;
+        var naturalNames = /natural|neural|premium|enhanced|studio|online|google|aria|ava|jenny|sonia|ryan|emma|guy|samantha|daniel|natasha|mónica|monica|paulina|dalia|jorge|helena|lucía|lucia|isabela|sofía|sofia|carlos/i;
         var roboticNames = /espeak|compact|eloquence|festival|flite|david|zira|mark|hazel|desktop/i;
         return voices.slice().sort(function(first, second) {
             function score(voice) {
@@ -2847,25 +2861,25 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
     function voiceForLanguage(targetLanguage) {
         var prefix = String(targetLanguage || '').slice(0, 2).toLowerCase();
         if (prefix === 'en' && selectedEnglishVoice) return selectedEnglishVoice;
-        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
-            return (voice.lang || '').slice(0, 2).toLowerCase() === prefix;
-        });
+        var voices = educationalVoicesForLanguage(targetLanguage);
         return bestNaturalVoice(voices, targetLanguage, selectedVoice);
     }
 
     function loadEnglishVoices() {
         if (!englishVoiceSelect || !supported) return;
-        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
-            return (voice.lang || '').slice(0, 2).toLowerCase() === 'en';
-        });
+        var voices = educationalVoicesForLanguage('en-US');
         var stored = '';
         try { stored = window.localStorage.getItem('acupuncturetests-reader-voice-en-formulas') || ''; } catch (error) {}
+        if (stored && !voices.some(function(voice) { return voice.name === stored; })) {
+            try { window.localStorage.removeItem('acupuncturetests-reader-voice-en-formulas'); } catch (error) {}
+            stored = '';
+        }
         selectedEnglishVoice = voices.find(function(voice) { return voice.name === stored; })
             || bestNaturalVoice(voices, 'en-US', selectedVoice);
         englishVoiceSelect.innerHTML = '';
         var automatic = document.createElement('option');
         automatic.value = '';
-        automatic.textContent = 'Automática — similar a la voz española'
+        automatic.textContent = 'Automática — voz inglesa educativa similar a la española'
             + (selectedEnglishVoice ? ': ' + selectedEnglishVoice.name : '');
         automatic.selected = !stored;
         englishVoiceSelect.appendChild(automatic);
@@ -2880,16 +2894,12 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
 
     function loadVoices() {
         if (!supported) return;
-        var prefix = language.slice(0, 2).toLowerCase();
-        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
-            return (voice.lang || '').slice(0, 2).toLowerCase() === prefix;
-        });
-        if (!voices.length) voices = window.speechSynthesis.getVoices();
+        var voices = educationalVoicesForLanguage(language);
         selectedVoice = preferredVoice(voices);
         voiceSelect.innerHTML = '';
         var automatic = document.createElement('option');
         automatic.value = '';
-        automatic.textContent = isSpanish ? 'Automática — recomendada' : 'Automatic — recommended';
+        automatic.textContent = isSpanish ? 'Automática — voz educativa recomendada' : 'Automatic — recommended educational voice';
         voiceSelect.appendChild(automatic);
         voices.forEach(function(voice) {
             var option = document.createElement('option');
@@ -3047,19 +3057,13 @@ document.querySelectorAll('[data-formula-chapter-jump] select').forEach(function
         if (text) cachedSelection = text;
     });
     voiceSelect.addEventListener('change', function() {
-        var prefix = language.slice(0, 2).toLowerCase();
-        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
-            return (voice.lang || '').slice(0, 2).toLowerCase() === prefix;
-        });
-        if (!voices.length) voices = window.speechSynthesis.getVoices();
+        var voices = educationalVoicesForLanguage(language);
         selectedVoice = voices.find(function(voice) { return voice.name === voiceSelect.value; }) || preferredVoice(voices);
         try { window.localStorage.setItem('acupuncturetests-reader-voice-' + language.slice(0, 2).toLowerCase(), voiceSelect.value); } catch (error) {}
         loadEnglishVoices();
     });
     if (englishVoiceSelect) englishVoiceSelect.addEventListener('change', function() {
-        var voices = window.speechSynthesis.getVoices().filter(function(voice) {
-            return (voice.lang || '').slice(0, 2).toLowerCase() === 'en';
-        });
+        var voices = educationalVoicesForLanguage('en-US');
         selectedEnglishVoice = voices.find(function(voice) { return voice.name === englishVoiceSelect.value; })
             || bestNaturalVoice(voices, 'en-US', selectedVoice);
         try {
