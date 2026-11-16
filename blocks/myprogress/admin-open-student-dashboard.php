@@ -15,6 +15,10 @@ if (\core\session\manager::is_loggedinas()) {
 }
 
 $studentid = required_param('userid', PARAM_INT);
+$destination = optional_param('destination', 'dashboard', PARAM_ALPHA);
+if (!in_array($destination, ['dashboard', 'studyscore'], true)) {
+    throw new invalid_parameter_exception('Invalid student destination.');
+}
 $student = $DB->get_record(
     'user',
     ['id' => $studentid, 'deleted' => 0, 'suspended' => 0],
@@ -37,7 +41,12 @@ foreach ([30, 34, 36, 44, 45, 113, 116, 117] as $courseid) {
 \core\session\manager::loginas($student->id, $systemcontext);
 \core\notification::info(
     'Active profile: student — ' . fullname($student)
-    . '. The dashboard and Evaluations will show only this student’s results.'
+    . ($destination === 'studyscore'
+        ? '. My Study Score is now open under this student profile.'
+        : '. The dashboard and Evaluations will show only this student’s results.')
 );
 
-redirect(new moodle_url('/my/', ['level' => 'school']));
+$destinationurl = $destination === 'studyscore'
+    ? new moodle_url('/blocks/myprogress/study-score.php')
+    : new moodle_url('/my/', ['level' => 'school']);
+redirect($destinationurl);

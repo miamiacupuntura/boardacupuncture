@@ -16,6 +16,8 @@ $libraryurl = new moodle_url('/blocks/myprogress/study-guide.php', ['area' => 'h
 $quizurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'formula-practice-es.html' : 'formula-practice.html'));
 $weakquizurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'formula-practice-es.html' : 'formula-practice.html'), ['focus' => 'weak']);
 $patternurl = new moodle_url('/blocks/myprogress/smart-study-tools.php', ['mode' => 'pattern'] + ($ises ? ['lang' => 'es'] : []));
+$issupervisedstudent = \core\session\manager::is_loggedinas() && !empty($USER->realuser);
+$supervisedstudentname = $issupervisedstudent ? fullname($USER) : '';
 
 $formuladata = json_decode((string)file_get_contents(__DIR__ . '/formulas-study-guide-data.json'), true);
 $formulas = [];
@@ -271,6 +273,7 @@ echo $OUTPUT->header();
 .study-score__overall{text-align:center}.study-score__ring{--study-score:0;width:190px;height:190px;display:grid;place-items:center;margin:2px auto 15px;border-radius:50%;background:conic-gradient(#ea6a19 calc(var(--study-score) * 1%),#e8eef2 0);position:relative}.study-score__ring:after{content:"";position:absolute;inset:16px;border-radius:50%;background:#fff}.study-score__ring-copy{position:relative;z-index:1}.study-score__ring strong{display:block;font-size:49px;line-height:1}.study-score__ring small{font-weight:900;color:#64748b}.study-score__overall h3{margin:0 0 4px;font-size:23px}.study-score__confidence{display:inline-flex;margin:8px 0;padding:5px 10px;border-radius:999px;background:#fff1df;color:#9a3f08;font-size:12px;font-weight:900}.study-score__meta{margin:5px 0;color:#526b84;font-size:13px}
 .study-score__metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.study-score__metric{padding:17px;border:1px solid #d8e2e8;border-radius:11px;background:#fbfdff}.study-score__metric-header{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.study-score__metric h3{margin:0;font-size:16px}.study-score__metric strong{font-size:24px}.study-score__track{height:9px;margin:11px 0;border-radius:999px;background:#e5edf1;overflow:hidden}.study-score__track span{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#0d8875,#44b59e)}.study-score__metric p{margin:0;color:#60758a;font-size:12px;line-height:1.45}
 .study-score__empty{margin-bottom:18px;padding:15px 17px;border-left:5px solid #6d28d9;border-radius:10px;background:#f5f0ff;color:#4c1d95;font-weight:800}.study-score__empty[hidden]{display:none}
+.study-score__profile{margin-bottom:18px;padding:14px 17px;border-left:5px solid #f47b20;border-radius:10px;background:#fff7ed;color:#7c2d12;line-height:1.5}.study-score__profile strong{color:#9a3412}
 .study-score__grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.75fr);gap:18px;margin-bottom:18px}.study-score__panel h3{margin:0 0 6px;font-size:22px}.study-score__subcopy{margin:0 0 16px;color:#60758a;font-size:13px}
 .study-score__table-wrap{overflow:auto}.study-score__table{width:100%;border-collapse:collapse}.study-score__table th,.study-score__table td{padding:11px 10px;border-bottom:1px solid #dae4e9;text-align:left;font-size:13px}.study-score__table th{background:#eef8f6;color:#075f50;font-size:12px}.study-score__table td:nth-child(n+2){font-weight:850;white-space:nowrap}.study-score__empty-cell{text-align:center!important;color:#64748b!important;font-weight:700!important}
 .study-score__weak-list{display:grid;gap:9px;margin:15px 0 0;padding:0;list-style:none}.study-score__weak-list li{display:flex;justify-content:space-between;gap:12px;padding:11px;border-radius:9px;background:#f8fafc;color:#314e63}.study-score__weak-list strong{color:#b44209;font-size:12px;white-space:nowrap}.study-score__empty-item{display:block!important;text-align:center;color:#64748b!important}
@@ -292,6 +295,12 @@ echo $OUTPUT->header();
             <a class="study-score__button" hreflang="<?php echo $ises ? 'en' : 'es'; ?>" href="<?php echo $languageurl->out(false); ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
         </div>
     </header>
+
+    <?php if ($issupervisedstudent): ?>
+    <aside class="study-score__profile"><strong><?php echo $ises ? 'Perfil supervisado del estudiante:' : 'Supervised student profile:'; ?> <?php echo s($supervisedstudentname); ?>.</strong> <?php echo $ises
+        ? 'My Study Score usa el historial de Formula Quiz guardado en este navegador; la actividad realizada en otro dispositivo no aparecerá hasta que se sincronice con el servidor.'
+        : 'My Study Score uses Formula Quiz history saved in this browser; activity completed on another device will not appear until it is synchronized with the server.'; ?></aside>
+    <?php endif; ?>
 
     <aside class="study-score__empty" data-empty-history>
         <?php echo $ises
