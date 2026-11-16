@@ -221,9 +221,9 @@ class block_menu extends block_base {
                 $membershipcontext = context_course::instance($membershipcourseid);
                 $hasboardaccess = is_enrolled($membershipcontext, $USER->id, '', true)
                     || has_capability('moodle/course:view', $membershipcontext, $USER->id);
-                $showpersonalevaluations = is_enrolled($membershipcontext, $USER->id, '', true)
-                    && !is_siteadmin($USER->id)
-                    && !has_capability('moodle/grade:viewall', $membershipcontext, $USER->id);
+                $showpersonalevaluations = !is_siteadmin($USER->id)
+                    && !has_capability('moodle/grade:viewall', $membershipcontext, $USER->id)
+                    && !has_capability('moodle/course:manageactivities', $membershipcontext, $USER->id);
             }
         }
 

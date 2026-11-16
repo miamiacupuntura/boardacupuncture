@@ -329,6 +329,7 @@ fi
 grep -Fq "/blocks/myprogress/my-evaluations.php" "$TEMP_DIR/menu/block_menu.php"
 grep -Fq '>Evaluations</a>' "$TEMP_DIR/menu/block_menu.php"
 grep -Fq "!has_capability('moodle/grade:viewall', \$membershipcontext, \$USER->id)" "$TEMP_DIR/menu/block_menu.php"
+grep -Fq "!has_capability('moodle/course:manageactivities', \$membershipcontext, \$USER->id)" "$TEMP_DIR/menu/block_menu.php"
 grep -Fq "'My Evaluations', 'Mis evaluaciones'" "$TEMP_DIR/moodle/my-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TEMP_DIR/moodle/my-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TEMP_DIR/moodle/my-evaluations.php"
