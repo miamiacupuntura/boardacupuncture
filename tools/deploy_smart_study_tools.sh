@@ -54,8 +54,8 @@ MOODLE_FILES+=(
     single-herbs-category-warm-interior.php
     single-herbs-category-warm-transform-phlegm.php
 )
-MENU_FILES=(herbology-board.php herbology-exam-history.php exam-history.php block_menu.php)
-MENU_JS_FILES=(herbology-simulation.js)
+MENU_FILES=(herbology-board.php herbology-exam-history.php exam-history.php block_menu.php admin-open-assessment-as.php assessment-session.php)
+MENU_JS_FILES=(herbology-simulation.js assessment-profile-banner.js)
 THEME_TEMPLATE_FILES=(frontpage.mustache)
 DATA_FILES=(single-herb-safety-supplement.json single-herb-properties.json single-herb-rich-profiles.json formulas-study-guide-data.json formula-board-roster-2026.json formula-architecture-data.json dui-yao-smart-data.json)
 STATIC_FILES=(read-aloud-test.html formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html cautions-contraindications.html cautions-contraindications-es.html safety.html safety-es.html advanced-name-traps.html families.html formula-name-traps.html formula-theory.html herb-families.html misleading-formula-names.html most-important-formulas.html name-traps.html patterns-tips-maciocia.html secondary-actions.html supplemental-herb-families.html advanced-name-traps-es.html families-es.html formula-name-traps-es.html formula-theory-es.html herb-families-es.html misleading-formula-names-es.html most-important-formulas-es.html name-traps-es.html patterns-tips-maciocia-es.html secondary-actions-es.html supplemental-herb-families-es.html index.html index-es.html safety-toxicity.html safety-interactions.html safety-regulation.html safety-toxic-herbs.html safety-pregnancy.html safety-anticoagulants.html safety-ma-huang-hypertension.html safety-fu-zi-cardiac-toxicity.html safety-clinical-interaction-cases.html safety-obsolete-prohibited-substances.html safety-herb-specific-cautions.html safety-toxicity-es.html safety-interactions-es.html safety-regulation-es.html safety-toxic-herbs-es.html safety-pregnancy-es.html safety-anticoagulants-es.html safety-ma-huang-hypertension-es.html safety-fu-zi-cardiac-toxicity-es.html safety-clinical-interaction-cases-es.html safety-obsolete-prohibited-substances-es.html safety-herb-specific-cautions-es.html continuous-reader.html continuous-reader.js safety-library.html safety-library-es.html comparisons.js study-return-navigation.js chief-herbs-property.html chief-herbs-property-es.html formulas.html formulas-es.html pathologies.html pathologies-es.html patterns.html patterns-es.html maciocia-formula-tips.html maciocia-formula-tips-es.html dui-yao.html dui-yao-es.html herb-comparison-bank.html herb-comparison-bank-es.html dui-yao-practice.html dui-yao-practice-es.html miscellaneous-practice.html miscellaneous-practice-es.html)
@@ -65,7 +65,7 @@ STATIC_FILES+=(
     gu-ya-vs-mai-ya.html gu-ya-vs-mai-ya-es.html
     huo-ma-ren-vs-yu-li-ren.html huo-ma-ren-vs-yu-li-ren-es.html
     zhu-li-vs-zhu-ru.html zhu-li-vs-zhu-ru-es.html
-    single-herb-practice.js
+    single-herb-practice.js single-herb-practice.html single-herb-practice-es.html
 )
 
 for file in "${MOODLE_FILES[@]}"; do
@@ -310,7 +310,7 @@ grep -Fq "Tipo de evaluación" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Quiz, Simulación y Exámenes" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "formula-modifications-manifest.json" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Quiz de fórmulas · categoría complementaria" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
-grep -Fq ">Abrir enlace</a>" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "Abrir como <?php echo s(\$attempt['student']); ?>" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "NCBAHM · Quiz, Simulación y Exámenes" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "'simulationlinear', 'simulationadaptive'" "$TEMP_DIR/menu/herbology-exam-history.php"
 grep -Fq "data-history-url" "$TEMP_DIR/menu/herbology-board.php"
@@ -318,6 +318,16 @@ grep -Fq 'examtype: `simulation${mode}`' "$TEMP_DIR/menu/herbology-simulation.js
 grep -Fq "Board Simulation" "$TEMP_DIR/menu/exam-history.php"
 grep -Fq "Comenzar de nuevo →" "$TEMP_DIR/menu/exam-history.php"
 grep -Fq "Volver a realizar →" "$TEMP_DIR/menu/exam-history.php"
+grep -Fq "session\\manager::loginas" "$TEMP_DIR/menu/admin-open-assessment-as.php"
+grep -Fq "Perfil activo: estudiante" "$TEMP_DIR/menu/admin-open-assessment-as.php"
+grep -Fq "assessment-session.php" "$TEMP_DIR/menu/assessment-profile-banner.js"
+grep -Fq "Perfil activo: estudiante" "$TEMP_DIR/menu/assessment-profile-banner.js"
+grep -Fq "Evaluación de estudiantes" "$TEMP_DIR/menu/block_menu.php"
+grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/menu/herbology-board.php"
+grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/formula-practice-es.html"
+grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/single-herb-practice-es.html"
+grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/dui-yao-practice-es.html"
+grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/miscellaneous-practice-es.html"
 grep -Fq "Último acceso al curso" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "estudiantes-por-curso-" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "El Formula Quiz y My Study Score todavía conservan su historial en el navegador" "$TEMP_DIR/moodle/admin-student-evaluations.php"
@@ -1260,7 +1270,7 @@ grep -Fq "Tipo de evaluación" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Quiz, Simulación y Exámenes" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "formula-modifications-manifest.json" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Quiz de fórmulas · categoría complementaria" "$TARGET_DIR/admin-ncbahm-evaluations.php"
-grep -Fq ">Abrir enlace</a>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "Abrir como <?php echo s(\$attempt['student']); ?>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Último acceso al curso" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "function extend_primary_navigation" "$TARGET_DIR/classes/hook/navigation.php"
 grep -Fq "core\\hook\\navigation\\primary_extend::class" "$TARGET_DIR/db/hooks.php"
@@ -1337,6 +1347,12 @@ grep -Fq 'examtype: `simulation${mode}`' "$MENU_TARGET_DIR/herbology-simulation.
 grep -Fq "Board Simulation" "$MENU_TARGET_DIR/exam-history.php"
 grep -Fq "Comenzar de nuevo →" "$MENU_TARGET_DIR/exam-history.php"
 grep -Fq "Volver a realizar →" "$MENU_TARGET_DIR/exam-history.php"
+grep -Fq "session\\manager::loginas" "$MENU_TARGET_DIR/admin-open-assessment-as.php"
+grep -Fq "Perfil activo: estudiante" "$MENU_TARGET_DIR/admin-open-assessment-as.php"
+grep -Fq "assessment-session.php" "$MENU_TARGET_DIR/assessment-profile-banner.js"
+grep -Fq "Perfil activo: estudiante" "$MENU_TARGET_DIR/assessment-profile-banner.js"
+grep -Fq "Evaluación de estudiantes" "$MENU_TARGET_DIR/block_menu.php"
+grep -Fq "assessment-profile-banner.js" "$MENU_TARGET_DIR/herbology-board.php"
 
 THEME_TEMPLATE_TARGET_DIR="$MOODLE_ROOT/theme/moove/templates"
 [[ -d "$THEME_TEMPLATE_TARGET_DIR" ]] || { echo "ERROR: no existe $THEME_TEMPLATE_TARGET_DIR" >&2; exit 1; }
@@ -1391,6 +1407,10 @@ for STUDY_NOTE_DIR in "${STUDY_NOTE_DIRS[@]}"; do
     done
     grep -Fq '← Study Guide' "$STUDY_NOTE_DIR/safety-library.html"
     grep -Fq '/blocks/myprogress/study-guide.php?area=herbology&amp;view=library' "$STUDY_NOTE_DIR/safety-library.html"
+    grep -Fq 'assessment-profile-banner.js' "$STUDY_NOTE_DIR/formula-practice-es.html"
+    grep -Fq 'assessment-profile-banner.js' "$STUDY_NOTE_DIR/single-herb-practice-es.html"
+    grep -Fq 'assessment-profile-banner.js' "$STUDY_NOTE_DIR/dui-yao-practice-es.html"
+    grep -Fq 'assessment-profile-banner.js' "$STUDY_NOTE_DIR/miscellaneous-practice-es.html"
     if grep -Fq 'href="/my/"' "$STUDY_NOTE_DIR/safety-library.html" "$STUDY_NOTE_DIR/safety-library-es.html"; then
         echo "ERROR: $STUDY_NOTE_DIR conserva una salida de Safety Library hacia /my/." >&2
         exit 1
@@ -1554,5 +1574,8 @@ echo "OK: la voz inglesa automática evita voces antiguas o Desktop cuando hay u
 echo "OK: todas las categorías identifican a Yang como autor del libro sin alterar Yang Qi, Yangming, Liver-Yang, Yin Yang Huo ni las deficiencias de Yang."
 echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video ni API externa."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
+echo "OK: el administrador abre cada evaluación en un perfil estudiantil supervisado y claramente identificado."
+echo "OK: el perfil supervisado conserva el cambio entre español e inglés y separa los resultados del administrador."
+echo "OK: el dashboard administrativo incluye Evaluación de estudiantes junto a los dos programas."
 echo "OK: archivos públicos instalados en ${#STUDY_NOTE_DIRS[@]} ruta(s): ${STUDY_NOTE_DIRS[*]}."
 echo "RESPALDO: $BACKUP"

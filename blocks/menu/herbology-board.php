@@ -1060,6 +1060,7 @@ $pagetitle = in_array($track, ['exams', 'simulation'], true)
         : ($ises ? 'Práctica de Herbología' : 'Herbology Practice'));
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($pagetitle);
+$PAGE->requires->js(new moodle_url('/blocks/menu/assessment-profile-banner.js', ['v' => '2026111601']));
 
 $topics = [];
 $clearheatsections = [
