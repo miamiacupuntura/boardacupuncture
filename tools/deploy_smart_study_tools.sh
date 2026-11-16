@@ -353,6 +353,12 @@ fi
 grep -Fq '"actionEs": "Libera capa muscular, regula Yin y Wei y armoniza exterior."' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq '"relatedDuiYaoTextEs": "En esta categoría aparecen siete parejas oficiales.' "$TEMP_DIR/data/formulas-study-guide-data.json"
 grep -Fq '"separatorEs": "Estreñimiento o plenitud dura y dolorosa con signos de Calor/exceso; las tres fórmulas Cheng Qi estudiadas en detalle forman la escala gradual central."' "$TEMP_DIR/data/formulas-study-guide-data.json"
+grep -Fq '"nameEs": "Fórmulas purgantes"' "$TEMP_DIR/data/formulas-study-guide-data.json"
+grep -Fq '"classificationTitleEs": "La categoría de fórmulas purgantes contiene cinco clases terapéuticas diferentes"' "$TEMP_DIR/data/formulas-study-guide-data.json"
+if grep -Fq 'La categoría Purge' "$TEMP_DIR/data/formulas-study-guide-data.json"; then
+    echo "ERROR: la categoría de fórmulas purgantes conserva el nombre inglés en el contenido español." >&2
+    exit 1
+fi
 grep -Fq '"clinicalFrameTitleEs": "La fórmula para Flema se elige por el mecanismo acompañante, no solo por el esputo."' "$TEMP_DIR/data/formulas-study-guide-data.json"
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (($data["version"] ?? null) !== 7 || count($data["formulas"] ?? []) !== 63 || count($data["supplementalFormulas"] ?? []) !== 227) { exit(1); }' "$TEMP_DIR/data/formulas-study-guide-data.json"
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || count($data["formulas"] ?? []) !== 181) { exit(1); }' "$TEMP_DIR/data/formula-board-roster-2026.json"

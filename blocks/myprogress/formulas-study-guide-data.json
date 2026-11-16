@@ -17,7 +17,7 @@
       "number": 3,
       "key": "purge",
       "name": "Purge",
-      "nameEs": "Purgar"
+      "nameEs": "Fórmulas purgantes"
     },
     {
       "number": 4,
@@ -708,7 +708,7 @@
         }
       ],
       "classificationTitle": "The Purge category contains five different therapeutic classes",
-      "classificationTitleEs": "La categoría Purge contiene cinco clases terapéuticas diferentes",
+      "classificationTitleEs": "La categoría de fórmulas purgantes contiene cinco clases terapéuticas diferentes",
       "classificationText": "Purgatives, moistening laxatives, and harsh water-expellants are grouped together because all direct a pathogen or accumulation downward, but they do not treat the same problem. Identify what must be removed—Heat clumping, Cold accumulation, dry stool, excess complicated by deficiency, or retained water—before comparing formulas.",
       "classificationTextEs": "Purgantes, laxantes humectantes y expelentes drásticos de agua se agrupan porque todos dirigen hacia abajo un patógeno o una acumulación, pero no tratan el mismo problema. Antes de comparar fórmulas, identifica qué debe eliminarse: aglomeración de Calor, acumulación de Frío, heces secas, exceso complicado por deficiencia o agua retenida.",
       "classificationCaveat": "Critical distinction: moistening laxatives gently lubricate dry stool; purgatives forcefully attack material clumping; harsh expellants violently drive retained water through the stool or urine and are not constipation remedies. Several historical expellant formulas contain toxic, prohibited, or obsolete substances. These are study distinctions, not instructions for self-treatment.",
