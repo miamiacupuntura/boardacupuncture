@@ -16,11 +16,11 @@ $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = 50;
 
 $subjects = [
-    'all' => ['name' => 'Todas las materias', 'courseids' => [30, 34, 45, 117, 36, 113]],
+    'all' => ['name' => 'Todas las materias', 'courseids' => [30, 34, 45, 44, 117, 36, 113]],
     'foundations' => ['name' => 'Foundations', 'courseids' => [30]],
     'acupuncture' => ['name' => 'Acupuncture & Point Location', 'courseids' => [34]],
     'single-herbs' => ['name' => 'Chinese Herbology · Single Herbs', 'courseids' => [45]],
-    'formulas' => ['name' => 'Chinese Herbology · Formulas', 'courseids' => [117]],
+    'formulas' => ['name' => 'Chinese Herbology · Formulas', 'courseids' => [44, 117]],
     'biomedicine' => ['name' => 'Biomedicine', 'courseids' => [36]],
     'cnt' => ['name' => 'Clean Needle Techniques', 'courseids' => [113]],
 ];
@@ -60,7 +60,7 @@ foreach ($courseids as $courseid) {
     }
     $enrolled = get_enrolled_users(
         $coursecontext,
-        'mod/scorm:submit',
+        'mod/scorm:savetrack',
         0,
         'u.id,u.firstname,u.lastname,u.email,u.lastaccess',
         'u.lastname ASC,u.firstname ASC',
