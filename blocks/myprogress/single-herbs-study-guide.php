@@ -1393,6 +1393,7 @@ $PAGE->set_pagelayout('standard');
 $pagetitle = $ises ? 'Guía de estudio de hierbas individuales' : 'Single Herbs Study Guide';
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($pagetitle);
+$PAGE->set_cacheable(false);
 $PAGE->requires->js_init_code(<<<'JS'
 document.querySelectorAll('[data-single-herbs-category-jump] select').forEach(function(select) {
     select.addEventListener('change', function() {
@@ -2911,22 +2912,39 @@ ob_start();
             return score;
         };
 
+        const mobileVoiceMenu = !!(window.matchMedia && (
+            window.matchMedia('(max-width: 760px)').matches || window.matchMedia('(pointer: coarse)').matches
+        ));
+        const isEducationalVoice = function(voice) {
+            const identity = String((voice && voice.name) || '') + ' ' + String((voice && voice.voiceURI) || '');
+            const noveltyOrEffect = /\b(?:albert|bad news|bahh|bells|boing|bubbles|cellos|child|cute|eddy|flo|good news|grandma|grandpa|hysterical|jester|kid|niña|niño|organ|princess|ralph|reed|rocko|sandy|shelley|superstar|trinoids|whisper|wobble|zarvox|alien|character|demon|effect|fantasma|ghost|horror|juego|game|monster|monstruo|novelty|robot|scary|singing|susurro|witch|zombie)\b/i;
+            const obsoleteOrRobotic = /\b(?:espeak|festival|flite|eloquence|desktop)\b/i;
+            return !noveltyOrEffect.test(identity) && !obsoleteOrRobotic.test(identity);
+        };
+        const isProfessionalMobileVoice = function(voice) {
+            const identity = (String((voice && voice.name) || '') + ' ' + String((voice && voice.voiceURI) || '')).toLowerCase();
+            return /google|microsoft|samsung|amazon|natural|neural|premium|enhanced|studio|online|siri|mónica|monica|paulina|dalia|jorge|helena|lucía|lucia|isabela|sofía|sofia|carlos|samantha|daniel|ava|aria|jenny|sonia|ryan|emma|natasha/.test(identity);
+        };
+
         const populateVoiceOptions = function() {
             const languagePrefix = language.slice(0, 2).toLowerCase();
             const previousValue = voiceSelect.value;
             availableVoices = window.speechSynthesis.getVoices().filter(function(voice) {
-                return voice.lang.toLowerCase().slice(0, 2) === languagePrefix;
+                return voice.lang.toLowerCase().slice(0, 2) === languagePrefix
+                    && isEducationalVoice(voice)
+                    && (!mobileVoiceMenu || isProfessionalMobileVoice(voice));
             }).sort(function(first, second) {
                 const scoreDifference = voicePreferenceScore(first) - voicePreferenceScore(second);
                 return scoreDifference || first.name.localeCompare(second.name);
             });
+            if (mobileVoiceMenu) availableVoices = availableVoices.slice(0, 6);
 
             voiceSelect.replaceChildren();
             const automaticOption = document.createElement('option');
             automaticOption.value = '';
             automaticOption.textContent = languagePrefix === 'es'
-                ? 'Automática — recomendada'
-                : 'Automatic — recommended';
+                ? 'Automática — voz educativa recomendada'
+                : 'Automatic — recommended educational voice';
             voiceSelect.appendChild(automaticOption);
 
             availableVoices.forEach(function(voice) {
