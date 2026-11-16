@@ -10,6 +10,7 @@ $requestedlang = optional_param('lang', '', PARAM_ALPHANUMEXT);
 $displaylang = $requestedui !== '' ? $requestedui : ($requestedlang !== '' ? $requestedlang : current_language());
 $ises = preg_match('/^es(?:[_-].*)?$/i', $displaylang) === 1;
 $historytype = optional_param('type', 'all', PARAM_ALPHA);
+$startassessment = optional_param('start', '', PARAM_ALPHANUMEXT);
 if (!in_array($historytype, ['all', 'board', 'quiz', 'boardquizcatalog', 'boardexamcatalog'], true)) {
     $historytype = 'all';
 }
@@ -406,6 +407,33 @@ foreach ($boardexamdefinitions as $examkey => $definition) {
     ];
 }
 
+$assessmentstarturls = [];
+foreach ($boardquizrows as $boardquizrow) {
+    if (!empty($boardquizrow['examtype']) && !empty($boardquizrow['url'])) {
+        $assessmentstarturls[(string)$boardquizrow['examtype']] = (string)$boardquizrow['url'];
+    }
+}
+foreach ($boardexamdefinitions as $examkey => $definition) {
+    $assessmentstarturls[$examkey] = $definition['url']->out(false);
+}
+$assessmentstarturls['simulationlinear'] = (new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'simulation',
+    'exam' => 'linear',
+] + $languageparams))->out(false);
+$assessmentstarturls['simulationadaptive'] = (new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'simulation',
+    'exam' => 'adaptive',
+] + $languageparams))->out(false);
+
+$assessmentstartkey = [
+    'linearincomplete' => 'linear',
+    'adaptiveincomplete' => 'adaptive',
+    'clinicalincomplete' => 'clinicalcases',
+][$startassessment] ?? $startassessment;
+if ($startassessment !== '' && isset($assessmentstarturls[$assessmentstartkey])) {
+    redirect(new moodle_url($assessmentstarturls[$assessmentstartkey]));
+}
+
 $boardquizcatalogrows = $boardquizrows;
 foreach ($boardexamrows as $boardexamrow) {
     if ($boardexamrow['key'] !== 'exam-clinicalcases') {
@@ -599,6 +627,11 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             : ($percentage >= 70
                 ? ($ises ? 'Aprobado' : 'Passed')
                 : ($ises ? 'No aprobado' : 'Not passed'));
+        $restartkey = [
+            'linearincomplete' => 'linear',
+            'adaptiveincomplete' => 'adaptive',
+            'clinicalincomplete' => 'clinicalcases',
+        ][$examtype] ?? $examtype;
         $historyrows[] = [
             'key' => 'board-' . (int) $attempt->id,
             'timestamp' => (int) $attempt->timecompleted,
@@ -616,7 +649,10 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             'statusclass' => $isincomplete ? 'is-incomplete' : ($percentage >= 70 ? 'is-passed' : 'is-failed'),
             'duration' => board_exam_history_duration((int) $attempt->duration, $ises),
             'durationseconds' => (int) $attempt->duration,
-            'resumeurl' => '',
+            'resumeurl' => $assessmentstarturls[$restartkey] ?? '',
+            'resumelabel' => $isincomplete
+                ? ($ises ? 'Comenzar de nuevo →' : 'Start again →')
+                : ($ises ? 'Volver a realizar →' : 'Take again →'),
         ];
     }
 }
