@@ -355,7 +355,8 @@ grep -Fq '/blocks/myprogress/study-guide.php?area=herbology&amp;view=library&amp
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/dui-yao-practice-es.html"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/miscellaneous-practice-es.html"
 grep -Fq "Last course access" "$TEMP_DIR/moodle/admin-student-evaluations.php"
-grep -Fq "estudiantes-por-curso-" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "students-by-course-" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "student-evaluations-" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "Formula Quiz and My Study Score still keep their history in each student’s browser" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 if grep -Eq "Consulta el|Alcance de|Buscar estudiante|Todas las materias|Estudiantes</h3>|Promedio|Aprobados|Intentos|Última actividad|Evaluaciones individuales|Requiere repaso" "$TEMP_DIR/moodle/admin-student-evaluations.php"; then
     echo "ERROR: Student Evaluations todavía contiene etiquetas de interfaz en español." >&2
