@@ -328,6 +328,7 @@ if grep -Fq "/blocks/myprogress/admin-student-evaluations.php" "$TEMP_DIR/menu/b
 fi
 grep -Fq "/blocks/myprogress/my-evaluations.php" "$TEMP_DIR/menu/block_menu.php"
 grep -Fq '>Evaluations</a>' "$TEMP_DIR/menu/block_menu.php"
+grep -Fq "\\core\\session\\manager::is_loggedinas() && !empty(\$USER->realuser)" "$TEMP_DIR/menu/block_menu.php"
 grep -Fq "!has_capability('moodle/grade:viewall', \$membershipcontext, \$USER->id)" "$TEMP_DIR/menu/block_menu.php"
 grep -Fq "!has_capability('moodle/course:manageactivities', \$membershipcontext, \$USER->id)" "$TEMP_DIR/menu/block_menu.php"
 grep -Fq "'My Evaluations', 'Mis evaluaciones'" "$TEMP_DIR/moodle/my-evaluations.php"
