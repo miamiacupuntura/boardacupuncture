@@ -69,7 +69,7 @@ foreach ($courseids as $courseid) {
     }
     $enrolled = get_enrolled_users(
         $coursecontext,
-        'mod/scorm:savetrack',
+        '',
         0,
         'u.id,u.firstname,u.lastname,u.email,u.lastaccess',
         'u.lastname ASC,u.firstname ASC',
@@ -78,7 +78,9 @@ foreach ($courseids as $courseid) {
         true
     );
     $enrolled = array_filter($enrolled, static function($user) use ($coursecontext): bool {
-        return !has_capability('mod/scorm:viewreport', $coursecontext, $user->id);
+        return !is_siteadmin($user->id)
+            && !has_capability('mod/scorm:viewreport', $coursecontext, $user->id)
+            && !has_capability('moodle/course:update', $coursecontext, $user->id);
     });
     $coursestudents[(int)$courseid] = $enrolled;
     foreach ($enrolled as $student) {
@@ -301,15 +303,8 @@ $exporturl = new moodle_url($reporturl, array_filter([
     'view' => $view !== 'students' ? $view : null,
     'export' => 'csv',
 ]));
-$studentlisturl = new moodle_url($reporturl, array_filter([
-    'subject' => $subjectkey !== 'all' ? $subjectkey : null,
-    'q' => $search !== '' ? $search : null,
-]));
-$courselisturl = new moodle_url($reporturl, array_filter([
-    'subject' => $subjectkey !== 'all' ? $subjectkey : null,
-    'q' => $search !== '' ? $search : null,
-    'view' => 'courses',
-]));
+$studentlisturl = new moodle_url($reporturl);
+$courselisturl = new moodle_url($reporturl, ['view' => 'courses']);
 $clearurl = new moodle_url($reporturl, $view === 'courses' ? ['view' => 'courses'] : []);
 
 echo $OUTPUT->header();
@@ -331,7 +326,7 @@ echo $OUTPUT->header();
     <?php if ($selectedstudent === null): ?>
         <nav class="student-evaluations__views" aria-label="Vista del informe">
             <a class="student-evaluations__view" href="<?php echo $studentlisturl->out(false); ?>"<?php echo $view === 'students' ? ' aria-current="page"' : ''; ?>>Resultados de estudiantes</a>
-            <a class="student-evaluations__view" href="<?php echo $courselisturl->out(false); ?>"<?php echo $view === 'courses' ? ' aria-current="page"' : ''; ?>>Estudiantes por curso</a>
+            <a class="student-evaluations__view" href="<?php echo $courselisturl->out(false); ?>"<?php echo $view === 'courses' ? ' aria-current="page"' : ''; ?>>Lista completa por cursos</a>
         </nav>
         <form class="student-evaluations__filters" method="get" action="<?php echo $reporturl->out(false); ?>">
             <?php if ($view === 'courses'): ?><input type="hidden" name="view" value="courses"><?php endif; ?>
@@ -343,7 +338,7 @@ echo $OUTPUT->header();
             </select></label>
             <div class="student-evaluations__filter-actions">
                 <button class="student-evaluations__button" type="submit">Aplicar</button>
-                <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo $clearurl->out(false); ?>">Limpiar</a>
+                <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo $clearurl->out(false); ?>"><?php echo $view === 'courses' ? 'Ver todos los estudiantes' : 'Limpiar'; ?></a>
             </div>
         </form>
         <?php if ($view === 'courses'): ?>
