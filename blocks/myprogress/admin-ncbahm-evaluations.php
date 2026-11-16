@@ -271,26 +271,12 @@ echo $OUTPUT->header();
     <?php else: ?>
     <div class="ncbahm-report__actions" style="margin-bottom:14px"><a class="ncbahm-report__button ncbahm-report__button--secondary" href="<?php echo (new moodle_url($reporturl, array_diff_key($pageparams, ['userid' => true])))->out(false); ?>">← Todos los estudiantes</a></div>
     <div class="ncbahm-report__cards"><article class="ncbahm-report__card"><span>Promedio</span><strong><?php echo $selectedstudent['average'] === null ? '—' : s($selectedstudent['average'] . '%'); ?></strong></article><article class="ncbahm-report__card"><span>Quiz</span><strong><?php echo (int)$selectedstudent['quiz']; ?></strong></article><article class="ncbahm-report__card"><span>Simulaciones</span><strong><?php echo (int)$selectedstudent['simulation']; ?></strong></article><article class="ncbahm-report__card"><span>Exámenes</span><strong><?php echo (int)$selectedstudent['exam']; ?></strong></article></div>
-    <div class="alert alert-info">El enlace debe abrirlo el estudiante en su propia cuenta. Los intentos terminados comienzan de nuevo; los incompletos sin respuestas guardadas también deben reiniciarse.</div>
+    <div class="alert alert-info">Abrir enlace inicia un intento nuevo en la cuenta que tenga la sesión activa. Los intentos incompletos sin respuestas guardadas también deben reiniciarse.</div>
     <section class="ncbahm-report__panel"><header class="ncbahm-report__panel-head"><h3><?php echo s($selectedstudent['name']); ?></h3><span><?php echo count($selectedattempts); ?> intento<?php echo count($selectedattempts) === 1 ? '' : 's'; ?></span></header><div class="ncbahm-report__table-wrap"><table><thead><tr><th>Tipo</th><th>Evaluación</th><th>Resultado</th><th>Estado</th><th>Duración</th><th>Fecha</th><th>Acción</th></tr></thead><tbody>
     <?php foreach ($selectedattempts as $attempt): $statuslabels = ['passed' => 'Aprobado', 'failed' => 'No aprobado', 'incomplete' => 'Incompleto']; ?>
-        <tr><td><?php echo s($attempt['kindname']); ?></td><td><strong><?php echo s($attempt['name']); ?></strong></td><td><span class="ncbahm-report__score"><?php echo s($attempt['percentage'] . '%'); ?></span></td><td><span class="ncbahm-report__status ncbahm-report__status--<?php echo s($attempt['status']); ?>"><?php echo s($statuslabels[$attempt['status']]); ?></span></td><td><?php echo s($durationvalue($attempt['duration'])); ?></td><td><?php echo s($datevalue($attempt['timecompleted'])); ?></td><td><button type="button" class="ncbahm-report__button ncbahm-report__button--secondary ncbahm-report__button--compact" data-copy-assessment-url="<?php echo s($attempt['restarturl']); ?>">Copiar enlace para el estudiante</button></td></tr>
+        <tr><td><?php echo s($attempt['kindname']); ?></td><td><strong><?php echo s($attempt['name']); ?></strong></td><td><span class="ncbahm-report__score"><?php echo s($attempt['percentage'] . '%'); ?></span></td><td><span class="ncbahm-report__status ncbahm-report__status--<?php echo s($attempt['status']); ?>"><?php echo s($statuslabels[$attempt['status']]); ?></span></td><td><?php echo s($durationvalue($attempt['duration'])); ?></td><td><?php echo s($datevalue($attempt['timecompleted'])); ?></td><td><a class="ncbahm-report__button ncbahm-report__button--secondary ncbahm-report__button--compact" href="<?php echo s($attempt['restarturl']); ?>" target="_blank" rel="noopener">Abrir enlace</a></td></tr>
     <?php endforeach; ?></tbody></table></div></section>
     <?php endif; ?>
 </main>
-<script>
-document.querySelectorAll('[data-copy-assessment-url]').forEach(button => {
-    button.addEventListener('click', async () => {
-        const originalLabel = button.textContent;
-        try {
-            await navigator.clipboard.writeText(button.dataset.copyAssessmentUrl || '');
-            button.textContent = 'Enlace copiado';
-        } catch (error) {
-            window.prompt('Copia este enlace y envíalo al estudiante:', button.dataset.copyAssessmentUrl || '');
-        }
-        window.setTimeout(() => { button.textContent = originalLabel; }, 2500);
-    });
-});
-</script>
 <?php
 echo $OUTPUT->footer();
