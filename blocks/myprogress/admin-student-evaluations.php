@@ -25,7 +25,7 @@ if (!in_array($program, ['all', 'nccaom', 'ncbahm'], true)) {
 }
 
 $subjects = [
-    'all' => ['name' => 'Todas las materias', 'courseids' => [30, 34, 45, 44, 117, 36, 113]],
+    'all' => ['name' => 'All subjects', 'courseids' => [30, 34, 45, 44, 117, 36, 113]],
     'foundations' => ['name' => 'Foundations', 'courseids' => [30]],
     'acupuncture' => ['name' => 'Acupuncture & Point Location', 'courseids' => [34]],
     'single-herbs' => ['name' => 'Chinese Herbology · Single Herbs', 'courseids' => [45]],
@@ -109,7 +109,7 @@ $PAGE->requires->js_init_code(<<<'JS'
             body.appendChild(emptyRow);
         }
         if (resultCount) {
-            resultCount.textContent = visible.length + (visible.length === 1 ? ' evaluación' : ' evaluaciones');
+            resultCount.textContent = visible.length + (visible.length === 1 ? ' evaluation' : ' evaluations');
         }
     }
 
@@ -344,11 +344,11 @@ $average = static function(array $stat): ?float {
     return $stat['attempted'] > 0 ? round($stat['sum'] / $stat['attempted'], 1) : null;
 };
 $datevalue = static function(int $timestamp): string {
-    return $timestamp > 0 ? userdate($timestamp, get_string('strftimedatetimeshort', 'langconfig')) : 'Sin actividad';
+    return $timestamp > 0 ? userdate($timestamp, get_string('strftimedatetimeshort', 'langconfig')) : 'No activity';
 };
 
 if ($export === 'csv') {
-    $filename = ($view === 'courses' ? 'estudiantes-por-curso-' : 'evaluacion-estudiantes-')
+    $filename = ($view === 'courses' ? 'students-by-course-' : 'student-evaluations-')
         . userdate(time(), '%Y-%m-%d') . '.csv';
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -356,7 +356,7 @@ if ($export === 'csv') {
     $output = fopen('php://output', 'wb');
     fwrite($output, "\xEF\xBB\xBF");
     if ($view === 'courses') {
-        fputcsv($output, ['Curso', 'Estudiante', 'Correo', 'Último acceso al curso']);
+        fputcsv($output, ['Course', 'Student', 'Email', 'Last course access']);
         foreach ($courseids as $courseid) {
             if (!isset($courserecords[$courseid])) {
                 continue;
@@ -371,7 +371,7 @@ if ($export === 'csv') {
             }
         }
     } else {
-        fputcsv($output, ['Estudiante', 'Correo', 'Promedio', 'Exámenes aprobados', 'Exámenes disponibles', 'Intentos', 'Última actividad']);
+        fputcsv($output, ['Student', 'Email', 'Average', 'Exams passed', 'Exams available', 'Attempts', 'Last activity']);
         foreach ($students as $studentid => $student) {
             $stat = $studentstats[$studentid];
             $studentaverage = $average($stat);
@@ -401,7 +401,7 @@ if ($selectedstudent !== null) {
         $key = $coursesubject[(int)$scorm->course] ?? null;
         $selectedexams[] = [
             'name' => $scorm->name,
-            'subject' => $key !== null ? $subjects[$key]['name'] : 'Otra materia',
+            'subject' => $key !== null ? $subjects[$key]['name'] : 'Other subject',
             'subjectkey' => $key ?? 'other',
             'score' => $exam['score'],
             'attempts' => count($exam['attemptids']),
@@ -443,28 +443,28 @@ echo $OUTPUT->header();
     <header class="student-evaluations__hero">
         <div>
             <h2>Student Evaluations</h2>
-            <p>Consulta el rendimiento registrado en Moodle, compara materias y abre el detalle de cada estudiante sin entrar en su dashboard.</p>
+            <p>Review performance recorded in Moodle, compare subjects, and open each student’s details without entering their dashboard.</p>
         </div>
         <div class="student-evaluations__hero-actions"><a class="student-evaluations__button" href="<?php echo $exporturl->out(false); ?>">Export CSV</a></div>
     </header>
-    <div class="student-evaluations__notice"><strong>Alcance de esta primera versión:</strong> incluye las evaluaciones SCORM guardadas en Moodle. El Formula Quiz y My Study Score todavía conservan su historial en el navegador de cada estudiante y se integrarán cuando ese historial se sincronice con el servidor.</div>
+    <div class="student-evaluations__notice"><strong>Scope of this first version:</strong> includes SCORM evaluations stored in Moodle. Formula Quiz and My Study Score still keep their history in each student’s browser and will be integrated when that history is synchronized with the server.</div>
 
     <?php if ($selectedstudent === null): ?>
-        <nav class="student-evaluations__views" aria-label="Vista del informe">
+        <nav class="student-evaluations__views" aria-label="Report view">
             <a class="student-evaluations__view" href="<?php echo $studentlisturl->out(false); ?>"<?php echo $view === 'students' ? ' aria-current="page"' : ''; ?>>Student results</a>
             <a class="student-evaluations__view" href="<?php echo $courselisturl->out(false); ?>"<?php echo $view === 'courses' ? ' aria-current="page"' : ''; ?>>Students by course</a>
-            <a class="student-evaluations__view" href="<?php echo $ncbahmreporturl->out(false); ?>">NCBAHM · Quiz, Simulación y Exámenes</a>
+            <a class="student-evaluations__view" href="<?php echo $ncbahmreporturl->out(false); ?>">NCBAHM · Quiz, Simulation and Exams</a>
         </nav>
         <form class="student-evaluations__filters" method="get" action="<?php echo $reporturl->out(false); ?>">
             <?php if ($view === 'courses'): ?><input type="hidden" name="view" value="courses"><?php endif; ?>
-            <label><span>Buscar estudiante</span><input type="search" name="q" value="<?php echo s($search); ?>" placeholder="Nombre o correo electrónico"></label>
-            <label><span>Materia</span><select name="subject">
+            <label><span>Search student</span><input type="search" name="q" value="<?php echo s($search); ?>" placeholder="Name or email address"></label>
+            <label><span>Subject</span><select name="subject">
                 <?php foreach ($subjects as $key => $subject): ?>
                     <option value="<?php echo s($key); ?>"<?php echo $key === $subjectkey ? ' selected' : ''; ?>><?php echo s($subject['name']); ?></option>
                 <?php endforeach; ?>
             </select></label>
-            <label><span>Programa</span><select name="program">
-                <option value="all"<?php echo $program === 'all' ? ' selected' : ''; ?>>Todos los programas</option>
+            <label><span>Program</span><select name="program">
+                <option value="all"<?php echo $program === 'all' ? ' selected' : ''; ?>>All programs</option>
                 <option value="nccaom"<?php echo $program === 'nccaom' ? ' selected' : ''; ?>>NCCAOM Focused Practice</option>
                 <option value="ncbahm"<?php echo $program === 'ncbahm' ? ' selected' : ''; ?>>NCBAHM Comprehensive Review</option>
             </select></label>
@@ -478,15 +478,15 @@ echo $OUTPUT->header();
             <section class="student-evaluations__panel" aria-labelledby="course-<?php echo (int)$courseid; ?>-title">
                 <header class="student-evaluations__panel-head">
                     <h3 id="course-<?php echo (int)$courseid; ?>-title"><span class="student-evaluations__course-name"><?php echo s(format_string($course->fullname)); ?></span><small class="student-evaluations__course-code"><?php echo s($course->shortname); ?></small></h3>
-                    <span><?php echo count($courseenrolled); ?> estudiante<?php echo count($courseenrolled) === 1 ? '' : 's'; ?></span>
+                    <span><?php echo count($courseenrolled); ?> student<?php echo count($courseenrolled) === 1 ? '' : 's'; ?></span>
                 </header>
                 <div class="student-evaluations__table-wrap"><table class="student-evaluations__table">
-                    <thead><tr><th>Estudiante</th><th>Correo electrónico</th><th>Último acceso al curso</th><th>Acciones</th></tr></thead>
+                    <thead><tr><th>Student</th><th>Email address</th><th>Last course access</th><th>Actions</th></tr></thead>
                     <tbody>
                     <?php if ($courseenrolled === []): ?>
                         <tr><td class="student-evaluations__empty" colspan="4"><?php echo $program === 'ncbahm' && (int)$courseid === 113
-                            ? 'Clean Needle Techniques no tiene evaluaciones en NCBAHM Comprehensive Review.'
-                            : 'No se encontraron estudiantes en este curso con los filtros seleccionados.'; ?></td></tr>
+                            ? 'Clean Needle Techniques has no evaluations in NCBAHM Comprehensive Review.'
+                            : 'No students were found in this course with the selected filters.'; ?></td></tr>
                     <?php else: ?>
                         <?php foreach ($courseenrolled as $studentid => $student): ?>
                         <tr>
@@ -506,18 +506,18 @@ echo $OUTPUT->header();
             <?php endforeach; ?>
         <?php else: ?>
         <section class="student-evaluations__panel" aria-labelledby="student-results-title">
-            <header class="student-evaluations__panel-head"><h3 id="student-results-title">Estudiantes</h3><span><?php echo $totalstudents; ?> resultado<?php echo $totalstudents === 1 ? '' : 's'; ?></span></header>
+            <header class="student-evaluations__panel-head"><h3 id="student-results-title">Students</h3><span><?php echo $totalstudents; ?> result<?php echo $totalstudents === 1 ? '' : 's'; ?></span></header>
             <div class="student-evaluations__table-wrap"><table class="student-evaluations__table">
-                <thead><tr><th>Estudiante</th><th>Promedio</th><th>Aprobados</th><th>Intentos</th><th>Última actividad</th><th>Acciones</th></tr></thead>
+                <thead><tr><th>Student</th><th>Average</th><th>Passed</th><th>Attempts</th><th>Last activity</th><th>Actions</th></tr></thead>
                 <tbody>
                 <?php if ($pagedstudents === []): ?>
-                    <tr><td class="student-evaluations__empty" colspan="6">No se encontraron estudiantes con estos filtros.</td></tr>
+                    <tr><td class="student-evaluations__empty" colspan="6">No students were found with these filters.</td></tr>
                 <?php else: ?>
                     <?php foreach ($pagedstudents as $studentid => $student): $stat = $studentstats[$studentid]; $studentaverage = $average($stat); ?>
                     <tr>
                         <td class="student-evaluations__student"><strong><?php echo s(fullname($student)); ?></strong><small><?php echo s($student->email); ?></small></td>
                         <td><span class="student-evaluations__score"><?php echo $studentaverage === null ? '—' : s($studentaverage . '%'); ?></span></td>
-                        <td><?php echo (int)$stat['passed']; ?> de <?php echo (int)$stat['total']; ?></td>
+                        <td><?php echo (int)$stat['passed']; ?> of <?php echo (int)$stat['total']; ?></td>
                         <td><?php echo (int)$stat['attempts']; ?></td>
                         <td><?php echo s($datevalue($stat['lastactivity'])); ?></td>
                         <td><div class="student-evaluations__row-actions">
@@ -530,7 +530,7 @@ echo $OUTPUT->header();
                 </tbody>
             </table></div>
             <?php if ($totalstudents > $perpage): ?>
-                <nav class="student-evaluations__pagination" aria-label="Páginas del informe">
+                <nav class="student-evaluations__pagination" aria-label="Report pages">
                     <?php for ($index = 0; $index < (int)ceil($totalstudents / $perpage); $index++): ?>
                         <a href="<?php echo (new moodle_url($reporturl, ['subject' => $subjectkey, 'program' => $program, 'q' => $search, 'page' => $index]))->out(false); ?>"<?php echo $index === $page ? ' aria-current="page"' : ''; ?>><?php echo $index + 1; ?></a>
                     <?php endfor; ?>
@@ -542,46 +542,46 @@ echo $OUTPUT->header();
         <?php $detailstat = $studentstats[$detailuserid]; $detailaverage = $average($detailstat); ?>
         <div class="student-evaluations__detail-head"><div><h3><?php echo s(fullname($selectedstudent)); ?></h3><p><?php echo s($selectedstudent->email); ?></p></div><a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['subject' => $subjectkey, 'program' => $program, 'q' => $search]))->out(false); ?>">← All students</a></div>
         <div class="student-evaluations__cards">
-            <article class="student-evaluations__card"><span>Promedio</span><strong><?php echo $detailaverage === null ? '—' : s($detailaverage . '%'); ?></strong></article>
-            <article class="student-evaluations__card"><span>Exámenes aprobados</span><strong><?php echo (int)$detailstat['passed']; ?> / <?php echo (int)$detailstat['total']; ?></strong></article>
-            <article class="student-evaluations__card"><span>Intentos registrados</span><strong><?php echo (int)$detailstat['attempts']; ?></strong></article>
-            <article class="student-evaluations__card"><span>Última actividad</span><strong style="font-size:16px"><?php echo s($datevalue($detailstat['lastactivity'])); ?></strong></article>
+            <article class="student-evaluations__card"><span>Average</span><strong><?php echo $detailaverage === null ? '—' : s($detailaverage . '%'); ?></strong></article>
+            <article class="student-evaluations__card"><span>Exams passed</span><strong><?php echo (int)$detailstat['passed']; ?> / <?php echo (int)$detailstat['total']; ?></strong></article>
+            <article class="student-evaluations__card"><span>Recorded attempts</span><strong><?php echo (int)$detailstat['attempts']; ?></strong></article>
+            <article class="student-evaluations__card"><span>Last activity</span><strong style="font-size:16px"><?php echo s($datevalue($detailstat['lastactivity'])); ?></strong></article>
         </div>
         <section class="student-evaluations__panel" aria-labelledby="subject-detail-title">
-            <header class="student-evaluations__panel-head"><h3 id="subject-detail-title">Resultados por materia</h3></header>
-            <div class="student-evaluations__table-wrap"><table class="student-evaluations__table"><thead><tr><th>Materia</th><th>Promedio</th><th>Aprobados</th><th>Intentos</th><th>Última actividad</th></tr></thead><tbody>
+            <header class="student-evaluations__panel-head"><h3 id="subject-detail-title">Results by subject</h3></header>
+            <div class="student-evaluations__table-wrap"><table class="student-evaluations__table"><thead><tr><th>Subject</th><th>Average</th><th>Passed</th><th>Attempts</th><th>Last activity</th></tr></thead><tbody>
             <?php foreach ($detailstat['subjects'] as $key => $subjectstat): if ($subjectstat['total'] === 0) continue; $subjectaverage = $average($subjectstat); ?>
-                <tr><td><strong><?php echo s($subjects[$key]['name']); ?></strong></td><td><span class="student-evaluations__score"><?php echo $subjectaverage === null ? '—' : s($subjectaverage . '%'); ?></span></td><td><?php echo (int)$subjectstat['passed']; ?> de <?php echo (int)$subjectstat['total']; ?></td><td><?php echo (int)$subjectstat['attempts']; ?></td><td><?php echo s($datevalue($subjectstat['lastactivity'])); ?></td></tr>
+                <tr><td><strong><?php echo s($subjects[$key]['name']); ?></strong></td><td><span class="student-evaluations__score"><?php echo $subjectaverage === null ? '—' : s($subjectaverage . '%'); ?></span></td><td><?php echo (int)$subjectstat['passed']; ?> of <?php echo (int)$subjectstat['total']; ?></td><td><?php echo (int)$subjectstat['attempts']; ?></td><td><?php echo s($datevalue($subjectstat['lastactivity'])); ?></td></tr>
             <?php endforeach; ?>
             </tbody></table></div>
         </section>
         <section class="student-evaluations__panel" aria-labelledby="exam-detail-title">
-            <header class="student-evaluations__panel-head"><h3 id="exam-detail-title">Evaluaciones individuales</h3><span data-exam-results-count><?php echo count($selectedexams); ?> evaluación<?php echo count($selectedexams) === 1 ? '' : 'es'; ?></span></header>
+            <header class="student-evaluations__panel-head"><h3 id="exam-detail-title">Individual evaluations</h3><span data-exam-results-count><?php echo count($selectedexams); ?> evaluation<?php echo count($selectedexams) === 1 ? '' : 's'; ?></span></header>
             <?php if ($selectedexams !== []): ?>
-            <div class="student-evaluations__exam-tools" aria-label="Filtros y orden de evaluaciones">
-                <label><span>Filtrar por materia</span><select data-exam-subject-filter><option value="">Todas las materias</option><?php foreach ($selectedexamsubjects as $key => $name): ?><option value="<?php echo s($key); ?>"><?php echo s($name); ?></option><?php endforeach; ?></select></label>
-                <label><span>Filtrar por estado</span><select data-exam-status-filter><option value="">Todos los estados</option><option value="passed">Aprobadas</option><option value="review">Requieren repaso</option></select></label>
-                <label><span>Ordenar por</span><select data-exam-sort><option value="subject">Materia y evaluación</option><option value="evaluation">Nombre de evaluación</option><option value="score-desc">Mejor resultado: mayor a menor</option><option value="score-asc">Mejor resultado: menor a mayor</option><option value="attempts-desc">Más intentos</option><option value="activity-desc">Actividad más reciente</option></select></label>
+            <div class="student-evaluations__exam-tools" aria-label="Evaluation filters and sorting">
+                <label><span>Filter by subject</span><select data-exam-subject-filter><option value="">All subjects</option><?php foreach ($selectedexamsubjects as $key => $name): ?><option value="<?php echo s($key); ?>"><?php echo s($name); ?></option><?php endforeach; ?></select></label>
+                <label><span>Filter by status</span><select data-exam-status-filter><option value="">All statuses</option><option value="passed">Passed</option><option value="review">Needs review</option></select></label>
+                <label><span>Sort by</span><select data-exam-sort><option value="subject">Subject and evaluation</option><option value="evaluation">Evaluation name</option><option value="score-desc">Best result: highest to lowest</option><option value="score-asc">Best result: lowest to highest</option><option value="attempts-desc">Most attempts</option><option value="activity-desc">Most recent activity</option></select></label>
                 <button class="student-evaluations__button student-evaluations__button--secondary" type="button" data-exam-filters-reset>Reset</button>
             </div>
             <?php endif; ?>
             <div class="student-evaluations__table-wrap"><table class="student-evaluations__table" data-student-exam-table>
-                <thead><tr><th>Materia</th><th>Evaluación</th><th>Mejor resultado</th><th>Estado</th><th>Intentos</th><th>Última actividad</th></tr></thead>
+                <thead><tr><th>Subject</th><th>Evaluation</th><th>Best result</th><th>Status</th><th>Attempts</th><th>Last activity</th></tr></thead>
                 <tbody>
                 <?php if ($selectedexams === []): ?>
-                    <tr><td class="student-evaluations__empty" colspan="6">Este estudiante todavía no tiene evaluaciones SCORM registradas con el filtro seleccionado.</td></tr>
+                    <tr><td class="student-evaluations__empty" colspan="6">This student does not yet have SCORM evaluations recorded with the selected filter.</td></tr>
                 <?php else: ?>
                     <?php foreach ($selectedexams as $exam): $passed = $exam['score'] >= 70; ?>
                     <tr data-student-exam-row data-subject="<?php echo s($exam['subjectkey']); ?>" data-subject-name="<?php echo s($exam['subject']); ?>" data-name="<?php echo s($exam['name']); ?>" data-status="<?php echo $passed ? 'passed' : 'review'; ?>" data-score="<?php echo s((string)$exam['score']); ?>" data-attempts="<?php echo (int)$exam['attempts']; ?>" data-activity="<?php echo (int)$exam['lastactivity']; ?>">
                         <td><?php echo s($exam['subject']); ?></td>
                         <td><strong><?php echo s($exam['name']); ?></strong></td>
                         <td><span class="student-evaluations__score"><?php echo s(round($exam['score'], 1) . '%'); ?></span></td>
-                        <td><span class="student-evaluations__status student-evaluations__status--<?php echo $passed ? 'passed' : 'review'; ?>"><?php echo $passed ? 'Aprobada' : 'Requiere repaso'; ?></span></td>
+                        <td><span class="student-evaluations__status student-evaluations__status--<?php echo $passed ? 'passed' : 'review'; ?>"><?php echo $passed ? 'Passed' : 'Needs review'; ?></span></td>
                         <td><?php echo (int)$exam['attempts']; ?></td>
                         <td><?php echo s($datevalue($exam['lastactivity'])); ?></td>
                     </tr>
                     <?php endforeach; ?>
-                    <tr data-exam-filter-empty hidden><td class="student-evaluations__empty" colspan="6">No hay evaluaciones que coincidan con los filtros seleccionados.</td></tr>
+                    <tr data-exam-filter-empty hidden><td class="student-evaluations__empty" colspan="6">No evaluations match the selected filters.</td></tr>
                 <?php endif; ?>
                 </tbody>
             </table></div>
