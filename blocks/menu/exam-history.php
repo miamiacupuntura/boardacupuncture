@@ -578,8 +578,13 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             ? (int) round(((float) $attempt->score / (float) $attempt->total) * 100)
             : 0;
         $isboardquiz = isset($boardquiznamesbytype[$examtype]);
+        $issimulation = str_starts_with($examtype, 'simulation');
         if ($isboardquiz) {
             $examname = $boardquiznamesbytype[$examtype];
+        } else if ($examtype === 'simulationadaptive') {
+            $examname = $ises ? 'Simulación adaptativa' : 'Adaptive Simulation';
+        } else if ($examtype === 'simulationlinear') {
+            $examname = $ises ? 'Simulación lineal' : 'Linear Simulation';
         } else if (in_array($examtype, ['adaptive', 'adaptiveincomplete'], true)) {
             $examname = $ises ? 'Examen Board adaptativo' : 'Adaptive Board Exam';
         } else if (in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true)) {
@@ -600,7 +605,9 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             'exam' => $examname,
             'source' => $isboardquiz
                 ? ($ises ? 'Quiz Board Level' : 'Board Level Quiz')
-                : ($ises ? 'Examen Board' : 'Board Exam'),
+                : ($issimulation
+                    ? ($ises ? 'Simulación Board' : 'Board Simulation')
+                    : ($ises ? 'Examen Board' : 'Board Exam')),
             'course' => (string) ($attempt->coursename ?? ''),
             'score' => board_exam_history_number((float) $attempt->score),
             'total' => board_exam_history_number((float) $attempt->total),

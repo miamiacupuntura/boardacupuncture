@@ -10,5 +10,11 @@ if ($hassiteconfig) {
         new moodle_url('/blocks/myprogress/admin-student-evaluations.php'),
         'moodle/site:config'
     ));
+    $ADMIN->add('reports', new admin_externalpage(
+        'block_myprogress_ncbahm_evaluations',
+        'Evaluaciones NCBAHM',
+        new moodle_url('/blocks/myprogress/admin-ncbahm-evaluations.php'),
+        'moodle/site:config'
+    ));
 }
 

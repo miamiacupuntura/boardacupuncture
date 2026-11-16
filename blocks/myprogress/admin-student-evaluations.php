@@ -41,6 +41,12 @@ $scorecourseids = $program === 'ncbahm'
     ? array_values(array_diff($courseids, [113]))
     : $courseids;
 $reporturl = new moodle_url('/blocks/myprogress/admin-student-evaluations.php');
+$ncbahmreporturl = new moodle_url('/blocks/myprogress/admin-ncbahm-evaluations.php', array_filter([
+    'q' => $search !== '' ? $search : null,
+]));
+if ($program === 'ncbahm') {
+    redirect($ncbahmreporturl);
+}
 $pageurl = new moodle_url($reporturl, array_filter([
     'subject' => $subjectkey !== 'all' ? $subjectkey : null,
     'program' => $program !== 'all' ? $program : null,
@@ -444,6 +450,7 @@ echo $OUTPUT->header();
         <nav class="student-evaluations__views" aria-label="Vista del informe">
             <a class="student-evaluations__view" href="<?php echo $studentlisturl->out(false); ?>"<?php echo $view === 'students' ? ' aria-current="page"' : ''; ?>>Resultados de estudiantes</a>
             <a class="student-evaluations__view" href="<?php echo $courselisturl->out(false); ?>"<?php echo $view === 'courses' ? ' aria-current="page"' : ''; ?>>Lista completa por cursos</a>
+            <a class="student-evaluations__view" href="<?php echo $ncbahmreporturl->out(false); ?>">NCBAHM · Quiz, Simulación y Exámenes</a>
         </nav>
         <form class="student-evaluations__filters" method="get" action="<?php echo $reporturl->out(false); ?>">
             <?php if ($view === 'courses'): ?><input type="hidden" name="view" value="courses"><?php endif; ?>

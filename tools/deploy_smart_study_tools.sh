@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
 
-MOODLE_FILES=(smart-study-tools.php study-score.php admin-student-evaluations.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php admin-student-evaluations.php admin-ncbahm-evaluations.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
 MOODLE_NESTED_FILES=(db/hooks.php classes/hook/navigation.php)
 MOODLE_FILES+=(
     single-herbs-category-anchor-settle-spirit.php
@@ -54,7 +54,8 @@ MOODLE_FILES+=(
     single-herbs-category-warm-interior.php
     single-herbs-category-warm-transform-phlegm.php
 )
-MENU_FILES=(herbology-board.php block_menu.php)
+MENU_FILES=(herbology-board.php herbology-exam-history.php exam-history.php block_menu.php)
+MENU_JS_FILES=(herbology-simulation.js)
 THEME_TEMPLATE_FILES=(frontpage.mustache)
 DATA_FILES=(single-herb-safety-supplement.json single-herb-properties.json single-herb-rich-profiles.json formulas-study-guide-data.json formula-board-roster-2026.json formula-architecture-data.json dui-yao-smart-data.json)
 STATIC_FILES=(read-aloud-test.html formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html cautions-contraindications.html cautions-contraindications-es.html safety.html safety-es.html advanced-name-traps.html families.html formula-name-traps.html formula-theory.html herb-families.html misleading-formula-names.html most-important-formulas.html name-traps.html patterns-tips-maciocia.html secondary-actions.html supplemental-herb-families.html advanced-name-traps-es.html families-es.html formula-name-traps-es.html formula-theory-es.html herb-families-es.html misleading-formula-names-es.html most-important-formulas-es.html name-traps-es.html patterns-tips-maciocia-es.html secondary-actions-es.html supplemental-herb-families-es.html index.html index-es.html safety-toxicity.html safety-interactions.html safety-regulation.html safety-toxic-herbs.html safety-pregnancy.html safety-anticoagulants.html safety-ma-huang-hypertension.html safety-fu-zi-cardiac-toxicity.html safety-clinical-interaction-cases.html safety-obsolete-prohibited-substances.html safety-herb-specific-cautions.html safety-toxicity-es.html safety-interactions-es.html safety-regulation-es.html safety-toxic-herbs-es.html safety-pregnancy-es.html safety-anticoagulants-es.html safety-ma-huang-hypertension-es.html safety-fu-zi-cardiac-toxicity-es.html safety-clinical-interaction-cases-es.html safety-obsolete-prohibited-substances-es.html safety-herb-specific-cautions-es.html continuous-reader.html continuous-reader.js safety-library.html safety-library-es.html comparisons.js study-return-navigation.js chief-herbs-property.html chief-herbs-property-es.html formulas.html formulas-es.html pathologies.html pathologies-es.html patterns.html patterns-es.html maciocia-formula-tips.html maciocia-formula-tips-es.html dui-yao.html dui-yao-es.html herb-comparison-bank.html herb-comparison-bank-es.html dui-yao-practice.html dui-yao-practice-es.html miscellaneous-practice.html miscellaneous-practice-es.html)
@@ -79,6 +80,9 @@ done
 for file in "${MENU_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/$file" -o "$TEMP_DIR/menu/$file"
     php -l "$TEMP_DIR/menu/$file" >/dev/null
+done
+for file in "${MENU_JS_FILES[@]}"; do
+    curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/$file" -o "$TEMP_DIR/menu/$file"
 done
 for file in "${THEME_TEMPLATE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/theme/moove/templates/$file" -o "$TEMP_DIR/theme/templates/$file"
@@ -301,6 +305,14 @@ grep -Fq "NCBAHM Comprehensive Review" "$TEMP_DIR/moodle/admin-student-evaluatio
 grep -Fq "context_course::instance(116, IGNORE_MISSING)" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "array_diff(\$courseids, [113])" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "Clean Needle Techniques no tiene evaluaciones en NCBAHM Comprehensive Review." "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "block_menu_exam_attempts" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "Tipo de evaluación" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "Quiz, Simulación y Exámenes" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "NCBAHM · Quiz, Simulación y Exámenes" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "'simulationlinear', 'simulationadaptive'" "$TEMP_DIR/menu/herbology-exam-history.php"
+grep -Fq "data-history-url" "$TEMP_DIR/menu/herbology-board.php"
+grep -Fq 'examtype: `simulation${mode}`' "$TEMP_DIR/menu/herbology-simulation.js"
+grep -Fq "Board Simulation" "$TEMP_DIR/menu/exam-history.php"
 grep -Fq "Último acceso al curso" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "estudiantes-por-curso-" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "El Formula Quiz y My Study Score todavía conservan su historial en el navegador" "$TEMP_DIR/moodle/admin-student-evaluations.php"
@@ -308,6 +320,7 @@ grep -Fq "core\\hook\\navigation\\primary_extend::class" "$TEMP_DIR/moodle/db/ho
 grep -Fq "function extend_primary_navigation" "$TEMP_DIR/moodle/classes/hook/navigation.php"
 grep -Fq "block_myprogress_student_evaluations" "$TEMP_DIR/moodle/classes/hook/navigation.php"
 grep -Fq "new admin_externalpage" "$TEMP_DIR/moodle/settings.php"
+grep -Fq "block_myprogress_ncbahm_evaluations" "$TEMP_DIR/moodle/settings.php"
 grep -Fq "Las hierbas emperador son " "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "installKingHerbNarrations(clone)" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Dang Gui' => 'Chinese Angelica Root'" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -1237,10 +1250,14 @@ grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/admin-student-evaluations.ph
 grep -Fq "context_course::instance(116, IGNORE_MISSING)" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "array_diff(\$courseids, [113])" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "Clean Needle Techniques no tiene evaluaciones en NCBAHM Comprehensive Review." "$TARGET_DIR/admin-student-evaluations.php"
+grep -Fq "block_menu_exam_attempts" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "Tipo de evaluación" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "Quiz, Simulación y Exámenes" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Último acceso al curso" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "function extend_primary_navigation" "$TARGET_DIR/classes/hook/navigation.php"
 grep -Fq "core\\hook\\navigation\\primary_extend::class" "$TARGET_DIR/db/hooks.php"
 grep -Fq "new admin_externalpage" "$TARGET_DIR/settings.php"
+grep -Fq "block_myprogress_ncbahm_evaluations" "$TARGET_DIR/settings.php"
 grep -Fq "Las hierbas emperador son " "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "installKingHerbNarrations(clone)" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "'Dang Gui' => 'Chinese Angelica Root'" "$TARGET_DIR/formulas-study-guide.php"
@@ -1294,6 +1311,22 @@ for file in "${MENU_FILES[@]}"; do
     cmp -s "$TEMP_DIR/menu/$file" "$target"
     php -l "$target" >/dev/null
 done
+for file in "${MENU_JS_FILES[@]}"; do
+    target="$MENU_TARGET_DIR/$file"
+    if [[ -f "$target" ]]; then
+        cp -a "$target" "$BACKUP/menu/$file"
+        file_owner_group="$(stat -c '%u:%g' "$target")"
+        file_mode="$(stat -c '%a' "$target")"
+    else
+        file_owner_group="$owner_group"
+        file_mode="$mode"
+    fi
+    install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/menu/$file" "$target"
+    cmp -s "$TEMP_DIR/menu/$file" "$target"
+done
+grep -Fq "'simulationlinear', 'simulationadaptive'" "$MENU_TARGET_DIR/herbology-exam-history.php"
+grep -Fq 'examtype: `simulation${mode}`' "$MENU_TARGET_DIR/herbology-simulation.js"
+grep -Fq "Board Simulation" "$MENU_TARGET_DIR/exam-history.php"
 
 THEME_TEMPLATE_TARGET_DIR="$MOODLE_ROOT/theme/moove/templates"
 [[ -d "$THEME_TEMPLATE_TARGET_DIR" ]] || { echo "ERROR: no existe $THEME_TEMPLATE_TARGET_DIR" >&2; exit 1; }
@@ -1374,6 +1407,7 @@ fi
 echo "OK: My Study Score visible antes de Smart Study Tools y conectado con el historial local del Formula Quiz."
 echo "OK: My Study Score calcula precisión, cobertura, retención, consistencia, categorías y recomendaciones."
 echo "OK: Evaluación de estudiantes ofrece acceso administrativo directo, filtros, detalle individual y exportación CSV de resultados SCORM."
+echo "OK: Evaluaciones NCBAHM separa resultados reales de Quiz, Simulación y Exámenes y permite exportarlos."
 echo "OK: el informe administrativo está protegido por moodle/site:config y aparece también en Site administration > Reports."
 echo "OK: Smart Study Tools visible como botón superior, a la izquierda del selector de idioma."
 echo "OK: Pattern → Formula incluye una lista desplegable y buscable de patrones verificados."

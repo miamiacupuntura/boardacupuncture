@@ -33,7 +33,10 @@ $language = optional_param('language', 'en', PARAM_ALPHA);
 $isboardquizattempt = preg_match('/^bq[dfhm]_[a-z0-9]{1,16}$/', $examtype) === 1;
 $validexamtype = $isboardquizattempt || in_array(
     $examtype,
-    ['linear', 'adaptive', 'linearincomplete', 'adaptiveincomplete', 'clinicalcases', 'clinicalincomplete'],
+    [
+        'linear', 'adaptive', 'linearincomplete', 'adaptiveincomplete',
+        'clinicalcases', 'clinicalincomplete', 'simulationlinear', 'simulationadaptive',
+    ],
     true
 );
 $isclinicalattempt = in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true);

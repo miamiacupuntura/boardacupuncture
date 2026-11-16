@@ -1034,7 +1034,7 @@ JS);
 }
 
 if ($track === 'simulation' && $mixdomains && count($mixedquestions) === 100) {
-    $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-simulation.js', ['v' => '2026110801']));
+    $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-simulation.js', ['v' => '2026111601']));
 }
 
 if ($track === 'clinicalcases' && $selectedclinicalexam !== null) {
@@ -2153,6 +2153,9 @@ echo $OUTPUT->header();
             <?php } else { ?>
                 <form id="herbology-simulation-exam" class="herb-board__simulation-player"
                     data-simulation-exam
+                    data-history-url="<?php echo s((new moodle_url('/blocks/menu/herbology-exam-history.php'))->out(false)); ?>"
+                    data-sesskey="<?php echo s(sesskey()); ?>"
+                    data-exam-language="<?php echo $ises ? 'es' : 'en'; ?>"
                     data-mode="<?php echo s($exammode); ?>"
                     data-duration="9000"
                     data-question-word="<?php echo $ises ? 'Pregunta' : 'Question'; ?>"

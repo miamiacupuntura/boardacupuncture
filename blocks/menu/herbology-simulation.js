@@ -28,6 +28,7 @@
         const difficultyRank = {foundation: 0, application: 1, analysis: 2};
         const originalNextText = nextButton.textContent;
         const startedAt = Date.now();
+        const attemptUid = `simulation-${Date.now()}-${Math.random().toString(36).slice(2)}`;
         const deadline = startedAt + (Number(exam.dataset.duration) * 1000);
         let timerId = null;
         let timeVisible = true;
@@ -37,6 +38,31 @@
         let adaptiveHistory = [];
         let adaptiveRemaining = [...questions];
         let reviewOpen = false;
+
+        const saveAttempt = async score => {
+            if (!exam.dataset.historyUrl || !exam.dataset.sesskey) {
+                return;
+            }
+            const body = new URLSearchParams({
+                sesskey: exam.dataset.sesskey,
+                attemptuid: attemptUid,
+                examtype: `simulation${mode}`,
+                score: String(score),
+                total: String(questions.length),
+                duration: String(Math.max(0, Math.round((Date.now() - startedAt) / 1000))),
+                language: exam.dataset.examLanguage || 'en',
+            });
+            try {
+                await fetch(exam.dataset.historyUrl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+                    body: body.toString(),
+                });
+            } catch (error) {
+                // The visible result remains available even if history cannot be saved.
+            }
+        };
 
         const selectedValue = question => question.querySelector('input[type="radio"]:checked')?.value || '';
         const isAnswered = question => selectedValue(question) !== '';
@@ -172,6 +198,7 @@
             const score = questions.filter(isCorrect).length;
             const answered = questions.filter(isAnswered).length;
             const percentage = Math.round((score / questions.length) * 100);
+            void saveAttempt(score);
             resultScore.textContent = `${score}/${questions.length} · ${percentage}%`;
             resultMessage.textContent = expired
                 ? exam.dataset.timeExpired
