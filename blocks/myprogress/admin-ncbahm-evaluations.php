@@ -64,12 +64,33 @@ $formulabankdirectories = [
 foreach (array_unique($formulabankdirectories) as $directory) {
     $formulabankpath = rtrim($directory, '/') . '/formula-practice-data.json';
     if (!is_readable($formulabankpath)) continue;
-    $formulabank = json_decode(file_get_contents($formulabankpath), true);
-    foreach ($formulabank['categories'] ?? [] as $category) {
-        $key = clean_param($category['key'] ?? '', PARAM_ALPHANUMEXT);
-        $name = trim((string)($category['es'] ?? $category['en'] ?? ''));
-        if ($key !== '' && $name !== '') {
-            $quiznames['bqf_' . substr(sha1($key), 0, 12)] = 'Quiz de fórmulas · ' . $name;
+
+    $formulafiles = [$formulabankpath];
+    $manifestpath = rtrim($directory, '/') . '/formula-modifications-manifest.json';
+    if (is_readable($manifestpath)) {
+        $manifest = json_decode(file_get_contents($manifestpath), true);
+        foreach ($manifest['files'] ?? [] as $filename) {
+            $filename = basename((string)$filename);
+            $supplementpath = rtrim($directory, '/') . '/' . $filename;
+            if ($filename !== '' && is_readable($supplementpath)) {
+                $formulafiles[] = $supplementpath;
+            }
+        }
+    }
+
+    foreach (array_unique($formulafiles) as $formulafile) {
+        $formulabank = json_decode(file_get_contents($formulafile), true);
+        foreach ($formulabank['categories'] ?? [] as $category) {
+            $key = clean_param($category['key'] ?? '', PARAM_ALPHANUMEXT);
+            $spanishname = trim((string)($category['es'] ?? $category['en'] ?? ''));
+            $englishname = trim((string)($category['en'] ?? ''));
+            if ($key !== '' && $spanishname !== '') {
+                $displayname = $spanishname;
+                if ($englishname !== '' && strcasecmp($englishname, $spanishname) !== 0) {
+                    $displayname .= ' (' . $englishname . ')';
+                }
+                $quiznames['bqf_' . substr(sha1($key), 0, 12)] = 'Quiz de fórmulas · ' . $displayname;
+            }
         }
     }
     $quiznames['bqf_modifications'] = 'Quiz de modificaciones de fórmulas';
@@ -91,7 +112,7 @@ $attemptname = static function(string $examtype) use (&$quiznames): string {
         : $examtype;
     if (isset($quiznames[$base])) return $quiznames[$base];
     if (preg_match('/^bqh_(\d+)$/', $base, $matches)) return 'Quiz de hierbas individuales · Capítulo ' . $matches[1];
-    if (str_starts_with($base, 'bqf_')) return 'Quiz de fórmulas · ' . substr($base, 4);
+    if (str_starts_with($base, 'bqf_')) return 'Quiz de fórmulas · categoría complementaria';
     if (str_starts_with($base, 'bqd_')) return 'Quiz de Dui Yao';
     if (str_starts_with($base, 'bqm_')) return 'Quiz complementario · ' . substr($base, 4);
     $names = [
