@@ -21,7 +21,8 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
 
-MOODLE_FILES=(smart-study-tools.php study-score.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php admin-student-evaluations.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_NESTED_FILES=(db/hooks.php classes/hook/navigation.php)
 MOODLE_FILES+=(
     single-herbs-category-anchor-settle-spirit.php
     single-herbs-category-aromatic-transform-dampness.php
@@ -67,6 +68,11 @@ STATIC_FILES+=(
 )
 
 for file in "${MOODLE_FILES[@]}"; do
+    curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
+    php -l "$TEMP_DIR/moodle/$file" >/dev/null
+done
+for file in "${MOODLE_NESTED_FILES[@]}"; do
+    mkdir -p "$TEMP_DIR/moodle/$(dirname "$file")"
     curl -fsSL "$REPOSITORY/$REVISION/blocks/myprogress/$file" -o "$TEMP_DIR/moodle/$file"
     php -l "$TEMP_DIR/moodle/$file" >/dev/null
 done
@@ -269,11 +275,20 @@ grep -Fq "['Tao Ren', 'Táo Rén', 'Tao Ren']" "$TEMP_DIR/moodle/formulas-study-
 grep -Fq "['Dang Gui', 'Dāng Guī', 'Dang Qui']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "['Ren Shen', 'Rén Shēn', 'Ren Shen']" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'data-formula-read-english-voice' "$TEMP_DIR/moodle/formulas-study-guide.php"
-grep -Fq 'Automática — similar a la voz española' "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq 'Automática — voz inglesa educativa similar a la española' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "voiceProvider(voice) === referenceProvider" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'online|google|aria|ava|jenny' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq 'david|zira|mark|hazel|desktop' "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "=== 'en' ? 0.96 : 1" "$TEMP_DIR/moodle/formulas-study-guide.php"
+grep -Fq "require_capability('moodle/site:config', \$systemcontext);" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "'Evaluación de estudiantes'" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "'mod/scorm:submit'" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "e.element IN (:scoreelement12, :scoreelement2004)" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "El Formula Quiz y My Study Score todavía conservan su historial en el navegador" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "core\\hook\\navigation\\primary_extend::class" "$TEMP_DIR/moodle/db/hooks.php"
+grep -Fq "function extend_primary_navigation" "$TEMP_DIR/moodle/classes/hook/navigation.php"
+grep -Fq "block_myprogress_student_evaluations" "$TEMP_DIR/moodle/classes/hook/navigation.php"
+grep -Fq "new admin_externalpage" "$TEMP_DIR/moodle/settings.php"
 grep -Fq "Las hierbas emperador son " "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "installKingHerbNarrations(clone)" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Dang Gui' => 'Chinese Angelica Root'" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -1148,16 +1163,36 @@ for file in "${MOODLE_FILES[@]}"; do
     cmp -s "$TEMP_DIR/moodle/$file" "$target"
     php -l "$target" >/dev/null
 done
+for file in "${MOODLE_NESTED_FILES[@]}"; do
+    target="$TARGET_DIR/$file"
+    install -d -o "${owner_group%:*}" -g "${owner_group#*:}" -m 755 "$(dirname "$target")"
+    mkdir -p "$BACKUP/moodle/$(dirname "$file")"
+    if [[ -f "$target" ]]; then
+        cp -a "$target" "$BACKUP/moodle/$file"
+        file_owner_group="$(stat -c '%u:%g' "$target")"
+        file_mode="$(stat -c '%a' "$target")"
+    else
+        file_owner_group="$owner_group"
+        file_mode="$mode"
+    fi
+    install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/moodle/$file" "$target"
+    cmp -s "$TEMP_DIR/moodle/$file" "$target"
+    php -l "$target" >/dev/null
+done
 grep -Fq "['Xing Ren', 'Xìng Rén', 'Xing Ren']" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "['Tao Ren', 'Táo Rén', 'Tao Ren']" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "['Dang Gui', 'Dāng Guī', 'Dang Qui']" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "['Ren Shen', 'Rén Shēn', 'Ren Shen']" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq 'data-formula-read-english-voice' "$TARGET_DIR/formulas-study-guide.php"
-grep -Fq 'Automática — similar a la voz española' "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq 'Automática — voz inglesa educativa similar a la española' "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "voiceProvider(voice) === referenceProvider" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq 'online|google|aria|ava|jenny' "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq 'david|zira|mark|hazel|desktop' "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "=== 'en' ? 0.96 : 1" "$TARGET_DIR/formulas-study-guide.php"
+grep -Fq "require_capability('moodle/site:config', \$systemcontext);" "$TARGET_DIR/admin-student-evaluations.php"
+grep -Fq "function extend_primary_navigation" "$TARGET_DIR/classes/hook/navigation.php"
+grep -Fq "core\\hook\\navigation\\primary_extend::class" "$TARGET_DIR/db/hooks.php"
+grep -Fq "new admin_externalpage" "$TARGET_DIR/settings.php"
 grep -Fq "Las hierbas emperador son " "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "installKingHerbNarrations(clone)" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "'Dang Gui' => 'Chinese Angelica Root'" "$TARGET_DIR/formulas-study-guide.php"
@@ -1290,6 +1325,8 @@ fi
 
 echo "OK: My Study Score visible antes de Smart Study Tools y conectado con el historial local del Formula Quiz."
 echo "OK: My Study Score calcula precisión, cobertura, retención, consistencia, categorías y recomendaciones."
+echo "OK: Evaluación de estudiantes ofrece acceso administrativo directo, filtros, detalle individual y exportación CSV de resultados SCORM."
+echo "OK: el informe administrativo está protegido por moodle/site:config y aparece también en Site administration > Reports."
 echo "OK: Smart Study Tools visible como botón superior, a la izquierda del selector de idioma."
 echo "OK: Pattern → Formula incluye una lista desplegable y buscable de patrones verificados."
 echo "OK: Tongue & Pulse incluye una lista desplegable y buscable de 63 hallazgos verificados."
