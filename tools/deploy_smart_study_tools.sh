@@ -303,7 +303,10 @@ grep -Fq "data-exam-subject-filter" "$TEMP_DIR/moodle/admin-student-evaluations.
 grep -Fq "data-exam-status-filter" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "data-exam-sort" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "function applyExamControls()" "$TEMP_DIR/moodle/admin-student-evaluations.php"
-grep -Fq "name=\"program\"" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+if grep -Fq 'name="program"' "$TEMP_DIR/moodle/admin-student-evaluations.php"; then
+    echo "ERROR: Student Evaluations conserva el selector Program redundante con la vista NCBAHM." >&2
+    exit 1
+fi
 grep -Fq "NCCAOM Focused Practice" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "context_course::instance(116, IGNORE_MISSING)" "$TEMP_DIR/moodle/admin-student-evaluations.php"
@@ -1308,7 +1311,10 @@ grep -Fq "data-exam-subject-filter" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "data-exam-status-filter" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "data-exam-sort" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "function applyExamControls()" "$TARGET_DIR/admin-student-evaluations.php"
-grep -Fq "name=\"program\"" "$TARGET_DIR/admin-student-evaluations.php"
+if grep -Fq 'name="program"' "$TARGET_DIR/admin-student-evaluations.php"; then
+    echo "ERROR: la instalación conserva el selector Program redundante con la vista NCBAHM." >&2
+    exit 1
+fi
 grep -Fq "NCCAOM Focused Practice" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "context_course::instance(116, IGNORE_MISSING)" "$TARGET_DIR/admin-student-evaluations.php"
@@ -1640,6 +1646,7 @@ echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
 echo "OK: el administrador abre cada evaluación en un perfil estudiantil supervisado y claramente identificado."
 echo "OK: el informe SCORM permite abrir el dashboard bajo la identidad real del estudiante y excluye instructores de la lista."
+echo "OK: Student Evaluations usa las pestañas para separar SCORM y NCBAHM; se eliminó el selector Program redundante."
 echo "OK: el perfil supervisado conserva el cambio entre español e inglés y separa los resultados del administrador."
 echo "OK: los botones exclusivos del administrador y las instrucciones de los intentos supervisados se abren en inglés."
 echo "OK: el dashboard muestra Evaluations solo a estudiantes; los controles administrativos permanecen en Site administration."
