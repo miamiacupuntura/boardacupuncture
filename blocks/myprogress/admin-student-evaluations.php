@@ -9,6 +9,8 @@ $systemcontext = context_system::instance();
 require_capability('moodle/site:config', $systemcontext);
 
 $subjectkey = optional_param('subject', 'all', PARAM_ALPHANUMEXT);
+$statusfilter = optional_param('status', 'all', PARAM_ALPHA);
+$sort = optional_param('sort', 'recent', PARAM_ALPHA);
 $search = trim(optional_param('q', '', PARAM_TEXT));
 $detailuserid = optional_param('userid', 0, PARAM_INT);
 $export = optional_param('export', '', PARAM_ALPHA);
@@ -22,6 +24,12 @@ if (!in_array($view, ['students', 'courses'], true)) {
 $program = optional_param('program', $view === 'courses' ? 'all' : 'nccaom', PARAM_ALPHA);
 if (!in_array($program, ['all', 'nccaom', 'ncbahm'], true)) {
     $program = $view === 'courses' ? 'all' : 'nccaom';
+}
+if (!in_array($statusfilter, ['all', 'passed', 'failed', 'incomplete'], true)) {
+    $statusfilter = 'all';
+}
+if (!in_array($sort, ['recent', 'name', 'result'], true)) {
+    $sort = 'recent';
 }
 
 $subjects = [
@@ -49,6 +57,8 @@ if ($program === 'ncbahm') {
 }
 $pageurl = new moodle_url($reporturl, array_filter([
     'subject' => $subjectkey !== 'all' ? $subjectkey : null,
+    'status' => $statusfilter !== 'all' ? $statusfilter : null,
+    'sort' => $sort !== 'recent' ? $sort : null,
     'program' => $program !== 'all' ? $program : null,
     'q' => $search !== '' ? $search : null,
     'userid' => $detailuserid ?: null,
@@ -347,6 +357,38 @@ $datevalue = static function(int $timestamp): string {
     return $timestamp > 0 ? userdate($timestamp, get_string('strftimedatetimeshort', 'langconfig')) : 'No activity';
 };
 
+$studentstatus = static function(array $stat) use ($average): string {
+    if ($stat['attempted'] === 0) {
+        return 'incomplete';
+    }
+    return ($average($stat) ?? 0.0) >= 70 ? 'passed' : 'failed';
+};
+if ($statusfilter !== 'all') {
+    $students = array_filter(
+        $students,
+        static fn($student): bool => $studentstatus($studentstats[(int)$student->id]) === $statusfilter
+    );
+}
+$comparestudents = static function($left, $right) use ($sort, $studentstats, $average): int {
+    $leftid = (int)$left->id;
+    $rightid = (int)$right->id;
+    if ($sort === 'result') {
+        $comparison = ($average($studentstats[$rightid]) ?? -1) <=> ($average($studentstats[$leftid]) ?? -1);
+    } else if ($sort === 'recent') {
+        $comparison = $studentstats[$rightid]['lastactivity'] <=> $studentstats[$leftid]['lastactivity'];
+    } else {
+        $comparison = 0;
+    }
+    return $comparison !== 0
+        ? $comparison
+        : strcasecmp($left->lastname . ' ' . $left->firstname, $right->lastname . ' ' . $right->firstname);
+};
+uasort($students, $comparestudents);
+foreach ($coursestudents as $courseid => $enrolled) {
+    $coursestudents[$courseid] = array_intersect_key($enrolled, $students);
+    uasort($coursestudents[$courseid], $comparestudents);
+}
+
 if ($export === 'csv') {
     $filename = ($view === 'courses' ? 'students-by-course-' : 'student-evaluations-')
         . userdate(time(), '%Y-%m-%d') . '.csv';
@@ -422,6 +464,8 @@ $totalstudents = count($students);
 $pagedstudents = array_slice($students, $page * $perpage, $perpage, true);
 $exporturl = new moodle_url($reporturl, array_filter([
     'subject' => $subjectkey !== 'all' ? $subjectkey : null,
+    'status' => $statusfilter !== 'all' ? $statusfilter : null,
+    'sort' => $sort !== 'recent' ? $sort : null,
     'program' => $program !== 'all' ? $program : null,
     'q' => $search !== '' ? $search : null,
     'view' => $view !== 'students' ? $view : null,
@@ -435,6 +479,7 @@ echo $OUTPUT->header();
 ?>
 <style>
 .student-evaluations{max-width:1280px;margin:0 auto 40px}.student-evaluations__hero{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:18px;padding:23px 25px;border-left:5px solid #0b8f87;border-radius:12px;background:linear-gradient(135deg,#eef9f6,#fff8ef);box-shadow:0 3px 12px rgba(15,23,42,.06)}.student-evaluations__hero h2{margin:0 0 6px;color:#102a3b;font-size:30px}.student-evaluations__hero p{max-width:780px;margin:0;color:#52677a;line-height:1.5}.student-evaluations__button{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:9px 14px;border:1px solid #0b8f87;border-radius:8px;background:#0b8f87;color:#fff;font-weight:800;text-decoration:none;white-space:nowrap}.student-evaluations__button:hover{background:#076d68;color:#fff;text-decoration:none}.student-evaluations__button--secondary{border-color:#b8c8d2;background:#fff;color:#24465b}.student-evaluations__button--secondary:hover{background:#f1f6f8;color:#173448}.student-evaluations__notice{margin:0 0 18px;padding:13px 16px;border:1px solid #f0cf96;border-left:5px solid #d97706;border-radius:9px;background:#fff8ea;color:#6f4a15;line-height:1.5}.student-evaluations__filters{display:grid;grid-template-columns:minmax(260px,1fr) minmax(230px,.8fr) auto;gap:10px;margin-bottom:18px;padding:16px;border:1px solid #d7e2e7;border-radius:11px;background:#fff}.student-evaluations__filters label span{display:block;margin-bottom:5px;color:#365469;font-size:12px;font-weight:800}.student-evaluations__filters input,.student-evaluations__filters select{width:100%;min-height:42px;box-sizing:border-box;padding:8px 10px;border:1px solid #b9cbd4;border-radius:8px;background:#fff}.student-evaluations__filter-actions{display:flex;align-items:end;gap:8px}.student-evaluations__panel{margin-bottom:18px;border:1px solid #d7e2e7;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.05);overflow:hidden}.student-evaluations__panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;background:#f3f8f8}.student-evaluations__panel-head h3{margin:0;color:#173448;font-size:19px}.student-evaluations__panel-head span{color:#607487;font-size:13px;font-weight:700}.student-evaluations__table-wrap{overflow-x:auto}.student-evaluations__table{width:100%;border-collapse:collapse}.student-evaluations__table th,.student-evaluations__table td{padding:12px 14px;border-top:1px solid #e1e8ec;text-align:left;vertical-align:middle}.student-evaluations__table th{background:#fbfcfd;color:#365469;font-size:11px;letter-spacing:.035em;text-transform:uppercase}.student-evaluations__table td{color:#435d6f}.student-evaluations__student strong{display:block;color:#142f40}.student-evaluations__student small{display:block;margin-top:2px;color:#718394}.student-evaluations__score{color:#08746f;font-size:18px;font-weight:900}.student-evaluations__status{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:850}.student-evaluations__status--passed{background:#ddf6ec;color:#076c55}.student-evaluations__status--review{background:#fff0dd;color:#a34d00}.student-evaluations__empty{padding:35px!important;color:#64748b!important;text-align:center!important}.student-evaluations__cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 18px}.student-evaluations__card{padding:16px;border:1px solid #d7e2e7;border-radius:10px;background:#fff}.student-evaluations__card span{display:block;color:#64748b;font-size:12px;font-weight:750}.student-evaluations__card strong{display:block;margin-top:5px;color:#0b655f;font-size:25px}.student-evaluations__detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px}.student-evaluations__detail-head h3{margin:0 0 3px}.student-evaluations__detail-head p{margin:0;color:#64748b}.student-evaluations__pagination{padding:15px;text-align:center}.student-evaluations__pagination a{display:inline-block;margin:2px;padding:6px 10px;border:1px solid #cbd8de;border-radius:6px;color:#24516a;text-decoration:none}.student-evaluations__pagination a[aria-current="page"]{border-color:#0b8f87;background:#0b8f87;color:#fff}@media(max-width:980px){.student-evaluations__filters{grid-template-columns:1fr 1fr}}@media(max-width:780px){.student-evaluations__hero,.student-evaluations__detail-head{align-items:stretch;flex-direction:column}.student-evaluations__filters{grid-template-columns:1fr}.student-evaluations__filter-actions{align-items:stretch;flex-direction:column}.student-evaluations__filter-actions .student-evaluations__button{width:100%}.student-evaluations__cards{grid-template-columns:1fr 1fr}.student-evaluations__table th,.student-evaluations__table td{padding:10px 9px}}
+.student-evaluations__filters{grid-template-columns:minmax(220px,1fr) repeat(3,minmax(170px,.6fr)) auto;padding:15px}.student-evaluations__filters input,.student-evaluations__filters select{min-height:40px;padding:7px 9px;border-radius:7px}.student-evaluations__filters .student-evaluations__button{min-height:40px;padding:8px 13px}.student-evaluations__filter-actions{gap:7px}
 .student-evaluations__hero-actions{display:flex;align-items:center;gap:8px}.student-evaluations__views{display:flex;gap:8px;margin:0 0 14px}.student-evaluations__view{display:inline-flex;min-height:40px;align-items:center;padding:8px 14px;border:1px solid #b8c8d2;border-radius:8px;background:#fff;color:#24465b;font-weight:800;text-decoration:none}.student-evaluations__view:hover{background:#f1f6f8;color:#173448;text-decoration:none}.student-evaluations__view[aria-current="page"]{border-color:#0b8f87;background:#e5f6f3;color:#076d68}.student-evaluations__course-name{display:block;color:#142f40}.student-evaluations__course-code{display:block;margin-top:2px;color:#718394;font-size:12px}@media(max-width:780px){.student-evaluations__hero-actions,.student-evaluations__views{align-items:stretch;flex-direction:column}.student-evaluations__hero-actions .student-evaluations__button,.student-evaluations__view{width:100%;box-sizing:border-box}}
 .student-evaluations__exam-tools{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr)) auto;gap:10px;padding:14px 18px;border-top:1px solid #e1e8ec;background:#fbfcfd}.student-evaluations__exam-tools label span{display:block;margin-bottom:5px;color:#365469;font-size:11px;font-weight:800;text-transform:uppercase}.student-evaluations__exam-tools select{width:100%;min-height:40px;padding:7px 9px;border:1px solid #b9cbd4;border-radius:7px;background:#fff}.student-evaluations__exam-tools .student-evaluations__button{align-self:end}@media(max-width:900px){.student-evaluations__exam-tools{grid-template-columns:1fr 1fr}}@media(max-width:600px){.student-evaluations__exam-tools{grid-template-columns:1fr}.student-evaluations__exam-tools .student-evaluations__button{width:100%}}
 .student-evaluations__row-actions{display:flex;flex-wrap:wrap;gap:7px}.student-evaluations__button--student{border-color:#7047c8;background:#f5f1ff;color:#5630a8}.student-evaluations__button--student:hover{background:#7047c8;color:#fff}@media(max-width:780px){.student-evaluations__row-actions{min-width:190px;flex-direction:column}.student-evaluations__row-actions .student-evaluations__button{width:100%;box-sizing:border-box}}
@@ -460,10 +505,21 @@ echo $OUTPUT->header();
         <form class="student-evaluations__filters" method="get" action="<?php echo $reporturl->out(false); ?>">
             <?php if ($view === 'courses'): ?><input type="hidden" name="view" value="courses"><?php endif; ?>
             <label><span>Search student</span><input type="search" name="q" value="<?php echo s($search); ?>" placeholder="Name or email address"></label>
-            <label><span>Subject</span><select name="subject">
+            <label><span>Evaluation type</span><select name="subject">
                 <?php foreach ($subjects as $key => $subject): ?>
                     <option value="<?php echo s($key); ?>"<?php echo $key === $subjectkey ? ' selected' : ''; ?>><?php echo s($subject['name']); ?></option>
                 <?php endforeach; ?>
+            </select></label>
+            <label><span>Status</span><select name="status">
+                <option value="all">All</option>
+                <option value="passed"<?php echo $statusfilter === 'passed' ? ' selected' : ''; ?>>Passed</option>
+                <option value="failed"<?php echo $statusfilter === 'failed' ? ' selected' : ''; ?>>Not passed</option>
+                <option value="incomplete"<?php echo $statusfilter === 'incomplete' ? ' selected' : ''; ?>>Incomplete</option>
+            </select></label>
+            <label><span>Sort by</span><select name="sort">
+                <option value="recent">Recent activity</option>
+                <option value="name"<?php echo $sort === 'name' ? ' selected' : ''; ?>>Name</option>
+                <option value="result"<?php echo $sort === 'result' ? ' selected' : ''; ?>>Best average</option>
             </select></label>
             <div class="student-evaluations__filter-actions">
                 <button class="student-evaluations__button" type="submit">Apply</button>
@@ -491,7 +547,7 @@ echo $OUTPUT->header();
                             <td><?php echo s($student->email); ?></td>
                             <td><?php echo s($datevalue($courselastaccess[$courseid][$studentid] ?? 0)); ?></td>
                             <td><div class="student-evaluations__row-actions">
-                                <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['userid' => $studentid, 'subject' => $coursesubject[$courseid] ?? 'all', 'program' => $program]))->out(false); ?>">View evaluation</a>
+                                <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['userid' => $studentid, 'subject' => $coursesubject[$courseid] ?? 'all', 'status' => $statusfilter, 'sort' => $sort, 'program' => $program, 'view' => $view]))->out(false); ?>">View evaluation</a>
                                 <a class="student-evaluations__button student-evaluations__button--student" href="<?php echo (new moodle_url('/blocks/myprogress/admin-open-student-dashboard.php', ['userid' => $studentid, 'sesskey' => sesskey()]))->out(false); ?>">Open as student</a>
                             </div></td>
                         </tr>
@@ -503,7 +559,7 @@ echo $OUTPUT->header();
             <?php endforeach; ?>
         <?php else: ?>
         <section class="student-evaluations__panel" aria-labelledby="student-results-title">
-            <header class="student-evaluations__panel-head"><h3 id="student-results-title">Students</h3><span><?php echo $totalstudents; ?> result<?php echo $totalstudents === 1 ? '' : 's'; ?></span></header>
+            <header class="student-evaluations__panel-head"><h3 id="student-results-title">Students with NCCAOM evaluations</h3><span><?php echo $totalstudents; ?> result<?php echo $totalstudents === 1 ? '' : 's'; ?></span></header>
             <div class="student-evaluations__table-wrap"><table class="student-evaluations__table">
                 <thead><tr><th>Student</th><th>Average</th><th>Passed</th><th>Attempts</th><th>Last activity</th><th>Actions</th></tr></thead>
                 <tbody>
@@ -518,7 +574,7 @@ echo $OUTPUT->header();
                         <td><?php echo (int)$stat['attempts']; ?></td>
                         <td><?php echo s($datevalue($stat['lastactivity'])); ?></td>
                         <td><div class="student-evaluations__row-actions">
-                            <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['userid' => $studentid, 'subject' => $subjectkey, 'program' => $program, 'q' => $search]))->out(false); ?>">View evaluation</a>
+                            <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['userid' => $studentid, 'subject' => $subjectkey, 'status' => $statusfilter, 'sort' => $sort, 'program' => $program, 'q' => $search, 'view' => $view]))->out(false); ?>">View evaluation</a>
                             <a class="student-evaluations__button student-evaluations__button--student" href="<?php echo (new moodle_url('/blocks/myprogress/admin-open-student-dashboard.php', ['userid' => $studentid, 'sesskey' => sesskey()]))->out(false); ?>">Open as student</a>
                         </div></td>
                     </tr>
@@ -529,7 +585,7 @@ echo $OUTPUT->header();
             <?php if ($totalstudents > $perpage): ?>
                 <nav class="student-evaluations__pagination" aria-label="Report pages">
                     <?php for ($index = 0; $index < (int)ceil($totalstudents / $perpage); $index++): ?>
-                        <a href="<?php echo (new moodle_url($reporturl, ['subject' => $subjectkey, 'program' => $program, 'q' => $search, 'page' => $index]))->out(false); ?>"<?php echo $index === $page ? ' aria-current="page"' : ''; ?>><?php echo $index + 1; ?></a>
+                        <a href="<?php echo (new moodle_url($reporturl, ['subject' => $subjectkey, 'status' => $statusfilter, 'sort' => $sort, 'program' => $program, 'q' => $search, 'page' => $index, 'view' => $view]))->out(false); ?>"<?php echo $index === $page ? ' aria-current="page"' : ''; ?>><?php echo $index + 1; ?></a>
                     <?php endfor; ?>
                 </nav>
             <?php endif; ?>
@@ -537,7 +593,7 @@ echo $OUTPUT->header();
         <?php endif; ?>
     <?php else: ?>
         <?php $detailstat = $studentstats[$detailuserid]; $detailaverage = $average($detailstat); ?>
-        <div class="student-evaluations__detail-head"><div><h3><?php echo s(fullname($selectedstudent)); ?></h3><p><?php echo s($selectedstudent->email); ?></p></div><a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['subject' => $subjectkey, 'program' => $program, 'q' => $search]))->out(false); ?>">← All students</a></div>
+        <div class="student-evaluations__detail-head"><div><h3><?php echo s(fullname($selectedstudent)); ?></h3><p><?php echo s($selectedstudent->email); ?></p></div><a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['subject' => $subjectkey, 'status' => $statusfilter, 'sort' => $sort, 'program' => $program, 'q' => $search, 'view' => $view]))->out(false); ?>">← All students</a></div>
         <div class="student-evaluations__cards">
             <article class="student-evaluations__card"><span>Average</span><strong><?php echo $detailaverage === null ? '—' : s($detailaverage . '%'); ?></strong></article>
             <article class="student-evaluations__card"><span>Exams passed</span><strong><?php echo (int)$detailstat['passed']; ?> / <?php echo (int)$detailstat['total']; ?></strong></article>
