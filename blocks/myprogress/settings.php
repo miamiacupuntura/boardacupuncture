@@ -6,7 +6,7 @@ defined('MOODLE_INTERNAL') || die();
 if ($hassiteconfig) {
     $ADMIN->add('reports', new admin_externalpage(
         'block_myprogress_student_evaluations',
-        'Evaluación de estudiantes',
+        'Student Evaluations',
         new moodle_url('/blocks/myprogress/admin-student-evaluations.php'),
         'moodle/site:config'
     ));

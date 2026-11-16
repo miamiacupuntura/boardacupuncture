@@ -58,8 +58,8 @@ $pageurl = new moodle_url($reporturl, array_filter([
 $PAGE->set_url($pageurl);
 $PAGE->set_context($systemcontext);
 $PAGE->set_pagelayout('report');
-$PAGE->set_title('Evaluación de estudiantes');
-$PAGE->set_heading('Evaluación de estudiantes');
+$PAGE->set_title('Student Evaluations');
+$PAGE->set_heading('Student Evaluations');
 $PAGE->set_cacheable(false);
 $PAGE->requires->js_init_code(<<<'JS'
 (function() {
@@ -442,7 +442,7 @@ echo $OUTPUT->header();
 <main class="student-evaluations">
     <header class="student-evaluations__hero">
         <div>
-            <h2>Evaluación de estudiantes</h2>
+            <h2>Student Evaluations</h2>
             <p>Consulta el rendimiento registrado en Moodle, compara materias y abre el detalle de cada estudiante sin entrar en su dashboard.</p>
         </div>
         <div class="student-evaluations__hero-actions"><a class="student-evaluations__button" href="<?php echo $exporturl->out(false); ?>">Export CSV</a></div>

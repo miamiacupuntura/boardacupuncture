@@ -25,7 +25,7 @@ final class navigation {
             return;
         }
         $hook->get_primaryview()->add(
-            'Evaluación de estudiantes',
+            'Student Evaluations',
             new moodle_url('/blocks/myprogress/admin-student-evaluations.php'),
             navigation_node::TYPE_CUSTOM,
             null,
