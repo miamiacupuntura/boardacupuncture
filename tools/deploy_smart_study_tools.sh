@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
 
-MOODLE_FILES=(smart-study-tools.php study-score.php my-evaluations.php admin-student-evaluations.php admin-ncbahm-evaluations.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php my-evaluations.php admin-student-evaluations.php admin-ncbahm-evaluations.php admin-open-student-dashboard.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
 MOODLE_NESTED_FILES=(db/hooks.php classes/hook/navigation.php)
 MOODLE_FILES+=(
     single-herbs-category-anchor-settle-spirit.php
@@ -292,6 +292,10 @@ grep -Fq "['attemptcourseid' => (int)\$courseid]" "$TEMP_DIR/moodle/admin-studen
 grep -Fq "'formulas' => ['name' => 'Chinese Herbology · Formulas', 'courseids' => [44, 117]]" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "e.element IN (:scoreelement12, :scoreelement2004)" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "Evaluaciones individuales" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "Abrir como estudiante" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "!has_capability('moodle/course:manageactivities', \$coursecontext, \$user->id)" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "session\\manager::loginas" "$TEMP_DIR/moodle/admin-open-student-dashboard.php"
+grep -Fq "redirect(new moodle_url('/my/', ['level' => 'school']))" "$TEMP_DIR/moodle/admin-open-student-dashboard.php"
 grep -Fq "Requiere repaso" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "Lista completa por cursos" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "Ver todos los estudiantes" "$TEMP_DIR/moodle/admin-student-evaluations.php"
@@ -1268,6 +1272,8 @@ grep -Fq "JOIN {scorm_attempt} a ON a.userid = u.id" "$TARGET_DIR/admin-student-
 grep -Fq "['attemptcourseid' => (int)\$courseid]" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "'formulas' => ['name' => 'Chinese Herbology · Formulas', 'courseids' => [44, 117]]" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "Evaluaciones individuales" "$TARGET_DIR/admin-student-evaluations.php"
+grep -Fq "Abrir como estudiante" "$TARGET_DIR/admin-student-evaluations.php"
+grep -Fq "session\\manager::loginas" "$TARGET_DIR/admin-open-student-dashboard.php"
 grep -Fq "Lista completa por cursos" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "Ver todos los estudiantes" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "data-exam-subject-filter" "$TARGET_DIR/admin-student-evaluations.php"
@@ -1594,6 +1600,7 @@ echo "OK: todas las categorías identifican a Yang como autor del libro sin alte
 echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video ni API externa."
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
 echo "OK: el administrador abre cada evaluación en un perfil estudiantil supervisado y claramente identificado."
+echo "OK: el informe SCORM permite abrir el dashboard bajo la identidad real del estudiante y excluye instructores de la lista."
 echo "OK: el perfil supervisado conserva el cambio entre español e inglés y separa los resultados del administrador."
 echo "OK: el dashboard muestra Evaluations solo a estudiantes; los controles administrativos permanecen en Site administration."
 echo "OK: My Evaluations separa NCCAOM y NCBAHM y permite cambiar entre inglés y español."
