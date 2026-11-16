@@ -470,20 +470,10 @@ class block_menu extends block_base {
             $boardactive = $levelview === 'board' ? ' is-active' : '';
             $schoolcurrent = $levelview === 'school' ? ' aria-current="page"' : '';
             $boardcurrent = $levelview === 'board' ? ' aria-current="page"' : '';
-            $evaluationlink = '';
-            $levelcolumncount = 2;
-            if (!$isguestview && has_capability('moodle/site:config', context_system::instance())) {
-                $evaluationurl = (new moodle_url('/blocks/myprogress/admin-student-evaluations.php'))->out(false);
-                $evaluationlink = '<a class="board-hub__level-link board-hub__level-link--admin" href="'
-                    . $evaluationurl . '">Evaluación de estudiantes</a>';
-                $levelcolumncount = 3;
-            }
-
             $levelnavigation = <<<HTML
-  <nav class="board-hub__level-nav" style="--level-columns:{$levelcolumncount}" aria-label="Programas y evaluación de estudiantes">
+  <nav class="board-hub__level-nav" aria-label="Programas de estudio">
     <a class="board-hub__level-link{$schoolactive}" href="{$schoollevelurl}"{$schoolcurrent}>NCCAOM Focused Practice</a>
     <a class="board-hub__level-link{$boardactive}" href="{$boardlevelurl}"{$boardcurrent}>NCBAHM Comprehensive Review</a>
-    {$evaluationlink}
   </nav>
 HTML;
 
@@ -540,7 +530,7 @@ HTML;
 }
 .board-hub__level-nav {
     display: grid;
-    grid-template-columns: repeat(var(--level-columns, 2), minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     margin: 20px 0 24px;
 }
@@ -567,11 +557,6 @@ HTML;
     border-color: #087f7b;
     background: #087f7b;
     color: #fff;
-}
-.board-hub__level-link--admin {
-    border-color: #6f4bc2;
-    background: #f5f1ff;
-    color: #4e2f98;
 }
 .board-hub__level-link:focus-visible {
     outline: 3px solid #ff7a2b;

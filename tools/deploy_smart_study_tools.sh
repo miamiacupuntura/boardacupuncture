@@ -322,7 +322,10 @@ grep -Fq "session\\manager::loginas" "$TEMP_DIR/menu/admin-open-assessment-as.ph
 grep -Fq "Perfil activo: estudiante" "$TEMP_DIR/menu/admin-open-assessment-as.php"
 grep -Fq "assessment-session.php" "$TEMP_DIR/menu/assessment-profile-banner.js"
 grep -Fq "Perfil activo: estudiante" "$TEMP_DIR/menu/assessment-profile-banner.js"
-grep -Fq "Evaluación de estudiantes" "$TEMP_DIR/menu/block_menu.php"
+if grep -Fq "/blocks/myprogress/admin-student-evaluations.php" "$TEMP_DIR/menu/block_menu.php"; then
+    echo "ERROR: el dashboard muestra un acceso administrativo de evaluaciones." >&2
+    exit 1
+fi
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/menu/herbology-board.php"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/formula-practice-es.html"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/single-herb-practice-es.html"
@@ -1353,7 +1356,6 @@ grep -Fq "session\\manager::loginas" "$MENU_TARGET_DIR/admin-open-assessment-as.
 grep -Fq "Perfil activo: estudiante" "$MENU_TARGET_DIR/admin-open-assessment-as.php"
 grep -Fq "assessment-session.php" "$MENU_TARGET_DIR/assessment-profile-banner.js"
 grep -Fq "Perfil activo: estudiante" "$MENU_TARGET_DIR/assessment-profile-banner.js"
-grep -Fq "Evaluación de estudiantes" "$MENU_TARGET_DIR/block_menu.php"
 grep -Fq "assessment-profile-banner.js" "$MENU_TARGET_DIR/herbology-board.php"
 
 THEME_TEMPLATE_TARGET_DIR="$MOODLE_ROOT/theme/moove/templates"
@@ -1578,6 +1580,6 @@ echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
 echo "OK: el administrador abre cada evaluación en un perfil estudiantil supervisado y claramente identificado."
 echo "OK: el perfil supervisado conserva el cambio entre español e inglés y separa los resultados del administrador."
-echo "OK: el dashboard administrativo incluye Evaluación de estudiantes junto a los dos programas."
+echo "OK: el dashboard conserva únicamente NCCAOM y NCBAHM; las evaluaciones administrativas permanecen en Site administration."
 echo "OK: archivos públicos instalados en ${#STUDY_NOTE_DIRS[@]} ruta(s): ${STUDY_NOTE_DIRS[*]}."
 echo "RESPALDO: $BACKUP"
