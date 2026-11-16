@@ -438,6 +438,7 @@ echo $OUTPUT->header();
 .student-evaluations__hero-actions{display:flex;align-items:center;gap:8px}.student-evaluations__views{display:flex;gap:8px;margin:0 0 14px}.student-evaluations__view{display:inline-flex;min-height:40px;align-items:center;padding:8px 14px;border:1px solid #b8c8d2;border-radius:8px;background:#fff;color:#24465b;font-weight:800;text-decoration:none}.student-evaluations__view:hover{background:#f1f6f8;color:#173448;text-decoration:none}.student-evaluations__view[aria-current="page"]{border-color:#0b8f87;background:#e5f6f3;color:#076d68}.student-evaluations__course-name{display:block;color:#142f40}.student-evaluations__course-code{display:block;margin-top:2px;color:#718394;font-size:12px}@media(max-width:780px){.student-evaluations__hero-actions,.student-evaluations__views{align-items:stretch;flex-direction:column}.student-evaluations__hero-actions .student-evaluations__button,.student-evaluations__view{width:100%;box-sizing:border-box}}
 .student-evaluations__exam-tools{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr)) auto;gap:10px;padding:14px 18px;border-top:1px solid #e1e8ec;background:#fbfcfd}.student-evaluations__exam-tools label span{display:block;margin-bottom:5px;color:#365469;font-size:11px;font-weight:800;text-transform:uppercase}.student-evaluations__exam-tools select{width:100%;min-height:40px;padding:7px 9px;border:1px solid #b9cbd4;border-radius:7px;background:#fff}.student-evaluations__exam-tools .student-evaluations__button{align-self:end}@media(max-width:900px){.student-evaluations__exam-tools{grid-template-columns:1fr 1fr}}@media(max-width:600px){.student-evaluations__exam-tools{grid-template-columns:1fr}.student-evaluations__exam-tools .student-evaluations__button{width:100%}}
 .student-evaluations__row-actions{display:flex;flex-wrap:wrap;gap:7px}.student-evaluations__button--student{border-color:#7047c8;background:#f5f1ff;color:#5630a8}.student-evaluations__button--student:hover{background:#7047c8;color:#fff}@media(max-width:780px){.student-evaluations__row-actions{min-width:190px;flex-direction:column}.student-evaluations__row-actions .student-evaluations__button{width:100%;box-sizing:border-box}}
+.student-evaluations__programs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 10px}.student-evaluations__program{display:flex;min-height:44px;align-items:center;justify-content:center;padding:8px 14px;border:1px solid #b8c8d2;border-radius:8px;background:#fff;color:#24465b;font-weight:850;text-align:center;text-decoration:none}.student-evaluations__program:hover{background:#f1f6f8;color:#173448;text-decoration:none}.student-evaluations__program[aria-current="page"]{border-color:#0b8f87;background:#0b8f87;color:#fff}@media(max-width:600px){.student-evaluations__programs{grid-template-columns:1fr}}
 </style>
 <main class="student-evaluations">
     <header class="student-evaluations__hero">
@@ -450,10 +451,13 @@ echo $OUTPUT->header();
     <div class="student-evaluations__notice"><strong>Scope of this first version:</strong> includes SCORM evaluations stored in Moodle. Formula Quiz and My Study Score still keep their history in each student’s browser and will be integrated when that history is synchronized with the server.</div>
 
     <?php if ($selectedstudent === null): ?>
-        <nav class="student-evaluations__views" aria-label="Report view">
+        <nav class="student-evaluations__programs" aria-label="Evaluation program">
+            <a class="student-evaluations__program" href="<?php echo $studentlisturl->out(false); ?>" aria-current="page">NCCAOM Focused Practice</a>
+            <a class="student-evaluations__program" href="<?php echo $ncbahmreporturl->out(false); ?>">NCBAHM Comprehensive Review</a>
+        </nav>
+        <nav class="student-evaluations__views" aria-label="NCCAOM report view">
             <a class="student-evaluations__view" href="<?php echo $studentlisturl->out(false); ?>"<?php echo $view === 'students' ? ' aria-current="page"' : ''; ?>>Student results</a>
             <a class="student-evaluations__view" href="<?php echo $courselisturl->out(false); ?>"<?php echo $view === 'courses' ? ' aria-current="page"' : ''; ?>>Students by course</a>
-            <a class="student-evaluations__view" href="<?php echo $ncbahmreporturl->out(false); ?>">NCBAHM · Quiz, Simulation and Exams</a>
         </nav>
         <form class="student-evaluations__filters" method="get" action="<?php echo $reporturl->out(false); ?>">
             <?php if ($view === 'courses'): ?><input type="hidden" name="view" value="courses"><?php endif; ?>
