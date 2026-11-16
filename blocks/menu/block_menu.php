@@ -208,6 +208,7 @@ class block_menu extends block_base {
         $membershipurl = (new moodle_url('/enrol/index.php', ['id' => $membershipcourseid]))->out(false);
         $membershipexists = $DB->record_exists('course', ['id' => $membershipcourseid]);
         $hasboardaccess = false;
+        $showpersonalevaluations = false;
         $paymentready = false;
 
         if ($membershipexists) {
@@ -220,6 +221,9 @@ class block_menu extends block_base {
                 $membershipcontext = context_course::instance($membershipcourseid);
                 $hasboardaccess = is_enrolled($membershipcontext, $USER->id, '', true)
                     || has_capability('moodle/course:view', $membershipcontext, $USER->id);
+                $showpersonalevaluations = is_enrolled($membershipcontext, $USER->id, '', true)
+                    && !is_siteadmin($USER->id)
+                    && !has_capability('moodle/grade:viewall', $membershipcontext, $USER->id);
             }
         }
 
@@ -470,6 +474,15 @@ class block_menu extends block_base {
             $boardactive = $levelview === 'board' ? ' is-active' : '';
             $schoolcurrent = $levelview === 'school' ? ' aria-current="page"' : '';
             $boardcurrent = $levelview === 'board' ? ' aria-current="page"' : '';
+            $personaltools = '';
+            if ($showpersonalevaluations) {
+                $personalevaluationsurl = (new moodle_url('/blocks/myprogress/my-evaluations.php'))->out(false);
+                $personaltools = <<<HTML
+  <aside class="board-hub__personal-tools" aria-label="Personal tools">
+    <a class="board-hub__evaluations-link" href="{$personalevaluationsurl}">Evaluations</a>
+  </aside>
+HTML;
+            }
             $levelnavigation = <<<HTML
   <nav class="board-hub__level-nav" aria-label="Programas de estudio">
     <a class="board-hub__level-link{$schoolactive}" href="{$schoollevelurl}"{$schoolcurrent}>NCCAOM Focused Practice</a>
@@ -534,6 +547,34 @@ HTML;
     gap: 12px;
     margin: 20px 0 24px;
 }
+.board-hub__personal-tools {
+    display: flex;
+    justify-content: flex-end;
+    margin: 18px 0 -8px;
+}
+.board-hub__evaluations-link {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border: 1px solid #7047c8;
+    border-radius: 9px;
+    background: #f5f1ff;
+    color: #5630a8;
+    font-weight: 800;
+    text-decoration: none;
+}
+.board-hub__evaluations-link:hover,
+.board-hub__evaluations-link:focus {
+    background: #7047c8;
+    color: #fff;
+    text-decoration: none;
+}
+.board-hub__evaluations-link:focus-visible {
+    outline: 3px solid #ff7a2b;
+    outline-offset: 2px;
+}
 .board-hub__level-link {
     display: inline-flex;
     align-items: center;
@@ -563,6 +604,10 @@ HTML;
     outline-offset: 2px;
 }
 @media (max-width: 640px) {
+    .board-hub__personal-tools,
+    .board-hub__evaluations-link {
+        width: 100%;
+    }
     .board-hub__level-nav {
         grid-template-columns: 1fr;
     }
@@ -574,6 +619,7 @@ HTML;
     <h2 id="board-hub-title">{$leveltitle}</h2>
     <span>{$levelintro}</span>
   </header>
+{$personaltools}
 {$levelnavigation}
 {$levelcontent}
 </section>

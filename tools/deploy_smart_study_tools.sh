@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
 
-MOODLE_FILES=(smart-study-tools.php study-score.php admin-student-evaluations.php admin-ncbahm-evaluations.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php my-evaluations.php admin-student-evaluations.php admin-ncbahm-evaluations.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
 MOODLE_NESTED_FILES=(db/hooks.php classes/hook/navigation.php)
 MOODLE_FILES+=(
     single-herbs-category-anchor-settle-spirit.php
@@ -326,6 +326,14 @@ if grep -Fq "/blocks/myprogress/admin-student-evaluations.php" "$TEMP_DIR/menu/b
     echo "ERROR: el dashboard muestra un acceso administrativo de evaluaciones." >&2
     exit 1
 fi
+grep -Fq "/blocks/myprogress/my-evaluations.php" "$TEMP_DIR/menu/block_menu.php"
+grep -Fq '>Evaluations</a>' "$TEMP_DIR/menu/block_menu.php"
+grep -Fq "!has_capability('moodle/grade:viewall', \$membershipcontext, \$USER->id)" "$TEMP_DIR/menu/block_menu.php"
+grep -Fq "'My Evaluations', 'Mis evaluaciones'" "$TEMP_DIR/moodle/my-evaluations.php"
+grep -Fq "NCCAOM Focused Practice" "$TEMP_DIR/moodle/my-evaluations.php"
+grep -Fq "NCBAHM Comprehensive Review" "$TEMP_DIR/moodle/my-evaluations.php"
+grep -Fq "\$languageurl" "$TEMP_DIR/moodle/my-evaluations.php"
+grep -Fq "['userid' => \$USER->id]" "$TEMP_DIR/moodle/my-evaluations.php"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/menu/herbology-board.php"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/formula-practice-es.html"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/single-herb-practice-es.html"
@@ -1281,6 +1289,11 @@ grep -Fq "function extend_primary_navigation" "$TARGET_DIR/classes/hook/navigati
 grep -Fq "core\\hook\\navigation\\primary_extend::class" "$TARGET_DIR/db/hooks.php"
 grep -Fq "new admin_externalpage" "$TARGET_DIR/settings.php"
 grep -Fq "block_myprogress_ncbahm_evaluations" "$TARGET_DIR/settings.php"
+grep -Fq "'My Evaluations', 'Mis evaluaciones'" "$TARGET_DIR/my-evaluations.php"
+grep -Fq "NCCAOM Focused Practice" "$TARGET_DIR/my-evaluations.php"
+grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/my-evaluations.php"
+grep -Fq "/blocks/myprogress/my-evaluations.php" "$MENU_TARGET_DIR/block_menu.php"
+grep -Fq '>Evaluations</a>' "$MENU_TARGET_DIR/block_menu.php"
 grep -Fq "Las hierbas emperador son " "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "installKingHerbNarrations(clone)" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "'Dang Gui' => 'Chinese Angelica Root'" "$TARGET_DIR/formulas-study-guide.php"
@@ -1580,6 +1593,7 @@ echo "OK: la página piloto Read Aloud usa la voz local del navegador, sin video
 echo "OK: motor local gratuito; no usa API externa ni transmite el historial."
 echo "OK: el administrador abre cada evaluación en un perfil estudiantil supervisado y claramente identificado."
 echo "OK: el perfil supervisado conserva el cambio entre español e inglés y separa los resultados del administrador."
-echo "OK: el dashboard conserva únicamente NCCAOM y NCBAHM; las evaluaciones administrativas permanecen en Site administration."
+echo "OK: el dashboard muestra Evaluations solo a estudiantes; los controles administrativos permanecen en Site administration."
+echo "OK: My Evaluations separa NCCAOM y NCBAHM y permite cambiar entre inglés y español."
 echo "OK: archivos públicos instalados en ${#STUDY_NOTE_DIRS[@]} ruta(s): ${STUDY_NOTE_DIRS[*]}."
 echo "RESPALDO: $BACKUP"
