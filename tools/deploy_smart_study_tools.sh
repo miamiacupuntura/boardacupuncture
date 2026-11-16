@@ -311,11 +311,16 @@ grep -Fq "array_diff(\$courseids, [113])" "$TEMP_DIR/moodle/admin-student-evalua
 grep -Fq "Clean Needle Techniques has no evaluations in NCBAHM Comprehensive Review." "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "block_menu_exam_attempts" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Evaluation type" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
-grep -Fq "Actual Quiz, Simulation, and Exam results stored on the server." "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "\$PAGE->set_heading('Student Evaluations');" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "Review NCBAHM Quiz, Simulation, and Exam results stored on the server." "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "formula-modifications-manifest.json" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Formula Quiz · supplemental category" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Open as <?php echo s(\$attempt['student']); ?>" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "ncbahm-evaluations-" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "Student evaluation views" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "Student results" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "Students by course" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "NCBAHM · Quiz, Simulation and Exams" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 if grep -Eq "Evaluaciones NCBAHM|Resultados reales|Buscar estudiante|Tipo de evaluación|Simulación|Exámenes|Estudiantes con|Promedio|Última actividad|Ver evaluaciones|Modo supervisado|Aprobado|No aprobado|Incompleto" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"; then
     echo "ERROR: NCBAHM Evaluations todavía contiene etiquetas de interfaz en español." >&2
     exit 1
@@ -373,8 +378,10 @@ grep -Fq "block_myprogress_student_evaluations" "$TEMP_DIR/moodle/classes/hook/n
 grep -Fq "'Student Evaluations'" "$TEMP_DIR/moodle/classes/hook/navigation.php"
 grep -Fq "new admin_externalpage" "$TEMP_DIR/moodle/settings.php"
 grep -Fq "'Student Evaluations'" "$TEMP_DIR/moodle/settings.php"
-grep -Fq "'NCBAHM Evaluations'" "$TEMP_DIR/moodle/settings.php"
-grep -Fq "block_myprogress_ncbahm_evaluations" "$TEMP_DIR/moodle/settings.php"
+if grep -Fq "block_myprogress_ncbahm_evaluations" "$TEMP_DIR/moodle/settings.php"; then
+    echo "ERROR: Site administration todavía contiene una entrada NCBAHM duplicada." >&2
+    exit 1
+fi
 grep -Fq "Las hierbas emperador son " "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "installKingHerbNarrations(clone)" "$TEMP_DIR/moodle/formulas-study-guide.php"
 grep -Fq "'Dang Gui' => 'Chinese Angelica Root'" "$TEMP_DIR/moodle/formulas-study-guide.php"
@@ -1309,7 +1316,8 @@ grep -Fq "array_diff(\$courseids, [113])" "$TARGET_DIR/admin-student-evaluations
 grep -Fq "Clean Needle Techniques has no evaluations in NCBAHM Comprehensive Review." "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "block_menu_exam_attempts" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Evaluation type" "$TARGET_DIR/admin-ncbahm-evaluations.php"
-grep -Fq "Actual Quiz, Simulation, and Exam results stored on the server." "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "\$PAGE->set_heading('Student Evaluations');" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "Review NCBAHM Quiz, Simulation, and Exam results stored on the server." "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "formula-modifications-manifest.json" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Formula Quiz · supplemental category" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Open as <?php echo s(\$attempt['student']); ?>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
@@ -1319,8 +1327,10 @@ grep -Fq "'Student Evaluations'" "$TARGET_DIR/classes/hook/navigation.php"
 grep -Fq "core\\hook\\navigation\\primary_extend::class" "$TARGET_DIR/db/hooks.php"
 grep -Fq "new admin_externalpage" "$TARGET_DIR/settings.php"
 grep -Fq "'Student Evaluations'" "$TARGET_DIR/settings.php"
-grep -Fq "'NCBAHM Evaluations'" "$TARGET_DIR/settings.php"
-grep -Fq "block_myprogress_ncbahm_evaluations" "$TARGET_DIR/settings.php"
+if grep -Fq "block_myprogress_ncbahm_evaluations" "$TARGET_DIR/settings.php"; then
+    echo "ERROR: la instalación conserva una entrada NCBAHM duplicada en Site administration." >&2
+    exit 1
+fi
 grep -Fq "'My Evaluations', 'Mis evaluaciones'" "$TARGET_DIR/my-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TARGET_DIR/my-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/my-evaluations.php"
@@ -1491,7 +1501,7 @@ echo "OK: la vista de puntuación se identifica como My Study Score (NCBAHM Comp
 echo "OK: My Study Score calcula precisión, cobertura, retención, consistencia, categorías y recomendaciones."
 echo "OK: Student Evaluations ofrece acceso administrativo directo, filtros, detalle individual y exportación CSV de resultados SCORM."
 echo "OK: la vista completa de Student Evaluations, incluidos filtros, tablas, estados y CSV, está escrita en inglés."
-echo "OK: NCBAHM Evaluations separa resultados reales de Quiz, Simulation y Exams y permite exportarlos."
+echo "OK: Student Evaluations integra NCBAHM como tercera vista junto a Student results y Students by course."
 echo "OK: el informe administrativo está protegido por moodle/site:config y aparece también en Site administration > Reports."
 echo "OK: Smart Study Tools visible como botón superior, a la izquierda del selector de idioma."
 echo "OK: Pattern → Formula incluye una lista desplegable y buscable de patrones verificados."
