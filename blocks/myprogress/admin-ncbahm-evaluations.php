@@ -242,6 +242,113 @@ $selectedattempts = $selectedstudent === null ? [] : array_values(array_filter(
     static fn(array $attempt): bool => $attempt['userid'] === $detailuserid
 ));
 
+$selectedanalytics = null;
+if ($selectedstudent !== null) {
+    $completedattempts = array_values(array_filter(
+        $selectedattempts,
+        static fn(array $attempt): bool => $attempt['status'] !== 'incomplete'
+    ));
+    $answeredquestions = array_sum(array_column($completedattempts, 'total'));
+    $correctanswers = array_sum(array_column($completedattempts, 'score'));
+    $accuracy = $answeredquestions > 0
+        ? round(($correctanswers / $answeredquestions) * 100)
+        : 0;
+    $attemptedkinds = array_fill_keys(array_column($selectedattempts, 'kind'), true);
+    $coverage = round((count($attemptedkinds) / 3) * 100);
+    $passedattempts = count(array_filter(
+        $completedattempts,
+        static fn(array $attempt): bool => $attempt['status'] === 'passed'
+    ));
+    $consistency = $completedattempts !== []
+        ? round(($passedattempts / count($completedattempts)) * 100)
+        : 0;
+
+    $attemptgroups = [];
+    foreach ($completedattempts as $attempt) {
+        $attemptkey = str_ends_with($attempt['examtype'], 'incomplete')
+            ? substr($attempt['examtype'], 0, -strlen('incomplete'))
+            : $attempt['examtype'];
+        $attemptgroups[$attemptkey][] = $attempt;
+    }
+    $repeatedattempts = [];
+    foreach ($attemptgroups as $group) {
+        if (count($group) >= 2) {
+            $repeatedattempts = array_merge($repeatedattempts, $group);
+        }
+    }
+    $repeatedtotal = array_sum(array_column($repeatedattempts, 'total'));
+    $repeatedscore = array_sum(array_column($repeatedattempts, 'score'));
+    $retention = $repeatedtotal > 0
+        ? round(($repeatedscore / $repeatedtotal) * 100)
+        : null;
+    $readiness = round(
+        ($accuracy * 0.40)
+        + ($coverage * 0.25)
+        + (($retention ?? 0) * 0.20)
+        + ($consistency * 0.15)
+    );
+    $readinesslabel = $readiness >= 90 ? 'Consistent mastery'
+        : ($readiness >= 75 ? 'Strong preparation'
+        : ($readiness >= 60 ? 'Progressing'
+        : ($readiness >= 40 ? 'Developing' : 'Building foundations')));
+
+    $kindlabels = ['quiz' => 'Quiz', 'simulation' => 'Simulations', 'exam' => 'Exams'];
+    $kindperformance = [];
+    foreach ($kindlabels as $kind => $label) {
+        $kindattempts = array_values(array_filter(
+            $completedattempts,
+            static fn(array $attempt): bool => $attempt['kind'] === $kind
+        ));
+        $kindtotal = array_sum(array_column($kindattempts, 'total'));
+        $kindscore = array_sum(array_column($kindattempts, 'score'));
+        $kindperformance[] = [
+            'label' => $label,
+            'attempts' => count($kindattempts),
+            'average' => $kindtotal > 0 ? round(($kindscore / $kindtotal) * 100) : null,
+        ];
+    }
+
+    $reviewattempts = array_values(array_filter(
+        $selectedattempts,
+        static fn(array $attempt): bool => $attempt['status'] !== 'passed'
+    ));
+    usort($reviewattempts, static fn(array $left, array $right): int =>
+        $left['percentage'] <=> $right['percentage']
+    );
+    $reviewattempts = array_slice($reviewattempts, 0, 5);
+
+    $recommendations = [];
+    if (!isset($attemptedkinds['quiz'])) {
+        $recommendations[] = ['Start a Quiz diagnostic', 'Complete a Quiz to add question-level evidence to this overview.'];
+    }
+    if (!isset($attemptedkinds['simulation'])) {
+        $recommendations[] = ['Add a Simulation', 'Use a Simulation to measure clinical decision-making under a different format.'];
+    }
+    if ($reviewattempts !== []) {
+        $recommendations[] = ['Review the lowest result', 'Revisit ' . $reviewattempts[0]['name'] . ' before the next attempt.'];
+    }
+    if ($retention === null) {
+        $recommendations[] = ['Confirm retention', 'Repeat one completed evaluation to compare performance over time.'];
+    }
+    if ($recommendations === []) {
+        $recommendations[] = ['Maintain readiness', 'Continue with mixed Quiz, Simulation and Exam practice.'];
+    }
+
+    $selectedanalytics = [
+        'accuracy' => $accuracy,
+        'coverage' => $coverage,
+        'retention' => $retention,
+        'consistency' => $consistency,
+        'readiness' => $readiness,
+        'readinesslabel' => $readinesslabel,
+        'answered' => $answeredquestions,
+        'completed' => count($completedattempts),
+        'kindperformance' => $kindperformance,
+        'reviewattempts' => $reviewattempts,
+        'recommendations' => array_slice($recommendations, 0, 3),
+    ];
+}
+
 if ($export === 'csv') {
     $filename = 'ncbahm-evaluations-' . userdate(time(), '%Y-%m-%d') . '.csv';
     header('Content-Type: text/csv; charset=utf-8');
@@ -272,6 +379,7 @@ echo $OUTPUT->header();
 .ncbahm-report__programs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 10px}.ncbahm-report__program{display:flex;min-height:44px;align-items:center;justify-content:center;padding:8px 14px;border:1px solid #b8c8d2;border-radius:8px;background:#fff;color:#24465b!important;font-weight:850;text-align:center;text-decoration:none}.ncbahm-report__program:hover{background:#f1f6f8;color:#173448!important;text-decoration:none}.ncbahm-report__program[aria-current="page"]{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.ncbahm-report__section-title{margin:0 0 14px;padding:10px 14px;border-left:4px solid #0b8f87;border-radius:7px;background:#f3f8f8;color:#173448;font-weight:850}@media(max-width:700px){.ncbahm-report__programs{grid-template-columns:1fr}}
 .ncbahm-report__hero{gap:20px;margin-bottom:18px;padding:23px 25px;box-shadow:0 3px 12px rgba(15,23,42,.06)}.ncbahm-report__hero h2{margin:0 0 6px;color:#102a3b;font-size:30px}.ncbahm-report__hero p{max-width:780px;line-height:1.5}.ncbahm-report__hero .ncbahm-report__button{min-height:42px;padding:9px 14px}
 .ncbahm-report__row-actions{display:flex;flex-wrap:wrap;gap:7px}.ncbahm-report__button--student{border-color:#7047c8;background:#f5f1ff;color:#5630a8!important}.ncbahm-report__button--student:hover{background:#7047c8;color:#fff!important}.ncbahm-report__button--score{border-color:#f47b20;background:#fff8f1;color:#a94408!important}.ncbahm-report__button--score:hover{background:#f47b20;color:#fff!important}@media(max-width:780px){.ncbahm-report__row-actions{min-width:190px;flex-direction:column}.ncbahm-report__row-actions .ncbahm-report__button{width:100%;box-sizing:border-box}}
+.ncbahm-analytics{margin-top:24px;padding-top:22px;border-top:2px solid #e4ebef}.ncbahm-analytics__hero{margin-bottom:14px;padding:18px 20px;border:1px solid #f0c5a5;border-top:5px solid #ea6a19;border-radius:12px;background:linear-gradient(135deg,#fff8f1,#f7fbff)}.ncbahm-analytics__hero h3{margin:0 0 5px;font-size:25px}.ncbahm-analytics__hero p{margin:0;color:#526b84}.ncbahm-analytics__notice{margin-bottom:14px;padding:12px 14px;border-left:4px solid #0b8f87;border-radius:8px;background:#eef9f6;color:#285d54}.ncbahm-analytics__overview{display:grid;grid-template-columns:245px minmax(0,1fr);gap:14px;margin-bottom:14px}.ncbahm-analytics__panel{padding:17px;border:1px solid #d5e0e6;border-radius:12px;background:#fff}.ncbahm-analytics__overall{text-align:center}.ncbahm-analytics__ring{--score:0;width:145px;height:145px;display:grid;place-items:center;margin:0 auto 12px;border-radius:50%;background:conic-gradient(#ea6a19 calc(var(--score) * 1%),#e8eef2 0);position:relative}.ncbahm-analytics__ring:after{content:"";position:absolute;inset:13px;border-radius:50%;background:#fff}.ncbahm-analytics__ring strong{position:relative;z-index:1;font-size:38px}.ncbahm-analytics__overall h4{margin:0 0 5px;font-size:19px}.ncbahm-analytics__overall p{margin:0;color:#60758a;font-size:12px}.ncbahm-analytics__metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.ncbahm-analytics__metric{padding:14px;border:1px solid #d8e2e8;border-radius:10px;background:#fbfdff}.ncbahm-analytics__metric-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}.ncbahm-analytics__metric h4{margin:0;font-size:14px}.ncbahm-analytics__metric strong{font-size:21px}.ncbahm-analytics__track{height:8px;margin:10px 0;border-radius:999px;background:#e5edf1;overflow:hidden}.ncbahm-analytics__track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#0d8875,#44b59e)}.ncbahm-analytics__metric p{margin:0;color:#60758a;font-size:11px}.ncbahm-analytics__details{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);gap:14px;margin-bottom:14px}.ncbahm-analytics__panel h4{margin:0 0 5px;font-size:19px}.ncbahm-analytics__subcopy{margin:0 0 13px;color:#60758a;font-size:12px}.ncbahm-analytics__type{display:grid;grid-template-columns:125px 1fr 52px;align-items:center;gap:10px;margin-top:11px}.ncbahm-analytics__type span{font-weight:800}.ncbahm-analytics__type small{color:#60758a}.ncbahm-analytics__review{margin:0;padding:0;list-style:none}.ncbahm-analytics__review li{display:flex;justify-content:space-between;gap:12px;margin-top:8px;padding:10px;border-radius:8px;background:#f8fafc}.ncbahm-analytics__review strong{color:#a94408;white-space:nowrap}.ncbahm-analytics__empty{padding:18px;border-radius:8px;background:#f8fafc;color:#64748b;text-align:center}.ncbahm-analytics__steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.ncbahm-analytics__step{padding:14px;border:1px solid #d7dfea;border-top:4px solid #6d28d9;border-radius:10px;background:#fff}.ncbahm-analytics__step strong{display:block;margin-bottom:6px;color:#4c1d95}.ncbahm-analytics__step p{margin:0;color:#60758a;font-size:12px;line-height:1.45}.ncbahm-analytics__method{margin-top:14px;padding:12px 14px;border-left:4px solid #0b8f87;border-radius:8px;background:#effaf7;color:#285d54;font-size:12px;line-height:1.5}@media(max-width:800px){.ncbahm-analytics__overview,.ncbahm-analytics__details{grid-template-columns:1fr}.ncbahm-analytics__steps{grid-template-columns:1fr}}@media(max-width:560px){.ncbahm-analytics__metrics{grid-template-columns:1fr}.ncbahm-analytics__type{grid-template-columns:105px 1fr 45px}}
 </style>
 <main class="ncbahm-report">
     <header class="ncbahm-report__hero"><div><h2>Student Evaluations</h2><p>Review NCBAHM Quiz, Simulation, and Exam results stored on the server.</p></div><div class="ncbahm-report__actions"><a class="ncbahm-report__button" href="<?php echo $exporturl->out(false); ?>">Export CSV</a></div></header>
@@ -300,6 +408,50 @@ echo $OUTPUT->header();
     <?php foreach ($selectedattempts as $attempt): $statuslabels = ['passed' => 'Passed', 'failed' => 'Not passed', 'incomplete' => 'Incomplete']; ?>
         <tr><td><?php echo s($attempt['kindname']); ?></td><td><strong><?php echo s($attempt['name']); ?></strong></td><td><span class="ncbahm-report__score"><?php echo s($attempt['percentage'] . '%'); ?></span></td><td><span class="ncbahm-report__status ncbahm-report__status--<?php echo s($attempt['status']); ?>"><?php echo s($statuslabels[$attempt['status']]); ?></span></td><td><?php echo s($durationvalue($attempt['duration'])); ?></td><td><?php echo s($datevalue($attempt['timecompleted'])); ?></td><td><a class="ncbahm-report__button ncbahm-report__button--secondary ncbahm-report__button--compact" href="<?php echo s($attempt['openasurl']); ?>">Open as <?php echo s($attempt['student']); ?></a></td></tr>
     <?php endforeach; ?></tbody></table></div></section>
+    <?php if ($selectedanalytics !== null): ?>
+    <section class="ncbahm-analytics" aria-labelledby="student-study-score-title">
+        <header class="ncbahm-analytics__hero">
+            <h3 id="student-study-score-title">My Study Score (NCBAHM Comprehensive Review)</h3>
+            <p>Performance charts for <?php echo s($selectedstudent['name']); ?> based on evaluations recorded on the server.</p>
+        </header>
+        <div class="ncbahm-analytics__notice"><strong>Student-specific server view:</strong> these charts use this student’s saved Quiz, Simulation and Exam attempts. They do not use the administrator’s browser history.</div>
+        <div class="ncbahm-analytics__overview">
+            <article class="ncbahm-analytics__panel ncbahm-analytics__overall">
+                <div class="ncbahm-analytics__ring" style="--score:<?php echo (int)$selectedanalytics['readiness']; ?>"><strong><?php echo (int)$selectedanalytics['readiness']; ?></strong></div>
+                <h4><?php echo s($selectedanalytics['readinesslabel']); ?></h4>
+                <p><?php echo (int)$selectedanalytics['completed']; ?> completed attempts · <?php echo (int)$selectedanalytics['answered']; ?> scored questions</p>
+            </article>
+            <div class="ncbahm-analytics__metrics">
+                <?php
+                $metriccopy = [
+                    ['Accuracy', 'accuracy', 'Correct answers across completed server attempts.'],
+                    ['Evaluation coverage', 'coverage', 'Quiz, Simulation and Exam formats represented.'],
+                    ['Retention', 'retention', 'Performance in evaluations attempted at least twice.'],
+                    ['Consistency', 'consistency', 'Completed attempts meeting the 70% passing mark.'],
+                ];
+                foreach ($metriccopy as [$label, $key, $description]):
+                    $metricvalue = $selectedanalytics[$key];
+                ?>
+                <article class="ncbahm-analytics__metric"><div class="ncbahm-analytics__metric-head"><h4><?php echo s($label); ?></h4><strong><?php echo $metricvalue === null ? '—' : (int)$metricvalue . '%'; ?></strong></div><div class="ncbahm-analytics__track"><span style="width:<?php echo $metricvalue === null ? 0 : (int)$metricvalue; ?>%"></span></div><p><?php echo s($description); ?></p></article>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <div class="ncbahm-analytics__details">
+            <article class="ncbahm-analytics__panel">
+                <h4>Performance by evaluation type</h4><p class="ncbahm-analytics__subcopy">Weighted average from the student’s completed attempts.</p>
+                <?php foreach ($selectedanalytics['kindperformance'] as $kindrow): ?>
+                <div class="ncbahm-analytics__type"><span><?php echo s($kindrow['label']); ?><br><small><?php echo (int)$kindrow['attempts']; ?> attempt<?php echo (int)$kindrow['attempts'] === 1 ? '' : 's'; ?></small></span><div class="ncbahm-analytics__track"><span style="width:<?php echo $kindrow['average'] === null ? 0 : (int)$kindrow['average']; ?>%"></span></div><strong><?php echo $kindrow['average'] === null ? '—' : (int)$kindrow['average'] . '%'; ?></strong></div>
+                <?php endforeach; ?>
+            </article>
+            <article class="ncbahm-analytics__panel">
+                <h4>Evaluations needing review</h4><p class="ncbahm-analytics__subcopy">Up to five incomplete or below-passing attempts.</p>
+                <?php if ($selectedanalytics['reviewattempts'] === []): ?><div class="ncbahm-analytics__empty">No recorded evaluations currently need review.</div><?php else: ?><ul class="ncbahm-analytics__review"><?php foreach ($selectedanalytics['reviewattempts'] as $reviewattempt): ?><li><span><?php echo s($reviewattempt['name']); ?></span><strong><?php echo s($reviewattempt['percentage'] . '%'); ?></strong></li><?php endforeach; ?></ul><?php endif; ?>
+            </article>
+        </div>
+        <article class="ncbahm-analytics__panel"><h4>Recommended next steps</h4><p class="ncbahm-analytics__subcopy">Recommendations generated from the selected student’s server history.</p><div class="ncbahm-analytics__steps"><?php foreach ($selectedanalytics['recommendations'] as $index => $recommendation): ?><div class="ncbahm-analytics__step"><strong><?php echo (int)$index + 1; ?>. <?php echo s($recommendation[0]); ?></strong><p><?php echo s($recommendation[1]); ?></p></div><?php endforeach; ?></div></article>
+        <aside class="ncbahm-analytics__method"><strong>How this administrative score is calculated:</strong> 40% accuracy, 25% evaluation coverage, 20% retention and 15% consistency. Formula-level coverage remains part of the student’s device-based My Study Score until that detailed history is synchronized with the server.</aside>
+    </section>
+    <?php endif; ?>
     <?php endif; ?>
 </main>
 <?php
