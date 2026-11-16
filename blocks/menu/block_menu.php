@@ -393,10 +393,18 @@ class block_menu extends block_base {
                     . '</article>';
 
                 $examhistoryaction = '';
+                $studyscoreaction = '';
+                $smartstudytoolsaction = '';
                 if ($subject['area'] === 'herbology') {
                     $examhistoryurl = new moodle_url('/blocks/menu/exam-history.php');
                     $examhistoryaction = '<a class="board-hub__action board-hub__action--exam-history" href="'
                         . $examhistoryurl->out(false) . '">Exam History</a>';
+                    $studyscoreurl = new moodle_url('/blocks/myprogress/study-score.php');
+                    $studyscoreaction = '<a class="board-hub__action board-hub__action--study-score" href="'
+                        . $studyscoreurl->out(false) . '">📊 My Study Score</a>';
+                    $smartstudytoolsurl = new moodle_url('/blocks/myprogress/smart-study-tools.php');
+                    $smartstudytoolsaction = '<a class="board-hub__action board-hub__action--smart-tools" href="'
+                        . $smartstudytoolsurl->out(false) . '">✨ Smart Study Tools</a>';
                     $mockquestionsurl = new moodle_url('/blocks/menu/herbology-board.php', [
                         'track' => 'practice',
                     ]);
@@ -427,7 +435,8 @@ class block_menu extends block_base {
                         . 'board-hub__action--board-simulation" aria-disabled="true">Simulation</span>';
                 }
                 $boardlevelactions = $libraryaction . $studyguideaction . $mockquestionsaction
-                    . $quizaction . $examsaction . $simulationaction . $examhistoryaction;
+                    . $quizaction . $examsaction . $simulationaction . $examhistoryaction
+                    . $studyscoreaction . $smartstudytoolsaction;
 
                 $boardlevelcards .= '<article id="board-level-' . s($subject['area'])
                     . '" class="board-hub__card board-hub__card--board-level board-hub__card--'
@@ -604,6 +613,28 @@ HTML;
 .board-hub__level-link:focus-visible {
     outline: 3px solid #ff7a2b;
     outline-offset: 2px;
+}
+.board-hub__card--board-level .board-hub__action--study-score {
+    order: 8;
+    border: 1px solid #ff7a2b;
+    background: #fff8f1;
+    color: #8a3100 !important;
+}
+.board-hub__card--board-level .board-hub__action--study-score:hover,
+.board-hub__card--board-level .board-hub__action--study-score:focus {
+    background: #ff7a2b;
+    color: #fff !important;
+}
+.board-hub__card--board-level .board-hub__action--smart-tools {
+    order: 9;
+    border: 1px solid #7047c8;
+    background: #faf7ff;
+    color: #5630a8 !important;
+}
+.board-hub__card--board-level .board-hub__action--smart-tools:hover,
+.board-hub__card--board-level .board-hub__action--smart-tools:focus {
+    background: #7047c8;
+    color: #fff !important;
 }
 @media (max-width: 640px) {
     .board-hub__personal-tools,
