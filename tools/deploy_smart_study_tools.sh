@@ -322,6 +322,7 @@ grep -Fq "ncbahm-evaluations-" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Evaluation program" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "All Programs" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Quiz, Simulation and Exams" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 if grep -Eq "Evaluaciones NCBAHM|Resultados reales|Buscar estudiante|Tipo de evaluación|Simulación|Exámenes|Estudiantes con|Promedio|Última actividad|Ver evaluaciones|Modo supervisado|Aprobado|No aprobado|Incompleto" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"; then
     echo "ERROR: NCBAHM Evaluations todavía contiene etiquetas de interfaz en español." >&2
@@ -330,6 +331,10 @@ fi
 grep -Fq "Evaluation program" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "All Programs" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "\$view === 'courses' ? 'all' : 'nccaom'" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "repeat(3,minmax(0,1fr))" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "repeat(3,minmax(0,1fr))" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 if grep -Fq "NCBAHM · Quiz, Simulation and Exams" "$TEMP_DIR/moodle/admin-student-evaluations.php"; then
     echo "ERROR: Student Evaluations todavía mezcla el módulo NCBAHM con el tipo de informe en un solo botón." >&2
     exit 1
@@ -1315,6 +1320,9 @@ grep -Fq "View all students" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "Evaluation program" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/admin-student-evaluations.php"
+grep -Fq "All Programs" "$TARGET_DIR/admin-student-evaluations.php"
+grep -Fq "\$view === 'courses' ? 'all' : 'nccaom'" "$TARGET_DIR/admin-student-evaluations.php"
+grep -Fq "repeat(3,minmax(0,1fr))" "$TARGET_DIR/admin-student-evaluations.php"
 if grep -Fq "NCBAHM · Quiz, Simulation and Exams" "$TARGET_DIR/admin-student-evaluations.php"; then
     echo "ERROR: la instalación mezcla el módulo NCBAHM con el tipo de informe en un solo botón." >&2
     exit 1
@@ -1341,6 +1349,8 @@ grep -Fq "Open as <?php echo s(\$attempt['student']); ?>" "$TARGET_DIR/admin-ncb
 grep -Fq "Evaluation program" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "All Programs" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "repeat(3,minmax(0,1fr))" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Quiz, Simulation and Exams" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Last course access" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "function extend_primary_navigation" "$TARGET_DIR/classes/hook/navigation.php"
@@ -1522,7 +1532,7 @@ echo "OK: la vista de puntuación se identifica como My Study Score (NCBAHM Comp
 echo "OK: My Study Score calcula precisión, cobertura, retención, consistencia, categorías y recomendaciones."
 echo "OK: Student Evaluations ofrece acceso administrativo directo, filtros, detalle individual y exportación CSV de resultados SCORM."
 echo "OK: la vista completa de Student Evaluations, incluidos filtros, tablas, estados y CSV, está escrita en inglés."
-echo "OK: Student Evaluations separa primero NCCAOM y NCBAHM; cada módulo muestra después sus propios tipos de informe."
+echo "OK: Student Evaluations muestra NCCAOM, NCBAHM y All Programs con la misma navegación; Students by course reúne ambos módulos."
 echo "OK: el informe administrativo está protegido por moodle/site:config y aparece también en Site administration > Reports."
 echo "OK: Smart Study Tools visible como botón superior, a la izquierda del selector de idioma."
 echo "OK: Pattern → Formula incluye una lista desplegable y buscable de patrones verificados."
