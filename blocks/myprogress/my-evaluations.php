@@ -14,6 +14,7 @@ $text = static function(string $english, string $spanish) use ($ises): string {
 $pageurl = new moodle_url('/blocks/myprogress/my-evaluations.php', ['lang' => $ises ? 'es' : 'en']);
 $languageurl = new moodle_url('/blocks/myprogress/my-evaluations.php', ['lang' => $ises ? 'en' : 'es']);
 $dashboardurl = new moodle_url('/my/');
+$studyscoreurl = new moodle_url('/blocks/myprogress/study-score.php', $ises ? ['lang' => 'es'] : []);
 
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
@@ -234,6 +235,7 @@ echo $OUTPUT->header();
             'Revisa tus resultados personales de ambos programas de estudio.'
         )); ?></p></div>
         <nav class="my-evaluations__actions" aria-label="<?php echo s($text('Page actions', 'Acciones de la página')); ?>">
+            <a class="my-evaluations__button" href="<?php echo $studyscoreurl->out(false); ?>"><?php echo s($text('← Back to My Study Score', '← Volver a My Study Score')); ?></a>
             <a class="my-evaluations__button" href="<?php echo $languageurl->out(false); ?>" hreflang="<?php echo $ises ? 'en' : 'es'; ?>"><?php echo $ises ? 'English' : 'Español'; ?></a>
             <a class="my-evaluations__button" href="<?php echo $dashboardurl->out(false); ?>"><?php echo s($text('Back to Dashboard', 'Volver al Dashboard')); ?></a>
         </nav>

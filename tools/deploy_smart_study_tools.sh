@@ -338,7 +338,7 @@ grep -Fq "Formula Quiz · supplemental category" "$TEMP_DIR/moodle/admin-ncbahm-
 grep -Fq "Open as <?php echo s(\$attempt['student']); ?>" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "admin-open-student-dashboard.php" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "'destination' => 'studyscore'" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
-grep -Fq ">📊 My Study Score</a>" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq ">← Back to My Study Score</a>" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Open as student" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "ncbahm-evaluations-" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Evaluation program" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
@@ -1178,6 +1178,9 @@ grep -Fq ".study-score h2{white-space:normal}" "$TEMP_DIR/moodle/study-score.php
 grep -Fq "40% accuracy, 25% coverage, 20% retention and 15% consistency" "$TEMP_DIR/moodle/study-score.php"
 grep -Fq "data-category-body" "$TEMP_DIR/moodle/study-score.php"
 grep -Fq "data-recommendations" "$TEMP_DIR/moodle/study-score.php"
+grep -Fq "← Back to My Study Score" "$TEMP_DIR/moodle/my-evaluations.php"
+grep -Fq "← Volver a My Study Score" "$TEMP_DIR/moodle/my-evaluations.php"
+grep -Fq "'/blocks/myprogress/study-score.php'" "$TEMP_DIR/moodle/my-evaluations.php"
 if grep -Fq "subject-study-library__journey-option subject-study-library__journey-option--smart" "$TEMP_DIR/moodle/study-guide.php"; then
     echo "ERROR: Smart Study Tools todavía aparece dentro de Main Study Guide." >&2
     exit 1
@@ -1399,7 +1402,7 @@ grep -Fq "Formula Quiz · supplemental category" "$TARGET_DIR/admin-ncbahm-evalu
 grep -Fq "Open as <?php echo s(\$attempt['student']); ?>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "admin-open-student-dashboard.php" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "'destination' => 'studyscore'" "$TARGET_DIR/admin-ncbahm-evaluations.php"
-grep -Fq ">📊 My Study Score</a>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq ">← Back to My Study Score</a>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Open as student" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Evaluation program" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TARGET_DIR/admin-ncbahm-evaluations.php"
@@ -1420,6 +1423,9 @@ fi
 grep -Fq "'My Evaluations', 'Mis evaluaciones'" "$TARGET_DIR/my-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TARGET_DIR/my-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/my-evaluations.php"
+grep -Fq "← Back to My Study Score" "$TARGET_DIR/my-evaluations.php"
+grep -Fq "← Volver a My Study Score" "$TARGET_DIR/my-evaluations.php"
+grep -Fq "'/blocks/myprogress/study-score.php'" "$TARGET_DIR/my-evaluations.php"
 grep -Fq "Las hierbas emperador son " "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "installKingHerbNarrations(clone)" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "'Dang Gui' => 'Chinese Angelica Root'" "$TARGET_DIR/formulas-study-guide.php"
