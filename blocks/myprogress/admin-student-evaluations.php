@@ -222,6 +222,27 @@ if ($export === 'csv') {
 }
 
 $selectedstudent = $detailuserid > 0 && isset($students[$detailuserid]) ? $students[$detailuserid] : null;
+$selectedexams = [];
+if ($selectedstudent !== null) {
+    foreach ($examdetails[$detailuserid] ?? [] as $scormid => $exam) {
+        if (!isset($scorms[$scormid])) {
+            continue;
+        }
+        $scorm = $scorms[$scormid];
+        $key = $coursesubject[(int)$scorm->course] ?? null;
+        $selectedexams[] = [
+            'name' => $scorm->name,
+            'subject' => $key !== null ? $subjects[$key]['name'] : 'Otra materia',
+            'score' => $exam['score'],
+            'attempts' => count($exam['attemptids']),
+            'lastactivity' => $exam['lastactivity'],
+        ];
+    }
+    usort($selectedexams, static function(array $left, array $right): int {
+        $subjectcomparison = strcasecmp($left['subject'], $right['subject']);
+        return $subjectcomparison !== 0 ? $subjectcomparison : strcasecmp($left['name'], $right['name']);
+    });
+}
 $totalstudents = count($students);
 $pagedstudents = array_slice($students, $page * $perpage, $perpage, true);
 $exporturl = new moodle_url($reporturl, array_filter([
@@ -233,7 +254,7 @@ $exporturl = new moodle_url($reporturl, array_filter([
 echo $OUTPUT->header();
 ?>
 <style>
-.student-evaluations{max-width:1280px;margin:0 auto 40px}.student-evaluations__hero{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:18px;padding:23px 25px;border-left:5px solid #0b8f87;border-radius:12px;background:linear-gradient(135deg,#eef9f6,#fff8ef);box-shadow:0 3px 12px rgba(15,23,42,.06)}.student-evaluations__hero h2{margin:0 0 6px;color:#102a3b;font-size:30px}.student-evaluations__hero p{max-width:780px;margin:0;color:#52677a;line-height:1.5}.student-evaluations__button{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:9px 14px;border:1px solid #0b8f87;border-radius:8px;background:#0b8f87;color:#fff;font-weight:800;text-decoration:none;white-space:nowrap}.student-evaluations__button:hover{background:#076d68;color:#fff;text-decoration:none}.student-evaluations__button--secondary{border-color:#b8c8d2;background:#fff;color:#24465b}.student-evaluations__button--secondary:hover{background:#f1f6f8;color:#173448}.student-evaluations__notice{margin:0 0 18px;padding:13px 16px;border:1px solid #f0cf96;border-left:5px solid #d97706;border-radius:9px;background:#fff8ea;color:#6f4a15;line-height:1.5}.student-evaluations__filters{display:grid;grid-template-columns:minmax(240px,1fr) minmax(230px,.7fr) auto;gap:10px;margin-bottom:18px;padding:16px;border:1px solid #d7e2e7;border-radius:11px;background:#fff}.student-evaluations__filters label span{display:block;margin-bottom:5px;color:#365469;font-size:12px;font-weight:800}.student-evaluations__filters input,.student-evaluations__filters select{width:100%;min-height:42px;box-sizing:border-box;padding:8px 10px;border:1px solid #b9cbd4;border-radius:8px;background:#fff}.student-evaluations__filter-actions{display:flex;align-items:end;gap:8px}.student-evaluations__panel{border:1px solid #d7e2e7;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.05);overflow:hidden}.student-evaluations__panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;background:#f3f8f8}.student-evaluations__panel-head h3{margin:0;color:#173448;font-size:19px}.student-evaluations__panel-head span{color:#607487;font-size:13px;font-weight:700}.student-evaluations__table-wrap{overflow-x:auto}.student-evaluations__table{width:100%;border-collapse:collapse}.student-evaluations__table th,.student-evaluations__table td{padding:12px 14px;border-top:1px solid #e1e8ec;text-align:left;vertical-align:middle}.student-evaluations__table th{background:#fbfcfd;color:#365469;font-size:11px;letter-spacing:.035em;text-transform:uppercase}.student-evaluations__table td{color:#435d6f}.student-evaluations__student strong{display:block;color:#142f40}.student-evaluations__student small{display:block;margin-top:2px;color:#718394}.student-evaluations__score{color:#08746f;font-size:18px;font-weight:900}.student-evaluations__empty{padding:35px!important;color:#64748b!important;text-align:center!important}.student-evaluations__cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 18px}.student-evaluations__card{padding:16px;border:1px solid #d7e2e7;border-radius:10px;background:#fff}.student-evaluations__card span{display:block;color:#64748b;font-size:12px;font-weight:750}.student-evaluations__card strong{display:block;margin-top:5px;color:#0b655f;font-size:25px}.student-evaluations__detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px}.student-evaluations__detail-head h3{margin:0 0 3px}.student-evaluations__detail-head p{margin:0;color:#64748b}.student-evaluations__pagination{padding:15px;text-align:center}.student-evaluations__pagination a{display:inline-block;margin:2px;padding:6px 10px;border:1px solid #cbd8de;border-radius:6px;color:#24516a;text-decoration:none}.student-evaluations__pagination a[aria-current="page"]{border-color:#0b8f87;background:#0b8f87;color:#fff}@media(max-width:780px){.student-evaluations__hero,.student-evaluations__detail-head{align-items:stretch;flex-direction:column}.student-evaluations__filters{grid-template-columns:1fr}.student-evaluations__filter-actions{align-items:stretch;flex-direction:column}.student-evaluations__filter-actions .student-evaluations__button{width:100%}.student-evaluations__cards{grid-template-columns:1fr 1fr}.student-evaluations__table th,.student-evaluations__table td{padding:10px 9px}}
+.student-evaluations{max-width:1280px;margin:0 auto 40px}.student-evaluations__hero{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:18px;padding:23px 25px;border-left:5px solid #0b8f87;border-radius:12px;background:linear-gradient(135deg,#eef9f6,#fff8ef);box-shadow:0 3px 12px rgba(15,23,42,.06)}.student-evaluations__hero h2{margin:0 0 6px;color:#102a3b;font-size:30px}.student-evaluations__hero p{max-width:780px;margin:0;color:#52677a;line-height:1.5}.student-evaluations__button{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:9px 14px;border:1px solid #0b8f87;border-radius:8px;background:#0b8f87;color:#fff;font-weight:800;text-decoration:none;white-space:nowrap}.student-evaluations__button:hover{background:#076d68;color:#fff;text-decoration:none}.student-evaluations__button--secondary{border-color:#b8c8d2;background:#fff;color:#24465b}.student-evaluations__button--secondary:hover{background:#f1f6f8;color:#173448}.student-evaluations__notice{margin:0 0 18px;padding:13px 16px;border:1px solid #f0cf96;border-left:5px solid #d97706;border-radius:9px;background:#fff8ea;color:#6f4a15;line-height:1.5}.student-evaluations__filters{display:grid;grid-template-columns:minmax(240px,1fr) minmax(230px,.7fr) auto;gap:10px;margin-bottom:18px;padding:16px;border:1px solid #d7e2e7;border-radius:11px;background:#fff}.student-evaluations__filters label span{display:block;margin-bottom:5px;color:#365469;font-size:12px;font-weight:800}.student-evaluations__filters input,.student-evaluations__filters select{width:100%;min-height:42px;box-sizing:border-box;padding:8px 10px;border:1px solid #b9cbd4;border-radius:8px;background:#fff}.student-evaluations__filter-actions{display:flex;align-items:end;gap:8px}.student-evaluations__panel{margin-bottom:18px;border:1px solid #d7e2e7;border-radius:12px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.05);overflow:hidden}.student-evaluations__panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;background:#f3f8f8}.student-evaluations__panel-head h3{margin:0;color:#173448;font-size:19px}.student-evaluations__panel-head span{color:#607487;font-size:13px;font-weight:700}.student-evaluations__table-wrap{overflow-x:auto}.student-evaluations__table{width:100%;border-collapse:collapse}.student-evaluations__table th,.student-evaluations__table td{padding:12px 14px;border-top:1px solid #e1e8ec;text-align:left;vertical-align:middle}.student-evaluations__table th{background:#fbfcfd;color:#365469;font-size:11px;letter-spacing:.035em;text-transform:uppercase}.student-evaluations__table td{color:#435d6f}.student-evaluations__student strong{display:block;color:#142f40}.student-evaluations__student small{display:block;margin-top:2px;color:#718394}.student-evaluations__score{color:#08746f;font-size:18px;font-weight:900}.student-evaluations__status{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:850}.student-evaluations__status--passed{background:#ddf6ec;color:#076c55}.student-evaluations__status--review{background:#fff0dd;color:#a34d00}.student-evaluations__empty{padding:35px!important;color:#64748b!important;text-align:center!important}.student-evaluations__cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 18px}.student-evaluations__card{padding:16px;border:1px solid #d7e2e7;border-radius:10px;background:#fff}.student-evaluations__card span{display:block;color:#64748b;font-size:12px;font-weight:750}.student-evaluations__card strong{display:block;margin-top:5px;color:#0b655f;font-size:25px}.student-evaluations__detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px}.student-evaluations__detail-head h3{margin:0 0 3px}.student-evaluations__detail-head p{margin:0;color:#64748b}.student-evaluations__pagination{padding:15px;text-align:center}.student-evaluations__pagination a{display:inline-block;margin:2px;padding:6px 10px;border:1px solid #cbd8de;border-radius:6px;color:#24516a;text-decoration:none}.student-evaluations__pagination a[aria-current="page"]{border-color:#0b8f87;background:#0b8f87;color:#fff}@media(max-width:780px){.student-evaluations__hero,.student-evaluations__detail-head{align-items:stretch;flex-direction:column}.student-evaluations__filters{grid-template-columns:1fr}.student-evaluations__filter-actions{align-items:stretch;flex-direction:column}.student-evaluations__filter-actions .student-evaluations__button{width:100%}.student-evaluations__cards{grid-template-columns:1fr 1fr}.student-evaluations__table th,.student-evaluations__table td{padding:10px 9px}}
 </style>
 <main class="student-evaluations">
     <header class="student-evaluations__hero">
@@ -303,6 +324,28 @@ echo $OUTPUT->header();
                 <tr><td><strong><?php echo s($subjects[$key]['name']); ?></strong></td><td><span class="student-evaluations__score"><?php echo $subjectaverage === null ? '—' : s($subjectaverage . '%'); ?></span></td><td><?php echo (int)$subjectstat['passed']; ?> de <?php echo (int)$subjectstat['total']; ?></td><td><?php echo (int)$subjectstat['attempts']; ?></td><td><?php echo s($datevalue($subjectstat['lastactivity'])); ?></td></tr>
             <?php endforeach; ?>
             </tbody></table></div>
+        </section>
+        <section class="student-evaluations__panel" aria-labelledby="exam-detail-title">
+            <header class="student-evaluations__panel-head"><h3 id="exam-detail-title">Evaluaciones individuales</h3><span>Se muestra el mejor resultado registrado en cada evaluación</span></header>
+            <div class="student-evaluations__table-wrap"><table class="student-evaluations__table">
+                <thead><tr><th>Materia</th><th>Evaluación</th><th>Mejor resultado</th><th>Estado</th><th>Intentos</th><th>Última actividad</th></tr></thead>
+                <tbody>
+                <?php if ($selectedexams === []): ?>
+                    <tr><td class="student-evaluations__empty" colspan="6">Este estudiante todavía no tiene evaluaciones SCORM registradas con el filtro seleccionado.</td></tr>
+                <?php else: ?>
+                    <?php foreach ($selectedexams as $exam): $passed = $exam['score'] >= 70; ?>
+                    <tr>
+                        <td><?php echo s($exam['subject']); ?></td>
+                        <td><strong><?php echo s($exam['name']); ?></strong></td>
+                        <td><span class="student-evaluations__score"><?php echo s(round($exam['score'], 1) . '%'); ?></span></td>
+                        <td><span class="student-evaluations__status student-evaluations__status--<?php echo $passed ? 'passed' : 'review'; ?>"><?php echo $passed ? 'Aprobada' : 'Requiere repaso'; ?></span></td>
+                        <td><?php echo (int)$exam['attempts']; ?></td>
+                        <td><?php echo s($datevalue($exam['lastactivity'])); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                </tbody>
+            </table></div>
         </section>
     <?php endif; ?>
 </main>
