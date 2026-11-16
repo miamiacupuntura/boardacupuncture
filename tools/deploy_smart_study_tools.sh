@@ -1292,8 +1292,6 @@ grep -Fq "block_myprogress_ncbahm_evaluations" "$TARGET_DIR/settings.php"
 grep -Fq "'My Evaluations', 'Mis evaluaciones'" "$TARGET_DIR/my-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TARGET_DIR/my-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/my-evaluations.php"
-grep -Fq "/blocks/myprogress/my-evaluations.php" "$MENU_TARGET_DIR/block_menu.php"
-grep -Fq '>Evaluations</a>' "$MENU_TARGET_DIR/block_menu.php"
 grep -Fq "Las hierbas emperador son " "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "installKingHerbNarrations(clone)" "$TARGET_DIR/formulas-study-guide.php"
 grep -Fq "'Dang Gui' => 'Chinese Angelica Root'" "$TARGET_DIR/formulas-study-guide.php"
@@ -1370,6 +1368,8 @@ grep -Fq "Perfil activo: estudiante" "$MENU_TARGET_DIR/admin-open-assessment-as.
 grep -Fq "assessment-session.php" "$MENU_TARGET_DIR/assessment-profile-banner.js"
 grep -Fq "Perfil activo: estudiante" "$MENU_TARGET_DIR/assessment-profile-banner.js"
 grep -Fq "assessment-profile-banner.js" "$MENU_TARGET_DIR/herbology-board.php"
+grep -Fq "/blocks/myprogress/my-evaluations.php" "$MENU_TARGET_DIR/block_menu.php"
+grep -Fq '>Evaluations</a>' "$MENU_TARGET_DIR/block_menu.php"
 
 THEME_TEMPLATE_TARGET_DIR="$MOODLE_ROOT/theme/moove/templates"
 [[ -d "$THEME_TEMPLATE_TARGET_DIR" ]] || { echo "ERROR: no existe $THEME_TEMPLATE_TARGET_DIR" >&2; exit 1; }
