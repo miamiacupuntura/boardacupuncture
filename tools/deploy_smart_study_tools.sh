@@ -337,11 +337,15 @@ grep -Fq "formula-modifications-manifest.json" "$TEMP_DIR/moodle/admin-ncbahm-ev
 grep -Fq "Formula Quiz · supplemental category" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Open as <?php echo s(\$attempt['student']); ?>" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "admin-open-student-dashboard.php" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
-grep -Fq ">← Back to student list</a>" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq ">← Back</a>" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "\$studentlistparams['page'] = \$page;" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "array_merge(\$detailparams, ['userid' => \$userid])" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 if grep -Fq "Back to My Study Score" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"; then
     echo "ERROR: Student Evaluations todavía conserva el retorno redundante a My Study Score." >&2
+    exit 1
+fi
+if grep -Fq "Back to student list" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"; then
+    echo "ERROR: Student Evaluations presenta la lista administrativa como retorno del estudiante." >&2
     exit 1
 fi
 grep -Fq "My Study Score (NCBAHM Comprehensive Review)" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
@@ -1411,11 +1415,15 @@ grep -Fq "formula-modifications-manifest.json" "$TARGET_DIR/admin-ncbahm-evaluat
 grep -Fq "Formula Quiz · supplemental category" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Open as <?php echo s(\$attempt['student']); ?>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "admin-open-student-dashboard.php" "$TARGET_DIR/admin-ncbahm-evaluations.php"
-grep -Fq ">← Back to student list</a>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq ">← Back</a>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "\$studentlistparams['page'] = \$page;" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "array_merge(\$detailparams, ['userid' => \$userid])" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 if grep -Fq "Back to My Study Score" "$TARGET_DIR/admin-ncbahm-evaluations.php"; then
     echo "ERROR: la instalación conserva el retorno redundante a My Study Score." >&2
+    exit 1
+fi
+if grep -Fq "Back to student list" "$TARGET_DIR/admin-ncbahm-evaluations.php"; then
+    echo "ERROR: la instalación presenta la lista administrativa como retorno del estudiante." >&2
     exit 1
 fi
 grep -Fq "My Study Score (NCBAHM Comprehensive Review)" "$TARGET_DIR/admin-ncbahm-evaluations.php"
