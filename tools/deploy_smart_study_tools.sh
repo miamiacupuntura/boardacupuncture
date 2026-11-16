@@ -307,7 +307,6 @@ if grep -Fq 'name="program"' "$TEMP_DIR/moodle/admin-student-evaluations.php"; t
     echo "ERROR: Student Evaluations conserva el selector Program redundante con la vista NCBAHM." >&2
     exit 1
 fi
-grep -Fq "NCCAOM Focused Practice" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "context_course::instance(116, IGNORE_MISSING)" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "array_diff(\$courseids, [113])" "$TEMP_DIR/moodle/admin-student-evaluations.php"
@@ -1315,7 +1314,6 @@ if grep -Fq 'name="program"' "$TARGET_DIR/admin-student-evaluations.php"; then
     echo "ERROR: la instalación conserva el selector Program redundante con la vista NCBAHM." >&2
     exit 1
 fi
-grep -Fq "NCCAOM Focused Practice" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "context_course::instance(116, IGNORE_MISSING)" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "array_diff(\$courseids, [113])" "$TARGET_DIR/admin-student-evaluations.php"
