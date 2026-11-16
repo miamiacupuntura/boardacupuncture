@@ -37,6 +37,9 @@ if (!isset($subjects[$subjectkey])) {
     $subjectkey = 'all';
 }
 $courseids = $subjects[$subjectkey]['courseids'];
+$scorecourseids = $program === 'ncbahm'
+    ? array_values(array_diff($courseids, [113]))
+    : $courseids;
 $reporturl = new moodle_url('/blocks/myprogress/admin-student-evaluations.php');
 $pageurl = new moodle_url($reporturl, array_filter([
     'subject' => $subjectkey !== 'all' ? $subjectkey : null,
@@ -150,6 +153,9 @@ $students = [];
 $coursestudents = [];
 foreach ($courseids as $courseid) {
     $coursestudents[(int)$courseid] = [];
+    if ($program === 'ncbahm' && (int)$courseid === 113) {
+        continue;
+    }
     $coursecontext = context_course::instance((int)$courseid, IGNORE_MISSING);
     if (!$coursecontext) {
         continue;
@@ -219,7 +225,9 @@ foreach ($lastaccessrecords as $lastaccessrecord) {
     }
 }
 
-$scorms = $DB->get_records_list('scorm', 'course', $courseids, 'course ASC, name ASC', 'id,course,name');
+$scorms = $scorecourseids === []
+    ? []
+    : $DB->get_records_list('scorm', 'course', $scorecourseids, 'course ASC, name ASC', 'id,course,name');
 $subjecttotals = [];
 foreach ($subjects as $key => $subject) {
     if ($key !== 'all') {
@@ -259,7 +267,7 @@ foreach ($students as $studentid => $student) {
 
 if ($students !== [] && $scorms !== []) {
     [$userinsql, $userparams] = $DB->get_in_or_equal(array_keys($students), SQL_PARAMS_NAMED, 'student');
-    [$courseinsql, $courseparams] = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED, 'reportcourse');
+    [$courseinsql, $courseparams] = $DB->get_in_or_equal($scorecourseids, SQL_PARAMS_NAMED, 'reportcourse');
     $params = $userparams + $courseparams + [
         'scoreelement12' => 'cmi.core.score.raw',
         'scoreelement2004' => 'cmi.score.raw',
@@ -466,7 +474,9 @@ echo $OUTPUT->header();
                     <thead><tr><th>Estudiante</th><th>Correo electrónico</th><th>Último acceso al curso</th><th></th></tr></thead>
                     <tbody>
                     <?php if ($courseenrolled === []): ?>
-                        <tr><td class="student-evaluations__empty" colspan="4">No se encontraron estudiantes en este curso con los filtros seleccionados.</td></tr>
+                        <tr><td class="student-evaluations__empty" colspan="4"><?php echo $program === 'ncbahm' && (int)$courseid === 113
+                            ? 'Clean Needle Techniques no tiene evaluaciones en NCBAHM Comprehensive Review.'
+                            : 'No se encontraron estudiantes en este curso con los filtros seleccionados.'; ?></td></tr>
                     <?php else: ?>
                         <?php foreach ($courseenrolled as $studentid => $student): ?>
                         <tr>
