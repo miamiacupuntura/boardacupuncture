@@ -45,9 +45,7 @@ if (!isset($subjects[$subjectkey])) {
     $subjectkey = 'all';
 }
 $courseids = $subjects[$subjectkey]['courseids'];
-$scorecourseids = $program === 'ncbahm'
-    ? array_values(array_diff($courseids, [113]))
-    : $courseids;
+$scorecourseids = $courseids;
 $reporturl = new moodle_url('/blocks/myprogress/admin-student-evaluations.php');
 $ncbahmreporturl = new moodle_url('/blocks/myprogress/admin-ncbahm-evaluations.php', array_filter([
     'q' => $search !== '' ? $search : null,
@@ -148,30 +146,11 @@ foreach ($subjects as $key => $subject) {
     }
 }
 
-$boardstudentids = [];
-$boardmembershipcontext = context_course::instance(116, IGNORE_MISSING);
-if ($boardmembershipcontext) {
-    $boardmembers = get_enrolled_users(
-        $boardmembershipcontext,
-        '',
-        0,
-        'u.id',
-        '',
-        0,
-        0,
-        false
-    );
-    $boardstudentids = array_fill_keys(array_map('intval', array_keys($boardmembers)), true);
-}
-
 $courserecords = $DB->get_records_list('course', 'id', $courseids, 'sortorder ASC, fullname ASC', 'id,fullname,shortname');
 $students = [];
 $coursestudents = [];
 foreach ($courseids as $courseid) {
     $coursestudents[(int)$courseid] = [];
-    if ($program === 'ncbahm' && (int)$courseid === 113) {
-        continue;
-    }
     $coursecontext = context_course::instance((int)$courseid, IGNORE_MISSING);
     if (!$coursecontext) {
         continue;
@@ -202,11 +181,6 @@ foreach ($courseids as $courseid) {
             && !has_capability('moodle/grade:viewall', $coursecontext, $user->id)
             && !has_capability('moodle/course:manageactivities', $coursecontext, $user->id);
     });
-    if ($program === 'ncbahm') {
-        $enrolled = array_intersect_key($enrolled, $boardstudentids);
-    } else if ($program === 'nccaom') {
-        $enrolled = array_diff_key($enrolled, $boardstudentids);
-    }
     $coursestudents[(int)$courseid] = $enrolled;
     foreach ($enrolled as $student) {
         $students[(int)$student->id] = $student;
@@ -537,9 +511,7 @@ echo $OUTPUT->header();
                     <thead><tr><th>Student</th><th>Email address</th><th>Last course access</th><th>Actions</th></tr></thead>
                     <tbody>
                     <?php if ($courseenrolled === []): ?>
-                        <tr><td class="student-evaluations__empty" colspan="4"><?php echo $program === 'ncbahm' && (int)$courseid === 113
-                            ? 'Clean Needle Techniques has no evaluations in NCBAHM Comprehensive Review.'
-                            : 'No students were found in this course with the selected filters.'; ?></td></tr>
+                        <tr><td class="student-evaluations__empty" colspan="4">No students were found in this course with the selected filters.</td></tr>
                     <?php else: ?>
                         <?php foreach ($courseenrolled as $studentid => $student): ?>
                         <tr>

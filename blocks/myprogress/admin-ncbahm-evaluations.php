@@ -30,6 +30,26 @@ if (!in_array($sort, ['recent', 'name', 'result'], true)) {
 $reporturl = new moodle_url('/blocks/myprogress/admin-ncbahm-evaluations.php');
 $scormreporturl = new moodle_url('/blocks/myprogress/admin-student-evaluations.php');
 $allprogramsurl = new moodle_url('/blocks/myprogress/admin-student-evaluations.php', ['view' => 'courses']);
+$ncbahmstudentids = null;
+$ncbahmcontext = context_course::instance(116, IGNORE_MISSING);
+if ($ncbahmcontext) {
+    $ncbahmmembers = get_enrolled_users(
+        $ncbahmcontext,
+        '',
+        0,
+        'u.id,u.firstname,u.lastname,u.email',
+        '',
+        0,
+        0,
+        false
+    );
+    $ncbahmmembers = array_filter($ncbahmmembers, static function($user) use ($ncbahmcontext): bool {
+        return !is_siteadmin($user->id)
+            && !has_capability('moodle/grade:viewall', $ncbahmcontext, $user->id)
+            && !has_capability('moodle/course:manageactivities', $ncbahmcontext, $user->id);
+    });
+    $ncbahmstudentids = array_fill_keys(array_map('intval', array_keys($ncbahmmembers)), true);
+}
 $pageparams = array_filter([
     'q' => $search !== '' ? $search : null,
     'assessment' => $assessmenttype !== 'all' ? $assessmenttype : null,
@@ -145,6 +165,11 @@ if ($tableavailable) {
        ORDER BY a.timecompleted DESC, a.id DESC"
     );
     foreach ($records as $record) {
+        $recorduserid = (int)$record->userid;
+        if (is_siteadmin($recorduserid)
+                || ($ncbahmstudentids !== null && !isset($ncbahmstudentids[$recorduserid]))) {
+            continue;
+        }
         $kind = $attemptkind((string)$record->examtype);
         $incomplete = str_ends_with((string)$record->examtype, 'incomplete');
         $percentage = (int)$record->total > 0

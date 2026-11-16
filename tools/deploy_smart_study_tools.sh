@@ -314,10 +314,16 @@ if grep -Fq 'name="program"' "$TEMP_DIR/moodle/admin-student-evaluations.php"; t
     exit 1
 fi
 grep -Fq "NCBAHM Comprehensive Review" "$TEMP_DIR/moodle/admin-student-evaluations.php"
-grep -Fq "context_course::instance(116, IGNORE_MISSING)" "$TEMP_DIR/moodle/admin-student-evaluations.php"
-grep -Fq "array_diff(\$courseids, [113])" "$TEMP_DIR/moodle/admin-student-evaluations.php"
-grep -Fq "Clean Needle Techniques has no evaluations in NCBAHM Comprehensive Review." "$TEMP_DIR/moodle/admin-student-evaluations.php"
+grep -Fq "\$scorecourseids = \$courseids;" "$TEMP_DIR/moodle/admin-student-evaluations.php"
+if grep -Eq "boardstudentids|boardmembershipcontext" "$TEMP_DIR/moodle/admin-student-evaluations.php"; then
+    echo "ERROR: NCCAOM todavía excluye alumnos que también pertenecen a NCBAHM." >&2
+    exit 1
+fi
 grep -Fq "block_menu_exam_attempts" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "context_course::instance(116, IGNORE_MISSING)" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "\$ncbahmstudentids" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "is_siteadmin(\$recorduserid)" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "!has_capability('moodle/course:manageactivities', \$ncbahmcontext, \$user->id)" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Evaluation type" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "\$PAGE->set_heading('Student Evaluations');" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "Review NCBAHM Quiz, Simulation, and Exam results stored on the server." "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
@@ -1350,10 +1356,16 @@ if grep -Fq 'name="program"' "$TARGET_DIR/admin-student-evaluations.php"; then
     exit 1
 fi
 grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/admin-student-evaluations.php"
-grep -Fq "context_course::instance(116, IGNORE_MISSING)" "$TARGET_DIR/admin-student-evaluations.php"
-grep -Fq "array_diff(\$courseids, [113])" "$TARGET_DIR/admin-student-evaluations.php"
-grep -Fq "Clean Needle Techniques has no evaluations in NCBAHM Comprehensive Review." "$TARGET_DIR/admin-student-evaluations.php"
+grep -Fq "\$scorecourseids = \$courseids;" "$TARGET_DIR/admin-student-evaluations.php"
+if grep -Eq "boardstudentids|boardmembershipcontext" "$TARGET_DIR/admin-student-evaluations.php"; then
+    echo "ERROR: la instalación excluye de NCCAOM alumnos que también pertenecen a NCBAHM." >&2
+    exit 1
+fi
 grep -Fq "block_menu_exam_attempts" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "context_course::instance(116, IGNORE_MISSING)" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "\$ncbahmstudentids" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "is_siteadmin(\$recorduserid)" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "!has_capability('moodle/course:manageactivities', \$ncbahmcontext, \$user->id)" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Evaluation type" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "\$PAGE->set_heading('Student Evaluations');" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "Review NCBAHM Quiz, Simulation, and Exam results stored on the server." "$TARGET_DIR/admin-ncbahm-evaluations.php"
@@ -1689,6 +1701,8 @@ echo "OK: el administrador abre cada evaluación en un perfil estudiantil superv
 echo "OK: el informe SCORM permite abrir el dashboard bajo la identidad real del estudiante y excluye instructores de la lista."
 echo "OK: Student Evaluations usa las pestañas para separar SCORM y NCBAHM; se eliminó el selector Program redundante."
 echo "OK: NCCAOM y NCBAHM comparten Search student, Evaluation type, Status y Sort by; NCBAHM también permite Open as student."
+echo "OK: NCCAOM conserva a los estudiantes con resultados SCORM aunque también estén inscritos en NCBAHM."
+echo "OK: NCBAHM muestra solo estudiantes matriculados y excluye administradores e instructores de sus resultados."
 echo "OK: el perfil supervisado conserva el cambio entre español e inglés y separa los resultados del administrador."
 echo "OK: los botones exclusivos del administrador y las instrucciones de los intentos supervisados se abren en inglés."
 echo "OK: el dashboard muestra Evaluations solo a estudiantes; los controles administrativos permanecen en Site administration."
