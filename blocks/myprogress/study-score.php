@@ -80,8 +80,8 @@ $config = [
 $PAGE->set_url($pageurl);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title($ises ? 'Mi puntuación de estudio' : 'My Study Score');
-$PAGE->set_heading($ises ? 'Mi puntuación de estudio' : 'My Study Score');
+$PAGE->set_title('My Study Score (NCBAHM Comprehensive Review)');
+$PAGE->set_heading('My Study Score (NCBAHM Comprehensive Review)');
 $PAGE->set_cacheable(false);
 
 $configjson = json_encode($config, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
@@ -282,7 +282,7 @@ echo $OUTPUT->header();
     <header class="study-score__hero">
         <div>
             <p class="study-score__eyebrow"><?php echo $ises ? 'PROGRESO LOCAL · PRIVADO · ACCIONABLE' : 'LOCAL · PRIVATE · ACTIONABLE PROGRESS'; ?></p>
-            <h2><?php echo $ises ? 'Mi puntuación de estudio' : 'My Study Score'; ?></h2>
+            <h2>My Study Score (NCBAHM Comprehensive Review)</h2>
             <p class="study-score__lead"><?php echo $ises
                 ? 'Convierte tu historial del Formula Quiz en una estimación de preparación, fortalezas y próximos pasos.'
                 : 'Turn your Formula Quiz history into a readiness estimate, strengths and clear next steps.'; ?></p>

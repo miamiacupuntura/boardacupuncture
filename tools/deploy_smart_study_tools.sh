@@ -1109,6 +1109,7 @@ grep -Fq "subject-study-library__smart-top" "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq "subject-study-library__score-top" "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq "/blocks/myprogress/study-score.php" "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq "formula-practice-progress-v1" "$TEMP_DIR/moodle/study-score.php"
+grep -Fq "My Study Score (NCBAHM Comprehensive Review)" "$TEMP_DIR/moodle/study-score.php"
 grep -Fq "40% accuracy, 25% coverage, 20% retention and 15% consistency" "$TEMP_DIR/moodle/study-score.php"
 grep -Fq "data-category-body" "$TEMP_DIR/moodle/study-score.php"
 grep -Fq "data-recommendations" "$TEMP_DIR/moodle/study-score.php"
@@ -1470,6 +1471,7 @@ if grep -Fq 'href="/my/"' "$TEMP_DIR/public-safety-library.html"; then
 fi
 
 echo "OK: My Study Score visible antes de Smart Study Tools y conectado con el historial local del Formula Quiz."
+echo "OK: la vista de puntuación se identifica como My Study Score (NCBAHM Comprehensive Review)."
 echo "OK: My Study Score calcula precisión, cobertura, retención, consistencia, categorías y recomendaciones."
 echo "OK: Evaluación de estudiantes ofrece acceso administrativo directo, filtros, detalle individual y exportación CSV de resultados SCORM."
 echo "OK: Evaluaciones NCBAHM separa resultados reales de Quiz, Simulación y Exámenes y permite exportarlos."
