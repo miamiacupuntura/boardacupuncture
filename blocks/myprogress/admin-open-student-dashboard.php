@@ -36,8 +36,8 @@ foreach ([30, 34, 36, 44, 45, 113, 116, 117] as $courseid) {
 
 \core\session\manager::loginas($student->id, $systemcontext);
 \core\notification::info(
-    'Perfil activo: estudiante — ' . fullname($student)
-    . '. El dashboard y Evaluations mostrarán exclusivamente los resultados de este estudiante.'
+    'Active profile: student — ' . fullname($student)
+    . '. The dashboard and Evaluations will show only this student’s results.'
 );
 
 redirect(new moodle_url('/my/', ['level' => 'school']));

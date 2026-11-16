@@ -38,12 +38,12 @@ if (!is_enrolled($coursecontext, $student->id, '', true)) {
 
 \core\session\manager::loginas($student->id, $systemcontext);
 \core\notification::info(
-    'Perfil activo: estudiante — ' . fullname($student)
-    . '. Las respuestas y el resultado se guardarán en este perfil.'
+    'Active profile: student — ' . fullname($student)
+    . '. Answers and results will be saved to this profile.'
 );
 
 redirect(new moodle_url('/blocks/menu/exam-history.php', [
     'start' => (string)$attempt->examtype,
-    'lang' => 'es',
-    'ui' => 'es',
+    'lang' => 'en',
+    'ui' => 'en',
 ]));

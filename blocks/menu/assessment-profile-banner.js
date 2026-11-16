@@ -63,10 +63,8 @@
         const exit = document.createElement('a');
         exit.href = profile.exiturl;
         exit.style.cssText = 'display:inline-flex;padding:9px 12px;border-radius:8px;background:#9a4d00;color:#fff;text-decoration:none;font-weight:900';
-        exit.textContent = spanish ? 'Salir del perfil del estudiante' : 'Exit student profile';
-        exit.title = spanish
-            ? 'Moodle solicitará iniciar sesión nuevamente como administrador.'
-            : 'Moodle will ask you to sign in again as administrator.';
+        exit.textContent = 'Exit student profile';
+        exit.title = 'Exit the supervised student profile and return to the administrator account.';
 
         banner.append(identity, exit);
         document.body.prepend(banner);

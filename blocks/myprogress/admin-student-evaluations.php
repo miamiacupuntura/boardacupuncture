@@ -445,14 +445,14 @@ echo $OUTPUT->header();
             <h2>Evaluación de estudiantes</h2>
             <p>Consulta el rendimiento registrado en Moodle, compara materias y abre el detalle de cada estudiante sin entrar en su dashboard.</p>
         </div>
-        <div class="student-evaluations__hero-actions"><a class="student-evaluations__button" href="<?php echo $exporturl->out(false); ?>">Exportar CSV</a></div>
+        <div class="student-evaluations__hero-actions"><a class="student-evaluations__button" href="<?php echo $exporturl->out(false); ?>">Export CSV</a></div>
     </header>
     <div class="student-evaluations__notice"><strong>Alcance de esta primera versión:</strong> incluye las evaluaciones SCORM guardadas en Moodle. El Formula Quiz y My Study Score todavía conservan su historial en el navegador de cada estudiante y se integrarán cuando ese historial se sincronice con el servidor.</div>
 
     <?php if ($selectedstudent === null): ?>
         <nav class="student-evaluations__views" aria-label="Vista del informe">
-            <a class="student-evaluations__view" href="<?php echo $studentlisturl->out(false); ?>"<?php echo $view === 'students' ? ' aria-current="page"' : ''; ?>>Resultados de estudiantes</a>
-            <a class="student-evaluations__view" href="<?php echo $courselisturl->out(false); ?>"<?php echo $view === 'courses' ? ' aria-current="page"' : ''; ?>>Lista completa por cursos</a>
+            <a class="student-evaluations__view" href="<?php echo $studentlisturl->out(false); ?>"<?php echo $view === 'students' ? ' aria-current="page"' : ''; ?>>Student results</a>
+            <a class="student-evaluations__view" href="<?php echo $courselisturl->out(false); ?>"<?php echo $view === 'courses' ? ' aria-current="page"' : ''; ?>>Students by course</a>
             <a class="student-evaluations__view" href="<?php echo $ncbahmreporturl->out(false); ?>">NCBAHM · Quiz, Simulación y Exámenes</a>
         </nav>
         <form class="student-evaluations__filters" method="get" action="<?php echo $reporturl->out(false); ?>">
@@ -469,8 +469,8 @@ echo $OUTPUT->header();
                 <option value="ncbahm"<?php echo $program === 'ncbahm' ? ' selected' : ''; ?>>NCBAHM Comprehensive Review</option>
             </select></label>
             <div class="student-evaluations__filter-actions">
-                <button class="student-evaluations__button" type="submit">Aplicar</button>
-                <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo $clearurl->out(false); ?>"><?php echo $view === 'courses' ? 'Ver todos los estudiantes' : 'Limpiar'; ?></a>
+                <button class="student-evaluations__button" type="submit">Apply</button>
+                <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo $clearurl->out(false); ?>"><?php echo $view === 'courses' ? 'View all students' : 'Clear'; ?></a>
             </div>
         </form>
         <?php if ($view === 'courses'): ?>
@@ -494,8 +494,8 @@ echo $OUTPUT->header();
                             <td><?php echo s($student->email); ?></td>
                             <td><?php echo s($datevalue($courselastaccess[$courseid][$studentid] ?? 0)); ?></td>
                             <td><div class="student-evaluations__row-actions">
-                                <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['userid' => $studentid, 'subject' => $coursesubject[$courseid] ?? 'all', 'program' => $program]))->out(false); ?>">Ver evaluación</a>
-                                <a class="student-evaluations__button student-evaluations__button--student" href="<?php echo (new moodle_url('/blocks/myprogress/admin-open-student-dashboard.php', ['userid' => $studentid, 'sesskey' => sesskey()]))->out(false); ?>">Abrir como estudiante</a>
+                                <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['userid' => $studentid, 'subject' => $coursesubject[$courseid] ?? 'all', 'program' => $program]))->out(false); ?>">View evaluation</a>
+                                <a class="student-evaluations__button student-evaluations__button--student" href="<?php echo (new moodle_url('/blocks/myprogress/admin-open-student-dashboard.php', ['userid' => $studentid, 'sesskey' => sesskey()]))->out(false); ?>">Open as student</a>
                             </div></td>
                         </tr>
                         <?php endforeach; ?>
@@ -521,8 +521,8 @@ echo $OUTPUT->header();
                         <td><?php echo (int)$stat['attempts']; ?></td>
                         <td><?php echo s($datevalue($stat['lastactivity'])); ?></td>
                         <td><div class="student-evaluations__row-actions">
-                            <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['userid' => $studentid, 'subject' => $subjectkey, 'program' => $program, 'q' => $search]))->out(false); ?>">Ver evaluación</a>
-                            <a class="student-evaluations__button student-evaluations__button--student" href="<?php echo (new moodle_url('/blocks/myprogress/admin-open-student-dashboard.php', ['userid' => $studentid, 'sesskey' => sesskey()]))->out(false); ?>">Abrir como estudiante</a>
+                            <a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['userid' => $studentid, 'subject' => $subjectkey, 'program' => $program, 'q' => $search]))->out(false); ?>">View evaluation</a>
+                            <a class="student-evaluations__button student-evaluations__button--student" href="<?php echo (new moodle_url('/blocks/myprogress/admin-open-student-dashboard.php', ['userid' => $studentid, 'sesskey' => sesskey()]))->out(false); ?>">Open as student</a>
                         </div></td>
                     </tr>
                     <?php endforeach; ?>
@@ -540,7 +540,7 @@ echo $OUTPUT->header();
         <?php endif; ?>
     <?php else: ?>
         <?php $detailstat = $studentstats[$detailuserid]; $detailaverage = $average($detailstat); ?>
-        <div class="student-evaluations__detail-head"><div><h3><?php echo s(fullname($selectedstudent)); ?></h3><p><?php echo s($selectedstudent->email); ?></p></div><a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['subject' => $subjectkey, 'program' => $program, 'q' => $search]))->out(false); ?>">← Todos los estudiantes</a></div>
+        <div class="student-evaluations__detail-head"><div><h3><?php echo s(fullname($selectedstudent)); ?></h3><p><?php echo s($selectedstudent->email); ?></p></div><a class="student-evaluations__button student-evaluations__button--secondary" href="<?php echo (new moodle_url($reporturl, ['subject' => $subjectkey, 'program' => $program, 'q' => $search]))->out(false); ?>">← All students</a></div>
         <div class="student-evaluations__cards">
             <article class="student-evaluations__card"><span>Promedio</span><strong><?php echo $detailaverage === null ? '—' : s($detailaverage . '%'); ?></strong></article>
             <article class="student-evaluations__card"><span>Exámenes aprobados</span><strong><?php echo (int)$detailstat['passed']; ?> / <?php echo (int)$detailstat['total']; ?></strong></article>
@@ -562,7 +562,7 @@ echo $OUTPUT->header();
                 <label><span>Filtrar por materia</span><select data-exam-subject-filter><option value="">Todas las materias</option><?php foreach ($selectedexamsubjects as $key => $name): ?><option value="<?php echo s($key); ?>"><?php echo s($name); ?></option><?php endforeach; ?></select></label>
                 <label><span>Filtrar por estado</span><select data-exam-status-filter><option value="">Todos los estados</option><option value="passed">Aprobadas</option><option value="review">Requieren repaso</option></select></label>
                 <label><span>Ordenar por</span><select data-exam-sort><option value="subject">Materia y evaluación</option><option value="evaluation">Nombre de evaluación</option><option value="score-desc">Mejor resultado: mayor a menor</option><option value="score-asc">Mejor resultado: menor a mayor</option><option value="attempts-desc">Más intentos</option><option value="activity-desc">Actividad más reciente</option></select></label>
-                <button class="student-evaluations__button student-evaluations__button--secondary" type="button" data-exam-filters-reset>Restablecer</button>
+                <button class="student-evaluations__button student-evaluations__button--secondary" type="button" data-exam-filters-reset>Reset</button>
             </div>
             <?php endif; ?>
             <div class="student-evaluations__table-wrap"><table class="student-evaluations__table" data-student-exam-table>
