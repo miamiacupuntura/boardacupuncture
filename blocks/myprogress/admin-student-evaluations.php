@@ -155,6 +155,27 @@ foreach ($courseids as $courseid) {
     if (!$coursecontext) {
         continue;
     }
+    $contextids = array_values(array_filter(array_map('intval', explode('/', trim($coursecontext->path, '/')))));
+    [$contextinsql, $contextparams] = $DB->get_in_or_equal($contextids, SQL_PARAMS_NAMED, 'staffcontext');
+    $staffrecords = $DB->get_records_sql(
+        "SELECT DISTINCT ra.userid
+           FROM {role_assignments} ra
+           JOIN {role} r ON r.id = ra.roleid
+          WHERE ra.contextid $contextinsql
+            AND (r.archetype IN (:managerarchetype, :creatorarchetype, :editingteacherarchetype, :teacherarchetype)
+                 OR r.shortname IN (:managerrole, :creatorrole, :editingteacherrole, :teacherrole))",
+        $contextparams + [
+            'managerarchetype' => 'manager',
+            'creatorarchetype' => 'coursecreator',
+            'editingteacherarchetype' => 'editingteacher',
+            'teacherarchetype' => 'teacher',
+            'managerrole' => 'manager',
+            'creatorrole' => 'coursecreator',
+            'editingteacherrole' => 'editingteacher',
+            'teacherrole' => 'teacher',
+        ]
+    );
+    $staffids = array_fill_keys(array_map('intval', array_keys($staffrecords)), true);
     $enrolled = get_enrolled_users(
         $coursecontext,
         '',
@@ -175,12 +196,17 @@ foreach ($courseids as $courseid) {
        ORDER BY u.lastname ASC, u.firstname ASC",
         ['attemptcourseid' => (int)$courseid]
     );
-    $enrolled += $attemptstudents;
-    $enrolled = array_filter($enrolled, static function($user) use ($coursecontext): bool {
+    $enrolled = array_filter($enrolled, static function($user) use ($coursecontext, $staffids): bool {
         return !is_siteadmin($user->id)
+            && !isset($staffids[(int)$user->id])
             && !has_capability('moodle/grade:viewall', $coursecontext, $user->id)
             && !has_capability('moodle/course:manageactivities', $coursecontext, $user->id);
     });
+    $attemptstudents = array_filter(
+        $attemptstudents,
+        static fn($user): bool => !is_siteadmin($user->id)
+    );
+    $enrolled += $attemptstudents;
     $coursestudents[(int)$courseid] = $enrolled;
     foreach ($enrolled as $student) {
         $students[(int)$student->id] = $student;
