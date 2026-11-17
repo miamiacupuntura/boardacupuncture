@@ -219,22 +219,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
         throw new invalid_parameter_exception('The four English answer choices must be different.');
     }
 
-    $spanishprompt = trim(optional_param('promptes', '', PARAM_RAW));
-    $spanishexplanation = trim(optional_param('explanationes', '', PARAM_RAW));
-    $spanishoptions = [];
-    foreach (['A', 'B', 'C', 'D'] as $label) {
-        $spanishoptions[] = [
-            'label' => $label,
-            'text' => trim(optional_param('option' . strtolower($label) . 'es', '', PARAM_RAW)),
-        ];
-    }
-    $hasspanish = $spanishprompt !== '' || $spanishexplanation !== ''
-        || array_filter($spanishoptions, static fn(array $option): bool => $option['text'] !== '');
-    if ($hasspanish && ($spanishprompt === '' || $spanishexplanation === ''
-            || count(array_filter($spanishoptions, static fn(array $option): bool => $option['text'] !== '')) !== 4)) {
-        throw new invalid_parameter_exception('Complete all Spanish fields or leave all of them empty.');
-    }
-
     $contenttype = optional_param('contenttype', 'other', PARAM_ALPHANUMEXT);
     $cognitivelevel = optional_param('cognitivelevel', 'apply', PARAM_ALPHA);
     $difficultyband = optional_param('difficultyband', 'application', PARAM_ALPHA);
@@ -257,13 +241,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
         'cognitiveLevel' => $cognitivelevel,
         'difficultyBand' => $difficultyband,
     ];
-    if ($hasspanish) {
-        $draft['translations'] = ['es' => [
-            'prompt' => $spanishprompt,
-            'options' => $spanishoptions,
-            'explanation' => $spanishexplanation,
-        ]];
-    }
     $requestreclassification = (bool)optional_param('requestreclassification', 0, PARAM_BOOL);
     $returnusage = optional_param('returnusage', '', PARAM_ALPHANUMEXT);
     if (!in_array($returnusage, ['exam1', 'exam2_review', 'reserve'], true)) {
@@ -737,9 +714,9 @@ You are a senior NCBAHM Chinese Herbology mock-exam item editor. Return one revi
 
 Editorial rules:
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer.
-2. Convert direct recall into clinical inference whenever the source supports it. Present the signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship that leads to the answer. Do not state the diagnosis, pattern, herb, formula, or decisive label in the stem when that would reveal the answer.
+2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
 3. Use exactly four plausible, parallel answer choices. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
-4. Write mock-exam feedback: identify the decisive clues; connect them directly to the correct answer; then explain briefly why each distractor is weaker. Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
+4. Write mock-exam feedback that explicitly explains both inference steps: (a) what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence; and (b) why that conclusion selects the correct answer. Then explain briefly why each distractor is weaker. Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
 5. Keep the item concise, clinically coherent, unambiguous, and appropriate for a supervised mock board examination. If the original lacks enough clinical facts, make the smallest source-grounded inference upgrade possible.
 6. Follow administratorProposal when it is nonempty, provided it does not conflict with the source or answer key.
 7. Set cognitiveLevel to "infer" or "analyze".
@@ -822,7 +799,7 @@ PROMPT;
             $record['history'] = $history;
             $record['proposalStatus'] = 'ai_draft_ready';
             $record['aiBatchId'] = $batchid;
-            $record['aiPromptVersion'] = 'ncbahm-mock-editor-1.0';
+            $record['aiPromptVersion'] = 'ncbahm-mock-editor-1.1';
             $store['questions'][$questionid] = $record;
         }
         return $store;
@@ -1011,8 +988,6 @@ $languageurl = new moodle_url(
     array_merge($baseparams, ['lang' => $displaylang === 'es' ? 'en' : 'es'])
 );
 $editoroptions = [];
-$editorspanishoptions = [];
-$editortranslation = [];
 $editorrevision = [];
 $editorrevisionfull = [];
 $editororiginalquestion = [];
@@ -1055,12 +1030,6 @@ if ($editquestion !== null) {
     foreach ($editquestion['options'] ?? [] as $option) {
         $editoroptions[(string)($option['label'] ?? '')] = (string)($option['text'] ?? '');
     }
-    $editortranslation = is_array($editquestion['translations']['es'] ?? null)
-        ? $editquestion['translations']['es']
-        : [];
-    foreach ($editortranslation['options'] ?? [] as $option) {
-        $editorspanishoptions[(string)($option['label'] ?? '')] = (string)($option['text'] ?? '');
-    }
     $editorrevision = $editquestion['_revision'] ?? [];
     $editorrevisionfull = is_array($revisionstore['questions'][$editquestion['questionId']] ?? null)
         ? $revisionstore['questions'][$editquestion['questionId']]
@@ -1091,7 +1060,7 @@ echo $OUTPUT->header();
 .question-bank__editor{margin-bottom:18px;padding:20px;border:2px solid #6d28d9;border-radius:12px;background:#faf8ff}.question-bank__editor-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px}.question-bank__editor-head h3{margin:0 0 4px;font-size:23px}.question-bank__editor-head p{margin:0;color:#66557e}.question-bank__editor-grid{display:grid;grid-template-columns:1fr;gap:14px}.question-bank__editor-panel{padding:15px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__editor-panel h4{margin:0 0 12px}.question-bank__editor-field{display:block;margin-bottom:11px}.question-bank__editor-field>span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__editor input[type=text],.question-bank__editor textarea,.question-bank__editor select{box-sizing:border-box;width:100%;padding:9px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff}.question-bank__editor textarea{min-height:92px;resize:vertical}.question-bank__editor-classification{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}.question-bank__editor-check{display:flex;align-items:flex-start;gap:9px;margin:15px 0;padding:13px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed}.question-bank__editor-check input{margin-top:4px}.question-bank__editor-actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button--primary{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__button--publish{border-color:#6d28d9;background:#6d28d9;color:#fff!important}.question-bank__button--exclude{border-color:#b42318;background:#fff1f0;color:#9f1d16!important}.question-bank__revision-note{margin:10px 0;padding:10px 12px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95}.question-bank__exclusion-note{margin:10px 0;padding:12px 14px;border-left:4px solid #b42318;border-radius:7px;background:#fff1f0;color:#7a271a}.question-bank__item--excluded{border-color:#f1a6a0;background:#fffafa}.question-bank__edit-link{margin-left:auto}@media(max-width:850px){.question-bank__editor-classification{grid-template-columns:1fr}.question-bank__editor-head{display:block}.question-bank__editor-head .question-bank__button{margin-top:10px}}
 .question-bank__temporary-order{display:flex;align-items:center;gap:10px;margin:-17px -17px 14px;padding:11px 16px;border-radius:10px 10px 0 0;background:#4c1d95;color:#fff}.question-bank__temporary-order span{font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.question-bank__temporary-order strong{font-size:24px;line-height:1}.question-bank__temporary-order small{font-weight:800;opacity:.85}.question-bank__temporary-order--editor{margin:0 0 12px;border-radius:8px}.question-bank__review-progress{margin-bottom:16px;padding:14px 16px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#4c1d95}.question-bank__review-progress strong{font-size:17px}.question-bank__review-progress p{margin:4px 0 0}
 .question-bank__ai-batch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;padding:14px 16px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__ai-batch p{margin:0;color:#66557e;line-height:1.45}.question-bank__ai-batch form{flex:0 0 auto}.question-bank__ai-batch .question-bank__button:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__ai-draft-note{margin:10px 0;padding:10px 12px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;font-weight:800}@media(max-width:700px){.question-bank__ai-batch{align-items:stretch;flex-direction:column}}
-.question-bank__editor-panel--original{border-color:#c8d8df;background:#fbfdfe}.question-bank__editor-panel--editing{border-color:#cbb9ee}.question-bank__panel-intro{margin:-6px 0 14px;color:#60758a;font-size:12px;line-height:1.45}.question-bank__original-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.question-bank__original-question{margin:0 0 13px;font-size:16px;font-weight:850;line-height:1.5}.question-bank__original-options{display:grid;gap:7px;margin:0 0 13px;padding:0;list-style:none}.question-bank__original-options li{padding:9px 11px;border:1px solid #dce5ea;border-radius:7px;background:#f7fafb;line-height:1.45}.question-bank__original-options li.is-correct{border-color:#7bcbb6;background:#eaf9f3;color:#075f50;font-weight:850}.question-bank__original-answer{margin:0 0 12px}.question-bank__original-feedback{padding:12px 14px;border-left:4px solid #0b8f87;border-radius:7px;background:#effaf7;line-height:1.5}.question-bank__original-source{margin:12px 0 0;color:#60758a;font-size:12px;line-height:1.5}.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:150px}.question-bank__translation-editor{margin:15px 0 2px;padding:0 12px 12px;border:1px solid #ded7ef;border-radius:8px;background:#faf8ff}.question-bank__translation-editor summary{margin:0 -12px 12px;padding:11px 12px;cursor:pointer;color:#4c1d95;font-weight:900}.question-bank__translation-editor[open] summary{border-bottom:1px solid #ded7ef}.question-bank__editor-panel--editing .question-bank__editor-classification{grid-template-columns:1fr;margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__editor-panel--editing .question-bank__editor-classification h5{margin:0 0 2px}.question-bank__editor-panel--editing .question-bank__editor-classification .question-bank__panel-intro{margin:0 0 8px}.question-bank__editor-panel--editing .question-bank__editor-actions{margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__proposal-form{display:grid;gap:12px}.question-bank__proposal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-toolbar p{margin:0;color:#66557e}.question-bank__proposal-box{display:block;margin-top:14px;padding:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-box>span{display:block;margin-bottom:7px;color:#4c1d95;font-weight:900}.question-bank__proposal-box textarea{box-sizing:border-box;width:100%;min-height:150px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__proposal-saved{display:block;margin-top:7px;color:#66557e;font-size:12px}.question-bank__proposal-review{margin-top:14px;padding:14px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;white-space:pre-wrap}.question-bank__editor-proposal{border-color:#8b5cf6;background:#faf8ff}.question-bank__editor-proposal h4{color:#4c1d95}@media(max-width:850px){.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:120px}.question-bank__proposal-toolbar{align-items:stretch;flex-direction:column}}
+.question-bank__editor-panel--original{border-color:#c8d8df;background:#fbfdfe}.question-bank__editor-panel--editing{border-color:#cbb9ee}.question-bank__panel-intro{margin:-6px 0 14px;color:#60758a;font-size:12px;line-height:1.45}.question-bank__original-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.question-bank__original-question{margin:0 0 13px;font-size:16px;font-weight:850;line-height:1.5}.question-bank__original-options{display:grid;gap:7px;margin:0 0 13px;padding:0;list-style:none}.question-bank__original-options li{padding:9px 11px;border:1px solid #dce5ea;border-radius:7px;background:#f7fafb;line-height:1.45}.question-bank__original-options li.is-correct{border-color:#7bcbb6;background:#eaf9f3;color:#075f50;font-weight:850}.question-bank__original-answer{margin:0 0 12px}.question-bank__original-feedback{padding:12px 14px;border-left:4px solid #0b8f87;border-radius:7px;background:#effaf7;line-height:1.5}.question-bank__original-source{margin:12px 0 0;color:#60758a;font-size:12px;line-height:1.5}.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:150px}.question-bank__editor-panel--editing .question-bank__editor-classification{grid-template-columns:1fr;margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__editor-panel--editing .question-bank__editor-classification h5{margin:0 0 2px}.question-bank__editor-panel--editing .question-bank__editor-classification .question-bank__panel-intro{margin:0 0 8px}.question-bank__editor-panel--editing .question-bank__editor-actions{margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__proposal-form{display:grid;gap:12px}.question-bank__proposal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-toolbar p{margin:0;color:#66557e}.question-bank__proposal-box{display:block;margin-top:14px;padding:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-box>span{display:block;margin-bottom:7px;color:#4c1d95;font-weight:900}.question-bank__proposal-box textarea{box-sizing:border-box;width:100%;min-height:150px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__proposal-saved{display:block;margin-top:7px;color:#66557e;font-size:12px}.question-bank__proposal-review{margin-top:14px;padding:14px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;white-space:pre-wrap}.question-bank__editor-proposal{border-color:#8b5cf6;background:#faf8ff}.question-bank__editor-proposal h4{color:#4c1d95}@media(max-width:850px){.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:120px}.question-bank__proposal-toolbar{align-items:stretch;flex-direction:column}}
 </style>
 <main class="question-bank">
     <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated and SCORM Chinese Herbology questions. Review each ID, domain, cognitive level, answer, explanation and source before approving it for an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($pendingreclassificationcount > 0): ?><a class="question-bank__button" href="<?php echo $queueurl->out(false); ?>">Export reclassification queue (<?php echo (int)$pendingreclassificationcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><a class="question-bank__button" href="<?php echo $exclusionqueueurl->out(false); ?>">Export exclusions</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
@@ -1143,12 +1112,6 @@ echo $OUTPUT->header();
                 <?php foreach (['A', 'B', 'C', 'D'] as $label): ?><label class="question-bank__editor-field"><span>Answer <?php echo $label; ?></span><input type="text" name="option<?php echo strtolower($label); ?>" value="<?php echo s($editoroptions[$label] ?? ''); ?>" required></label><?php endforeach; ?>
                 <label class="question-bank__editor-field"><span>Correct answer</span><select name="correctlabel" required><?php foreach (['A', 'B', 'C', 'D'] as $label): ?><option value="<?php echo $label; ?>"<?php echo ($editquestion['correctLabel'] ?? '') === $label ? ' selected' : ''; ?>><?php echo $label; ?></option><?php endforeach; ?></select></label>
                 <label class="question-bank__editor-field"><span>Answer feedback / explanation</span><textarea name="explanation" required><?php echo s($editquestion['explanation'] ?? ''); ?></textarea></label>
-                <details class="question-bank__translation-editor" open>
-                    <summary>Spanish translation (optional, but complete as a set)</summary>
-                    <label class="question-bank__editor-field"><span>Pregunta</span><textarea name="promptes"><?php echo s($editortranslation['prompt'] ?? ''); ?></textarea></label>
-                    <?php foreach (['A', 'B', 'C', 'D'] as $label): ?><label class="question-bank__editor-field"><span>Respuesta <?php echo $label; ?></span><input type="text" name="option<?php echo strtolower($label); ?>es" value="<?php echo s($editorspanishoptions[$label] ?? ''); ?>"></label><?php endforeach; ?>
-                    <label class="question-bank__editor-field"><span>Retroalimentación / explicación</span><textarea name="explanationes"><?php echo s($editortranslation['explanation'] ?? ''); ?></textarea></label>
-                </details>
                 <div class="question-bank__editor-classification">
                     <div><h5>Editable classification</h5><p class="question-bank__panel-intro">Domain remains fixed; these fields can be reviewed and changed.</p></div>
                     <label class="question-bank__editor-field"><span>Content classification</span><select name="contenttype"><?php foreach ($contenttypelabels as $value => $label): ?><option value="<?php echo s($value); ?>"<?php echo ($editquestion['contentType'] ?? 'other') === $value ? ' selected' : ''; ?>><?php echo s($label); ?></option><?php endforeach; ?></select></label>
