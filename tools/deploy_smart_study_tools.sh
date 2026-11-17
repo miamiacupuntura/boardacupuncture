@@ -13,13 +13,13 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     exit 1
 fi
 
-for command in curl php grep install stat cp cmp mkdir mktemp date rm id dirname find; do
+for command in curl php python3 grep install stat cp cmp mkdir mktemp date rm id dirname find; do
     command -v "$command" >/dev/null 2>&1 || { echo "ERROR: falta el comando $command" >&2; exit 1; }
 done
 
 TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
-mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
+mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates" "$TEMP_DIR/scorm"
 
 MOODLE_FILES=(smart-study-tools.php study-score.php my-evaluations.php admin-student-evaluations.php admin-ncbahm-evaluations.php admin-herbology-question-bank.php admin-open-student-dashboard.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
 MOODLE_NESTED_FILES=(db/hooks.php classes/hook/navigation.php)
@@ -58,6 +58,7 @@ MENU_FILES=(herbology-board.php herbology-exam-history.php exam-history.php bloc
 MENU_JS_FILES=(herbology-simulation.js assessment-profile-banner.js)
 MENU_DATA_FILES=(herbology-domain-candidates.json)
 THEME_TEMPLATE_FILES=(frontpage.mustache)
+SCORM_FILES=(scorm_herbology_question_extract.py clinical_cases_extract.py scorm_word_export.py scorm_word_inventory.php)
 DATA_FILES=(single-herb-safety-supplement.json single-herb-properties.json single-herb-rich-profiles.json formulas-study-guide-data.json formula-board-roster-2026.json formula-architecture-data.json dui-yao-smart-data.json)
 STATIC_FILES=(read-aloud-test.html formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html cautions-contraindications.html cautions-contraindications-es.html safety.html safety-es.html advanced-name-traps.html families.html formula-name-traps.html formula-theory.html herb-families.html misleading-formula-names.html most-important-formulas.html name-traps.html patterns-tips-maciocia.html secondary-actions.html supplemental-herb-families.html advanced-name-traps-es.html families-es.html formula-name-traps-es.html formula-theory-es.html herb-families-es.html misleading-formula-names-es.html most-important-formulas-es.html name-traps-es.html patterns-tips-maciocia-es.html secondary-actions-es.html supplemental-herb-families-es.html index.html index-es.html safety-toxicity.html safety-interactions.html safety-regulation.html safety-toxic-herbs.html safety-pregnancy.html safety-anticoagulants.html safety-ma-huang-hypertension.html safety-fu-zi-cardiac-toxicity.html safety-clinical-interaction-cases.html safety-obsolete-prohibited-substances.html safety-herb-specific-cautions.html safety-toxicity-es.html safety-interactions-es.html safety-regulation-es.html safety-toxic-herbs-es.html safety-pregnancy-es.html safety-anticoagulants-es.html safety-ma-huang-hypertension-es.html safety-fu-zi-cardiac-toxicity-es.html safety-clinical-interaction-cases-es.html safety-obsolete-prohibited-substances-es.html safety-herb-specific-cautions-es.html continuous-reader.html continuous-reader.js safety-library.html safety-library-es.html comparisons.js study-return-navigation.js chief-herbs-property.html chief-herbs-property-es.html formulas.html formulas-es.html pathologies.html pathologies-es.html patterns.html patterns-es.html maciocia-formula-tips.html maciocia-formula-tips-es.html dui-yao.html dui-yao-es.html herb-comparison-bank.html herb-comparison-bank-es.html dui-yao-practice.html dui-yao-practice-es.html miscellaneous-practice.html miscellaneous-practice-es.html)
 STATIC_FILES+=(
@@ -99,6 +100,17 @@ done
 for file in "${STATIC_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/study-guide/comparisons/$file" -o "$TEMP_DIR/static/$file"
 done
+for file in "${SCORM_FILES[@]}"; do
+    curl -fsSL "$REPOSITORY/$REVISION/mod/scorm/studytopic/$file" -o "$TEMP_DIR/scorm/$file"
+done
+python3 -m py_compile "$TEMP_DIR/scorm/scorm_herbology_question_extract.py" "$TEMP_DIR/scorm/clinical_cases_extract.py" "$TEMP_DIR/scorm/scorm_word_export.py"
+php -l "$TEMP_DIR/scorm/scorm_word_inventory.php" >/dev/null
+grep -Fq 'herbology-scorm-question-bank.json' "$TEMP_DIR/scorm/scorm_herbology_question_extract.py"
+grep -Fq '"herb_properties"' "$TEMP_DIR/scorm/scorm_herbology_question_extract.py"
+grep -Fq '"formula_hierarchy"' "$TEMP_DIR/scorm/scorm_herbology_question_extract.py"
+grep -Fq '"herb_processing"' "$TEMP_DIR/scorm/scorm_herbology_question_extract.py"
+grep -Fq 'inferenceUpgradeRequired' "$TEMP_DIR/scorm/scorm_herbology_question_extract.py"
+grep -Fq 'feedbackQuality' "$TEMP_DIR/scorm/scorm_herbology_question_extract.py"
 
 grep -Fq 'Yang, the book author' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'Yang, autor del libro' "$TEMP_DIR/moodle/single-herbs-study-guide-es.php"
@@ -1330,7 +1342,7 @@ done < <(find /var/www -type f -name formula-practice.html -path '*/comparisons/
 
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP="$BACKUP_ROOT/smart-study-tools-$TIMESTAMP"
-mkdir -p "$BACKUP/moodle" "$BACKUP/menu" "$BACKUP/static" "$BACKUP/theme/templates"
+mkdir -p "$BACKUP/moodle" "$BACKUP/menu" "$BACKUP/static" "$BACKUP/theme/templates" "$BACKUP/scorm"
 reference="$TARGET_DIR/study-guide.php"
 owner_group="$(stat -c '%u:%g' "$reference")"
 mode="$(stat -c '%a' "$reference")"
@@ -1463,6 +1475,10 @@ grep -Fq "NCBAHM Question Bank" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Search ID or text" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Simulation Exam 1" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Correct answer:" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "SCORM classified" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Needs more inference" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Needs stronger feedback" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Formula hierarchy" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "'NCBAHM Question Bank'" "$TARGET_DIR/classes/hook/navigation.php"
 grep -Fq "admin-herbology-question-bank.php" "$TARGET_DIR/settings.php"
 grep -Fq "Last course access" "$TARGET_DIR/admin-student-evaluations.php"
@@ -1561,6 +1577,50 @@ for file in "${MENU_DATA_FILES[@]}"; do
     cmp -s "$TEMP_DIR/menu/$file" "$target"
     php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data)) { exit(1); }' "$target"
 done
+
+SCORM_TARGET_DIR="$MOODLE_ROOT/mod/scorm/studytopic"
+[[ -d "$SCORM_TARGET_DIR" ]] || { echo "ERROR: no existe $SCORM_TARGET_DIR" >&2; exit 1; }
+for file in "${SCORM_FILES[@]}"; do
+    target="$SCORM_TARGET_DIR/$file"
+    if [[ -f "$target" ]]; then
+        cp -a "$target" "$BACKUP/scorm/$file"
+        file_owner_group="$(stat -c '%u:%g' "$target")"
+        file_mode="$(stat -c '%a' "$target")"
+    else
+        file_owner_group="$owner_group"
+        case "$file" in
+            *.py) file_mode=750 ;;
+            *) file_mode=640 ;;
+        esac
+    fi
+    install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/scorm/$file" "$target"
+    cmp -s "$TEMP_DIR/scorm/$file" "$target"
+done
+php -l "$SCORM_TARGET_DIR/scorm_word_inventory.php" >/dev/null
+
+SCORM_BANK_PATH="$(php -r 'define("CLI_SCRIPT", true); require $argv[1]; global $CFG; echo $CFG->dataroot . "/board-domain-banks/herbology-scorm-question-bank.json";' "$MOODLE_ROOT/config.php")"
+if [[ -f "$SCORM_BANK_PATH" ]]; then
+    cp -a "$SCORM_BANK_PATH" "$BACKUP/scorm/herbology-scorm-question-bank.json"
+fi
+if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
+    SCORM_CLASSIFICATION_OUTPUT="$(runuser -u www-data -- python3 "$SCORM_TARGET_DIR/scorm_herbology_question_extract.py")"
+else
+    SCORM_CLASSIFICATION_OUTPUT="$(python3 "$SCORM_TARGET_DIR/scorm_herbology_question_extract.py")"
+fi
+echo "$SCORM_CLASSIFICATION_OUTPUT"
+php -r '
+$data=json_decode(file_get_contents($argv[1]), true);
+if (!is_array($data) || empty($data["sourceReadOnly"]) || (int)($data["moduleCount"] ?? 0) < 1 || (int)($data["questionCount"] ?? 0) < 1) { exit(1); }
+$ids=[];
+foreach (($data["domains"] ?? []) as $questions) {
+    foreach ($questions as $question) {
+        $id=(string)($question["questionId"] ?? "");
+        if ($id === "" || empty($question["editorial"]["feedbackQuality"]) || !array_key_exists("inferenceUpgradeRequired", $question["editorial"] ?? [])) { exit(1); }
+        $ids[]=$id;
+    }
+}
+if (count($ids) !== (int)$data["questionCount"] || count(array_unique($ids)) !== count($ids)) { exit(1); }
+' "$SCORM_BANK_PATH"
 grep -Fq "'simulationlinear', 'simulationadaptive'" "$MENU_TARGET_DIR/herbology-exam-history.php"
 grep -Fq 'examtype: `simulation${mode}`' "$MENU_TARGET_DIR/herbology-simulation.js"
 grep -Fq "Board Simulation" "$MENU_TARGET_DIR/exam-history.php"
@@ -1672,6 +1732,8 @@ echo "OK: Student Evaluations ofrece acceso administrativo directo, filtros, det
 echo "OK: la vista completa de Student Evaluations, incluidos filtros, tablas, estados y CSV, está escrita en inglés."
 echo "OK: Student Evaluations muestra NCCAOM, NCBAHM y All Programs con la misma navegación; Students by course reúne ambos módulos."
 echo "OK: el informe administrativo está protegido por moodle/site:config y aparece también en Site administration > Reports."
+echo "OK: los bancos SCORM de Herbology se extraen sin modificar sus fuentes y aparecen clasificados por dominio, contenido y nivel cognitivo."
+echo "OK: el banco administrativo identifica preguntas SCORM que necesitan más inferencia o feedback antes de usarlas en simulaciones."
 echo "OK: Smart Study Tools visible como botón superior, a la izquierda del selector de idioma."
 echo "OK: Pattern → Formula incluye una lista desplegable y buscable de patrones verificados."
 echo "OK: Tongue & Pulse incluye una lista desplegable y buscable de 63 hallazgos verificados."
