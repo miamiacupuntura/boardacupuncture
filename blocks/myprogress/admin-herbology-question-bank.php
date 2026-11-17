@@ -24,7 +24,7 @@ $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = $reviewfilter === 'ai_drafts' ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-2.0';
+$aipromptversion = 'ncbahm-mock-editor-2.1';
 
 $domains = [
     'formula_differentiation' => ['number' => 1, 'name' => 'Formula selection and differentiation'],
@@ -300,13 +300,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
             $history[] = array_diff_key($previous, ['history' => true, 'original' => true]);
             $history = array_slice($history, -20);
         }
+        $storeddraft = $draft;
+        $previousreviewsummary = trim((string)($previous['draft']['reviewSummary'] ?? ''));
+        if ($previousreviewsummary !== '') {
+            $storeddraft['reviewSummary'] = $previousreviewsummary;
+        }
         $approved = is_array($previous['approved'] ?? null) ? $previous['approved'] : null;
         if ($approved === null && ($previous['status'] ?? '') === 'approved'
                 && is_array($previous['draft'] ?? null)) {
             $approved = $previous['draft'];
         }
         if ($status === 'approved') {
-            $approved = $draft;
+            $approved = $storeddraft;
         }
         $store['questions'][$questionid] = [
             'questionId' => $questionid,
@@ -320,7 +325,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
             'savedByName' => $savedbyname,
             'original' => $previous['original'] ?? $original,
             'approved' => $approved,
-            'draft' => $draft,
+            'draft' => $storeddraft,
             'history' => $history,
             'reviewProposal' => (string)($previous['reviewProposal'] ?? ''),
             'proposalStatus' => $status === 'approved'
@@ -686,7 +691,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
     }
 
-    $decodeaidraft = static function(string $generated, array $sourcequestion): array {
+    $decodeaidraft = static function(
+        string $generated,
+        array $sourcequestion,
+        string $administratorproposal
+    ): array {
         $generated = trim($generated);
         if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $generated, $matches)) {
             $generated = $matches[1];
@@ -703,10 +712,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         $prompt = trim((string)($decoded['prompt'] ?? ''));
         $explanation = trim((string)($decoded['explanation'] ?? ''));
+        $reviewsummary = trim((string)($decoded['reviewSummary'] ?? ''));
         $correctlabel = strtoupper(trim((string)($decoded['correctLabel'] ?? '')));
         $sourcecorrectlabel = strtoupper(trim((string)($sourcequestion['correctLabel'] ?? '')));
-        if ($prompt === '' || $explanation === '' || $correctlabel !== $sourcecorrectlabel) {
+        if ($prompt === '' || $explanation === '' || $reviewsummary === ''
+                || $correctlabel !== $sourcecorrectlabel) {
             throw new UnexpectedValueException('The AI draft changed the answer key or omitted required text.');
+        }
+        if (preg_match('/\b(?:heat[ -]dampness|damp[ -]heat)\b/i', $prompt)) {
+            throw new UnexpectedValueException(
+                'The stem names the Damp-Heat diagnosis instead of presenting observable findings.'
+            );
+        }
+        if ($administratorproposal !== ''
+                && preg_match('/\b(?:not applied|unable|cannot|could not)\b/i', $reviewsummary)) {
+            throw new UnexpectedValueException('The administrator instructions were not applied.');
         }
         $rawoptions = $decoded['options'] ?? null;
         if (!is_array($rawoptions) || count($rawoptions) !== 4) {
@@ -751,6 +771,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             ),
             'correctLabel' => $sourcecorrectlabel,
             'explanation' => $explanation,
+            'reviewSummary' => $reviewsummary,
             'contentType' => $contenttype,
             'cognitiveLevel' => $cognitivelevel,
             'difficultyBand' => $cognitivelevel === 'analyze' ? 'analysis' : 'inference',
@@ -780,6 +801,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 $relevantnames[] = $herb['pinyin'] . ' (' . $herb['pharmaceuticalName'] . ')';
             }
         }
+        $administratorproposal = array_key_exists($questionid, $proposaloverrides)
+            ? $proposaloverrides[$questionid]
+            : (string)($question['_proposal']['text'] ?? '');
         $sourcepayload = [
             'id' => $questionid,
             'domain' => $domains[$question['_domainid']]['number'] . ' · ' . $domains[$question['_domainid']]['name'],
@@ -789,9 +813,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             'correctLabel' => (string)($sourcequestion['correctLabel'] ?? ''),
             'sourceFeedback' => (string)($sourcequestion['explanation'] ?? ''),
             'source' => $sourcequestion['source'] ?? [],
-            'administratorProposal' => array_key_exists($questionid, $proposaloverrides)
-                ? $proposaloverrides[$questionid]
-                : (string)($question['_proposal']['text'] ?? ''),
+            'administratorProposal' => $administratorproposal,
             'relevantGuidelineNames' => $relevantnames,
         ];
         $aiprompt = <<<'PROMPT'
@@ -800,7 +822,7 @@ You are a senior NCBAHM Chinese Herbology mock-exam item editor. Return one revi
 Editorial rules:
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer.
 1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection or differentiation; Domain 2 must test individual-herb identification, properties, actions, indications, or comparison; Domain 3 must test Duì Yào pairing, compatibility, hierarchy, synergy, antagonism, or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing, or dispensing principle. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
-2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
+2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
 3. Use exactly four plausible, parallel answer choices. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
 4. Write mock-exam feedback that explicitly explains both inference steps: (a) what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence; and (b) why that conclusion selects the correct answer. Identify which findings are decisive and which details are contextual distractors. Then explain briefly why each answer-choice distractor is weaker. Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
 5. In clinical cases, add one or two plausible contextual details when useful: age, illness duration, a relevant health history, temperature with measurement site, pulse rate, or respiratory rate. Use physiologically coherent values and include these details sparingly; they must not contradict the source, change the keyed answer, create a second defensible diagnosis, or replace the Chinese-medicine reasoning being tested.
@@ -810,12 +832,13 @@ Editorial rules:
 9. When useful, frame a case as a follow-up visit after an earlier consultation, initial treatment, hospital discharge, or referral. State which source-compatible findings improved, persisted, or newly appeared, then ask whether the original strategy should be maintained, modified, or reconsidered. Do not invent a prior treatment response that changes the keyed fact or requires knowledge absent from the source.
 10. Occasionally include a source-compatible Western diagnosis, medication history, basic laboratory result, imaging finding, or condition already ruled out when it helps confirm or exclude part of the differential. Never treat a Western diagnosis as automatically equivalent to a Chinese-medicine pattern, never let it replace tongue-pulse and symptom differentiation, and do not invent a test result that changes the keyed answer. The feedback must state what the Western information supports or excludes and what it cannot establish by itself.
 11. Keep the item concise, clinically coherent, unambiguous, and appropriate for a supervised mock board examination. If the original lacks enough clinical facts, make the smallest source-grounded inference upgrade possible.
-12. Follow administratorProposal when it is nonempty, provided it does not conflict with the source or answer key. Treat requests for additional manifestations of a named pattern as guidance to add source-compatible clinical findings without naming that pattern in the stem.
+12. Follow administratorProposal when it is nonempty, provided it does not conflict with the source or answer key. Treat requests for additional manifestations of a named pattern as guidance to add source-compatible clinical findings without naming that pattern in the stem. Applying a nonempty administratorProposal is mandatory. Do not preserve wording the administrator explicitly asked to remove.
 13. Set cognitiveLevel to "infer" or "analyze". Set contentType to the best classification for the rewritten educational objective; do not blindly copy the source classification.
-14. Before returning JSON, silently audit and correct the draft: verify the keyed letter and concept, fixed-domain alignment, source support, guideline nomenclature, one defensible answer, four parallel choices, two genuine inference steps, and feedback for every distractor. Return only the corrected final JSON.
+14. Before returning JSON, silently audit and correct the draft: verify the keyed letter and concept, fixed-domain alignment, source support, guideline nomenclature, one defensible answer, four parallel choices, two genuine inference steps, feedback for every distractor, and full compliance with administratorProposal. Return only the corrected final JSON.
+15. In reviewSummary, state concretely what the automatic review changed and how administratorProposal was applied. This summary is shown to the administrator and must not be generic.
 
 Required JSON shape:
-{"prompt":"...","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"correctLabel":"A","explanation":"...","contentType":"safety_dispensing","cognitiveLevel":"infer"}
+{"prompt":"...","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"correctLabel":"A","explanation":"...","contentType":"safety_dispensing","cognitiveLevel":"infer","reviewSummary":"Removed the named diagnosis and replaced it with observable findings; standardized all herb names and expanded distractor feedback."}
 
 SOURCE QUESTION:
 PROMPT;
@@ -823,20 +846,40 @@ PROMPT;
             $sourcepayload,
             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
         );
-        try {
-            $action = new \core_ai\aiactions\generate_text(
-                contextid: $systemcontext->id,
-                userid: (int)$USER->id,
-                prompttext: $aiprompt,
-            );
-            $response = $manager->process_action($action);
-            if (!$response->get_success()) {
-                throw new RuntimeException($response->get_errormessage() ?: 'The AI provider returned an error.');
+        $lasterror = null;
+        for ($generationattempt = 1; $generationattempt <= 2; $generationattempt++) {
+            try {
+                $attemptprompt = $aiprompt;
+                if ($generationattempt > 1 && $lasterror !== null) {
+                    $attemptprompt .= "\n\nVALIDATION FAILURE FROM THE PREVIOUS DRAFT:\n"
+                        . $lasterror->getMessage()
+                        . "\nCorrect this failure and return a new complete JSON draft.";
+                }
+                $action = new \core_ai\aiactions\generate_text(
+                    contextid: $systemcontext->id,
+                    userid: (int)$USER->id,
+                    prompttext: $attemptprompt,
+                );
+                $response = $manager->process_action($action);
+                if (!$response->get_success()) {
+                    throw new RuntimeException(
+                        $response->get_errormessage() ?: 'The AI provider returned an error.'
+                    );
+                }
+                $responsecontent = (string)($response->get_response_data()['generatedcontent'] ?? '');
+                $generateddrafts[$questionid] = $decodeaidraft(
+                    $responsecontent,
+                    $sourcequestion,
+                    $administratorproposal
+                );
+                $lasterror = null;
+                break;
+            } catch (Throwable $error) {
+                $lasterror = $error;
             }
-            $responsecontent = (string)($response->get_response_data()['generatedcontent'] ?? '');
-            $generateddrafts[$questionid] = $decodeaidraft($responsecontent, $sourcequestion);
-        } catch (Throwable $error) {
-            $generationerrors[] = $questionid . ': ' . $error->getMessage();
+        }
+        if ($lasterror !== null) {
+            $generationerrors[] = $questionid . ': ' . $lasterror->getMessage();
         }
     }
 
@@ -1177,7 +1220,7 @@ echo $OUTPUT->header();
 .question-bank__editor{margin-bottom:18px;padding:20px;border:2px solid #6d28d9;border-radius:12px;background:#faf8ff}.question-bank__editor-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px}.question-bank__editor-head h3{margin:0 0 4px;font-size:23px}.question-bank__editor-head p{margin:0;color:#66557e}.question-bank__editor-grid{display:grid;grid-template-columns:1fr;gap:14px}.question-bank__editor-panel{padding:15px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__editor-panel h4{margin:0 0 12px}.question-bank__editor-field{display:block;margin-bottom:11px}.question-bank__editor-field>span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__editor input[type=text],.question-bank__editor textarea,.question-bank__editor select{box-sizing:border-box;width:100%;padding:9px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff}.question-bank__editor textarea{min-height:92px;resize:vertical}.question-bank__editor-classification{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}.question-bank__editor-check{display:flex;align-items:flex-start;gap:9px;margin:15px 0;padding:13px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed}.question-bank__editor-check input{margin-top:4px}.question-bank__editor-actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button--primary{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__button--publish{border-color:#6d28d9;background:#6d28d9;color:#fff!important}.question-bank__button--exclude{border-color:#b42318;background:#fff1f0;color:#9f1d16!important}.question-bank__revision-note{margin:10px 0;padding:10px 12px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95}.question-bank__exclusion-note{margin:10px 0;padding:12px 14px;border-left:4px solid #b42318;border-radius:7px;background:#fff1f0;color:#7a271a}.question-bank__item--excluded{border-color:#f1a6a0;background:#fffafa}.question-bank__edit-link{margin-left:auto}@media(max-width:850px){.question-bank__editor-classification{grid-template-columns:1fr}.question-bank__editor-head{display:block}.question-bank__editor-head .question-bank__button{margin-top:10px}}
 .question-bank__temporary-order{display:flex;align-items:center;gap:10px;margin:-17px -17px 14px;padding:11px 16px;border-radius:10px 10px 0 0;background:#4c1d95;color:#fff}.question-bank__temporary-order span{font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.question-bank__temporary-order strong{font-size:24px;line-height:1}.question-bank__temporary-order small{font-weight:800;opacity:.85}.question-bank__temporary-order--editor{margin:0 0 12px;border-radius:8px}.question-bank__review-progress{margin-bottom:16px;padding:14px 16px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#4c1d95}.question-bank__review-progress strong{font-size:17px}.question-bank__review-progress p{margin:4px 0 0}
 .question-bank__ai-batch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;padding:14px 16px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__ai-batch p{margin:0;color:#66557e;line-height:1.45}.question-bank__ai-batch form{flex:0 0 auto}.question-bank__ai-batch .question-bank__button:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__ai-draft-note{margin:10px 0;padding:10px 12px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;font-weight:800}@media(max-width:700px){.question-bank__ai-batch{align-items:stretch;flex-direction:column}}
-.question-bank__rewrite-ready{margin:0 0 14px;padding:13px 15px;border-left:5px solid #0b8f87;border-radius:8px;background:#eaf9f3;color:#075f50;line-height:1.5}.question-bank__rewrite-ready strong{display:block;font-size:17px}.question-bank__rewrite-ready--outdated{border-left-color:#d97706;background:#fff7ed;color:#9a3412}.question-bank__rewrite-ready .question-bank__button{margin-top:10px}.question-bank__rewrite-again{margin-top:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__rewrite-again summary{padding:13px 14px;color:#4c1d95;font-weight:900;cursor:pointer}.question-bank__rewrite-again .question-bank__proposal-box{margin:0;border:0;border-top:1px solid #ded7ef;border-radius:0 0 9px 9px}
+.question-bank__rewrite-ready{margin:0 0 14px;padding:13px 15px;border-left:5px solid #0b8f87;border-radius:8px;background:#eaf9f3;color:#075f50;line-height:1.5}.question-bank__rewrite-ready strong{display:block;font-size:17px}.question-bank__rewrite-summary{display:block;margin-top:8px;padding-top:8px;border-top:1px solid #acdcca}.question-bank__rewrite-summary strong{display:inline;font-size:inherit}.question-bank__rewrite-ready--outdated{border-left-color:#d97706;background:#fff7ed;color:#9a3412}.question-bank__rewrite-ready .question-bank__button{margin-top:10px}.question-bank__rewrite-again{margin-top:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__rewrite-again summary{padding:13px 14px;color:#4c1d95;font-weight:900;cursor:pointer}.question-bank__rewrite-again .question-bank__proposal-box{margin:0;border:0;border-top:1px solid #ded7ef;border-radius:0 0 9px 9px}
 .question-bank__advanced-review{margin-top:14px;border:1px solid #e5c27f;border-radius:9px;background:#fffaf0}.question-bank__advanced-review summary{padding:13px 14px;color:#8a4b08;font-weight:900;cursor:pointer}.question-bank__advanced-review>.question-bank__editor-check{margin:0;border-radius:0;border-left:0;border-top:1px solid #f0d5a1}.question-bank__advanced-review>.question-bank__editor-field{margin:0;padding:14px}.question-bank__advanced-review>.question-bank__editor-actions{padding:0 14px 14px}
 .question-bank__editor-panel--original{border-color:#c8d8df;background:#fbfdfe}.question-bank__editor-panel--editing{border-color:#cbb9ee}.question-bank__panel-intro{margin:-6px 0 14px;color:#60758a;font-size:12px;line-height:1.45}.question-bank__original-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.question-bank__original-question{margin:0 0 13px;font-size:16px;font-weight:850;line-height:1.5}.question-bank__original-options{display:grid;gap:7px;margin:0 0 13px;padding:0;list-style:none}.question-bank__original-options li{padding:9px 11px;border:1px solid #dce5ea;border-radius:7px;background:#f7fafb;line-height:1.45}.question-bank__original-options li.is-correct{border-color:#7bcbb6;background:#eaf9f3;color:#075f50;font-weight:850}.question-bank__original-answer{margin:0 0 12px}.question-bank__original-feedback{padding:12px 14px;border-left:4px solid #0b8f87;border-radius:7px;background:#effaf7;line-height:1.5}.question-bank__original-source{margin:12px 0 0;color:#60758a;font-size:12px;line-height:1.5}.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:150px}.question-bank__editor-panel--editing .question-bank__editor-classification{grid-template-columns:1fr;margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__editor-panel--editing .question-bank__editor-classification h5{margin:0 0 2px}.question-bank__editor-panel--editing .question-bank__editor-classification .question-bank__panel-intro{margin:0 0 8px}.question-bank__editor-panel--editing .question-bank__editor-actions{margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__proposal-form{display:grid;gap:12px}.question-bank__proposal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-toolbar p{margin:0;color:#66557e}.question-bank__proposal-box{display:block;margin-top:14px;padding:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-box>span{display:block;margin-bottom:7px;color:#4c1d95;font-weight:900}.question-bank__proposal-box textarea{box-sizing:border-box;width:100%;min-height:150px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__proposal-saved{display:block;margin-top:7px;color:#66557e;font-size:12px}.question-bank__proposal-review{margin-top:14px;padding:14px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;white-space:pre-wrap}.question-bank__editor-proposal{border-color:#8b5cf6;background:#faf8ff}.question-bank__editor-proposal h4{color:#4c1d95}@media(max-width:850px){.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:120px}.question-bank__proposal-toolbar{align-items:stretch;flex-direction:column}}
 </style>
@@ -1191,6 +1234,7 @@ echo $OUTPUT->header();
             && !empty($editorrevisionfull['aiBatchId']);
         $editorisoutdatedaidraft = $editorisaidraft
             && (string)($editorrevisionfull['aiPromptVersion'] ?? '') !== $aipromptversion;
+        $editorreviewsummary = trim((string)($editorrevisionfull['draft']['reviewSummary'] ?? ''));
         $editorstatuslabel = [
             'draft' => $editorisoutdatedaidraft
                 ? 'Previous automatic review — update required'
@@ -1207,7 +1251,7 @@ echo $OUTPUT->header();
     <form id="question-editor" class="question-bank__editor" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
         <?php if ($editquestion['_exam2position'] > 0): ?><div class="question-bank__temporary-order question-bank__temporary-order--editor"><span>Temporary review order</span><strong>Proposed Exam 2 Question <?php echo str_pad((string)$editquestion['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
         <div class="question-bank__editor-head"><div><h3><?php echo $editorisaidraft ? 'Final review ' : 'Edit '; ?><?php echo s($editquestion['questionId']); ?></h3><p><?php echo s($editorstatuslabel); ?> · Domain <?php echo (int)$editordomain['number']; ?> remains fixed to protect the exam blueprint.</p></div><a class="question-bank__button" href="<?php echo $pageurl->out(false); ?>">Return to questions</a></div>
-        <?php if ($editorisoutdatedaidraft): ?><div class="question-bank__rewrite-ready question-bank__rewrite-ready--outdated"><strong>Updated automatic review required.</strong>This draft was created with an earlier review method and is not ready for final approval. Run the updated review once; it will recheck domain alignment, inference, guideline terminology, answer choices, feedback and classification.<br><button class="question-bank__button question-bank__button--publish" type="submit" form="question-rewrite-form"<?php echo $textaienabled ? '' : ' disabled'; ?>>Run updated automatic review</button></div><?php elseif ($editorisaidraft): ?><div class="question-bank__rewrite-ready"><strong>Automatic editorial review completed.</strong>The edited version below is the proposed final question. Verify it and select <strong>Approve and continue</strong>. Edit a field only when necessary, or request another rewrite if the proposal still needs substantial changes.</div><?php endif; ?>
+        <?php if ($editorisoutdatedaidraft): ?><div class="question-bank__rewrite-ready question-bank__rewrite-ready--outdated"><strong>Updated automatic review required.</strong>This draft was created with an earlier review method and is not ready for final approval. Run the updated review once; it will recheck domain alignment, inference, guideline terminology, answer choices, feedback and classification.<br><button class="question-bank__button question-bank__button--publish" type="submit" form="question-rewrite-form"<?php echo $textaienabled ? '' : ' disabled'; ?>>Run updated automatic review</button></div><?php elseif ($editorisaidraft): ?><div class="question-bank__rewrite-ready"><strong>Automatic editorial review completed.</strong>The edited version below is the proposed final question. Verify it and select <strong>Approve and continue</strong>. Edit a field only when necessary, or request another rewrite if the proposal still needs substantial changes.<?php if ($editorreviewsummary !== ''): ?><span class="question-bank__rewrite-summary"><strong>Applied changes:</strong> <?php echo s($editorreviewsummary); ?></span><?php endif; ?></div><?php endif; ?>
         <?php if ($editorrevision !== []): ?><div class="question-bank__revision-note">Revision <?php echo (int)($editorrevision['revisionNumber'] ?? 1); ?> saved by <?php echo s($editorrevision['savedByName'] ?? 'administrator'); ?><?php if (!empty($editorrevision['savedAt'])): ?> on <?php echo s(userdate(strtotime($editorrevision['savedAt']))); ?><?php endif; ?>.<?php if ($editorstatus === 'exclusion_candidate'): ?> This question is preserved in the recycle bin and unavailable to active practice and exams.<?php elseif ($editorstatus !== 'approved'): ?> The currently approved exam version remains unchanged.<?php endif; ?><?php if (!empty($editorrevisionfull['history'])): ?> <details><summary>Revision history (<?php echo count($editorrevisionfull['history']); ?>)</summary><ol><?php foreach (array_reverse($editorrevisionfull['history']) as $historicalrevision): ?><li>Revision <?php echo (int)($historicalrevision['revisionNumber'] ?? 1); ?> · <?php echo s(str_replace('_', ' ', (string)($historicalrevision['status'] ?? 'draft'))); ?> · <?php echo s($historicalrevision['savedByName'] ?? 'administrator'); ?><?php if (!empty($historicalrevision['savedAt'])): ?> · <?php echo s(userdate(strtotime($historicalrevision['savedAt']))); ?><?php endif; ?></li><?php endforeach; ?></ol></details><?php endif; ?></div><?php endif; ?>
         <div class="question-bank__editor-grid">
             <section class="question-bank__editor-panel question-bank__editor-panel--original">
