@@ -1856,6 +1856,7 @@ PROMPT;
             $failureparams = $returneditingdrafts
                 ? array_filter([
                     'review' => 'editing_drafts',
+                    'q' => $rewritequestionid,
                     'page' => $returneditingpage > 0 ? $returneditingpage : null,
                 ])
                 : ['usage' => 'exam2_review'];
@@ -1966,6 +1967,7 @@ PROMPT;
     $reviewurlparams = $returneditingdrafts
         ? array_filter([
             'review' => 'editing_drafts',
+            'q' => $rewritequestionid,
             'page' => $returneditingpage > 0 ? $returneditingpage : null,
         ])
         : [
