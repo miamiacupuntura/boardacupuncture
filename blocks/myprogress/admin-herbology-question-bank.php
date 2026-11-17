@@ -183,14 +183,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
     if ($savemode === 'exclude' && $exclusionreason === '') {
         throw new invalid_parameter_exception('Explain why this question may need exclusion.');
     }
-    $status = $savemode === 'exclude'
-        ? 'exclusion_candidate'
-        : ($savemode === 'restore'
-            ? 'draft'
-            : ($requestreclassification
-                ? 'pending_reclassification'
-                : ($savemode === 'publish' ? 'approved' : 'draft')));
-    if ($status === 'exclusion_candidate' || $savemode === 'restore') {
+    if ($savemode === 'publish') {
+        $status = 'approved';
+    } else if ($savemode === 'exclude') {
+        $status = 'exclusion_candidate';
+    } else if ($savemode === 'restore') {
+        $status = 'draft';
+    } else {
+        $status = $requestreclassification ? 'pending_reclassification' : 'draft';
+    }
+    if ($savemode !== 'draft') {
         $requestreclassification = false;
     }
     $savedat = gmdate(DATE_ATOM);
@@ -705,7 +707,7 @@ echo $OUTPUT->header();
                     <label class="question-bank__editor-field"><span>Cognitive level</span><select name="cognitivelevel"><?php foreach ($cognitivelevellabels as $value => $label): ?><option value="<?php echo s($value); ?>"<?php echo ($editquestion['cognitiveLevel'] ?? 'apply') === $value ? ' selected' : ''; ?>><?php echo s($label); ?></option><?php endforeach; ?></select></label>
                     <label class="question-bank__editor-field"><span>Complexity</span><select name="difficultyband"><?php foreach ($difficultylabels as $value => $label): ?><option value="<?php echo s($value); ?>"<?php echo ($editquestion['difficultyBand'] ?? 'application') === $value ? ' selected' : ''; ?>><?php echo s($label); ?></option><?php endforeach; ?></select></label>
                 </div>
-                <label class="question-bank__editor-check"><input type="checkbox" name="requestreclassification" value="1"<?php echo !empty($editorrevision['requestReclassification']) ? ' checked' : ''; ?>><span><strong>Request reclassification after this edit</strong><br>Check this when the wording, answer, feedback or educational objective changed enough that the domain, content type, cognitive level, complexity or exam placement should be reviewed again. The draft will enter the exportable review queue and will not replace the approved exam version.</span></label>
+                <label class="question-bank__editor-check"><input type="checkbox" name="requestreclassification" value="1"<?php echo !empty($editorrevision['requestReclassification']) ? ' checked' : ''; ?>><span><strong>Request reclassification after this edit</strong><br>This option applies only when you select <strong>Save draft</strong>. Check it when the wording, answer, feedback or educational objective changed enough that the domain, content type, cognitive level, complexity or exam placement should be reviewed again. <strong>Publish approved version</strong> always publishes the edited version and clears this request.</span></label>
                 <label class="question-bank__editor-field"><span>Possible error / exclusion note</span><textarea name="exclusionreason" placeholder="Describe the conflict, unsupported source, ambiguous answer or other reason this question may need exclusion."><?php echo s($editorexclusionnote); ?></textarea></label>
                 <div class="question-bank__editor-actions"><?php if ($editorstatus === 'exclusion_candidate'): ?><button class="question-bank__button question-bank__button--primary" type="submit" name="savemode" value="restore">Restore as draft</button><?php else: ?><button class="question-bank__button question-bank__button--primary" type="submit" name="savemode" value="draft">Save draft</button><button class="question-bank__button question-bank__button--publish" type="submit" name="savemode" value="publish">Publish approved version</button><button class="question-bank__button question-bank__button--exclude" type="submit" name="savemode" value="exclude" onclick="return confirm('Move this question to Possible exclusions and remove it from active practice and exams?');">Move to possible exclusion</button><?php endif; ?></div>
             </section>
