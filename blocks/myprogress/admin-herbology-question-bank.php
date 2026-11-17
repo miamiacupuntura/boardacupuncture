@@ -18,6 +18,7 @@ $cognitivefilter = optional_param('cognitive', 'all', PARAM_ALPHA);
 $contentfilter = optional_param('content', 'all', PARAM_ALPHANUMEXT);
 $reviewfilter = optional_param('review', 'all', PARAM_ALPHANUMEXT);
 $editquestionid = optional_param('edit', '', PARAM_ALPHANUMEXT);
+$advancetonext = (bool)optional_param('advance', 0, PARAM_BOOL);
 $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
@@ -256,6 +257,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
                     ? 'Question restored from Possible exclusions as a draft. Review it before publishing.'
                     : 'Draft saved. The approved exam version is unchanged.')));
     $redirectparams = ['edit' => $questionid];
+    if ($status === 'approved' && $returnusage === 'exam2_review') {
+        $redirectparams = ['usage' => 'exam2_review', 'advance' => 1];
+        $message = 'Approved revision saved. Opening the next pending Simulation Exam 2 question.';
+    }
     if ($returnusage !== '') {
         $redirectparams['usage'] = $returnusage;
     }
@@ -439,6 +444,31 @@ foreach ($allquestions as &$question) {
 unset($question);
 $exam2candidatecount = count($exam2positions);
 
+if ($advancetonext && $usagefilter === 'exam2_review') {
+    $pendingexam2questions = array_values(array_filter(
+        $allquestions,
+        static fn(array $question): bool => $question['_exam2position'] > 0
+            && ($question['_revision']['status'] ?? '') !== 'approved'
+            && !$question['_excluded']
+    ));
+    usort(
+        $pendingexam2questions,
+        static fn(array $left, array $right): int => $left['_exam2position'] <=> $right['_exam2position']
+    );
+    if ($pendingexam2questions !== []) {
+        redirect(new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+            'usage' => 'exam2_review',
+            'edit' => (string)$pendingexam2questions[0]['questionId'],
+        ]));
+    }
+    redirect(
+        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['usage' => 'exam2_review']),
+        'All current Simulation Exam 2 candidate questions have an approved review.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
 $totals = [
     'total' => count($allquestions),
     'ready' => count(array_filter($allquestions, static fn(array $question): bool => $question['_ready'])),
@@ -519,6 +549,11 @@ $filteredquestions = array_values(array_filter(
 ));
 usort($filteredquestions, static function(array $left, array $right) use ($domains, $usagefilter): int {
     if ($usagefilter === 'exam2_review') {
+        $leftapproved = ($left['_revision']['status'] ?? '') === 'approved' ? 1 : 0;
+        $rightapproved = ($right['_revision']['status'] ?? '') === 'approved' ? 1 : 0;
+        if ($leftapproved !== $rightapproved) {
+            return $leftapproved <=> $rightapproved;
+        }
         return $left['_exam2position'] <=> $right['_exam2position'];
     }
     $domaincomparison = $domains[$left['_domainid']]['number'] <=> $domains[$right['_domainid']]['number'];
