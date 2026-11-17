@@ -1788,6 +1788,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     };
 
     $manager = \core\di::get(\core_ai\manager::class);
+    $validateinstructioncompliance = static function(
+        array $draft,
+        array $sourcepayload,
+        string $administratorproposal
+    ) use ($manager, $systemcontext, $USER): string {
+        if (trim($administratorproposal) === '') {
+            return 'Automatic editorial requirements verified.';
+        }
+        $validationprompt = <<<'PROMPT'
+You are the final quality-control reviewer for one NCBAHM Chinese Herbology mock-exam question. Return strict JSON only.
+
+Compare the visible DRAFT itself with every ADMINISTRATOR INSTRUCTION and the SOURCE QUESTION. Do not trust the draft's reviewSummary or its claim that a change was applied. Inspect the stem, all four choices, keyed answer and explanation directly.
+
+Set compliant to true only when every compatible instruction is visibly implemented without changing the source-supported correct answer concept or letter. If the administrator requested ingredient-based choices, the choices themselves must contain ingredients or ingredient combinations rather than formula names. If the administrator requested observable manifestations instead of a named diagnosis, the stem must contain those findings and must not name the diagnosis. If any requested change is missing, vague, merely mentioned in the summary, or contradicted by the draft, set compliant to false and explain the exact correction required.
+
+Required JSON:
+{"compliant":true,"reason":"One concise, specific sentence describing what was verified."}
+
+MATERIAL TO CHECK:
+PROMPT;
+        $validationprompt .= "\n" . json_encode([
+            'administratorInstructions' => $administratorproposal,
+            'sourceQuestion' => $sourcepayload,
+            'draft' => $draft,
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $validationaction = new \core_ai\aiactions\generate_text(
+            contextid: $systemcontext->id,
+            userid: (int)$USER->id,
+            prompttext: $validationprompt,
+        );
+        $validationresponse = $manager->process_action($validationaction);
+        if (!$validationresponse->get_success()) {
+            throw new RuntimeException(
+                $validationresponse->get_errormessage() ?: 'The instruction compliance check failed.'
+            );
+        }
+        $validationcontent = trim((string)(
+            $validationresponse->get_response_data()['generatedcontent'] ?? ''
+        ));
+        if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $validationcontent, $matches)) {
+            $validationcontent = $matches[1];
+        } else {
+            $firstbrace = strpos($validationcontent, '{');
+            $lastbrace = strrpos($validationcontent, '}');
+            if ($firstbrace !== false && $lastbrace !== false && $lastbrace > $firstbrace) {
+                $validationcontent = substr(
+                    $validationcontent,
+                    $firstbrace,
+                    $lastbrace - $firstbrace + 1
+                );
+            }
+        }
+        $validation = json_decode($validationcontent, true, 64, JSON_THROW_ON_ERROR);
+        $validationreason = trim((string)($validation['reason'] ?? ''));
+        if (($validation['compliant'] ?? null) !== true || $validationreason === '') {
+            throw new UnexpectedValueException(
+                'The requested correction was not fully applied. '
+                    . ($validationreason !== '' ? $validationreason : 'Rebuild the draft and apply every instruction.')
+            );
+        }
+        return $validationreason;
+    };
     $generateddrafts = [];
     $generationerrors = [];
     @set_time_limit(300);
@@ -1895,7 +1957,7 @@ PROMPT;
             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
         );
         $lasterror = null;
-        for ($generationattempt = 1; $generationattempt <= 2; $generationattempt++) {
+        for ($generationattempt = 1; $generationattempt <= 3; $generationattempt++) {
             try {
                 $attemptprompt = $aiprompt;
                 if ($generationattempt > 1 && $lasterror !== null) {
@@ -1915,11 +1977,20 @@ PROMPT;
                     );
                 }
                 $responsecontent = (string)($response->get_response_data()['generatedcontent'] ?? '');
-                $generateddrafts[$questionid] = $decodeaidraft(
+                $generateddraft = $decodeaidraft(
                     $responsecontent,
                     $sourcequestion,
                     $administratorproposal
                 );
+                $generateddraft['instructionCompliance'] = [
+                    'status' => 'verified',
+                    'note' => $validateinstructioncompliance(
+                        $generateddraft,
+                        $sourcepayload,
+                        $administratorproposal
+                    ),
+                ];
+                $generateddrafts[$questionid] = $generateddraft;
                 $lasterror = null;
                 break;
             } catch (Throwable $error) {
@@ -2050,7 +2121,9 @@ PROMPT;
         return $store;
     });
     $message = $issinglequestionrewrite
-        ? 'Question rewritten and saved for your review. Nothing was published.'
+        ? ($displaylang === 'es'
+            ? 'Corrección terminada y comprobada. Usa Aprobar y publicar una sola vez.'
+            : 'Correction completed and checked. Use Approve and publish once.')
         : count($generateddrafts) . ' AI-assisted review draft'
             . (count($generateddrafts) === 1 ? '' : 's')
             . ' saved. Nothing was published.';
@@ -2458,7 +2531,7 @@ echo $OUTPUT->header();
 .question-bank__temporary-order{display:flex;align-items:center;gap:10px;margin:-17px -17px 14px;padding:11px 16px;border-radius:10px 10px 0 0;background:#4c1d95;color:#fff}.question-bank__temporary-order span{font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.question-bank__temporary-order strong{font-size:24px;line-height:1}.question-bank__temporary-order small{font-weight:800;opacity:.85}.question-bank__temporary-order--editor{margin:0 0 12px;border-radius:8px}.question-bank__review-progress{margin-bottom:16px;padding:14px 16px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#4c1d95}.question-bank__review-progress strong{font-size:17px}.question-bank__review-progress p{margin:4px 0 0}
 .question-bank__ai-batch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;padding:14px 16px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__ai-batch p{margin:0;color:#66557e;line-height:1.45}.question-bank__ai-batch form{flex:0 0 auto}.question-bank__ai-batch .question-bank__button:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__ai-draft-note{margin:10px 0;padding:10px 12px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;font-weight:800}@media(max-width:700px){.question-bank__ai-batch{align-items:stretch;flex-direction:column}}
 .question-bank__decision-panel{display:grid;gap:12px;margin-top:15px;padding:15px;border:1px solid #cbb9ee;border-radius:10px;background:#faf8ff}.question-bank__decision-panel label{display:block;color:#4c1d95;font-weight:900}.question-bank__decision-panel textarea{box-sizing:border-box;width:100%;min-height:105px;margin-top:7px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__decision-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.question-bank__button--approve{border-color:#08746f;background:#08746f;color:#fff!important}.question-bank__button--approve:hover{background:#075f5b}.question-bank__button--approve:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__applied-summary{padding:10px 12px;border-left:4px solid #0b8f87;border-radius:7px;background:#eaf9f3;color:#075f50;line-height:1.45}
-.question-bank__review-location{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0;padding:12px 14px;border-left:4px solid #6d28d9;border-radius:8px;background:#f4efff;color:#3b167d}.question-bank__review-location strong{font-size:1rem}.question-bank__review-location span{flex:1 1 360px}.question-bank__action-status{font-weight:850;color:#4c1d95}
+.question-bank__review-location{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0;padding:12px 14px;border-left:4px solid #6d28d9;border-radius:8px;background:#f4efff;color:#3b167d}.question-bank__review-location strong{font-size:1rem}.question-bank__review-location span{flex:1 1 300px}.question-bank__review-location form{margin:0}.question-bank__action-status{font-weight:850;color:#4c1d95}.question-bank__correction-request{margin-top:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__correction-request summary{padding:12px 14px;color:#4c1d95;font-weight:900;cursor:pointer}.question-bank__correction-request form{padding:0 14px 14px}.question-bank__correction-request label{display:block;color:#4c1d95;font-weight:900}.question-bank__correction-request textarea{box-sizing:border-box;width:100%;min-height:100px;margin-top:7px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}
 .question-bank__language-state{margin:0 0 16px;padding:12px 15px;border-left:5px solid #0b8f87;border-radius:8px;background:#eaf9f3;color:#075f50}.question-bank__language-state strong{display:block}.question-bank__translation-missing{margin:8px 0 12px;padding:9px 12px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed;color:#8a4b08;font-weight:800}
 .question-bank__rewrite-ready{margin:0 0 14px;padding:13px 15px;border-left:5px solid #0b8f87;border-radius:8px;background:#eaf9f3;color:#075f50;line-height:1.5}.question-bank__rewrite-ready strong{display:block;font-size:17px}.question-bank__rewrite-summary{display:block;margin-top:8px;padding-top:8px;border-top:1px solid #acdcca}.question-bank__rewrite-summary strong{display:inline;font-size:inherit}.question-bank__rewrite-ready--outdated{border-left-color:#d97706;background:#fff7ed;color:#9a3412}.question-bank__rewrite-ready .question-bank__button{margin-top:10px}.question-bank__rewrite-again{margin-top:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__rewrite-again summary{padding:13px 14px;color:#4c1d95;font-weight:900;cursor:pointer}.question-bank__rewrite-again .question-bank__proposal-box{margin:0;border:0;border-top:1px solid #ded7ef;border-radius:0 0 9px 9px}
 .question-bank__advanced-review{margin-top:14px;border:1px solid #e5c27f;border-radius:9px;background:#fffaf0}.question-bank__advanced-review summary{padding:13px 14px;color:#8a4b08;font-weight:900;cursor:pointer}.question-bank__advanced-review>.question-bank__editor-check{margin:0;border-radius:0;border-left:0;border-top:1px solid #f0d5a1}.question-bank__advanced-review>.question-bank__editor-field{margin:0;padding:14px}.question-bank__advanced-review>.question-bank__editor-actions{padding:0 14px 14px}
@@ -2627,6 +2700,10 @@ echo $OUTPUT->header();
         $revisionstatus = (string)($revision['status'] ?? '');
         $fullrevision = $questionrevisionrecord;
         $cardreviewsummary = trim((string)($fullrevision['draft']['reviewSummary'] ?? ''));
+        $instructioncheck = is_array($fullrevision['draft']['instructionCompliance'] ?? null)
+            ? $fullrevision['draft']['instructionCompliance']
+            : [];
+        $instructionverified = (string)($instructioncheck['status'] ?? '') === 'verified';
         $cardbatchid = (string)($fullrevision['aiBatchId'] ?? '');
         $cardisoutdated = $revisionstatus === 'draft'
             && $cardbatchid !== ''
@@ -2648,6 +2725,7 @@ echo $OUTPUT->header();
         <?php if ($usagefilter === 'exam2_review' && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span>Temporary review order</span><strong>Proposed Exam 2 Question <?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
         <div class="question-bank__meta">
             <span class="question-bank__id"><?php echo s($question['questionId'] ?? 'Unnumbered'); ?></span>
+            <?php if (!$inlineapproval): ?>
             <span class="question-bank__badge">Domain <?php echo (int)$domain['number']; ?> · <?php echo s($domain['name']); ?></span>
             <span class="question-bank__badge<?php echo $question['_sourcekind'] === 'scorm' ? ' question-bank__badge--scorm' : ''; ?>"><?php echo s($sourcelabel); ?></span>
             <span class="question-bank__badge">Content: <?php echo s($contentlabel); ?></span>
@@ -2665,10 +2743,22 @@ echo $OUTPUT->header();
             <?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><span class="question-bank__badge question-bank__badge--exam">Proposal pending publishing review</span><?php endif; ?>
             <?php if ($question['_sourcekind'] !== 'admin' && $revisionstatus !== 'deleted' && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a><?php endif; ?>
             <?php if (!$iscustomdraft): ?><form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'deleted' ? 'restoredeletedquestion' : 'deletequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'deleted' ? 'question-bank__button--primary' : 'question-bank__button--exclude'; ?>" type="submit"<?php if ($revisionstatus !== 'deleted'): ?> onclick="return confirm('Delete this question from the active bank and exams? You can restore it later from Deleted questions.');"<?php endif; ?>><?php echo $revisionstatus === 'deleted' ? 'Restore question' : 'Delete question'; ?></button></form><?php endif; ?>
+            <?php endif; ?>
         </div>
         <?php if ($displaylang === 'es' && !$hasspanishtranslation): ?><div class="question-bank__translation-missing">Traducción al español pendiente para esta pregunta; se muestra temporalmente la versión original en inglés.</div><?php endif; ?>
-        <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><div class="question-bank__ai-draft-note"><?php echo $cardisoutdated ? 'Earlier automatic-review version. If the question is already correct, approve the current version; run the updated review only when changes are still needed.' : ($cardiscorrected ? 'Corrected version — awaiting your approval. Review the current question below; the earlier version is not shown.' : 'Current proposed version — not published. Review it below, then accept it or request a correction.'); ?></div><?php endif; ?>
-        <?php if (($inlineorigin && $cardbatchid !== '') || $inlineapproval): ?><div class="question-bank__review-location"><strong><?php echo $revisionstatus === 'approved' ? ($displaylang === 'es' ? 'Pregunta aprobada y publicada' : 'Question approved and published') : ($displaylang === 'es' ? 'Revisión automática completada' : 'Automatic review completed'); ?> — <?php echo s($question['questionId']); ?></strong><span><?php echo $revisionstatus === 'approved' ? ($displaylang === 'es' ? 'La versión revisada está activa.' : 'The reviewed version is now active.') : ($displaylang === 'es' ? 'Estás viendo la pregunta revisada. Revísala y luego solicita una corrección, edítala manualmente o apruébala y publícala.' : 'You are viewing the revised question. Review it below, then request a correction, edit it manually, or approve and publish it.'); ?></span><a class="question-bank__button" href="<?php echo $exam2url->out(false); ?>"><?php echo $displaylang === 'es' ? '← Volver a las preguntas pendientes' : '← Back to pending questions'; ?></a></div><?php endif; ?>
+        <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft' && !$inlineapproval): ?><div class="question-bank__ai-draft-note"><?php echo $cardisoutdated ? 'Earlier automatic-review version. If the question is already correct, approve the current version; run the updated review only when changes are still needed.' : ($cardiscorrected ? 'Corrected version — awaiting your approval. Review the current question below; the earlier version is not shown.' : 'Current proposed version — not published. Review it below, then accept it or request a correction.'); ?></div><?php endif; ?>
+        <?php if (($inlineorigin && $cardbatchid !== '') || $inlineapproval): ?>
+        <div class="question-bank__review-location">
+            <strong><?php echo $revisionstatus === 'approved' ? ($displaylang === 'es' ? 'Publicada' : 'Published') : ($displaylang === 'es' ? 'Corrección lista' : 'Correction ready'); ?> — <?php echo s($question['questionId']); ?></strong>
+            <span><?php echo $revisionstatus === 'approved'
+                ? ($displaylang === 'es' ? 'La pregunta ya está activa.' : 'The question is now active.')
+                : ($instructionverified
+                    ? ($displaylang === 'es' ? 'La IA comprobó la corrección. Solo necesitas aprobarla.' : 'The correction was checked automatically. You only need to approve it.')
+                    : ($displaylang === 'es' ? 'Apruébala si está correcta o solicita otro cambio.' : 'Approve it if correct or request another change.')); ?></span>
+            <?php if ($inlineapproval): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+            <a class="question-bank__button" href="<?php echo $exam2url->out(false); ?>"><?php echo $displaylang === 'es' ? '← Preguntas pendientes' : '← Pending questions'; ?></a>
+        </div>
+        <?php endif; ?>
         <?php if ($question['_excluded']): ?><div class="question-bank__exclusion-note"><strong><?php echo $revisionstatus === 'deleted' ? 'Deleted question:' : 'Possible error / exclusion note:'; ?></strong> <?php echo s($revision['exclusionReason'] ?? 'No reason recorded.'); ?> This question is preserved but unavailable to students and exams.</div><?php endif; ?>
         <?php if ($usagefilter !== 'exam2_review' && ($question['_proposal']['status'] ?? '') === 'pending_review'): ?><div class="question-bank__proposal-review"><strong>Proposal awaiting publishing review:</strong><br><?php echo s($question['_proposal']['text'] ?? ''); ?></div><?php endif; ?>
         <h3><?php echo s($prompt); ?></h3>
@@ -2684,10 +2774,10 @@ echo $OUTPUT->header();
         <?php if ($iscustomapproved): ?><section class="question-bank__decision-panel" aria-label="Continue after approving <?php echo s($question['questionId']); ?>"><div class="question-bank__applied-summary"><strong>Question approved and active.</strong> You can edit it, create another question, or return to the complete question bank.</div><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="button" disabled>Approved and published ✓</button><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="reopencustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit">Edit this question</button></form><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create another question</a><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Return to all questions</a></div></section><?php endif; ?>
         <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customoriginalityclear ? '' : ' disabled'; ?> onclick="return confirm('Approve and publish this question?');">Approve and publish</button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
         <?php if ($inlineapproval): ?>
-        <section class="question-bank__decision-panel" aria-label="Review decision for <?php echo s($question['questionId']); ?>">
-            <?php if ($cardreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Applied changes:</strong> <?php echo s($cardreviewsummary); ?></div><?php endif; ?>
+        <details class="question-bank__correction-request">
+            <summary><?php echo $displaylang === 'es' ? 'Solicitar otro cambio' : 'Request another change'; ?></summary>
             <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
-                <label>Comment for correction<textarea name="proposal"<?php echo $cardisoutdated ? '' : ' required'; ?> placeholder="Describe only what still needs to be corrected in this question. The revised question will return to this same screen."></textarea><small class="question-bank__proposal-saved">This box edits only the current question: its stem, choices, keyed answer, feedback or classification. It cannot modify other questions, reports, users, files or site settings. Your comment is added to the earlier question instructions unless you explicitly ask to remove one.</small></label>
+                <label><?php echo $displaylang === 'es' ? '¿Qué falta por corregir?' : 'What still needs correction?'; ?><textarea name="proposal"<?php echo $cardisoutdated ? '' : ' required'; ?> placeholder="<?php echo $displaylang === 'es' ? 'Escribe solamente el cambio que todavía necesitas.' : 'Describe only the change that is still needed.'; ?>"></textarea></label>
                 <input type="hidden" name="formaction" value="rewritequestion">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
                 <input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>">
@@ -2696,20 +2786,9 @@ echo $OUTPUT->header();
                 <input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>">
                 <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
                 <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
-                <div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $cardisoutdated ? 'Run updated automatic review' : 'Request correction'; ?></button><a class="question-bank__button" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a></div>
+                <div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Corregir pregunta' : 'Correct question'; ?></button></div>
             </form>
-            <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
-                <input type="hidden" name="formaction" value="approvequestion">
-                <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
-                <input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>">
-                <input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>">
-                <input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>">
-                <input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>">
-                <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
-                <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
-                <div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this current question? It will be removed from the pending review screen.');"><?php echo $cardisoutdated ? 'Approve current version' : 'Approve and publish'; ?></button></div>
-            </form>
-        </section>
+        </details>
         <?php endif; ?>
         <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$inlineapproval && !$iscustomdraft): ?>
         <form class="question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>">
