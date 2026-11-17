@@ -570,7 +570,7 @@ $textaienabled = !empty($textaiproviders[\core_ai\aiactions\generate_text::class
 if ($_SERVER['REQUEST_METHOD'] === 'POST'
         && in_array($formaction, ['generateaidrafts', 'rewritequestion'], true)) {
     require_sesskey();
-    $aipromptversion = 'ncbahm-mock-editor-1.8';
+    $aipromptversion = 'ncbahm-mock-editor-1.9';
     $issinglequestionrewrite = $formaction === 'rewritequestion';
     $proposaloverrides = [];
     if (!$textaienabled) {
@@ -760,9 +760,10 @@ Editorial rules:
 7. Vary the narrative format. Some vignettes may show a fictional physician presenting a fictional case to acupuncture students during a teaching session. Others may have the physician recall a previously treated fictional patient and ask the students to reason from the historical findings. Another format may show a fictional acupuncture student presenting a case during a clinical or medical round while an instructor asks the group to complete the two inference steps. Give the student-presented case enough decisive findings for one defensible answer, optionally include one secondary contextual detail, and do not let the student or instructor state the diagnosis or answer being tested. Keep every recalled or presented case de-identified and invented, and use past tense where appropriate.
 8. When the source supports a clear differential, a student may propose a plausible but incorrect diagnosis, herb, formula, or treatment. The instructor should point out that specific findings do not fit and ask the group to select the best correction; do not state the final correction in the stem. In the feedback, identify the student's reasoning error, reconstruct both correct inference steps, and explain why the proposed alternative fails.
 9. When useful, frame a case as a follow-up visit after an earlier consultation, initial treatment, hospital discharge, or referral. State which source-compatible findings improved, persisted, or newly appeared, then ask whether the original strategy should be maintained, modified, or reconsidered. Do not invent a prior treatment response that changes the keyed fact or requires knowledge absent from the source.
-10. Keep the item concise, clinically coherent, unambiguous, and appropriate for a supervised mock board examination. If the original lacks enough clinical facts, make the smallest source-grounded inference upgrade possible.
-11. Follow administratorProposal when it is nonempty, provided it does not conflict with the source or answer key. Treat requests for additional manifestations of a named pattern as guidance to add source-compatible clinical findings without naming that pattern in the stem.
-12. Set cognitiveLevel to "infer" or "analyze".
+10. Occasionally include a source-compatible Western diagnosis, medication history, basic laboratory result, imaging finding, or condition already ruled out when it helps confirm or exclude part of the differential. Never treat a Western diagnosis as automatically equivalent to a Chinese-medicine pattern, never let it replace tongue-pulse and symptom differentiation, and do not invent a test result that changes the keyed answer. The feedback must state what the Western information supports or excludes and what it cannot establish by itself.
+11. Keep the item concise, clinically coherent, unambiguous, and appropriate for a supervised mock board examination. If the original lacks enough clinical facts, make the smallest source-grounded inference upgrade possible.
+12. Follow administratorProposal when it is nonempty, provided it does not conflict with the source or answer key. Treat requests for additional manifestations of a named pattern as guidance to add source-compatible clinical findings without naming that pattern in the stem.
+13. Set cognitiveLevel to "infer" or "analyze".
 
 Required JSON shape:
 {"prompt":"...","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"correctLabel":"A","explanation":"...","cognitiveLevel":"infer"}
