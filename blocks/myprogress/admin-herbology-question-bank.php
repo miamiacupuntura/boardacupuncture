@@ -37,7 +37,7 @@ if ($domainfilter !== 'all' && !isset($domains[$domainfilter])) {
 if (!in_array($readinessfilter, ['all', 'ready', 'incomplete'], true)) {
     $readinessfilter = 'all';
 }
-if (!in_array($usagefilter, ['all', 'exam1', 'reserve'], true)) {
+if (!in_array($usagefilter, ['all', 'exam1', 'exam2_review', 'reserve'], true)) {
     $usagefilter = 'all';
 }
 if (!in_array($sourcefilter, ['all', 'curated', 'scorm'], true)) {
@@ -170,6 +170,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
         ]];
     }
     $requestreclassification = (bool)optional_param('requestreclassification', 0, PARAM_BOOL);
+    $returnusage = optional_param('returnusage', '', PARAM_ALPHANUMEXT);
+    if (!in_array($returnusage, ['exam1', 'exam2_review', 'reserve'], true)) {
+        $returnusage = '';
+    }
+    $returnpage = max(0, optional_param('returnpage', 0, PARAM_INT));
     $savemode = optional_param('savemode', 'draft', PARAM_ALPHA);
     if (!in_array($savemode, ['draft', 'publish', 'exclude', 'restore'], true)) {
         $savemode = 'draft';
@@ -248,8 +253,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
                 : ($savemode === 'restore'
                     ? 'Question restored from Possible exclusions as a draft. Review it before publishing.'
                     : 'Draft saved. The approved exam version is unchanged.')));
+    $redirectparams = ['edit' => $questionid];
+    if ($returnusage !== '') {
+        $redirectparams['usage'] = $returnusage;
+    }
+    if ($returnpage > 0) {
+        $redirectparams['page'] = $returnpage;
+    }
     redirect(
-        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['edit' => $questionid]),
+        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', $redirectparams),
         $message,
         null,
         \core\output\notification::NOTIFY_SUCCESS
@@ -337,11 +349,12 @@ $missingfields = static function(array $question): array {
 $allquestions = [];
 $domainstats = [];
 foreach ($domains as $domainid => $domain) {
-    $domainstats[$domainid] = ['total' => 0, 'ready' => 0, 'exam1' => 0, 'reserve' => 0, 'scorm' => 0];
+    $domainstats[$domainid] = ['total' => 0, 'ready' => 0, 'exam1' => 0, 'exam2' => 0, 'reserve' => 0, 'scorm' => 0];
     foreach (($bank['domains'][$domainid] ?? []) as $question) {
         $ready = $isready($question);
         $isexcluded = !empty($question['_excludedFromUse']);
-        $examposition = $isexcluded ? 0 : (int)($question['examTemplate']['globalPosition'] ?? 0);
+        $configuredexamposition = (int)($question['examTemplate']['globalPosition'] ?? 0);
+        $examposition = $isexcluded ? 0 : $configuredexamposition;
         $domainstats[$domainid]['total']++;
         if ($ready) $domainstats[$domainid]['ready']++;
         if ($examposition > 0) $domainstats[$domainid]['exam1']++;
@@ -350,6 +363,8 @@ foreach ($domains as $domainid => $domain) {
         $question['_domainid'] = $domainid;
         $question['_ready'] = $ready;
         $question['_examposition'] = $examposition;
+        $question['_configuredexamposition'] = $configuredexamposition;
+        $question['_exam2position'] = 0;
         $question['_missing'] = $missingfields($question);
         $question['_sourcekind'] = ($question['sourceKind'] ?? 'curated') === 'scorm' ? 'scorm' : 'curated';
         $question['_cognitive'] = $cognitivebucket($question);
@@ -364,6 +379,62 @@ foreach ($domains as $domainid => $domain) {
         $allquestions[] = $question;
     }
 }
+
+$exam2slotsbydomain = array_fill_keys(array_keys($domains), []);
+foreach ($allquestions as $question) {
+    if ($question['_configuredexamposition'] > 0) {
+        $exam2slotsbydomain[$question['_domainid']][] = $question['_configuredexamposition'];
+    }
+}
+foreach ($exam2slotsbydomain as &$positions) {
+    sort($positions, SORT_NUMERIC);
+}
+unset($positions);
+
+$exam2eligiblebydomain = array_fill_keys(array_keys($domains), []);
+foreach ($allquestions as $question) {
+    if ($question['_ready'] && !$question['_excluded'] && $question['_configuredexamposition'] === 0) {
+        $exam2eligiblebydomain[$question['_domainid']][] = $question;
+    }
+}
+$exam2quality = static function(array $question): array {
+    $cognitiverank = ['analysis' => 0, 'inference' => 1, 'application' => 2, 'recall' => 3];
+    $feedbackrank = in_array($question['_feedbackquality'], ['detailed', 'curated'], true) ? 0 : 1;
+    return [
+        $question['_simulationcandidate'] ? 0 : 1,
+        $cognitiverank[$question['_cognitive']] ?? 4,
+        $feedbackrank,
+        hash('sha256', 'ncbahm-simulation-exam-2|' . (string)($question['questionId'] ?? '')),
+    ];
+};
+$exam2positions = [];
+$exam2shortfalls = [];
+foreach ($domains as $domainid => $unused) {
+    usort($exam2eligiblebydomain[$domainid], static function(array $left, array $right) use ($exam2quality): int {
+        return $exam2quality($left) <=> $exam2quality($right);
+    });
+    $slots = $exam2slotsbydomain[$domainid];
+    $selected = array_slice($exam2eligiblebydomain[$domainid], 0, count($slots));
+    foreach ($selected as $index => $question) {
+        $exam2positions[(string)$question['questionId']] = (int)$slots[$index];
+    }
+    if (count($selected) < count($slots)) {
+        $exam2shortfalls[$domainid] = count($slots) - count($selected);
+    }
+}
+$exam2reviewedcount = 0;
+foreach ($allquestions as &$question) {
+    $questionid = (string)($question['questionId'] ?? '');
+    $question['_exam2position'] = (int)($exam2positions[$questionid] ?? 0);
+    if ($question['_exam2position'] > 0) {
+        $domainstats[$question['_domainid']]['exam2']++;
+        if (($question['_revision']['status'] ?? '') === 'approved') {
+            $exam2reviewedcount++;
+        }
+    }
+}
+unset($question);
+$exam2candidatecount = count($exam2positions);
 
 $totals = [
     'total' => count($allquestions),
@@ -404,6 +475,7 @@ $filteredquestions = array_values(array_filter(
         if ($readinessfilter === 'ready' && !$question['_ready']) return false;
         if ($readinessfilter === 'incomplete' && $question['_ready']) return false;
         if ($usagefilter === 'exam1' && $question['_examposition'] === 0) return false;
+        if ($usagefilter === 'exam2_review' && $question['_exam2position'] === 0) return false;
         if ($usagefilter === 'reserve' && (!$question['_ready'] || $question['_examposition'] > 0)) return false;
         if ($sourcefilter !== 'all' && $question['_sourcekind'] !== $sourcefilter) return false;
         if ($cognitivefilter !== 'all' && $question['_cognitive'] !== $cognitivefilter) return false;
@@ -442,7 +514,10 @@ $filteredquestions = array_values(array_filter(
         return true;
     }
 ));
-usort($filteredquestions, static function(array $left, array $right) use ($domains): int {
+usort($filteredquestions, static function(array $left, array $right) use ($domains, $usagefilter): int {
+    if ($usagefilter === 'exam2_review') {
+        return $left['_exam2position'] <=> $right['_exam2position'];
+    }
     $domaincomparison = $domains[$left['_domainid']]['number'] <=> $domains[$right['_domainid']]['number'];
     return $domaincomparison !== 0
         ? $domaincomparison
@@ -482,6 +557,7 @@ $clearurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php
 $queueurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['download' => 'review_queue']);
 $exclusionurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'possible_exclusion']);
 $exclusionqueueurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['download' => 'exclusion_queue']);
+$exam2url = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['usage' => 'exam2_review']);
 $languageurl = new moodle_url(
     '/blocks/myprogress/admin-herbology-question-bank.php',
     array_merge($baseparams, ['lang' => $displaylang === 'es' ? 'en' : 'es'])
@@ -556,9 +632,11 @@ echo $OUTPUT->header();
 <style>
 .question-bank{max-width:1380px;margin:0 auto 45px;color:#173448}.question-bank__hero{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px;padding:22px 24px;border-left:5px solid #0b8f87;border-radius:12px;background:linear-gradient(135deg,#eef9f6,#fff8ef)}.question-bank__hero h2{margin:0 0 5px;font-size:30px}.question-bank__hero p{max-width:850px;margin:0;color:#52677a;line-height:1.5}.question-bank__actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button{display:inline-flex;min-height:40px;align-items:center;justify-content:center;padding:8px 13px;border:1px solid #b8c8d2;border-radius:8px;background:#fff;color:#24465b!important;font-weight:850;text-decoration:none!important}.question-bank__button:hover{border-color:#0b8f87;background:#eef9f6}.question-bank__summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}.question-bank__summary article{padding:15px;border:1px solid #d5e0e6;border-radius:10px;background:#fff}.question-bank__summary span{display:block;color:#64748b;font-size:12px;font-weight:800}.question-bank__summary strong{display:block;margin-top:4px;color:#08746f;font-size:25px}.question-bank__filters{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:10px;margin-bottom:16px;padding:15px;border:1px solid #d7e2e7;border-radius:11px;background:#fff}.question-bank__filters label span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__filters input,.question-bank__filters select{width:100%;min-height:42px;box-sizing:border-box;padding:8px 10px;border:1px solid #b9cbd4;border-radius:7px;background:#fff}.question-bank__filter-actions{display:flex;align-items:end;gap:7px}.question-bank__filter-actions button{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__domains{margin-bottom:16px;overflow-x:auto;border:1px solid #d7e2e7;border-radius:11px;background:#fff}.question-bank__domains table{width:100%;border-collapse:collapse}.question-bank__domains th,.question-bank__domains td{padding:10px 12px;border-top:1px solid #e1e8ec;text-align:left}.question-bank__domains th{background:#f3f8f8;font-size:11px;text-transform:uppercase}.question-bank__result-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px;padding:12px 15px;border-left:4px solid #0b8f87;border-radius:7px;background:#f3f8f8;font-weight:850}.question-bank__items{display:grid;gap:13px}.question-bank__item{padding:17px;border:1px solid #d5e0e6;border-radius:11px;background:#fff}.question-bank__meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:10px}.question-bank__id{color:#102a43;font-size:16px;font-weight:950}.question-bank__badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#edf2f5;color:#455d6d;font-size:11px;font-weight:850}.question-bank__badge--ready{background:#ddf6ec;color:#076c55}.question-bank__badge--incomplete{background:#fff0dd;color:#a34d00}.question-bank__badge--exam{background:#eee8ff;color:#5630a8}.question-bank__badge--scorm{background:#e8f1ff;color:#1d4f91}.question-bank__item h3{margin:0 0 12px;font-size:18px;line-height:1.45}.question-bank__options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:0 0 12px;padding:0;list-style:none}.question-bank__options li{padding:9px 11px;border:1px solid #e0e7eb;border-radius:7px;background:#f8fafc}.question-bank__options li.is-correct{border-color:#7bcbb6;background:#eaf9f3;color:#075f50;font-weight:850}.question-bank__explanation{margin-top:10px;padding:12px 14px;border-left:4px solid #0b8f87;border-radius:7px;background:#effaf7;line-height:1.5}.question-bank__source{margin:10px 0 0;color:#60758a;font-size:12px}.question-bank__missing{margin-top:10px;padding:10px 12px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed;color:#9a3412;font-weight:750}.question-bank__pagination{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:18px}.question-bank__pagination a{display:inline-flex;min-width:36px;min-height:36px;align-items:center;justify-content:center;border:1px solid #c6d4dc;border-radius:7px;background:#fff;text-decoration:none}.question-bank__pagination a[aria-current="page"]{border-color:#0b8f87;background:#0b8f87;color:#fff}@media(max-width:1050px){.question-bank__summary{grid-template-columns:repeat(2,minmax(0,1fr))}.question-bank__filters{grid-template-columns:1fr 1fr}.question-bank__filter-actions{align-items:stretch}}@media(max-width:700px){.question-bank__hero{flex-direction:column}.question-bank__summary,.question-bank__filters,.question-bank__options{grid-template-columns:1fr}.question-bank__filter-actions{flex-direction:column}.question-bank__button{width:100%;box-sizing:border-box}}
 .question-bank__editor{margin-bottom:18px;padding:20px;border:2px solid #6d28d9;border-radius:12px;background:#faf8ff}.question-bank__editor-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px}.question-bank__editor-head h3{margin:0 0 4px;font-size:23px}.question-bank__editor-head p{margin:0;color:#66557e}.question-bank__editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.question-bank__editor-panel{padding:15px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__editor-panel h4{margin:0 0 12px}.question-bank__editor-field{display:block;margin-bottom:11px}.question-bank__editor-field>span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__editor input[type=text],.question-bank__editor textarea,.question-bank__editor select{box-sizing:border-box;width:100%;padding:9px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff}.question-bank__editor textarea{min-height:92px;resize:vertical}.question-bank__editor-classification{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}.question-bank__editor-check{display:flex;align-items:flex-start;gap:9px;margin:15px 0;padding:13px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed}.question-bank__editor-check input{margin-top:4px}.question-bank__editor-actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button--primary{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__button--publish{border-color:#6d28d9;background:#6d28d9;color:#fff!important}.question-bank__button--exclude{border-color:#b42318;background:#fff1f0;color:#9f1d16!important}.question-bank__revision-note{margin:10px 0;padding:10px 12px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95}.question-bank__exclusion-note{margin:10px 0;padding:12px 14px;border-left:4px solid #b42318;border-radius:7px;background:#fff1f0;color:#7a271a}.question-bank__item--excluded{border-color:#f1a6a0;background:#fffafa}.question-bank__edit-link{margin-left:auto}@media(max-width:850px){.question-bank__editor-grid,.question-bank__editor-classification{grid-template-columns:1fr}.question-bank__editor-head{display:block}.question-bank__editor-head .question-bank__button{margin-top:10px}}
+.question-bank__review-progress{margin-bottom:16px;padding:14px 16px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#4c1d95}.question-bank__review-progress strong{font-size:17px}.question-bank__review-progress p{margin:4px 0 0}
 </style>
 <main class="question-bank">
     <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated and SCORM Chinese Herbology questions. Review each ID, domain, cognitive level, answer, explanation and source before approving it for an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><?php if ($pendingreclassificationcount > 0): ?><a class="question-bank__button" href="<?php echo $queueurl->out(false); ?>">Export reclassification queue (<?php echo (int)$pendingreclassificationcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><a class="question-bank__button" href="<?php echo $exclusionqueueurl->out(false); ?>">Export exclusions</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
+    <section class="question-bank__review-progress" aria-label="Simulation Exam 2 review progress"><strong><?php echo $usagefilter === 'exam2_review' ? 'Simulation Exam 2 review set' : 'Review one simulation exam at a time'; ?></strong><p><?php if ($usagefilter === 'exam2_review'): ?><?php echo (int)$exam2reviewedcount; ?> of <?php echo (int)$exam2candidatecount; ?> candidate questions have an approved review. Candidates follow the 100-question Exam 1 domain blueprint and exclude Exam 1 questions and recycle-bin items.<?php if ($exam2shortfalls !== []): ?> The current bank is short <?php echo (int)array_sum($exam2shortfalls); ?> required domain question<?php echo array_sum($exam2shortfalls) === 1 ? '' : 's'; ?>.<?php endif; ?><?php else: ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $exam2url->out(false); ?>">Review Simulation Exam 2 candidates (<?php echo (int)$exam2candidatecount; ?>)</a><?php endif; ?></p></section>
     <?php if ($editquestion !== null):
         $editorstatus = (string)($editorrevision['status'] ?? 'original');
         $editorstatuslabel = [
@@ -593,7 +671,7 @@ echo $OUTPUT->header();
         </div>
         <label class="question-bank__editor-check"><input type="checkbox" name="requestreclassification" value="1"<?php echo !empty($editorrevision['requestReclassification']) ? ' checked' : ''; ?>><span><strong>Request reclassification after this edit</strong><br>Check this when the wording, answer, feedback or educational objective changed enough that the domain, content type, cognitive level, complexity or exam placement should be reviewed again. The draft will enter the exportable review queue and will not replace the approved exam version.</span></label>
         <label class="question-bank__editor-field"><span>Possible error / exclusion note</span><textarea name="exclusionreason" placeholder="Describe the conflict, unsupported source, ambiguous answer or other reason this question may need exclusion."><?php echo s($editorexclusionnote); ?></textarea></label>
-        <input type="hidden" name="formaction" value="editquestion"><input type="hidden" name="questionid" value="<?php echo s($editquestion['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+        <input type="hidden" name="formaction" value="editquestion"><input type="hidden" name="questionid" value="<?php echo s($editquestion['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>">
         <div class="question-bank__editor-actions"><?php if ($editorstatus === 'exclusion_candidate'): ?><button class="question-bank__button question-bank__button--primary" type="submit" name="savemode" value="restore">Restore as draft</button><?php else: ?><button class="question-bank__button question-bank__button--primary" type="submit" name="savemode" value="draft">Save draft</button><button class="question-bank__button question-bank__button--publish" type="submit" name="savemode" value="publish">Publish approved version</button><button class="question-bank__button question-bank__button--exclude" type="submit" name="savemode" value="exclude" onclick="return confirm('Move this question to Possible exclusions and remove it from active practice and exams?');">Move to possible exclusion</button><?php endif; ?></div>
     </form>
     <?php endif; ?>
@@ -602,7 +680,7 @@ echo $OUTPUT->header();
         <label><span>Search ID or text</span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="Example: DY-001, Ma Huang Tang"></label>
         <label><span>Domain</span><select name="domain"><option value="all">All domains</option><?php foreach ($domains as $domainid => $domain): ?><option value="<?php echo s($domainid); ?>"<?php echo $domainfilter === $domainid ? ' selected' : ''; ?>>Domain <?php echo (int)$domain['number']; ?> · <?php echo s($domain['name']); ?></option><?php endforeach; ?></select></label>
         <label><span>Readiness</span><select name="readiness"><option value="all">All questions</option><option value="ready"<?php echo $readinessfilter === 'ready' ? ' selected' : ''; ?>>Ready for practice</option><option value="incomplete"<?php echo $readinessfilter === 'incomplete' ? ' selected' : ''; ?>>Needs completion</option></select></label>
-        <label><span>Exam use</span><select name="usage"><option value="all">All uses</option><option value="exam1"<?php echo $usagefilter === 'exam1' ? ' selected' : ''; ?>>Simulation Exam 1</option><option value="reserve"<?php echo $usagefilter === 'reserve' ? ' selected' : ''; ?>>Ready reserve bank</option></select></label>
+        <label><span>Exam use</span><select name="usage"><option value="all">All uses</option><option value="exam1"<?php echo $usagefilter === 'exam1' ? ' selected' : ''; ?>>Simulation Exam 1</option><option value="exam2_review"<?php echo $usagefilter === 'exam2_review' ? ' selected' : ''; ?>>Simulation Exam 2 review set</option><option value="reserve"<?php echo $usagefilter === 'reserve' ? ' selected' : ''; ?>>Ready reserve bank</option></select></label>
         <label><span>Source</span><select name="source"><option value="all">All sources</option><option value="curated"<?php echo $sourcefilter === 'curated' ? ' selected' : ''; ?>>Curated bank</option><option value="scorm"<?php echo $sourcefilter === 'scorm' ? ' selected' : ''; ?>>SCORM modules</option></select></label>
         <label><span>Cognitive level</span><select name="cognitive"><option value="all">All cognitive levels</option><option value="recall"<?php echo $cognitivefilter === 'recall' ? ' selected' : ''; ?>>Recall / direct</option><option value="application"<?php echo $cognitivefilter === 'application' ? ' selected' : ''; ?>>Application</option><option value="inference"<?php echo $cognitivefilter === 'inference' ? ' selected' : ''; ?>>Inference</option><option value="analysis"<?php echo $cognitivefilter === 'analysis' ? ' selected' : ''; ?>>Analysis / differential</option></select></label>
         <label><span>Content focus</span><select name="content"><option value="all">All content</option><option value="herb_properties"<?php echo $contentfilter === 'herb_properties' ? ' selected' : ''; ?>>Herb properties</option><option value="formula_hierarchy"<?php echo $contentfilter === 'formula_hierarchy' ? ' selected' : ''; ?>>Formula hierarchy</option><option value="herb_processing"<?php echo $contentfilter === 'herb_processing' ? ' selected' : ''; ?>>Herb processing</option><option value="clinical_case"<?php echo $contentfilter === 'clinical_case' ? ' selected' : ''; ?>>Clinical cases</option><option value="other"<?php echo $contentfilter === 'other' ? ' selected' : ''; ?>>Other content</option></select></label>
@@ -610,7 +688,7 @@ echo $OUTPUT->header();
         <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
         <div class="question-bank__filter-actions"><button class="question-bank__button" type="submit">Apply</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Clear</a></div>
     </form>
-    <section class="question-bank__domains"><table><thead><tr><th>Domain</th><th>Classified</th><th>SCORM</th><th>Ready</th><th>Exam 1</th><th>Ready reserve</th></tr></thead><tbody><?php foreach ($domains as $domainid => $domain): ?><tr><td><strong>Domain <?php echo (int)$domain['number']; ?></strong> · <?php echo s($domain['name']); ?></td><td><?php echo (int)$domainstats[$domainid]['total']; ?></td><td><?php echo (int)$domainstats[$domainid]['scorm']; ?></td><td><?php echo (int)$domainstats[$domainid]['ready']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam1']; ?></td><td><?php echo (int)$domainstats[$domainid]['reserve']; ?></td></tr><?php endforeach; ?></tbody></table></section>
+    <section class="question-bank__domains"><table><thead><tr><th>Domain</th><th>Classified</th><th>SCORM</th><th>Ready</th><th>Exam 1</th><th>Exam 2 review</th><th>Ready reserve</th></tr></thead><tbody><?php foreach ($domains as $domainid => $domain): ?><tr><td><strong>Domain <?php echo (int)$domain['number']; ?></strong> · <?php echo s($domain['name']); ?></td><td><?php echo (int)$domainstats[$domainid]['total']; ?></td><td><?php echo (int)$domainstats[$domainid]['scorm']; ?></td><td><?php echo (int)$domainstats[$domainid]['ready']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam1']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam2']; ?></td><td><?php echo (int)$domainstats[$domainid]['reserve']; ?></td></tr><?php endforeach; ?></tbody></table></section>
     <div class="question-bank__result-head"><span>Filtered questions</span><span><?php echo (int)$resultcount; ?> result<?php echo $resultcount === 1 ? '' : 's'; ?></span></div>
     <?php if ($pagequestions === []): ?><div class="question-bank__item">No questions match these filters.</div><?php else: ?><section class="question-bank__items"><?php foreach ($pagequestions as $question):
         $translation = $displaylang === 'es' ? ($question['translations']['es'] ?? []) : [];
@@ -640,6 +718,7 @@ echo $OUTPUT->header();
             <?php if ($question['_simulationcandidate']): ?><span class="question-bank__badge question-bank__badge--ready">Simulation candidate</span><?php endif; ?>
             <span class="question-bank__badge question-bank__badge--<?php echo $question['_ready'] ? 'ready' : 'incomplete'; ?>"><?php echo $question['_excluded'] ? 'Excluded from active use' : ($question['_ready'] ? 'Ready for practice' : 'Needs completion'); ?></span>
             <?php if ($question['_examposition'] > 0): ?><span class="question-bank__badge question-bank__badge--exam">Simulation Exam 1 · position <?php echo (int)$question['_examposition']; ?></span><?php else: ?><span class="question-bank__badge">Not used in Exam 1</span><?php endif; ?>
+            <?php if ($question['_exam2position'] > 0): ?><span class="question-bank__badge question-bank__badge--exam">Simulation Exam 2 review · position <?php echo (int)$question['_exam2position']; ?></span><?php endif; ?>
             <span class="question-bank__badge">Complexity: <?php echo s(ucfirst((string)($question['difficultyBand'] ?? 'unclassified'))); ?></span>
             <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready">Approved revision</span><?php endif; ?>
             <a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit question</a>
