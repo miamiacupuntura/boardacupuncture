@@ -816,6 +816,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             if (!in_array($label, ['A', 'B', 'C', 'D'], true) || $text === '') {
                 throw new UnexpectedValueException('Each AI answer choice needs a label and text.');
             }
+            if (preg_match('/\b(?:both|all)\b.*\b(?:correct|above)\b|\bnone\s+of\s+the\s+above\b|\b[A-D]\s+(?:and|&)\s+[A-D]\s+(?:are|is)\s+correct\b/i', $text)) {
+                throw new UnexpectedValueException(
+                    'The AI draft used a combined-answer choice such as "Both are correct" or "All of the above".'
+                );
+            }
             $optionsbylabel[$label] = $text;
         }
         if (count($optionsbylabel) !== 4 || count(array_unique(array_map(
@@ -897,7 +902,7 @@ Editorial rules:
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer.
 1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection or differentiation; Domain 2 must test individual-herb identification, properties, actions, indications, or comparison; Domain 3 must test Duì Yào pairing, compatibility, hierarchy, synergy, antagonism, or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing, or dispensing principle. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
-3. Use exactly four plausible, parallel answer choices. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
+3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use "Both are correct," "All of the above," "None of the above," "A and B are correct," or any equivalent combined-answer shortcut. If the keyed source option is one of those shortcuts, preserve its LETTER and underlying tested fact but replace the shortcut with one self-contained, unambiguous answer statement. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
 4. Write mock-exam feedback that explicitly explains both inference steps: (a) what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence; and (b) why that conclusion selects the correct answer. Identify which findings are decisive and which details are contextual distractors. Then explain briefly why each answer-choice distractor is weaker. Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
 5. In clinical cases, add one or two plausible contextual details when useful: age, illness duration, a relevant health history, temperature with measurement site, pulse rate, or respiratory rate. Use physiologically coherent values and include these details sparingly; they must not contradict the source, change the keyed answer, create a second defensible diagnosis, or replace the Chinese-medicine reasoning being tested.
 6. Some cases may use a realistic United States clinical handoff: a fictitiously named patient is evaluated by a fictitiously named physician at a fictional hospital, urgent-care center, or outpatient clinic and is later received by a fictitiously named acupuncturist. Rotate settings across Miami and named cities in other states; vary patient, physician, and acupuncturist names; and include plausible referral, discharge, follow-up, or outpatient context when useful. Do not use the name of any real patient, clinician, acupuncturist, hospital, clinic, health system, or public figure. Never imply a real affiliation or event. When findings could require urgent conventional care, state that medical evaluation and stabilization occurred before the acupuncture visit.
@@ -958,6 +963,32 @@ PROMPT;
     }
 
     if ($generateddrafts === []) {
+        if ($issinglequestionrewrite) {
+            $failurebatchid = $requestedreviewbatch;
+            if ($failurebatchid === '') {
+                $existingrevision = $revisionstore['questions'][$rewritequestionid] ?? null;
+                if (is_array($existingrevision)) {
+                    $failurebatchid = (string)($existingrevision['aiBatchId'] ?? '');
+                }
+            }
+            $failureparams = ['usage' => 'exam2_review'];
+            if ($failurebatchid !== '') {
+                $failureparams['review'] = 'ai_drafts';
+                $failureparams['aibatch'] = $failurebatchid;
+            }
+            $failureurl = new moodle_url(
+                '/blocks/myprogress/admin-herbology-question-bank.php',
+                $failureparams
+            );
+            $failureurl->set_anchor('question-' . $rewritequestionid);
+            redirect(
+                $failureurl,
+                'The correction was not created. The current version remains unchanged and is shown below. '
+                    . implode(' ', $generationerrors),
+                null,
+                \core\output\notification::NOTIFY_ERROR
+            );
+        }
         redirect(
             new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['usage' => 'exam2_review']),
             'No review drafts were saved. ' . implode(' ', $generationerrors),
@@ -1054,6 +1085,9 @@ PROMPT;
         '/blocks/myprogress/admin-herbology-question-bank.php',
         $reviewurlparams
     );
+    if ($issinglequestionrewrite) {
+        $reviewurl->set_anchor('question-' . $rewritequestionid);
+    }
     redirect(
         $reviewurl,
         $message,
@@ -1225,6 +1259,48 @@ $queueurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php
 $exclusionurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'possible_exclusion']);
 $exclusionqueueurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['download' => 'exclusion_queue']);
 $exam2url = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['usage' => 'exam2_review']);
+$pendingaibatches = [];
+foreach ($allquestions as $question) {
+    $revision = is_array($question['_revision'] ?? null) ? $question['_revision'] : [];
+    $fullrevision = is_array($revisionstore['questions'][$question['questionId']] ?? null)
+        ? $revisionstore['questions'][$question['questionId']]
+        : [];
+    $batchid = (string)($revision['aiBatchId'] ?? '');
+    if ($batchid === ''
+            || (string)($revision['status'] ?? '') !== 'draft'
+            || (int)($question['_exam2position'] ?? 0) === 0
+            || !empty($question['_excluded'])) {
+        continue;
+    }
+    if (!isset($pendingaibatches[$batchid])) {
+        $pendingaibatches[$batchid] = [
+            'count' => 0,
+            'savedAt' => '',
+            'hasCorrection' => false,
+        ];
+    }
+    $pendingaibatches[$batchid]['count']++;
+    $pendingaibatches[$batchid]['savedAt'] = max(
+        $pendingaibatches[$batchid]['savedAt'],
+        (string)($revision['savedAt'] ?? '')
+    );
+    if ((int)($revision['revisionNumber'] ?? 0) > 1
+            && trim((string)($fullrevision['reviewProposal'] ?? '')) !== '') {
+        $pendingaibatches[$batchid]['hasCorrection'] = true;
+    }
+}
+$resumebatchid = '';
+$resumebatch = null;
+foreach ($pendingaibatches as $batchid => $batch) {
+    if ($resumebatch === null || $batch['savedAt'] > $resumebatch['savedAt']) {
+        $resumebatchid = $batchid;
+        $resumebatch = $batch;
+    }
+}
+$resumereviewurl = $resumebatchid === '' ? null : new moodle_url(
+    '/blocks/myprogress/admin-herbology-question-bank.php',
+    ['usage' => 'exam2_review', 'review' => 'ai_drafts', 'aibatch' => $resumebatchid]
+);
 $languageurl = new moodle_url(
     '/blocks/myprogress/admin-herbology-question-bank.php',
     array_merge($baseparams, ['lang' => $displaylang === 'es' ? 'en' : 'es'])
@@ -1299,7 +1375,7 @@ echo $OUTPUT->header();
 .question-bank__editor-panel--editing{border-color:#cbb9ee}.question-bank__panel-intro{margin:-6px 0 14px;color:#60758a;font-size:12px;line-height:1.45}.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:150px}.question-bank__editor-panel--editing .question-bank__editor-classification{grid-template-columns:1fr;margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__editor-panel--editing .question-bank__editor-classification h5{margin:0 0 2px}.question-bank__editor-panel--editing .question-bank__editor-classification .question-bank__panel-intro{margin:0 0 8px}.question-bank__editor-panel--editing .question-bank__editor-actions{margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__proposal-form{display:grid;gap:12px}.question-bank__proposal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-toolbar p{margin:0;color:#66557e}.question-bank__proposal-box{display:block;margin-top:14px;padding:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-box>span{display:block;margin-bottom:7px;color:#4c1d95;font-weight:900}.question-bank__proposal-box textarea{box-sizing:border-box;width:100%;min-height:150px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__proposal-saved{display:block;margin-top:7px;color:#66557e;font-size:12px}.question-bank__proposal-review{margin-top:14px;padding:14px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;white-space:pre-wrap}@media(max-width:850px){.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:120px}.question-bank__proposal-toolbar{align-items:stretch;flex-direction:column}}
 </style>
 <main class="question-bank">
-    <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated and SCORM Chinese Herbology questions. Review each ID, domain, cognitive level, answer, explanation and source before approving it for an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($pendingreclassificationcount > 0): ?><a class="question-bank__button" href="<?php echo $queueurl->out(false); ?>">Export reclassification queue (<?php echo (int)$pendingreclassificationcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><a class="question-bank__button" href="<?php echo $exclusionqueueurl->out(false); ?>">Export exclusions</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
+    <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated and SCORM Chinese Herbology questions. Review each ID, domain, cognitive level, answer, explanation and source before approving it for an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><?php if ($resumereviewurl !== null): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Resume corrected questions' : 'Resume current review'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($pendingreclassificationcount > 0): ?><a class="question-bank__button" href="<?php echo $queueurl->out(false); ?>">Export reclassification queue (<?php echo (int)$pendingreclassificationcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><a class="question-bank__button" href="<?php echo $exclusionqueueurl->out(false); ?>">Export exclusions</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
     <section class="question-bank__review-progress" aria-label="Simulation Exam 2 approval progress"><strong>Accepted and ready: <?php echo (int)$exam2reviewedcount; ?> of <?php echo (int)$exam2candidatecount; ?></strong><p><?php if ($usagefilter === 'exam2_review'): ?>Approved questions are removed from the pending review screen immediately. Only the remaining questions stay visible.<?php if ($exam2shortfalls !== []): ?> The current bank is short <?php echo (int)array_sum($exam2shortfalls); ?> required domain question<?php echo array_sum($exam2shortfalls) === 1 ? '' : 's'; ?>.<?php endif; ?><?php else: ?>Start the next five automatic reviews directly from this screen.<?php endif; ?></p><?php if ($usagefilter !== 'exam2_review'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Automatically review next 5 questions</button></form><?php endif; ?></section>
     <?php if ($usagefilter === 'exam2_review'): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, distractor analysis, feedback and classification. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Automatically review next 5 questions</button></form></section><?php endif; ?>
     <?php if ($editquestion !== null && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts')):
@@ -1388,6 +1464,9 @@ echo $OUTPUT->header();
         $cardisoutdated = $revisionstatus === 'draft'
             && $cardbatchid !== ''
             && (string)($fullrevision['aiPromptVersion'] ?? '') !== $aipromptversion;
+        $cardiscorrected = $revisionstatus === 'draft'
+            && (int)($fullrevision['revisionNumber'] ?? 0) > 1
+            && trim((string)($fullrevision['reviewProposal'] ?? '')) !== '';
         $inlineapproval = $usagefilter === 'exam2_review'
             && $reviewfilter === 'ai_drafts'
             && $revisionstatus === 'draft'
@@ -1396,7 +1475,7 @@ echo $OUTPUT->header();
             '/blocks/myprogress/admin-herbology-question-bank.php',
             array_merge($baseparams, ['page' => $page, 'edit' => $question['questionId']])
         );
-    ?><article class="question-bank__item<?php echo $question['_excluded'] ? ' question-bank__item--excluded' : ''; ?>">
+    ?><article id="question-<?php echo s($question['questionId']); ?>" class="question-bank__item<?php echo $question['_excluded'] ? ' question-bank__item--excluded' : ''; ?>">
         <?php if ($usagefilter === 'exam2_review' && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span>Temporary review order</span><strong>Proposed Exam 2 Question <?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
         <div class="question-bank__meta">
             <span class="question-bank__id"><?php echo s($question['questionId'] ?? 'Unnumbered'); ?></span>
@@ -1416,7 +1495,7 @@ echo $OUTPUT->header();
             <?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><span class="question-bank__badge question-bank__badge--exam">Proposal pending publishing review</span><?php endif; ?>
             <?php if (($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a><?php endif; ?>
         </div>
-        <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><div class="question-bank__ai-draft-note"><?php echo $cardisoutdated ? 'This question needs the updated automatic review before it can be accepted.' : 'Current proposed version — not published. Review it below, then accept it or request a correction.'; ?></div><?php endif; ?>
+        <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><div class="question-bank__ai-draft-note"><?php echo $cardisoutdated ? 'This question needs the updated automatic review before it can be accepted.' : ($cardiscorrected ? 'Corrected version — awaiting your approval. Review the current question below; the earlier version is not shown.' : 'Current proposed version — not published. Review it below, then accept it or request a correction.'); ?></div><?php endif; ?>
         <?php if ($question['_excluded']): ?><div class="question-bank__exclusion-note"><strong>Possible error / exclusion note:</strong> <?php echo s($revision['exclusionReason'] ?? 'No reason recorded.'); ?> This question is preserved but unavailable to students and exams.</div><?php endif; ?>
         <?php if ($usagefilter !== 'exam2_review' && ($question['_proposal']['status'] ?? '') === 'pending_review'): ?><div class="question-bank__proposal-review"><strong>Proposal awaiting publishing review:</strong><br><?php echo s($question['_proposal']['text'] ?? ''); ?></div><?php endif; ?>
         <h3><?php echo s($prompt); ?></h3>
