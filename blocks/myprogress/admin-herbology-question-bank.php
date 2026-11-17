@@ -864,12 +864,23 @@ PROMPT;
     if ($generationerrors !== []) {
         $message .= ' ' . count($generationerrors) . ' question(s) could not be generated and remain pending.';
     }
+    $reviewurlparams = [
+        'usage' => 'exam2_review',
+        'review' => 'ai_drafts',
+        'aibatch' => $batchid,
+    ];
+    if ($issinglequestionrewrite) {
+        $reviewurlparams['edit'] = (string)array_key_first($generateddrafts);
+    }
+    $reviewurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        $reviewurlparams
+    );
+    if ($issinglequestionrewrite) {
+        $reviewurl->set_anchor('question-editor');
+    }
     redirect(
-        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
-            'usage' => 'exam2_review',
-            'review' => 'ai_drafts',
-            'aibatch' => $batchid,
-        ]),
+        $reviewurl,
         $message,
         null,
         \core\output\notification::NOTIFY_SUCCESS
@@ -1160,7 +1171,7 @@ echo $OUTPUT->header();
             </section>
             <?php if (($editorrevisionfull['proposalStatus'] ?? '') === 'pending_review' && trim((string)($editorrevisionfull['reviewProposal'] ?? '')) !== ''): ?><section class="question-bank__editor-panel question-bank__editor-proposal"><h4>Proposal awaiting publishing review</h4><p class="question-bank__panel-intro">Use this proposal to prepare the editable version below. Nothing in this proposal is published automatically.</p><div class="question-bank__proposal-review"><?php echo s($editorrevisionfull['reviewProposal']); ?></div></section><?php endif; ?>
             <section class="question-bank__editor-panel question-bank__editor-panel--editing"><h4>Edited version</h4>
-                <p class="question-bank__panel-intro">Edit the complete working version here. Save it as a draft or publish it after review.</p>
+                <p class="question-bank__panel-intro">Edit the complete working version here. Save changes without publishing, or publish only after review.</p>
                 <h5>English (required)</h5>
                 <label class="question-bank__editor-field"><span>Question</span><textarea name="prompt" required><?php echo s($editquestion['prompt'] ?? ''); ?></textarea></label>
                 <?php foreach (['A', 'B', 'C', 'D'] as $label): ?><label class="question-bank__editor-field"><span>Answer <?php echo $label; ?></span><input type="text" name="option<?php echo strtolower($label); ?>" value="<?php echo s($editoroptions[$label] ?? ''); ?>" required></label><?php endforeach; ?>
@@ -1172,13 +1183,15 @@ echo $OUTPUT->header();
                     <label class="question-bank__editor-field"><span>Cognitive level</span><select name="cognitivelevel"><?php foreach ($cognitivelevellabels as $value => $label): ?><option value="<?php echo s($value); ?>"<?php echo ($editquestion['cognitiveLevel'] ?? 'apply') === $value ? ' selected' : ''; ?>><?php echo s($label); ?></option><?php endforeach; ?></select></label>
                     <label class="question-bank__editor-field"><span>Complexity</span><select name="difficultyband"><?php foreach ($difficultylabels as $value => $label): ?><option value="<?php echo s($value); ?>"<?php echo ($editquestion['difficultyBand'] ?? 'application') === $value ? ' selected' : ''; ?>><?php echo s($label); ?></option><?php endforeach; ?></select></label>
                 </div>
-                <label class="question-bank__editor-check"><input type="checkbox" name="requestreclassification" value="1"<?php echo !empty($editorrevision['requestReclassification']) ? ' checked' : ''; ?>><span><strong>Request reclassification after this edit</strong><br>This option applies only when you select <strong>Save draft</strong>. Check it when the wording, answer, feedback or educational objective changed enough that the domain, content type, cognitive level, complexity or exam placement should be reviewed again. <strong>Publish approved version</strong> always publishes the edited version and clears this request.</span></label>
+                <?php if ($editquestion['_exam2position'] > 0 && !$editquestion['_excluded']): ?><div class="question-bank__proposal-box"><span>Rewrite instructions (optional)</span><textarea name="proposal" form="question-rewrite-form" placeholder="Describe how this question should be rewritten. The rewriter will start from the original SCORM source."><?php echo s($editorrevisionfull['reviewProposal'] ?? ''); ?></textarea><small class="question-bank__proposal-saved">Send the instructions below to create a new review version. Unsaved manual field changes above are not included.</small><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--publish" type="submit" form="question-rewrite-form"<?php echo $textaienabled ? '' : ' disabled'; ?>>Send to rewrite</button></div></div><?php endif; ?>
+                <label class="question-bank__editor-check"><input type="checkbox" name="requestreclassification" value="1"<?php echo !empty($editorrevision['requestReclassification']) ? ' checked' : ''; ?>><span><strong>Request reclassification after this edit</strong><br>This option applies only when you select <strong>Save changes without publishing</strong>. Check it when the wording, answer, feedback or educational objective changed enough that the domain, content type, cognitive level, complexity or exam placement should be reviewed again. <strong>Publish approved version</strong> always publishes the edited version and clears this request.</span></label>
                 <label class="question-bank__editor-field"><span>Possible error / exclusion note</span><textarea name="exclusionreason" placeholder="Describe the conflict, unsupported source, ambiguous answer or other reason this question may need exclusion."><?php echo s($editorexclusionnote); ?></textarea></label>
                 <div class="question-bank__editor-actions"><?php if ($editorstatus === 'exclusion_candidate'): ?><button class="question-bank__button question-bank__button--primary" type="submit" name="savemode" value="restore">Restore as draft</button><?php else: ?><button class="question-bank__button question-bank__button--primary" type="submit" name="savemode" value="draft">Save changes without publishing</button><button class="question-bank__button question-bank__button--publish" type="submit" name="savemode" value="publish">Publish approved version</button><button class="question-bank__button question-bank__button--exclude" type="submit" name="savemode" value="exclude" onclick="return confirm('Move this question to Possible exclusions and remove it from active practice and exams?');">Move to possible exclusion</button><?php endif; ?></div>
             </section>
         </div>
         <input type="hidden" name="formaction" value="editquestion"><input type="hidden" name="questionid" value="<?php echo s($editquestion['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>">
     </form>
+    <?php if ($editquestion['_exam2position'] > 0 && !$editquestion['_excluded']): ?><form id="question-rewrite-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($editquestion['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"></form><?php endif; ?>
     <?php endif; ?>
     <section class="question-bank__summary" aria-label="Question bank totals"><article><span>Classified candidates</span><strong><?php echo (int)$totals['total']; ?></strong></article><article><span>Publishing proposals</span><strong><?php echo (int)$pendingproposalcount; ?></strong></article><article><span>Pending reclassification</span><strong><?php echo (int)$pendingreclassificationcount; ?></strong></article><article><span>Possible exclusions</span><strong><?php echo (int)$possibleexclusioncount; ?></strong></article><article><span>SCORM classified</span><strong><?php echo (int)$scormquestioncount; ?></strong></article><article><span>SCORM needing inference</span><strong><?php echo (int)$scormneedsinference; ?></strong></article><article><span>SCORM needing feedback</span><strong><?php echo (int)$scormneedsfeedback; ?></strong></article><article><span>SCORM simulation candidates</span><strong><?php echo (int)$scormsimulationcandidates; ?></strong></article><article><span>Ready for practice</span><strong><?php echo (int)$totals['ready']; ?></strong></article><article><span>Simulation Exam 1</span><strong><?php echo (int)$totals['exam1']; ?></strong></article><article><span>Ready reserve bank</span><strong><?php echo (int)$totals['reserve']; ?></strong></article></section>
     <form class="question-bank__filters" method="get" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
