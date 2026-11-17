@@ -526,7 +526,8 @@ if ($usesdomainbank) {
 }
 $domaincandidateinventory = $domainbank['sourceInventory'] ?? $domaincandidateinventory;
 $questionisready = static function(array $question): bool {
-    return !empty($question['prompt'])
+    return empty($question['_excludedFromUse'])
+        && !empty($question['prompt'])
         && count($question['options'] ?? []) === 4
         && !empty($question['correctLabel'])
         && !empty($question['explanation'])

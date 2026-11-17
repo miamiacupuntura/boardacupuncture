@@ -82,6 +82,8 @@ function block_myprogress_herbology_apply_revision(
         return $question;
     }
     $status = (string)($revision['status'] ?? 'draft');
+    $isexcluded = $status === 'exclusion_candidate';
+    $draft = null;
     if ($includepending && is_array($revision['draft'] ?? null)) {
         $draft = $revision['draft'];
     } else if (is_array($revision['approved'] ?? null)) {
@@ -89,20 +91,24 @@ function block_myprogress_herbology_apply_revision(
     } else if ($status === 'approved' && is_array($revision['draft'] ?? null)) {
         // Backward compatibility with revisions saved before the approved snapshot was introduced.
         $draft = $revision['draft'];
-    } else {
+    } else if (!$isexcluded) {
         return $question;
     }
-    foreach ([
-        'prompt', 'options', 'correctLabel', 'explanation', 'translations',
-        'contentType', 'cognitiveLevel', 'difficultyBand',
-    ] as $field) {
-        if (array_key_exists($field, $draft)) {
-            $question[$field] = $draft[$field];
+    if (is_array($draft)) {
+        foreach ([
+            'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+            'contentType', 'cognitiveLevel', 'difficultyBand',
+        ] as $field) {
+            if (array_key_exists($field, $draft)) {
+                $question[$field] = $draft[$field];
+            }
         }
     }
+    $question['_excludedFromUse'] = $isexcluded;
     $question['_editorialRevision'] = [
         'status' => $status,
         'requestReclassification' => !empty($revision['requestReclassification']),
+        'exclusionReason' => (string)($revision['exclusionReason'] ?? ''),
         'savedAt' => (string)($revision['savedAt'] ?? ''),
         'savedByName' => (string)($revision['savedByName'] ?? ''),
         'revisionNumber' => (int)($revision['revisionNumber'] ?? 1),
