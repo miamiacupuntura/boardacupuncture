@@ -27,7 +27,7 @@ $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-2.4';
+$aipromptversion = 'ncbahm-mock-editor-2.6';
 
 $domains = [
     'formula_differentiation' => ['number' => 1, 'name' => 'Formula selection and differentiation'],
@@ -1621,8 +1621,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     } else {
         $pendingquestions = array_values(array_filter(
             $allquestions,
-            static function(array $question) use ($isprocessedquestion): bool {
-                $status = (string)($question['_revision']['status'] ?? '');
+            static function(array $question) use ($isprocessedquestion, $aipromptversion): bool {
+                $revision = is_array($question['_revision'] ?? null)
+                    ? $question['_revision']
+                    : [];
+                $status = (string)($revision['status'] ?? '');
+                $isoutdateddraft = $status === 'draft'
+                    && (string)($revision['aiPromptVersion'] ?? '') !== $aipromptversion;
                 $isunreviewedsource = !in_array(
                     $status,
                     ['approved', 'exclusion_candidate', 'draft', 'pending_reclassification'],
@@ -1631,7 +1636,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 return $question['_exam2position'] > 0
                     && !$question['_excluded']
                     && !$isprocessedquestion($question)
-                    && $isunreviewedsource;
+                    && ($isoutdateddraft || $isunreviewedsource);
             }
         ));
     }
@@ -1735,6 +1740,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         ))) !== 4) {
             throw new UnexpectedValueException('The AI answer choices must be four unique A-D options.');
         }
+        $sourceformulabylabel = [];
+        foreach (($sourcequestion['options'] ?? []) as $sourceoption) {
+            $sourceoptionlabel = strtoupper(trim((string)($sourceoption['label'] ?? '')));
+            $sourceoptiontext = trim((string)($sourceoption['text'] ?? ''));
+            if (in_array($sourceoptionlabel, ['A', 'B', 'C', 'D'], true)
+                    && preg_match(
+                        '/^\s*([^(:]{2,90}?\b(?:Tang|San|Wan|Dan|Yin|Gao|Pian))\b/iu',
+                        $sourceoptiontext,
+                        $formulamatch
+                    )) {
+                $sourceformulabylabel[$sourceoptionlabel] = trim($formulamatch[1]);
+            }
+        }
+        $sourceformulanames = array_values(array_unique(array_values($sourceformulabylabel)));
+        $draftingredientoptioncount = count(array_filter(
+            $optionsbylabel,
+            static fn(string $optiontext): bool => substr_count($optiontext, ',') >= 2
+        ));
         $requestsingredientwork = preg_match('/\b(?:ingredient|ingrediente)s?\b/i', $administratorproposal);
         $requestsformulanamesremoved = preg_match(
             '/(?:\b(?:remove|delete|omit|without|quita\w*|elimina\w*|suprime\w*|sin)\b.{0,100}\b(?:formula|f[oó]rmula|name|nombre)\b|\b(?:formula|f[oó]rmula|name|nombre)\b.{0,100}\b(?:remove|delete|omit|quita\w*|elimina\w*|suprime\w*)\b)/iu',
@@ -1762,6 +1785,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             '/\b(?:feedback|explanation|explain|retroalimentaci[oó]n|explicaci[oó]n|explica)\w*\b/iu',
             $administratorproposal
         );
+        $requestsformulafeedback = $requestsfeedbackwork
+            && preg_match('/\b(?:formula|f[oó]rmula)s?\b/iu', $administratorproposal)
+            && preg_match(
+                '/\b(?:name|named|naming|identify|mention|nombre|nombra\w*|identifica\w*|menciona\w*)\b/iu',
+                $administratorproposal
+            );
+        $requiresformulamapping = count($sourceformulabylabel) >= 2
+            && ($requestsformulafeedback
+                || ($requestsingredientwork && $requestsformulanamesremoved)
+                || $draftingredientoptioncount >= 2);
+        $extractpinyinformulanames = static function(string $text): array {
+            preg_match_all(
+                '/\b(?:[A-Z][a-z]+\s+){1,6}(?:Tang|San|Wan|Dan|Yin|Gao|Pian)\b/u',
+                $text,
+                $matches
+            );
+            return array_values(array_unique(array_map('trim', $matches[0] ?? [])));
+        };
+        if ($requiresformulamapping) {
+            if (count($sourceformulanames) >= 2) {
+                $missingformulanames = array_values(array_filter(
+                    $sourceformulanames,
+                    static fn(string $formulaname): bool => stripos($explanation, $formulaname) === false
+                ));
+                if ($missingformulanames !== []) {
+                    throw new UnexpectedValueException(
+                        'The feedback must explicitly name the formula represented by each ingredient choice. '
+                            . 'Missing: ' . implode(', ', $missingformulanames) . '.'
+                    );
+                }
+            }
+        }
+        if ($requestsformulafeedback
+                && count($sourceformulabylabel) < 2
+                && $draftingredientoptioncount >= 2
+                && count($extractpinyinformulanames($explanation)) < $draftingredientoptioncount) {
+            throw new UnexpectedValueException(
+                'The feedback must name the Pinyin formula represented by every ingredient-only answer choice.'
+            );
+        }
         if ($requestsingredientwork && $requestsfeedbackwork) {
             $correctoptiontext = (string)($optionsbylabel[$sourcecorrectlabel] ?? '');
             $colonposition = strrpos($correctoptiontext, ':');
@@ -1822,6 +1885,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 }
             }
         }
+        if ($requiresformulamapping && count($sourceformulanames) >= 2) {
+            $missingspanishformulas = array_values(array_filter(
+                $sourceformulanames,
+                static fn(string $formulaname): bool => stripos(
+                    $spanishexplanation,
+                    $formulaname
+                ) === false
+            ));
+            if ($missingspanishformulas !== []) {
+                throw new UnexpectedValueException(
+                    'The Spanish feedback omitted formula names required by the administrator: '
+                        . implode(', ', $missingspanishformulas) . '.'
+                );
+            }
+        }
+        if ($requestsformulafeedback
+                && count($sourceformulabylabel) < 2
+                && $draftingredientoptioncount >= 2
+                && count($extractpinyinformulanames($spanishexplanation)) < $draftingredientoptioncount) {
+            throw new UnexpectedValueException(
+                'The Spanish feedback must name the Pinyin formula represented by every ingredient-only choice.'
+            );
+        }
         $contenttype = strtolower(trim((string)($decoded['contentType'] ?? '')));
         if (!in_array($contenttype, [
                 'recall', 'case', 'comparison', 'safety', 'herb_properties',
@@ -1869,9 +1955,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         array $sourcepayload,
         string $administratorproposal
     ) use ($manager, $systemcontext, $USER): string {
-        if (trim($administratorproposal) === '') {
-            return 'Automatic editorial requirements verified.';
-        }
         $validationprompt = <<<'PROMPT'
 You are the final quality-control reviewer for one NCBAHM Chinese Herbology mock-exam question. Return strict JSON only.
 
@@ -1882,6 +1965,10 @@ Set compliant to true only when every compatible instruction is visibly implemen
 Instructions are cumulative. When one instruction requests ingredients in the choices and a later instruction requests improved feedback or explanation, compliant can be true only if the explanation discusses the clinical role of the decisive ingredients and connects those roles to the answer. Merely listing ingredients in the choices or discussing only the formula names is not compliant.
 
 When an instruction requests ingredient-only answer choices or asks to remove formula names, inspect every choice literally. Each choice must contain only the ingredient or ingredient combination being compared. No Pinyin formula title, English formula translation, decoction name, powder name or pill name may remain in any choice. A choice such as “Ma Huang Tang (Ephedra Decoction): Ma Huang, Gui Zhi...” is not compliant; it must begin directly with the ingredient list.
+
+Ingredient-only choices and formula identification in the feedback are separate requirements and may coexist. When the administrator asks the feedback to name the formulas represented by the ingredient combinations, the choices must remain ingredient-only, while the English and Spanish explanations must explicitly map every option letter to its corresponding Pinyin formula name. Omitting even one requested formula name is not compliant.
+
+Apply the same inference-feedback standard even when the administrator supplied no special instruction. If a direct label was deliberately hidden in the stem or choices to create inference, the explanation must restore that hidden intermediate concept after the learner answers. For ingredient-only formula choices, explicitly map A, B, C and D to their corresponding Pinyin formula names and explain the decisive distinction. For other inference items, name the hidden pattern, action, safety rule, processing principle, hierarchy role or compatibility relationship supported by the clues, then connect it to the keyed answer and contrast every distractor. Do not approve a draft that merely repeats the correct choice.
 
 Required JSON:
 {"compliant":true,"reason":"One concise, specific sentence describing what was verified."}
@@ -1989,10 +2076,11 @@ PROMPT;
         ));
         $instructionhistories[$questionid] = $instructionhistory;
         $currentreviewversion = null;
-        if ($issinglequestionrewrite && is_array($revisionrecord['draft'] ?? null)) {
+        if ((string)($revisionrecord['status'] ?? '') === 'draft'
+                && is_array($revisionrecord['draft'] ?? null)) {
             $currentreviewversion = array_intersect_key($question, array_flip([
                 'prompt', 'options', 'correctLabel', 'explanation',
-                'contentType', 'cognitiveLevel', 'difficultyBand',
+                'translations', 'contentType', 'cognitiveLevel', 'difficultyBand',
             ]));
         }
         $sourcepayload = [
@@ -2019,6 +2107,7 @@ Editorial rules:
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
 3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use "Both are correct," "All of the above," "None of the above," "A and B are correct," or any equivalent combined-answer shortcut. If the keyed source option is one of those shortcuts, preserve its LETTER and underlying tested fact but replace the shortcut with one self-contained, unambiguous answer statement. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
 4. Write mock-exam feedback that explicitly explains both inference steps: (a) what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence; and (b) why that conclusion selects the correct answer. Identify which findings are decisive and which details are contextual distractors. Then explain briefly why each answer-choice distractor is weaker. Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
+4A. Whenever inference is created by replacing direct answer labels with observable findings, ingredient combinations, clinical roles or safety clues, the explanation must reveal and teach the hidden intermediate label after the learner answers. If formula names were removed from ingredient-based choices, keep the choices ingredient-only but explicitly map every option letter A-D to its source-supported Pinyin formula name in both English and Spanish feedback. Apply the equivalent mapping to similar questions: identify the pattern, herb action, preparation rule, hierarchy role, compatibility relationship or safety principle represented by each choice, and explain the decisive difference rather than merely restating the keyed option.
 5. In clinical cases, add one or two plausible contextual details when useful: age, illness duration, a relevant health history, temperature with measurement site, pulse rate, or respiratory rate. Use physiologically coherent values and include these details sparingly; they must not contradict the source, change the keyed answer, create a second defensible diagnosis, or replace the Chinese-medicine reasoning being tested.
 6. Some cases may use a realistic clinical handoff, seminar, case-history conference or teaching round. Rotate real geographic settings across the United States, China, Spain and other countries, including recognizable cities such as Miami, Boston, New York, San Francisco, Beijing, Shanghai, Chengdu, Madrid and Barcelona. A real hospital, university or acupuncture school may appear only as a neutral geographic or educational reference and never as a claim that the institution treated the fictional patient, hosted the fictional event, endorses the item or supplied the answer. Examples of safe neutral anchors include “during a fictional seminar in Boston near Massachusetts General Hospital” and “during a fictional academic exchange in Chengdu.” All patients, students, clinicians and active instructors in the scenario must have clearly fictional names. Do not attribute invented patient care, speech, teaching, affiliation or professional conduct to a real living professor, clinician, acupuncturist or public figure. A real historical Chinese-medicine scholar or a real professor's published teaching may be named only when that person and teaching are explicitly supported by the question's source metadata. When findings could require urgent conventional care, state that medical evaluation and stabilization occurred before the acupuncture visit.
 7. Vary the narrative format and use the setting as a concise didactic hook rather than filler. Some vignettes may show a fictional physician presenting a fictional case to acupuncture students during a teaching session. Others may have the physician recall a previously treated fictional patient and ask the students to reason from the historical findings. Another format may show a fictional acupuncture student presenting a case during a clinical or medical round while an instructor asks the group to complete the two inference steps. Give the student-presented case enough decisive findings for one defensible answer, optionally include one secondary contextual detail, and do not let the student or instructor state the diagnosis or answer being tested. Keep every patient case invented and use past tense where appropriate.
@@ -2672,7 +2761,7 @@ echo $OUTPUT->header();
     <?php if ($customdraftcount > 0 && !$shownewquestionform): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
     <?php if ($reviewfilter === 'editing_drafts'): ?><section class="question-bank__review-progress"><strong>Saved editing drafts: <?php echo (int)$savededitingdraftcount; ?></strong><p>This view includes unfinished manual and automatic edits from earlier updates and review groups. The most recently saved drafts appear first. Continue the correction, approve the current version, edit manually or delete the question.</p></section><?php endif; ?>
     <section class="question-bank__review-progress" aria-label="Simulation Exam 2 approval progress"><strong>Accepted and ready: <?php echo (int)$exam2reviewedcount; ?> of <?php echo (int)$exam2candidatecount; ?></strong><p><?php if ($usagefilter === 'exam2_review'): ?>Approved questions are removed from the pending review screen immediately. Only the remaining questions stay visible.<?php if ($exam2shortfalls !== []): ?> The current bank is short <?php echo (int)array_sum($exam2shortfalls); ?> required domain question<?php echo array_sum($exam2shortfalls) === 1 ? '' : 's'; ?>.<?php endif; ?><?php else: ?>Start the next five automatic reviews directly from this screen.<?php endif; ?></p><?php if ($usagefilter !== 'exam2_review'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Automatically review next 5 questions</button></form><?php endif; ?></section>
-    <?php if ($usagefilter === 'exam2_review'): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, distractor analysis, feedback and classification. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Automatically review next 5 questions</button></form></section><?php endif; ?>
+    <?php if ($usagefilter === 'exam2_review'): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, explicit concept-to-choice mappings, distractor analysis, feedback and classification. It also updates the oldest pending drafts created with an earlier reviewer while preserving their accumulated instructions. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Update or review next 5 questions</button></form></section><?php endif; ?>
     <?php if ($editquestion !== null && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts')):
         $editorstatus = (string)($editorrevision['status'] ?? 'original');
         $editorisaidraft = $editorstatus === 'draft'
