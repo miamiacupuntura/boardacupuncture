@@ -90,6 +90,29 @@ for file in "${MENU_DATA_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/$file" -o "$TEMP_DIR/menu/$file"
     php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data)) { exit(1); }' "$TEMP_DIR/menu/$file"
 done
+php -r '
+$data=json_decode(file_get_contents($argv[1]), true);
+$questions=$data["domains"]["single_herb"] ?? [];
+if (count($questions) !== 30) { exit(1); }
+$target=null;
+foreach ($questions as $question) {
+    if (($question["contentType"] ?? "") !== "case"
+            || !str_contains((string)($question["explanation"] ?? ""), "Why the others are weaker:")
+            || !str_contains((string)($question["translations"]["es"]["explanation"] ?? ""), "Por qué no las otras:")) {
+        exit(1);
+    }
+    if (($question["questionId"] ?? "") === "SH-0017") { $target=$question; }
+}
+$options=array_map(static fn($option) => preg_replace("/\\s+\\(.*/", "", (string)($option["text"] ?? "")), $target["options"] ?? []);
+if (!$target
+        || ($target["cognitiveLevel"] ?? "") !== "infer"
+        || ($target["difficultyBand"] ?? "") !== "analysis"
+        || ($target["correctLabel"] ?? "") !== "C"
+        || ($target["examTemplate"]["globalPosition"] ?? 0) !== 82
+        || $options !== ["Shen Qu", "Mai Ya", "Gu Ya", "Ji Nei Jin"]) {
+    exit(1);
+}
+' "$TEMP_DIR/menu/herbology-domain-candidates.json"
 for file in "${THEME_TEMPLATE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/theme/moove/templates/$file" -o "$TEMP_DIR/theme/templates/$file"
 done
@@ -1479,6 +1502,9 @@ grep -Fq "SCORM classified" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Needs more inference" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Needs stronger feedback" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Formula hierarchy" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Content: <?php echo s(\$contentlabel); ?>" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Cognitive: <?php echo s(\$cognitivelabel); ?>" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Complexity: <?php echo s(ucfirst" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "'NCBAHM Question Bank'" "$TARGET_DIR/classes/hook/navigation.php"
 grep -Fq "admin-herbology-question-bank.php" "$TARGET_DIR/settings.php"
 grep -Fq "Last course access" "$TARGET_DIR/admin-student-evaluations.php"
@@ -1739,6 +1765,8 @@ echo "OK: Student Evaluations muestra NCCAOM, NCBAHM y All Programs con la misma
 echo "OK: el informe administrativo está protegido por moodle/site:config y aparece también en Site administration > Reports."
 echo "OK: los bancos SCORM de Herbology se extraen sin modificar sus fuentes y aparecen clasificados por dominio, contenido y nivel cognitivo."
 echo "OK: el banco administrativo identifica preguntas SCORM que necesitan más inferencia o feedback antes de usarlas en simulaciones."
+echo "OK: las 30 preguntas curadas de hierbas usan casos clínicos, distractores de la misma categoría y feedback comparativo bilingüe."
+echo "OK: SH-0017 diferencia Gu Ya, Shen Qu, Mai Ya y Ji Nei Jin como inferencia clínica en la posición 82."
 echo "OK: Smart Study Tools visible como botón superior, a la izquierda del selector de idioma."
 echo "OK: Pattern → Formula incluye una lista desplegable y buscable de patrones verificados."
 echo "OK: Tongue & Pulse incluye una lista desplegable y buscable de 63 hallazgos verificados."

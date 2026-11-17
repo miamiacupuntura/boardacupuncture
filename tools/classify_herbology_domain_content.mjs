@@ -511,26 +511,88 @@ for (const formula of coreFormulaProfiles) {
 }
 
 const herbNames = usableHerbProfiles.map(herb => herb.name);
+const herbProfileByName = new Map(usableHerbProfiles.map(herb => [herb.name, herb]));
+const herbNamesByGuideNumber = new Map();
 for (const herb of usableHerbProfiles) {
-    const options = buildOptions(herb.name, herbNames, `herb-${herb.guideNumber || herb.name}`);
+    const guideNumber = Number(herb.guideNumber || 0);
+    if (!herbNamesByGuideNumber.has(guideNumber)) {
+        herbNamesByGuideNumber.set(guideNumber, []);
+    }
+    herbNamesByGuideNumber.get(guideNumber).push(herb.name);
+}
+
+function singleHerbExplanation(herb, options, language) {
+    const isSpanish = language === 'es';
+    const action = herb.actionSummary?.[language] || herb.actionSummary?.en || '';
+    const indication = herb.indicationSummary?.[language] || herb.indicationSummary?.en || '';
+    const temperature = herb.temperature?.[language]
+        || herb.temperature?.en
+        || (isSpanish ? 'de temperatura registrada' : 'of the recorded temperature');
+    const flavor = herb.flavor?.[language]
+        || herb.flavor?.en
+        || (isSpanish ? 'con el sabor registrado' : 'with the recorded flavor profile');
+    const distinctions = options
+        .filter(option => option.text !== herb.name)
+        .map(option => {
+            const distractor = herbProfileByName.get(option.text);
+            const distractorAction = distractor?.actionSummary?.[language]
+                || distractor?.actionSummary?.en
+                || (isSpanish ? 'tiene una indicación diferente' : 'has a different indication');
+            return `${option.text}: ${distractorAction}`;
+        });
+    if (isSpanish) {
+        return `${herb.name} es ${temperature} y ${flavor}. ${action} El perfil verificado identifica este uso principal: ${indication} `
+            + `Por qué no las otras: ${distinctions.join(' ')}`;
+    }
+    return `${herb.name} is ${temperature} and ${flavor}. ${action} The verified profile identifies this principal use: ${indication} `
+        + `Why the others are weaker: ${distinctions.join(' ')}`;
+}
+
+for (const herb of usableHerbProfiles) {
+    const sameCategoryNames = herbNamesByGuideNumber.get(Number(herb.guideNumber || 0)) || [];
+    let options = buildOptions(
+        herb.name,
+        sameCategoryNames.length >= 4 ? sameCategoryNames : herbNames,
+        `herb-${herb.guideNumber || herb.name}`,
+    );
+    let prompt = `A patient presents with ${herb.indicationSummary.en} Which herb best matches this presentation?`;
+    let promptEs = `Un paciente presenta ${herb.indicationSummary.es || herb.indicationSummary.en} ¿Qué hierba corresponde mejor a esta presentación?`;
+    if (herb.name === 'Gu Ya') {
+        const guYaOptions = ['Shen Qu', 'Mai Ya', 'Gu Ya', 'Ji Nei Jin'];
+        options = guYaOptions.map((text, index) => ({label: String.fromCharCode(65 + index), text}));
+        prompt = 'An older adult has chronic weak digestion, poor appetite and mild grain-and-starch retention. '
+            + 'There is no marked distension after heavy food or alcohol, no lactation or Liver-Qi clue, and no '
+            + 'stubborn mixed-food retention, stones or enuresis. Which herb is the best fit?';
+        promptEs = 'Un adulto mayor presenta digestión débil crónica, poco apetito y retención leve de granos y almidones. '
+            + 'No hay distensión marcada después de alimentos pesados o alcohol, ninguna pista de lactancia o Qi de Hígado, '
+            + 'ni retención persistente de alimentos mixtos, cálculos o enuresis. ¿Qué hierba corresponde mejor?';
+    }
     const correctOption = options.find(option => option.text === herb.name);
-    domains.single_herb.push(createCandidate({
+    const candidate = createCandidate({
         questionId: `SH-${String(herb.guideNumber || stableNumber(herb.name)).padStart(4, '0')}`,
         domainId: 'single_herb',
-        prompt: `Which herb best matches this profile? ${herb.actionSummary.en} Principal indications: ${herb.indicationSummary.en}`,
+        prompt,
         options,
         correctLabel: correctOption.label,
-        explanation: `${herb.name} (${herb.latin || 'pharmaceutical name not supplied'}) is ${herb.temperature?.en || 'of the recorded temperature'} and ${herb.flavor?.en || 'has the recorded flavor profile'}. ${herb.actionSummary.en}`,
+        explanation: singleHerbExplanation(herb, options, 'en'),
         sourceTitle: 'Single Herb verified study profiles',
         sourceLocator: `Study Guide herb ${herb.guideNumber || herb.name}`,
         sourceCard: singleHerbSourceCard(herb.name),
-        reason: 'Source-grounded question generated from a verified individual-herb profile',
+        reason: 'Clinical differentiation question generated from a verified individual-herb profile and same-category distractors',
         translationEs: {
-            prompt: `¿Qué hierba corresponde mejor a este perfil? ${herb.actionSummary.es || herb.actionSummary.en} Indicaciones principales: ${herb.indicationSummary.es || herb.indicationSummary.en}`,
+            prompt: promptEs,
             options,
-            explanation: `${herb.name} (${herb.latin || 'nombre farmacéutico no disponible'}) es ${herb.temperature?.es || 'de la temperatura registrada'} y ${herb.flavor?.es || 'presenta el perfil de sabor registrado'}. ${herb.actionSummary.es}`,
+            explanation: singleHerbExplanation(herb, options, 'es'),
         },
-    }));
+    });
+    if (herb.name === 'Gu Ya') {
+        candidate.difficultyBand = 'analysis';
+        candidate.cognitiveLevel = 'infer';
+        candidate.contentType = 'case';
+        candidate.classification.reason = 'Multi-clue clinical differentiation among four Food Stagnation herbs';
+        candidate.review.notes = 'Practice-ready inference item with same-category distractors and comparative feedback.';
+    }
+    domains.single_herb.push(candidate);
 }
 
 const usablePairs = (Array.isArray(duiYaoPairs) ? duiYaoPairs : []).filter(pair => pair.title && pair.action?.en);
@@ -1088,7 +1150,7 @@ const practiceReadyCounts = Object.fromEntries(domainIds.map(domainId => [
 ]));
 const output = {
     version: 1,
-    classificationVersion: 'herbology-domain-source-grounded-2026-11-06-v8-safety-source-links',
+    classificationVersion: 'herbology-domain-source-grounded-2026-11-17-v9-clinical-herb-differentiation',
     status: 'practice-ready',
     policy: 'Existing keyed questions and source-grounded generated questions are assigned to one primary study Domain. Herb pinyin is paired with its pharmaceutical name and formula pinyin with its English name in prompts, options and feedback.',
     generatedFrom: {

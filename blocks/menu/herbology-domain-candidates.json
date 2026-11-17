@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "classificationVersion": "herbology-domain-source-grounded-2026-11-06-v8-safety-source-links",
+  "classificationVersion": "herbology-domain-source-grounded-2026-11-17-v9-clinical-herb-differentiation",
   "status": "practice-ready",
-  "policy": "Existing keyed questions and source-grounded generated questions are assigned to one primary study Domain. Herb pinyin is paired with its pharmaceutical name and formula pinyin with its English name in prompts, options and feedback.",
+  "policy": "Existing keyed questions and source-grounded questions are assigned to one primary Domain. Curated individual-herb items use clinical presentations, same-category distractors and comparative feedback.",
   "generatedFrom": {
     "legacyKeyedQuestions": {
       "path": "output/complete-final-import/keyed-questions.jsonl",
@@ -62655,7 +62655,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -62663,17 +62663,17 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Warms the channels and womb, disperses Cold, stops bleeding and calms the fetus. Principal indications: Cold uterine bleeding, prolonged menstruation or pregnancy bleeding with abdominal cold pain.",
+        "prompt": "A patient presents with Cold uterine bleeding, prolonged menstruation or pregnancy bleeding with abdominal cold pain. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Pei Lan (Eupatorii Herba)"
+            "text": "Pu Huang (Typhae Pollen)"
           },
           {
             "label": "B",
-            "text": "Sang Ji Sheng (Taxilli Herba)"
+            "text": "San Qi (Notoginseng Radix)"
           },
           {
             "label": "C",
@@ -62681,15 +62681,15 @@
           },
           {
             "label": "D",
-            "text": "Shui Niu Jiao (Bubali Cornu)"
+            "text": "Xian He Cao (Agrimoniae Herba)"
           }
         ],
         "correctLabel": "C",
-        "explanation": "Ai Ye (Artemisiae argyi Folium) is warm and Acrid, bitter. Warms the channels and womb, disperses Cold, stops bleeding and calms the fetus.",
+        "explanation": "Ai Ye (Artemisiae argyi Folium) is warm and Acrid, bitter. Warms the channels and womb, disperses Cold, stops bleeding and calms the fetus. The verified profile identifies this principal use: Cold uterine bleeding, prolonged menstruation or pregnancy bleeding with abdominal cold pain. Why the others are weaker: Pu Huang (Typhae Pollen): Raw Pu Huang moves Blood and stops bleeding; charred Pu Huang astringes and stops bleeding more strongly. San Qi (Notoginseng Radix): Stops bleeding while dispersing Blood stasis, reduces swelling and relieves pain. Xian He Cao (Agrimoniae Herba): Astringes and stops bleeding throughout the body, stops diarrhea, kills parasites and addresses exhaustion.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Ai%20Ye",
@@ -62699,15 +62699,15 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Calienta canales y útero, dispersa Frío, detiene sangrado y calma el feto. Indicaciones principales: Sangrado uterino por Frío, menstruación prolongada o sangrado del embarazo con dolor abdominal frío.",
+            "prompt": "Un paciente presenta Sangrado uterino por Frío, menstruación prolongada o sangrado del embarazo con dolor abdominal frío. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Pei Lan (Eupatorii Herba)"
+                "text": "Pu Huang (Typhae Pollen)"
               },
               {
                 "label": "B",
-                "text": "Sang Ji Sheng (Taxilli Herba)"
+                "text": "San Qi (Notoginseng Radix)"
               },
               {
                 "label": "C",
@@ -62715,37 +62715,49 @@
               },
               {
                 "label": "D",
-                "text": "Shui Niu Jiao (Bubali Cornu)"
+                "text": "Xian He Cao (Agrimoniae Herba)"
               }
             ],
-            "explanation": "Ai Ye (Artemisiae argyi Folium) es tibia y Acre, amarga. Calienta canales y útero, dispersa Frío, detiene sangrado y calma el feto."
+            "explanation": "Ai Ye (Artemisiae argyi Folium) es tibia y Acre, amarga. Calienta canales y útero, dispersa Frío, detiene sangrado y calma el feto. El perfil verificado identifica este uso principal: Sangrado uterino por Frío, menstruación prolongada o sangrado del embarazo con dolor abdominal frío. Por qué no las otras: Pu Huang (Typhae Pollen): Pu Huang cruda mueve Sangre y detiene sangrado; carbonizada astringe y detiene con más fuerza. San Qi (Notoginseng Radix): Detiene sangrado mientras dispersa estasis de Sangre, reduce hinchazón y alivia dolor. Xian He Cao (Agrimoniae Herba): Astringe y detiene sangrado en todo el cuerpo, detiene diarrea, elimina parásitos y trata agotamiento."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Pei Lan",
-              "pharmaceuticalName": "Eupatorii Herba"
+              "pinyin": "Pu Huang",
+              "pharmaceuticalName": "Typhae Pollen"
             },
             {
-              "pinyin": "Sang Ji Sheng",
-              "pharmaceuticalName": "Taxilli Herba"
+              "pinyin": "San Qi",
+              "pharmaceuticalName": "Notoginseng Radix"
             },
             {
               "pinyin": "Ai Ye",
               "pharmaceuticalName": "Artemisiae argyi Folium"
             },
             {
-              "pinyin": "Shui Niu Jiao",
-              "pharmaceuticalName": "Bubali Cornu"
+              "pinyin": "Xian He Cao",
+              "pharmaceuticalName": "Agrimoniae Herba"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Pu Huang",
+                "pharmaceuticalName": "Typhae Pollen"
+              },
+              {
+                "pinyin": "San Qi",
+                "pharmaceuticalName": "Notoginseng Radix"
+              },
+              {
                 "pinyin": "Ai Ye",
                 "pharmaceuticalName": "Artemisiae argyi Folium"
+              },
+              {
+                "pinyin": "Xian He Cao",
+                "pharmaceuticalName": "Agrimoniae Herba"
               }
             ],
             "formulas": []
@@ -62769,7 +62781,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -62777,9 +62789,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? A violent hot cathartic for severe Cold accumulation; also drives out water and congested phlegm. Principal indications: Severe internal Cold obstruction: hot-for-Cold, the thermal opposite of Da Huang (Rhei Radix et Rhizoma).",
+        "prompt": "A patient presents with Severe internal Cold obstruction: hot-for-Cold, the thermal opposite of Da Huang. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -62799,11 +62811,11 @@
           }
         ],
         "correctLabel": "A",
-        "explanation": "Ba Dou (Crotonis Fructus) is hot; very toxic and Acrid. A violent hot cathartic for severe Cold accumulation; also drives out water and congested phlegm.",
+        "explanation": "Ba Dou (Crotonis Fructus) is hot; very toxic and Acrid. A violent hot cathartic for severe Cold accumulation; also drives out water and congested phlegm. The verified profile identifies this principal use: Severe internal Cold obstruction: hot-for-Cold, the thermal opposite of Da Huang. Why the others are weaker: Jie Geng (Platycodi Radix): Opens and raises Lung Qi, transforms Phlegm, benefits the throat, expels pus and guides herbs upward. Mai Men Dong (Ophiopogonis Radix): Gently nourishes Lung and Stomach Yin, generates fluids, moistens intestines and clears Heart irritability. Qian Hu (Peucedani Radix): Directs Lung Qi downward, transforms Phlegm-Heat and disperses Wind-Heat.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Ba%20Dou",
@@ -62813,7 +62825,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Un catártico caliente y violento para acumulación severa de Frío; también expulsa agua y flema congestionada. Indicaciones principales: Obstrucción interna severa por Frío: caliente para Frío, el opuesto térmico de Da Huang (Rhei Radix et Rhizoma).",
+            "prompt": "Un paciente presenta Obstrucción interna severa por Frío: caliente para Frío, el opuesto térmico de Da Huang. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -62832,15 +62844,11 @@
                 "text": "Qian Hu (Peucedani Radix)"
               }
             ],
-            "explanation": "Ba Dou (Crotonis Fructus) es caliente; muy tóxica y Acre. Un catártico caliente y violento para acumulación severa de Frío; también expulsa agua y flema congestionada."
+            "explanation": "Ba Dou (Crotonis Fructus) es caliente; muy tóxica y Acre. Un catártico caliente y violento para acumulación severa de Frío; también expulsa agua y flema congestionada. El perfil verificado identifica este uso principal: Obstrucción interna severa por Frío: caliente para Frío, el opuesto térmico de Da Huang. Por qué no las otras: Jie Geng (Platycodi Radix): Abre y eleva Qi de Pulmón, transforma Flema, beneficia garganta, expulsa pus y guía hierbas arriba. Mai Men Dong (Ophiopogonis Radix): Nutre suavemente Yin de Pulmón y Estómago, genera líquidos, humedece intestinos y aclara irritabilidad de Corazón. Qian Hu (Peucedani Radix): Desciende Qi de Pulmón, transforma Flema-Calor y dispersa Viento-Calor."
           }
         },
         "nomenclature": {
           "herbs": [
-            {
-              "pinyin": "Da Huang",
-              "pharmaceuticalName": "Rhei Radix et Rhizoma"
-            },
             {
               "pinyin": "Ba Dou",
               "pharmaceuticalName": "Crotonis Fructus"
@@ -62864,6 +62872,18 @@
               {
                 "pinyin": "Ba Dou",
                 "pharmaceuticalName": "Crotonis Fructus"
+              },
+              {
+                "pinyin": "Jie Geng",
+                "pharmaceuticalName": "Platycodi Radix"
+              },
+              {
+                "pinyin": "Mai Men Dong",
+                "pharmaceuticalName": "Ophiopogonis Radix"
+              },
+              {
+                "pinyin": "Qian Hu",
+                "pharmaceuticalName": "Peucedani Radix"
               }
             ],
             "formulas": []
@@ -62882,7 +62902,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -62890,21 +62910,21 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Gently tonifies Kidney Yang, strengthens sinews/bones and dispels Wind-Damp without harsh dryness. Principal indications: Sexual or reproductive Yang deficiency with weak legs/knees or chronic deficiency-type Bi pain.",
+        "prompt": "A patient presents with Sexual or reproductive Yang deficiency with weak legs/knees or chronic deficiency-type Bi pain. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Qin Jiao (Gentianae macrophyllae Radix)"
+            "text": "Tu Si Zi (Cuscutae Semen)"
           },
           {
             "label": "B",
-            "text": "Shan Yao (Dioscoreae Rhizoma)"
+            "text": "Lu Rong (Cervi Cornu pantotrichum)"
           },
           {
             "label": "C",
-            "text": "Tian Hua Fen (Trichosanthis Radix)"
+            "text": "Dong Chong Xia Cao (Cordyceps)"
           },
           {
             "label": "D",
@@ -62912,11 +62932,11 @@
           }
         ],
         "correctLabel": "D",
-        "explanation": "Ba Ji Tian (Morindae officinalis Radix) is slightly warm and Sweet, acrid. Gently tonifies Kidney Yang, strengthens sinews/bones and dispels Wind-Damp without harsh dryness.",
+        "explanation": "Ba Ji Tian (Morindae officinalis Radix) is slightly warm and Sweet, acrid. Gently tonifies Kidney Yang, strengthens sinews/bones and dispels Wind-Damp without harsh dryness. The verified profile identifies this principal use: Sexual or reproductive Yang deficiency with weak legs/knees or chronic deficiency-type Bi pain. Why the others are weaker: Tu Si Zi (Cuscutae Semen): Balanced tonic that supports Kidney Yang and Essence, nourishes Liver vision, stabilizes leakage and stops Spleen-Kidney diarrhea. Lu Rong (Cervi Cornu pantotrichum): Powerfully tonifies Kidney Yang, replenishes Essence and Blood, strengthens sinews/bones and regulates Chong/Ren. Dong Chong Xia Cao (Cordyceps): Tonifies Kidney Yang/Essence and Lung Qi/Yin, stops chronic cough and supports recovery from depletion.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Ba%20Ji%20Tian",
@@ -62926,41 +62946,41 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Tonifica suavemente Yang de Riñón, fortalece tendones/huesos y expulsa Viento-Humedad sin sequedad agresiva. Indicaciones principales: Deficiencia sexual o reproductiva de Yang con piernas/rodillas débiles o dolor Bi crónico por deficiencia.",
+            "prompt": "Un paciente presenta Deficiencia sexual o reproductiva de Yang con piernas/rodillas débiles o dolor Bi crónico por deficiencia. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Qin Jiao (Gentianae macrophyllae Radix)"
+                "text": "Tu Si Zi (Cuscutae Semen)"
               },
               {
                 "label": "B",
-                "text": "Shan Yao (Dioscoreae Rhizoma)"
+                "text": "Lu Rong (Cervi Cornu pantotrichum)"
               },
               {
                 "label": "C",
-                "text": "Tian Hua Fen (Trichosanthis Radix)"
+                "text": "Dong Chong Xia Cao (Cordyceps)"
               },
               {
                 "label": "D",
                 "text": "Ba Ji Tian (Morindae officinalis Radix)"
               }
             ],
-            "explanation": "Ba Ji Tian (Morindae officinalis Radix) es ligeramente tibia y Dulce, acre. Tonifica suavemente Yang de Riñón, fortalece tendones/huesos y expulsa Viento-Humedad sin sequedad agresiva."
+            "explanation": "Ba Ji Tian (Morindae officinalis Radix) es ligeramente tibia y Dulce, acre. Tonifica suavemente Yang de Riñón, fortalece tendones/huesos y expulsa Viento-Humedad sin sequedad agresiva. El perfil verificado identifica este uso principal: Deficiencia sexual o reproductiva de Yang con piernas/rodillas débiles o dolor Bi crónico por deficiencia. Por qué no las otras: Tu Si Zi (Cuscutae Semen): Tónica equilibrada que apoya Yang/Esencia de Riñón, nutre visión de Hígado, estabiliza pérdidas y detiene diarrea Bazo-Riñón. Lu Rong (Cervi Cornu pantotrichum): Tonifica con fuerza Yang de Riñón, repone Esencia/Sangre, fortalece tendones/huesos y regula Chong/Ren. Dong Chong Xia Cao (Cordyceps): Tonifica Yang/Esencia de Riñón y Qi/Yin de Pulmón, detiene tos crónica y apoya recuperación del agotamiento."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Qin Jiao",
-              "pharmaceuticalName": "Gentianae macrophyllae Radix"
+              "pinyin": "Tu Si Zi",
+              "pharmaceuticalName": "Cuscutae Semen"
             },
             {
-              "pinyin": "Shan Yao",
-              "pharmaceuticalName": "Dioscoreae Rhizoma"
+              "pinyin": "Lu Rong",
+              "pharmaceuticalName": "Cervi Cornu pantotrichum"
             },
             {
-              "pinyin": "Tian Hua Fen",
-              "pharmaceuticalName": "Trichosanthis Radix"
+              "pinyin": "Dong Chong Xia Cao",
+              "pharmaceuticalName": "Cordyceps"
             },
             {
               "pinyin": "Ba Ji Tian",
@@ -62970,6 +62990,18 @@
           "formulas": [],
           "feedback": {
             "herbs": [
+              {
+                "pinyin": "Tu Si Zi",
+                "pharmaceuticalName": "Cuscutae Semen"
+              },
+              {
+                "pinyin": "Lu Rong",
+                "pharmaceuticalName": "Cervi Cornu pantotrichum"
+              },
+              {
+                "pinyin": "Dong Chong Xia Cao",
+                "pharmaceuticalName": "Cordyceps"
+              },
               {
                 "pinyin": "Ba Ji Tian",
                 "pharmaceuticalName": "Morindae officinalis Radix"
@@ -62996,7 +63028,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -63004,9 +63036,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Moistens the Lung and stops many cough types; externally kills lice and parasites. Principal indications: Chronic, recurrent or spasmodic cough, especially pertussis, without a rigid Hot/Cold boundary.",
+        "prompt": "A patient presents with Chronic, recurrent or spasmodic cough, especially pertussis, without a rigid Hot/Cold boundary. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -63014,23 +63046,23 @@
           },
           {
             "label": "B",
-            "text": "Jue Ming Zi (Cassiae Semen)"
+            "text": "Kuan Dong Hua (Farfarae Flos)"
           },
           {
             "label": "C",
-            "text": "Mo Yao (Myrrha)"
+            "text": "Sang Bai Pi (Mori Cortex)"
           },
           {
             "label": "D",
-            "text": "Qing Hao (Artemisiae annuae Herba)"
+            "text": "Zi Wan (Asteris Radix)"
           }
         ],
         "correctLabel": "A",
-        "explanation": "Bai Bu (Stemonae Radix) is slightly warm and Sweet, bitter. Moistens the Lung and stops many cough types; externally kills lice and parasites.",
+        "explanation": "Bai Bu (Stemonae Radix) is slightly warm and Sweet, bitter. Moistens the Lung and stops many cough types; externally kills lice and parasites. The verified profile identifies this principal use: Chronic, recurrent or spasmodic cough, especially pertussis, without a rigid Hot/Cold boundary. Why the others are weaker: Kuan Dong Hua (Farfarae Flos): Moistens the Lung, descends Qi and directly suppresses cough without being very drying. Sang Bai Pi (Mori Cortex): Clears Lung Heat, stops cough and wheeze, promotes urination and reduces edema. Zi Wan (Asteris Radix): Moistens Lung, transforms Phlegm and stops cough across acute/chronic and Hot/Cold presentations.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Bu",
@@ -63040,7 +63072,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Humedece Pulmón y detiene muchos tipos de tos; externamente mata piojos y parásitos. Indicaciones principales: Tos crónica, recurrente o espasmódica, especialmente tos ferina, sin límite rígido Calor/Frío.",
+            "prompt": "Un paciente presenta Tos crónica, recurrente o espasmódica, especialmente tos ferina, sin límite rígido Calor/Frío. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -63048,18 +63080,18 @@
               },
               {
                 "label": "B",
-                "text": "Jue Ming Zi (Cassiae Semen)"
+                "text": "Kuan Dong Hua (Farfarae Flos)"
               },
               {
                 "label": "C",
-                "text": "Mo Yao (Myrrha)"
+                "text": "Sang Bai Pi (Mori Cortex)"
               },
               {
                 "label": "D",
-                "text": "Qing Hao (Artemisiae annuae Herba)"
+                "text": "Zi Wan (Asteris Radix)"
               }
             ],
-            "explanation": "Bai Bu (Stemonae Radix) es ligeramente tibia y Dulce, amarga. Humedece Pulmón y detiene muchos tipos de tos; externamente mata piojos y parásitos."
+            "explanation": "Bai Bu (Stemonae Radix) es ligeramente tibia y Dulce, amarga. Humedece Pulmón y detiene muchos tipos de tos; externamente mata piojos y parásitos. El perfil verificado identifica este uso principal: Tos crónica, recurrente o espasmódica, especialmente tos ferina, sin límite rígido Calor/Frío. Por qué no las otras: Kuan Dong Hua (Farfarae Flos): Humedece Pulmón, desciende Qi y suprime directamente la tos sin secar demasiado. Sang Bai Pi (Mori Cortex): Aclara Calor de Pulmón, detiene tos y sibilancia, promueve micción y reduce edema. Zi Wan (Asteris Radix): Humedece Pulmón, transforma Flema y detiene tos en cuadros agudos/crónicos y calientes/fríos."
           }
         },
         "nomenclature": {
@@ -63069,16 +63101,16 @@
               "pharmaceuticalName": "Stemonae Radix"
             },
             {
-              "pinyin": "Jue Ming Zi",
-              "pharmaceuticalName": "Cassiae Semen"
+              "pinyin": "Kuan Dong Hua",
+              "pharmaceuticalName": "Farfarae Flos"
             },
             {
-              "pinyin": "Mo Yao",
-              "pharmaceuticalName": "Myrrha"
+              "pinyin": "Sang Bai Pi",
+              "pharmaceuticalName": "Mori Cortex"
             },
             {
-              "pinyin": "Qing Hao",
-              "pharmaceuticalName": "Artemisiae annuae Herba"
+              "pinyin": "Zi Wan",
+              "pharmaceuticalName": "Asteris Radix"
             }
           ],
           "formulas": [],
@@ -63087,6 +63119,18 @@
               {
                 "pinyin": "Bai Bu",
                 "pharmaceuticalName": "Stemonae Radix"
+              },
+              {
+                "pinyin": "Kuan Dong Hua",
+                "pharmaceuticalName": "Farfarae Flos"
+              },
+              {
+                "pinyin": "Sang Bai Pi",
+                "pharmaceuticalName": "Mori Cortex"
+              },
+              {
+                "pinyin": "Zi Wan",
+                "pharmaceuticalName": "Asteris Radix"
               }
             ],
             "formulas": []
@@ -63110,7 +63154,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -63118,13 +63162,13 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Moves Qi, transforms Dampness, warms the Middle, stops vomiting and disseminates Lung Qi. Principal indications: Damp obstruction with poor appetite and distension plus an Upper-Jiao or Lung-Qi clue.",
+        "prompt": "A patient presents with Damp obstruction with poor appetite and distension plus an Upper-Jiao or Lung-Qi clue. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Ku Shen (Sophorae flavescentis Radix)"
+            "text": "Cao Dou Kou (Alpiniae katsumadai Semen)"
           },
           {
             "label": "B",
@@ -63132,19 +63176,19 @@
           },
           {
             "label": "C",
-            "text": "Mu Dan Pi (Moutan Cortex)"
+            "text": "Huo Xiang (Pogostemonis/Agastaches Herba)"
           },
           {
             "label": "D",
-            "text": "Qing Pi (Citri reticulatae viride Pericarpium)"
+            "text": "Cang Zhu (Atractylodis Rhizoma)"
           }
         ],
         "correctLabel": "B",
-        "explanation": "Bai Dou Kou (Amomi Fructus rotundus) is warm and Acrid. Moves Qi, transforms Dampness, warms the Middle, stops vomiting and disseminates Lung Qi.",
+        "explanation": "Bai Dou Kou (Amomi Fructus rotundus) is warm and Acrid. Moves Qi, transforms Dampness, warms the Middle, stops vomiting and disseminates Lung Qi. The verified profile identifies this principal use: Damp obstruction with poor appetite and distension plus an Upper-Jiao or Lung-Qi clue. Why the others are weaker: Cao Dou Kou (Alpiniae katsumadai Semen): Dries turbid Dampness, warms the Middle, moves Qi and stops vomiting. Huo Xiang (Pogostemonis/Agastaches Herba): Aromatically transforms Dampness, releases the Exterior, harmonizes the Middle and stops vomiting. Cang Zhu (Atractylodis Rhizoma): Strongly dries Dampness, strengthens Spleen transport, induces sweating and expels Wind-Dampness.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Dou%20Kou",
@@ -63154,11 +63198,11 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Mueve Qi, transforma Humedad, calienta el Centro, detiene vómito y difunde Qi de Pulmón. Indicaciones principales: Obstrucción por Humedad con poco apetito y distensión más una pista de Jiao Superior o Qi de Pulmón.",
+            "prompt": "Un paciente presenta Obstrucción por Humedad con poco apetito y distensión más una pista de Jiao Superior o Qi de Pulmón. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Ku Shen (Sophorae flavescentis Radix)"
+                "text": "Cao Dou Kou (Alpiniae katsumadai Semen)"
               },
               {
                 "label": "B",
@@ -63166,41 +63210,53 @@
               },
               {
                 "label": "C",
-                "text": "Mu Dan Pi (Moutan Cortex)"
+                "text": "Huo Xiang (Pogostemonis/Agastaches Herba)"
               },
               {
                 "label": "D",
-                "text": "Qing Pi (Citri reticulatae viride Pericarpium)"
+                "text": "Cang Zhu (Atractylodis Rhizoma)"
               }
             ],
-            "explanation": "Bai Dou Kou (Amomi Fructus rotundus) es tibia y Acre. Mueve Qi, transforma Humedad, calienta el Centro, detiene vómito y difunde Qi de Pulmón."
+            "explanation": "Bai Dou Kou (Amomi Fructus rotundus) es tibia y Acre. Mueve Qi, transforma Humedad, calienta el Centro, detiene vómito y difunde Qi de Pulmón. El perfil verificado identifica este uso principal: Obstrucción por Humedad con poco apetito y distensión más una pista de Jiao Superior o Qi de Pulmón. Por qué no las otras: Cao Dou Kou (Alpiniae katsumadai Semen): Seca Humedad turbia, calienta el Centro, mueve Qi y detiene el vómito. Huo Xiang (Pogostemonis/Agastaches Herba): Transforma Humedad aromáticamente, libera el Exterior, armoniza el Centro y detiene el vómito. Cang Zhu (Atractylodis Rhizoma): Seca Humedad con fuerza, fortalece el transporte del Bazo, induce sudoración y expulsa Viento-Humedad."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Ku Shen",
-              "pharmaceuticalName": "Sophorae flavescentis Radix"
+              "pinyin": "Cao Dou Kou",
+              "pharmaceuticalName": "Alpiniae katsumadai Semen"
             },
             {
               "pinyin": "Bai Dou Kou",
               "pharmaceuticalName": "Amomi Fructus rotundus"
             },
             {
-              "pinyin": "Mu Dan Pi",
-              "pharmaceuticalName": "Moutan Cortex"
+              "pinyin": "Huo Xiang",
+              "pharmaceuticalName": "Pogostemonis/Agastaches Herba"
             },
             {
-              "pinyin": "Qing Pi",
-              "pharmaceuticalName": "Citri reticulatae viride Pericarpium"
+              "pinyin": "Cang Zhu",
+              "pharmaceuticalName": "Atractylodis Rhizoma"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Cao Dou Kou",
+                "pharmaceuticalName": "Alpiniae katsumadai Semen"
+              },
+              {
                 "pinyin": "Bai Dou Kou",
                 "pharmaceuticalName": "Amomi Fructus rotundus"
+              },
+              {
+                "pinyin": "Huo Xiang",
+                "pharmaceuticalName": "Pogostemonis/Agastaches Herba"
+              },
+              {
+                "pinyin": "Cang Zhu",
+                "pharmaceuticalName": "Atractylodis Rhizoma"
               }
             ],
             "formulas": []
@@ -63224,7 +63280,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -63232,9 +63288,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Clears Heat-toxin, reduces abscesses and promotes urination to drain Damp-Heat. Principal indications: Toxic swelling or abscess accompanied by Damp-Heat urinary difficulty, especially when a broad gentle toxicity herb is needed.",
+        "prompt": "A patient presents with Toxic swelling or abscess accompanied by Damp-Heat urinary difficulty, especially when a broad gentle toxicity herb is needed. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -63242,23 +63298,23 @@
           },
           {
             "label": "B",
-            "text": "Huang Bai (Phellodendri Cortex)"
+            "text": "Yu Xing Cao (Houttuyniae Herba)"
           },
           {
             "label": "C",
-            "text": "Lian Xu (Nelumbinis Stamen)"
+            "text": "Shan Dou Gen (Sophorae tonkinensis Radix)"
           },
           {
             "label": "D",
-            "text": "Mu Zei (Equiseti hiemalis Herba)"
+            "text": "Jin Yin Hua (Lonicerae Flos)"
           }
         ],
         "correctLabel": "A",
-        "explanation": "Bai Hua She She Cao (Hedyotis diffusae Herba) is cold and Bitter, sweet. Clears Heat-toxin, reduces abscesses and promotes urination to drain Damp-Heat.",
+        "explanation": "Bai Hua She She Cao (Hedyotis diffusae Herba) is cold and Bitter, sweet. Clears Heat-toxin, reduces abscesses and promotes urination to drain Damp-Heat. The verified profile identifies this principal use: Toxic swelling or abscess accompanied by Damp-Heat urinary difficulty, especially when a broad gentle toxicity herb is needed. Why the others are weaker: Yu Xing Cao (Houttuyniae Herba): Clears Lung Heat-toxin, expels pus from Lung abscess and promotes urination for Damp-Heat. Shan Dou Gen (Sophorae tonkinensis Radix): Strongly clears toxic Heat from a swollen painful throat and benefits the gums and mouth. Jin Yin Hua (Lonicerae Flos): Clears Heat and resolves toxicity while gently dispersing Wind-Heat; reaches exterior and interior stages and hot sores.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Hua%20She%20She%20Cao",
@@ -63268,7 +63324,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Aclara Calor-Toxina, reduce abscesos y promueve la micción para drenar Humedad-Calor. Indicaciones principales: Inflamación tóxica o absceso acompañado de dificultad urinaria por Humedad-Calor, especialmente cuando se necesita una hierba amplia y suave contra toxicidad.",
+            "prompt": "Un paciente presenta Inflamación tóxica o absceso acompañado de dificultad urinaria por Humedad-Calor, especialmente cuando se necesita una hierba amplia y suave contra toxicidad. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -63276,18 +63332,18 @@
               },
               {
                 "label": "B",
-                "text": "Huang Bai (Phellodendri Cortex)"
+                "text": "Yu Xing Cao (Houttuyniae Herba)"
               },
               {
                 "label": "C",
-                "text": "Lian Xu (Nelumbinis Stamen)"
+                "text": "Shan Dou Gen (Sophorae tonkinensis Radix)"
               },
               {
                 "label": "D",
-                "text": "Mu Zei (Equiseti hiemalis Herba)"
+                "text": "Jin Yin Hua (Lonicerae Flos)"
               }
             ],
-            "explanation": "Bai Hua She She Cao (Hedyotis diffusae Herba) es fría y Amarga, dulce. Aclara Calor-Toxina, reduce abscesos y promueve la micción para drenar Humedad-Calor."
+            "explanation": "Bai Hua She She Cao (Hedyotis diffusae Herba) es fría y Amarga, dulce. Aclara Calor-Toxina, reduce abscesos y promueve la micción para drenar Humedad-Calor. El perfil verificado identifica este uso principal: Inflamación tóxica o absceso acompañado de dificultad urinaria por Humedad-Calor, especialmente cuando se necesita una hierba amplia y suave contra toxicidad. Por qué no las otras: Yu Xing Cao (Houttuyniae Herba): Aclara Calor-Toxina de Pulmón, expulsa pus de absceso pulmonar y promueve la micción ante Humedad-Calor. Shan Dou Gen (Sophorae tonkinensis Radix): Aclara con fuerza Calor tóxico de una garganta inflamada y dolorosa y beneficia encías y boca. Jin Yin Hua (Lonicerae Flos): Aclara Calor y resuelve toxicidad mientras dispersa suavemente Viento-Calor; alcanza etapas exterior e interior y lesiones calientes."
           }
         },
         "nomenclature": {
@@ -63297,16 +63353,16 @@
               "pharmaceuticalName": "Hedyotis diffusae Herba"
             },
             {
-              "pinyin": "Huang Bai",
-              "pharmaceuticalName": "Phellodendri Cortex"
+              "pinyin": "Yu Xing Cao",
+              "pharmaceuticalName": "Houttuyniae Herba"
             },
             {
-              "pinyin": "Lian Xu",
-              "pharmaceuticalName": "Nelumbinis Stamen"
+              "pinyin": "Shan Dou Gen",
+              "pharmaceuticalName": "Sophorae tonkinensis Radix"
             },
             {
-              "pinyin": "Mu Zei",
-              "pharmaceuticalName": "Equiseti hiemalis Herba"
+              "pinyin": "Jin Yin Hua",
+              "pharmaceuticalName": "Lonicerae Flos"
             }
           ],
           "formulas": [],
@@ -63315,6 +63371,18 @@
               {
                 "pinyin": "Bai Hua She She Cao",
                 "pharmaceuticalName": "Hedyotis diffusae Herba"
+              },
+              {
+                "pinyin": "Yu Xing Cao",
+                "pharmaceuticalName": "Houttuyniae Herba"
+              },
+              {
+                "pinyin": "Shan Dou Gen",
+                "pharmaceuticalName": "Sophorae tonkinensis Radix"
+              },
+              {
+                "pinyin": "Jin Yin Hua",
+                "pharmaceuticalName": "Lonicerae Flos"
               }
             ],
             "formulas": []
@@ -63338,7 +63406,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -63346,21 +63414,21 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Warms Lung Phlegm, moves Qi, disperses nodules and reaches invisible Phlegm outside the Lung and in channels. Principal indications: Cold-Phlegm with chest/flank pain, deep nodules, numbness or painful obstruction.",
+        "prompt": "A patient presents with Cold-Phlegm with chest/flank pain, deep nodules, numbness or painful obstruction. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Ju Hua (Chrysanthemi Flos)"
+            "text": "Xuan Fu Hua (Inulae Flos)"
           },
           {
             "label": "B",
-            "text": "Mang Xiao (Natrii Sulfas)"
+            "text": "Ban Xia (Pinelliae Rhizoma)"
           },
           {
             "label": "C",
-            "text": "Qing Dai (Indigo naturalis)"
+            "text": "Tian Nan Xing (Arisaematis Rhizoma)"
           },
           {
             "label": "D",
@@ -63368,11 +63436,11 @@
           }
         ],
         "correctLabel": "D",
-        "explanation": "Bai Jie Zi (Sinapis Semen) is warm and Acrid. Warms Lung Phlegm, moves Qi, disperses nodules and reaches invisible Phlegm outside the Lung and in channels.",
+        "explanation": "Bai Jie Zi (Sinapis Semen) is warm and Acrid. Warms Lung Phlegm, moves Qi, disperses nodules and reaches invisible Phlegm outside the Lung and in channels. The verified profile identifies this principal use: Cold-Phlegm with chest/flank pain, deep nodules, numbness or painful obstruction. Why the others are weaker: Xuan Fu Hua (Inulae Flos): Directs Lung and Stomach Qi downward, transforms Phlegm and reduces focal chest accumulation. Ban Xia (Pinelliae Rhizoma): Dries Dampness, transforms Phlegm, descends rebellious Qi, stops vomiting and dissipates clumps. Tian Nan Xing (Arisaematis Rhizoma): Powerfully dries Damp-Phlegm and expels Wind-Phlegm from channels; raw herb is primarily topical.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Jie%20Zi",
@@ -63382,41 +63450,41 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Calienta Flema de Pulmón, mueve Qi, dispersa nódulos y alcanza Flema invisible fuera del Pulmón y en canales. Indicaciones principales: Flema-Fría con dolor torácico o de flancos, nódulos profundos, entumecimiento u obstrucción dolorosa.",
+            "prompt": "Un paciente presenta Flema-Fría con dolor torácico o de flancos, nódulos profundos, entumecimiento u obstrucción dolorosa. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Ju Hua (Chrysanthemi Flos)"
+                "text": "Xuan Fu Hua (Inulae Flos)"
               },
               {
                 "label": "B",
-                "text": "Mang Xiao (Natrii Sulfas)"
+                "text": "Ban Xia (Pinelliae Rhizoma)"
               },
               {
                 "label": "C",
-                "text": "Qing Dai (Indigo naturalis)"
+                "text": "Tian Nan Xing (Arisaematis Rhizoma)"
               },
               {
                 "label": "D",
                 "text": "Bai Jie Zi (Sinapis Semen)"
               }
             ],
-            "explanation": "Bai Jie Zi (Sinapis Semen) es tibia y Acre. Calienta Flema de Pulmón, mueve Qi, dispersa nódulos y alcanza Flema invisible fuera del Pulmón y en canales."
+            "explanation": "Bai Jie Zi (Sinapis Semen) es tibia y Acre. Calienta Flema de Pulmón, mueve Qi, dispersa nódulos y alcanza Flema invisible fuera del Pulmón y en canales. El perfil verificado identifica este uso principal: Flema-Fría con dolor torácico o de flancos, nódulos profundos, entumecimiento u obstrucción dolorosa. Por qué no las otras: Xuan Fu Hua (Inulae Flos): Desciende Qi de Pulmón y Estómago, transforma Flema y reduce acumulación focal torácica. Ban Xia (Pinelliae Rhizoma): Seca Humedad, transforma Flema, desciende Qi rebelde, detiene vómito y disipa acumulaciones. Tian Nan Xing (Arisaematis Rhizoma): Seca con fuerza Flema-Humedad y expulsa Viento-Flema de canales; la cruda se usa principalmente de forma tópica."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Ju Hua",
-              "pharmaceuticalName": "Chrysanthemi Flos"
+              "pinyin": "Xuan Fu Hua",
+              "pharmaceuticalName": "Inulae Flos"
             },
             {
-              "pinyin": "Mang Xiao",
-              "pharmaceuticalName": "Natrii Sulfas"
+              "pinyin": "Ban Xia",
+              "pharmaceuticalName": "Pinelliae Rhizoma"
             },
             {
-              "pinyin": "Qing Dai",
-              "pharmaceuticalName": "Indigo naturalis"
+              "pinyin": "Tian Nan Xing",
+              "pharmaceuticalName": "Arisaematis Rhizoma"
             },
             {
               "pinyin": "Bai Jie Zi",
@@ -63426,6 +63494,18 @@
           "formulas": [],
           "feedback": {
             "herbs": [
+              {
+                "pinyin": "Xuan Fu Hua",
+                "pharmaceuticalName": "Inulae Flos"
+              },
+              {
+                "pinyin": "Ban Xia",
+                "pharmaceuticalName": "Pinelliae Rhizoma"
+              },
+              {
+                "pinyin": "Tian Nan Xing",
+                "pharmaceuticalName": "Arisaematis Rhizoma"
+              },
               {
                 "pinyin": "Bai Jie Zi",
                 "pharmaceuticalName": "Sinapis Semen"
@@ -63452,7 +63532,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -63460,17 +63540,17 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Nourishes Blood and preserves Yin, softens the Liver, relieves spasm and pain and restrains excessive sweating. Principal indications: Blood deficiency with Liver-Qi tension: irritability, cramping, hypochondriac or abdominal pain, menstrual pain or sweating.",
+        "prompt": "A patient presents with Blood deficiency with Liver-Qi tension: irritability, cramping, hypochondriac or abdominal pain, menstrual pain or sweating. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Qian Hu (Peucedani Radix)"
+            "text": "Dang Gui (Angelicae sinensis Radix)"
           },
           {
             "label": "B",
-            "text": "Shan Dou Gen (Sophorae tonkinensis Radix)"
+            "text": "Shu Di Huang (Rehmanniae Radix preparata)"
           },
           {
             "label": "C",
@@ -63478,15 +63558,15 @@
           },
           {
             "label": "D",
-            "text": "Tao Ren (Persicae Semen)"
+            "text": "E Jiao (Asini Corii Colla)"
           }
         ],
         "correctLabel": "C",
-        "explanation": "Bai Shao (Paeoniae Radix alba) is slightly cold and Bitter, sour. Nourishes Blood and preserves Yin, softens the Liver, relieves spasm and pain and restrains excessive sweating.",
+        "explanation": "Bai Shao (Paeoniae Radix alba) is slightly cold and Bitter, sour. Nourishes Blood and preserves Yin, softens the Liver, relieves spasm and pain and restrains excessive sweating. The verified profile identifies this principal use: Blood deficiency with Liver-Qi tension: irritability, cramping, hypochondriac or abdominal pain, menstrual pain or sweating. Why the others are weaker: Dang Gui (Angelicae sinensis Radix): Nourishes and invigorates Blood, regulates menstruation, relieves pain and moistens the intestines. Shu Di Huang (Rehmanniae Radix preparata): Powerfully nourishes Blood and Yin and replenishes Kidney Essence and marrow. E Jiao (Asini Corii Colla): Strongly nourishes Blood, stops bleeding, enriches Yin and moistens the Lung.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Shao",
@@ -63496,15 +63576,15 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Nutre Sangre y preserva Yin, suaviza Hígado, alivia espasmo/dolor y contiene sudor excesivo. Indicaciones principales: Deficiencia de Sangre con tensión de Qi de Hígado: irritabilidad, calambres, dolor hipocondríaco/abdominal, dolor menstrual o sudor.",
+            "prompt": "Un paciente presenta Deficiencia de Sangre con tensión de Qi de Hígado: irritabilidad, calambres, dolor hipocondríaco/abdominal, dolor menstrual o sudor. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Qian Hu (Peucedani Radix)"
+                "text": "Dang Gui (Angelicae sinensis Radix)"
               },
               {
                 "label": "B",
-                "text": "Shan Dou Gen (Sophorae tonkinensis Radix)"
+                "text": "Shu Di Huang (Rehmanniae Radix preparata)"
               },
               {
                 "label": "C",
@@ -63512,37 +63592,49 @@
               },
               {
                 "label": "D",
-                "text": "Tao Ren (Persicae Semen)"
+                "text": "E Jiao (Asini Corii Colla)"
               }
             ],
-            "explanation": "Bai Shao (Paeoniae Radix alba) es ligeramente fría y Amarga, ácida. Nutre Sangre y preserva Yin, suaviza Hígado, alivia espasmo/dolor y contiene sudor excesivo."
+            "explanation": "Bai Shao (Paeoniae Radix alba) es ligeramente fría y Amarga, ácida. Nutre Sangre y preserva Yin, suaviza Hígado, alivia espasmo/dolor y contiene sudor excesivo. El perfil verificado identifica este uso principal: Deficiencia de Sangre con tensión de Qi de Hígado: irritabilidad, calambres, dolor hipocondríaco/abdominal, dolor menstrual o sudor. Por qué no las otras: Dang Gui (Angelicae sinensis Radix): Nutre y moviliza Sangre, regula menstruación, alivia dolor y humedece intestinos. Shu Di Huang (Rehmanniae Radix preparata): Nutre con fuerza Sangre y Yin y repone Esencia y médula de Riñón. E Jiao (Asini Corii Colla): Nutre Sangre con fuerza, detiene sangrado, enriquece Yin y humedece Pulmón."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Qian Hu",
-              "pharmaceuticalName": "Peucedani Radix"
+              "pinyin": "Dang Gui",
+              "pharmaceuticalName": "Angelicae sinensis Radix"
             },
             {
-              "pinyin": "Shan Dou Gen",
-              "pharmaceuticalName": "Sophorae tonkinensis Radix"
+              "pinyin": "Shu Di Huang",
+              "pharmaceuticalName": "Rehmanniae Radix preparata"
             },
             {
               "pinyin": "Bai Shao",
               "pharmaceuticalName": "Paeoniae Radix alba"
             },
             {
-              "pinyin": "Tao Ren",
-              "pharmaceuticalName": "Persicae Semen"
+              "pinyin": "E Jiao",
+              "pharmaceuticalName": "Asini Corii Colla"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Dang Gui",
+                "pharmaceuticalName": "Angelicae sinensis Radix"
+              },
+              {
+                "pinyin": "Shu Di Huang",
+                "pharmaceuticalName": "Rehmanniae Radix preparata"
+              },
+              {
                 "pinyin": "Bai Shao",
                 "pharmaceuticalName": "Paeoniae Radix alba"
+              },
+              {
+                "pinyin": "E Jiao",
+                "pharmaceuticalName": "Asini Corii Colla"
               }
             ],
             "formulas": []
@@ -63566,7 +63658,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -63574,9 +63666,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Clears Deficient Heat and residual febrile Heat, cools Blood, clears Lung Heat, promotes urination and relieves toxic swelling. Principal indications: Low-grade fever after a warm disease with Yin injury, or Lung Heat and Blood Heat accompanied by difficult urination.",
+        "prompt": "A patient presents with Low-grade fever after a warm disease with Yin injury, or Lung Heat and Blood Heat accompanied by difficult urination. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -63596,11 +63688,11 @@
           }
         ],
         "correctLabel": "B",
-        "explanation": "Bai Wei (Cynanchi atrati Radix) is cold and Bitter, salty. Clears Deficient Heat and residual febrile Heat, cools Blood, clears Lung Heat, promotes urination and relieves toxic swelling.",
+        "explanation": "Bai Wei (Cynanchi atrati Radix) is cold and Bitter, salty. Clears Deficient Heat and residual febrile Heat, cools Blood, clears Lung Heat, promotes urination and relieves toxic swelling. The verified profile identifies this principal use: Low-grade fever after a warm disease with Yin injury, or Lung Heat and Blood Heat accompanied by difficult urination. Why the others are weaker: Huang Lian (Coptidis Rhizoma): Powerfully drains Heart and Stomach Fire, clears Middle-Jiao Damp-Heat and resolves toxicity. Lian Zi (Nelumbinis Semen): Tonifies Spleen, stops diarrhea, nourishes Heart, secures Essence and stabilizes vaginal discharge. Niu Bang Zi (Arctii Fructus): Disperses Wind-Heat, benefits the throat, resolves toxicity, vents rashes and moistens the intestines.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Wei",
@@ -63610,7 +63702,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Aclara Calor por deficiencia y Calor febril residual, enfría Sangre, aclara Calor de Pulmón, promueve orina y reduce inflamación tóxica. Indicaciones principales: Fiebre baja después de enfermedad tibia con lesión de Yin, o Calor de Pulmón y Sangre acompañado de dificultad urinaria.",
+            "prompt": "Un paciente presenta Fiebre baja después de enfermedad tibia con lesión de Yin, o Calor de Pulmón y Sangre acompañado de dificultad urinaria. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -63629,7 +63721,7 @@
                 "text": "Niu Bang Zi (Arctii Fructus)"
               }
             ],
-            "explanation": "Bai Wei (Cynanchi atrati Radix) es fría y Amarga, salada. Aclara Calor por deficiencia y Calor febril residual, enfría Sangre, aclara Calor de Pulmón, promueve orina y reduce inflamación tóxica."
+            "explanation": "Bai Wei (Cynanchi atrati Radix) es fría y Amarga, salada. Aclara Calor por deficiencia y Calor febril residual, enfría Sangre, aclara Calor de Pulmón, promueve orina y reduce inflamación tóxica. El perfil verificado identifica este uso principal: Fiebre baja después de enfermedad tibia con lesión de Yin, o Calor de Pulmón y Sangre acompañado de dificultad urinaria. Por qué no las otras: Huang Lian (Coptidis Rhizoma): Drena con potencia Fuego de Corazón y Estómago, aclara Humedad-Calor del Jiao Medio y resuelve toxicidad. Lian Zi (Nelumbinis Semen): Tonifica Bazo, detiene diarrea, nutre Corazón, asegura Esencia y estabiliza leucorrea. Niu Bang Zi (Arctii Fructus): Dispersa Viento-Calor, beneficia la garganta, resuelve toxicidad, exterioriza erupciones y humedece los intestinos."
           }
         },
         "nomenclature": {
@@ -63655,8 +63747,20 @@
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Huang Lian",
+                "pharmaceuticalName": "Coptidis Rhizoma"
+              },
+              {
                 "pinyin": "Bai Wei",
                 "pharmaceuticalName": "Cynanchi atrati Radix"
+              },
+              {
+                "pinyin": "Lian Zi",
+                "pharmaceuticalName": "Nelumbinis Semen"
+              },
+              {
+                "pinyin": "Niu Bang Zi",
+                "pharmaceuticalName": "Arctii Fructus"
               }
             ],
             "formulas": []
@@ -63680,7 +63784,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -63688,21 +63792,21 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Clears Damp-Heat, dispels Wind and stops itching, especially in weeping skin lesions. Principal indications: Red, swollen, itchy and weeping eczema or other skin lesions in which Damp-Heat and Wind are both evident.",
+        "prompt": "A patient presents with Red, swollen, itchy and weeping eczema or other skin lesions in which Damp-Heat and Wind are both evident. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Huai Mi (Sophorae Flos immaturus)"
+            "text": "Huang Bai (Phellodendri Cortex)"
           },
           {
             "label": "B",
-            "text": "Lian Qiao (Forsythiae Fructus)"
+            "text": "Qin Pi (Fraxini Cortex)"
           },
           {
             "label": "C",
-            "text": "Mu Xiang (Aucklandiae Radix)"
+            "text": "Long Dan Cao (Gentianae Radix)"
           },
           {
             "label": "D",
@@ -63710,11 +63814,11 @@
           }
         ],
         "correctLabel": "D",
-        "explanation": "Bai Xian Pi (Dictamni Cortex) is cold and Bitter. Clears Damp-Heat, dispels Wind and stops itching, especially in weeping skin lesions.",
+        "explanation": "Bai Xian Pi (Dictamni Cortex) is cold and Bitter. Clears Damp-Heat, dispels Wind and stops itching, especially in weeping skin lesions. The verified profile identifies this principal use: Red, swollen, itchy and weeping eczema or other skin lesions in which Damp-Heat and Wind are both evident. Why the others are weaker: Huang Bai (Phellodendri Cortex): Clears Lower-Jiao Damp-Heat, drains Kidney deficiency Fire and resolves toxicity in the lower body. Qin Pi (Fraxini Cortex): Clears Damp-Heat from the intestines and Liver, stops dysentery and benefits red, swollen eyes. Long Dan Cao (Gentianae Radix): Drains excess Liver/Gallbladder Fire from above and clears Liver-channel Damp-Heat from below.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Xian%20Pi",
@@ -63724,41 +63828,41 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Aclara Humedad-Calor, expulsa Viento y detiene el prurito, especialmente en lesiones cutáneas exudativas. Indicaciones principales: Eccema u otras lesiones cutáneas rojas, inflamadas, pruriginosas y exudativas donde son evidentes tanto Humedad-Calor como Viento.",
+            "prompt": "Un paciente presenta Eccema u otras lesiones cutáneas rojas, inflamadas, pruriginosas y exudativas donde son evidentes tanto Humedad-Calor como Viento. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Huai Mi (Sophorae Flos immaturus)"
+                "text": "Huang Bai (Phellodendri Cortex)"
               },
               {
                 "label": "B",
-                "text": "Lian Qiao (Forsythiae Fructus)"
+                "text": "Qin Pi (Fraxini Cortex)"
               },
               {
                 "label": "C",
-                "text": "Mu Xiang (Aucklandiae Radix)"
+                "text": "Long Dan Cao (Gentianae Radix)"
               },
               {
                 "label": "D",
                 "text": "Bai Xian Pi (Dictamni Cortex)"
               }
             ],
-            "explanation": "Bai Xian Pi (Dictamni Cortex) es fría y Amarga. Aclara Humedad-Calor, expulsa Viento y detiene el prurito, especialmente en lesiones cutáneas exudativas."
+            "explanation": "Bai Xian Pi (Dictamni Cortex) es fría y Amarga. Aclara Humedad-Calor, expulsa Viento y detiene el prurito, especialmente en lesiones cutáneas exudativas. El perfil verificado identifica este uso principal: Eccema u otras lesiones cutáneas rojas, inflamadas, pruriginosas y exudativas donde son evidentes tanto Humedad-Calor como Viento. Por qué no las otras: Huang Bai (Phellodendri Cortex): Aclara Humedad-Calor del Jiao Inferior, drena Fuego por deficiencia de Riñón y resuelve toxicidad en la parte inferior. Qin Pi (Fraxini Cortex): Aclara Humedad-Calor de los intestinos y el Hígado, detiene la disentería y beneficia los ojos rojos e inflamados. Long Dan Cao (Gentianae Radix): Drena Fuego por exceso de Hígado/Vesícula Biliar arriba y aclara Humedad-Calor del canal de Hígado abajo."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Huai Mi",
-              "pharmaceuticalName": "Sophorae Flos immaturus"
+              "pinyin": "Huang Bai",
+              "pharmaceuticalName": "Phellodendri Cortex"
             },
             {
-              "pinyin": "Lian Qiao",
-              "pharmaceuticalName": "Forsythiae Fructus"
+              "pinyin": "Qin Pi",
+              "pharmaceuticalName": "Fraxini Cortex"
             },
             {
-              "pinyin": "Mu Xiang",
-              "pharmaceuticalName": "Aucklandiae Radix"
+              "pinyin": "Long Dan Cao",
+              "pharmaceuticalName": "Gentianae Radix"
             },
             {
               "pinyin": "Bai Xian Pi",
@@ -63768,6 +63872,18 @@
           "formulas": [],
           "feedback": {
             "herbs": [
+              {
+                "pinyin": "Huang Bai",
+                "pharmaceuticalName": "Phellodendri Cortex"
+              },
+              {
+                "pinyin": "Qin Pi",
+                "pharmaceuticalName": "Fraxini Cortex"
+              },
+              {
+                "pinyin": "Long Dan Cao",
+                "pharmaceuticalName": "Gentianae Radix"
+              },
               {
                 "pinyin": "Bai Xian Pi",
                 "pharmaceuticalName": "Dictamni Cortex"
@@ -63794,7 +63910,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -63802,13 +63918,13 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Tonifies Spleen Qi while drying Dampness, stops sweating and diarrhea and calms a fetus disturbed by Spleen deficiency. Principal indications: Poor appetite and fatigue with abdominal fullness, loose stool, edema or heaviness from Spleen-Qi deficiency plus Dampness.",
+        "prompt": "A patient presents with Poor appetite and fatigue with abdominal fullness, loose stool, edema or heaviness from Spleen-Qi deficiency plus Dampness. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Pu Huang (Typhae Pollen)"
+            "text": "Dang Shen (Codonopsis Radix)"
           },
           {
             "label": "B",
@@ -63816,19 +63932,19 @@
           },
           {
             "label": "C",
-            "text": "Sha Ren (Amomi Fructus)"
+            "text": "Ren Shen (Ginseng Radix)"
           },
           {
             "label": "D",
-            "text": "Tan Xiang (Santali albi Lignum)"
+            "text": "Da Zao (Jujubae Fructus)"
           }
         ],
         "correctLabel": "B",
-        "explanation": "Bai Zhu (Atractylodis macrocephalae Rhizoma) is warm and Bitter, sweet. Tonifies Spleen Qi while drying Dampness, stops sweating and diarrhea and calms a fetus disturbed by Spleen deficiency.",
+        "explanation": "Bai Zhu (Atractylodis macrocephalae Rhizoma) is warm and Bitter, sweet. Tonifies Spleen Qi while drying Dampness, stops sweating and diarrhea and calms a fetus disturbed by Spleen deficiency. The verified profile identifies this principal use: Poor appetite and fatigue with abdominal fullness, loose stool, edema or heaviness from Spleen-Qi deficiency plus Dampness. Why the others are weaker: Dang Shen (Codonopsis Radix): Gently tonifies Spleen and Lung Qi, supports Blood generation and produces fluids without the heaviness of Ren Shen. Ren Shen (Ginseng Radix): Powerfully tonifies Original Qi, rescues collapse, strengthens Spleen and Lung, generates fluids and calms Shen. Da Zao (Jujubae Fructus): Gently tonifies Middle Qi, nourishes Blood, calms Shen and harmonizes harsh ingredients.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bai%20Zhu",
@@ -63838,11 +63954,11 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Tonifica Qi de Bazo mientras seca Humedad, detiene sudor/diarrea y calma feto alterado por deficiencia de Bazo. Indicaciones principales: Poco apetito y fatiga con plenitud abdominal, heces sueltas, edema o pesadez por deficiencia de Qi de Bazo más Humedad.",
+            "prompt": "Un paciente presenta Poco apetito y fatiga con plenitud abdominal, heces sueltas, edema o pesadez por deficiencia de Qi de Bazo más Humedad. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Pu Huang (Typhae Pollen)"
+                "text": "Dang Shen (Codonopsis Radix)"
               },
               {
                 "label": "B",
@@ -63850,41 +63966,53 @@
               },
               {
                 "label": "C",
-                "text": "Sha Ren (Amomi Fructus)"
+                "text": "Ren Shen (Ginseng Radix)"
               },
               {
                 "label": "D",
-                "text": "Tan Xiang (Santali albi Lignum)"
+                "text": "Da Zao (Jujubae Fructus)"
               }
             ],
-            "explanation": "Bai Zhu (Atractylodis macrocephalae Rhizoma) es tibia y Amarga, dulce. Tonifica Qi de Bazo mientras seca Humedad, detiene sudor/diarrea y calma feto alterado por deficiencia de Bazo."
+            "explanation": "Bai Zhu (Atractylodis macrocephalae Rhizoma) es tibia y Amarga, dulce. Tonifica Qi de Bazo mientras seca Humedad, detiene sudor/diarrea y calma feto alterado por deficiencia de Bazo. El perfil verificado identifica este uso principal: Poco apetito y fatiga con plenitud abdominal, heces sueltas, edema o pesadez por deficiencia de Qi de Bazo más Humedad. Por qué no las otras: Dang Shen (Codonopsis Radix): Tonifica suavemente Qi de Bazo y Pulmón, apoya generación de Sangre y produce líquidos sin la pesadez de Ren Shen. Ren Shen (Ginseng Radix): Tonifica con fuerza Qi Original, rescata colapso, fortalece Bazo y Pulmón, genera líquidos y calma Shen. Da Zao (Jujubae Fructus): Tonifica suavemente Qi del Medio, nutre Sangre, calma Shen y armoniza ingredientes agresivos."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Pu Huang",
-              "pharmaceuticalName": "Typhae Pollen"
+              "pinyin": "Dang Shen",
+              "pharmaceuticalName": "Codonopsis Radix"
             },
             {
               "pinyin": "Bai Zhu",
               "pharmaceuticalName": "Atractylodis macrocephalae Rhizoma"
             },
             {
-              "pinyin": "Sha Ren",
-              "pharmaceuticalName": "Amomi Fructus"
+              "pinyin": "Ren Shen",
+              "pharmaceuticalName": "Ginseng Radix"
             },
             {
-              "pinyin": "Tan Xiang",
-              "pharmaceuticalName": "Santali albi Lignum"
+              "pinyin": "Da Zao",
+              "pharmaceuticalName": "Jujubae Fructus"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Dang Shen",
+                "pharmaceuticalName": "Codonopsis Radix"
+              },
+              {
                 "pinyin": "Bai Zhu",
                 "pharmaceuticalName": "Atractylodis macrocephalae Rhizoma"
+              },
+              {
+                "pinyin": "Ren Shen",
+                "pharmaceuticalName": "Ginseng Radix"
+              },
+              {
+                "pinyin": "Da Zao",
+                "pharmaceuticalName": "Jujubae Fructus"
               }
             ],
             "formulas": []
@@ -63908,7 +64036,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -63916,9 +64044,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Quickly disperses Wind-Heat from the head, eyes and throat, vents rashes and courses constrained Liver Qi. Principal indications: Wind-Heat with headache, red eyes, sore throat or rash plus irritability or hypochondriac constraint.",
+        "prompt": "A patient presents with Wind-Heat with headache, red eyes, sore throat or rash plus irritability or hypochondriac constraint. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -63926,23 +64054,23 @@
           },
           {
             "label": "B",
-            "text": "He Zi (Chebulae Fructus)"
+            "text": "Man Jing Zi (Viticis Fructus)"
           },
           {
             "label": "C",
-            "text": "Ku Shen (Sophorae flavescentis Radix)"
+            "text": "Dan Dou Chi (Sojae Semen preparatum)"
           },
           {
             "label": "D",
-            "text": "Mu Dan Pi (Moutan Cortex)"
+            "text": "Sheng Ma (Cimicifugae Rhizoma)"
           }
         ],
         "correctLabel": "A",
-        "explanation": "Bo He (Menthae haplocalycis Herba) is cool and Acrid, aromatic. Quickly disperses Wind-Heat from the head, eyes and throat, vents rashes and courses constrained Liver Qi.",
+        "explanation": "Bo He (Menthae haplocalycis Herba) is cool and Acrid, aromatic. Quickly disperses Wind-Heat from the head, eyes and throat, vents rashes and courses constrained Liver Qi. The verified profile identifies this principal use: Wind-Heat with headache, red eyes, sore throat or rash plus irritability or hypochondriac constraint. Why the others are weaker: Man Jing Zi (Viticis Fructus): Disperses Wind-Heat concentrated in the head, clears the eyes and can alleviate Wind-Damp pain. Dan Dou Chi (Sojae Semen preparatum): Gently releases constrained exterior pathogens and relieves restlessness without the forceful dispersing action of the main Wind-Heat herbs. Sheng Ma (Cimicifugae Rhizoma): Disperses Wind-Heat, vents rashes, clears toxicity and raises the clear Yang of the Spleen and Stomach.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Bo%20He",
@@ -63952,7 +64080,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Dispersa rápidamente Viento-Calor de cabeza, ojos y garganta, exterioriza erupciones y moviliza el Qi de Hígado estancado. Indicaciones principales: Viento-Calor con cefalea, ojos rojos, dolor de garganta o erupción, junto con irritabilidad o tensión hipocondríaca.",
+            "prompt": "Un paciente presenta Viento-Calor con cefalea, ojos rojos, dolor de garganta o erupción, junto con irritabilidad o tensión hipocondríaca. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -63960,18 +64088,18 @@
               },
               {
                 "label": "B",
-                "text": "He Zi (Chebulae Fructus)"
+                "text": "Man Jing Zi (Viticis Fructus)"
               },
               {
                 "label": "C",
-                "text": "Ku Shen (Sophorae flavescentis Radix)"
+                "text": "Dan Dou Chi (Sojae Semen preparatum)"
               },
               {
                 "label": "D",
-                "text": "Mu Dan Pi (Moutan Cortex)"
+                "text": "Sheng Ma (Cimicifugae Rhizoma)"
               }
             ],
-            "explanation": "Bo He (Menthae haplocalycis Herba) es fresca y Acre, aromática. Dispersa rápidamente Viento-Calor de cabeza, ojos y garganta, exterioriza erupciones y moviliza el Qi de Hígado estancado."
+            "explanation": "Bo He (Menthae haplocalycis Herba) es fresca y Acre, aromática. Dispersa rápidamente Viento-Calor de cabeza, ojos y garganta, exterioriza erupciones y moviliza el Qi de Hígado estancado. El perfil verificado identifica este uso principal: Viento-Calor con cefalea, ojos rojos, dolor de garganta o erupción, junto con irritabilidad o tensión hipocondríaca. Por qué no las otras: Man Jing Zi (Viticis Fructus): Dispersa Viento-Calor concentrado en la cabeza, aclara los ojos y puede aliviar dolor por Viento-Humedad. Dan Dou Chi (Sojae Semen preparatum): Libera suavemente patógenos constreñidos en el Exterior y alivia inquietud sin la acción dispersante intensa de las principales hierbas para Viento-Calor. Sheng Ma (Cimicifugae Rhizoma): Dispersa Viento-Calor, exterioriza erupciones, aclara toxicidad y eleva Yang claro de Bazo y Estómago."
           }
         },
         "nomenclature": {
@@ -63981,16 +64109,16 @@
               "pharmaceuticalName": "Menthae haplocalycis Herba"
             },
             {
-              "pinyin": "He Zi",
-              "pharmaceuticalName": "Chebulae Fructus"
+              "pinyin": "Man Jing Zi",
+              "pharmaceuticalName": "Viticis Fructus"
             },
             {
-              "pinyin": "Ku Shen",
-              "pharmaceuticalName": "Sophorae flavescentis Radix"
+              "pinyin": "Dan Dou Chi",
+              "pharmaceuticalName": "Sojae Semen preparatum"
             },
             {
-              "pinyin": "Mu Dan Pi",
-              "pharmaceuticalName": "Moutan Cortex"
+              "pinyin": "Sheng Ma",
+              "pharmaceuticalName": "Cimicifugae Rhizoma"
             }
           ],
           "formulas": [],
@@ -63999,6 +64127,18 @@
               {
                 "pinyin": "Bo He",
                 "pharmaceuticalName": "Menthae haplocalycis Herba"
+              },
+              {
+                "pinyin": "Man Jing Zi",
+                "pharmaceuticalName": "Viticis Fructus"
+              },
+              {
+                "pinyin": "Dan Dou Chi",
+                "pharmaceuticalName": "Sojae Semen preparatum"
+              },
+              {
+                "pinyin": "Sheng Ma",
+                "pharmaceuticalName": "Cimicifugae Rhizoma"
               }
             ],
             "formulas": []
@@ -64022,7 +64162,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -64030,9 +64170,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Disperses Wind, opens the nasal passages and addresses Wind-Damp itching and pain. Principal indications: Nasal obstruction and frontal headache, with possible itchy skin or Wind-Damp pain.",
+        "prompt": "A patient presents with Nasal obstruction and frontal headache, with possible itchy skin or Wind-Damp pain. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -64052,11 +64192,11 @@
           }
         ],
         "correctLabel": "D",
-        "explanation": "Cang Er Zi (Xanthii Fructus) is warm; toxic and Acrid, bitter. Disperses Wind, opens the nasal passages and addresses Wind-Damp itching and pain.",
+        "explanation": "Cang Er Zi (Xanthii Fructus) is warm; toxic and Acrid, bitter. Disperses Wind, opens the nasal passages and addresses Wind-Damp itching and pain. The verified profile identifies this principal use: Nasal obstruction and frontal headache, with possible itchy skin or Wind-Damp pain. Why the others are weaker: He Ye (Nelumbinis Folium): Clears Summerheat, raises clear Yang and stops bleeding; the charred form emphasizes hemostasis. Jue Ming Zi (Cassiae Semen): Clears Liver Heat, brightens the eyes and moistens the intestines to unblock the bowels. Mo Yao (Myrrha): Breaks Blood stasis, stops fixed pain, reduces swelling and supports tissue healing.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Cang%20Er%20Zi",
@@ -64066,7 +64206,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Dispersa Viento, abre los orificios nasales y trata prurito y dolor por Viento-Humedad. Indicaciones principales: Obstrucción nasal y cefalea frontal, con posible prurito o dolor por Viento-Humedad.",
+            "prompt": "Un paciente presenta Obstrucción nasal y cefalea frontal, con posible prurito o dolor por Viento-Humedad. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -64085,7 +64225,7 @@
                 "text": "Cang Er Zi (Xanthii Fructus)"
               }
             ],
-            "explanation": "Cang Er Zi (Xanthii Fructus) es tibia; tóxica y Acre, amarga. Dispersa Viento, abre los orificios nasales y trata prurito y dolor por Viento-Humedad."
+            "explanation": "Cang Er Zi (Xanthii Fructus) es tibia; tóxica y Acre, amarga. Dispersa Viento, abre los orificios nasales y trata prurito y dolor por Viento-Humedad. El perfil verificado identifica este uso principal: Obstrucción nasal y cefalea frontal, con posible prurito o dolor por Viento-Humedad. Por qué no las otras: He Ye (Nelumbinis Folium): Aclara Calor de Verano, eleva Yang claro y detiene sangrado; la forma carbonizada enfatiza hemostasia. Jue Ming Zi (Cassiae Semen): Aclara Calor de Hígado, mejora los ojos y humedece los intestinos para desbloquear las evacuaciones. Mo Yao (Myrrha): Rompe estasis de Sangre, detiene dolor fijo, reduce hinchazón y apoya reparación de tejido."
           }
         },
         "nomenclature": {
@@ -64110,6 +64250,18 @@
           "formulas": [],
           "feedback": {
             "herbs": [
+              {
+                "pinyin": "He Ye",
+                "pharmaceuticalName": "Nelumbinis Folium"
+              },
+              {
+                "pinyin": "Jue Ming Zi",
+                "pharmaceuticalName": "Cassiae Semen"
+              },
+              {
+                "pinyin": "Mo Yao",
+                "pharmaceuticalName": "Myrrha"
+              },
               {
                 "pinyin": "Cang Er Zi",
                 "pharmaceuticalName": "Xanthii Fructus"
@@ -64136,7 +64288,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -64144,13 +64296,13 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Fiercely dispels Wind-Cold-Damp and relieves severe fixed Bi pain. Principal indications: Severe cold, fixed, penetrating joint or channel pain that resists gentler herbs.",
+        "prompt": "A patient presents with Severe cold, fixed, penetrating joint or channel pain that resists gentler herbs. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Jin Yin Hua (Lonicerae Flos)"
+            "text": "Du Huo (Angelicae pubescentis Radix)"
           },
           {
             "label": "B",
@@ -64158,19 +64310,19 @@
           },
           {
             "label": "C",
-            "text": "Mai Ya (Hordei Fructus germinatus)"
+            "text": "Hai Tong Pi (Erythrinae Cortex)"
           },
           {
             "label": "D",
-            "text": "Qin Jiao (Gentianae macrophyllae Radix)"
+            "text": "Mu Gua (Chaenomelis Fructus)"
           }
         ],
         "correctLabel": "B",
-        "explanation": "Cao Wu (Aconiti kusnezoffii Radix) is hot; very toxic and Acrid, bitter. Fiercely dispels Wind-Cold-Damp and relieves severe fixed Bi pain.",
+        "explanation": "Cao Wu (Aconiti kusnezoffii Radix) is hot; very toxic and Acrid, bitter. Fiercely dispels Wind-Cold-Damp and relieves severe fixed Bi pain. The verified profile identifies this principal use: Severe cold, fixed, penetrating joint or channel pain that resists gentler herbs. Why the others are weaker: Du Huo (Angelicae pubescentis Radix): Expels Wind-Cold-Damp from the deeper, lower body and relieves chronic Bi pain. Hai Tong Pi (Erythrinae Cortex): Expels Wind-Damp, opens channels and reaches painful swelling and itching of the skin. Mu Gua (Chaenomelis Fructus): Relaxes sinews, transforms Dampness and harmonizes the Stomach.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Cao%20Wu",
@@ -64180,11 +64332,11 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Expulsa con ferocidad Viento-Frío-Humedad y alivia dolor Bi fijo e intenso. Indicaciones principales: Dolor intenso, frío, fijo y penetrante de articulaciones o canales que no responde a hierbas suaves.",
+            "prompt": "Un paciente presenta Dolor intenso, frío, fijo y penetrante de articulaciones o canales que no responde a hierbas suaves. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Jin Yin Hua (Lonicerae Flos)"
+                "text": "Du Huo (Angelicae pubescentis Radix)"
               },
               {
                 "label": "B",
@@ -64192,41 +64344,53 @@
               },
               {
                 "label": "C",
-                "text": "Mai Ya (Hordei Fructus germinatus)"
+                "text": "Hai Tong Pi (Erythrinae Cortex)"
               },
               {
                 "label": "D",
-                "text": "Qin Jiao (Gentianae macrophyllae Radix)"
+                "text": "Mu Gua (Chaenomelis Fructus)"
               }
             ],
-            "explanation": "Cao Wu (Aconiti kusnezoffii Radix) es caliente; muy tóxica y Acre, amarga. Expulsa con ferocidad Viento-Frío-Humedad y alivia dolor Bi fijo e intenso."
+            "explanation": "Cao Wu (Aconiti kusnezoffii Radix) es caliente; muy tóxica y Acre, amarga. Expulsa con ferocidad Viento-Frío-Humedad y alivia dolor Bi fijo e intenso. El perfil verificado identifica este uso principal: Dolor intenso, frío, fijo y penetrante de articulaciones o canales que no responde a hierbas suaves. Por qué no las otras: Du Huo (Angelicae pubescentis Radix): Expulsa Viento-Frío-Humedad de la profundidad y la parte inferior del cuerpo y alivia dolor Bi crónico. Hai Tong Pi (Erythrinae Cortex): Expulsa Viento-Humedad, abre canales y alcanza hinchazón dolorosa y prurito de la piel. Mu Gua (Chaenomelis Fructus): Relaja tendones, transforma Humedad y armoniza el Estómago."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Jin Yin Hua",
-              "pharmaceuticalName": "Lonicerae Flos"
+              "pinyin": "Du Huo",
+              "pharmaceuticalName": "Angelicae pubescentis Radix"
             },
             {
               "pinyin": "Cao Wu",
               "pharmaceuticalName": "Aconiti kusnezoffii Radix"
             },
             {
-              "pinyin": "Mai Ya",
-              "pharmaceuticalName": "Hordei Fructus germinatus"
+              "pinyin": "Hai Tong Pi",
+              "pharmaceuticalName": "Erythrinae Cortex"
             },
             {
-              "pinyin": "Qin Jiao",
-              "pharmaceuticalName": "Gentianae macrophyllae Radix"
+              "pinyin": "Mu Gua",
+              "pharmaceuticalName": "Chaenomelis Fructus"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Du Huo",
+                "pharmaceuticalName": "Angelicae pubescentis Radix"
+              },
+              {
                 "pinyin": "Cao Wu",
                 "pharmaceuticalName": "Aconiti kusnezoffii Radix"
+              },
+              {
+                "pinyin": "Hai Tong Pi",
+                "pharmaceuticalName": "Erythrinae Cortex"
+              },
+              {
+                "pinyin": "Mu Gua",
+                "pharmaceuticalName": "Chaenomelis Fructus"
               }
             ],
             "formulas": []
@@ -64245,7 +64409,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -64253,21 +64417,21 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Regulates Middle-Jiao Qi, dries Dampness and transforms Phlegm. Principal indications: Epigastric distension, poor appetite, nausea or vomiting with Damp-Phlegm.",
+        "prompt": "A patient presents with Epigastric distension, poor appetite, nausea or vomiting with Damp-Phlegm. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Lai Fu Zi (Raphani Semen)"
+            "text": "Zhi Ke (Aurantii Fructus)"
           },
           {
             "label": "B",
-            "text": "Mu Li (Ostreae Concha)"
+            "text": "Qing Pi (Citri reticulatae viride Pericarpium)"
           },
           {
             "label": "C",
-            "text": "Rou Cong Rong (Cistanches Herba)"
+            "text": "Da Fu Pi (Arecae Pericarpium)"
           },
           {
             "label": "D",
@@ -64275,11 +64439,11 @@
           }
         ],
         "correctLabel": "D",
-        "explanation": "Chen Pi (Citri reticulatae Pericarpium) is warm and Acrid, bitter. Regulates Middle-Jiao Qi, dries Dampness and transforms Phlegm.",
+        "explanation": "Chen Pi (Citri reticulatae Pericarpium) is warm and Acrid, bitter. Regulates Middle-Jiao Qi, dries Dampness and transforms Phlegm. The verified profile identifies this principal use: Epigastric distension, poor appetite, nausea or vomiting with Damp-Phlegm. Why the others are weaker: Zhi Ke (Aurantii Fructus): Gently regulates Qi across the chest and upper abdomen and relieves distension. Qing Pi (Citri reticulatae viride Pericarpium): Forcefully spreads Liver Qi, breaks accumulation and reduces nodules. Da Fu Pi (Arecae Pericarpium): Moves Qi throughout the abdomen, promotes urination and reduces edema.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Chen%20Pi",
@@ -64289,41 +64453,41 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Regula Qi del Jiao Medio, seca Humedad y transforma Flema. Indicaciones principales: Distensión epigástrica, poco apetito, náusea o vómito con Humedad-Flema.",
+            "prompt": "Un paciente presenta Distensión epigástrica, poco apetito, náusea o vómito con Humedad-Flema. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Lai Fu Zi (Raphani Semen)"
+                "text": "Zhi Ke (Aurantii Fructus)"
               },
               {
                 "label": "B",
-                "text": "Mu Li (Ostreae Concha)"
+                "text": "Qing Pi (Citri reticulatae viride Pericarpium)"
               },
               {
                 "label": "C",
-                "text": "Rou Cong Rong (Cistanches Herba)"
+                "text": "Da Fu Pi (Arecae Pericarpium)"
               },
               {
                 "label": "D",
                 "text": "Chen Pi (Citri reticulatae Pericarpium)"
               }
             ],
-            "explanation": "Chen Pi (Citri reticulatae Pericarpium) es tibia y Acre, amarga. Regula Qi del Jiao Medio, seca Humedad y transforma Flema."
+            "explanation": "Chen Pi (Citri reticulatae Pericarpium) es tibia y Acre, amarga. Regula Qi del Jiao Medio, seca Humedad y transforma Flema. El perfil verificado identifica este uso principal: Distensión epigástrica, poco apetito, náusea o vómito con Humedad-Flema. Por qué no las otras: Zhi Ke (Aurantii Fructus): Regula suavemente Qi en tórax y abdomen superior y alivia distensión. Qing Pi (Citri reticulatae viride Pericarpium): Mueve con fuerza Qi de Hígado, rompe acumulación y reduce nódulos. Da Fu Pi (Arecae Pericarpium): Mueve Qi por todo el abdomen, promueve orina y reduce edema."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Lai Fu Zi",
-              "pharmaceuticalName": "Raphani Semen"
+              "pinyin": "Zhi Ke",
+              "pharmaceuticalName": "Aurantii Fructus"
             },
             {
-              "pinyin": "Mu Li",
-              "pharmaceuticalName": "Ostreae Concha"
+              "pinyin": "Qing Pi",
+              "pharmaceuticalName": "Citri reticulatae viride Pericarpium"
             },
             {
-              "pinyin": "Rou Cong Rong",
-              "pharmaceuticalName": "Cistanches Herba"
+              "pinyin": "Da Fu Pi",
+              "pharmaceuticalName": "Arecae Pericarpium"
             },
             {
               "pinyin": "Chen Pi",
@@ -64333,6 +64497,18 @@
           "formulas": [],
           "feedback": {
             "herbs": [
+              {
+                "pinyin": "Zhi Ke",
+                "pharmaceuticalName": "Aurantii Fructus"
+              },
+              {
+                "pinyin": "Qing Pi",
+                "pharmaceuticalName": "Citri reticulatae viride Pericarpium"
+              },
+              {
+                "pinyin": "Da Fu Pi",
+                "pharmaceuticalName": "Arecae Pericarpium"
+              },
               {
                 "pinyin": "Chen Pi",
                 "pharmaceuticalName": "Citri reticulatae Pericarpium"
@@ -64359,7 +64535,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -64367,17 +64543,17 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Cools excess Blood Heat, invigorates Blood, dispels stasis and relieves pain. Principal indications: Blood Heat accompanied by fixed pain, abdominal masses, traumatic swelling or other clear signs of stasis.",
+        "prompt": "A patient presents with Blood Heat accompanied by fixed pain, abdominal masses, traumatic swelling or other clear signs of stasis. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Hou Po (Magnoliae officinalis Cortex)"
+            "text": "Zi Cao (Arnebiae/Lithospermi Radix)"
           },
           {
             "label": "B",
-            "text": "Lai Fu Zi (Raphani Semen)"
+            "text": "Xuan Shen (Scrophulariae Radix)"
           },
           {
             "label": "C",
@@ -64385,15 +64561,15 @@
           },
           {
             "label": "D",
-            "text": "Mu Li (Ostreae Concha)"
+            "text": "Shui Niu Jiao (Bubali Cornu)"
           }
         ],
         "correctLabel": "C",
-        "explanation": "Chi Shao (Paeoniae Radix rubra) is slightly cold and Bitter, sour. Cools excess Blood Heat, invigorates Blood, dispels stasis and relieves pain.",
+        "explanation": "Chi Shao (Paeoniae Radix rubra) is slightly cold and Bitter, sour. Cools excess Blood Heat, invigorates Blood, dispels stasis and relieves pain. The verified profile identifies this principal use: Blood Heat accompanied by fixed pain, abdominal masses, traumatic swelling or other clear signs of stasis. Why the others are weaker: Zi Cao (Arnebiae/Lithospermi Radix): Cools and invigorates Blood, resolves toxicity and vents rashes and lesions. Xuan Shen (Scrophulariae Radix): Clears Heat, cools Blood, nourishes Yin, drains Fire, resolves toxicity and softens hard nodules. Shui Niu Jiao (Bubali Cornu): Cools Blood, stops bleeding, clears Heat-toxin and calms delirium or convulsions from intense Heat.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Chi%20Shao",
@@ -64403,15 +64579,15 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Enfría Calor de Sangre por exceso, moviliza Sangre, disipa estasis y alivia dolor. Indicaciones principales: Calor de Sangre acompañado de dolor fijo, masas abdominales, inflamación traumática u otros signos claros de estasis.",
+            "prompt": "Un paciente presenta Calor de Sangre acompañado de dolor fijo, masas abdominales, inflamación traumática u otros signos claros de estasis. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Hou Po (Magnoliae officinalis Cortex)"
+                "text": "Zi Cao (Arnebiae/Lithospermi Radix)"
               },
               {
                 "label": "B",
-                "text": "Lai Fu Zi (Raphani Semen)"
+                "text": "Xuan Shen (Scrophulariae Radix)"
               },
               {
                 "label": "C",
@@ -64419,37 +64595,49 @@
               },
               {
                 "label": "D",
-                "text": "Mu Li (Ostreae Concha)"
+                "text": "Shui Niu Jiao (Bubali Cornu)"
               }
             ],
-            "explanation": "Chi Shao (Paeoniae Radix rubra) es ligeramente fría y Amarga, ácida. Enfría Calor de Sangre por exceso, moviliza Sangre, disipa estasis y alivia dolor."
+            "explanation": "Chi Shao (Paeoniae Radix rubra) es ligeramente fría y Amarga, ácida. Enfría Calor de Sangre por exceso, moviliza Sangre, disipa estasis y alivia dolor. El perfil verificado identifica este uso principal: Calor de Sangre acompañado de dolor fijo, masas abdominales, inflamación traumática u otros signos claros de estasis. Por qué no las otras: Zi Cao (Arnebiae/Lithospermi Radix): Enfría y moviliza Sangre, resuelve toxicidad y exterioriza erupciones y lesiones. Xuan Shen (Scrophulariae Radix): Aclara Calor, enfría Sangre, nutre Yin, drena Fuego, resuelve toxicidad y ablanda nódulos duros. Shui Niu Jiao (Bubali Cornu): Enfría Sangre, detiene sangrado, aclara Calor-Toxina y calma delirio o convulsiones por Calor intenso."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Hou Po",
-              "pharmaceuticalName": "Magnoliae officinalis Cortex"
+              "pinyin": "Zi Cao",
+              "pharmaceuticalName": "Arnebiae/Lithospermi Radix"
             },
             {
-              "pinyin": "Lai Fu Zi",
-              "pharmaceuticalName": "Raphani Semen"
+              "pinyin": "Xuan Shen",
+              "pharmaceuticalName": "Scrophulariae Radix"
             },
             {
               "pinyin": "Chi Shao",
               "pharmaceuticalName": "Paeoniae Radix rubra"
             },
             {
-              "pinyin": "Mu Li",
-              "pharmaceuticalName": "Ostreae Concha"
+              "pinyin": "Shui Niu Jiao",
+              "pharmaceuticalName": "Bubali Cornu"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Zi Cao",
+                "pharmaceuticalName": "Arnebiae/Lithospermi Radix"
+              },
+              {
+                "pinyin": "Xuan Shen",
+                "pharmaceuticalName": "Scrophulariae Radix"
+              },
+              {
                 "pinyin": "Chi Shao",
                 "pharmaceuticalName": "Paeoniae Radix rubra"
+              },
+              {
+                "pinyin": "Shui Niu Jiao",
+                "pharmaceuticalName": "Bubali Cornu"
               }
             ],
             "formulas": []
@@ -64473,7 +64661,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -64481,17 +64669,17 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Moistens the Lung, clears Phlegm-Heat, stops cough and gently dissipates nodules. Principal indications: Chronic dry cough or scant, sticky sputum with Lung-Yin or fluid deficiency.",
+        "prompt": "A patient presents with Chronic dry cough or scant, sticky sputum with Lung-Yin or fluid deficiency. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Ju Hong (Citri reticulatae Exocarpium rubrum)"
+            "text": "Gua Lou Pi (Trichosanthis Pericarpium)"
           },
           {
             "label": "B",
-            "text": "Man Jing Zi (Viticis Fructus)"
+            "text": "Gua Lou (Trichosanthis Fructus)"
           },
           {
             "label": "C",
@@ -64499,15 +64687,15 @@
           },
           {
             "label": "D",
-            "text": "Qin Pi (Fraxini Cortex)"
+            "text": "Zhu Ru (Bambusae Caulis in taeniam)"
           }
         ],
         "correctLabel": "C",
-        "explanation": "Chuan Bei Mu (Fritillariae cirrhosae Bulbus) is slightly cold and Bitter, sweet. Moistens the Lung, clears Phlegm-Heat, stops cough and gently dissipates nodules.",
+        "explanation": "Chuan Bei Mu (Fritillariae cirrhosae Bulbus) is slightly cold and Bitter, sweet. Moistens the Lung, clears Phlegm-Heat, stops cough and gently dissipates nodules. The verified profile identifies this principal use: Chronic dry cough or scant, sticky sputum with Lung-Yin or fluid deficiency. Why the others are weaker: Gua Lou Pi (Trichosanthis Pericarpium): The peel emphasizes Lung, chest and throat: it clears Heat, transforms Phlegm and regulates chest Qi. Gua Lou (Trichosanthis Fructus): Clears Heat, transforms Phlegm, expands the chest and moistens the intestines. Zhu Ru (Bambusae Caulis in taeniam): Clears Phlegm-Heat, relieves irritability and calms rebellious Stomach Qi.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Chuan%20Bei%20Mu",
@@ -64517,15 +64705,15 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Humedece Pulmón, aclara Flema-Calor, detiene tos y disipa suavemente nódulos. Indicaciones principales: Tos seca crónica o esputo escaso y pegajoso con deficiencia de Yin o líquidos de Pulmón.",
+            "prompt": "Un paciente presenta Tos seca crónica o esputo escaso y pegajoso con deficiencia de Yin o líquidos de Pulmón. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Ju Hong (Citri reticulatae Exocarpium rubrum)"
+                "text": "Gua Lou Pi (Trichosanthis Pericarpium)"
               },
               {
                 "label": "B",
-                "text": "Man Jing Zi (Viticis Fructus)"
+                "text": "Gua Lou (Trichosanthis Fructus)"
               },
               {
                 "label": "C",
@@ -64533,37 +64721,49 @@
               },
               {
                 "label": "D",
-                "text": "Qin Pi (Fraxini Cortex)"
+                "text": "Zhu Ru (Bambusae Caulis in taeniam)"
               }
             ],
-            "explanation": "Chuan Bei Mu (Fritillariae cirrhosae Bulbus) es ligeramente fría y Amarga, dulce. Humedece Pulmón, aclara Flema-Calor, detiene tos y disipa suavemente nódulos."
+            "explanation": "Chuan Bei Mu (Fritillariae cirrhosae Bulbus) es ligeramente fría y Amarga, dulce. Humedece Pulmón, aclara Flema-Calor, detiene tos y disipa suavemente nódulos. El perfil verificado identifica este uso principal: Tos seca crónica o esputo escaso y pegajoso con deficiencia de Yin o líquidos de Pulmón. Por qué no las otras: Gua Lou Pi (Trichosanthis Pericarpium): La cáscara enfatiza Pulmón, tórax y garganta: aclara Calor, transforma Flema y regula Qi torácico. Gua Lou (Trichosanthis Fructus): Aclara Calor, transforma Flema, expande el tórax y humedece intestinos. Zhu Ru (Bambusae Caulis in taeniam): Aclara Flema-Calor, alivia irritabilidad y calma Qi rebelde de Estómago."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Ju Hong",
-              "pharmaceuticalName": "Citri reticulatae Exocarpium rubrum"
+              "pinyin": "Gua Lou Pi",
+              "pharmaceuticalName": "Trichosanthis Pericarpium"
             },
             {
-              "pinyin": "Man Jing Zi",
-              "pharmaceuticalName": "Viticis Fructus"
+              "pinyin": "Gua Lou",
+              "pharmaceuticalName": "Trichosanthis Fructus"
             },
             {
               "pinyin": "Chuan Bei Mu",
               "pharmaceuticalName": "Fritillariae cirrhosae Bulbus"
             },
             {
-              "pinyin": "Qin Pi",
-              "pharmaceuticalName": "Fraxini Cortex"
+              "pinyin": "Zhu Ru",
+              "pharmaceuticalName": "Bambusae Caulis in taeniam"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Gua Lou Pi",
+                "pharmaceuticalName": "Trichosanthis Pericarpium"
+              },
+              {
+                "pinyin": "Gua Lou",
+                "pharmaceuticalName": "Trichosanthis Fructus"
+              },
+              {
                 "pinyin": "Chuan Bei Mu",
                 "pharmaceuticalName": "Fritillariae cirrhosae Bulbus"
+              },
+              {
+                "pinyin": "Zhu Ru",
+                "pharmaceuticalName": "Bambusae Caulis in taeniam"
               }
             ],
             "formulas": []
@@ -64587,7 +64787,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -64595,13 +64795,13 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Clears Heat, dries Dampness and astringes chronic diarrhea, leukorrhea or bleeding. Principal indications: Persistent diarrhea or yellow malodorous leukorrhea with Damp-Heat rather than deficiency Cold.",
+        "prompt": "A patient presents with Persistent diarrhea or yellow malodorous leukorrhea with Damp-Heat rather than deficiency Cold. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Qing Dai (Indigo naturalis)"
+            "text": "Rou Dou Kou (Myristicae Semen)"
           },
           {
             "label": "B",
@@ -64613,15 +64813,15 @@
           },
           {
             "label": "D",
-            "text": "Tian Men Dong (Asparagi Radix)"
+            "text": "Wu Mei (Mume Fructus)"
           }
         ],
         "correctLabel": "B",
-        "explanation": "Chun Pi (Ailanthi Cortex) is cold and Bitter, astringent. Clears Heat, dries Dampness and astringes chronic diarrhea, leukorrhea or bleeding.",
+        "explanation": "Chun Pi (Ailanthi Cortex) is cold and Bitter, astringent. Clears Heat, dries Dampness and astringes chronic diarrhea, leukorrhea or bleeding. The verified profile identifies this principal use: Persistent diarrhea or yellow malodorous leukorrhea with Damp-Heat rather than deficiency Cold. Why the others are weaker: Rou Dou Kou (Myristicae Semen): Warms the Middle, moves Qi and strongly binds chronic diarrhea from Spleen-Kidney deficiency Cold. Shan Zhu Yu (Corni Fructus): Tonifies Liver-Kidney while securing Essence, urine and sweat; can support deficiency collapse. Wu Mei (Mume Fructus): Restrains Lung, binds intestines, generates fluids, stops bleeding and quiets roundworms.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Chun%20Pi",
@@ -64631,11 +64831,11 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Aclara Calor, seca Humedad y contiene diarrea crónica, leucorrea o sangrado. Indicaciones principales: Diarrea persistente o leucorrea amarilla/maloliente con Humedad-Calor, no Frío-deficiencia.",
+            "prompt": "Un paciente presenta Diarrea persistente o leucorrea amarilla/maloliente con Humedad-Calor, no Frío-deficiencia. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Qing Dai (Indigo naturalis)"
+                "text": "Rou Dou Kou (Myristicae Semen)"
               },
               {
                 "label": "B",
@@ -64647,17 +64847,17 @@
               },
               {
                 "label": "D",
-                "text": "Tian Men Dong (Asparagi Radix)"
+                "text": "Wu Mei (Mume Fructus)"
               }
             ],
-            "explanation": "Chun Pi (Ailanthi Cortex) es fría y Amarga, astringente. Aclara Calor, seca Humedad y contiene diarrea crónica, leucorrea o sangrado."
+            "explanation": "Chun Pi (Ailanthi Cortex) es fría y Amarga, astringente. Aclara Calor, seca Humedad y contiene diarrea crónica, leucorrea o sangrado. El perfil verificado identifica este uso principal: Diarrea persistente o leucorrea amarilla/maloliente con Humedad-Calor, no Frío-deficiencia. Por qué no las otras: Rou Dou Kou (Myristicae Semen): Calienta el Centro, mueve Qi y contiene diarrea crónica por Frío-deficiencia de Bazo-Riñón. Shan Zhu Yu (Corni Fructus): Tonifica Hígado-Riñón mientras asegura Esencia, orina y sudor; puede apoyar colapso por deficiencia. Wu Mei (Mume Fructus): Contiene Pulmón, liga intestinos, genera líquidos, detiene sangrado y calma áscaris."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Qing Dai",
-              "pharmaceuticalName": "Indigo naturalis"
+              "pinyin": "Rou Dou Kou",
+              "pharmaceuticalName": "Myristicae Semen"
             },
             {
               "pinyin": "Chun Pi",
@@ -64668,16 +64868,28 @@
               "pharmaceuticalName": "Corni Fructus"
             },
             {
-              "pinyin": "Tian Men Dong",
-              "pharmaceuticalName": "Asparagi Radix"
+              "pinyin": "Wu Mei",
+              "pharmaceuticalName": "Mume Fructus"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Rou Dou Kou",
+                "pharmaceuticalName": "Myristicae Semen"
+              },
+              {
                 "pinyin": "Chun Pi",
                 "pharmaceuticalName": "Ailanthi Cortex"
+              },
+              {
+                "pinyin": "Shan Zhu Yu",
+                "pharmaceuticalName": "Corni Fructus"
+              },
+              {
+                "pinyin": "Wu Mei",
+                "pharmaceuticalName": "Mume Fructus"
               }
             ],
             "formulas": []
@@ -64696,7 +64908,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -64704,17 +64916,17 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? The strongest direct Spirit settler here; anchors Yang, benefits hearing/vision and helps the Kidney grasp Qi. Principal indications: Severe fright, restlessness or insomnia with tinnitus, deafness, blurred vision or deficiency wheezing.",
+        "prompt": "A patient presents with Severe fright, restlessness or insomnia with tinnitus, deafness, blurred vision or deficiency wheezing. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Qing Hao (Artemisiae annuae Herba)"
+            "text": "Mu Li (Ostreae Concha)"
           },
           {
             "label": "B",
-            "text": "She Gan (Belamcandae Rhizoma)"
+            "text": "Long Gu (Fossilia Ossis Mastodi)"
           },
           {
             "label": "C",
@@ -64722,15 +64934,15 @@
           },
           {
             "label": "D",
-            "text": "Tian Nan Xing (Arisaematis Rhizoma)"
+            "text": "Zhen Zhu (Margarita)"
           }
         ],
         "correctLabel": "C",
-        "explanation": "Ci Shi (Magnetitum) is cold and Pungent, salty. The strongest direct Spirit settler here; anchors Yang, benefits hearing/vision and helps the Kidney grasp Qi.",
+        "explanation": "Ci Shi (Magnetitum) is cold and Pungent, salty. The strongest direct Spirit settler here; anchors Yang, benefits hearing/vision and helps the Kidney grasp Qi. The verified profile identifies this principal use: Severe fright, restlessness or insomnia with tinnitus, deafness, blurred vision or deficiency wheezing. Why the others are weaker: Mu Li (Ostreae Concha): Anchors Liver Yang, calms the Spirit, restrains leakage and softens hardness. Long Gu (Fossilia Ossis Mastodi): Heavily settles fright and the Spirit, anchors Liver Yang and secures deficiency leakage. Zhen Zhu (Margarita): Calms the Spirit, clears Heart-Liver Fire, settles convulsions, benefits the eyes and supports tissue healing.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Ci%20Shi",
@@ -64740,15 +64952,15 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? La que asienta Shen directamente con más fuerza; ancla Yang, beneficia oído/visión y ayuda al Riñón a captar Qi. Indicaciones principales: Susto intenso, inquietud o insomnio con tinnitus, sordera, visión borrosa o sibilancia por deficiencia.",
+            "prompt": "Un paciente presenta Susto intenso, inquietud o insomnio con tinnitus, sordera, visión borrosa o sibilancia por deficiencia. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Qing Hao (Artemisiae annuae Herba)"
+                "text": "Mu Li (Ostreae Concha)"
               },
               {
                 "label": "B",
-                "text": "She Gan (Belamcandae Rhizoma)"
+                "text": "Long Gu (Fossilia Ossis Mastodi)"
               },
               {
                 "label": "C",
@@ -64756,37 +64968,49 @@
               },
               {
                 "label": "D",
-                "text": "Tian Nan Xing (Arisaematis Rhizoma)"
+                "text": "Zhen Zhu (Margarita)"
               }
             ],
-            "explanation": "Ci Shi (Magnetitum) es fría y Picante, salada. La que asienta Shen directamente con más fuerza; ancla Yang, beneficia oído/visión y ayuda al Riñón a captar Qi."
+            "explanation": "Ci Shi (Magnetitum) es fría y Picante, salada. La que asienta Shen directamente con más fuerza; ancla Yang, beneficia oído/visión y ayuda al Riñón a captar Qi. El perfil verificado identifica este uso principal: Susto intenso, inquietud o insomnio con tinnitus, sordera, visión borrosa o sibilancia por deficiencia. Por qué no las otras: Mu Li (Ostreae Concha): Ancla Yang de Hígado, calma Shen, contiene pérdidas y suaviza dureza. Long Gu (Fossilia Ossis Mastodi): Asienta con peso el susto y Shen, ancla Yang de Hígado y asegura pérdidas por deficiencia. Zhen Zhu (Margarita): Calma Shen, aclara Fuego de Corazón-Hígado, calma convulsiones, beneficia ojos y apoya cicatrización."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Qing Hao",
-              "pharmaceuticalName": "Artemisiae annuae Herba"
+              "pinyin": "Mu Li",
+              "pharmaceuticalName": "Ostreae Concha"
             },
             {
-              "pinyin": "She Gan",
-              "pharmaceuticalName": "Belamcandae Rhizoma"
+              "pinyin": "Long Gu",
+              "pharmaceuticalName": "Fossilia Ossis Mastodi"
             },
             {
               "pinyin": "Ci Shi",
               "pharmaceuticalName": "Magnetitum"
             },
             {
-              "pinyin": "Tian Nan Xing",
-              "pharmaceuticalName": "Arisaematis Rhizoma"
+              "pinyin": "Zhen Zhu",
+              "pharmaceuticalName": "Margarita"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Mu Li",
+                "pharmaceuticalName": "Ostreae Concha"
+              },
+              {
+                "pinyin": "Long Gu",
+                "pharmaceuticalName": "Fossilia Ossis Mastodi"
+              },
+              {
                 "pinyin": "Ci Shi",
                 "pharmaceuticalName": "Magnetitum"
+              },
+              {
+                "pinyin": "Zhen Zhu",
+                "pharmaceuticalName": "Margarita"
               }
             ],
             "formulas": []
@@ -64805,7 +65029,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -64813,21 +65037,21 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Purges accumulations and Heat, clears Damp-Heat and toxicity, cools Blood and invigorates Blood to dispel stasis. Principal indications: Yangming-Fu Heat with constipation and a hard, full painful abdomen; Blood-Heat, Damp-Heat or Blood stasis clues broaden the answer beyond the bowel.",
+        "prompt": "A patient presents with Yangming-Fu Heat with constipation and a hard, full painful abdomen; Blood-Heat, Damp-Heat or Blood stasis clues broaden the answer beyond the bowel. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Huang Qin (Scutellariae Radix)"
+            "text": "Lu Hui (Aloe)"
           },
           {
             "label": "B",
-            "text": "Long Dan Cao (Gentianae Radix)"
+            "text": "Fan Xie Ye (Sennae Folium)"
           },
           {
             "label": "C",
-            "text": "Nu Zhen Zi (Ligustri lucidi Fructus)"
+            "text": "Mang Xiao (Natrii Sulfas)"
           },
           {
             "label": "D",
@@ -64835,11 +65059,11 @@
           }
         ],
         "correctLabel": "D",
-        "explanation": "Da Huang (Rhei Radix et Rhizoma) is cold and Bitter. Purges accumulations and Heat, clears Damp-Heat and toxicity, cools Blood and invigorates Blood to dispel stasis.",
+        "explanation": "Da Huang (Rhei Radix et Rhizoma) is cold and Bitter. Purges accumulations and Heat, clears Damp-Heat and toxicity, cools Blood and invigorates Blood to dispel stasis. The verified profile identifies this principal use: Yangming-Fu Heat with constipation and a hard, full painful abdomen; Blood-Heat, Damp-Heat or Blood stasis clues broaden the answer beyond the bowel. Why the others are weaker: Lu Hui (Aloe): Purges Heat constipation, drains Liver Fire and kills parasites. Fan Xie Ye (Sennae Folium): Purges Heat accumulation and promotes bowel movement; its sweetness and moist quality temper, but do not remove, its strong action. Mang Xiao (Natrii Sulfas): Softens hardness, moistens Dryness, clears Heat and promotes bowel movement.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Da%20Huang",
@@ -64849,41 +65073,41 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Purga acumulaciones y Calor, aclara Humedad-Calor y toxicidad, enfría Sangre y moviliza Sangre para disipar estasis. Indicaciones principales: Calor Yangming-Fu con estreñimiento y abdomen duro, lleno y doloroso; las pistas de Calor en Sangre, Humedad-Calor o estasis amplían la respuesta más allá del intestino.",
+            "prompt": "Un paciente presenta Calor Yangming-Fu con estreñimiento y abdomen duro, lleno y doloroso; las pistas de Calor en Sangre, Humedad-Calor o estasis amplían la respuesta más allá del intestino. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Huang Qin (Scutellariae Radix)"
+                "text": "Lu Hui (Aloe)"
               },
               {
                 "label": "B",
-                "text": "Long Dan Cao (Gentianae Radix)"
+                "text": "Fan Xie Ye (Sennae Folium)"
               },
               {
                 "label": "C",
-                "text": "Nu Zhen Zi (Ligustri lucidi Fructus)"
+                "text": "Mang Xiao (Natrii Sulfas)"
               },
               {
                 "label": "D",
                 "text": "Da Huang (Rhei Radix et Rhizoma)"
               }
             ],
-            "explanation": "Da Huang (Rhei Radix et Rhizoma) es fría y Amarga. Purga acumulaciones y Calor, aclara Humedad-Calor y toxicidad, enfría Sangre y moviliza Sangre para disipar estasis."
+            "explanation": "Da Huang (Rhei Radix et Rhizoma) es fría y Amarga. Purga acumulaciones y Calor, aclara Humedad-Calor y toxicidad, enfría Sangre y moviliza Sangre para disipar estasis. El perfil verificado identifica este uso principal: Calor Yangming-Fu con estreñimiento y abdomen duro, lleno y doloroso; las pistas de Calor en Sangre, Humedad-Calor o estasis amplían la respuesta más allá del intestino. Por qué no las otras: Lu Hui (Aloe): Purga estreñimiento por Calor, drena Fuego de Hígado y elimina parásitos. Fan Xie Ye (Sennae Folium): Purga acumulación de Calor y promueve evacuación; su dulzor y cualidad húmeda moderan, pero no eliminan, su acción fuerte. Mang Xiao (Natrii Sulfas): Ablanda dureza, humedece Sequedad, aclara Calor y promueve evacuación."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Huang Qin",
-              "pharmaceuticalName": "Scutellariae Radix"
+              "pinyin": "Lu Hui",
+              "pharmaceuticalName": "Aloe"
             },
             {
-              "pinyin": "Long Dan Cao",
-              "pharmaceuticalName": "Gentianae Radix"
+              "pinyin": "Fan Xie Ye",
+              "pharmaceuticalName": "Sennae Folium"
             },
             {
-              "pinyin": "Nu Zhen Zi",
-              "pharmaceuticalName": "Ligustri lucidi Fructus"
+              "pinyin": "Mang Xiao",
+              "pharmaceuticalName": "Natrii Sulfas"
             },
             {
               "pinyin": "Da Huang",
@@ -64893,6 +65117,18 @@
           "formulas": [],
           "feedback": {
             "herbs": [
+              {
+                "pinyin": "Lu Hui",
+                "pharmaceuticalName": "Aloe"
+              },
+              {
+                "pinyin": "Fan Xie Ye",
+                "pharmaceuticalName": "Sennae Folium"
+              },
+              {
+                "pinyin": "Mang Xiao",
+                "pharmaceuticalName": "Natrii Sulfas"
+              },
               {
                 "pinyin": "Da Huang",
                 "pharmaceuticalName": "Rhei Radix et Rhizoma"
@@ -64919,7 +65155,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -64927,17 +65163,17 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? The strongest heavy descent of Liver Yang, Wind, rebellious Qi and Blood; also cools Blood and stops bleeding. Principal indications: Acute severe rising: intense distending headache, neck stiffness, loss of balance, nausea/vomiting, belching or bleeding.",
+        "prompt": "A patient presents with Acute severe rising: intense distending headache, neck stiffness, loss of balance, nausea/vomiting, belching or bleeding. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Shi Jue Ming (Haliotidis Concha)"
+            "text": "Gou Teng (Uncariae Ramulus cum Uncis)"
           },
           {
             "label": "B",
-            "text": "Wu Zhu Yu (Evodiae Fructus)"
+            "text": "Shi Jue Ming (Haliotidis Concha)"
           },
           {
             "label": "C",
@@ -64945,15 +65181,15 @@
           },
           {
             "label": "D",
-            "text": "Zhe Bei Mu (Fritillariae thunbergii Bulbus)"
+            "text": "Tian Ma (Gastrodiae Rhizoma)"
           }
         ],
         "correctLabel": "C",
-        "explanation": "Dai Zhe Shi (Haematitum) is cold and Bitter. The strongest heavy descent of Liver Yang, Wind, rebellious Qi and Blood; also cools Blood and stops bleeding.",
+        "explanation": "Dai Zhe Shi (Haematitum) is cold and Bitter. The strongest heavy descent of Liver Yang, Wind, rebellious Qi and Blood; also cools Blood and stops bleeding. The verified profile identifies this principal use: Acute severe rising: intense distending headache, neck stiffness, loss of balance, nausea/vomiting, belching or bleeding. Why the others are weaker: Gou Teng (Uncariae Ramulus cum Uncis): Clears Liver Heat, extinguishes Wind, stops tremor/convulsion and calms rising Liver Yang. Shi Jue Ming (Haliotidis Concha): Strongly anchors Liver Yang, clears Liver Fire, extinguishes Wind and brightens the eyes. Tian Ma (Gastrodiae Rhizoma): Pacifies the Liver, extinguishes internal Wind, treats many dizziness patterns and expels Wind from painful collaterals.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Dai%20Zhe%20Shi",
@@ -64963,15 +65199,15 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? El descenso pesado más fuerte de Yang, Viento, Qi y Sangre rebeldes; también enfría Sangre y detiene sangrado. Indicaciones principales: Ascenso agudo grave: cefalea distensiva intensa, rigidez cervical, pérdida de equilibrio, náusea/vómito, eructo o sangrado.",
+            "prompt": "Un paciente presenta Ascenso agudo grave: cefalea distensiva intensa, rigidez cervical, pérdida de equilibrio, náusea/vómito, eructo o sangrado. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Shi Jue Ming (Haliotidis Concha)"
+                "text": "Gou Teng (Uncariae Ramulus cum Uncis)"
               },
               {
                 "label": "B",
-                "text": "Wu Zhu Yu (Evodiae Fructus)"
+                "text": "Shi Jue Ming (Haliotidis Concha)"
               },
               {
                 "label": "C",
@@ -64979,37 +65215,49 @@
               },
               {
                 "label": "D",
-                "text": "Zhe Bei Mu (Fritillariae thunbergii Bulbus)"
+                "text": "Tian Ma (Gastrodiae Rhizoma)"
               }
             ],
-            "explanation": "Dai Zhe Shi (Haematitum) es fría y Amarga. El descenso pesado más fuerte de Yang, Viento, Qi y Sangre rebeldes; también enfría Sangre y detiene sangrado."
+            "explanation": "Dai Zhe Shi (Haematitum) es fría y Amarga. El descenso pesado más fuerte de Yang, Viento, Qi y Sangre rebeldes; también enfría Sangre y detiene sangrado. El perfil verificado identifica este uso principal: Ascenso agudo grave: cefalea distensiva intensa, rigidez cervical, pérdida de equilibrio, náusea/vómito, eructo o sangrado. Por qué no las otras: Gou Teng (Uncariae Ramulus cum Uncis): Aclara Calor de Hígado, extingue Viento, detiene temblor/convulsión y calma Yang ascendente. Shi Jue Ming (Haliotidis Concha): Ancla con fuerza Yang de Hígado, aclara Fuego, extingue Viento y mejora ojos. Tian Ma (Gastrodiae Rhizoma): Pacifica Hígado, extingue Viento interno, trata múltiples mareos y expulsa Viento de colaterales dolorosos."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Shi Jue Ming",
-              "pharmaceuticalName": "Haliotidis Concha"
+              "pinyin": "Gou Teng",
+              "pharmaceuticalName": "Uncariae Ramulus cum Uncis"
             },
             {
-              "pinyin": "Wu Zhu Yu",
-              "pharmaceuticalName": "Evodiae Fructus"
+              "pinyin": "Shi Jue Ming",
+              "pharmaceuticalName": "Haliotidis Concha"
             },
             {
               "pinyin": "Dai Zhe Shi",
               "pharmaceuticalName": "Haematitum"
             },
             {
-              "pinyin": "Zhe Bei Mu",
-              "pharmaceuticalName": "Fritillariae thunbergii Bulbus"
+              "pinyin": "Tian Ma",
+              "pharmaceuticalName": "Gastrodiae Rhizoma"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Gou Teng",
+                "pharmaceuticalName": "Uncariae Ramulus cum Uncis"
+              },
+              {
+                "pinyin": "Shi Jue Ming",
+                "pharmaceuticalName": "Haliotidis Concha"
+              },
+              {
                 "pinyin": "Dai Zhe Shi",
                 "pharmaceuticalName": "Haematitum"
+              },
+              {
+                "pinyin": "Tian Ma",
+                "pharmaceuticalName": "Gastrodiae Rhizoma"
               }
             ],
             "formulas": []
@@ -65028,7 +65276,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -65036,9 +65284,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Invigorates and cools Blood, dispels stasis, relieves pain and calms irritability and restlessness. Principal indications: Blood Heat or stasis with chest, abdominal or menstrual pain plus irritability or disturbed sleep.",
+        "prompt": "A patient presents with Blood Heat or stasis with chest, abdominal or menstrual pain plus irritability or disturbed sleep. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -65046,23 +65294,23 @@
           },
           {
             "label": "B",
-            "text": "Lian Qiao (Forsythiae Fructus)"
+            "text": "Tao Ren (Persicae Semen)"
           },
           {
             "label": "C",
-            "text": "Mu Xiang (Aucklandiae Radix)"
+            "text": "E Zhu (Curcumae Rhizoma)"
           },
           {
             "label": "D",
-            "text": "Rou Dou Kou (Myristicae Semen)"
+            "text": "Ru Xiang (Olibanum)"
           }
         ],
         "correctLabel": "A",
-        "explanation": "Dan Shen (Salviae miltiorrhizae Radix) is slightly cold and Bitter. Invigorates and cools Blood, dispels stasis, relieves pain and calms irritability and restlessness.",
+        "explanation": "Dan Shen (Salviae miltiorrhizae Radix) is slightly cold and Bitter. Invigorates and cools Blood, dispels stasis, relieves pain and calms irritability and restlessness. The verified profile identifies this principal use: Blood Heat or stasis with chest, abdominal or menstrual pain plus irritability or disturbed sleep. Why the others are weaker: Tao Ren (Persicae Semen): Breaks Blood stasis, moistens the intestines and stops cough and wheezing. E Zhu (Curcumae Rhizoma): Forcefully moves Qi, breaks Blood stasis and reduces fixed abdominal masses and food accumulation. Ru Xiang (Olibanum): Moves Qi and Blood, relieves pain, reduces swelling and generates flesh.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Dan%20Shen",
@@ -65072,7 +65320,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Moviliza y enfría Sangre, disipa estasis, alivia dolor y calma irritabilidad e inquietud. Indicaciones principales: Calor o estasis de Sangre con dolor torácico, abdominal o menstrual más irritabilidad o sueño alterado.",
+            "prompt": "Un paciente presenta Calor o estasis de Sangre con dolor torácico, abdominal o menstrual más irritabilidad o sueño alterado. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -65080,18 +65328,18 @@
               },
               {
                 "label": "B",
-                "text": "Lian Qiao (Forsythiae Fructus)"
+                "text": "Tao Ren (Persicae Semen)"
               },
               {
                 "label": "C",
-                "text": "Mu Xiang (Aucklandiae Radix)"
+                "text": "E Zhu (Curcumae Rhizoma)"
               },
               {
                 "label": "D",
-                "text": "Rou Dou Kou (Myristicae Semen)"
+                "text": "Ru Xiang (Olibanum)"
               }
             ],
-            "explanation": "Dan Shen (Salviae miltiorrhizae Radix) es ligeramente fría y Amarga. Moviliza y enfría Sangre, disipa estasis, alivia dolor y calma irritabilidad e inquietud."
+            "explanation": "Dan Shen (Salviae miltiorrhizae Radix) es ligeramente fría y Amarga. Moviliza y enfría Sangre, disipa estasis, alivia dolor y calma irritabilidad e inquietud. El perfil verificado identifica este uso principal: Calor o estasis de Sangre con dolor torácico, abdominal o menstrual más irritabilidad o sueño alterado. Por qué no las otras: Tao Ren (Persicae Semen): Rompe estasis de Sangre, humedece intestinos y detiene tos y sibilancia. E Zhu (Curcumae Rhizoma): Mueve Qi con fuerza, rompe estasis de Sangre y reduce masas abdominales fijas y acumulación alimentaria. Ru Xiang (Olibanum): Mueve Qi y Sangre, alivia dolor, reduce hinchazón y genera tejido."
           }
         },
         "nomenclature": {
@@ -65101,16 +65349,16 @@
               "pharmaceuticalName": "Salviae miltiorrhizae Radix"
             },
             {
-              "pinyin": "Lian Qiao",
-              "pharmaceuticalName": "Forsythiae Fructus"
+              "pinyin": "Tao Ren",
+              "pharmaceuticalName": "Persicae Semen"
             },
             {
-              "pinyin": "Mu Xiang",
-              "pharmaceuticalName": "Aucklandiae Radix"
+              "pinyin": "E Zhu",
+              "pharmaceuticalName": "Curcumae Rhizoma"
             },
             {
-              "pinyin": "Rou Dou Kou",
-              "pharmaceuticalName": "Myristicae Semen"
+              "pinyin": "Ru Xiang",
+              "pharmaceuticalName": "Olibanum"
             }
           ],
           "formulas": [],
@@ -65119,6 +65367,18 @@
               {
                 "pinyin": "Dan Shen",
                 "pharmaceuticalName": "Salviae miltiorrhizae Radix"
+              },
+              {
+                "pinyin": "Tao Ren",
+                "pharmaceuticalName": "Persicae Semen"
+              },
+              {
+                "pinyin": "E Zhu",
+                "pharmaceuticalName": "Curcumae Rhizoma"
+              },
+              {
+                "pinyin": "Ru Xiang",
+                "pharmaceuticalName": "Olibanum"
               }
             ],
             "formulas": []
@@ -65150,13 +65410,13 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Clears Heat and irritability and promotes urination to guide Heart and Small-Intestine Heat outward. Principal indications: Fever and thirst with irritability, mouth sores, a red tongue tip or scanty painful urine.",
+        "prompt": "A patient presents with Fever and thirst with irritability, mouth sores, a red tongue tip or scanty painful urine. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Hei Zhi Ma (Sesami Semen nigrum)"
+            "text": "Tian Hua Fen (Trichosanthis Radix)"
           },
           {
             "label": "B",
@@ -65164,19 +65424,19 @@
           },
           {
             "label": "C",
-            "text": "Kuan Dong Hua (Farfarae Flos)"
+            "text": "Xia Ku Cao (Prunellae Spica)"
           },
           {
             "label": "D",
-            "text": "Mu Gua (Chaenomelis Fructus)"
+            "text": "Zhi Mu (Anemarrhenae Radix)"
           }
         ],
         "correctLabel": "B",
-        "explanation": "Dan Zhu Ye (Lophateri Herba) is cold and Sweet, bland. Clears Heat and irritability and promotes urination to guide Heart and Small-Intestine Heat outward.",
+        "explanation": "Dan Zhu Ye (Lophateri Herba) is cold and Sweet, bland. Clears Heat and irritability and promotes urination to guide Heart and Small-Intestine Heat outward. The verified profile identifies this principal use: Fever and thirst with irritability, mouth sores, a red tongue tip or scanty painful urine. Why the others are weaker: Tian Hua Fen (Trichosanthis Radix): Clears Heat, generates fluids, relieves thirst, reduces swelling and expels pus. Xia Ku Cao (Prunellae Spica): Clears Liver Fire, brightens the eyes and dissipates nodules and clumps. Zhi Mu (Anemarrhenae Radix): Clears Heat and drains Fire while nourishing Yin, generating fluids and moistening dryness.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Dan%20Zhu%20Ye",
@@ -65186,11 +65446,11 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Aclara Calor e irritabilidad y promueve orina para conducir hacia afuera el Calor de Corazón e Intestino Delgado. Indicaciones principales: Fiebre y sed con irritabilidad, úlceras bucales, punta lingual roja u orina escasa y dolorosa.",
+            "prompt": "Un paciente presenta Fiebre y sed con irritabilidad, úlceras bucales, punta lingual roja u orina escasa y dolorosa. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Hei Zhi Ma (Sesami Semen nigrum)"
+                "text": "Tian Hua Fen (Trichosanthis Radix)"
               },
               {
                 "label": "B",
@@ -65198,41 +65458,53 @@
               },
               {
                 "label": "C",
-                "text": "Kuan Dong Hua (Farfarae Flos)"
+                "text": "Xia Ku Cao (Prunellae Spica)"
               },
               {
                 "label": "D",
-                "text": "Mu Gua (Chaenomelis Fructus)"
+                "text": "Zhi Mu (Anemarrhenae Radix)"
               }
             ],
-            "explanation": "Dan Zhu Ye (Lophateri Herba) es fría y Dulce, insípida. Aclara Calor e irritabilidad y promueve orina para conducir hacia afuera el Calor de Corazón e Intestino Delgado."
+            "explanation": "Dan Zhu Ye (Lophateri Herba) es fría y Dulce, insípida. Aclara Calor e irritabilidad y promueve orina para conducir hacia afuera el Calor de Corazón e Intestino Delgado. El perfil verificado identifica este uso principal: Fiebre y sed con irritabilidad, úlceras bucales, punta lingual roja u orina escasa y dolorosa. Por qué no las otras: Tian Hua Fen (Trichosanthis Radix): Aclara Calor, genera líquidos, alivia sed, reduce inflamación y expulsa pus. Xia Ku Cao (Prunellae Spica): Aclara Fuego de Hígado, mejora los ojos y disipa nódulos y masas. Zhi Mu (Anemarrhenae Radix): Aclara Calor y drena Fuego mientras nutre Yin, genera líquidos y humedece sequedad."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Hei Zhi Ma",
-              "pharmaceuticalName": "Sesami Semen nigrum"
+              "pinyin": "Tian Hua Fen",
+              "pharmaceuticalName": "Trichosanthis Radix"
             },
             {
               "pinyin": "Dan Zhu Ye",
               "pharmaceuticalName": "Lophateri Herba"
             },
             {
-              "pinyin": "Kuan Dong Hua",
-              "pharmaceuticalName": "Farfarae Flos"
+              "pinyin": "Xia Ku Cao",
+              "pharmaceuticalName": "Prunellae Spica"
             },
             {
-              "pinyin": "Mu Gua",
-              "pharmaceuticalName": "Chaenomelis Fructus"
+              "pinyin": "Zhi Mu",
+              "pharmaceuticalName": "Anemarrhenae Radix"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Tian Hua Fen",
+                "pharmaceuticalName": "Trichosanthis Radix"
+              },
+              {
                 "pinyin": "Dan Zhu Ye",
                 "pharmaceuticalName": "Lophateri Herba"
+              },
+              {
+                "pinyin": "Xia Ku Cao",
+                "pharmaceuticalName": "Prunellae Spica"
+              },
+              {
+                "pinyin": "Zhi Mu",
+                "pharmaceuticalName": "Anemarrhenae Radix"
               }
             ],
             "formulas": []
@@ -65264,21 +65536,21 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Rapidly rescues devastated Yang, warms the Fire of the Gate of Life and dispels Cold-Damp pain through all twelve channels. Principal indications: Cold limbs, faint pulse, profuse sweating, diarrhea or shock-like Yang collapse; also deep Cold Bi pain.",
+        "prompt": "A patient presents with Cold limbs, faint pulse, profuse sweating, diarrhea or shock-like Yang collapse; also deep Cold Bi pain. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Pi Pa Ye (Eriobotryae Folium)"
+            "text": "Rou Gui (Cinnamomi Cortex)"
           },
           {
             "label": "B",
-            "text": "Sang Ye (Mori Folium)"
+            "text": "Xiao Hui Xiang (Foeniculi Fructus)"
           },
           {
             "label": "C",
-            "text": "Suan Zao Ren (Ziziphi spinosae Semen)"
+            "text": "Gao Liang Jiang (Alpiniae officinarum Rhizoma)"
           },
           {
             "label": "D",
@@ -65286,11 +65558,11 @@
           }
         ],
         "correctLabel": "D",
-        "explanation": "Fu Zi (Aconiti Radix lateralis) is hot; toxic and Acrid. Rapidly rescues devastated Yang, warms the Fire of the Gate of Life and dispels Cold-Damp pain through all twelve channels.",
+        "explanation": "Fu Zi (Aconiti Radix lateralis) is hot; toxic and Acrid. Rapidly rescues devastated Yang, warms the Fire of the Gate of Life and dispels Cold-Damp pain through all twelve channels. The verified profile identifies this principal use: Cold limbs, faint pulse, profuse sweating, diarrhea or shock-like Yang collapse; also deep Cold Bi pain. Why the others are weaker: Rou Gui (Cinnamomi Cortex): Steadily warms Ming Men and the Lower Jiao, leads floating Fire back to its source and warms Blood and channels. Xiao Hui Xiang (Foeniculi Fructus): Warms Liver and Kidney, disperses Lower-Jiao Cold, regulates Qi and harmonizes the Stomach. Gao Liang Jiang (Alpiniae officinarum Rhizoma): Directly warms the Stomach, disperses Cold, stops pain and redirects rebellious Qi downward.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Fu%20Zi",
@@ -65300,41 +65572,41 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Rescata rápidamente Yang devastado, calienta Fuego de la Puerta de la Vida y expulsa dolor Frío-Humedad por los doce canales. Indicaciones principales: Extremidades frías, pulso casi imperceptible, sudor profuso, diarrea o colapso de Yang tipo shock; también Bi profundo por Frío.",
+            "prompt": "Un paciente presenta Extremidades frías, pulso casi imperceptible, sudor profuso, diarrea o colapso de Yang tipo shock; también Bi profundo por Frío. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Pi Pa Ye (Eriobotryae Folium)"
+                "text": "Rou Gui (Cinnamomi Cortex)"
               },
               {
                 "label": "B",
-                "text": "Sang Ye (Mori Folium)"
+                "text": "Xiao Hui Xiang (Foeniculi Fructus)"
               },
               {
                 "label": "C",
-                "text": "Suan Zao Ren (Ziziphi spinosae Semen)"
+                "text": "Gao Liang Jiang (Alpiniae officinarum Rhizoma)"
               },
               {
                 "label": "D",
                 "text": "Fu Zi (Aconiti Radix lateralis)"
               }
             ],
-            "explanation": "Fu Zi (Aconiti Radix lateralis) es caliente; tóxica y Acre. Rescata rápidamente Yang devastado, calienta Fuego de la Puerta de la Vida y expulsa dolor Frío-Humedad por los doce canales."
+            "explanation": "Fu Zi (Aconiti Radix lateralis) es caliente; tóxica y Acre. Rescata rápidamente Yang devastado, calienta Fuego de la Puerta de la Vida y expulsa dolor Frío-Humedad por los doce canales. El perfil verificado identifica este uso principal: Extremidades frías, pulso casi imperceptible, sudor profuso, diarrea o colapso de Yang tipo shock; también Bi profundo por Frío. Por qué no las otras: Rou Gui (Cinnamomi Cortex): Calienta de forma sostenida Ming Men y Jiao Inferior, devuelve Fuego flotante a su fuente y calienta Sangre y canales. Xiao Hui Xiang (Foeniculi Fructus): Calienta Hígado y Riñón, dispersa Frío de Jiao Inferior, regula Qi y armoniza Estómago. Gao Liang Jiang (Alpiniae officinarum Rhizoma): Calienta directamente Estómago, dispersa Frío, detiene dolor y redirige Qi rebelde hacia abajo."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Pi Pa Ye",
-              "pharmaceuticalName": "Eriobotryae Folium"
+              "pinyin": "Rou Gui",
+              "pharmaceuticalName": "Cinnamomi Cortex"
             },
             {
-              "pinyin": "Sang Ye",
-              "pharmaceuticalName": "Mori Folium"
+              "pinyin": "Xiao Hui Xiang",
+              "pharmaceuticalName": "Foeniculi Fructus"
             },
             {
-              "pinyin": "Suan Zao Ren",
-              "pharmaceuticalName": "Ziziphi spinosae Semen"
+              "pinyin": "Gao Liang Jiang",
+              "pharmaceuticalName": "Alpiniae officinarum Rhizoma"
             },
             {
               "pinyin": "Fu Zi",
@@ -65344,6 +65616,18 @@
           "formulas": [],
           "feedback": {
             "herbs": [
+              {
+                "pinyin": "Rou Gui",
+                "pharmaceuticalName": "Cinnamomi Cortex"
+              },
+              {
+                "pinyin": "Xiao Hui Xiang",
+                "pharmaceuticalName": "Foeniculi Fructus"
+              },
+              {
+                "pinyin": "Gao Liang Jiang",
+                "pharmaceuticalName": "Alpiniae officinarum Rhizoma"
+              },
               {
                 "pinyin": "Fu Zi",
                 "pharmaceuticalName": "Aconiti Radix lateralis"
@@ -65368,9 +65652,9 @@
         "outlineVersion": "pending-official-confirmation",
         "domainId": "single_herb",
         "objectiveId": "working-single_herb",
-        "difficultyBand": "application",
-        "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "difficultyBand": "analysis",
+        "cognitiveLevel": "infer",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -65378,17 +65662,17 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready inference item with same-category distractors and comparative feedback."
         },
-        "prompt": "Which herb best matches this profile? Gently improves digestion of grains and starches while strengthening the Spleen and awakening appetite. Principal indications: Chronic weak digestion, poor appetite or mild Food Stagnation in children, older adults or deficient patients.",
+        "prompt": "An older adult has chronic weak digestion, poor appetite and mild grain-and-starch retention. There is no marked distension after heavy food or alcohol, no lactation or Liver-Qi clue, and no stubborn mixed-food retention, stones or enuresis. Which herb is the best fit?",
         "options": [
           {
             "label": "A",
-            "text": "Kuan Dong Hua (Farfarae Flos)"
+            "text": "Shen Qu (Massa medicata fermentata)"
           },
           {
             "label": "B",
-            "text": "Mu Gua (Chaenomelis Fructus)"
+            "text": "Mai Ya (Hordei Fructus germinatus)"
           },
           {
             "label": "C",
@@ -65396,15 +65680,15 @@
           },
           {
             "label": "D",
-            "text": "Ren Shen (Ginseng Radix)"
+            "text": "Ji Nei Jin (Gigeriae galli Endothelium corneum)"
           }
         ],
         "correctLabel": "C",
-        "explanation": "Gu Ya (Setariae (Oryzae) Fructus germinatus) is neutral and Sweet. Gently improves digestion of grains and starches while strengthening the Spleen and awakening appetite.",
+        "explanation": "Gu Ya (Setariae (Oryzae) Fructus germinatus) is neutral and Sweet. Gently improves digestion of grains and starches while strengthening the Spleen and awakening appetite. The verified profile identifies this principal use: Chronic weak digestion, poor appetite or mild Food Stagnation in children, older adults or deficient patients. Why the others are weaker: Shen Qu (Massa medicata fermentata): Digests grains and heavy starchy foods, moves Qi, harmonizes the Stomach and dispels the effects of alcohol. Mai Ya (Hordei Fructus germinatus): Digests starches and grains, strengthens the Stomach, courses constrained Liver Qi and stops lactation. Ji Nei Jin (Gigeriae galli Endothelium corneum): Strongly digests every type of retained food, strengthens the Stomach, dissolves stones and secures essence and urine.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Multi-clue clinical differentiation among four Food Stagnation herbs"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Gu%20Ya",
@@ -65414,15 +65698,15 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Mejora suavemente la digestión de granos y almidones mientras fortalece Bazo y despierta apetito. Indicaciones principales: Digestión débil crónica, poco apetito o estancamiento leve en niños, adultos mayores o pacientes deficientes.",
+            "prompt": "Un adulto mayor presenta digestión débil crónica, poco apetito y retención leve de granos y almidones. No hay distensión marcada después de alimentos pesados o alcohol, ninguna pista de lactancia o Qi de Hígado, ni retención persistente de alimentos mixtos, cálculos o enuresis. ¿Qué hierba corresponde mejor?",
             "options": [
               {
                 "label": "A",
-                "text": "Kuan Dong Hua (Farfarae Flos)"
+                "text": "Shen Qu (Massa medicata fermentata)"
               },
               {
                 "label": "B",
-                "text": "Mu Gua (Chaenomelis Fructus)"
+                "text": "Mai Ya (Hordei Fructus germinatus)"
               },
               {
                 "label": "C",
@@ -65430,37 +65714,49 @@
               },
               {
                 "label": "D",
-                "text": "Ren Shen (Ginseng Radix)"
+                "text": "Ji Nei Jin (Gigeriae galli Endothelium corneum)"
               }
             ],
-            "explanation": "Gu Ya (Setariae (Oryzae) Fructus germinatus) es neutra y Dulce. Mejora suavemente la digestión de granos y almidones mientras fortalece Bazo y despierta apetito."
+            "explanation": "Gu Ya (Setariae (Oryzae) Fructus germinatus) es neutra y Dulce. Mejora suavemente la digestión de granos y almidones mientras fortalece Bazo y despierta apetito. El perfil verificado identifica este uso principal: Digestión débil crónica, poco apetito o estancamiento leve en niños, adultos mayores o pacientes deficientes. Por qué no las otras: Shen Qu (Massa medicata fermentata): Digiere granos y almidones pesados, mueve Qi, armoniza Estómago y disipa los efectos del alcohol. Mai Ya (Hordei Fructus germinatus): Digiere almidones y granos, fortalece Estómago, moviliza Qi de Hígado constreñido y detiene lactancia. Ji Nei Jin (Gigeriae galli Endothelium corneum): Digiere con fuerza todo tipo de alimento retenido, fortalece Estómago, disuelve cálculos y asegura Esencia y orina."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Kuan Dong Hua",
-              "pharmaceuticalName": "Farfarae Flos"
+              "pinyin": "Shen Qu",
+              "pharmaceuticalName": "Massa medicata fermentata"
             },
             {
-              "pinyin": "Mu Gua",
-              "pharmaceuticalName": "Chaenomelis Fructus"
+              "pinyin": "Mai Ya",
+              "pharmaceuticalName": "Hordei Fructus germinatus"
             },
             {
               "pinyin": "Gu Ya",
               "pharmaceuticalName": "Setariae (Oryzae) Fructus germinatus"
             },
             {
-              "pinyin": "Ren Shen",
-              "pharmaceuticalName": "Ginseng Radix"
+              "pinyin": "Ji Nei Jin",
+              "pharmaceuticalName": "Gigeriae galli Endothelium corneum"
             }
           ],
           "formulas": [],
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Shen Qu",
+                "pharmaceuticalName": "Massa medicata fermentata"
+              },
+              {
+                "pinyin": "Mai Ya",
+                "pharmaceuticalName": "Hordei Fructus germinatus"
+              },
+              {
                 "pinyin": "Gu Ya",
                 "pharmaceuticalName": "Setariae (Oryzae) Fructus germinatus"
+              },
+              {
+                "pinyin": "Ji Nei Jin",
+                "pharmaceuticalName": "Gigeriae galli Endothelium corneum"
               }
             ],
             "formulas": []
@@ -65484,7 +65780,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -65492,21 +65788,21 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Relieves constraint and melancholy, calms the Spirit, invigorates Blood, reduces swelling and reconnects sinews and bones. Principal indications: Insomnia with depression, sadness, grief, chest tightness or poor appetite; trauma can add pain and swelling.",
+        "prompt": "A patient presents with Insomnia with depression, sadness, grief, chest tightness or poor appetite; trauma can add pain and swelling. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Qing Pi (Citri reticulatae viride Pericarpium)"
+            "text": "Yuan Zhi (Polygalae Radix)"
           },
           {
             "label": "B",
-            "text": "Shen Qu (Massa medicata fermentata)"
+            "text": "Ye Jiao Teng (Polygoni multiflori Caulis)"
           },
           {
             "label": "C",
-            "text": "Tu Fu Ling (Smilacis glabrae Rhizoma)"
+            "text": "Suan Zao Ren (Ziziphi spinosae Semen)"
           },
           {
             "label": "D",
@@ -65514,11 +65810,11 @@
           }
         ],
         "correctLabel": "D",
-        "explanation": "He Huan Pi (Albiziae Cortex) is neutral and Sweet. Relieves constraint and melancholy, calms the Spirit, invigorates Blood, reduces swelling and reconnects sinews and bones.",
+        "explanation": "He Huan Pi (Albiziae Cortex) is neutral and Sweet. Relieves constraint and melancholy, calms the Spirit, invigorates Blood, reduces swelling and reconnects sinews and bones. The verified profile identifies this principal use: Insomnia with depression, sadness, grief, chest tightness or poor appetite; trauma can add pain and swelling. Why the others are weaker: Yuan Zhi (Polygalae Radix): Restores Heart-Kidney communication, calms the Spirit, transforms Phlegm and improves memory and concentration. Ye Jiao Teng (Polygoni multiflori Caulis): Nourishes Heart-Liver Blood, calms the Spirit, unblocks the channels and relieves Wind-related itching. Suan Zao Ren (Ziziphi spinosae Semen): Nourishes Heart Yin and Liver Blood, calms the Spirit and restrains deficiency sweating.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=He%20Huan%20Pi",
@@ -65528,41 +65824,41 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Alivia estancamiento y melancolía, calma Shen, vigoriza Sangre, reduce hinchazón y reconecta tendones/huesos. Indicaciones principales: Insomnio con depresión, tristeza, duelo, opresión torácica o poco apetito; trauma puede añadir dolor e hinchazón.",
+            "prompt": "Un paciente presenta Insomnio con depresión, tristeza, duelo, opresión torácica o poco apetito; trauma puede añadir dolor e hinchazón. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Qing Pi (Citri reticulatae viride Pericarpium)"
+                "text": "Yuan Zhi (Polygalae Radix)"
               },
               {
                 "label": "B",
-                "text": "Shen Qu (Massa medicata fermentata)"
+                "text": "Ye Jiao Teng (Polygoni multiflori Caulis)"
               },
               {
                 "label": "C",
-                "text": "Tu Fu Ling (Smilacis glabrae Rhizoma)"
+                "text": "Suan Zao Ren (Ziziphi spinosae Semen)"
               },
               {
                 "label": "D",
                 "text": "He Huan Pi (Albiziae Cortex)"
               }
             ],
-            "explanation": "He Huan Pi (Albiziae Cortex) es neutra y Dulce. Alivia estancamiento y melancolía, calma Shen, vigoriza Sangre, reduce hinchazón y reconecta tendones/huesos."
+            "explanation": "He Huan Pi (Albiziae Cortex) es neutra y Dulce. Alivia estancamiento y melancolía, calma Shen, vigoriza Sangre, reduce hinchazón y reconecta tendones/huesos. El perfil verificado identifica este uso principal: Insomnio con depresión, tristeza, duelo, opresión torácica o poco apetito; trauma puede añadir dolor e hinchazón. Por qué no las otras: Yuan Zhi (Polygalae Radix): Restablece comunicación Corazón-Riñón, calma Shen, transforma Flema y mejora memoria y concentración. Ye Jiao Teng (Polygoni multiflori Caulis): Nutre Sangre de Corazón-Hígado, calma Shen, desbloquea canales y alivia prurito por Viento. Suan Zao Ren (Ziziphi spinosae Semen): Nutre Yin de Corazón y Sangre de Hígado, calma Shen y contiene sudor por deficiencia."
           }
         },
         "nomenclature": {
           "herbs": [
             {
-              "pinyin": "Qing Pi",
-              "pharmaceuticalName": "Citri reticulatae viride Pericarpium"
+              "pinyin": "Yuan Zhi",
+              "pharmaceuticalName": "Polygalae Radix"
             },
             {
-              "pinyin": "Shen Qu",
-              "pharmaceuticalName": "Massa medicata fermentata"
+              "pinyin": "Ye Jiao Teng",
+              "pharmaceuticalName": "Polygoni multiflori Caulis"
             },
             {
-              "pinyin": "Tu Fu Ling",
-              "pharmaceuticalName": "Smilacis glabrae Rhizoma"
+              "pinyin": "Suan Zao Ren",
+              "pharmaceuticalName": "Ziziphi spinosae Semen"
             },
             {
               "pinyin": "He Huan Pi",
@@ -65572,6 +65868,18 @@
           "formulas": [],
           "feedback": {
             "herbs": [
+              {
+                "pinyin": "Yuan Zhi",
+                "pharmaceuticalName": "Polygalae Radix"
+              },
+              {
+                "pinyin": "Ye Jiao Teng",
+                "pharmaceuticalName": "Polygoni multiflori Caulis"
+              },
+              {
+                "pinyin": "Suan Zao Ren",
+                "pharmaceuticalName": "Ziziphi spinosae Semen"
+              },
               {
                 "pinyin": "He Huan Pi",
                 "pharmaceuticalName": "Albiziae Cortex"
@@ -65598,7 +65906,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -65606,9 +65914,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Clears Summerheat, raises clear Yang and stops bleeding; the charred form emphasizes hemostasis. Principal indications: Summerheat with diarrhea from Spleen sinking, or bleeding that benefits from raising clear Yang.",
+        "prompt": "A patient presents with Summerheat with diarrhea from Spleen sinking, or bleeding that benefits from raising clear Yang. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -65628,11 +65936,11 @@
           }
         ],
         "correctLabel": "C",
-        "explanation": "He Ye (Nelumbinis Folium) is neutral and Bitter. Clears Summerheat, raises clear Yang and stops bleeding; the charred form emphasizes hemostasis.",
+        "explanation": "He Ye (Nelumbinis Folium) is neutral and Bitter. Clears Summerheat, raises clear Yang and stops bleeding; the charred form emphasizes hemostasis. The verified profile identifies this principal use: Summerheat with diarrhea from Spleen sinking, or bleeding that benefits from raising clear Yang. Why the others are weaker: Huang Qi (Astragali Radix): Tonifies and raises Spleen Qi, strengthens Defensive Qi, stabilizes the Exterior, promotes healing and regulates water. Lian Zi Xin (Nelumbinis Plumula): Clears Heart Fire, calms the spirit and restores communication between Heart and Kidney. Niu Huang (Bovis Calculus): Clears Heart-Liver Heat and toxicity, opens the orifices, extinguishes Wind and stops convulsions.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=He%20Ye",
@@ -65642,7 +65950,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Aclara Calor de Verano, eleva Yang claro y detiene sangrado; la forma carbonizada enfatiza hemostasia. Indicaciones principales: Calor de Verano con diarrea por hundimiento de Bazo, o sangrado que se beneficia de elevar Yang claro.",
+            "prompt": "Un paciente presenta Calor de Verano con diarrea por hundimiento de Bazo, o sangrado que se beneficia de elevar Yang claro. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -65661,7 +65969,7 @@
                 "text": "Niu Huang (Bovis Calculus)"
               }
             ],
-            "explanation": "He Ye (Nelumbinis Folium) es neutra y Amarga. Aclara Calor de Verano, eleva Yang claro y detiene sangrado; la forma carbonizada enfatiza hemostasia."
+            "explanation": "He Ye (Nelumbinis Folium) es neutra y Amarga. Aclara Calor de Verano, eleva Yang claro y detiene sangrado; la forma carbonizada enfatiza hemostasia. El perfil verificado identifica este uso principal: Calor de Verano con diarrea por hundimiento de Bazo, o sangrado que se beneficia de elevar Yang claro. Por qué no las otras: Huang Qi (Astragali Radix): Tonifica y eleva Qi de Bazo, fortalece Qi Defensivo, estabiliza Exterior, promueve cicatrización y regula agua. Lian Zi Xin (Nelumbinis Plumula): Aclara Fuego de Corazón, calma el espíritu y restablece comunicación entre Corazón y Riñón. Niu Huang (Bovis Calculus): Aclara Calor y toxicidad de Corazón-Hígado, abre orificios, extingue Viento y detiene convulsiones."
           }
         },
         "nomenclature": {
@@ -65687,8 +65995,20 @@
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Huang Qi",
+                "pharmaceuticalName": "Astragali Radix"
+              },
+              {
+                "pinyin": "Lian Zi Xin",
+                "pharmaceuticalName": "Nelumbinis Plumula"
+              },
+              {
                 "pinyin": "He Ye",
                 "pharmaceuticalName": "Nelumbinis Folium"
+              },
+              {
+                "pinyin": "Niu Huang",
+                "pharmaceuticalName": "Bovis Calculus"
               }
             ],
             "formulas": []
@@ -65720,9 +66040,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Nourishes Liver-Kidney Yin and Blood, replenishes Essence and moistens dry intestines. Principal indications: Premature graying, dizziness, tinnitus or blurred vision with dry constipation in an older or depleted patient.",
+        "prompt": "A patient presents with Premature graying, dizziness, tinnitus or blurred vision with dry constipation in an older or depleted patient. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -65730,23 +66050,23 @@
           },
           {
             "label": "B",
-            "text": "Qin Pi (Fraxini Cortex)"
+            "text": "Tian Men Dong (Asparagi Radix)"
           },
           {
             "label": "C",
-            "text": "Shan Zha (Crataegi Fructus)"
+            "text": "Mai Men Dong (Ophiopogonis Radix)"
           },
           {
             "label": "D",
-            "text": "Tian Ma (Gastrodiae Rhizoma)"
+            "text": "Nu Zhen Zi (Ligustri lucidi Fructus)"
           }
         ],
         "correctLabel": "A",
-        "explanation": "Hei Zhi Ma (Sesami Semen nigrum) is neutral and Sweet. Nourishes Liver-Kidney Yin and Blood, replenishes Essence and moistens dry intestines.",
+        "explanation": "Hei Zhi Ma (Sesami Semen nigrum) is neutral and Sweet. Nourishes Liver-Kidney Yin and Blood, replenishes Essence and moistens dry intestines. The verified profile identifies this principal use: Premature graying, dizziness, tinnitus or blurred vision with dry constipation in an older or depleted patient. Why the others are weaker: Tian Men Dong (Asparagi Radix): Strongly nourishes Lung and Kidney Yin, clears deficiency Heat and moistens dry intestines. Mai Men Dong (Ophiopogonis Radix): Gently nourishes Lung and Stomach Yin, generates fluids, moistens intestines and clears Heart irritability. Nu Zhen Zi (Ligustri lucidi Fructus): Gently nourishes Liver-Kidney Yin, clears deficiency Heat and benefits eyes and hair without cloying.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Hei%20Zhi%20Ma",
@@ -65756,7 +66076,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Nutre Yin y Sangre de Hígado-Riñón, repone Esencia y humedece intestinos secos. Indicaciones principales: Canas prematuras, mareo, tinnitus o visión borrosa con estreñimiento seco en paciente mayor o agotado.",
+            "prompt": "Un paciente presenta Canas prematuras, mareo, tinnitus o visión borrosa con estreñimiento seco en paciente mayor o agotado. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -65764,18 +66084,18 @@
               },
               {
                 "label": "B",
-                "text": "Qin Pi (Fraxini Cortex)"
+                "text": "Tian Men Dong (Asparagi Radix)"
               },
               {
                 "label": "C",
-                "text": "Shan Zha (Crataegi Fructus)"
+                "text": "Mai Men Dong (Ophiopogonis Radix)"
               },
               {
                 "label": "D",
-                "text": "Tian Ma (Gastrodiae Rhizoma)"
+                "text": "Nu Zhen Zi (Ligustri lucidi Fructus)"
               }
             ],
-            "explanation": "Hei Zhi Ma (Sesami Semen nigrum) es neutra y Dulce. Nutre Yin y Sangre de Hígado-Riñón, repone Esencia y humedece intestinos secos."
+            "explanation": "Hei Zhi Ma (Sesami Semen nigrum) es neutra y Dulce. Nutre Yin y Sangre de Hígado-Riñón, repone Esencia y humedece intestinos secos. El perfil verificado identifica este uso principal: Canas prematuras, mareo, tinnitus o visión borrosa con estreñimiento seco en paciente mayor o agotado. Por qué no las otras: Tian Men Dong (Asparagi Radix): Nutre fuertemente Yin de Pulmón y Riñón, aclara Calor por deficiencia y humedece intestinos secos. Mai Men Dong (Ophiopogonis Radix): Nutre suavemente Yin de Pulmón y Estómago, genera líquidos, humedece intestinos y aclara irritabilidad de Corazón. Nu Zhen Zi (Ligustri lucidi Fructus): Nutre suavemente Yin de Hígado-Riñón, aclara Calor por deficiencia y beneficia ojos/cabello sin empalagar."
           }
         },
         "nomenclature": {
@@ -65785,16 +66105,16 @@
               "pharmaceuticalName": "Sesami Semen nigrum"
             },
             {
-              "pinyin": "Qin Pi",
-              "pharmaceuticalName": "Fraxini Cortex"
+              "pinyin": "Tian Men Dong",
+              "pharmaceuticalName": "Asparagi Radix"
             },
             {
-              "pinyin": "Shan Zha",
-              "pharmaceuticalName": "Crataegi Fructus"
+              "pinyin": "Mai Men Dong",
+              "pharmaceuticalName": "Ophiopogonis Radix"
             },
             {
-              "pinyin": "Tian Ma",
-              "pharmaceuticalName": "Gastrodiae Rhizoma"
+              "pinyin": "Nu Zhen Zi",
+              "pharmaceuticalName": "Ligustri lucidi Fructus"
             }
           ],
           "formulas": [],
@@ -65803,6 +66123,18 @@
               {
                 "pinyin": "Hei Zhi Ma",
                 "pharmaceuticalName": "Sesami Semen nigrum"
+              },
+              {
+                "pinyin": "Tian Men Dong",
+                "pharmaceuticalName": "Asparagi Radix"
+              },
+              {
+                "pinyin": "Mai Men Dong",
+                "pharmaceuticalName": "Ophiopogonis Radix"
+              },
+              {
+                "pinyin": "Nu Zhen Zi",
+                "pharmaceuticalName": "Ligustri lucidi Fructus"
               }
             ],
             "formulas": []
@@ -65834,9 +66166,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Nourishes and moistens the Intestines to promote bowel movement without the force of a cold purgative. Principal indications: Dry constipation in an elderly, postpartum, post-febrile, chronically ill or otherwise deficient patient.",
+        "prompt": "A patient presents with Dry constipation in an elderly, postpartum, post-febrile, chronically ill or otherwise deficient patient. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -65856,11 +66188,11 @@
           }
         ],
         "correctLabel": "D",
-        "explanation": "Huo Ma Ren (Cannabis Semen) is neutral and Sweet. Nourishes and moistens the Intestines to promote bowel movement without the force of a cold purgative.",
+        "explanation": "Huo Ma Ren (Cannabis Semen) is neutral and Sweet. Nourishes and moistens the Intestines to promote bowel movement without the force of a cold purgative. The verified profile identifies this principal use: Dry constipation in an elderly, postpartum, post-febrile, chronically ill or otherwise deficient patient. Why the others are weaker: Jiang Huang (Curcumae longae Rhizoma): Moves Qi and Blood, relieves pain and unblocks channels, especially in shoulders and upper limbs. Lu Rong (Cervi Cornu pantotrichum): Powerfully tonifies Kidney Yang, replenishes Essence and Blood, strengthens sinews/bones and regulates Chong/Ren. Pu Huang (Typhae Pollen): Raw Pu Huang moves Blood and stops bleeding; charred Pu Huang astringes and stops bleeding more strongly.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Huo%20Ma%20Ren",
@@ -65870,7 +66202,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Nutre y humedece intestinos para promover evacuación sin la fuerza de un purgante frío. Indicaciones principales: Estreñimiento seco en paciente mayor, posparto, posfebril, crónicamente enfermo o deficiente.",
+            "prompt": "Un paciente presenta Estreñimiento seco en paciente mayor, posparto, posfebril, crónicamente enfermo o deficiente. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -65889,7 +66221,7 @@
                 "text": "Huo Ma Ren (Cannabis Semen)"
               }
             ],
-            "explanation": "Huo Ma Ren (Cannabis Semen) es neutra y Dulce. Nutre y humedece intestinos para promover evacuación sin la fuerza de un purgante frío."
+            "explanation": "Huo Ma Ren (Cannabis Semen) es neutra y Dulce. Nutre y humedece intestinos para promover evacuación sin la fuerza de un purgante frío. El perfil verificado identifica este uso principal: Estreñimiento seco en paciente mayor, posparto, posfebril, crónicamente enfermo o deficiente. Por qué no las otras: Jiang Huang (Curcumae longae Rhizoma): Mueve Qi y Sangre, alivia dolor y abre canales, especialmente hombros y miembros superiores. Lu Rong (Cervi Cornu pantotrichum): Tonifica con fuerza Yang de Riñón, repone Esencia/Sangre, fortalece tendones/huesos y regula Chong/Ren. Pu Huang (Typhae Pollen): Pu Huang cruda mueve Sangre y detiene sangrado; carbonizada astringe y detiene con más fuerza."
           }
         },
         "nomenclature": {
@@ -65914,6 +66246,18 @@
           "formulas": [],
           "feedback": {
             "herbs": [
+              {
+                "pinyin": "Jiang Huang",
+                "pharmaceuticalName": "Curcumae longae Rhizoma"
+              },
+              {
+                "pinyin": "Lu Rong",
+                "pharmaceuticalName": "Cervi Cornu pantotrichum"
+              },
+              {
+                "pinyin": "Pu Huang",
+                "pharmaceuticalName": "Typhae Pollen"
+              },
               {
                 "pinyin": "Huo Ma Ren",
                 "pharmaceuticalName": "Cannabis Semen"
@@ -65940,7 +66284,7 @@
         "objectiveId": "working-single_herb",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "case",
         "language": "en",
         "source": {
           "title": "Single Herb verified study profiles",
@@ -65948,9 +66292,9 @@
         },
         "review": {
           "status": "practice-ready",
-          "notes": "Source-grounded practice preparation: Source-grounded question generated from a verified individual-herb profile."
+          "notes": "Practice-ready application item with comparative distractor feedback."
         },
-        "prompt": "Which herb best matches this profile? Clears Heart-Liver Heat and toxicity, opens the orifices, extinguishes Wind and stops convulsions. Principal indications: Hot Locked-up syndrome: impaired consciousness with high fever, irritability, warm limbs, red face, thick yellow coat or convulsions.",
+        "prompt": "A patient presents with Hot Locked-up syndrome: impaired consciousness with high fever, irritability, warm limbs, red face, thick yellow coat or convulsions. Which herb best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -65970,11 +66314,11 @@
           }
         ],
         "correctLabel": "B",
-        "explanation": "Niu Huang (Bovis Calculus) is cold and Bitter. Clears Heart-Liver Heat and toxicity, opens the orifices, extinguishes Wind and stops convulsions.",
+        "explanation": "Niu Huang (Bovis Calculus) is cold and Bitter. Clears Heart-Liver Heat and toxicity, opens the orifices, extinguishes Wind and stops convulsions. The verified profile identifies this principal use: Hot Locked-up syndrome: impaired consciousness with high fever, irritability, warm limbs, red face, thick yellow coat or convulsions. Why the others are weaker: Shi Hu (Dendrobii Herba): Strongly nourishes Stomach Yin, generates fluids, clears deficiency Heat and benefits vision through Kidney Yin. Wu Wei Zi (Schisandrae Fructus): Contains Lung Qi, stops sweating, secures Essence, generates fluids and calms the Heart Spirit. Ze Lan (Lycopi Herba): Invigorates Blood, regulates menstruation, promotes urination and reduces edema.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "high",
-          "reason": "Source-grounded question generated from a verified individual-herb profile"
+          "reason": "Clinical selection with same-category distractors from verified herb profiles"
         },
         "sourceCard": {
           "url": "/blocks/myprogress/single-herbs-study-guide.php?herb=Niu%20Huang",
@@ -65984,7 +66328,7 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Qué hierba corresponde mejor a este perfil? Aclara Calor y toxicidad de Corazón-Hígado, abre orificios, extingue Viento y detiene convulsiones. Indicaciones principales: Síndrome cerrado caliente: conciencia alterada con fiebre alta, irritabilidad, extremidades calientes, cara roja, saburra amarilla gruesa o convulsiones.",
+            "prompt": "Un paciente presenta Síndrome cerrado caliente: conciencia alterada con fiebre alta, irritabilidad, extremidades calientes, cara roja, saburra amarilla gruesa o convulsiones. ¿Qué hierba corresponde mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
@@ -66003,7 +66347,7 @@
                 "text": "Ze Lan (Lycopi Herba)"
               }
             ],
-            "explanation": "Niu Huang (Bovis Calculus) es fría y Amarga. Aclara Calor y toxicidad de Corazón-Hígado, abre orificios, extingue Viento y detiene convulsiones."
+            "explanation": "Niu Huang (Bovis Calculus) es fría y Amarga. Aclara Calor y toxicidad de Corazón-Hígado, abre orificios, extingue Viento y detiene convulsiones. El perfil verificado identifica este uso principal: Síndrome cerrado caliente: conciencia alterada con fiebre alta, irritabilidad, extremidades calientes, cara roja, saburra amarilla gruesa o convulsiones. Por qué no las otras: Shi Hu (Dendrobii Herba): Nutre fuertemente Yin de Estómago, genera líquidos, aclara Calor por deficiencia y beneficia visión mediante Yin de Riñón. Wu Wei Zi (Schisandrae Fructus): Contiene Qi de Pulmón, detiene sudor, asegura Esencia, genera líquidos y calma Shen de Corazón. Ze Lan (Lycopi Herba): Mueve Sangre, regula menstruación, promueve orina y reduce edema."
           }
         },
         "nomenclature": {
@@ -66029,8 +66373,20 @@
           "feedback": {
             "herbs": [
               {
+                "pinyin": "Shi Hu",
+                "pharmaceuticalName": "Dendrobii Herba"
+              },
+              {
                 "pinyin": "Niu Huang",
                 "pharmaceuticalName": "Bovis Calculus"
+              },
+              {
+                "pinyin": "Wu Wei Zi",
+                "pharmaceuticalName": "Schisandrae Fructus"
+              },
+              {
+                "pinyin": "Ze Lan",
+                "pharmaceuticalName": "Lycopi Herba"
               }
             ],
             "formulas": []
