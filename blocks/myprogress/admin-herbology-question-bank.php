@@ -19,6 +19,7 @@ $contentfilter = optional_param('content', 'all', PARAM_ALPHANUMEXT);
 $reviewfilter = optional_param('review', 'all', PARAM_ALPHANUMEXT);
 $aibatchfilter = optional_param('aibatch', '', PARAM_ALPHANUMEXT);
 $editquestionid = optional_param('edit', '', PARAM_ALPHANUMEXT);
+$shownewquestionform = (bool)optional_param('newquestion', 0, PARAM_BOOL);
 $advancetonext = (bool)optional_param('advance', 0, PARAM_BOOL);
 $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
@@ -43,7 +44,7 @@ if (!in_array($readinessfilter, ['all', 'ready', 'incomplete'], true)) {
 if (!in_array($usagefilter, ['all', 'exam1', 'exam2_review', 'reserve'], true)) {
     $usagefilter = 'all';
 }
-if (!in_array($sourcefilter, ['all', 'curated', 'scorm'], true)) {
+if (!in_array($sourcefilter, ['all', 'curated', 'scorm', 'admin'], true)) {
     $sourcefilter = 'all';
 }
 if (!in_array($cognitivefilter, ['all', 'recall', 'application', 'inference', 'analysis'], true)) {
@@ -87,8 +88,13 @@ if (is_readable($scormbankpath)) {
         }
     }
 }
-$basebank = $bank;
 $revisionstore = block_myprogress_herbology_override_load();
+$bank['domains'] = block_myprogress_herbology_merge_custom_questions(
+    $bank['domains'],
+    $revisionstore,
+    true
+);
+$basebank = $bank;
 $findquestion = static function(array $questionbank, string $questionid): ?array {
     foreach (($questionbank['domains'] ?? []) as $domainid => $questions) {
         foreach ($questions as $question) {
@@ -547,6 +553,7 @@ $cognitivebucket = static function(array $question): string {
 
 $isready = static function(array $question): bool {
     return empty($question['_excludedFromUse'])
+        && (string)($question['_customStatus'] ?? 'approved') === 'approved'
         && trim((string)($question['prompt'] ?? '')) !== ''
         && count($question['options'] ?? []) === 4
         && trim((string)($question['correctLabel'] ?? '')) !== ''
@@ -558,6 +565,7 @@ $isready = static function(array $question): bool {
 };
 $missingfields = static function(array $question): array {
     $missing = [];
+    if ((string)($question['_customStatus'] ?? 'approved') !== 'approved') $missing[] = 'administrator approval';
     if (!empty($question['_excludedFromUse'])) $missing[] = 'possible exclusion review';
     if (trim((string)($question['prompt'] ?? '')) === '') $missing[] = 'prompt';
     if (count($question['options'] ?? []) !== 4) $missing[] = 'four options';
@@ -594,7 +602,10 @@ foreach ($domains as $domainid => $domain) {
         $question['_configuredexamposition'] = $configuredexamposition;
         $question['_exam2position'] = 0;
         $question['_missing'] = $missingfields($question);
-        $question['_sourcekind'] = ($question['sourceKind'] ?? 'curated') === 'scorm' ? 'scorm' : 'curated';
+        $questionsourcekind = (string)($question['sourceKind'] ?? 'curated');
+        $question['_sourcekind'] = in_array($questionsourcekind, ['scorm', 'admin'], true)
+            ? $questionsourcekind
+            : 'curated';
         $question['_cognitive'] = $cognitivebucket($question);
         $editorial = is_array($question['editorial'] ?? null) ? $question['editorial'] : [];
         $question['_needsinference'] = (bool)($editorial['inferenceUpgradeRequired'] ?? false);
@@ -685,6 +696,301 @@ $textaiproviders = \core_ai\manager::get_providers_for_actions(
     true
 );
 $textaienabled = !empty($textaiproviders[\core_ai\aiactions\generate_text::class]);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST'
+        && in_array($formaction, ['approvecustomquestion', 'discardcustomquestion'], true)) {
+    require_sesskey();
+    $customquestionid = required_param('questionid', PARAM_ALPHANUMEXT);
+    $customrecord = $revisionstore['customQuestions'][$customquestionid] ?? null;
+    if (!is_array($customrecord)) {
+        throw new invalid_parameter_exception('Unknown administrator-authored question ID.');
+    }
+    if ((string)($customrecord['status'] ?? 'draft') !== 'draft') {
+        throw new invalid_parameter_exception('Only an unpublished administrator-authored draft can be changed here.');
+    }
+    if ($formaction === 'discardcustomquestion') {
+        block_myprogress_herbology_override_update(static function(array $store) use ($customquestionid): array {
+            unset($store['customQuestions'][$customquestionid]);
+            return $store;
+        });
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php'),
+            'Administrator-authored draft discarded.',
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
+    $savedat = gmdate(DATE_ATOM);
+    $savedbyname = fullname($USER);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $customquestionid,
+        $savedat,
+        $savedbyname,
+        $USER
+    ): array {
+        $record = $store['customQuestions'][$customquestionid] ?? null;
+        if (!is_array($record) || !is_array($record['draft'] ?? null)) {
+            throw new invalid_parameter_exception('Only a complete administrator-authored draft can be approved.');
+        }
+        $record['status'] = 'approved';
+        $record['approved'] = $record['draft'];
+        $record['savedAt'] = $savedat;
+        $record['savedById'] = (int)$USER->id;
+        $record['savedByName'] = $savedbyname;
+        $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        $store['customQuestions'][$customquestionid] = $record;
+        return $store;
+    });
+    redirect(
+        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+            'q' => $customquestionid,
+            'source' => 'admin',
+        ]),
+        'New question approved and added to the question bank.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST'
+        && in_array($formaction, ['createnewquestion', 'rewritecustomquestion'], true)) {
+    require_sesskey();
+    if (!$textaienabled) {
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['newquestion' => 1]),
+            'No enabled Moodle text AI provider is available. Enable Generate text before creating a question.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $iscustomrewrite = $formaction === 'rewritecustomquestion';
+    $customquestionid = $iscustomrewrite ? required_param('questionid', PARAM_ALPHANUMEXT) : '';
+    $customrecord = $iscustomrewrite
+        ? ($revisionstore['customQuestions'][$customquestionid] ?? null)
+        : null;
+    if ($iscustomrewrite && !is_array($customrecord)) {
+        throw new invalid_parameter_exception('Unknown administrator-authored question ID.');
+    }
+    if ($iscustomrewrite && (string)($customrecord['status'] ?? 'draft') !== 'draft') {
+        throw new invalid_parameter_exception('Only an unpublished administrator-authored draft can be revised.');
+    }
+    $idea = $iscustomrewrite
+        ? trim((string)($customrecord['idea'] ?? ''))
+        : trim(required_param('idea', PARAM_RAW));
+    $correction = $iscustomrewrite ? trim(required_param('correction', PARAM_RAW)) : '';
+    if ($idea === '' || core_text::strlen($idea) > 12000) {
+        throw new invalid_parameter_exception('Describe the question idea in 12,000 characters or fewer.');
+    }
+    if (core_text::strlen($correction) > 12000) {
+        throw new invalid_parameter_exception('Correction instructions must be 12,000 characters or fewer.');
+    }
+    $currentdraft = $iscustomrewrite && is_array($customrecord['draft'] ?? null)
+        ? $customrecord['draft']
+        : null;
+    $customprompt = <<<'PROMPT'
+You are a senior NCBAHM Chinese Herbology mock-exam author. Create one original English question from the administrator's idea and return strict JSON only.
+
+Requirements:
+1. Determine the best fixed domain from these exact IDs: formula_differentiation, single_herb, dui_yao, safety_dispensing, formula_composition, scope_aliases.
+2. Write a concise board-style inference or analysis question with one defensible answer and exactly four parallel A-D choices.
+3. Never use “Both are correct,” “All of the above,” “None of the above,” or equivalent combined-answer shortcuts.
+4. Use NCBAHM guideline terminology. Herb names must use “Pinyin (Pharmaceutical Latin)” when herbs appear in the choices or explanation. Use standard formula names consistently.
+5. Do not state the diagnosis, tested action, formula, herb, hierarchy role, preparation rule, or other decisive answer in the stem when observable findings can support an inference instead.
+6. The explanation must identify both inference steps, explain the decisive clues, justify the correct answer, and explain why every distractor is weaker. Do not introduce unrelated facts.
+7. Classify contentType as one of: clinical_case, herb_properties, formula_selection, formula_composition, formula_hierarchy, dui_yao, herb_processing, safety_dispensing, roster_aliases, other.
+8. Set cognitiveLevel to infer or analyze and difficultyBand to inference or analysis.
+9. The administrator will review the result. Do not claim that it is published or source-verified.
+10. If CURRENT DRAFT and CORRECTION are supplied, revise the current draft in place and apply the correction without losing good existing content.
+
+Required JSON:
+{"domainId":"single_herb","prompt":"...","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"correctLabel":"A","explanation":"...","contentType":"clinical_case","cognitiveLevel":"infer","difficultyBand":"inference","reviewSummary":"..."}
+
+ADMINISTRATOR IDEA:
+PROMPT;
+    $customprompt .= "\n" . $idea;
+    if ($currentdraft !== null) {
+        $customprompt .= "\n\nCURRENT DRAFT:\n" . json_encode(
+            $currentdraft,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        );
+        $customprompt .= "\n\nCORRECTION:\n" . $correction;
+    }
+    $manager = \core\di::get(\core_ai\manager::class);
+    $action = new \core_ai\aiactions\generate_text(
+        contextid: $systemcontext->id,
+        userid: (int)$USER->id,
+        prompttext: $customprompt,
+    );
+    $response = $manager->process_action($action);
+    if (!$response->get_success()) {
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['newquestion' => 1]),
+            'The new-question draft was not created. ' . ($response->get_errormessage() ?: 'The AI provider returned an error.'),
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $generated = trim((string)($response->get_response_data()['generatedcontent'] ?? ''));
+    if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $generated, $matches)) {
+        $generated = $matches[1];
+    } else {
+        $firstbrace = strpos($generated, '{');
+        $lastbrace = strrpos($generated, '}');
+        if ($firstbrace !== false && $lastbrace !== false && $lastbrace > $firstbrace) {
+            $generated = substr($generated, $firstbrace, $lastbrace - $firstbrace + 1);
+        }
+    }
+    try {
+        $decoded = json_decode($generated, true, 512, JSON_THROW_ON_ERROR);
+    } catch (Throwable $error) {
+        $decoded = null;
+    }
+    $domainid = (string)($decoded['domainId'] ?? '');
+    $prompt = trim((string)($decoded['prompt'] ?? ''));
+    $explanation = trim((string)($decoded['explanation'] ?? ''));
+    $correctlabel = strtoupper(trim((string)($decoded['correctLabel'] ?? '')));
+    $rawoptions = $decoded['options'] ?? null;
+    if (!is_array($decoded) || !isset($domains[$domainid]) || $prompt === '' || $explanation === ''
+            || !in_array($correctlabel, ['A', 'B', 'C', 'D'], true)
+            || !is_array($rawoptions) || count($rawoptions) !== 4) {
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['newquestion' => 1]),
+            'The generated draft was incomplete. Please submit the idea again with one or two more specific details.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $optionsbylabel = [];
+    foreach ($rawoptions as $option) {
+        $label = strtoupper(trim((string)($option['label'] ?? '')));
+        $text = trim((string)($option['text'] ?? ''));
+        if (!in_array($label, ['A', 'B', 'C', 'D'], true) || $text === ''
+                || preg_match('/\b(?:both|all)\b.*\b(?:correct|above)\b|\bnone\s+of\s+the\s+above\b/i', $text)) {
+            $optionsbylabel = [];
+            break;
+        }
+        $optionsbylabel[$label] = $text;
+    }
+    if (count($optionsbylabel) !== 4 || count(array_unique(array_map(
+        static fn(string $text): string => core_text::strtolower($text),
+        $optionsbylabel
+    ))) !== 4) {
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['newquestion' => 1]),
+            'The generated answer choices were not valid. Please generate the draft again.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $contenttype = (string)($decoded['contentType'] ?? 'other');
+    $allowedcontenttypes = [
+        'clinical_case', 'herb_properties', 'formula_selection', 'formula_composition',
+        'formula_hierarchy', 'dui_yao', 'herb_processing', 'safety_dispensing',
+        'roster_aliases', 'other',
+    ];
+    if (!in_array($contenttype, $allowedcontenttypes, true)) {
+        $contenttype = 'other';
+    }
+    $cognitivelevel = in_array(($decoded['cognitiveLevel'] ?? ''), ['infer', 'analyze'], true)
+        ? (string)$decoded['cognitiveLevel']
+        : 'infer';
+    $difficultyband = $cognitivelevel === 'analyze' ? 'analysis' : 'inference';
+    if ($customquestionid === '') {
+        $customquestionid = 'ADMIN-HB-' . gmdate('Ymd-His') . '-' . strtoupper(bin2hex(random_bytes(2)));
+    }
+    $sourcepaths = [
+        'formula_differentiation' => '/blocks/myprogress/formulas-study-guide.php',
+        'single_herb' => '/blocks/myprogress/single-herbs-study-guide.php',
+        'dui_yao' => '/blocks/myprogress/single-herbs-dui-yao-reference.php',
+        'safety_dispensing' => '/blocks/myprogress/safety-library.php',
+        'formula_composition' => '/blocks/myprogress/formulas-study-guide.php',
+        'scope_aliases' => '/blocks/menu/herbology-board.php',
+    ];
+    $sourcepath = $sourcepaths[$domainid] ?? '/blocks/menu/herbology-board.php';
+    $sourceurl = new moodle_url($sourcepath, ['lang' => 'en']);
+    $sourceurles = new moodle_url($sourcepath, ['lang' => 'es']);
+    $question = [
+        'questionId' => $customquestionid,
+        'domainId' => $domainid,
+        'prompt' => $prompt,
+        'options' => array_map(
+            static fn(string $label): array => ['label' => $label, 'text' => $optionsbylabel[$label]],
+            ['A', 'B', 'C', 'D']
+        ),
+        'correctLabel' => $correctlabel,
+        'explanation' => $explanation,
+        'contentType' => $contenttype,
+        'cognitiveLevel' => $cognitivelevel,
+        'difficultyBand' => $difficultyband,
+        'sourceKind' => 'admin',
+        'source' => [
+            'title' => 'Administrator-authored NCBAHM question',
+            'section' => 'Idea supplied by ' . fullname($USER),
+            'locator' => 'Administrator idea · ' . core_text::substr($idea, 0, 220),
+        ],
+        'sourceCard' => [
+            'label' => 'Open supporting study guide',
+            'labelEs' => 'Abrir guía de estudio de apoyo',
+            'url' => $sourceurl->out(false),
+            'urlEs' => $sourceurles->out(false),
+        ],
+        'editorial' => [
+            'simulationCandidate' => true,
+            'inferenceUpgradeRequired' => false,
+            'feedbackQuality' => 'curated',
+            'feedbackRecommendation' => 'Administrator approval required before use.',
+        ],
+        'examTemplate' => ['globalPosition' => 0],
+    ];
+    $savedat = gmdate(DATE_ATOM);
+    $savedbyname = fullname($USER);
+    $reviewsummary = trim((string)($decoded['reviewSummary'] ?? ''));
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $customquestionid,
+        $question,
+        $idea,
+        $correction,
+        $reviewsummary,
+        $domainid,
+        $savedat,
+        $savedbyname,
+        $USER
+    ): array {
+        $previous = is_array($store['customQuestions'][$customquestionid] ?? null)
+            ? $store['customQuestions'][$customquestionid]
+            : [];
+        $corrections = is_array($previous['corrections'] ?? null) ? $previous['corrections'] : [];
+        if ($correction !== '') {
+            $corrections[] = $correction;
+        }
+        $store['customQuestions'][$customquestionid] = [
+            'questionId' => $customquestionid,
+            'domainId' => $domainid,
+            'status' => 'draft',
+            'idea' => $idea,
+            'corrections' => array_slice($corrections, -20),
+            'reviewSummary' => $reviewsummary,
+            'draft' => $question,
+            'approved' => is_array($previous['approved'] ?? null) ? $previous['approved'] : null,
+            'revisionNumber' => (int)($previous['revisionNumber'] ?? 0) + 1,
+            'savedAt' => $savedat,
+            'savedById' => (int)$USER->id,
+            'savedByName' => $savedbyname,
+        ];
+        return $store;
+    });
+    redirect(
+        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+            'q' => $customquestionid,
+            'source' => 'admin',
+        ]),
+        $iscustomrewrite
+            ? 'New-question draft revised. Review the current version before approving it.'
+            : 'New-question draft created. Review it before approving it.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'
         && in_array($formaction, ['generateaidrafts', 'rewritequestion'], true)) {
@@ -1303,6 +1609,15 @@ $queueurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php
 $exclusionurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'possible_exclusion']);
 $exclusionqueueurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['download' => 'exclusion_queue']);
 $exam2url = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['usage' => 'exam2_review']);
+$newquestionurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['newquestion' => 1]);
+$customdrafturl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+    'source' => 'admin',
+    'readiness' => 'incomplete',
+]);
+$customdraftcount = count(array_filter(
+    $revisionstore['customQuestions'] ?? [],
+    static fn(array $record): bool => (string)($record['status'] ?? 'draft') === 'draft'
+));
 $pendingaibatches = [];
 foreach ($allquestions as $question) {
     $revision = is_array($question['_revision'] ?? null) ? $question['_revision'] : [];
@@ -1417,9 +1732,12 @@ echo $OUTPUT->header();
 .question-bank__rewrite-ready{margin:0 0 14px;padding:13px 15px;border-left:5px solid #0b8f87;border-radius:8px;background:#eaf9f3;color:#075f50;line-height:1.5}.question-bank__rewrite-ready strong{display:block;font-size:17px}.question-bank__rewrite-summary{display:block;margin-top:8px;padding-top:8px;border-top:1px solid #acdcca}.question-bank__rewrite-summary strong{display:inline;font-size:inherit}.question-bank__rewrite-ready--outdated{border-left-color:#d97706;background:#fff7ed;color:#9a3412}.question-bank__rewrite-ready .question-bank__button{margin-top:10px}.question-bank__rewrite-again{margin-top:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__rewrite-again summary{padding:13px 14px;color:#4c1d95;font-weight:900;cursor:pointer}.question-bank__rewrite-again .question-bank__proposal-box{margin:0;border:0;border-top:1px solid #ded7ef;border-radius:0 0 9px 9px}
 .question-bank__advanced-review{margin-top:14px;border:1px solid #e5c27f;border-radius:9px;background:#fffaf0}.question-bank__advanced-review summary{padding:13px 14px;color:#8a4b08;font-weight:900;cursor:pointer}.question-bank__advanced-review>.question-bank__editor-check{margin:0;border-radius:0;border-left:0;border-top:1px solid #f0d5a1}.question-bank__advanced-review>.question-bank__editor-field{margin:0;padding:14px}.question-bank__advanced-review>.question-bank__editor-actions{padding:0 14px 14px}
 .question-bank__editor-panel--editing{border-color:#cbb9ee}.question-bank__panel-intro{margin:-6px 0 14px;color:#60758a;font-size:12px;line-height:1.45}.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:150px}.question-bank__editor-panel--editing .question-bank__editor-classification{grid-template-columns:1fr;margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__editor-panel--editing .question-bank__editor-classification h5{margin:0 0 2px}.question-bank__editor-panel--editing .question-bank__editor-classification .question-bank__panel-intro{margin:0 0 8px}.question-bank__editor-panel--editing .question-bank__editor-actions{margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__proposal-form{display:grid;gap:12px}.question-bank__proposal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-toolbar p{margin:0;color:#66557e}.question-bank__proposal-box{display:block;margin-top:14px;padding:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-box>span{display:block;margin-bottom:7px;color:#4c1d95;font-weight:900}.question-bank__proposal-box textarea{box-sizing:border-box;width:100%;min-height:150px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__proposal-saved{display:block;margin-top:7px;color:#66557e;font-size:12px}.question-bank__proposal-review{margin-top:14px;padding:14px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;white-space:pre-wrap}@media(max-width:850px){.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:120px}.question-bank__proposal-toolbar{align-items:stretch;flex-direction:column}}
+.question-bank__new-question{margin-bottom:18px;padding:20px;border:2px solid #0b8f87;border-radius:12px;background:#f2fbf9}.question-bank__new-question h3{margin:0 0 6px;font-size:24px}.question-bank__new-question p{margin:0 0 14px;color:#52677a}.question-bank__new-question textarea{box-sizing:border-box;width:100%;min-height:180px;padding:13px 14px;border:1px solid #9db8c3;border-radius:8px;background:#fff;resize:vertical}.question-bank__new-question .question-bank__editor-actions{margin-top:12px}
 </style>
 <main class="question-bank">
-    <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated and SCORM Chinese Herbology questions. Review each ID, domain, cognitive level, answer, explanation and source before approving it for an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><?php if ($resumereviewurl !== null): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Resume corrected questions' : 'Resume current review'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($pendingreclassificationcount > 0): ?><a class="question-bank__button" href="<?php echo $queueurl->out(false); ?>">Export reclassification queue (<?php echo (int)$pendingreclassificationcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><a class="question-bank__button" href="<?php echo $exclusionqueueurl->out(false); ?>">Export exclusions</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
+    <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($resumereviewurl !== null): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Resume corrected questions' : 'Resume current review'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($pendingreclassificationcount > 0): ?><a class="question-bank__button" href="<?php echo $queueurl->out(false); ?>">Export reclassification queue (<?php echo (int)$pendingreclassificationcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><a class="question-bank__button" href="<?php echo $exclusionqueueurl->out(false); ?>">Export exclusions</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
+    <?php if ($shownewquestionform): ?><section id="new-question" class="question-bank__new-question"><h3>Create a new question from your idea</h3><p>Describe what you want in your own words. The system will write the question, four choices, correct answer, feedback and classification. It will remain a draft until you approve it.</p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><textarea name="idea" maxlength="12000" required placeholder="Example: Create an inference question in which the student identifies the deputy ingredients of a formula from their clinical roles. Include realistic distractors and explain the hierarchy in the feedback."></textarea><input type="hidden" name="formaction" value="createnewquestion"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Create draft</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Cancel</a></div><?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?></form></section><?php endif; ?>
+    <?php if ($customdraftcount > 0 && !$shownewquestionform): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
     <section class="question-bank__review-progress" aria-label="Simulation Exam 2 approval progress"><strong>Accepted and ready: <?php echo (int)$exam2reviewedcount; ?> of <?php echo (int)$exam2candidatecount; ?></strong><p><?php if ($usagefilter === 'exam2_review'): ?>Approved questions are removed from the pending review screen immediately. Only the remaining questions stay visible.<?php if ($exam2shortfalls !== []): ?> The current bank is short <?php echo (int)array_sum($exam2shortfalls); ?> required domain question<?php echo array_sum($exam2shortfalls) === 1 ? '' : 's'; ?>.<?php endif; ?><?php else: ?>Start the next five automatic reviews directly from this screen.<?php endif; ?></p><?php if ($usagefilter !== 'exam2_review'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Automatically review next 5 questions</button></form><?php endif; ?></section>
     <?php if ($usagefilter === 'exam2_review'): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, distractor analysis, feedback and classification. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Automatically review next 5 questions</button></form></section><?php endif; ?>
     <?php if ($editquestion !== null && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts')):
@@ -1478,7 +1796,7 @@ echo $OUTPUT->header();
         <label><span>Domain</span><select name="domain"><option value="all">All domains</option><?php foreach ($domains as $domainid => $domain): ?><option value="<?php echo s($domainid); ?>"<?php echo $domainfilter === $domainid ? ' selected' : ''; ?>>Domain <?php echo (int)$domain['number']; ?> · <?php echo s($domain['name']); ?></option><?php endforeach; ?></select></label>
         <label><span>Readiness</span><select name="readiness"><option value="all">All questions</option><option value="ready"<?php echo $readinessfilter === 'ready' ? ' selected' : ''; ?>>Ready for practice</option><option value="incomplete"<?php echo $readinessfilter === 'incomplete' ? ' selected' : ''; ?>>Needs completion</option></select></label>
         <label><span>Exam use</span><select name="usage"><option value="all">All uses</option><option value="exam1"<?php echo $usagefilter === 'exam1' ? ' selected' : ''; ?>>Simulation Exam 1</option><option value="exam2_review"<?php echo $usagefilter === 'exam2_review' ? ' selected' : ''; ?>>Simulation Exam 2 review set</option><option value="reserve"<?php echo $usagefilter === 'reserve' ? ' selected' : ''; ?>>Ready reserve bank</option></select></label>
-        <label><span>Source</span><select name="source"><option value="all">All sources</option><option value="curated"<?php echo $sourcefilter === 'curated' ? ' selected' : ''; ?>>Curated bank</option><option value="scorm"<?php echo $sourcefilter === 'scorm' ? ' selected' : ''; ?>>SCORM modules</option></select></label>
+        <label><span>Source</span><select name="source"><option value="all">All sources</option><option value="curated"<?php echo $sourcefilter === 'curated' ? ' selected' : ''; ?>>Curated bank</option><option value="scorm"<?php echo $sourcefilter === 'scorm' ? ' selected' : ''; ?>>SCORM modules</option><option value="admin"<?php echo $sourcefilter === 'admin' ? ' selected' : ''; ?>>Administrator-authored</option></select></label>
         <label><span>Cognitive level</span><select name="cognitive"><option value="all">All cognitive levels</option><option value="recall"<?php echo $cognitivefilter === 'recall' ? ' selected' : ''; ?>>Recall / direct</option><option value="application"<?php echo $cognitivefilter === 'application' ? ' selected' : ''; ?>>Application</option><option value="inference"<?php echo $cognitivefilter === 'inference' ? ' selected' : ''; ?>>Inference</option><option value="analysis"<?php echo $cognitivefilter === 'analysis' ? ' selected' : ''; ?>>Analysis / differential</option></select></label>
         <label><span>Content focus</span><select name="content"><option value="all">All content</option><option value="herb_properties"<?php echo $contentfilter === 'herb_properties' ? ' selected' : ''; ?>>Herb properties</option><option value="formula_hierarchy"<?php echo $contentfilter === 'formula_hierarchy' ? ' selected' : ''; ?>>Formula hierarchy</option><option value="herb_processing"<?php echo $contentfilter === 'herb_processing' ? ' selected' : ''; ?>>Herb processing</option><option value="clinical_case"<?php echo $contentfilter === 'clinical_case' ? ' selected' : ''; ?>>Clinical cases</option><option value="other"<?php echo $contentfilter === 'other' ? ' selected' : ''; ?>>Other content</option></select></label>
         <label><span>Editorial review</span><select name="review"><option value="all">All review states</option><option value="ai_drafts"<?php echo $reviewfilter === 'ai_drafts' ? ' selected' : ''; ?>>AI review drafts</option><option value="proposals_pending"<?php echo $reviewfilter === 'proposals_pending' ? ' selected' : ''; ?>>Publishing proposals</option><option value="needs_inference"<?php echo $reviewfilter === 'needs_inference' ? ' selected' : ''; ?>>Needs more inference</option><option value="needs_feedback"<?php echo $reviewfilter === 'needs_feedback' ? ' selected' : ''; ?>>Needs stronger feedback</option><option value="simulation_candidate"<?php echo $reviewfilter === 'simulation_candidate' ? ' selected' : ''; ?>>Simulation candidate</option><option value="reclassification_requested"<?php echo $reviewfilter === 'reclassification_requested' ? ' selected' : ''; ?>>Reclassification requested</option><option value="possible_exclusion"<?php echo $reviewfilter === 'possible_exclusion' ? ' selected' : ''; ?>>Possible exclusions (recycle bin)</option></select></label>
@@ -1497,7 +1815,15 @@ echo $OUTPUT->header();
         $domain = $domains[$question['_domainid']];
         $contentlabel = ucwords(str_replace('_', ' ', (string)($question['contentType'] ?? 'other')));
         $cognitivelabel = ucwords((string)$question['_cognitive']);
-        $sourcelabel = $question['_sourcekind'] === 'scorm' ? 'SCORM source' : 'Curated source';
+        $sourcelabel = $question['_sourcekind'] === 'scorm'
+            ? 'SCORM source'
+            : ($question['_sourcekind'] === 'admin' ? 'Administrator-authored' : 'Curated source');
+        $customrecord = is_array($revisionstore['customQuestions'][$question['questionId']] ?? null)
+            ? $revisionstore['customQuestions'][$question['questionId']]
+            : [];
+        $customstatus = (string)($customrecord['status'] ?? '');
+        $iscustomdraft = $question['_sourcekind'] === 'admin' && $customstatus === 'draft';
+        $customreviewsummary = trim((string)($customrecord['reviewSummary'] ?? ''));
         $revision = $question['_revision'];
         $revisionstatus = (string)($revision['status'] ?? '');
         $fullrevision = is_array($revisionstore['questions'][$question['questionId']] ?? null)
@@ -1534,10 +1860,11 @@ echo $OUTPUT->header();
             <?php if ($question['_examposition'] > 0): ?><span class="question-bank__badge question-bank__badge--exam">Simulation Exam 1 · position <?php echo (int)$question['_examposition']; ?></span><?php else: ?><span class="question-bank__badge">Not used in Exam 1</span><?php endif; ?>
             <?php if ($question['_exam2position'] > 0): ?><span class="question-bank__badge question-bank__badge--exam">Simulation Exam 2 review · position <?php echo (int)$question['_exam2position']; ?></span><?php endif; ?>
             <span class="question-bank__badge">Complexity: <?php echo s(ucfirst((string)($question['difficultyBand'] ?? 'unclassified'))); ?></span>
+            <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php elseif ($question['_sourcekind'] === 'admin'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>
             <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready">Approved</span><?php endif; ?>
             <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--exam">AI-assisted mock review</span><?php endif; ?>
             <?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><span class="question-bank__badge question-bank__badge--exam">Proposal pending publishing review</span><?php endif; ?>
-            <?php if (($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a><?php endif; ?>
+            <?php if ($question['_sourcekind'] !== 'admin' && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a><?php endif; ?>
         </div>
         <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><div class="question-bank__ai-draft-note"><?php echo $cardisoutdated ? 'Earlier automatic-review version. If the question is already correct, approve the current version; run the updated review only when changes are still needed.' : ($cardiscorrected ? 'Corrected version — awaiting your approval. Review the current question below; the earlier version is not shown.' : 'Current proposed version — not published. Review it below, then accept it or request a correction.'); ?></div><?php endif; ?>
         <?php if ($question['_excluded']): ?><div class="question-bank__exclusion-note"><strong>Possible error / exclusion note:</strong> <?php echo s($revision['exclusionReason'] ?? 'No reason recorded.'); ?> This question is preserved but unavailable to students and exams.</div><?php endif; ?>
@@ -1552,6 +1879,7 @@ echo $OUTPUT->header();
         $sourcecardlabel = (string)($question['sourceCard'][$displaylang === 'es' ? 'labelEs' : 'label'] ?? 'Open source card');
         if ($sourcecardurl !== ''):
         ?> · <a href="<?php echo s($sourcecardurl); ?>" target="_blank" rel="noopener"><?php echo s($sourcecardlabel); ?></a><?php endif; ?></p><?php if (!$question['_ready']): ?><div class="question-bank__missing">Missing for practice readiness: <?php echo s(implode(', ', $question['_missing'])); ?>.</div><?php endif; ?>
+        <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction" required placeholder="Describe only the correction you want. The revised draft will return here for another review."></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Revise draft</button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve this new question and add it to the question bank?');">Approve and add to bank</button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('Discard this new-question draft?');">Discard draft</button></form></div></section><?php endif; ?>
         <?php if ($inlineapproval): ?><section class="question-bank__decision-panel" aria-label="Review decision for <?php echo s($question['questionId']); ?>"><?php if ($cardreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Applied changes:</strong> <?php echo s($cardreviewsummary); ?></div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>Comment for correction<textarea name="proposal"<?php echo $cardisoutdated ? '' : ' required'; ?> placeholder="Describe only what still needs to be corrected. The revised question will return to this same screen."></textarea><small class="question-bank__proposal-saved">This comment will be added to the earlier instructions. Previous requested changes must remain unless you explicitly ask to remove them.</small></label><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $cardisoutdated ? 'Run updated automatic review' : 'Request correction'; ?></button><a class="question-bank__button" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a></div></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this current question? It will be removed from the pending review screen.');"><?php echo $cardisoutdated ? 'Approve current version' : 'Approve and publish'; ?></button></div></form></section><?php endif; ?>
         <?php if ($usagefilter === 'exam2_review' && $reviewfilter !== 'ai_drafts'): ?><details class="question-bank__rewrite-again"><summary>Special instructions for this question (optional)</summary><form class="question-bank__proposal-box" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><span>What should the automatic reviewer emphasize?</span><textarea name="proposal" placeholder="Example: Use observable clinical findings instead of naming the diagnosis or tested action. Explain both inference steps in the feedback."><?php echo s($question['_proposal']['text'] ?? ''); ?></textarea><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Review this question automatically</button></div><?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><small class="question-bank__proposal-saved">Previous instructions saved<?php if (!empty($question['_proposal']['savedByName'])): ?> · by <?php echo s($question['_proposal']['savedByName']); ?><?php endif; ?><?php if (!empty($question['_proposal']['savedAt'])): ?> · <?php echo s(userdate(strtotime($question['_proposal']['savedAt']))); ?><?php endif; ?></small><?php endif; ?></form></details><?php endif; ?>
         <?php if ($usagefilter === 'exam2_review' && $reviewfilter !== 'ai_drafts' && $revisionstatus === 'draft' && $cardbatchid !== ''): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions" style="margin-top:12px"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this current question? It will be removed from the pending review screen.');">Approve current version</button></div></form><?php endif; ?>

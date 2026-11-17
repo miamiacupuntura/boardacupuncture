@@ -13,6 +13,7 @@ function block_myprogress_herbology_override_empty(): array {
         'schemaVersion' => 1,
         'updatedAt' => null,
         'questions' => [],
+        'customQuestions' => [],
     ];
 }
 
@@ -48,7 +49,9 @@ function block_myprogress_herbology_override_update(callable $mutator): array {
     try {
         $store = block_myprogress_herbology_override_load_unlocked($path);
         $updated = $mutator($store);
-        if (!is_array($updated) || !is_array($updated['questions'] ?? null)) {
+        if (!is_array($updated)
+                || !is_array($updated['questions'] ?? null)
+                || !is_array($updated['customQuestions'] ?? null)) {
             throw new RuntimeException('The Herbology question revision store is invalid.');
         }
         $updated['schemaVersion'] = 1;
@@ -71,6 +74,51 @@ function block_myprogress_herbology_override_update(callable $mutator): array {
         flock($lock, LOCK_UN);
         fclose($lock);
     }
+}
+
+/**
+ * Merge administrator-authored questions into the domain bank.
+ *
+ * Drafts are included only on administrator pages. Student-facing pages receive
+ * approved custom questions exclusively.
+ */
+function block_myprogress_herbology_merge_custom_questions(
+    array $domains,
+    array $store,
+    bool $includepending = false
+): array {
+    foreach (($store['customQuestions'] ?? []) as $questionid => $record) {
+        if (!is_array($record)) {
+            continue;
+        }
+        $status = (string)($record['status'] ?? 'draft');
+        if ($status !== 'approved' && !$includepending) {
+            continue;
+        }
+        $question = $status === 'approved' && is_array($record['approved'] ?? null)
+            ? $record['approved']
+            : ($record['draft'] ?? null);
+        if (!is_array($question)) {
+            continue;
+        }
+        $domainid = (string)($record['domainId'] ?? $question['domainId'] ?? '');
+        if ($domainid === '') {
+            continue;
+        }
+        if (!isset($domains[$domainid]) || !is_array($domains[$domainid])) {
+            $domains[$domainid] = [];
+        }
+        $question['questionId'] = (string)($question['questionId'] ?? $questionid);
+        $question['domainId'] = $domainid;
+        $question['sourceKind'] = 'admin';
+        $question['_customStatus'] = $status;
+        $domains[$domainid] = array_values(array_filter(
+            $domains[$domainid],
+            static fn(array $existing): bool => (string)($existing['questionId'] ?? '') !== $question['questionId']
+        ));
+        $domains[$domainid][] = $question;
+    }
+    return $domains;
 }
 
 function block_myprogress_herbology_apply_revision(

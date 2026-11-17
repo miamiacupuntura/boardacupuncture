@@ -518,6 +518,11 @@ if ($usesdomainbank && is_readable($domaincandidatepath)) {
 }
 if ($usesdomainbank) {
     $questionrevisionstore = block_myprogress_herbology_override_load();
+    $domainbank['domains'] = block_myprogress_herbology_merge_custom_questions(
+        $domainbank['domains'] ?? [],
+        $questionrevisionstore,
+        false
+    );
     $domainbank['domains'] = block_myprogress_herbology_apply_revisions_to_domains(
         $domainbank['domains'] ?? [],
         $questionrevisionstore,
