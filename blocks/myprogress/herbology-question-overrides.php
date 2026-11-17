@@ -92,12 +92,13 @@ function block_myprogress_herbology_merge_custom_questions(
             continue;
         }
         $status = (string)($record['status'] ?? 'draft');
-        if ($status !== 'approved' && !$includepending) {
+        $approved = is_array($record['approved'] ?? null) ? $record['approved'] : null;
+        if ($status !== 'approved' && !$includepending && $approved === null) {
             continue;
         }
-        $question = $status === 'approved' && is_array($record['approved'] ?? null)
-            ? $record['approved']
-            : ($record['draft'] ?? null);
+        $question = $status === 'approved'
+            ? ($approved ?? ($record['draft'] ?? null))
+            : ($includepending ? ($record['draft'] ?? null) : $approved);
         if (!is_array($question)) {
             continue;
         }

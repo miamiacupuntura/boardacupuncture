@@ -459,6 +459,8 @@ grep -Fq "AI-assisted mock review" "$TEMP_DIR/moodle/admin-herbology-question-ba
 grep -Fq "ncbahm-mock-editor-2.1" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "core_ai\\aiactions\\generate_text" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "Create new question" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Edit this question" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq 'value="reopencustomquestion"' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq 'value="createnewquestion"' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "Question Bank AI" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq 'value="askassistant"' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
@@ -481,6 +483,7 @@ if grep -Fq "Original bank version" "$TEMP_DIR/moodle/admin-herbology-question-b
 fi
 grep -Fq "function block_myprogress_herbology_override_update" "$TEMP_DIR/moodle/herbology-question-overrides.php"
 grep -Fq "function block_myprogress_herbology_merge_custom_questions" "$TEMP_DIR/moodle/herbology-question-overrides.php"
+grep -Fq "The previously approved version remains active" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "_excludedFromUse" "$TEMP_DIR/moodle/herbology-question-overrides.php"
 grep -Fq "block_myprogress_herbology_apply_revisions_to_domains" "$TEMP_DIR/menu/herbology-board.php"
 grep -Fq "empty(\$question['_excludedFromUse'])" "$TEMP_DIR/menu/herbology-board.php"
@@ -1601,6 +1604,8 @@ grep -Fq "AI-assisted mock review" "$TARGET_DIR/admin-herbology-question-bank.ph
 grep -Fq "ncbahm-mock-editor-2.1" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "core_ai\\aiactions\\generate_text" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Create new question" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Edit this question" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq 'value="reopencustomquestion"' "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq 'value="createnewquestion"' "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Question Bank AI" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq 'value="askassistant"' "$TARGET_DIR/admin-herbology-question-bank.php"
@@ -1623,6 +1628,7 @@ if grep -Fq "Original bank version" "$TARGET_DIR/admin-herbology-question-bank.p
 fi
 grep -Fq "function block_myprogress_herbology_override_update" "$TARGET_DIR/herbology-question-overrides.php"
 grep -Fq "function block_myprogress_herbology_merge_custom_questions" "$TARGET_DIR/herbology-question-overrides.php"
+grep -Fq "The previously approved version remains active" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "_excludedFromUse" "$TARGET_DIR/herbology-question-overrides.php"
 grep -Fq "'NCBAHM Question Bank'" "$TARGET_DIR/classes/hook/navigation.php"
 grep -Fq "admin-herbology-question-bank.php" "$TARGET_DIR/settings.php"

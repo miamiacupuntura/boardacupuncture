@@ -872,6 +872,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'clearassistant') {
     );
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'reopencustomquestion') {
+    require_sesskey();
+    $customquestionid = required_param('questionid', PARAM_ALPHANUMEXT);
+    $customrecord = $revisionstore['customQuestions'][$customquestionid] ?? null;
+    if (!is_array($customrecord)
+            || (string)($customrecord['status'] ?? '') !== 'approved'
+            || !is_array($customrecord['approved'] ?? null)) {
+        throw new invalid_parameter_exception('Only an approved administrator-authored question can be reopened.');
+    }
+    $savedat = gmdate(DATE_ATOM);
+    $savedbyname = fullname($USER);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $customquestionid,
+        $savedat,
+        $savedbyname,
+        $USER
+    ): array {
+        $record = $store['customQuestions'][$customquestionid] ?? null;
+        if (!is_array($record) || !is_array($record['approved'] ?? null)) {
+            throw new invalid_parameter_exception('The approved question could not be reopened.');
+        }
+        $record['status'] = 'draft';
+        $record['draft'] = $record['approved'];
+        $record['savedAt'] = $savedat;
+        $record['savedById'] = (int)$USER->id;
+        $record['savedByName'] = $savedbyname;
+        $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        $store['customQuestions'][$customquestionid] = $record;
+        return $store;
+    });
+    redirect(
+        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+            'q' => $customquestionid,
+            'source' => 'admin',
+        ]),
+        'Question reopened for editing. The previously approved version remains active until you approve the revision.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'askassistant') {
     require_sesskey();
     if (!$textaienabled) {
@@ -968,13 +1009,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         throw new invalid_parameter_exception('Only an unpublished administrator-authored draft can be changed here.');
     }
     if ($formaction === 'discardcustomquestion') {
-        block_myprogress_herbology_override_update(static function(array $store) use ($customquestionid): array {
-            unset($store['customQuestions'][$customquestionid]);
+        $hasapprovedversion = is_array($customrecord['approved'] ?? null);
+        $savedat = gmdate(DATE_ATOM);
+        $savedbyname = fullname($USER);
+        block_myprogress_herbology_override_update(static function(array $store) use (
+            $customquestionid,
+            $hasapprovedversion,
+            $savedat,
+            $savedbyname,
+            $USER
+        ): array {
+            if (!$hasapprovedversion) {
+                unset($store['customQuestions'][$customquestionid]);
+                return $store;
+            }
+            $record = $store['customQuestions'][$customquestionid] ?? null;
+            if (!is_array($record) || !is_array($record['approved'] ?? null)) {
+                throw new invalid_parameter_exception('The approved question could not be restored.');
+            }
+            $record['status'] = 'approved';
+            $record['draft'] = $record['approved'];
+            $record['savedAt'] = $savedat;
+            $record['savedById'] = (int)$USER->id;
+            $record['savedByName'] = $savedbyname;
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $store['customQuestions'][$customquestionid] = $record;
             return $store;
         });
         redirect(
-            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php'),
-            'Administrator-authored draft discarded.',
+            new moodle_url(
+                '/blocks/myprogress/admin-herbology-question-bank.php',
+                $hasapprovedversion ? ['q' => $customquestionid, 'source' => 'admin'] : []
+            ),
+            $hasapprovedversion
+                ? 'Editing canceled. The approved question remains active.'
+                : 'Administrator-authored draft discarded.',
             null,
             \core\output\notification::NOTIFY_SUCCESS
         );
@@ -2380,6 +2449,8 @@ echo $OUTPUT->header();
             : [];
         $customstatus = (string)($customrecord['status'] ?? '');
         $iscustomdraft = $question['_sourcekind'] === 'admin' && $customstatus === 'draft';
+        $iscustomapproved = $question['_sourcekind'] === 'admin' && $customstatus === 'approved';
+        $customhasapprovedversion = is_array($customrecord['approved'] ?? null);
         $customreviewsummary = trim((string)($customrecord['reviewSummary'] ?? ''));
         $customoriginality = is_array($customrecord['originality'] ?? null)
             ? $customrecord['originality']
@@ -2440,7 +2511,8 @@ echo $OUTPUT->header();
         $sourcecardlabel = (string)($question['sourceCard'][$displaylang === 'es' ? 'labelEs' : 'label'] ?? 'Open source card');
         if ($sourcecardurl !== ''):
         ?> · <a href="<?php echo s($sourcecardurl); ?>" target="_blank" rel="noopener"><?php echo s($sourcecardlabel); ?></a><?php endif; ?></p><?php if (!$question['_ready']): ?><div class="question-bank__missing">Missing for practice readiness: <?php echo s(implode(', ', $question['_missing'])); ?>.</div><?php endif; ?>
-        <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customoriginalityclear ? '' : ' disabled'; ?> onclick="return confirm('Approve this new question and add it to the question bank?');">Approve and add to bank</button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('Discard this new-question draft?');">Discard draft</button></form></div></section><?php endif; ?>
+        <?php if ($iscustomapproved): ?><section class="question-bank__decision-panel" aria-label="Continue after approving <?php echo s($question['questionId']); ?>"><div class="question-bank__applied-summary"><strong>Question approved and active.</strong> You can edit it, create another question, or return to the complete question bank.</div><div class="question-bank__decision-actions"><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="reopencustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit">Edit this question</button></form><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create another question</a><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Return to all questions</a></div></section><?php endif; ?>
+        <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customoriginalityclear ? '' : ' disabled'; ?> onclick="return confirm('Approve this new question and add it to the question bank?');"><?php echo $customhasapprovedversion ? 'Approve revised version' : 'Approve and add to bank'; ?></button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
         <?php if ($inlineapproval): ?>
         <section class="question-bank__decision-panel" aria-label="Review decision for <?php echo s($question['questionId']); ?>">
             <?php if ($cardreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Applied changes:</strong> <?php echo s($cardreviewsummary); ?></div><?php endif; ?>
