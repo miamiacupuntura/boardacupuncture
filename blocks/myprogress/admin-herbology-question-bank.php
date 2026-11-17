@@ -26,7 +26,7 @@ $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-2.2';
+$aipromptversion = 'ncbahm-mock-editor-2.4';
 
 $domains = [
     'formula_differentiation' => ['number' => 1, 'name' => 'Formula selection and differentiation'],
@@ -1734,6 +1734,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         ))) !== 4) {
             throw new UnexpectedValueException('The AI answer choices must be four unique A-D options.');
         }
+        $requestsingredientwork = preg_match('/\b(?:ingredient|ingrediente)s?\b/i', $administratorproposal);
+        $requestsformulanamesremoved = preg_match(
+            '/(?:\b(?:remove|delete|omit|without|quita\w*|elimina\w*|suprime\w*|sin)\b.{0,100}\b(?:formula|f[oó]rmula|name|nombre)\b|\b(?:formula|f[oó]rmula|name|nombre)\b.{0,100}\b(?:remove|delete|omit|quita\w*|elimina\w*|suprime\w*)\b)/iu',
+            $administratorproposal
+        );
+        if ($requestsingredientwork && $requestsformulanamesremoved) {
+            foreach ($optionsbylabel as $optiontext) {
+                $containsenglishformulaname = preg_match(
+                    '/\b(?:decoction|powder|pill|formula)\b/i',
+                    $optiontext
+                );
+                $containspinyinformulaname = preg_match(
+                    '/^\s*.{0,90}\b(?:Tang|San|Wan|Dan|Yin|Gao|Pian)\b\s*(?:\([^)]*\))?\s*(?::|$)/iu',
+                    $optiontext
+                );
+                if ($containsenglishformulaname || $containspinyinformulaname) {
+                    throw new UnexpectedValueException(
+                        'The administrator requested ingredient-only answer choices, but at least one choice '
+                            . 'still includes a formula name. Remove every formula name and leave only the ingredients.'
+                    );
+                }
+            }
+        }
+        $requestsfeedbackwork = preg_match(
+            '/\b(?:feedback|explanation|explain|retroalimentaci[oó]n|explicaci[oó]n|explica)\w*\b/iu',
+            $administratorproposal
+        );
+        if ($requestsingredientwork && $requestsfeedbackwork) {
+            $correctoptiontext = (string)($optionsbylabel[$sourcecorrectlabel] ?? '');
+            $colonposition = strrpos($correctoptiontext, ':');
+            $ingredienttext = $colonposition === false
+                ? ''
+                : trim(substr($correctoptiontext, $colonposition + 1));
+            $ingredientnames = [];
+            foreach (preg_split('/\s*,\s*/', $ingredienttext) ?: [] as $ingredientname) {
+                $ingredientname = trim((string)preg_replace('/\s*\([^)]*\)\s*/', '', $ingredientname));
+                if ($ingredientname !== '' && core_text::strlen($ingredientname) >= 3) {
+                    $ingredientnames[] = $ingredientname;
+                }
+            }
+            if (count($ingredientnames) >= 2) {
+                $explainedingredients = 0;
+                foreach (array_unique($ingredientnames) as $ingredientname) {
+                    if (stripos($explanation, $ingredientname) !== false) {
+                        $explainedingredients++;
+                    }
+                }
+                if ($explainedingredients < 2) {
+                    throw new UnexpectedValueException(
+                        'The answer choices include formula ingredients, but the feedback does not explain '
+                            . 'the roles of at least two decisive ingredients as requested.'
+                    );
+                }
+            }
+        }
         $spanish = is_array($decoded['translations']['es'] ?? null)
             ? $decoded['translations']['es']
             : [];
@@ -1752,6 +1807,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         if ($spanishprompt === '' || $spanishexplanation === '' || count($spanishoptionsbylabel) !== 4) {
             throw new UnexpectedValueException('The AI draft omitted the complete Spanish translation.');
+        }
+        if ($requestsingredientwork && $requestsformulanamesremoved) {
+            foreach ($spanishoptionsbylabel as $optiontext) {
+                if (preg_match('/\b(?:decocci[oó]n|polvo|p[ií]ldora|f[oó]rmula)\b/iu', $optiontext)
+                        || preg_match(
+                            '/^\s*.{0,90}\b(?:Tang|San|Wan|Dan|Yin|Gao|Pian)\b\s*(?:\([^)]*\))?\s*(?::|$)/iu',
+                            $optiontext
+                        )) {
+                    throw new UnexpectedValueException(
+                        'The Spanish answer choices still include a formula name instead of ingredients only.'
+                    );
+                }
+            }
         }
         $contenttype = strtolower(trim((string)($decoded['contentType'] ?? '')));
         if (!in_array($contenttype, [
@@ -1810,6 +1878,10 @@ Compare the visible DRAFT itself with every ADMINISTRATOR INSTRUCTION and the SO
 
 Set compliant to true only when every compatible instruction is visibly implemented without changing the source-supported correct answer concept or letter. If the administrator requested ingredient-based choices, the choices themselves must contain ingredients or ingredient combinations rather than formula names. If the administrator requested observable manifestations instead of a named diagnosis, the stem must contain those findings and must not name the diagnosis. If any requested change is missing, vague, merely mentioned in the summary, or contradicted by the draft, set compliant to false and explain the exact correction required.
 
+Instructions are cumulative. When one instruction requests ingredients in the choices and a later instruction requests improved feedback or explanation, compliant can be true only if the explanation discusses the clinical role of the decisive ingredients and connects those roles to the answer. Merely listing ingredients in the choices or discussing only the formula names is not compliant.
+
+When an instruction requests ingredient-only answer choices or asks to remove formula names, inspect every choice literally. Each choice must contain only the ingredient or ingredient combination being compared. No Pinyin formula title, English formula translation, decoction name, powder name or pill name may remain in any choice. A choice such as “Ma Huang Tang (Ephedra Decoction): Ma Huang, Gui Zhi...” is not compliant; it must begin directly with the ingredient list.
+
 Required JSON:
 {"compliant":true,"reason":"One concise, specific sentence describing what was verified."}
 
@@ -1858,6 +1930,7 @@ PROMPT;
         return $validationreason;
     };
     $generateddrafts = [];
+    $instructionhistories = [];
     $generationerrors = [];
     @set_time_limit(300);
     foreach ($pendingquestions as $question) {
@@ -1893,6 +1966,9 @@ PROMPT;
             }
             $instructionhistory[] = $instruction;
         };
+        foreach (($revisionrecord['administratorInstructions'] ?? []) as $savedinstruction) {
+            $addinstruction((string)$savedinstruction);
+        }
         foreach (($revisionrecord['proposalHistory'] ?? []) as $proposalrecord) {
             if (is_array($proposalrecord)) {
                 $addinstruction((string)($proposalrecord['text'] ?? ''));
@@ -1910,6 +1986,7 @@ PROMPT;
             $instructionhistory,
             array_keys($instructionhistory)
         ));
+        $instructionhistories[$questionid] = $instructionhistory;
         $currentreviewversion = null;
         if ($issinglequestionrewrite && is_array($revisionrecord['draft'] ?? null)) {
             $currentreviewversion = array_intersect_key($question, array_flip([
@@ -2072,6 +2149,7 @@ PROMPT;
         $batchid,
         $aipromptversion,
         $proposaloverrides,
+        $instructionhistories,
         $savedat,
         $savedbyname,
         $issinglequestionrewrite,
@@ -2109,6 +2187,9 @@ PROMPT;
             $record['approved'] = is_array($previous['approved'] ?? null) ? $previous['approved'] : null;
             $record['draft'] = $draft;
             $record['history'] = $history;
+            $record['administratorInstructions'] = array_values(
+                $instructionhistories[$questionid] ?? []
+            );
             if (array_key_exists($questionid, $proposaloverrides)) {
                 $record['reviewProposal'] = $proposaloverrides[$questionid];
                 $record['proposalSavedAt'] = $savedat;
@@ -2761,10 +2842,12 @@ echo $OUTPUT->header();
             <strong><?php echo $revisionstatus === 'approved' ? ($displaylang === 'es' ? 'Publicada' : 'Published') : ($displaylang === 'es' ? 'Corrección lista' : 'Correction ready'); ?> — <?php echo s($question['questionId']); ?></strong>
             <span><?php echo $revisionstatus === 'approved'
                 ? ($displaylang === 'es' ? 'La pregunta ya está activa.' : 'The question is now active.')
-                : ($instructionverified
-                    ? ($displaylang === 'es' ? 'La IA comprobó la corrección. Solo necesitas aprobarla.' : 'The correction was checked automatically. You only need to approve it.')
-                    : ($displaylang === 'es' ? 'Apruébala si está correcta o solicita otro cambio.' : 'Approve it if correct or request another change.')); ?></span>
-            <?php if ($inlineapproval): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+                : ($cardisoutdated
+                    ? ($displaylang === 'es' ? 'Completa automáticamente las instrucciones acumuladas antes de aprobar.' : 'Complete the accumulated instructions automatically before approval.')
+                    : ($instructionverified
+                        ? ($displaylang === 'es' ? 'La IA comprobó la corrección. Solo necesitas aprobarla.' : 'The correction was checked automatically. You only need to approve it.')
+                        : ($displaylang === 'es' ? 'Apruébala si está correcta o solicita otro cambio.' : 'Approve it if correct or request another change.'))); ?></span>
+            <?php if ($inlineapproval && $cardisoutdated): ?><form class="question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Completar corrección' : 'Complete correction'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></form><?php elseif ($inlineapproval): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <a class="question-bank__button" href="<?php echo $exam2url->out(false); ?>"><?php echo $displaylang === 'es' ? '← Preguntas pendientes' : '← Pending questions'; ?></a>
         </div>
         <?php endif; ?>
