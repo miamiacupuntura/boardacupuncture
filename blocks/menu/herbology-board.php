@@ -2,6 +2,7 @@
 // Chinese Herbology Board Level workspace.
 
 require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/../myprogress/herbology-question-overrides.php');
 
 require_login();
 
@@ -514,6 +515,14 @@ if ($usesdomainbank && is_readable($domaincandidatepath)) {
             $savedomainbank($domainbank);
         }
     }
+}
+if ($usesdomainbank) {
+    $questionrevisionstore = block_myprogress_herbology_override_load();
+    $domainbank['domains'] = block_myprogress_herbology_apply_revisions_to_domains(
+        $domainbank['domains'] ?? [],
+        $questionrevisionstore,
+        false
+    );
 }
 $domaincandidateinventory = $domainbank['sourceInventory'] ?? $domaincandidateinventory;
 $questionisready = static function(array $question): bool {

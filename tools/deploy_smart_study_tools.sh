@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates" "$TEMP_DIR/scorm"
 
-MOODLE_FILES=(smart-study-tools.php study-score.php my-evaluations.php admin-student-evaluations.php admin-ncbahm-evaluations.php admin-herbology-question-bank.php admin-open-student-dashboard.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php my-evaluations.php admin-student-evaluations.php admin-ncbahm-evaluations.php admin-herbology-question-bank.php herbology-question-overrides.php admin-open-student-dashboard.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
 MOODLE_NESTED_FILES=(db/hooks.php classes/hook/navigation.php)
 MOODLE_FILES+=(
     single-herbs-category-anchor-settle-spirit.php
@@ -421,6 +421,11 @@ grep -Fq "Simulation Exam 1" "$TEMP_DIR/moodle/admin-herbology-question-bank.php
 grep -Fq "Ready reserve bank" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "Correct answer:" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "Explanation:" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Request reclassification after this edit" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Publish approved version" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "review_queue" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "function block_myprogress_herbology_override_update" "$TEMP_DIR/moodle/herbology-question-overrides.php"
+grep -Fq "block_myprogress_herbology_apply_revisions_to_domains" "$TEMP_DIR/menu/herbology-board.php"
 grep -Fq "'NCBAHM Question Bank'" "$TEMP_DIR/moodle/classes/hook/navigation.php"
 grep -Fq "admin-herbology-question-bank.php" "$TEMP_DIR/moodle/settings.php"
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || (int)($data["summary"]["classifiedQuestionCandidates"] ?? 0) !== 1087 || (int)($data["summary"]["practiceReadyTotal"] ?? 0) !== 451) { exit(1); }' "$TEMP_DIR/menu/herbology-domain-candidates.json"
@@ -1505,6 +1510,11 @@ grep -Fq "Formula hierarchy" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Content: <?php echo s(\$contentlabel); ?>" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Cognitive: <?php echo s(\$cognitivelabel); ?>" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Complexity: <?php echo s(ucfirst" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Request reclassification after this edit" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Publish approved version" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "review_queue" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "function block_myprogress_herbology_override_update" "$TARGET_DIR/herbology-question-overrides.php"
+grep -Fq "block_myprogress_herbology_apply_revisions_to_domains" "$MENU_TARGET_DIR/herbology-board.php"
 grep -Fq "'NCBAHM Question Bank'" "$TARGET_DIR/classes/hook/navigation.php"
 grep -Fq "admin-herbology-question-bank.php" "$TARGET_DIR/settings.php"
 grep -Fq "Last course access" "$TARGET_DIR/admin-student-evaluations.php"
