@@ -112,6 +112,8 @@ function block_myprogress_herbology_apply_revision(
         'savedAt' => (string)($revision['savedAt'] ?? ''),
         'savedByName' => (string)($revision['savedByName'] ?? ''),
         'revisionNumber' => (int)($revision['revisionNumber'] ?? 1),
+        'aiBatchId' => (string)($revision['aiBatchId'] ?? ''),
+        'aiPromptVersion' => (string)($revision['aiPromptVersion'] ?? ''),
     ];
     return $question;
 }
