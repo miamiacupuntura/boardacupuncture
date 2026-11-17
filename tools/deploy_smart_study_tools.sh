@@ -21,7 +21,7 @@ TEMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEMP_DIR"' EXIT
 mkdir -p "$TEMP_DIR/moodle" "$TEMP_DIR/menu" "$TEMP_DIR/data" "$TEMP_DIR/static" "$TEMP_DIR/theme/templates"
 
-MOODLE_FILES=(smart-study-tools.php study-score.php my-evaluations.php admin-student-evaluations.php admin-ncbahm-evaluations.php admin-open-student-dashboard.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
+MOODLE_FILES=(smart-study-tools.php study-score.php my-evaluations.php admin-student-evaluations.php admin-ncbahm-evaluations.php admin-herbology-question-bank.php admin-open-student-dashboard.php settings.php study-guide.php formulas-study-guide.php single-herbs-study-guide.php single-herbs-study-guide-es.php single-herbs-dui-yao-reference.php safety-library.php formula-list.php single-herbs-list.php herbs-category-comparison.php herbology-library-navigation.php formula-tongue-pulse.php formula-ingredients.php formula-actions.php herb-formula-category-map.php)
 MOODLE_NESTED_FILES=(db/hooks.php classes/hook/navigation.php)
 MOODLE_FILES+=(
     single-herbs-category-anchor-settle-spirit.php
@@ -56,6 +56,7 @@ MOODLE_FILES+=(
 )
 MENU_FILES=(herbology-board.php herbology-exam-history.php exam-history.php block_menu.php admin-open-assessment-as.php assessment-session.php)
 MENU_JS_FILES=(herbology-simulation.js assessment-profile-banner.js)
+MENU_DATA_FILES=(herbology-domain-candidates.json)
 THEME_TEMPLATE_FILES=(frontpage.mustache)
 DATA_FILES=(single-herb-safety-supplement.json single-herb-properties.json single-herb-rich-profiles.json formulas-study-guide-data.json formula-board-roster-2026.json formula-architecture-data.json dui-yao-smart-data.json)
 STATIC_FILES=(read-aloud-test.html formula-practice.js formula-practice.html formula-practice-es.html formula-practice-data.json formula-practice-translations-es.json dui-yao-data.json formula-modifications-manifest.json formula-modifications-supplement.json formula-modifications-gui-zhi-tang.json formula-modifications-ge-gen-tang.json formula-modifications-generated.json formula-category-expansion.json herbal-incompatibilities.html herbal-incompatibilities-es.html incompatibilities-seven-relationships.html incompatibilities-seven-relationships-es.html incompatibilities-xu-vs-shi.html incompatibilities-xu-vs-shi-es.html incompatibilities-wei-vs-sha.html incompatibilities-wei-vs-sha-es.html incompatibilities-wu-vs-fan.html incompatibilities-wu-vs-fan-es.html incompatibilities-shi-ba-fan-aconite.html incompatibilities-shi-ba-fan-aconite-es.html incompatibilities-shi-ba-fan-gancao-lilu.html incompatibilities-shi-ba-fan-gancao-lilu-es.html incompatibilities-shi-jiu-wei.html incompatibilities-shi-jiu-wei-es.html incompatibilities-extended-counteraction.html incompatibilities-extended-counteraction-es.html incompatibilities-extended-antagonism.html incompatibilities-extended-antagonism-es.html incompatibilities-dietary.html incompatibilities-dietary-es.html incompatibilities-medicinal-origins.html incompatibilities-medicinal-origins-es.html guideline-herbs-by-origin.html guideline-herbs-by-origin-es.html formula-category-map.html formula-category-map-es.html formula-navigator.html formula-navigator-es.html formula-category-tree-map.html formula-category-tree-map-es.html safety-preparation.html safety-preparation-es.html cautions-contraindications.html cautions-contraindications-es.html safety.html safety-es.html advanced-name-traps.html families.html formula-name-traps.html formula-theory.html herb-families.html misleading-formula-names.html most-important-formulas.html name-traps.html patterns-tips-maciocia.html secondary-actions.html supplemental-herb-families.html advanced-name-traps-es.html families-es.html formula-name-traps-es.html formula-theory-es.html herb-families-es.html misleading-formula-names-es.html most-important-formulas-es.html name-traps-es.html patterns-tips-maciocia-es.html secondary-actions-es.html supplemental-herb-families-es.html index.html index-es.html safety-toxicity.html safety-interactions.html safety-regulation.html safety-toxic-herbs.html safety-pregnancy.html safety-anticoagulants.html safety-ma-huang-hypertension.html safety-fu-zi-cardiac-toxicity.html safety-clinical-interaction-cases.html safety-obsolete-prohibited-substances.html safety-herb-specific-cautions.html safety-toxicity-es.html safety-interactions-es.html safety-regulation-es.html safety-toxic-herbs-es.html safety-pregnancy-es.html safety-anticoagulants-es.html safety-ma-huang-hypertension-es.html safety-fu-zi-cardiac-toxicity-es.html safety-clinical-interaction-cases-es.html safety-obsolete-prohibited-substances-es.html safety-herb-specific-cautions-es.html continuous-reader.html continuous-reader.js safety-library.html safety-library-es.html comparisons.js study-return-navigation.js chief-herbs-property.html chief-herbs-property-es.html formulas.html formulas-es.html pathologies.html pathologies-es.html patterns.html patterns-es.html maciocia-formula-tips.html maciocia-formula-tips-es.html dui-yao.html dui-yao-es.html herb-comparison-bank.html herb-comparison-bank-es.html dui-yao-practice.html dui-yao-practice-es.html miscellaneous-practice.html miscellaneous-practice-es.html)
@@ -83,6 +84,10 @@ for file in "${MENU_FILES[@]}"; do
 done
 for file in "${MENU_JS_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/$file" -o "$TEMP_DIR/menu/$file"
+done
+for file in "${MENU_DATA_FILES[@]}"; do
+    curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/$file" -o "$TEMP_DIR/menu/$file"
+    php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data)) { exit(1); }' "$TEMP_DIR/menu/$file"
 done
 for file in "${THEME_TEMPLATE_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/theme/moove/templates/$file" -o "$TEMP_DIR/theme/templates/$file"
@@ -359,6 +364,7 @@ grep -Fq "Evaluation program" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq "All Programs" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq ">Question Bank</a>" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 grep -Fq '<div class="ncbahm-report__section-title">Student results</div>' "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
 if grep -Eq "Evaluaciones NCBAHM|Resultados reales|Buscar estudiante|Tipo de evaluación|Simulación|Exámenes|Estudiantes con|Promedio|Última actividad|Ver evaluaciones|Modo supervisado|Aprobado|No aprobado|Incompleto" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"; then
     echo "ERROR: NCBAHM Evaluations todavía contiene etiquetas de interfaz en español." >&2
@@ -371,6 +377,19 @@ grep -Fq "All Programs" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "\$view === 'courses' ? 'all' : 'nccaom'" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "repeat(3,minmax(0,1fr))" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "repeat(3,minmax(0,1fr))" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+grep -Fq "require_capability('moodle/site:config', \$systemcontext);" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "NCBAHM Question Bank" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "herbology-domain-candidates.json" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Search ID or text" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Ready for practice" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Simulation Exam 1" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Ready reserve bank" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Correct answer:" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Explanation:" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "'NCBAHM Question Bank'" "$TEMP_DIR/moodle/classes/hook/navigation.php"
+grep -Fq "admin-herbology-question-bank.php" "$TEMP_DIR/moodle/settings.php"
+php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || (int)($data["summary"]["classifiedQuestionCandidates"] ?? 0) !== 1087 || (int)($data["summary"]["practiceReadyTotal"] ?? 0) !== 451) { exit(1); }' "$TEMP_DIR/menu/herbology-domain-candidates.json"
+php -r '$data=json_decode(file_get_contents($argv[1]), true); $ids=[]; foreach (($data["domains"] ?? []) as $domain) { foreach ($domain as $question) { $id=trim((string)($question["questionId"] ?? "")); if ($id === "") { exit(1); } $ids[]=$id; } } if (count($ids) !== 1087 || count(array_unique($ids)) !== count($ids)) { exit(1); }' "$TEMP_DIR/menu/herbology-domain-candidates.json"
 if grep -Fq "NCBAHM · Quiz, Simulation and Exams" "$TEMP_DIR/moodle/admin-student-evaluations.php"; then
     echo "ERROR: Student Evaluations todavía mezcla el módulo NCBAHM con el tipo de informe en un solo botón." >&2
     exit 1
@@ -1436,8 +1455,16 @@ grep -Fq "Evaluation program" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "NCCAOM Focused Practice" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "NCBAHM Comprehensive Review" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "All Programs" "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq ">Question Bank</a>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "repeat(3,minmax(0,1fr))" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq '<div class="ncbahm-report__section-title">Student results</div>' "$TARGET_DIR/admin-ncbahm-evaluations.php"
+grep -Fq "require_capability('moodle/site:config', \$systemcontext);" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "NCBAHM Question Bank" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Search ID or text" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Simulation Exam 1" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Correct answer:" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "'NCBAHM Question Bank'" "$TARGET_DIR/classes/hook/navigation.php"
+grep -Fq "admin-herbology-question-bank.php" "$TARGET_DIR/settings.php"
 grep -Fq "Last course access" "$TARGET_DIR/admin-student-evaluations.php"
 grep -Fq "function extend_primary_navigation" "$TARGET_DIR/classes/hook/navigation.php"
 grep -Fq "'Student Evaluations'" "$TARGET_DIR/classes/hook/navigation.php"
@@ -1520,6 +1547,20 @@ for file in "${MENU_JS_FILES[@]}"; do
     install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/menu/$file" "$target"
     cmp -s "$TEMP_DIR/menu/$file" "$target"
 done
+for file in "${MENU_DATA_FILES[@]}"; do
+    target="$MENU_TARGET_DIR/$file"
+    if [[ -f "$target" ]]; then
+        cp -a "$target" "$BACKUP/menu/$file"
+        file_owner_group="$(stat -c '%u:%g' "$target")"
+        file_mode="$(stat -c '%a' "$target")"
+    else
+        file_owner_group="$owner_group"
+        file_mode="$mode"
+    fi
+    install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/menu/$file" "$target"
+    cmp -s "$TEMP_DIR/menu/$file" "$target"
+    php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data)) { exit(1); }' "$target"
+done
 grep -Fq "'simulationlinear', 'simulationadaptive'" "$MENU_TARGET_DIR/herbology-exam-history.php"
 grep -Fq 'examtype: `simulation${mode}`' "$MENU_TARGET_DIR/herbology-simulation.js"
 grep -Fq "Board Simulation" "$MENU_TARGET_DIR/exam-history.php"
@@ -1533,6 +1574,8 @@ grep -Fq "exit.textContent = 'Exit student profile';" "$MENU_TARGET_DIR/assessme
 grep -Fq "'lang' => 'en'" "$MENU_TARGET_DIR/admin-open-assessment-as.php"
 grep -Fq "'ui' => 'en'" "$MENU_TARGET_DIR/admin-open-assessment-as.php"
 grep -Fq "assessment-profile-banner.js" "$MENU_TARGET_DIR/herbology-board.php"
+php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || (int)($data["summary"]["classifiedQuestionCandidates"] ?? 0) !== 1087 || (int)($data["summary"]["practiceReadyTotal"] ?? 0) !== 451) { exit(1); }' "$MENU_TARGET_DIR/herbology-domain-candidates.json"
+php -r '$data=json_decode(file_get_contents($argv[1]), true); $ids=[]; foreach (($data["domains"] ?? []) as $domain) { foreach ($domain as $question) { $id=trim((string)($question["questionId"] ?? "")); if ($id === "") { exit(1); } $ids[]=$id; } } if (count($ids) !== 1087 || count(array_unique($ids)) !== count($ids)) { exit(1); }' "$MENU_TARGET_DIR/herbology-domain-candidates.json"
 grep -Fq "/blocks/myprogress/my-evaluations.php" "$MENU_TARGET_DIR/block_menu.php"
 grep -Fq '>Evaluations</a>' "$MENU_TARGET_DIR/block_menu.php"
 grep -Fq "/blocks/myprogress/study-score.php" "$MENU_TARGET_DIR/block_menu.php"
@@ -1772,6 +1815,7 @@ echo "OK: NCCAOM conserva a los estudiantes con resultados SCORM aunque también
 echo "OK: NCBAHM muestra solo estudiantes matriculados y excluye administradores e instructores de sus resultados."
 echo "OK: NCCAOM excluye matrículas docentes, pero conserva usuarios con intentos SCORM reales como Dainery."
 echo "OK: la tarjeta Chinese Herbology Comprehensive Review incluye My Study Score y Smart Study Tools."
+echo "OK: NCBAHM Question Bank está disponible como pestaña administrativa con filtros por dominio, ID, preparación y uso en Simulation Exam 1."
 echo "OK: el perfil supervisado conserva el cambio entre español e inglés y separa los resultados del administrador."
 echo "OK: los botones exclusivos del administrador y las instrucciones de los intentos supervisados se abren en inglés."
 echo "OK: el dashboard muestra Evaluations solo a estudiantes; los controles administrativos permanecen en Site administration."

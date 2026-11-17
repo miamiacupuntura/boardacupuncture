@@ -12,7 +12,7 @@ use pix_icon;
 
 final class navigation {
     /**
-     * Adds the student evaluation report after Moodle's standard primary items.
+     * Adds administrator reports after Moodle's standard primary items.
      *
      * @param primary_extend $hook
      */
@@ -31,6 +31,14 @@ final class navigation {
             null,
             'block_myprogress_student_evaluations',
             new pix_icon('i/report', '')
+        );
+        $hook->get_primaryview()->add(
+            'NCBAHM Question Bank',
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php'),
+            navigation_node::TYPE_CUSTOM,
+            null,
+            'block_myprogress_ncbahm_question_bank',
+            new pix_icon('i/questions', '')
         );
     }
 }
