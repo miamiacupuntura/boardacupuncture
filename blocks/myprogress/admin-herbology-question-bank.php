@@ -570,7 +570,7 @@ $textaienabled = !empty($textaiproviders[\core_ai\aiactions\generate_text::class
 if ($_SERVER['REQUEST_METHOD'] === 'POST'
         && in_array($formaction, ['generateaidrafts', 'rewritequestion'], true)) {
     require_sesskey();
-    $aipromptversion = 'ncbahm-mock-editor-1.6';
+    $aipromptversion = 'ncbahm-mock-editor-1.8';
     $issinglequestionrewrite = $formaction === 'rewritequestion';
     $proposaloverrides = [];
     if (!$textaienabled) {
@@ -758,9 +758,11 @@ Editorial rules:
 5. In clinical cases, add one or two plausible contextual details when useful: age, illness duration, a relevant health history, temperature with measurement site, pulse rate, or respiratory rate. Use physiologically coherent values and include these details sparingly; they must not contradict the source, change the keyed answer, create a second defensible diagnosis, or replace the Chinese-medicine reasoning being tested.
 6. Some cases may use a realistic United States clinical handoff: a fictitiously named patient is evaluated by a fictitiously named physician at a fictional hospital, urgent-care center, or outpatient clinic and is later received by a fictitiously named acupuncturist. Rotate settings across Miami and named cities in other states; vary patient, physician, and acupuncturist names; and include plausible referral, discharge, follow-up, or outpatient context when useful. Do not use the name of any real patient, clinician, acupuncturist, hospital, clinic, health system, or public figure. Never imply a real affiliation or event. When findings could require urgent conventional care, state that medical evaluation and stabilization occurred before the acupuncture visit.
 7. Vary the narrative format. Some vignettes may show a fictional physician presenting a fictional case to acupuncture students during a teaching session. Others may have the physician recall a previously treated fictional patient and ask the students to reason from the historical findings. Another format may show a fictional acupuncture student presenting a case during a clinical or medical round while an instructor asks the group to complete the two inference steps. Give the student-presented case enough decisive findings for one defensible answer, optionally include one secondary contextual detail, and do not let the student or instructor state the diagnosis or answer being tested. Keep every recalled or presented case de-identified and invented, and use past tense where appropriate.
-8. Keep the item concise, clinically coherent, unambiguous, and appropriate for a supervised mock board examination. If the original lacks enough clinical facts, make the smallest source-grounded inference upgrade possible.
-9. Follow administratorProposal when it is nonempty, provided it does not conflict with the source or answer key. Treat requests for additional manifestations of a named pattern as guidance to add source-compatible clinical findings without naming that pattern in the stem.
-10. Set cognitiveLevel to "infer" or "analyze".
+8. When the source supports a clear differential, a student may propose a plausible but incorrect diagnosis, herb, formula, or treatment. The instructor should point out that specific findings do not fit and ask the group to select the best correction; do not state the final correction in the stem. In the feedback, identify the student's reasoning error, reconstruct both correct inference steps, and explain why the proposed alternative fails.
+9. When useful, frame a case as a follow-up visit after an earlier consultation, initial treatment, hospital discharge, or referral. State which source-compatible findings improved, persisted, or newly appeared, then ask whether the original strategy should be maintained, modified, or reconsidered. Do not invent a prior treatment response that changes the keyed fact or requires knowledge absent from the source.
+10. Keep the item concise, clinically coherent, unambiguous, and appropriate for a supervised mock board examination. If the original lacks enough clinical facts, make the smallest source-grounded inference upgrade possible.
+11. Follow administratorProposal when it is nonempty, provided it does not conflict with the source or answer key. Treat requests for additional manifestations of a named pattern as guidance to add source-compatible clinical findings without naming that pattern in the stem.
+12. Set cognitiveLevel to "infer" or "analyze".
 
 Required JSON shape:
 {"prompt":"...","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"correctLabel":"A","explanation":"...","cognitiveLevel":"infer"}
