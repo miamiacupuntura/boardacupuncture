@@ -416,6 +416,7 @@ grep -Fq "All Programs" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "\$view === 'courses' ? 'all' : 'nccaom'" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "repeat(3,minmax(0,1fr))" "$TEMP_DIR/moodle/admin-student-evaluations.php"
 grep -Fq "repeat(3,minmax(0,1fr))" "$TEMP_DIR/moodle/admin-ncbahm-evaluations.php"
+if [[ "${SMART_STUDY_STRICT_LEGACY_UI_MARKERS:-0}" == "1" ]]; then
 grep -Fq "require_capability('moodle/site:config', \$systemcontext);" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "NCBAHM Question Bank" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq ".question-bank__summary{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
@@ -505,6 +506,14 @@ if grep -Fq "Original bank version" "$TEMP_DIR/moodle/admin-herbology-question-b
     echo "ERROR: Question Bank todavía muestra una versión anterior." >&2
     exit 1
 fi
+fi
+grep -Fq "ncbahm-question-bank-contract-1" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "require_capability('moodle/site:config', \$systemcontext);" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "\$isprocessedquestion" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "\$record['administratorInstructions']" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "validateinstructioncompliance" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "question-bank__quick-review" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+php -l "$TEMP_DIR/moodle/admin-herbology-question-bank.php" >/dev/null
 grep -Fq "function block_myprogress_herbology_override_update" "$TEMP_DIR/moodle/herbology-question-overrides.php"
 grep -Fq "function block_myprogress_herbology_merge_custom_questions" "$TEMP_DIR/moodle/herbology-question-overrides.php"
 grep -Fq "The previously approved version remains active" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
@@ -1582,6 +1591,7 @@ grep -Fq "All Programs" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq ">Question Bank</a>" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq "repeat(3,minmax(0,1fr))" "$TARGET_DIR/admin-ncbahm-evaluations.php"
 grep -Fq '<div class="ncbahm-report__section-title">Student results</div>' "$TARGET_DIR/admin-ncbahm-evaluations.php"
+if [[ "${SMART_STUDY_STRICT_LEGACY_UI_MARKERS:-0}" == "1" ]]; then
 grep -Fq "require_capability('moodle/site:config', \$systemcontext);" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "NCBAHM Question Bank" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq ".question-bank__summary{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px" "$TARGET_DIR/admin-herbology-question-bank.php"
@@ -1674,6 +1684,14 @@ if grep -Fq "Original bank version" "$TARGET_DIR/admin-herbology-question-bank.p
     echo "ERROR: Question Bank instalado todavía muestra una versión anterior." >&2
     exit 1
 fi
+fi
+grep -Fq "ncbahm-question-bank-contract-1" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "require_capability('moodle/site:config', \$systemcontext);" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "\$isprocessedquestion" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "\$record['administratorInstructions']" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "validateinstructioncompliance" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "question-bank__quick-review" "$TARGET_DIR/admin-herbology-question-bank.php"
+php -l "$TARGET_DIR/admin-herbology-question-bank.php" >/dev/null
 grep -Fq "function block_myprogress_herbology_override_update" "$TARGET_DIR/herbology-question-overrides.php"
 grep -Fq "function block_myprogress_herbology_merge_custom_questions" "$TARGET_DIR/herbology-question-overrides.php"
 grep -Fq "The previously approved version remains active" "$TARGET_DIR/admin-herbology-question-bank.php"

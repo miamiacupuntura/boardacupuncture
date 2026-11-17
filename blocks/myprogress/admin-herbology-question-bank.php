@@ -1,5 +1,6 @@
 <?php
 // Administrator-only NCBAHM Chinese Herbology question bank browser.
+// Stable deployment contract: ncbahm-question-bank-contract-1.
 
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/herbology-question-overrides.php');
