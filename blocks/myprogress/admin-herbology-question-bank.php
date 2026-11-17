@@ -802,6 +802,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 && preg_match('/\b(?:not applied|unable|cannot|could not)\b/i', $reviewsummary)) {
             throw new UnexpectedValueException('The administrator instructions were not applied.');
         }
+        if (preg_match('/\b(?:ingredient|ingrediente)s?\b/i', $administratorproposal)
+                && !preg_match('/\b(?:ingredient|ingrediente)s?\b/i', $reviewsummary)) {
+            throw new UnexpectedValueException(
+                'The draft did not confirm that the requested ingredient-based answer choices were preserved.'
+            );
+        }
         $rawoptions = $decoded['options'] ?? null;
         if (!is_array($rawoptions) || count($rawoptions) !== 4) {
             throw new UnexpectedValueException('The AI draft must contain four answer choices.');
@@ -880,9 +886,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 $relevantnames[] = $herb['pinyin'] . ' (' . $herb['pharmaceuticalName'] . ')';
             }
         }
-        $administratorproposal = array_key_exists($questionid, $proposaloverrides)
+        $latestadministratorproposal = array_key_exists($questionid, $proposaloverrides)
             ? $proposaloverrides[$questionid]
             : (string)($question['_proposal']['text'] ?? '');
+        $revisionrecord = is_array($revisionstore['questions'][$questionid] ?? null)
+            ? $revisionstore['questions'][$questionid]
+            : [];
+        $instructionhistory = [];
+        $addinstruction = static function(string $instruction) use (&$instructionhistory): void {
+            $instruction = trim($instruction);
+            if ($instruction === '' || in_array($instruction, $instructionhistory, true)) {
+                return;
+            }
+            $instructionhistory[] = $instruction;
+        };
+        foreach (($revisionrecord['proposalHistory'] ?? []) as $proposalrecord) {
+            if (is_array($proposalrecord)) {
+                $addinstruction((string)($proposalrecord['text'] ?? ''));
+            }
+        }
+        foreach (($revisionrecord['history'] ?? []) as $historyrecord) {
+            if (is_array($historyrecord)) {
+                $addinstruction((string)($historyrecord['reviewProposal'] ?? ''));
+            }
+        }
+        $addinstruction((string)($revisionrecord['reviewProposal'] ?? ''));
+        $addinstruction($latestadministratorproposal);
+        $administratorproposal = implode("\n", array_map(
+            static fn(string $instruction, int $index): string => ($index + 1) . '. ' . $instruction,
+            $instructionhistory,
+            array_keys($instructionhistory)
+        ));
+        $currentreviewversion = null;
+        if ($issinglequestionrewrite && is_array($revisionrecord['draft'] ?? null)) {
+            $currentreviewversion = array_intersect_key($question, array_flip([
+                'prompt', 'options', 'correctLabel', 'explanation',
+                'contentType', 'cognitiveLevel', 'difficultyBand',
+            ]));
+        }
         $sourcepayload = [
             'id' => $questionid,
             'domain' => $domains[$question['_domainid']]['number'] . ' · ' . $domains[$question['_domainid']]['name'],
@@ -893,6 +934,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             'sourceFeedback' => (string)($sourcequestion['explanation'] ?? ''),
             'source' => $sourcequestion['source'] ?? [],
             'administratorProposal' => $administratorproposal,
+            'administratorInstructionHistory' => $instructionhistory,
+            'latestAdministratorInstruction' => $latestadministratorproposal,
+            'currentReviewVersion' => $currentreviewversion,
             'relevantGuidelineNames' => $relevantnames,
         ];
         $aiprompt = <<<'PROMPT'
@@ -911,10 +955,10 @@ Editorial rules:
 9. When useful, frame a case as a follow-up visit after an earlier consultation, initial treatment, hospital discharge, or referral. State which source-compatible findings improved, persisted, or newly appeared, then ask whether the original strategy should be maintained, modified, or reconsidered. Do not invent a prior treatment response that changes the keyed fact or requires knowledge absent from the source.
 10. Occasionally include a source-compatible Western diagnosis, medication history, basic laboratory result, imaging finding, or condition already ruled out when it helps confirm or exclude part of the differential. Never treat a Western diagnosis as automatically equivalent to a Chinese-medicine pattern, never let it replace tongue-pulse and symptom differentiation, and do not invent a test result that changes the keyed answer. The feedback must state what the Western information supports or excludes and what it cannot establish by itself.
 11. Keep the item concise, clinically coherent, unambiguous, and appropriate for a supervised mock board examination. If the original lacks enough clinical facts, make the smallest source-grounded inference upgrade possible.
-12. Follow administratorProposal when it is nonempty, provided it does not conflict with the source or answer key. Treat requests for additional manifestations of a named pattern as guidance to add source-compatible clinical findings without naming that pattern in the stem. Applying a nonempty administratorProposal is mandatory. Do not preserve wording the administrator explicitly asked to remove.
+12. Follow every item in administratorInstructionHistory when it is nonempty, provided it does not conflict with the source or answer key. The instructions are cumulative: the latestAdministratorInstruction adds to earlier requirements and does not erase them unless it explicitly asks to undo or replace a prior requirement. When currentReviewVersion is present, revise that version in place and preserve all of its previously requested improvements that the latest instruction does not ask to change; never restart from the original source. Treat requests for additional manifestations of a named pattern as guidance to add source-compatible clinical findings without naming that pattern in the stem. Applying all compatible instructions is mandatory. Do not preserve wording the administrator explicitly asked to remove.
 13. Set cognitiveLevel to "infer" or "analyze". Set contentType to the best classification for the rewritten educational objective; do not blindly copy the source classification.
 14. Before returning JSON, silently audit and correct the draft: verify the keyed letter and concept, fixed-domain alignment, source support, guideline nomenclature, one defensible answer, four parallel choices, two genuine inference steps, feedback for every distractor, and full compliance with administratorProposal. Return only the corrected final JSON.
-15. In reviewSummary, state concretely what the automatic review changed and how administratorProposal was applied. This summary is shown to the administrator and must not be generic.
+15. In reviewSummary, state concretely what the automatic review changed and how the cumulative administratorInstructionHistory was preserved and applied. This summary is shown to the administrator and must not be generic.
 
 Required JSON shape:
 {"prompt":"...","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"correctLabel":"A","explanation":"...","contentType":"safety_dispensing","cognitiveLevel":"infer","reviewSummary":"Removed the named diagnosis and replaced it with observable findings; standardized all herb names and expanded distractor feedback."}
@@ -1416,7 +1460,7 @@ echo $OUTPUT->header();
                     <label class="question-bank__editor-field"><span>Cognitive level</span><select name="cognitivelevel"><?php foreach ($cognitivelevellabels as $value => $label): ?><option value="<?php echo s($value); ?>"<?php echo ($editquestion['cognitiveLevel'] ?? 'apply') === $value ? ' selected' : ''; ?>><?php echo s($label); ?></option><?php endforeach; ?></select></label>
                     <label class="question-bank__editor-field"><span>Complexity</span><select name="difficultyband"><?php foreach ($difficultylabels as $value => $label): ?><option value="<?php echo s($value); ?>"<?php echo ($editquestion['difficultyBand'] ?? 'application') === $value ? ' selected' : ''; ?>><?php echo s($label); ?></option><?php endforeach; ?></select></label>
                 </div>
-                <?php if ($editquestion['_exam2position'] > 0 && !$editquestion['_excluded']): ?><?php if ($editorisaidraft): ?><details class="question-bank__rewrite-again"><summary><?php echo $editorisoutdatedaidraft ? 'Optional instructions for the updated review' : 'Request another rewrite'; ?></summary><?php endif; ?><div class="question-bank__proposal-box"><span><?php echo $editorisaidraft ? 'What should the reviewer change or emphasize?' : 'Rewrite instructions (optional)'; ?></span><textarea name="proposal" form="question-rewrite-form" placeholder="Describe how this question should be rewritten. The rewriter will start from the original SCORM source."><?php echo s($editorrevisionfull['reviewProposal'] ?? ''); ?></textarea><small class="question-bank__proposal-saved">The automatic reviewer will create a new complete version from the original SCORM source and these instructions. Unsaved manual field changes above are not included.</small><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--publish" type="submit" form="question-rewrite-form"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $editorisoutdatedaidraft ? 'Run updated automatic review' : ($editorisaidraft ? 'Rewrite again' : 'Send to automatic review'); ?></button></div></div><?php if ($editorisaidraft): ?></details><?php endif; ?><?php endif; ?>
+                <?php if ($editquestion['_exam2position'] > 0 && !$editquestion['_excluded']): ?><?php if ($editorisaidraft): ?><details class="question-bank__rewrite-again"><summary><?php echo $editorisoutdatedaidraft ? 'Optional instructions for the updated review' : 'Request another rewrite'; ?></summary><?php endif; ?><div class="question-bank__proposal-box"><span><?php echo $editorisaidraft ? 'What should the reviewer change or emphasize?' : 'Rewrite instructions (optional)'; ?></span><textarea name="proposal" form="question-rewrite-form" placeholder="Describe the next correction. It will be added to all prior instructions."><?php echo s($editorrevisionfull['reviewProposal'] ?? ''); ?></textarea><small class="question-bank__proposal-saved">The automatic reviewer will revise the current visible version and preserve every compatible instruction from earlier corrections. Unsaved manual field changes above are not included.</small><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--publish" type="submit" form="question-rewrite-form"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $editorisoutdatedaidraft ? 'Run updated automatic review' : ($editorisaidraft ? 'Rewrite again' : 'Send to automatic review'); ?></button></div></div><?php if ($editorisaidraft): ?></details><?php endif; ?><?php endif; ?>
                 <?php if ($editorisaidraft): ?><details class="question-bank__advanced-review"><summary>Advanced: reclassification or possible exclusion</summary><?php endif; ?>
                 <label class="question-bank__editor-check"><input type="checkbox" name="requestreclassification" value="1"<?php echo !empty($editorrevision['requestReclassification']) ? ' checked' : ''; ?>><span><strong>Request reclassification after this edit</strong><br>This option applies only when you save without publishing. Check it when the wording, answer, feedback or educational objective changed enough that the domain, content type, cognitive level, complexity or exam placement should be reviewed again. Final approval always publishes the edited version and clears this request.</span></label>
                 <label class="question-bank__editor-field"><span>Possible error / exclusion note</span><textarea name="exclusionreason" placeholder="Describe the conflict, unsupported source, ambiguous answer or other reason this question may need exclusion."><?php echo s($editorexclusionnote); ?></textarea></label>
@@ -1508,7 +1552,7 @@ echo $OUTPUT->header();
         $sourcecardlabel = (string)($question['sourceCard'][$displaylang === 'es' ? 'labelEs' : 'label'] ?? 'Open source card');
         if ($sourcecardurl !== ''):
         ?> · <a href="<?php echo s($sourcecardurl); ?>" target="_blank" rel="noopener"><?php echo s($sourcecardlabel); ?></a><?php endif; ?></p><?php if (!$question['_ready']): ?><div class="question-bank__missing">Missing for practice readiness: <?php echo s(implode(', ', $question['_missing'])); ?>.</div><?php endif; ?>
-        <?php if ($inlineapproval): ?><section class="question-bank__decision-panel" aria-label="Review decision for <?php echo s($question['questionId']); ?>"><?php if ($cardreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Applied changes:</strong> <?php echo s($cardreviewsummary); ?></div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>Comment for correction<textarea name="proposal"<?php echo $cardisoutdated ? '' : ' required'; ?> placeholder="Describe only what still needs to be corrected. The revised question will return to this same screen."></textarea></label><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $cardisoutdated ? 'Run updated automatic review' : 'Request correction'; ?></button><a class="question-bank__button" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a></div></form><?php if (!$cardisoutdated): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this question? It will be removed from the pending review screen.');">Approve and publish</button></div></form><?php endif; ?></section><?php endif; ?>
+        <?php if ($inlineapproval): ?><section class="question-bank__decision-panel" aria-label="Review decision for <?php echo s($question['questionId']); ?>"><?php if ($cardreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Applied changes:</strong> <?php echo s($cardreviewsummary); ?></div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>Comment for correction<textarea name="proposal"<?php echo $cardisoutdated ? '' : ' required'; ?> placeholder="Describe only what still needs to be corrected. The revised question will return to this same screen."></textarea><small class="question-bank__proposal-saved">This comment will be added to the earlier instructions. Previous requested changes must remain unless you explicitly ask to remove them.</small></label><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $cardisoutdated ? 'Run updated automatic review' : 'Request correction'; ?></button><a class="question-bank__button" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a></div></form><?php if (!$cardisoutdated): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this question? It will be removed from the pending review screen.');">Approve and publish</button></div></form><?php endif; ?></section><?php endif; ?>
         <?php if ($usagefilter === 'exam2_review' && $reviewfilter !== 'ai_drafts'): ?><details class="question-bank__rewrite-again"><summary>Special instructions for this question (optional)</summary><form class="question-bank__proposal-box" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><span>What should the automatic reviewer emphasize?</span><textarea name="proposal" placeholder="Example: Use observable clinical findings instead of naming the diagnosis or tested action. Explain both inference steps in the feedback."><?php echo s($question['_proposal']['text'] ?? ''); ?></textarea><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Review this question automatically</button></div><?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><small class="question-bank__proposal-saved">Previous instructions saved<?php if (!empty($question['_proposal']['savedByName'])): ?> · by <?php echo s($question['_proposal']['savedByName']); ?><?php endif; ?><?php if (!empty($question['_proposal']['savedAt'])): ?> · <?php echo s(userdate(strtotime($question['_proposal']['savedAt']))); ?><?php endif; ?></small><?php endif; ?></form></details><?php endif; ?>
         </article><?php endforeach; ?></section>
     <?php endif; ?>
