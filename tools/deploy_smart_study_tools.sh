@@ -7,6 +7,10 @@ REVISION="${1:-}"
 REPOSITORY="https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture"
 MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
+TARGET_DIR="$MOODLE_ROOT/blocks/myprogress"
+MENU_TARGET_DIR="$MOODLE_ROOT/blocks/menu"
+SCORM_TARGET_DIR="$MOODLE_ROOT/mod/scorm/studytopic"
+THEME_TEMPLATE_TARGET_DIR="$MOODLE_ROOT/theme/moove/templates"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash /tmp/deploy_smart_study_tools.sh COMMIT_DE_40_CARACTERES" >&2
@@ -1354,7 +1358,6 @@ fi
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || count($data) !== 51) { exit(1); }' "$TEMP_DIR/static/dui-yao-data.json"
 php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data) || count($data["questions"] ?? []) < 290) { exit(1); }' "$TEMP_DIR/static/formula-modifications-generated.json"
 
-TARGET_DIR="$MOODLE_ROOT/blocks/myprogress"
 [[ -d "$TARGET_DIR" ]] || { echo "ERROR: no existe $TARGET_DIR" >&2; exit 1; }
 for file in study-guide.php formula-list.php single-herbs-list.php     formula-board-roster-2026.json formulas-study-guide-data.json formula-guideline-profile-additions.json     formula-tongue-pulse-data.json single-herb-card-index.json single-herb-properties.json     single-herb-rich-profiles.json single-herb-actions-indications-supplement.json; do
     [[ -f "$TARGET_DIR/$file" ]] || { echo "ERROR: falta $TARGET_DIR/$file" >&2; exit 1; }
@@ -1563,8 +1566,6 @@ grep -Fq "Read-only source snapshot" "$TARGET_DIR/admin-herbology-question-bank.
 grep -Fq "Edited version" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "function block_myprogress_herbology_override_update" "$TARGET_DIR/herbology-question-overrides.php"
 grep -Fq "_excludedFromUse" "$TARGET_DIR/herbology-question-overrides.php"
-grep -Fq "block_myprogress_herbology_apply_revisions_to_domains" "$MENU_TARGET_DIR/herbology-board.php"
-grep -Fq "empty(\$question['_excludedFromUse'])" "$MENU_TARGET_DIR/herbology-board.php"
 grep -Fq "'NCBAHM Question Bank'" "$TARGET_DIR/classes/hook/navigation.php"
 grep -Fq "admin-herbology-question-bank.php" "$TARGET_DIR/settings.php"
 grep -Fq "Last course access" "$TARGET_DIR/admin-student-evaluations.php"
@@ -1620,7 +1621,6 @@ grep -Fq "'Ren Shen': 'Ren Shen'" "$TARGET_DIR/single-herbs-study-guide.php"
 grep -Fq "'Rén Shēn': 'Ren Shen'" "$TARGET_DIR/single-herbs-list.php"
 grep -Fq "'Ren Shen': 'Ren Shen'" "$TARGET_DIR/single-herbs-list.php"
 
-MENU_TARGET_DIR="$MOODLE_ROOT/blocks/menu"
 [[ -d "$MENU_TARGET_DIR" ]] || { echo "ERROR: no existe $MENU_TARGET_DIR" >&2; exit 1; }
 for file in "${MENU_FILES[@]}"; do
     target="$MENU_TARGET_DIR/$file"
@@ -1664,7 +1664,6 @@ for file in "${MENU_DATA_FILES[@]}"; do
     php -r '$data=json_decode(file_get_contents($argv[1]), true); if (!is_array($data)) { exit(1); }' "$target"
 done
 
-SCORM_TARGET_DIR="$MOODLE_ROOT/mod/scorm/studytopic"
 [[ -d "$SCORM_TARGET_DIR" ]] || { echo "ERROR: no existe $SCORM_TARGET_DIR" >&2; exit 1; }
 for file in "${SCORM_FILES[@]}"; do
     target="$SCORM_TARGET_DIR/$file"
@@ -1714,6 +1713,8 @@ if (count($ids) !== (int)$data["questionCount"] || count(array_unique($ids)) !==
 ' "$SCORM_BANK_PATH"
 grep -Fq "'simulationlinear', 'simulationadaptive'" "$MENU_TARGET_DIR/herbology-exam-history.php"
 grep -Fq 'examtype: `simulation${mode}`' "$MENU_TARGET_DIR/herbology-simulation.js"
+grep -Fq "block_myprogress_herbology_apply_revisions_to_domains" "$MENU_TARGET_DIR/herbology-board.php"
+grep -Fq "empty(\$question['_excludedFromUse'])" "$MENU_TARGET_DIR/herbology-board.php"
 grep -Fq "Board Simulation" "$MENU_TARGET_DIR/exam-history.php"
 grep -Fq "Comenzar de nuevo →" "$MENU_TARGET_DIR/exam-history.php"
 grep -Fq "Volver a realizar →" "$MENU_TARGET_DIR/exam-history.php"
@@ -1736,7 +1737,6 @@ grep -Fq '>✨ Smart Study Tools</a>' "$MENU_TARGET_DIR/block_menu.php"
 grep -Fq "board-hub__action--study-score" "$MENU_TARGET_DIR/block_menu.php"
 grep -Fq "board-hub__action--smart-tools" "$MENU_TARGET_DIR/block_menu.php"
 
-THEME_TEMPLATE_TARGET_DIR="$MOODLE_ROOT/theme/moove/templates"
 [[ -d "$THEME_TEMPLATE_TARGET_DIR" ]] || { echo "ERROR: no existe $THEME_TEMPLATE_TARGET_DIR" >&2; exit 1; }
 for file in "${THEME_TEMPLATE_FILES[@]}"; do
     target="$THEME_TEMPLATE_TARGET_DIR/$file"
