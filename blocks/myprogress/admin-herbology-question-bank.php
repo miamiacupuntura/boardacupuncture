@@ -569,6 +569,7 @@ $textaienabled = !empty($textaiproviders[\core_ai\aiactions\generate_text::class
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'generateaidrafts') {
     require_sesskey();
+    $aipromptversion = 'ncbahm-mock-editor-1.1';
     if (!$textaienabled) {
         redirect(
             new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['usage' => 'exam2_review']),
@@ -580,13 +581,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'generateaidrafts')
 
     $pendingquestions = array_values(array_filter(
         $allquestions,
-        static fn(array $question): bool => $question['_exam2position'] > 0
-            && ($question['_revision']['status'] ?? '') !== 'approved'
-            && ($question['_revision']['status'] ?? '') !== 'exclusion_candidate'
-            && ($question['_revision']['status'] ?? '') !== 'draft'
-            && ($question['_revision']['status'] ?? '') !== 'pending_reclassification'
-            && empty($question['_revision']['aiBatchId'])
-            && !$question['_excluded']
+        static function(array $question) use ($aipromptversion): bool {
+            $status = (string)($question['_revision']['status'] ?? '');
+            $isoutdatedaidraft = $status === 'draft'
+                && (string)($question['_revision']['aiBatchId'] ?? '') !== ''
+                && (string)($question['_revision']['aiPromptVersion'] ?? '') !== $aipromptversion;
+            $isunreviewedsource = !in_array(
+                $status,
+                ['approved', 'exclusion_candidate', 'draft', 'pending_reclassification'],
+                true
+            );
+            return $question['_exam2position'] > 0
+                && !$question['_excluded']
+                && ($isoutdatedaidraft || $isunreviewedsource);
+        }
     ));
     usort(
         $pendingquestions,
@@ -687,9 +695,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'generateaidrafts')
     @set_time_limit(300);
     foreach ($pendingquestions as $question) {
         $questionid = (string)$question['questionId'];
+        $sourceentry = $findquestion($basebank, $questionid);
+        $sourcequestion = is_array($sourceentry['question'] ?? null)
+            ? $sourceentry['question']
+            : $question;
         $questiontext = implode("\n", array_merge(
-            [(string)($question['prompt'] ?? '')],
-            array_map(static fn(array $option): string => (string)($option['text'] ?? ''), $question['options'] ?? [])
+            [(string)($sourcequestion['prompt'] ?? '')],
+            array_map(
+                static fn(array $option): string => (string)($option['text'] ?? ''),
+                $sourcequestion['options'] ?? []
+            )
         ));
         $relevantnames = [];
         foreach ($guidelinenames as $herb) {
@@ -700,12 +715,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'generateaidrafts')
         $sourcepayload = [
             'id' => $questionid,
             'domain' => $domains[$question['_domainid']]['number'] . ' · ' . $domains[$question['_domainid']]['name'],
-            'contentType' => (string)($question['contentType'] ?? 'other'),
-            'prompt' => (string)($question['prompt'] ?? ''),
-            'options' => $question['options'] ?? [],
-            'correctLabel' => (string)($question['correctLabel'] ?? ''),
-            'sourceFeedback' => (string)($question['explanation'] ?? ''),
-            'source' => $question['source'] ?? [],
+            'contentType' => (string)($sourcequestion['contentType'] ?? 'other'),
+            'prompt' => (string)($sourcequestion['prompt'] ?? ''),
+            'options' => $sourcequestion['options'] ?? [],
+            'correctLabel' => (string)($sourcequestion['correctLabel'] ?? ''),
+            'sourceFeedback' => (string)($sourcequestion['explanation'] ?? ''),
+            'source' => $sourcequestion['source'] ?? [],
             'administratorProposal' => (string)($question['_proposal']['text'] ?? ''),
             'relevantGuidelineNames' => $relevantnames,
         ];
@@ -741,7 +756,7 @@ PROMPT;
                 throw new RuntimeException($response->get_errormessage() ?: 'The AI provider returned an error.');
             }
             $responsecontent = (string)($response->get_response_data()['generatedcontent'] ?? '');
-            $generateddrafts[$questionid] = $decodeaidraft($responsecontent, $question);
+            $generateddrafts[$questionid] = $decodeaidraft($responsecontent, $sourcequestion);
         } catch (Throwable $error) {
             $generationerrors[] = $questionid . ': ' . $error->getMessage();
         }
@@ -763,6 +778,7 @@ PROMPT;
         $basebank,
         $findquestion,
         $batchid,
+        $aipromptversion,
         $savedat,
         $savedbyname,
         $USER
@@ -799,7 +815,7 @@ PROMPT;
             $record['history'] = $history;
             $record['proposalStatus'] = 'ai_draft_ready';
             $record['aiBatchId'] = $batchid;
-            $record['aiPromptVersion'] = 'ncbahm-mock-editor-1.1';
+            $record['aiPromptVersion'] = $aipromptversion;
             $store['questions'][$questionid] = $record;
         }
         return $store;
@@ -1065,7 +1081,7 @@ echo $OUTPUT->header();
 <main class="question-bank">
     <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated and SCORM Chinese Herbology questions. Review each ID, domain, cognitive level, answer, explanation and source before approving it for an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($pendingreclassificationcount > 0): ?><a class="question-bank__button" href="<?php echo $queueurl->out(false); ?>">Export reclassification queue (<?php echo (int)$pendingreclassificationcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><a class="question-bank__button" href="<?php echo $exclusionqueueurl->out(false); ?>">Export exclusions</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
     <section class="question-bank__review-progress" aria-label="Simulation Exam 2 review progress"><strong><?php echo $usagefilter === 'exam2_review' ? 'Simulation Exam 2 review set' : 'Review one simulation exam at a time'; ?></strong><p><?php if ($usagefilter === 'exam2_review'): ?><?php echo (int)$exam2reviewedcount; ?> of <?php echo (int)$exam2candidatecount; ?> candidate questions have an approved review. Candidates follow the 100-question Exam 1 domain blueprint and exclude Exam 1 questions and recycle-bin items.<?php if ($exam2shortfalls !== []): ?> The current bank is short <?php echo (int)array_sum($exam2shortfalls); ?> required domain question<?php echo array_sum($exam2shortfalls) === 1 ? '' : 's'; ?>.<?php endif; ?><?php else: ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $exam2url->out(false); ?>">Review Simulation Exam 2 candidates (<?php echo (int)$exam2candidatecount; ?>)</a><?php endif; ?></p></section>
-    <?php if ($usagefilter === 'exam2_review'): ?><section class="question-bank__ai-batch"><p><strong>Five-question assisted review</strong><br>Creates the next five inference-focused mock-exam drafts with guideline herb names and distractor feedback. Drafts require administrator review and are never published automatically.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Generate next 5 review drafts</button></form></section><?php endif; ?>
+    <?php if ($usagefilter === 'exam2_review'): ?><section class="question-bank__ai-batch"><p><strong>Five-question assisted review</strong><br>Creates the next five inference-focused mock-exam drafts with guideline herb names and distractor feedback. Drafts made with an older review method are regenerated from the original SCORM source first. Every draft requires administrator review and is never published automatically.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Generate next 5 review drafts</button></form></section><?php endif; ?>
     <?php if ($editquestion !== null && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts')):
         $editorstatus = (string)($editorrevision['status'] ?? 'original');
         $editorstatuslabel = [
