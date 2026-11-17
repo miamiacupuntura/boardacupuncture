@@ -1585,14 +1585,13 @@ for file in "${SCORM_FILES[@]}"; do
     if [[ -f "$target" ]]; then
         cp -a "$target" "$BACKUP/scorm/$file"
         file_owner_group="$(stat -c '%u:%g' "$target")"
-        file_mode="$(stat -c '%a' "$target")"
     else
         file_owner_group="$owner_group"
-        case "$file" in
-            *.py) file_mode=750 ;;
-            *) file_mode=640 ;;
-        esac
     fi
+    case "$file" in
+        *.py) file_mode=755 ;;
+        *) file_mode=644 ;;
+    esac
     install -o "${file_owner_group%:*}" -g "${file_owner_group#*:}" -m "$file_mode" "$TEMP_DIR/scorm/$file" "$target"
     cmp -s "$TEMP_DIR/scorm/$file" "$target"
 done
@@ -1603,6 +1602,12 @@ if [[ -f "$SCORM_BANK_PATH" ]]; then
     cp -a "$SCORM_BANK_PATH" "$BACKUP/scorm/herbology-scorm-question-bank.json"
 fi
 if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
+    for file in "${SCORM_FILES[@]}"; do
+        runuser -u www-data -- test -r "$SCORM_TARGET_DIR/$file" || {
+            echo "ERROR: www-data no puede leer $SCORM_TARGET_DIR/$file" >&2
+            exit 1
+        }
+    done
     SCORM_CLASSIFICATION_OUTPUT="$(runuser -u www-data -- python3 "$SCORM_TARGET_DIR/scorm_herbology_question_extract.py")"
 else
     SCORM_CLASSIFICATION_OUTPUT="$(python3 "$SCORM_TARGET_DIR/scorm_herbology_question_extract.py")"
