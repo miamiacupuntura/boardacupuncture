@@ -329,6 +329,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
     require_sesskey();
     $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
     $reviewbatch = optional_param('reviewbatch', '', PARAM_ALPHANUMEXT);
+    $returnorigin = (bool)optional_param('returnorigin', 0, PARAM_BOOL);
     $returneditingdrafts = (bool)optional_param('returneditingdrafts', 0, PARAM_BOOL);
     $returneditingpage = max(0, optional_param('returneditingpage', 0, PARAM_INT));
     if ($findquestion($basebank, $questionid) === null) {
@@ -362,6 +363,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
         $store['questions'][$questionid] = $previous;
         return $store;
     });
+
+    if ($returnorigin) {
+        $focusedurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+            'q' => $questionid,
+        ]);
+        $focusedurl->set_anchor('question-' . $questionid);
+        redirect(
+            $focusedurl,
+            'Question approved and published. You are viewing the question you just completed.',
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
 
     if ($returneditingdrafts) {
         redirect(
@@ -1527,6 +1541,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $requestedreviewbatch = $issinglequestionrewrite
         ? optional_param('reviewbatch', '', PARAM_ALPHANUMEXT)
         : '';
+    $returnorigin = $issinglequestionrewrite
+        && (bool)optional_param('returnorigin', 0, PARAM_BOOL);
     $returneditingdrafts = $issinglequestionrewrite
         && (bool)optional_param('returneditingdrafts', 0, PARAM_BOOL);
     $returneditingpage = $returneditingdrafts
@@ -1853,14 +1869,20 @@ PROMPT;
                     $failurebatchid = (string)($existingrevision['aiBatchId'] ?? '');
                 }
             }
-            $failureparams = $returneditingdrafts
+            $failureparams = $returnorigin
                 ? array_filter([
+                    'domain' => $domainfilter !== 'all' ? $domainfilter : null,
+                    'usage' => $usagefilter !== 'all' ? $usagefilter : null,
+                    'source' => $sourcefilter !== 'all' ? $sourcefilter : null,
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                    'q' => $rewritequestionid,
+                ])
+                : ($returneditingdrafts ? array_filter([
                     'review' => 'editing_drafts',
                     'q' => $rewritequestionid,
                     'page' => $returneditingpage > 0 ? $returneditingpage : null,
-                ])
-                : ['usage' => 'exam2_review'];
-            if (!$returneditingdrafts && $failurebatchid !== '') {
+                ]) : ['usage' => 'exam2_review']);
+            if (!$returnorigin && !$returneditingdrafts && $failurebatchid !== '') {
                 $failureparams['review'] = 'ai_drafts';
                 $failureparams['aibatch'] = $failurebatchid;
             }
@@ -1964,17 +1986,23 @@ PROMPT;
     if ($generationerrors !== []) {
         $message .= ' ' . count($generationerrors) . ' question(s) could not be generated and remain pending.';
     }
-    $reviewurlparams = $returneditingdrafts
+    $reviewurlparams = $returnorigin
         ? array_filter([
+            'domain' => $domainfilter !== 'all' ? $domainfilter : null,
+            'usage' => $usagefilter !== 'all' ? $usagefilter : null,
+            'source' => $sourcefilter !== 'all' ? $sourcefilter : null,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+            'q' => $rewritequestionid,
+        ])
+        : ($returneditingdrafts ? array_filter([
             'review' => 'editing_drafts',
             'q' => $rewritequestionid,
             'page' => $returneditingpage > 0 ? $returneditingpage : null,
-        ])
-        : [
+        ]) : [
             'usage' => 'exam2_review',
             'review' => 'ai_drafts',
             'aibatch' => $batchid,
-        ];
+        ]);
     $reviewurl = new moodle_url(
         '/blocks/myprogress/admin-herbology-question-bank.php',
         $reviewurlparams
@@ -2308,6 +2336,23 @@ $PAGE->set_pagelayout('report');
 $PAGE->set_title('NCBAHM Question Bank');
 $PAGE->set_heading('NCBAHM Question Bank');
 $PAGE->set_cacheable(false);
+$PAGE->requires->js_init_code(<<<'JS'
+document.querySelectorAll('.question-bank__automatic-review-form').forEach(function(form) {
+    form.addEventListener('submit', function() {
+        var button = form.querySelector('[data-review-button]');
+        var status = form.querySelector('[data-review-status]');
+        var questionId = form.getAttribute('data-question-id') || 'this question';
+        if (button) {
+            button.disabled = true;
+            button.textContent = 'Reviewing this question…';
+        }
+        if (status) {
+            status.textContent = 'Automatic review in progress for ' + questionId
+                + '. You will return to this question when it finishes.';
+        }
+    });
+});
+JS);
 
 echo $OUTPUT->header();
 ?>
@@ -2318,6 +2363,7 @@ echo $OUTPUT->header();
 .question-bank__temporary-order{display:flex;align-items:center;gap:10px;margin:-17px -17px 14px;padding:11px 16px;border-radius:10px 10px 0 0;background:#4c1d95;color:#fff}.question-bank__temporary-order span{font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.question-bank__temporary-order strong{font-size:24px;line-height:1}.question-bank__temporary-order small{font-weight:800;opacity:.85}.question-bank__temporary-order--editor{margin:0 0 12px;border-radius:8px}.question-bank__review-progress{margin-bottom:16px;padding:14px 16px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#4c1d95}.question-bank__review-progress strong{font-size:17px}.question-bank__review-progress p{margin:4px 0 0}
 .question-bank__ai-batch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;padding:14px 16px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__ai-batch p{margin:0;color:#66557e;line-height:1.45}.question-bank__ai-batch form{flex:0 0 auto}.question-bank__ai-batch .question-bank__button:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__ai-draft-note{margin:10px 0;padding:10px 12px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;font-weight:800}@media(max-width:700px){.question-bank__ai-batch{align-items:stretch;flex-direction:column}}
 .question-bank__decision-panel{display:grid;gap:12px;margin-top:15px;padding:15px;border:1px solid #cbb9ee;border-radius:10px;background:#faf8ff}.question-bank__decision-panel label{display:block;color:#4c1d95;font-weight:900}.question-bank__decision-panel textarea{box-sizing:border-box;width:100%;min-height:105px;margin-top:7px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__decision-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.question-bank__button--approve{border-color:#08746f;background:#08746f;color:#fff!important}.question-bank__button--approve:hover{background:#075f5b}.question-bank__button--approve:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__applied-summary{padding:10px 12px;border-left:4px solid #0b8f87;border-radius:7px;background:#eaf9f3;color:#075f50;line-height:1.45}
+.question-bank__review-location{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0;padding:12px 14px;border-left:4px solid #6d28d9;border-radius:8px;background:#f4efff;color:#3b167d}.question-bank__review-location strong{font-size:1rem}.question-bank__review-location span{flex:1 1 360px}.question-bank__action-status{font-weight:850;color:#4c1d95}
 .question-bank__rewrite-ready{margin:0 0 14px;padding:13px 15px;border-left:5px solid #0b8f87;border-radius:8px;background:#eaf9f3;color:#075f50;line-height:1.5}.question-bank__rewrite-ready strong{display:block;font-size:17px}.question-bank__rewrite-summary{display:block;margin-top:8px;padding-top:8px;border-top:1px solid #acdcca}.question-bank__rewrite-summary strong{display:inline;font-size:inherit}.question-bank__rewrite-ready--outdated{border-left-color:#d97706;background:#fff7ed;color:#9a3412}.question-bank__rewrite-ready .question-bank__button{margin-top:10px}.question-bank__rewrite-again{margin-top:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__rewrite-again summary{padding:13px 14px;color:#4c1d95;font-weight:900;cursor:pointer}.question-bank__rewrite-again .question-bank__proposal-box{margin:0;border:0;border-top:1px solid #ded7ef;border-radius:0 0 9px 9px}
 .question-bank__advanced-review{margin-top:14px;border:1px solid #e5c27f;border-radius:9px;background:#fffaf0}.question-bank__advanced-review summary{padding:13px 14px;color:#8a4b08;font-weight:900;cursor:pointer}.question-bank__advanced-review>.question-bank__editor-check{margin:0;border-radius:0;border-left:0;border-top:1px solid #f0d5a1}.question-bank__advanced-review>.question-bank__editor-field{margin:0;padding:14px}.question-bank__advanced-review>.question-bank__editor-actions{padding:0 14px 14px}
 .question-bank__editor-panel--editing{border-color:#cbb9ee}.question-bank__panel-intro{margin:-6px 0 14px;color:#60758a;font-size:12px;line-height:1.45}.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:150px}.question-bank__editor-panel--editing .question-bank__editor-classification{grid-template-columns:1fr;margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__editor-panel--editing .question-bank__editor-classification h5{margin:0 0 2px}.question-bank__editor-panel--editing .question-bank__editor-classification .question-bank__panel-intro{margin:0 0 8px}.question-bank__editor-panel--editing .question-bank__editor-actions{margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__proposal-form{display:grid;gap:12px}.question-bank__proposal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-toolbar p{margin:0;color:#66557e}.question-bank__proposal-box{display:block;margin-top:14px;padding:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-box>span{display:block;margin-bottom:7px;color:#4c1d95;font-weight:900}.question-bank__proposal-box textarea{box-sizing:border-box;width:100%;min-height:150px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__proposal-saved{display:block;margin-top:7px;color:#66557e;font-size:12px}.question-bank__proposal-review{margin-top:14px;padding:14px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;white-space:pre-wrap}@media(max-width:850px){.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:120px}.question-bank__proposal-toolbar{align-items:stretch;flex-direction:column}}
@@ -2471,7 +2517,10 @@ echo $OUTPUT->header();
         $cardiscorrected = $revisionstatus === 'draft'
             && (int)($fullrevision['revisionNumber'] ?? 0) > 1
             && trim((string)($fullrevision['reviewProposal'] ?? '')) !== '';
-        $inlineapproval = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true)
+        $inlineorigin = $query !== ''
+            && strcasecmp($query, (string)$question['questionId']) === 0
+            && !in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true);
+        $inlineapproval = (in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) || $inlineorigin)
             && $revisionstatus === 'draft'
             && $cardbatchid !== '';
         $editurl = new moodle_url(
@@ -2501,6 +2550,7 @@ echo $OUTPUT->header();
             <?php if (!$iscustomdraft): ?><form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'deleted' ? 'restoredeletedquestion' : 'deletequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'deleted' ? 'question-bank__button--primary' : 'question-bank__button--exclude'; ?>" type="submit"<?php if ($revisionstatus !== 'deleted'): ?> onclick="return confirm('Delete this question from the active bank and exams? You can restore it later from Deleted questions.');"<?php endif; ?>><?php echo $revisionstatus === 'deleted' ? 'Restore question' : 'Delete question'; ?></button></form><?php endif; ?>
         </div>
         <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><div class="question-bank__ai-draft-note"><?php echo $cardisoutdated ? 'Earlier automatic-review version. If the question is already correct, approve the current version; run the updated review only when changes are still needed.' : ($cardiscorrected ? 'Corrected version — awaiting your approval. Review the current question below; the earlier version is not shown.' : 'Current proposed version — not published. Review it below, then accept it or request a correction.'); ?></div><?php endif; ?>
+        <?php if (($inlineorigin && $cardbatchid !== '') || $inlineapproval): ?><div class="question-bank__review-location"><strong><?php echo $revisionstatus === 'approved' ? 'Question approved and published' : 'Automatic review completed'; ?> — <?php echo s($question['questionId']); ?></strong><span><?php echo $revisionstatus === 'approved' ? 'The reviewed version is now active.' : 'You are viewing the revised question. Review it below, then request a correction, edit it manually, or approve and publish it.'; ?></span><a class="question-bank__button" href="<?php echo $exam2url->out(false); ?>">← Back to pending questions</a></div><?php endif; ?>
         <?php if ($question['_excluded']): ?><div class="question-bank__exclusion-note"><strong><?php echo $revisionstatus === 'deleted' ? 'Deleted question:' : 'Possible error / exclusion note:'; ?></strong> <?php echo s($revision['exclusionReason'] ?? 'No reason recorded.'); ?> This question is preserved but unavailable to students and exams.</div><?php endif; ?>
         <?php if ($usagefilter !== 'exam2_review' && ($question['_proposal']['status'] ?? '') === 'pending_review'): ?><div class="question-bank__proposal-review"><strong>Proposal awaiting publishing review:</strong><br><?php echo s($question['_proposal']['text'] ?? ''); ?></div><?php endif; ?>
         <h3><?php echo s($prompt); ?></h3>
@@ -2523,6 +2573,7 @@ echo $OUTPUT->header();
                 <input type="hidden" name="formaction" value="rewritequestion">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
                 <input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>">
+                <input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>">
                 <input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>">
                 <input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>">
                 <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
@@ -2532,6 +2583,7 @@ echo $OUTPUT->header();
                 <input type="hidden" name="formaction" value="approvequestion">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
                 <input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>">
+                <input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>">
                 <input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>">
                 <input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>">
                 <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
@@ -2539,7 +2591,17 @@ echo $OUTPUT->header();
             </form>
         </section>
         <?php endif; ?>
-        <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$inlineapproval && !$iscustomdraft): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returneditingdrafts" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions" style="margin-top:12px"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Automatically review</button></div></form><details class="question-bank__rewrite-again"><summary>Special instructions for this question (optional)</summary><form class="question-bank__proposal-box" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><span>What should the automatic reviewer emphasize?</span><textarea name="proposal" placeholder="Example: Use observable clinical findings instead of naming the diagnosis or tested action. Explain both inference steps in the feedback."><?php echo s($question['_proposal']['text'] ?? ''); ?></textarea><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returneditingdrafts" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Review with these instructions</button></div><?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><small class="question-bank__proposal-saved">Previous instructions saved<?php if (!empty($question['_proposal']['savedByName'])): ?> · by <?php echo s($question['_proposal']['savedByName']); ?><?php endif; ?><?php if (!empty($question['_proposal']['savedAt'])): ?> · <?php echo s(userdate(strtotime($question['_proposal']['savedAt']))); ?><?php endif; ?></small><?php endif; ?></form></details><?php endif; ?>
+        <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$inlineapproval && !$iscustomdraft): ?>
+        <form class="question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>">
+            <input type="hidden" name="formaction" value="rewritequestion">
+            <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
+            <input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>">
+            <input type="hidden" name="returnorigin" value="1">
+            <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+            <div class="question-bank__decision-actions" style="margin-top:12px"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>>Automatically review</button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div>
+        </form>
+        <details class="question-bank__rewrite-again"><summary>Special instructions for this question (optional)</summary><form class="question-bank__proposal-box question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><span>What should the automatic reviewer emphasize?</span><textarea name="proposal" placeholder="Example: Use observable clinical findings instead of naming the diagnosis or tested action. Explain both inference steps in the feedback."><?php echo s($question['_proposal']['text'] ?? ''); ?></textarea><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>>Review with these instructions</button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div><?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><small class="question-bank__proposal-saved">Previous instructions saved<?php if (!empty($question['_proposal']['savedByName'])): ?> · by <?php echo s($question['_proposal']['savedByName']); ?><?php endif; ?><?php if (!empty($question['_proposal']['savedAt'])): ?> · <?php echo s(userdate(strtotime($question['_proposal']['savedAt']))); ?><?php endif; ?></small><?php endif; ?></form></details>
+        <?php endif; ?>
         <?php if ($usagefilter === 'exam2_review' && $reviewfilter !== 'ai_drafts' && $revisionstatus === 'draft' && $cardbatchid !== ''): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions" style="margin-top:12px"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this current question? It will be removed from the pending review screen.');">Approve current version</button></div></form><?php endif; ?>
         </article><?php endforeach; ?></section>
     <?php endif; ?>
