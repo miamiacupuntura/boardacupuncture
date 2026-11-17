@@ -453,9 +453,16 @@ grep -Fq "AI-assisted mock review" "$TEMP_DIR/moodle/admin-herbology-question-ba
 grep -Fq "ncbahm-mock-editor-2.1" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "core_ai\\aiactions\\generate_text" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "question-bank__editor-grid{display:grid;grid-template-columns:1fr" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
-grep -Fq "Original bank version" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
-grep -Fq "Read-only source snapshot" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
-grep -Fq "Edited version" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Current version" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "This is the only version shown" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+if grep -Fq "Revision history" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"; then
+    echo "ERROR: Question Bank todavía muestra el historial de revisiones." >&2
+    exit 1
+fi
+if grep -Fq "Original bank version" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"; then
+    echo "ERROR: Question Bank todavía muestra una versión anterior." >&2
+    exit 1
+fi
 grep -Fq "function block_myprogress_herbology_override_update" "$TEMP_DIR/moodle/herbology-question-overrides.php"
 grep -Fq "_excludedFromUse" "$TEMP_DIR/moodle/herbology-question-overrides.php"
 grep -Fq "block_myprogress_herbology_apply_revisions_to_domains" "$TEMP_DIR/menu/herbology-board.php"
@@ -1571,9 +1578,16 @@ grep -Fq "AI-assisted mock review" "$TARGET_DIR/admin-herbology-question-bank.ph
 grep -Fq "ncbahm-mock-editor-2.1" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "core_ai\\aiactions\\generate_text" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "question-bank__editor-grid{display:grid;grid-template-columns:1fr" "$TARGET_DIR/admin-herbology-question-bank.php"
-grep -Fq "Original bank version" "$TARGET_DIR/admin-herbology-question-bank.php"
-grep -Fq "Read-only source snapshot" "$TARGET_DIR/admin-herbology-question-bank.php"
-grep -Fq "Edited version" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Current version" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "This is the only version shown" "$TARGET_DIR/admin-herbology-question-bank.php"
+if grep -Fq "Revision history" "$TARGET_DIR/admin-herbology-question-bank.php"; then
+    echo "ERROR: Question Bank instalado todavía muestra el historial de revisiones." >&2
+    exit 1
+fi
+if grep -Fq "Original bank version" "$TARGET_DIR/admin-herbology-question-bank.php"; then
+    echo "ERROR: Question Bank instalado todavía muestra una versión anterior." >&2
+    exit 1
+fi
 grep -Fq "function block_myprogress_herbology_override_update" "$TARGET_DIR/herbology-question-overrides.php"
 grep -Fq "_excludedFromUse" "$TARGET_DIR/herbology-question-overrides.php"
 grep -Fq "'NCBAHM Question Bank'" "$TARGET_DIR/classes/hook/navigation.php"
