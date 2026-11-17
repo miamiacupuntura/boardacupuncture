@@ -27,7 +27,7 @@ $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-2.6';
+$aipromptversion = 'ncbahm-mock-editor-2.8';
 
 $domains = [
     'formula_differentiation' => ['number' => 1, 'name' => 'Formula selection and differentiation'],
@@ -1803,6 +1803,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             );
             return array_values(array_unique(array_map('trim', $matches[0] ?? [])));
         };
+        $feedbackingredientcandidatesbylabel = [];
+        foreach ($optionsbylabel as $label => $optiontext) {
+            $optionparts = array_values(array_filter(array_map(
+                static function(string $part): string {
+                    $part = trim((string)preg_replace('/\s*\([^)]*\)\s*/u', ' ', $part));
+                    return trim((string)preg_replace('/\s+/u', ' ', $part));
+                },
+                preg_split('/\s*,\s*/u', $optiontext) ?: []
+            )));
+            if (count($optionparts) < 3 || count($optionparts) > 16
+                    || count(array_filter(
+                        $optionparts,
+                        static fn(string $part): bool => core_text::strlen($part) > 55
+                            || preg_match('/[.!?;:]/u', $part)
+                    )) > 0) {
+                continue;
+            }
+            $feedbackingredientcandidatesbylabel[$label] = $optionparts;
+        }
+        if (count($feedbackingredientcandidatesbylabel) >= 3) {
+            $ingredientfrequency = [];
+            foreach ($feedbackingredientcandidatesbylabel as $optionparts) {
+                foreach (array_unique($optionparts) as $part) {
+                    $normalizedpart = core_text::strtolower($part);
+                    $ingredientfrequency[$normalizedpart] = ($ingredientfrequency[$normalizedpart] ?? 0) + 1;
+                }
+            }
+            $missingingredientfeedback = [];
+            foreach ($feedbackingredientcandidatesbylabel as $label => $optionparts) {
+                $distinctiveparts = array_values(array_filter(
+                    $optionparts,
+                    static fn(string $part): bool => ($ingredientfrequency[core_text::strtolower($part)] ?? 0) === 1
+                ));
+                $partsneeded = $distinctiveparts !== [] ? $distinctiveparts : $optionparts;
+                $hasingredientfeedback = count(array_filter(
+                    $partsneeded,
+                    static fn(string $part): bool => stripos($explanation, $part) !== false
+                )) > 0;
+                if (!$hasingredientfeedback) {
+                    $missingingredientfeedback[] = $label . ' (' . implode(' / ', array_slice($partsneeded, 0, 3)) . ')';
+                }
+            }
+            if ($missingingredientfeedback !== []) {
+                throw new UnexpectedValueException(
+                    'Automatic feedback for ingredient-combination choices must discuss at least one distinctive '
+                        . 'ingredient and its clinical role for every option. Missing: '
+                        . implode(', ', $missingingredientfeedback) . '.'
+                );
+            }
+        }
         if ($requiresformulamapping) {
             if (count($sourceformulanames) >= 2) {
                 $missingformulanames = array_values(array_filter(
@@ -1908,6 +1958,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 'The Spanish feedback must name the Pinyin formula represented by every ingredient-only choice.'
             );
         }
+        if (count($feedbackingredientcandidatesbylabel) >= 3) {
+            $missingspanishingredientfeedback = [];
+            foreach ($feedbackingredientcandidatesbylabel as $label => $optionparts) {
+                $distinctiveparts = array_values(array_filter(
+                    $optionparts,
+                    static fn(string $part): bool => ($ingredientfrequency[core_text::strtolower($part)] ?? 0) === 1
+                ));
+                $partsneeded = $distinctiveparts !== [] ? $distinctiveparts : $optionparts;
+                if (count(array_filter(
+                    $partsneeded,
+                    static fn(string $part): bool => stripos($spanishexplanation, $part) !== false
+                )) === 0) {
+                    $missingspanishingredientfeedback[] = $label;
+                }
+            }
+            if ($missingspanishingredientfeedback !== []) {
+                throw new UnexpectedValueException(
+                    'The Spanish feedback must discuss a distinctive ingredient for every ingredient-combination '
+                        . 'choice. Missing options: ' . implode(', ', $missingspanishingredientfeedback) . '.'
+                );
+            }
+        }
         $contenttype = strtolower(trim((string)($decoded['contentType'] ?? '')));
         if (!in_array($contenttype, [
                 'recall', 'case', 'comparison', 'safety', 'herb_properties',
@@ -1953,7 +2025,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $validateinstructioncompliance = static function(
         array $draft,
         array $sourcepayload,
-        string $administratorproposal
+        string $administratorproposal,
+        string $latestadministratorinstruction,
+        ?array $previousvisibleversion
     ) use ($manager, $systemcontext, $USER): string {
         $validationprompt = <<<'PROMPT'
 You are the final quality-control reviewer for one NCBAHM Chinese Herbology mock-exam question. Return strict JSON only.
@@ -1970,13 +2044,19 @@ Ingredient-only choices and formula identification in the feedback are separate 
 
 Apply the same inference-feedback standard even when the administrator supplied no special instruction. If a direct label was deliberately hidden in the stem or choices to create inference, the explanation must restore that hidden intermediate concept after the learner answers. For ingredient-only formula choices, explicitly map A, B, C and D to their corresponding Pinyin formula names and explain the decisive distinction. For other inference items, name the hidden pattern, action, safety rule, processing principle, hierarchy role or compatibility relationship supported by the clues, then connect it to the keyed answer and contrast every distractor. Do not approve a draft that merely repeats the correct choice.
 
+Strong feedback is mandatory during every automatic review, even without an administrator comment. The explanation must contain a specific analysis of A, B, C and D. For ingredient-combination choices, identify the source-supported formula or therapeutic strategy represented by each combination, name at least one distinctive ingredient from that option, state its relevant action, and explain why that action fits or fails the case. A sentence such as “Option B targets phlegm” or “Option D is for food stagnation” is too vague and is not compliant. Do not invent a canonical formula name when the source does not support one; in that case name the precise therapeutic strategy and still analyze a distinctive ingredient.
+
+Evaluate the LATEST ADMINISTRATOR INSTRUCTION separately after checking the cumulative instructions. When the latest instruction asks to improve, expand, correct, name something in, or otherwise modify the feedback/explanation, compare the DRAFT with PREVIOUS VISIBLE VERSION. Set latestInstructionApplied to true only when the current English or Spanish explanation visibly contains new wording that implements that exact request. A generic rewrite, an unchanged explanation, a reviewSummary claim, or a change made only to the stem or choices does not count. Copy one exact new clause from the explanation into latestInstructionEvidence; it must be the passage that implements the latest request and must not appear in the previous explanation.
+
 Required JSON:
-{"compliant":true,"reason":"One concise, specific sentence describing what was verified."}
+{"compliant":true,"latestInstructionApplied":true,"latestInstructionEvidence":"One exact clause copied from the new explanation, or an empty string when there is no latest feedback instruction.","choiceEvidence":{"A":"Exact clause analyzing A","B":"Exact clause analyzing B","C":"Exact clause analyzing C","D":"Exact clause analyzing D"},"reason":"One concise, specific sentence describing what was verified."}
 
 MATERIAL TO CHECK:
 PROMPT;
         $validationprompt .= "\n" . json_encode([
             'administratorInstructions' => $administratorproposal,
+            'latestAdministratorInstruction' => $latestadministratorinstruction,
+            'previousVisibleVersion' => $previousvisibleversion,
             'sourceQuestion' => $sourcepayload,
             'draft' => $draft,
         ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -2009,11 +2089,69 @@ PROMPT;
         }
         $validation = json_decode($validationcontent, true, 64, JSON_THROW_ON_ERROR);
         $validationreason = trim((string)($validation['reason'] ?? ''));
-        if (($validation['compliant'] ?? null) !== true || $validationreason === '') {
+        $choiceevidence = is_array($validation['choiceEvidence'] ?? null)
+            ? $validation['choiceEvidence']
+            : [];
+        $latestrequestsfeedback = preg_match(
+            '/\b(?:feedback|explanation|explain|retroalimentaci[oó]n|explicaci[oó]n|explica)\w*\b/iu',
+            $latestadministratorinstruction
+        );
+        $latestinstructionevidence = trim((string)($validation['latestInstructionEvidence'] ?? ''));
+        if (($validation['compliant'] ?? null) !== true
+                || ($latestadministratorinstruction !== ''
+                    && ($validation['latestInstructionApplied'] ?? null) !== true)
+                || $validationreason === '') {
             throw new UnexpectedValueException(
                 'The requested correction was not fully applied. '
                     . ($validationreason !== '' ? $validationreason : 'Rebuild the draft and apply every instruction.')
             );
+        }
+        $newexplanations = [
+            trim((string)($draft['explanation'] ?? '')),
+            trim((string)($draft['translations']['es']['explanation'] ?? '')),
+        ];
+        $verifiedchoiceevidence = [];
+        foreach (['A', 'B', 'C', 'D'] as $label) {
+            $evidence = trim((string)($choiceevidence[$label] ?? ''));
+            if (core_text::strlen($evidence) < 12
+                    || count(array_filter(
+                        $newexplanations,
+                        static fn(string $explanation): bool => $explanation !== ''
+                            && stripos($explanation, $evidence) !== false
+                    )) === 0) {
+                throw new UnexpectedValueException(
+                    'The automatic feedback does not contain a verifiable, specific analysis of option ' . $label . '.'
+                );
+            }
+            $verifiedchoiceevidence[] = core_text::strtolower($evidence);
+        }
+        if (count(array_unique($verifiedchoiceevidence)) !== 4) {
+            throw new UnexpectedValueException(
+                'The automatic feedback must analyze A, B, C and D separately rather than reuse one generic statement.'
+            );
+        }
+        if ($latestrequestsfeedback) {
+            $previousexplanations = [
+                trim((string)($previousvisibleversion['explanation'] ?? '')),
+                trim((string)($previousvisibleversion['translations']['es']['explanation'] ?? '')),
+            ];
+            $evidenceisnew = core_text::strlen($latestinstructionevidence) >= 12
+                && count(array_filter(
+                    $newexplanations,
+                    static fn(string $explanation): bool => $explanation !== ''
+                        && stripos($explanation, $latestinstructionevidence) !== false
+                )) > 0
+                && count(array_filter(
+                    $previousexplanations,
+                    static fn(string $explanation): bool => $explanation !== ''
+                        && stripos($explanation, $latestinstructionevidence) !== false
+                )) === 0;
+            if (!$evidenceisnew) {
+                throw new UnexpectedValueException(
+                    'The feedback instruction was not visibly implemented. Add a new, specific passage to the '
+                        . 'explanation that applies the latest request; do not merely claim it in the review summary.'
+                );
+            }
         }
         return $validationreason;
     };
@@ -2108,6 +2246,7 @@ Editorial rules:
 3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use "Both are correct," "All of the above," "None of the above," "A and B are correct," or any equivalent combined-answer shortcut. If the keyed source option is one of those shortcuts, preserve its LETTER and underlying tested fact but replace the shortcut with one self-contained, unambiguous answer statement. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
 4. Write mock-exam feedback that explicitly explains both inference steps: (a) what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence; and (b) why that conclusion selects the correct answer. Identify which findings are decisive and which details are contextual distractors. Then explain briefly why each answer-choice distractor is weaker. Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
 4A. Whenever inference is created by replacing direct answer labels with observable findings, ingredient combinations, clinical roles or safety clues, the explanation must reveal and teach the hidden intermediate label after the learner answers. If formula names were removed from ingredient-based choices, keep the choices ingredient-only but explicitly map every option letter A-D to its source-supported Pinyin formula name in both English and Spanish feedback. Apply the equivalent mapping to similar questions: identify the pattern, herb action, preparation rule, hierarchy role, compatibility relationship or safety principle represented by each choice, and explain the decisive difference rather than merely restating the keyed option.
+4B. Improve the feedback automatically on every review; do not wait for the administrator to request it. Analyze A, B, C and D separately. When choices are ingredient combinations, identify the source-supported formula or precise therapeutic strategy behind each option, name at least one distinctive ingredient from each combination, explain that ingredient's relevant action, and connect it to why the option fits or fails. Generic statements such as “targets phlegm” or “is for food stagnation” are insufficient. If a combination is not a source-supported canonical formula, do not invent a formula name; describe its precise strategy instead.
 5. In clinical cases, add one or two plausible contextual details when useful: age, illness duration, a relevant health history, temperature with measurement site, pulse rate, or respiratory rate. Use physiologically coherent values and include these details sparingly; they must not contradict the source, change the keyed answer, create a second defensible diagnosis, or replace the Chinese-medicine reasoning being tested.
 6. Some cases may use a realistic clinical handoff, seminar, case-history conference or teaching round. Rotate real geographic settings across the United States, China, Spain and other countries, including recognizable cities such as Miami, Boston, New York, San Francisco, Beijing, Shanghai, Chengdu, Madrid and Barcelona. A real hospital, university or acupuncture school may appear only as a neutral geographic or educational reference and never as a claim that the institution treated the fictional patient, hosted the fictional event, endorses the item or supplied the answer. Examples of safe neutral anchors include “during a fictional seminar in Boston near Massachusetts General Hospital” and “during a fictional academic exchange in Chengdu.” All patients, students, clinicians and active instructors in the scenario must have clearly fictional names. Do not attribute invented patient care, speech, teaching, affiliation or professional conduct to a real living professor, clinician, acupuncturist or public figure. A real historical Chinese-medicine scholar or a real professor's published teaching may be named only when that person and teaching are explicitly supported by the question's source metadata. When findings could require urgent conventional care, state that medical evaluation and stabilization occurred before the acupuncture visit.
 7. Vary the narrative format and use the setting as a concise didactic hook rather than filler. Some vignettes may show a fictional physician presenting a fictional case to acupuncture students during a teaching session. Others may have the physician recall a previously treated fictional patient and ask the students to reason from the historical findings. Another format may show a fictional acupuncture student presenting a case during a clinical or medical round while an instructor asks the group to complete the two inference steps. Give the student-presented case enough decisive findings for one defensible answer, optionally include one secondary contextual detail, and do not let the student or instructor state the diagnosis or answer being tested. Keep every patient case invented and use past tense where appropriate.
@@ -2161,7 +2300,9 @@ PROMPT;
                     'note' => $validateinstructioncompliance(
                         $generateddraft,
                         $sourcepayload,
-                        $administratorproposal
+                        $administratorproposal,
+                        $latestadministratorproposal,
+                        $currentreviewversion
                     ),
                 ];
                 $generateddrafts[$questionid] = $generateddraft;
