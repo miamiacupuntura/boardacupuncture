@@ -23,6 +23,7 @@ $editquestionid = optional_param('edit', '', PARAM_ALPHANUMEXT);
 $shownewquestionform = (bool)optional_param('newquestion', 0, PARAM_BOOL);
 $showaiassistant = (bool)optional_param('aiassistant', 0, PARAM_BOOL);
 $showexamcreator = (bool)optional_param('createexam', 0, PARAM_BOOL);
+$showexam2duplicatereport = (bool)optional_param('duplicatescan', 0, PARAM_BOOL);
 $examprojectid = optional_param('examproject', '', PARAM_ALPHANUMEXT);
 $examprojectview = optional_param('examview', 'candidates', PARAM_ALPHA);
 $advancetonext = (bool)optional_param('advance', 0, PARAM_BOOL);
@@ -1550,13 +1551,26 @@ $saveassistantturn = static function(string $request, string $response): void {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'scanexamduplicates') {
     require_sesskey();
+    $scanreturn = optional_param('scanreturn', 'assistant', PARAM_ALPHA);
     $scanrequest = $displaylang === 'es'
         ? 'Revisar las 100 candidatas de Simulation Exam 2 para detectar posibles preguntas repetidas.'
         : 'Review the 100 Simulation Exam 2 candidates for possible duplicate questions.';
-    $saveassistantturn(
-        $scanrequest,
-        $buildexam2duplicatereport($allquestions, $displaylang === 'es')
-    );
+    $scanreport = $buildexam2duplicatereport($allquestions, $displaylang === 'es');
+    if ($scanreturn !== 'exam') {
+        $saveassistantturn($scanrequest, $scanreport);
+    }
+    $SESSION->ncbahm_exam2_duplicate_report = [
+        'text' => $scanreport,
+        'createdAt' => gmdate(DATE_ATOM),
+    ];
+    if ($scanreturn === 'exam') {
+        $scanurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+            'duplicatescan' => 1,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ]));
+        $scanurl->set_anchor('exam-builder');
+        redirect($scanurl);
+    }
     $scanurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
         'aiassistant' => 1,
         'lang' => $displaylang !== 'en' ? $displaylang : null,
@@ -3791,7 +3805,7 @@ echo $OUTPUT->header();
 .question-bank__technical-exports{margin:0 0 16px;border:1px solid #d7e2e7;border-radius:9px;background:#fff}.question-bank__technical-exports summary{padding:11px 14px;color:#52677a;font-weight:850;cursor:pointer}.question-bank__technical-exports>div{padding:0 14px 14px}.question-bank__technical-exports p{margin:0 0 10px;color:#60758a;line-height:1.45}
 .question-bank__active-filters{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:-6px 0 16px;padding:10px 12px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#3b167d}.question-bank__active-filters-title{margin-right:2px;font-weight:950}.question-bank__active-filters-count{color:#66557e;font-weight:800}.question-bank__active-filter{display:inline-flex;gap:4px;padding:6px 9px;border:1px solid #cbb9ee;border-radius:999px;background:#fff;color:#4c1d95}.question-bank__active-filter strong{font-weight:900}.question-bank__active-filters .question-bank__button{min-height:32px;margin-left:auto;padding:5px 10px}@media(max-width:700px){.question-bank__active-filters{align-items:stretch;flex-direction:column}.question-bank__active-filters .question-bank__button{width:100%;margin-left:0}}
 .question-bank__button--language{min-height:32px;padding:5px 10px;border-color:#7c5bc4;background:#f4f0ff;color:#4c1d95!important}
-.question-bank__exam-builder{margin:0 0 16px;padding:16px;border:1px solid #cbb9ee;border-radius:11px;background:#faf8ff}.question-bank__exam-builder-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.question-bank__exam-builder-head h3{margin:0;color:#3b167d;font-size:21px}.question-bank__exam-builder-head p{margin:3px 0 0;color:#66557e}.question-bank__exam-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.question-bank__exam-card{padding:13px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__exam-card--active{border:2px solid #6d28d9;background:#f8f5ff}.question-bank__exam-card h4{margin:0 0 7px;font-size:17px}.question-bank__exam-numbers{display:flex;flex-wrap:wrap;gap:7px 14px;margin-bottom:9px;color:#52677a}.question-bank__exam-numbers strong{color:#08746f}.question-bank__exam-progress{height:9px;margin-bottom:10px;overflow:hidden;border-radius:999px;background:#e8eef1}.question-bank__exam-progress span{display:block;height:100%;border-radius:999px;background:#6d28d9}.question-bank__exam-card .question-bank__editor-actions{gap:6px}.question-bank__exam-card .question-bank__button{min-height:34px;padding:5px 9px}.question-bank__exam-form{display:grid;grid-template-columns:minmax(240px,2fr) minmax(160px,1fr) auto;align-items:end;gap:10px;margin:0 0 13px;padding:13px;border:1px solid #cbb9ee;border-radius:9px;background:#fff}.question-bank__exam-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__exam-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #b9cbd4;border-radius:7px}@media(max-width:900px){.question-bank__exam-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.question-bank__exam-builder-head{align-items:stretch;flex-direction:column}.question-bank__exam-grid,.question-bank__exam-form{grid-template-columns:1fr}}
+.question-bank__exam-builder{margin:0 0 16px;padding:16px;border:1px solid #cbb9ee;border-radius:11px;background:#faf8ff}.question-bank__exam-builder-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.question-bank__exam-builder-head h3{margin:0;color:#3b167d;font-size:21px}.question-bank__exam-builder-head p{margin:3px 0 0;color:#66557e}.question-bank__exam-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.question-bank__exam-card{padding:13px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__exam-card--active{border:2px solid #6d28d9;background:#f8f5ff}.question-bank__exam-card h4{margin:0 0 7px;font-size:17px}.question-bank__exam-numbers{display:flex;flex-wrap:wrap;gap:7px 14px;margin-bottom:9px;color:#52677a}.question-bank__exam-numbers strong{color:#08746f}.question-bank__exam-progress{height:9px;margin-bottom:10px;overflow:hidden;border-radius:999px;background:#e8eef1}.question-bank__exam-progress span{display:block;height:100%;border-radius:999px;background:#6d28d9}.question-bank__exam-card .question-bank__editor-actions{gap:6px}.question-bank__exam-card .question-bank__button{min-height:34px;padding:5px 9px}.question-bank__exam-card form{margin:0}.question-bank__duplicate-report{margin-top:12px;padding:13px 14px;border:1px solid #8b5cf6;border-left:5px solid #6d28d9;border-radius:9px;background:#fff}.question-bank__duplicate-report h4{margin:0 0 6px;color:#3b167d}.question-bank__duplicate-report p{margin:0 0 9px;color:#52677a}.question-bank__duplicate-report-content{max-height:480px;overflow:auto;padding:12px;border-radius:7px;background:#f6f3fc;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}.question-bank__exam-form{display:grid;grid-template-columns:minmax(240px,2fr) minmax(160px,1fr) auto;align-items:end;gap:10px;margin:0 0 13px;padding:13px;border:1px solid #cbb9ee;border-radius:9px;background:#fff}.question-bank__exam-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__exam-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #b9cbd4;border-radius:7px}@media(max-width:900px){.question-bank__exam-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.question-bank__exam-builder-head{align-items:stretch;flex-direction:column}.question-bank__exam-grid,.question-bank__exam-form{grid-template-columns:1fr}}
 </style>
 <main class="question-bank">
     <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
@@ -3811,7 +3825,7 @@ echo $OUTPUT->header();
                 <h4>Simulation Exam 2</h4>
                 <div class="question-bank__exam-numbers"><span><?php echo $displaylang === 'es' ? 'Creadas/listas:' : 'Created/ready:'; ?> <strong><?php echo (int)$exam2reviewedcount; ?> / <?php echo (int)$exam2targetcount; ?></strong></span><span><?php echo $displaylang === 'es' ? 'Faltan:' : 'Missing:'; ?> <strong><?php echo max(0, (int)$exam2targetcount - (int)$exam2reviewedcount); ?></strong></span></div>
                 <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="<?php echo (int)$exam2targetcount; ?>" aria-valuenow="<?php echo (int)$exam2reviewedcount; ?>"><span style="width:<?php echo (int)$exam2progresspercent; ?>%"></span></div>
-                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $exam2url->out(false); ?>"><?php echo $displaylang === 'es' ? 'Continuar revisión' : 'Continue review'; ?></a><a class="question-bank__button" href="<?php echo $exam2approvedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver listas' : 'View ready'; ?></a></div>
+                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $exam2url->out(false); ?>"><?php echo $displaylang === 'es' ? 'Continuar revisión' : 'Continue review'; ?></a><a class="question-bank__button" href="<?php echo $exam2approvedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver listas' : 'View ready'; ?></a><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="scanexamduplicates"><input type="hidden" name="scanreturn" value="exam"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button" type="submit"><?php echo $displaylang === 'es' ? 'Buscar repetidas' : 'Check duplicates'; ?></button></form></div>
             </article>
             <?php foreach ($examprojects as $projectid => $project):
                 $projectcount = (int)$project['currentCount'];
@@ -3837,6 +3851,21 @@ echo $OUTPUT->header();
             </article>
             <?php endforeach; ?>
         </div>
+        <?php
+        $exam2duplicatereport = is_array($SESSION->ncbahm_exam2_duplicate_report ?? null)
+            ? $SESSION->ncbahm_exam2_duplicate_report
+            : null;
+        if ($showexam2duplicatereport && $exam2duplicatereport !== null):
+        ?>
+        <section class="question-bank__duplicate-report" aria-live="polite">
+            <h4><?php echo $displaylang === 'es' ? 'Resultado de la búsqueda de preguntas repetidas' : 'Duplicate-question scan result'; ?></h4>
+            <p><?php echo $displaylang === 'es'
+                ? 'Se compararon las preguntas que ocupan posiciones en Simulation Exam 2. Este informe no modificó ni eliminó ninguna pregunta.'
+                : 'Questions assigned to Simulation Exam 2 positions were compared. This report did not change or delete any question.'; ?></p>
+            <div class="question-bank__duplicate-report-content"><?php echo s((string)$exam2duplicatereport['text']); ?></div>
+            <div class="question-bank__editor-actions"><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cerrar informe' : 'Close report'; ?></a></div>
+        </section>
+        <?php endif; ?>
     </section>
     <?php if ($pendingreclassificationcount > 0 || $possibleexclusioncount > 0): ?><details class="question-bank__technical-exports"><summary>Technical exports (JSON)</summary><div><p>These downloads are backups for offline or developer review. They are not required for approving questions on this screen.</p><nav class="question-bank__actions" aria-label="Technical question exports"><?php if ($pendingreclassificationcount > 0): ?><a class="question-bank__button" href="<?php echo $queueurl->out(false); ?>">Download reclassification queue (<?php echo (int)$pendingreclassificationcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button" href="<?php echo $exclusionqueueurl->out(false); ?>">Download possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?></nav></div></details><?php endif; ?>
     <?php if ($showaiassistant): ?>
