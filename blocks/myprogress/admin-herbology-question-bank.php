@@ -27,7 +27,7 @@ $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-2.8';
+$aipromptversion = 'ncbahm-mock-editor-2.9';
 
 $domains = [
     'formula_differentiation' => ['number' => 1, 'name' => 'Formula selection and differentiation'],
@@ -1673,7 +1673,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $decodeaidraft = static function(
         string $generated,
         array $sourcequestion,
-        string $administratorproposal
+        string $administratorproposal,
+        bool $enforcefeedbackquality = true
     ): array {
         $generated = trim($generated);
         if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $generated, $matches)) {
@@ -1822,7 +1823,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             }
             $feedbackingredientcandidatesbylabel[$label] = $optionparts;
         }
-        if (count($feedbackingredientcandidatesbylabel) >= 3) {
+        if ($enforcefeedbackquality && count($feedbackingredientcandidatesbylabel) >= 3) {
             $ingredientfrequency = [];
             foreach ($feedbackingredientcandidatesbylabel as $optionparts) {
                 foreach (array_unique($optionparts) as $part) {
@@ -1853,7 +1854,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 );
             }
         }
-        if ($requiresformulamapping) {
+        if ($enforcefeedbackquality && $requiresformulamapping) {
             if (count($sourceformulanames) >= 2) {
                 $missingformulanames = array_values(array_filter(
                     $sourceformulanames,
@@ -1867,7 +1868,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 }
             }
         }
-        if ($requestsformulafeedback
+        if ($enforcefeedbackquality
+                && $requestsformulafeedback
                 && count($sourceformulabylabel) < 2
                 && $draftingredientoptioncount >= 2
                 && count($extractpinyinformulanames($explanation)) < $draftingredientoptioncount) {
@@ -1875,7 +1877,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 'The feedback must name the Pinyin formula represented by every ingredient-only answer choice.'
             );
         }
-        if ($requestsingredientwork && $requestsfeedbackwork) {
+        if ($enforcefeedbackquality && $requestsingredientwork && $requestsfeedbackwork) {
             $correctoptiontext = (string)($optionsbylabel[$sourcecorrectlabel] ?? '');
             $colonposition = strrpos($correctoptiontext, ':');
             $ingredienttext = $colonposition === false
@@ -1935,7 +1937,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 }
             }
         }
-        if ($requiresformulamapping && count($sourceformulanames) >= 2) {
+        if ($enforcefeedbackquality && $requiresformulamapping && count($sourceformulanames) >= 2) {
             $missingspanishformulas = array_values(array_filter(
                 $sourceformulanames,
                 static fn(string $formulaname): bool => stripos(
@@ -1950,7 +1952,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 );
             }
         }
-        if ($requestsformulafeedback
+        if ($enforcefeedbackquality
+                && $requestsformulafeedback
                 && count($sourceformulabylabel) < 2
                 && $draftingredientoptioncount >= 2
                 && count($extractpinyinformulanames($spanishexplanation)) < $draftingredientoptioncount) {
@@ -1958,7 +1961,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 'The Spanish feedback must name the Pinyin formula represented by every ingredient-only choice.'
             );
         }
-        if (count($feedbackingredientcandidatesbylabel) >= 3) {
+        if ($enforcefeedbackquality && count($feedbackingredientcandidatesbylabel) >= 3) {
             $missingspanishingredientfeedback = [];
             foreach ($feedbackingredientcandidatesbylabel as $label => $optionparts) {
                 $distinctiveparts = array_values(array_filter(
@@ -2155,10 +2158,94 @@ PROMPT;
         }
         return $validationreason;
     };
+    $refinefeedback = static function(
+        array $draft,
+        array $sourcepayload,
+        string $administratorproposal,
+        string $latestadministratorinstruction,
+        ?array $previousvisibleversion
+    ) use ($manager, $systemcontext, $USER): array {
+        $feedbackprompt = <<<'PROMPT'
+You are the dedicated NCBAHM feedback editor. The question stem, four choices and keyed answer have already been finalized by another editor. Rebuild only the English and Spanish explanations and return strict JSON only.
+
+Requirements:
+1. Preserve the keyed answer and rely only on the FINAL QUESTION, SOURCE QUESTION and source-supported facts. Do not change or propose changes to the stem, choices or answer letter.
+2. Apply every cumulative administrator instruction that concerns reasoning, terminology, ingredients, formula identification or feedback. Give special priority to LATEST ADMINISTRATOR INSTRUCTION. Never copy an administrator instruction into the explanation as if it were educational feedback.
+3. Teach both inference steps explicitly: first infer the hidden pattern, action, safety or processing principle from the evidence; then connect it to the keyed answer.
+4. Analyze A, B, C and D separately. For every distractor, state the precise reason it is weaker in this case. Avoid generic statements.
+5. When choices contain ingredient combinations, identify the source-supported formula or precise therapeutic strategy represented by each option. Name at least one distinctive ingredient from each option, explain its relevant action, and connect that action to why the option fits or fails. Do not invent a canonical formula name when the source does not establish one.
+6. When formula names were deliberately removed from ingredient-only choices, keep them out of the choices but identify the corresponding formula names in the feedback when they are source-supported or unambiguously established by the supplied material.
+7. Use NCBAHM guideline terminology and standard Pinyin. Do not introduce unrelated facts, unsupported citations or new clinical findings.
+8. The Spanish explanation must be a complete, clinically faithful version of the English explanation and must retain Pinyin, option letters and the same reasoning.
+9. Before returning JSON, verify that the explanations visibly implement the latest feedback instruction and contain meaningful analysis for all four choices.
+
+Required JSON:
+{"explanation":"Complete English feedback.","spanishExplanation":"Complete Spanish feedback.","feedbackSummary":"One concise sentence describing the substantive feedback improvement."}
+
+MATERIAL:
+PROMPT;
+        $feedbackprompt .= "\n" . json_encode([
+            'cumulativeAdministratorInstructions' => $administratorproposal,
+            'latestAdministratorInstruction' => $latestadministratorinstruction,
+            'previousVisibleVersion' => $previousvisibleversion,
+            'sourceQuestion' => $sourcepayload,
+            'finalQuestion' => [
+                'prompt' => (string)($draft['prompt'] ?? ''),
+                'options' => $draft['options'] ?? [],
+                'correctLabel' => (string)($draft['correctLabel'] ?? ''),
+                'currentGeneratedExplanation' => (string)($draft['explanation'] ?? ''),
+                'currentGeneratedSpanishExplanation' => (string)(
+                    $draft['translations']['es']['explanation'] ?? ''
+                ),
+            ],
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $feedbackaction = new \core_ai\aiactions\generate_text(
+            contextid: $systemcontext->id,
+            userid: (int)$USER->id,
+            prompttext: $feedbackprompt,
+        );
+        $feedbackresponse = $manager->process_action($feedbackaction);
+        if (!$feedbackresponse->get_success()) {
+            throw new RuntimeException(
+                $feedbackresponse->get_errormessage() ?: 'The dedicated feedback editor failed.'
+            );
+        }
+        $feedbackcontent = trim((string)(
+            $feedbackresponse->get_response_data()['generatedcontent'] ?? ''
+        ));
+        if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $feedbackcontent, $matches)) {
+            $feedbackcontent = $matches[1];
+        } else {
+            $firstbrace = strpos($feedbackcontent, '{');
+            $lastbrace = strrpos($feedbackcontent, '}');
+            if ($firstbrace !== false && $lastbrace !== false && $lastbrace > $firstbrace) {
+                $feedbackcontent = substr(
+                    $feedbackcontent,
+                    $firstbrace,
+                    $lastbrace - $firstbrace + 1
+                );
+            }
+        }
+        $feedback = json_decode($feedbackcontent, true, 64, JSON_THROW_ON_ERROR);
+        $englishexplanation = trim((string)($feedback['explanation'] ?? ''));
+        $spanishexplanation = trim((string)($feedback['spanishExplanation'] ?? ''));
+        $feedbacksummary = trim((string)($feedback['feedbackSummary'] ?? ''));
+        if ($englishexplanation === '' || $spanishexplanation === '' || $feedbacksummary === '') {
+            throw new UnexpectedValueException(
+                'The dedicated feedback editor omitted the English explanation, Spanish explanation or summary.'
+            );
+        }
+        $draft['explanation'] = $englishexplanation;
+        $draft['translations']['es']['explanation'] = $spanishexplanation;
+        $draft['reviewSummary'] = trim(
+            (string)($draft['reviewSummary'] ?? '') . ' Feedback rebuilt separately: ' . $feedbacksummary
+        );
+        return $draft;
+    };
     $generateddrafts = [];
     $instructionhistories = [];
     $generationerrors = [];
-    @set_time_limit(300);
+    @set_time_limit(600);
     foreach ($pendingquestions as $question) {
         $questionid = (string)$question['questionId'];
         $sourceentry = $findquestion($basebank, $questionid);
@@ -2292,6 +2379,22 @@ PROMPT;
                 $responsecontent = (string)($response->get_response_data()['generatedcontent'] ?? '');
                 $generateddraft = $decodeaidraft(
                     $responsecontent,
+                    $sourcequestion,
+                    $administratorproposal,
+                    false
+                );
+                $generateddraft = $refinefeedback(
+                    $generateddraft,
+                    $sourcepayload,
+                    $administratorproposal,
+                    $latestadministratorproposal,
+                    $currentreviewversion
+                );
+                $generateddraft = $decodeaidraft(
+                    json_encode(
+                        $generateddraft,
+                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
+                    ),
                     $sourcequestion,
                     $administratorproposal
                 );
