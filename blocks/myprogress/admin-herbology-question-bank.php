@@ -43,7 +43,7 @@ if ($domainfilter !== 'all' && !isset($domains[$domainfilter])) {
 if (!in_array($readinessfilter, ['all', 'ready', 'incomplete'], true)) {
     $readinessfilter = 'all';
 }
-if (!in_array($usagefilter, ['all', 'exam1', 'exam2_review', 'reserve'], true)) {
+if (!in_array($usagefilter, ['all', 'exam1', 'exam2_review', 'exam2_approved', 'reserve'], true)) {
     $usagefilter = 'all';
 }
 if (!in_array($sourcefilter, ['all', 'curated', 'scorm', 'admin'], true)) {
@@ -297,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $returnaibatch = optional_param('returnaibatch', '', PARAM_ALPHANUMEXT);
     $returnpage = max(0, optional_param('returnpage', 0, PARAM_INT));
     $redirectparams = [];
-    if (in_array($returnusage, ['exam1', 'exam2_review', 'reserve'], true)) {
+    if (in_array($returnusage, ['exam1', 'exam2_review', 'exam2_approved', 'reserve'], true)) {
         $redirectparams['usage'] = $returnusage;
     }
     if (in_array($returnreview, [
@@ -479,7 +479,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
     ];
     $requestreclassification = (bool)optional_param('requestreclassification', 0, PARAM_BOOL);
     $returnusage = optional_param('returnusage', '', PARAM_ALPHANUMEXT);
-    if (!in_array($returnusage, ['exam1', 'exam2_review', 'reserve'], true)) {
+    if (!in_array($returnusage, ['exam1', 'exam2_review', 'exam2_approved', 'reserve'], true)) {
         $returnusage = '';
     }
     $returnreview = optional_param('returnreview', '', PARAM_ALPHANUMEXT);
@@ -2699,6 +2699,8 @@ $filteredquestions = array_values(array_filter(
         if ($usagefilter === 'exam1' && $question['_examposition'] === 0) return false;
         if ($usagefilter === 'exam2_review' && $question['_exam2position'] === 0) return false;
         if ($usagefilter === 'exam2_review' && $isprocessedquestion($question)) return false;
+        if ($usagefilter === 'exam2_approved' && $question['_exam2position'] === 0) return false;
+        if ($usagefilter === 'exam2_approved' && !$isprocessedquestion($question)) return false;
         if ($usagefilter === 'reserve' && (!$question['_ready'] || $question['_examposition'] > 0)) return false;
         if ($sourcefilter !== 'all' && $question['_sourcekind'] !== $sourcefilter) return false;
         if ($cognitivefilter !== 'all' && $question['_cognitive'] !== $cognitivefilter) return false;
@@ -2766,7 +2768,7 @@ usort($filteredquestions, static function(array $left, array $right) use (
             return $savedcomparison;
         }
     }
-    if ($usagefilter === 'exam2_review') {
+    if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true)) {
         $leftapproved = ($left['_revision']['status'] ?? '') === 'approved' ? 1 : 0;
         $rightapproved = ($right['_revision']['status'] ?? '') === 'approved' ? 1 : 0;
         if ($leftapproved !== $rightapproved) {
@@ -2838,6 +2840,10 @@ $deletedurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.p
 $exclusionqueueurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['download' => 'exclusion_queue']);
 $exam2url = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'usage' => 'exam2_review',
+    'lang' => $displaylang !== 'en' ? $displaylang : null,
+]));
+$exam2approvedurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+    'usage' => 'exam2_approved',
     'lang' => $displaylang !== 'en' ? $displaylang : null,
 ]));
 $newquestionurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
@@ -3064,7 +3070,7 @@ echo $OUTPUT->header();
     <?php if ($shownewquestionform): ?><section id="new-question" class="question-bank__new-question"><h3>Create a new question from your idea</h3><p>Describe what you want in your own words. The system will write the question, four choices, correct answer, feedback and classification. It will remain a draft until you approve it.</p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><textarea name="idea" maxlength="12000" required placeholder="Example: Create an inference question in which the student identifies the deputy ingredients of a formula from their clinical roles. Include realistic distractors and explain the hierarchy in the feedback."></textarea><input type="hidden" name="formaction" value="createnewquestion"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Create draft</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Cancel</a></div><?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?></form></section><?php endif; ?>
     <?php if ($customdraftcount > 0 && !$shownewquestionform): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
     <?php if ($reviewfilter === 'editing_drafts'): ?><section class="question-bank__review-progress"><strong>Saved editing drafts: <?php echo (int)$savededitingdraftcount; ?></strong><p>This view includes unfinished manual and automatic edits from earlier updates and review groups. The most recently saved drafts appear first. Continue the correction, approve the current version, edit manually or delete the question.</p></section><?php endif; ?>
-    <section class="question-bank__review-progress" aria-label="Simulation Exam 2 approval progress"><strong>Accepted and ready: <?php echo (int)$exam2reviewedcount; ?> of <?php echo (int)$exam2candidatecount; ?></strong><p><?php if ($usagefilter === 'exam2_review'): ?>Approved questions are removed from the pending review screen immediately. Only the remaining questions stay visible.<?php if ($exam2shortfalls !== []): ?> The current bank is short <?php echo (int)array_sum($exam2shortfalls); ?> required domain question<?php echo array_sum($exam2shortfalls) === 1 ? '' : 's'; ?>.<?php endif; ?><?php else: ?>Start the next five automatic reviews directly from this screen.<?php endif; ?></p><?php if ($usagefilter !== 'exam2_review'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Automatically review next 5 questions</button></form><?php endif; ?></section>
+    <section class="question-bank__review-progress" aria-label="Simulation Exam 2 approval progress"><strong>Accepted and ready: <?php echo (int)$exam2reviewedcount; ?> of <?php echo (int)$exam2candidatecount; ?></strong><p><?php if ($usagefilter === 'exam2_review'): ?>Approved questions are removed from the pending review screen immediately. Only the remaining questions stay visible.<?php if ($exam2shortfalls !== []): ?> The current bank is short <?php echo (int)array_sum($exam2shortfalls); ?> required domain question<?php echo array_sum($exam2shortfalls) === 1 ? '' : 's'; ?>.<?php endif; ?><?php elseif ($usagefilter === 'exam2_approved'): ?>You are viewing only the approved Simulation Exam 2 questions.<?php else: ?>Start the next five automatic reviews directly from this screen.<?php endif; ?></p><div class="question-bank__editor-actions"><?php if ($usagefilter === 'exam2_approved'): ?><a class="question-bank__button" href="<?php echo $exam2url->out(false); ?>">← View pending Exam 2 questions</a><?php else: ?><a class="question-bank__button" href="<?php echo $exam2approvedurl->out(false); ?>">View approved Exam 2 questions (<?php echo (int)$exam2reviewedcount; ?>)</a><?php endif; ?><?php if (!in_array($usagefilter, ['exam2_review', 'exam2_approved'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Automatically review next 5 questions</button></form><?php endif; ?></div></section>
     <?php if ($usagefilter === 'exam2_review'): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, explicit concept-to-choice mappings, distractor analysis, feedback and classification. It also updates the oldest pending drafts created with an earlier reviewer while preserving their accumulated instructions. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Update or review next 5 questions</button></form></section><?php endif; ?>
     <?php if ($editquestion !== null && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts')):
         $editorstatus = (string)($editorrevision['status'] ?? 'original');
@@ -3122,7 +3128,7 @@ echo $OUTPUT->header();
         <label><span>Search ID or text</span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="Example: DY-001, Ma Huang Tang"></label>
         <label><span>Domain</span><select name="domain"><option value="all">All domains</option><?php foreach ($domains as $domainid => $domain): ?><option value="<?php echo s($domainid); ?>"<?php echo $domainfilter === $domainid ? ' selected' : ''; ?>>Domain <?php echo (int)$domain['number']; ?> · <?php echo s($domain['name']); ?></option><?php endforeach; ?></select></label>
         <label><span>Readiness</span><select name="readiness"><option value="all">All questions</option><option value="ready"<?php echo $readinessfilter === 'ready' ? ' selected' : ''; ?>>Ready for practice</option><option value="incomplete"<?php echo $readinessfilter === 'incomplete' ? ' selected' : ''; ?>>Needs completion</option></select></label>
-        <label><span>Exam use</span><select name="usage"><option value="all">All uses</option><option value="exam1"<?php echo $usagefilter === 'exam1' ? ' selected' : ''; ?>>Simulation Exam 1</option><option value="exam2_review"<?php echo $usagefilter === 'exam2_review' ? ' selected' : ''; ?>>Simulation Exam 2 review set</option><option value="reserve"<?php echo $usagefilter === 'reserve' ? ' selected' : ''; ?>>Ready reserve bank</option></select></label>
+        <label><span>Exam use</span><select name="usage"><option value="all">All uses</option><option value="exam1"<?php echo $usagefilter === 'exam1' ? ' selected' : ''; ?>>Simulation Exam 1</option><option value="exam2_review"<?php echo $usagefilter === 'exam2_review' ? ' selected' : ''; ?>>Simulation Exam 2 pending review</option><option value="exam2_approved"<?php echo $usagefilter === 'exam2_approved' ? ' selected' : ''; ?>>Simulation Exam 2 approved</option><option value="reserve"<?php echo $usagefilter === 'reserve' ? ' selected' : ''; ?>>Ready reserve bank</option></select></label>
         <label><span>Source</span><select name="source"><option value="all">All sources</option><option value="curated"<?php echo $sourcefilter === 'curated' ? ' selected' : ''; ?>>Curated bank</option><option value="scorm"<?php echo $sourcefilter === 'scorm' ? ' selected' : ''; ?>>SCORM modules</option><option value="admin"<?php echo $sourcefilter === 'admin' ? ' selected' : ''; ?>>Administrator-authored</option></select></label>
         <label><span>Cognitive level</span><select name="cognitive"><option value="all">All cognitive levels</option><option value="recall"<?php echo $cognitivefilter === 'recall' ? ' selected' : ''; ?>>Recall / direct</option><option value="application"<?php echo $cognitivefilter === 'application' ? ' selected' : ''; ?>>Application</option><option value="inference"<?php echo $cognitivefilter === 'inference' ? ' selected' : ''; ?>>Inference</option><option value="analysis"<?php echo $cognitivefilter === 'analysis' ? ' selected' : ''; ?>>Analysis / differential</option></select></label>
         <label><span>Content focus</span><select name="content"><option value="all">All content</option><option value="herb_properties"<?php echo $contentfilter === 'herb_properties' ? ' selected' : ''; ?>>Herb properties</option><option value="formula_hierarchy"<?php echo $contentfilter === 'formula_hierarchy' ? ' selected' : ''; ?>>Formula hierarchy</option><option value="herb_processing"<?php echo $contentfilter === 'herb_processing' ? ' selected' : ''; ?>>Herb processing</option><option value="clinical_case"<?php echo $contentfilter === 'clinical_case' ? ' selected' : ''; ?>>Clinical cases</option><option value="other"<?php echo $contentfilter === 'other' ? ' selected' : ''; ?>>Other content</option></select></label>
@@ -3205,7 +3211,7 @@ echo $OUTPUT->header();
             array_merge($baseparams, ['page' => $page, 'edit' => $question['questionId']])
         );
     ?><article id="question-<?php echo s($question['questionId']); ?>" class="question-bank__item<?php echo $question['_excluded'] ? ' question-bank__item--excluded' : ''; ?>">
-        <?php if ($usagefilter === 'exam2_review' && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span>Temporary review order</span><strong>Proposed Exam 2 Question <?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
+        <?php if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true) && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span><?php echo $usagefilter === 'exam2_approved' ? 'Approved Exam 2 position' : 'Temporary review order'; ?></span><strong><?php echo $usagefilter === 'exam2_approved' ? 'Simulation Exam 2 Question ' : 'Proposed Exam 2 Question '; ?><?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
         <div class="question-bank__meta">
             <span class="question-bank__id"><?php echo s($question['questionId'] ?? 'Unnumbered'); ?></span>
             <?php if (!$inlineapproval): ?>

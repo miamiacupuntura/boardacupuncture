@@ -522,6 +522,7 @@ grep -Fq "distinctive ingredient for every ingredient-combination" "$TEMP_DIR/mo
 grep -Fq '"choiceEvidence"' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "Return to pending questions" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "question-bank__summary-card" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Simulation Exam 2 approved" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "Pinyin formula represented by every ingredient-only" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "Update or review next 5 questions" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 php -l "$TEMP_DIR/moodle/admin-herbology-question-bank.php" >/dev/null
@@ -1711,6 +1712,7 @@ grep -Fq "distinctive ingredient for every ingredient-combination" "$TARGET_DIR/
 grep -Fq '"choiceEvidence"' "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Return to pending questions" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "question-bank__summary-card" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Simulation Exam 2 approved" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Pinyin formula represented by every ingredient-only" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Update or review next 5 questions" "$TARGET_DIR/admin-herbology-question-bank.php"
 php -l "$TARGET_DIR/admin-herbology-question-bank.php" >/dev/null
