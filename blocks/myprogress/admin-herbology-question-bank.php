@@ -1397,6 +1397,174 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'reopencustomquesti
     );
 }
 
+$buildexam2duplicatereport = static function(array $questions, bool $spanish): string {
+    $examquestions = array_values(array_filter(
+        $questions,
+        static fn(array $question): bool => (int)($question['_exam2position'] ?? 0) > 0
+            && empty($question['_excluded'])
+            && (string)($question['_revision']['status'] ?? '') !== 'deleted'
+    ));
+    usort(
+        $examquestions,
+        static fn(array $left, array $right): int =>
+            (int)$left['_exam2position'] <=> (int)$right['_exam2position']
+    );
+    $stopwords = array_fill_keys([
+        'the', 'and', 'with', 'that', 'this', 'from', 'into', 'than', 'then', 'which',
+        'what', 'when', 'where', 'patient', 'presents', 'reports', 'case', 'clinical',
+        'following', 'according', 'most', 'best', 'appropriate', 'select', 'choose',
+        'would', 'should', 'could', 'herb', 'formula', 'answer', 'correct', 'option',
+        'treatment', 'symptoms', 'signs', 'has', 'have', 'had', 'for', 'are', 'was',
+        'were', 'its', 'his', 'her', 'their', 'una', 'uno', 'que', 'con', 'por',
+        'para', 'como', 'cual', 'cuál', 'paciente', 'presenta', 'indique', 'seleccione',
+    ], true);
+    $tokens = static function(string $text) use ($stopwords): array {
+        $text = core_text::strtolower($text);
+        $text = preg_replace('/[^\p{L}\p{N}]+/u', ' ', $text) ?? '';
+        $parts = preg_split('/\s+/u', trim($text), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $parts = array_filter($parts, static function(string $part) use ($stopwords): bool {
+            return core_text::strlen($part) >= 3 && !isset($stopwords[$part]);
+        });
+        return array_values(array_unique($parts));
+    };
+    $similarity = static function(array $left, array $right): float {
+        if ($left === [] || $right === []) {
+            return 0.0;
+        }
+        $union = count(array_unique(array_merge($left, $right)));
+        return $union > 0 ? count(array_intersect($left, $right)) / $union : 0.0;
+    };
+    $correctanswer = static function(array $question): string {
+        $correctlabel = strtoupper(trim((string)($question['correctLabel'] ?? '')));
+        foreach (($question['options'] ?? []) as $option) {
+            if (strtoupper(trim((string)($option['label'] ?? ''))) === $correctlabel) {
+                return trim((string)($option['text'] ?? ''));
+            }
+        }
+        return '';
+    };
+    $index = [];
+    foreach ($examquestions as $question) {
+        $prompt = trim((string)($question['prompt'] ?? ''));
+        $optiontext = implode(' ', array_map(
+            static fn(array $option): string => (string)($option['text'] ?? ''),
+            is_array($question['options'] ?? null) ? $question['options'] : []
+        ));
+        $answer = $correctanswer($question);
+        $normalizedprompt = core_text::strtolower(
+            trim(preg_replace('/[^\p{L}\p{N}]+/u', ' ', $prompt) ?? '')
+        );
+        $index[] = [
+            'questionId' => (string)($question['questionId'] ?? ''),
+            'position' => (int)($question['_exam2position'] ?? 0),
+            'prompt' => $prompt,
+            'normalizedPrompt' => $normalizedprompt,
+            'promptTokens' => $tokens($prompt),
+            'fullTokens' => $tokens($prompt . ' ' . $optiontext),
+            'answerTokens' => $tokens($answer),
+        ];
+    }
+    $matches = [];
+    $questioncount = count($index);
+    for ($leftindex = 0; $leftindex < $questioncount; $leftindex++) {
+        for ($rightindex = $leftindex + 1; $rightindex < $questioncount; $rightindex++) {
+            $left = $index[$leftindex];
+            $right = $index[$rightindex];
+            $promptscore = $similarity($left['promptTokens'], $right['promptTokens']);
+            $fullscore = $similarity($left['fullTokens'], $right['fullTokens']);
+            $answerscore = $similarity($left['answerTokens'], $right['answerTokens']);
+            $exactprompt = $left['normalizedPrompt'] !== ''
+                && $left['normalizedPrompt'] === $right['normalizedPrompt'];
+            $score = max($promptscore, $fullscore, ($promptscore * 0.70) + ($answerscore * 0.30));
+            $ispossibleduplicate = $exactprompt
+                || $promptscore >= 0.62
+                || $fullscore >= 0.72
+                || ($promptscore >= 0.42 && $answerscore >= 0.80);
+            if (!$ispossibleduplicate) {
+                continue;
+            }
+            $matches[] = [
+                'left' => $left,
+                'right' => $right,
+                'score' => $exactprompt ? 1.0 : $score,
+                'exact' => $exactprompt,
+            ];
+        }
+    }
+    usort($matches, static fn(array $left, array $right): int => $right['score'] <=> $left['score']);
+    $totalmatches = count($matches);
+    $matches = array_slice($matches, 0, 30);
+    $lines = [];
+    $lines[] = $spanish
+        ? 'Revisión de posibles duplicados — Simulation Exam 2'
+        : 'Possible duplicate review — Simulation Exam 2';
+    $lines[] = ($spanish ? 'Preguntas comparadas: ' : 'Questions compared: ') . $questioncount;
+    $lines[] = ($spanish ? 'Pares que requieren revisión humana: ' : 'Pairs requiring human review: ')
+        . $totalmatches;
+    if ($totalmatches > count($matches)) {
+        $lines[] = $spanish
+            ? 'Se muestran las 30 coincidencias más cercanas.'
+            : 'Showing the 30 closest matches.';
+    }
+    if ($matches === []) {
+        $lines[] = '';
+        $lines[] = $spanish
+            ? 'No se detectaron coincidencias por encima de los límites establecidos.'
+            : 'No matches were detected above the configured thresholds.';
+    } else {
+        foreach ($matches as $position => $match) {
+            $left = $match['left'];
+            $right = $match['right'];
+            $lines[] = '';
+            $lines[] = ($position + 1) . '. '
+                . '#' . str_pad((string)$left['position'], 3, '0', STR_PAD_LEFT)
+                . ' ' . $left['questionId'] . ' ↔ '
+                . '#' . str_pad((string)$right['position'], 3, '0', STR_PAD_LEFT)
+                . ' ' . $right['questionId'];
+            $lines[] = ($spanish ? 'Coincidencia estimada: ' : 'Estimated similarity: ')
+                . (int)round($match['score'] * 100) . '%'
+                . (!empty($match['exact']) ? ($spanish ? ' · texto exacto' : ' · exact wording') : '');
+            $lines[] = 'A: ' . core_text::substr($left['prompt'], 0, 220);
+            $lines[] = 'B: ' . core_text::substr($right['prompt'], 0, 220);
+        }
+    }
+    $lines[] = '';
+    $lines[] = $spanish
+        ? 'Este análisis no elimina ni modifica preguntas. Revise cada par antes de decidir.'
+        : 'This analysis does not delete or modify questions. Review each pair before deciding.';
+    return implode("\n", $lines);
+};
+
+$saveassistantturn = static function(string $request, string $response): void {
+    global $SESSION;
+    $history = is_array($SESSION->ncbahm_question_bank_ai_history ?? null)
+        ? array_slice($SESSION->ncbahm_question_bank_ai_history, -7)
+        : [];
+    $history[] = [
+        'request' => $request,
+        'response' => core_text::substr($response, 0, 24000),
+        'createdAt' => gmdate(DATE_ATOM),
+    ];
+    $SESSION->ncbahm_question_bank_ai_history = array_slice($history, -8);
+};
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'scanexamduplicates') {
+    require_sesskey();
+    $scanrequest = $displaylang === 'es'
+        ? 'Revisar las 100 candidatas de Simulation Exam 2 para detectar posibles preguntas repetidas.'
+        : 'Review the 100 Simulation Exam 2 candidates for possible duplicate questions.';
+    $saveassistantturn(
+        $scanrequest,
+        $buildexam2duplicatereport($allquestions, $displaylang === 'es')
+    );
+    $scanurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+        'aiassistant' => 1,
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ]));
+    $scanurl->set_anchor('question-bank-ai');
+    redirect($scanurl);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'askassistant') {
     require_sesskey();
     if (!$textaienabled) {
@@ -1409,7 +1577,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'askassistant') {
     }
     $assistantrequest = trim(required_param('assistantprompt', PARAM_RAW));
     if ($assistantrequest === '' || core_text::strlen($assistantrequest) > 12000) {
-        throw new invalid_parameter_exception('Write an AI request in 12,000 characters or fewer.');
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['aiassistant' => 1]),
+            'Write an AI request in 12,000 characters or fewer.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $isduplicaterequest = preg_match(
+        '/(?:duplicad|repetid|repetic|preguntas?\s+iguales|duplicate|repeated|same\s+questions?)/iu',
+        $assistantrequest
+    ) === 1;
+    if ($isduplicaterequest) {
+        $isspanishrequest = preg_match('/(?:duplicad|repetid|repetic|preguntas?\s+iguales)/iu', $assistantrequest) === 1;
+        $saveassistantturn(
+            $assistantrequest,
+            $buildexam2duplicatereport($allquestions, $isspanishrequest || $displaylang === 'es')
+        );
+        $duplicateurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+            'aiassistant' => 1,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ]));
+        $duplicateurl->set_anchor('question-bank-ai');
+        redirect($duplicateurl);
     }
     $assistanthistory = is_array($SESSION->ncbahm_question_bank_ai_history ?? null)
         ? array_slice($SESSION->ncbahm_question_bank_ai_history, -8)
@@ -1442,13 +1632,24 @@ PROMPT;
         );
     }
     $assistantprompt .= "\n\nLATEST ADMINISTRATOR REQUEST:\n" . $assistantrequest;
-    $manager = \core\di::get(\core_ai\manager::class);
-    $action = new \core_ai\aiactions\generate_text(
-        contextid: $systemcontext->id,
-        userid: (int)$USER->id,
-        prompttext: $assistantprompt,
-    );
-    $response = $manager->process_action($action);
+    try {
+        @set_time_limit(180);
+        $manager = \core\di::get(\core_ai\manager::class);
+        $action = new \core_ai\aiactions\generate_text(
+            contextid: $systemcontext->id,
+            userid: (int)$USER->id,
+            prompttext: $assistantprompt,
+        );
+        $response = $manager->process_action($action);
+    } catch (Throwable $error) {
+        debugging('Question Bank AI request failed: ' . $error->getMessage(), DEBUG_DEVELOPER);
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['aiassistant' => 1]),
+            'The AI request was interrupted. The question bank is unchanged. Try a shorter request or use the dedicated duplicate scan.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
     if (!$response->get_success()) {
         redirect(
             new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['aiassistant' => 1]),
@@ -3642,6 +3843,16 @@ echo $OUTPUT->header();
     <section id="question-bank-ai" class="question-bank__assistant">
         <h3>Question Bank AI</h3>
         <p>Use this workspace for broader questions, analysis, planning, explanations or drafting. It can discuss material beyond one question, but it does not publish or change the site automatically.</p>
+        <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+            <input type="hidden" name="formaction" value="scanexamduplicates">
+            <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+            <div class="question-bank__assistant-actions">
+                <button class="question-bank__button question-bank__button--primary" type="submit"><?php echo $displaylang === 'es' ? 'Revisar duplicados del Exam 2' : 'Check Exam 2 duplicates'; ?></button>
+            </div>
+            <small class="question-bank__proposal-saved"><?php echo $displaylang === 'es'
+                ? 'Compara las 100 candidatas sin enviarlas juntas a la IA. Solo genera un informe; no cambia ni elimina preguntas.'
+                : 'Compares all 100 candidates without sending them together to AI. It only creates a report; no questions are changed or deleted.'; ?></small>
+        </form>
         <?php if ($assistanthistory !== []): ?>
         <div class="question-bank__assistant-history">
             <?php foreach ($assistanthistory as $assistantturn): ?>
