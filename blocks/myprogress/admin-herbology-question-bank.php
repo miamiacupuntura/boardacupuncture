@@ -451,6 +451,83 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         \core\output\notification::NOTIFY_SUCCESS
     );
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishcurrentquestion') {
+    require_sesskey();
+    $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
+    $baseentry = $findquestion($basebank, $questionid);
+    if ($baseentry === null) {
+        throw new invalid_parameter_exception('Unknown Herbology question ID.');
+    }
+    $basequestion = $baseentry['question'];
+    $snapshot = array_intersect_key($basequestion, array_flip([
+        'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+        'contentType', 'cognitiveLevel', 'difficultyBand',
+    ]));
+    if (trim((string)($snapshot['prompt'] ?? '')) === ''
+            || count($snapshot['options'] ?? []) !== 4
+            || trim((string)($snapshot['correctLabel'] ?? '')) === ''
+            || trim((string)($snapshot['explanation'] ?? '')) === '') {
+        throw new invalid_parameter_exception('This question is incomplete and cannot be published directly.');
+    }
+    $original = array_intersect_key($basequestion, array_flip([
+        'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
+        'translations', 'contentType', 'cognitiveLevel', 'difficultyBand', 'source',
+        'sourceCard', 'examTemplate',
+    ]));
+    $savedat = gmdate(DATE_ATOM);
+    $savedbyname = fullname($USER);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $questionid,
+        $baseentry,
+        $snapshot,
+        $original,
+        $savedat,
+        $savedbyname,
+        $USER
+    ): array {
+        $previous = is_array($store['questions'][$questionid] ?? null)
+            ? $store['questions'][$questionid]
+            : [];
+        $previousstatus = (string)($previous['status'] ?? 'original');
+        if (!in_array($previousstatus, ['', 'original'], true)) {
+            throw new invalid_parameter_exception(
+                'This question has another editorial state. Publish or resolve its visible version instead.'
+            );
+        }
+        $history = is_array($previous['history'] ?? null) ? $previous['history'] : [];
+        if ($previous !== []) {
+            $history[] = array_diff_key($previous, ['history' => true, 'original' => true]);
+            $history = array_slice($history, -20);
+        }
+        $record = $previous;
+        $record['questionId'] = $questionid;
+        $record['domainId'] = (string)$baseentry['domainId'];
+        $record['status'] = 'approved';
+        $record['requestReclassification'] = false;
+        $record['exclusionReason'] = '';
+        $record['revisionNumber'] = (int)($previous['revisionNumber'] ?? 0) + 1;
+        $record['savedAt'] = $savedat;
+        $record['savedById'] = (int)$USER->id;
+        $record['savedByName'] = $savedbyname;
+        $record['original'] = $previous['original'] ?? $original;
+        $record['approved'] = $snapshot;
+        $record['draft'] = $snapshot;
+        $record['history'] = $history;
+        $record['proposalStatus'] = 'reviewed';
+        $record['directApproval'] = true;
+        $store['questions'][$questionid] = $record;
+        return $store;
+    });
+    redirect(
+        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+            'usage' => 'exam2_review',
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ])),
+        'Question approved and published without automatic review. It was removed from pending questions.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') {
     require_sesskey();
     $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
@@ -3586,6 +3663,7 @@ echo $OUTPUT->header();
             <?php if ($query !== '' && !$inlineapproval): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
             <?php if (is_array($currentexamproject) && !$inlineapproval && !$question['_excluded'] && $question['_ready']): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
             <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$iscustomdraft): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
+            <?php if ($usagefilter === 'exam2_review' && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible question without automatic review?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if ($question['_sourcekind'] !== 'admin' && $revisionstatus !== 'deleted' && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a><?php endif; ?>
             <?php if (!$iscustomdraft): ?><form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'deleted' ? 'restoredeletedquestion' : 'deletequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'deleted' ? 'question-bank__button--primary' : 'question-bank__button--exclude'; ?>" type="submit"<?php if ($revisionstatus !== 'deleted'): ?> onclick="return confirm('Delete this question from the active bank and exams? You can restore it later from Deleted questions.');"<?php endif; ?>><?php echo $revisionstatus === 'deleted' ? 'Restore question' : 'Delete question'; ?></button></form><?php endif; ?>
             <?php endif; ?>
