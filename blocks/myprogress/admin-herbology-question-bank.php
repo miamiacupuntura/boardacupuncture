@@ -27,7 +27,7 @@ $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-2.9';
+$aipromptversion = 'ncbahm-mock-editor-3.0';
 
 $domains = [
     'formula_differentiation' => ['number' => 1, 'name' => 'Formula selection and differentiation'],
@@ -1704,6 +1704,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 'The stem names the Damp-Heat diagnosis instead of presenting observable findings.'
             );
         }
+        $requestspositivewording = preg_match(
+            '/(?:\b(?:positive|positively)\b.{0,80}\bquestion\b|\bquestion\b.{0,80}\b(?:positive|positively)\b|\b(?:pregunta)\b.{0,80}\bpositiv\w*\b|\bpositiv\w*\b.{0,80}\b(?:pregunta)\b)/iu',
+            $administratorproposal
+        );
+        if ($requestspositivewording && preg_match(
+            '/\b(?:not|except|incorrect|inaccurate|false|error|least\s+(?:appropriate|likely|correct))\b/iu',
+            $prompt
+        )) {
+            throw new UnexpectedValueException(
+                'The administrator requested a positively worded item, but the stem still uses a negative-testing '
+                    . 'frame such as NOT, EXCEPT, incorrect, false or error.'
+            );
+        }
         if ($administratorproposal !== ''
                 && preg_match('/\b(?:not applied|unable|cannot|could not)\b/i', $reviewsummary)) {
             throw new UnexpectedValueException('The administrator instructions were not applied.');
@@ -1822,6 +1835,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 continue;
             }
             $feedbackingredientcandidatesbylabel[$label] = $optionparts;
+        }
+        if ($enforcefeedbackquality && preg_match(
+            '/(?:convi[eé]rt\w*|transform\w*|reescrib\w*).{0,100}(?:pregunta|question).{0,80}positiv\w*/iu',
+            $explanation
+        )) {
+            throw new UnexpectedValueException(
+                'An editorial instruction was copied into the explanation instead of being applied.'
+            );
         }
         if ($enforcefeedbackquality && count($feedbackingredientcandidatesbylabel) >= 3) {
             $ingredientfrequency = [];
@@ -2037,7 +2058,9 @@ You are the final quality-control reviewer for one NCBAHM Chinese Herbology mock
 
 Compare the visible DRAFT itself with every ADMINISTRATOR INSTRUCTION and the SOURCE QUESTION. Do not trust the draft's reviewSummary or its claim that a change was applied. Inspect the stem, all four choices, keyed answer and explanation directly.
 
-Set compliant to true only when every compatible instruction is visibly implemented without changing the source-supported correct answer concept or letter. If the administrator requested ingredient-based choices, the choices themselves must contain ingredients or ingredient combinations rather than formula names. If the administrator requested observable manifestations instead of a named diagnosis, the stem must contain those findings and must not name the diagnosis. If any requested change is missing, vague, merely mentioned in the summary, or contradicted by the draft, set compliant to false and explain the exact correction required.
+Set compliant to true only when every compatible instruction is visibly implemented without changing the source-supported correct answer concept or letter. A requested conversion from a negative item to a positive item is a permitted exception: preserve the keyed LETTER and educational objective, rewrite the keyed option as a true source-supported statement, and rebuild the distractors. If the administrator requested ingredient-based choices, the choices themselves must contain ingredients or ingredient combinations rather than formula names. If the administrator requested observable manifestations instead of a named diagnosis, the stem must contain those findings and must not name the diagnosis. If any requested change is missing, vague, merely mentioned in the summary, or contradicted by the draft, set compliant to false and explain the exact correction required.
+
+When positive wording was requested, the final stem must not test through NOT, EXCEPT, incorrect, inaccurate, false, error, or least-appropriate framing. Do not accept the administrator's instruction as the explanation; require genuine educational feedback.
 
 Instructions are cumulative. When one instruction requests ingredients in the choices and a later instruction requests improved feedback or explanation, compliant can be true only if the explanation discusses the clinical role of the decisive ingredients and connects those roles to the answer. Merely listing ingredients in the choices or discussing only the formula names is not compliant.
 
@@ -2271,6 +2294,21 @@ PROMPT;
         $revisionrecord = is_array($revisionstore['questions'][$questionid] ?? null)
             ? $revisionstore['questions'][$questionid]
             : [];
+        $recoverededitorialinstruction = '';
+        $storedexplanation = trim((string)($revisionrecord['draft']['explanation'] ?? ''));
+        if (preg_match(
+            '/(?:convi[eé]rt\w*|transform\w*|reescrib\w*).{0,100}(?:pregunta|question).{0,80}positiv\w*/iu',
+            $storedexplanation
+        )) {
+            $recoverededitorialinstruction = 'Rewrite this as a positively worded question. Remove NOT, EXCEPT, '
+                . 'incorrect, false and other negative-testing language. Preserve the keyed answer letter and the '
+                . 'educational objective, but rewrite the keyed option as a true source-supported statement and '
+                . 'rebuild the other three choices as plausible distractors. Replace the editorial note currently '
+                . 'stored in the explanation with complete educational feedback.';
+            if (trim($latestadministratorproposal) === '') {
+                $latestadministratorproposal = $recoverededitorialinstruction;
+            }
+        }
         $instructionhistory = [];
         $addinstruction = static function(string $instruction) use (&$instructionhistory): void {
             $instruction = trim($instruction);
@@ -2293,6 +2331,7 @@ PROMPT;
             }
         }
         $addinstruction((string)($revisionrecord['reviewProposal'] ?? ''));
+        $addinstruction($recoverededitorialinstruction);
         $addinstruction($latestadministratorproposal);
         $administratorproposal = implode("\n", array_map(
             static fn(string $instruction, int $index): string => ($index + 1) . '. ' . $instruction,
@@ -2320,6 +2359,7 @@ PROMPT;
             'administratorProposal' => $administratorproposal,
             'administratorInstructionHistory' => $instructionhistory,
             'latestAdministratorInstruction' => $latestadministratorproposal,
+            'recoveredEditorialInstruction' => $recoverededitorialinstruction,
             'currentReviewVersion' => $currentreviewversion,
             'relevantGuidelineNames' => $relevantnames,
         ];
@@ -2331,6 +2371,7 @@ Editorial rules:
 1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection or differentiation; Domain 2 must test individual-herb identification, properties, actions, indications, or comparison; Domain 3 must test Duì Yào pairing, compatibility, hierarchy, synergy, antagonism, or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing, or dispensing principle. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
 3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use "Both are correct," "All of the above," "None of the above," "A and B are correct," or any equivalent combined-answer shortcut. If the keyed source option is one of those shortcuts, preserve its LETTER and underlying tested fact but replace the shortcut with one self-contained, unambiguous answer statement. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
+3A. When the administrator requests a positive question, reconstruct the item rather than lightly editing it. Remove NOT, EXCEPT, incorrect, inaccurate, false, error and least-appropriate framing from the stem. Preserve the source-supported educational objective and keyed LETTER, rewrite the keyed option into a true source-supported statement, and rebuild the other three choices as plausible false or weaker statements. The final explanation must be educational feedback, never the administrator's instruction.
 4. Write mock-exam feedback that explicitly explains both inference steps: (a) what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence; and (b) why that conclusion selects the correct answer. Identify which findings are decisive and which details are contextual distractors. Then explain briefly why each answer-choice distractor is weaker. Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
 4A. Whenever inference is created by replacing direct answer labels with observable findings, ingredient combinations, clinical roles or safety clues, the explanation must reveal and teach the hidden intermediate label after the learner answers. If formula names were removed from ingredient-based choices, keep the choices ingredient-only but explicitly map every option letter A-D to its source-supported Pinyin formula name in both English and Spanish feedback. Apply the equivalent mapping to similar questions: identify the pattern, herb action, preparation rule, hierarchy role, compatibility relationship or safety principle represented by each choice, and explain the decisive difference rather than merely restating the keyed option.
 4B. Improve the feedback automatically on every review; do not wait for the administrator to request it. Analyze A, B, C and D separately. When choices are ingredient combinations, identify the source-supported formula or precise therapeutic strategy behind each option, name at least one distinctive ingredient from each combination, explain that ingredient's relevant action, and connect it to why the option fits or fails. Generic statements such as “targets phlegm” or “is for food stagnation” are insufficient. If a combination is not a source-supported canonical formula, do not invent a formula name; describe its precise strategy instead.
