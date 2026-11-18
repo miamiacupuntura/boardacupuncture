@@ -1158,6 +1158,193 @@ $textaiproviders = \core_ai\manager::get_providers_for_actions(
 );
 $textaienabled = !empty($textaiproviders[\core_ai\aiactions\generate_text::class]);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'translatequestion') {
+    require_sesskey();
+    $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
+    $targetquestion = null;
+    foreach ($allquestions as $candidatequestion) {
+        if ((string)($candidatequestion['questionId'] ?? '') === $questionid) {
+            $targetquestion = $candidatequestion;
+            break;
+        }
+    }
+    if (!is_array($targetquestion)) {
+        throw new invalid_parameter_exception('Unknown Herbology question ID.');
+    }
+    if (!$textaienabled) {
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['q' => $questionid]),
+            'No enabled Moodle text AI provider is available for translation.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $translationprompt = <<<'PROMPT'
+Translate the supplied NCBAHM Chinese Herbology question from English into clinically faithful Spanish. Return strict JSON only.
+
+Rules:
+1. Translate only the question prompt, the four answer choices and the explanation. Do not rewrite, improve, shorten, expand, correct, reclassify or change the educational content.
+2. Preserve the answer letters A-D, their order, the keyed answer concept, all numerical values and every clinical finding exactly.
+3. Preserve Pinyin, pharmaceutical Latin names, formula names and standardized Chinese-medicine terminology. Translate the surrounding prose, not the Pinyin or pharmaceutical Latin.
+4. Do not add facts, cautions, diagnoses, citations or commentary.
+5. Produce four complete Spanish answer choices and a complete Spanish explanation.
+
+Required JSON:
+{"prompt":"Pregunta en español","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"explanation":"Explicación completa en español"}
+
+ENGLISH QUESTION:
+PROMPT;
+    $translationprompt .= "\n" . json_encode([
+        'prompt' => (string)($targetquestion['prompt'] ?? ''),
+        'options' => $targetquestion['options'] ?? [],
+        'correctLabel' => (string)($targetquestion['correctLabel'] ?? ''),
+        'explanation' => (string)($targetquestion['explanation'] ?? ''),
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $manager = \core\di::get(\core_ai\manager::class);
+    $action = new \core_ai\aiactions\generate_text(
+        contextid: $systemcontext->id,
+        userid: (int)$USER->id,
+        prompttext: $translationprompt,
+    );
+    $response = $manager->process_action($action);
+    if (!$response->get_success()) {
+        throw new RuntimeException($response->get_errormessage() ?: 'The Spanish translation could not be generated.');
+    }
+    $responsecontent = trim((string)($response->get_response_data()['generatedcontent'] ?? ''));
+    if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $responsecontent, $matches)) {
+        $responsecontent = $matches[1];
+    } else {
+        $firstbrace = strpos($responsecontent, '{');
+        $lastbrace = strrpos($responsecontent, '}');
+        if ($firstbrace !== false && $lastbrace !== false && $lastbrace > $firstbrace) {
+            $responsecontent = substr($responsecontent, $firstbrace, $lastbrace - $firstbrace + 1);
+        }
+    }
+    $spanishtranslation = json_decode($responsecontent, true, 64, JSON_THROW_ON_ERROR);
+    $spanishprompt = trim((string)($spanishtranslation['prompt'] ?? ''));
+    $spanishexplanation = trim((string)($spanishtranslation['explanation'] ?? ''));
+    $spanishoptions = is_array($spanishtranslation['options'] ?? null)
+        ? array_values($spanishtranslation['options'])
+        : [];
+    if ($spanishprompt === '' || $spanishexplanation === '' || count($spanishoptions) !== 4) {
+        throw new UnexpectedValueException('The generated Spanish translation is incomplete.');
+    }
+    foreach (['A', 'B', 'C', 'D'] as $index => $label) {
+        if ((string)($spanishoptions[$index]['label'] ?? '') !== $label
+                || trim((string)($spanishoptions[$index]['text'] ?? '')) === '') {
+            throw new UnexpectedValueException('The Spanish answer choices are incomplete or out of order.');
+        }
+        $spanishoptions[$index] = [
+            'label' => $label,
+            'text' => trim((string)$spanishoptions[$index]['text']),
+        ];
+    }
+    $translation = [
+        'prompt' => $spanishprompt,
+        'options' => $spanishoptions,
+        'explanation' => $spanishexplanation,
+    ];
+    $savedat = gmdate(DATE_ATOM);
+    $savedbyname = fullname($USER);
+    $sourceentry = $findquestion($basebank, $questionid);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $questionid,
+        $targetquestion,
+        $sourceentry,
+        $translation,
+        $savedat,
+        $savedbyname,
+        $USER
+    ): array {
+        $customrecord = $store['customQuestions'][$questionid] ?? null;
+        if (is_array($customrecord)) {
+            $customstatus = (string)($customrecord['status'] ?? 'draft');
+            $snapshotkey = $customstatus === 'approved' ? 'approved' : 'draft';
+            $snapshot = is_array($customrecord[$snapshotkey] ?? null)
+                ? $customrecord[$snapshotkey]
+                : $targetquestion;
+            $snapshot['translations']['es'] = $translation;
+            $customrecord[$snapshotkey] = $snapshot;
+            if ($customstatus === 'approved') {
+                $customrecord['draft'] = $snapshot;
+            }
+            $customrecord['savedAt'] = $savedat;
+            $customrecord['savedById'] = (int)$USER->id;
+            $customrecord['savedByName'] = $savedbyname;
+            $customrecord['revisionNumber'] = (int)($customrecord['revisionNumber'] ?? 0) + 1;
+            $store['customQuestions'][$questionid] = $customrecord;
+            return $store;
+        }
+        if (!is_array($sourceentry)) {
+            throw new invalid_parameter_exception('The source question could not be found.');
+        }
+        $previous = is_array($store['questions'][$questionid] ?? null)
+            ? $store['questions'][$questionid]
+            : [];
+        $previousstatus = (string)($previous['status'] ?? 'original');
+        if (in_array($previousstatus, ['deleted', 'exclusion_candidate'], true)) {
+            throw new invalid_parameter_exception('An excluded question cannot be translated for publication.');
+        }
+        $history = is_array($previous['history'] ?? null) ? $previous['history'] : [];
+        if ($previous !== []) {
+            $history[] = array_diff_key($previous, ['history' => true, 'original' => true]);
+            $history = array_slice($history, -20);
+        }
+        $snapshot = is_array($previous['draft'] ?? null) ? $previous['draft'] : array_intersect_key(
+            $targetquestion,
+            array_flip([
+                'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+                'contentType', 'cognitiveLevel', 'difficultyBand',
+            ])
+        );
+        $snapshot['translations']['es'] = $translation;
+        $basequestion = $sourceentry['question'];
+        $original = array_intersect_key($basequestion, array_flip([
+            'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
+            'translations', 'contentType', 'cognitiveLevel', 'difficultyBand', 'source',
+            'sourceCard', 'examTemplate',
+        ]));
+        $record = $previous;
+        $record['questionId'] = $questionid;
+        $record['domainId'] = (string)$sourceentry['domainId'];
+        $record['status'] = in_array(
+            $previousstatus,
+            ['draft', 'pending_reclassification', 'approved'],
+            true
+        ) ? $previousstatus : 'draft';
+        $record['requestReclassification'] = $record['status'] === 'pending_reclassification';
+        $record['revisionNumber'] = (int)($previous['revisionNumber'] ?? 0) + 1;
+        $record['savedAt'] = $savedat;
+        $record['savedById'] = (int)$USER->id;
+        $record['savedByName'] = $savedbyname;
+        $record['original'] = $previous['original'] ?? $original;
+        $record['draft'] = $snapshot;
+        if ($record['status'] === 'approved') {
+            $record['approved'] = $snapshot;
+        }
+        $record['history'] = $history;
+        $record['translationOnly'] = true;
+        $store['questions'][$questionid] = $record;
+        return $store;
+    });
+    $translationurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+        'q' => $questionid,
+        'usage' => $usagefilter !== 'all' ? $usagefilter : null,
+        'review' => $reviewfilter !== 'all' ? $reviewfilter : null,
+        'aibatch' => $aibatchfilter !== '' ? $aibatchfilter : null,
+        'examproject' => $examprojectid !== '' ? $examprojectid : null,
+        'examview' => $examprojectid !== '' && $examprojectview !== 'candidates' ? $examprojectview : null,
+        'lang' => 'es',
+    ]));
+    $translationurl->set_anchor('question-' . $questionid);
+    redirect(
+        $translationurl,
+        'Spanish translation created. The clinical content and classification were not changed.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'clearassistant') {
     require_sesskey();
     unset($SESSION->ncbahm_question_bank_ai_history);
@@ -3654,7 +3841,7 @@ echo $OUTPUT->header();
         <?php if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true) && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span><?php echo $usagefilter === 'exam2_approved' ? 'Approved Exam 2 position' : 'Temporary review order'; ?></span><strong><?php echo $usagefilter === 'exam2_approved' ? 'Simulation Exam 2 Question ' : 'Proposed Exam 2 Question '; ?><?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
         <div class="question-bank__meta">
             <span class="question-bank__id"><?php echo s($question['questionId'] ?? 'Unnumbered'); ?></span>
-            <a class="question-bank__button question-bank__button--language" href="<?php echo $questionlanguageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a>
+            <?php if ($hasspanishtranslation): ?><a class="question-bank__button question-bank__button--language" href="<?php echo $questionlanguageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Ver en español'; ?></a><?php else: ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="translatequestion"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--language" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Crear traducción al español</button></form><?php if ($displaylang === 'es'): ?><a class="question-bank__button" href="<?php echo $questionlanguageurl->out(false); ?>">← English</a><?php endif; ?><?php endif; ?>
             <?php if (!$inlineapproval): ?>
             <span class="question-bank__badge">Domain <?php echo (int)$domain['number']; ?> · <?php echo s($domain['name']); ?></span>
             <span class="question-bank__badge<?php echo $question['_sourcekind'] === 'scorm' ? ' question-bank__badge--scorm' : ''; ?>"><?php echo s($sourcelabel); ?></span>
@@ -3680,7 +3867,7 @@ echo $OUTPUT->header();
             <?php if (!$iscustomdraft): ?><form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'deleted' ? 'restoredeletedquestion' : 'deletequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'deleted' ? 'question-bank__button--primary' : 'question-bank__button--exclude'; ?>" type="submit"<?php if ($revisionstatus !== 'deleted'): ?> onclick="return confirm('Delete this question from the active bank and exams? You can restore it later from Deleted questions.');"<?php endif; ?>><?php echo $revisionstatus === 'deleted' ? 'Restore question' : 'Delete question'; ?></button></form><?php endif; ?>
             <?php endif; ?>
         </div>
-        <?php if ($displaylang === 'es' && !$hasspanishtranslation): ?><div class="question-bank__translation-missing">Traducción al español pendiente para esta pregunta; se muestra temporalmente la versión original en inglés.</div><?php endif; ?>
+        <?php if ($displaylang === 'es' && !$hasspanishtranslation): ?><div class="question-bank__translation-missing"><strong>Esta pregunta todavía no tiene traducción guardada.</strong> Se muestra el original inglés. Use <strong>Crear traducción al español</strong> para traducir solamente el texto, las respuestas y la explicación sin cambiar el contenido clínico.</div><?php endif; ?>
         <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft' && !$inlineapproval): ?><div class="question-bank__ai-draft-note"><?php echo $cardisoutdated ? 'Earlier automatic-review version. If the question is already correct, approve the current version; run the updated review only when changes are still needed.' : ($cardiscorrected ? 'Corrected version — awaiting your approval. Review the current question below; the earlier version is not shown.' : 'Current proposed version — not published. Review it below, then accept it or request a correction.'); ?></div><?php endif; ?>
         <?php if (($inlineorigin && $cardbatchid !== '') || $inlineapproval): ?>
         <div class="question-bank__review-location">
