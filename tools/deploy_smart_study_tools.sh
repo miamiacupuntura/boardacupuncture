@@ -1712,6 +1712,7 @@ grep -Fq "distinctive ingredient for every ingredient-combination" "$TARGET_DIR/
 grep -Fq '"choiceEvidence"' "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Return to pending questions" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "question-bank__summary-card" "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "question-bank__active-filters" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Simulation Exam 2 approved" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Pinyin formula represented by every ingredient-only" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Update or review next 5 questions" "$TARGET_DIR/admin-herbology-question-bank.php"

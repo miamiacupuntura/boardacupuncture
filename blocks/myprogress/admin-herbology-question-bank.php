@@ -2815,6 +2815,65 @@ $reporturl = new moodle_url('/blocks/myprogress/admin-ncbahm-evaluations.php');
 $clearurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'lang' => $displaylang !== 'en' ? $displaylang : null,
 ]));
+$filterlabels = $displaylang === 'es' ? [
+    'query' => 'Búsqueda', 'domain' => 'Dominio', 'readiness' => 'Preparación',
+    'usage' => 'Uso en examen', 'source' => 'Fuente', 'cognitive' => 'Nivel cognitivo',
+    'content' => 'Contenido', 'review' => 'Revisión editorial', 'batch' => 'Grupo de revisión',
+] : [
+    'query' => 'Search', 'domain' => 'Domain', 'readiness' => 'Readiness',
+    'usage' => 'Exam use', 'source' => 'Source', 'cognitive' => 'Cognitive level',
+    'content' => 'Content focus', 'review' => 'Editorial review', 'batch' => 'Review group',
+];
+$filtervalues = $displaylang === 'es' ? [
+    'ready' => 'Lista para práctica', 'incomplete' => 'Necesita completarse',
+    'exam1' => 'Simulation Exam 1', 'exam2_review' => 'Simulation Exam 2 · revisión pendiente',
+    'exam2_approved' => 'Simulation Exam 2 · aprobadas', 'reserve' => 'Banco de reserva listo',
+    'curated' => 'Banco curado', 'scorm' => 'Módulos SCORM', 'admin' => 'Creada por administrador',
+    'recall' => 'Memoria / directa', 'application' => 'Aplicación', 'inference' => 'Inferencia',
+    'analysis' => 'Análisis / diferencial', 'herb_properties' => 'Propiedades de hierbas',
+    'formula_hierarchy' => 'Jerarquía de fórmulas', 'herb_processing' => 'Elaboración de hierbas',
+    'clinical_case' => 'Casos clínicos', 'other' => 'Otro contenido',
+    'editing_drafts' => 'Ediciones guardadas', 'ai_drafts' => 'Grupo actual de IA',
+    'proposals_pending' => 'Propuestas para publicar', 'needs_inference' => 'Necesita más inferencia',
+    'needs_feedback' => 'Necesita mejor feedback', 'simulation_candidate' => 'Candidata para simulación',
+    'reclassification_requested' => 'Reclasificación solicitada', 'possible_exclusion' => 'Posible exclusión',
+    'deleted' => 'Preguntas eliminadas',
+] : [
+    'ready' => 'Ready for practice', 'incomplete' => 'Needs completion',
+    'exam1' => 'Simulation Exam 1', 'exam2_review' => 'Simulation Exam 2 pending review',
+    'exam2_approved' => 'Simulation Exam 2 approved', 'reserve' => 'Ready reserve bank',
+    'curated' => 'Curated bank', 'scorm' => 'SCORM modules', 'admin' => 'Administrator-authored',
+    'recall' => 'Recall / direct', 'application' => 'Application', 'inference' => 'Inference',
+    'analysis' => 'Analysis / differential', 'herb_properties' => 'Herb properties',
+    'formula_hierarchy' => 'Formula hierarchy', 'herb_processing' => 'Herb processing',
+    'clinical_case' => 'Clinical cases', 'other' => 'Other content',
+    'editing_drafts' => 'Saved editing drafts', 'ai_drafts' => 'Current AI review group',
+    'proposals_pending' => 'Publishing proposals', 'needs_inference' => 'Needs more inference',
+    'needs_feedback' => 'Needs stronger feedback', 'simulation_candidate' => 'Simulation candidate',
+    'reclassification_requested' => 'Reclassification requested', 'possible_exclusion' => 'Possible exclusions',
+    'deleted' => 'Deleted questions',
+];
+$activefilters = [];
+if ($query !== '') {
+    $activefilters[] = ['label' => $filterlabels['query'], 'value' => $query];
+}
+if ($domainfilter !== 'all' && isset($domains[$domainfilter])) {
+    $activefilters[] = [
+        'label' => $filterlabels['domain'],
+        'value' => 'Domain ' . (int)$domains[$domainfilter]['number'] . ' · ' . (string)$domains[$domainfilter]['name'],
+    ];
+}
+foreach ([
+    [$readinessfilter, 'readiness'], [$usagefilter, 'usage'], [$sourcefilter, 'source'],
+    [$cognitivefilter, 'cognitive'], [$contentfilter, 'content'], [$reviewfilter, 'review'],
+] as [$filtervalue, $filtertype]) {
+    if ($filtervalue !== 'all' && isset($filtervalues[$filtervalue])) {
+        $activefilters[] = ['label' => $filterlabels[$filtertype], 'value' => $filtervalues[$filtervalue]];
+    }
+}
+if ($aibatchfilter !== '') {
+    $activefilters[] = ['label' => $filterlabels['batch'], 'value' => $aibatchfilter];
+}
 $makesummaryurl = static function(array $params = []) use ($displaylang): moodle_url {
     if ($displaylang !== 'en') {
         $params['lang'] = $displaylang;
@@ -3028,6 +3087,7 @@ echo $OUTPUT->header();
 .question-bank__new-question{margin-bottom:18px;padding:20px;border:2px solid #0b8f87;border-radius:12px;background:#f2fbf9}.question-bank__new-question h3{margin:0 0 6px;font-size:24px}.question-bank__new-question p{margin:0 0 14px;color:#52677a}.question-bank__new-question textarea{box-sizing:border-box;width:100%;min-height:180px;padding:13px 14px;border:1px solid #9db8c3;border-radius:8px;background:#fff;resize:vertical}.question-bank__new-question .question-bank__editor-actions{margin-top:12px}
 .question-bank__assistant{margin-bottom:18px;padding:20px;border:2px solid #6d28d9;border-radius:12px;background:#faf8ff}.question-bank__assistant h3{margin:0 0 6px;font-size:24px}.question-bank__assistant>p{margin:0 0 14px;color:#66557e;line-height:1.45}.question-bank__assistant textarea{box-sizing:border-box;width:100%;min-height:150px;padding:13px 14px;border:1px solid #aebfca;border-radius:8px;background:#fff;resize:vertical}.question-bank__assistant-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}.question-bank__assistant-history{display:grid;gap:10px;margin:0 0 14px}.question-bank__assistant-turn{padding:12px 14px;border:1px solid #ded7ef;border-radius:8px;background:#fff}.question-bank__assistant-turn strong{display:block;margin-bottom:5px;color:#4c1d95}.question-bank__assistant-response{margin-top:9px;padding-top:9px;border-top:1px solid #e7e1f1;white-space:pre-wrap;line-height:1.5}
 .question-bank__technical-exports{margin:0 0 16px;border:1px solid #d7e2e7;border-radius:9px;background:#fff}.question-bank__technical-exports summary{padding:11px 14px;color:#52677a;font-weight:850;cursor:pointer}.question-bank__technical-exports>div{padding:0 14px 14px}.question-bank__technical-exports p{margin:0 0 10px;color:#60758a;line-height:1.45}
+.question-bank__active-filters{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:-6px 0 16px;padding:10px 12px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#3b167d}.question-bank__active-filters-title{margin-right:2px;font-weight:950}.question-bank__active-filters-count{color:#66557e;font-weight:800}.question-bank__active-filter{display:inline-flex;gap:4px;padding:6px 9px;border:1px solid #cbb9ee;border-radius:999px;background:#fff;color:#4c1d95}.question-bank__active-filter strong{font-weight:900}.question-bank__active-filters .question-bank__button{min-height:32px;margin-left:auto;padding:5px 10px}@media(max-width:700px){.question-bank__active-filters{align-items:stretch;flex-direction:column}.question-bank__active-filters .question-bank__button{width:100%;margin-left:0}}
 </style>
 <main class="question-bank">
     <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
@@ -3136,6 +3196,16 @@ echo $OUTPUT->header();
         <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
         <div class="question-bank__filter-actions"><button class="question-bank__button" type="submit">Apply</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Clear</a></div>
     </form>
+    <section class="question-bank__active-filters" aria-label="<?php echo $displaylang === 'es' ? 'Filtros actuales' : 'Current filters'; ?>">
+        <span class="question-bank__active-filters-title"><?php echo $displaylang === 'es' ? 'Filtros actuales:' : 'Current filters:'; ?></span>
+        <?php if ($activefilters === []): ?>
+            <span class="question-bank__active-filter"><?php echo $displaylang === 'es' ? 'Todas las preguntas' : 'All questions'; ?></span>
+        <?php else: ?>
+            <?php foreach ($activefilters as $activefilter): ?><span class="question-bank__active-filter"><strong><?php echo s($activefilter['label']); ?>:</strong> <?php echo s($activefilter['value']); ?></span><?php endforeach; ?>
+        <?php endif; ?>
+        <span class="question-bank__active-filters-count"><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span>
+        <?php if ($activefilters !== []): ?><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Limpiar todos los filtros' : 'Clear all filters'; ?></a><?php endif; ?>
+    </section>
     <section class="question-bank__domains"><table><thead><tr><th>Domain</th><th>Classified</th><th>SCORM</th><th>Ready</th><th>Exam 1</th><th>Exam 2 review</th><th>Ready reserve</th></tr></thead><tbody><?php foreach ($domains as $domainid => $domain): ?><tr><td><strong>Domain <?php echo (int)$domain['number']; ?></strong> · <?php echo s($domain['name']); ?></td><td><?php echo (int)$domainstats[$domainid]['total']; ?></td><td><?php echo (int)$domainstats[$domainid]['scorm']; ?></td><td><?php echo (int)$domainstats[$domainid]['ready']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam1']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam2']; ?></td><td><?php echo (int)$domainstats[$domainid]['reserve']; ?></td></tr><?php endforeach; ?></tbody></table></section>
     <div class="question-bank__result-head"><span><?php echo $displaylang === 'es' ? 'Preguntas filtradas' : 'Filtered questions'; ?></span><span><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
     <?php if ($pagequestions === []): ?><div class="question-bank__item"><?php echo $displaylang === 'es' ? 'Ninguna pregunta coincide con estos filtros.' : 'No questions match these filters.'; ?></div><?php else: ?>
