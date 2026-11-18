@@ -518,6 +518,7 @@ grep -Fq "ncbahm-mock-editor-2.8" "$TEMP_DIR/moodle/admin-herbology-question-ban
 grep -Fq "latestInstructionEvidence" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "distinctive ingredient for every ingredient-combination" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq '"choiceEvidence"' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq "Return to pending questions" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "Pinyin formula represented by every ingredient-only" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "Update or review next 5 questions" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 php -l "$TEMP_DIR/moodle/admin-herbology-question-bank.php" >/dev/null
@@ -1703,6 +1704,7 @@ grep -Fq "ncbahm-mock-editor-2.8" "$TARGET_DIR/admin-herbology-question-bank.php
 grep -Fq "latestInstructionEvidence" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "distinctive ingredient for every ingredient-combination" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq '"choiceEvidence"' "$TARGET_DIR/admin-herbology-question-bank.php"
+grep -Fq "Return to pending questions" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Pinyin formula represented by every ingredient-only" "$TARGET_DIR/admin-herbology-question-bank.php"
 grep -Fq "Update or review next 5 questions" "$TARGET_DIR/admin-herbology-question-bank.php"
 php -l "$TARGET_DIR/admin-herbology-question-bank.php" >/dev/null
