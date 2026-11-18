@@ -1034,6 +1034,7 @@ foreach ($domains as $domainid => $domain) {
             'savedAt' => (string)($proposalrecord['proposalSavedAt'] ?? ''),
             'savedByName' => (string)($proposalrecord['proposalSavedByName'] ?? ''),
         ];
+        $question['_deferredfromexam2'] = !empty($proposalrecord['deferredFromExam2']);
         $allquestions[] = $question;
     }
 }
@@ -1114,7 +1115,10 @@ $exam2targetcount = array_sum(array_map('count', $exam2slotsbydomain));
 
 $exam2eligiblebydomain = array_fill_keys(array_keys($domains), []);
 foreach ($allquestions as $question) {
-    if ($question['_ready'] && !$question['_excluded'] && $question['_configuredexamposition'] === 0) {
+    if ($question['_ready']
+            && !$question['_excluded']
+            && empty($question['_deferredfromexam2'])
+            && $question['_configuredexamposition'] === 0) {
         $exam2eligiblebydomain[$question['_domainid']][] = $question;
     }
 }
@@ -1398,7 +1402,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'reopencustomquesti
     );
 }
 
-$buildexam2duplicatereport = static function(array $questions, bool $spanish): string {
+$buildexam2duplicatereport = static function(array $questions, bool $spanish): array {
     $examquestions = array_values(array_filter(
         $questions,
         static fn(array $question): bool => (int)($question['_exam2position'] ?? 0) > 0
@@ -1533,7 +1537,29 @@ $buildexam2duplicatereport = static function(array $questions, bool $spanish): s
     $lines[] = $spanish
         ? 'Este análisis no elimina ni modifica preguntas. Revise cada par antes de decidir.'
         : 'This analysis does not delete or modify questions. Review each pair before deciding.';
-    return implode("\n", $lines);
+    $reportmatches = array_map(static function(array $match): array {
+        return [
+            'left' => [
+                'questionId' => (string)$match['left']['questionId'],
+                'position' => (int)$match['left']['position'],
+                'prompt' => (string)$match['left']['prompt'],
+            ],
+            'right' => [
+                'questionId' => (string)$match['right']['questionId'],
+                'position' => (int)$match['right']['position'],
+                'prompt' => (string)$match['right']['prompt'],
+            ],
+            'score' => (int)round($match['score'] * 100),
+            'exact' => !empty($match['exact']),
+        ];
+    }, $matches);
+    return [
+        'text' => implode("\n", $lines),
+        'matches' => $reportmatches,
+        'questionCount' => $questioncount,
+        'matchCount' => $totalmatches,
+        'createdAt' => gmdate(DATE_ATOM),
+    ];
 };
 
 $saveassistantturn = static function(string $request, string $response): void {
@@ -1557,12 +1583,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'scanexamduplicates
         : 'Review the 100 Simulation Exam 2 candidates for possible duplicate questions.';
     $scanreport = $buildexam2duplicatereport($allquestions, $displaylang === 'es');
     if ($scanreturn !== 'exam') {
-        $saveassistantturn($scanrequest, $scanreport);
+        $saveassistantturn($scanrequest, (string)$scanreport['text']);
     }
-    $SESSION->ncbahm_exam2_duplicate_report = [
-        'text' => $scanreport,
-        'createdAt' => gmdate(DATE_ATOM),
-    ];
+    $SESSION->ncbahm_exam2_duplicate_report = $scanreport;
     if ($scanreturn === 'exam') {
         $scanurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
             'duplicatescan' => 1,
@@ -1577,6 +1600,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'scanexamduplicates
     ]));
     $scanurl->set_anchor('question-bank-ai');
     redirect($scanurl);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'deferexam2question') {
+    require_sesskey();
+    $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
+    $defermode = optional_param('defermode', 'defer', PARAM_ALPHA);
+    if (!in_array($defermode, ['defer', 'restore'], true)) {
+        throw new invalid_parameter_exception('Invalid Exam 2 deferral action.');
+    }
+    $matchedquestion = null;
+    foreach ($allquestions as $candidatequestion) {
+        if ((string)($candidatequestion['questionId'] ?? '') === $questionid) {
+            $matchedquestion = $candidatequestion;
+            break;
+        }
+    }
+    if ($matchedquestion === null
+            || ($defermode === 'defer' && (int)($matchedquestion['_exam2position'] ?? 0) === 0)
+            || ($defermode === 'restore' && empty($matchedquestion['_deferredfromexam2']))) {
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['duplicatescan' => 1]),
+            'The selected question is no longer available for this action.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $savedat = gmdate(DATE_ATOM);
+    $savedbyname = fullname($USER);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $questionid,
+        $defermode,
+        $savedat,
+        $savedbyname,
+        $USER
+    ): array {
+        $questions = is_array($store['questions'] ?? null) ? $store['questions'] : [];
+        $record = is_array($questions[$questionid] ?? null) ? $questions[$questionid] : [];
+        if ($defermode === 'defer') {
+            $record['deferredFromExam2'] = true;
+            $record['deferredFromExam2At'] = $savedat;
+            $record['deferredFromExam2ById'] = (int)$USER->id;
+            $record['deferredFromExam2ByName'] = $savedbyname;
+        } else {
+            unset(
+                $record['deferredFromExam2'],
+                $record['deferredFromExam2At'],
+                $record['deferredFromExam2ById'],
+                $record['deferredFromExam2ByName']
+            );
+        }
+        $questions[$questionid] = $record;
+        $store['questions'] = $questions;
+        return $store;
+    });
+    if ($defermode === 'defer') {
+        $SESSION->ncbahm_last_exam2_deferred = [
+            'questionId' => $questionid,
+            'position' => (int)($matchedquestion['_exam2position'] ?? 0),
+        ];
+    } else {
+        unset($SESSION->ncbahm_last_exam2_deferred);
+    }
+    $deferurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+        'duplicatescan' => 1,
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ]));
+    $deferurl->set_anchor('exam-builder');
+    redirect(
+        $deferurl,
+        $defermode === 'defer'
+            ? ($displaylang === 'es'
+                ? 'La pregunta se reservó para otro examen y su posición fue ocupada por otra candidata.'
+                : 'The question was reserved for another exam and its position was filled by another candidate.')
+            : ($displaylang === 'es'
+                ? 'La pregunta volvió a estar disponible para Simulation Exam 2.'
+                : 'The question is available for Simulation Exam 2 again.'),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $showexam2duplicatereport) {
+    $SESSION->ncbahm_exam2_duplicate_report = $buildexam2duplicatereport(
+        $allquestions,
+        $displaylang === 'es'
+    );
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'askassistant') {
@@ -1604,9 +1713,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'askassistant') {
     ) === 1;
     if ($isduplicaterequest) {
         $isspanishrequest = preg_match('/(?:duplicad|repetid|repetic|preguntas?\s+iguales)/iu', $assistantrequest) === 1;
+        $duplicateresult = $buildexam2duplicatereport(
+            $allquestions,
+            $isspanishrequest || $displaylang === 'es'
+        );
         $saveassistantturn(
             $assistantrequest,
-            $buildexam2duplicatereport($allquestions, $isspanishrequest || $displaylang === 'es')
+            (string)$duplicateresult['text']
         );
         $duplicateurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
             'aiassistant' => 1,
@@ -3805,7 +3918,7 @@ echo $OUTPUT->header();
 .question-bank__technical-exports{margin:0 0 16px;border:1px solid #d7e2e7;border-radius:9px;background:#fff}.question-bank__technical-exports summary{padding:11px 14px;color:#52677a;font-weight:850;cursor:pointer}.question-bank__technical-exports>div{padding:0 14px 14px}.question-bank__technical-exports p{margin:0 0 10px;color:#60758a;line-height:1.45}
 .question-bank__active-filters{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:-6px 0 16px;padding:10px 12px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#3b167d}.question-bank__active-filters-title{margin-right:2px;font-weight:950}.question-bank__active-filters-count{color:#66557e;font-weight:800}.question-bank__active-filter{display:inline-flex;gap:4px;padding:6px 9px;border:1px solid #cbb9ee;border-radius:999px;background:#fff;color:#4c1d95}.question-bank__active-filter strong{font-weight:900}.question-bank__active-filters .question-bank__button{min-height:32px;margin-left:auto;padding:5px 10px}@media(max-width:700px){.question-bank__active-filters{align-items:stretch;flex-direction:column}.question-bank__active-filters .question-bank__button{width:100%;margin-left:0}}
 .question-bank__button--language{min-height:32px;padding:5px 10px;border-color:#7c5bc4;background:#f4f0ff;color:#4c1d95!important}
-.question-bank__exam-builder{margin:0 0 16px;padding:16px;border:1px solid #cbb9ee;border-radius:11px;background:#faf8ff}.question-bank__exam-builder-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.question-bank__exam-builder-head h3{margin:0;color:#3b167d;font-size:21px}.question-bank__exam-builder-head p{margin:3px 0 0;color:#66557e}.question-bank__exam-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.question-bank__exam-card{padding:13px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__exam-card--active{border:2px solid #6d28d9;background:#f8f5ff}.question-bank__exam-card h4{margin:0 0 7px;font-size:17px}.question-bank__exam-numbers{display:flex;flex-wrap:wrap;gap:7px 14px;margin-bottom:9px;color:#52677a}.question-bank__exam-numbers strong{color:#08746f}.question-bank__exam-progress{height:9px;margin-bottom:10px;overflow:hidden;border-radius:999px;background:#e8eef1}.question-bank__exam-progress span{display:block;height:100%;border-radius:999px;background:#6d28d9}.question-bank__exam-card .question-bank__editor-actions{gap:6px}.question-bank__exam-card .question-bank__button{min-height:34px;padding:5px 9px}.question-bank__exam-card form{margin:0}.question-bank__duplicate-report{margin-top:12px;padding:13px 14px;border:1px solid #8b5cf6;border-left:5px solid #6d28d9;border-radius:9px;background:#fff}.question-bank__duplicate-report h4{margin:0 0 6px;color:#3b167d}.question-bank__duplicate-report p{margin:0 0 9px;color:#52677a}.question-bank__duplicate-report-content{max-height:480px;overflow:auto;padding:12px;border-radius:7px;background:#f6f3fc;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}.question-bank__exam-form{display:grid;grid-template-columns:minmax(240px,2fr) minmax(160px,1fr) auto;align-items:end;gap:10px;margin:0 0 13px;padding:13px;border:1px solid #cbb9ee;border-radius:9px;background:#fff}.question-bank__exam-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__exam-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #b9cbd4;border-radius:7px}@media(max-width:900px){.question-bank__exam-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.question-bank__exam-builder-head{align-items:stretch;flex-direction:column}.question-bank__exam-grid,.question-bank__exam-form{grid-template-columns:1fr}}
+.question-bank__exam-builder{margin:0 0 16px;padding:16px;border:1px solid #cbb9ee;border-radius:11px;background:#faf8ff}.question-bank__exam-builder-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.question-bank__exam-builder-head h3{margin:0;color:#3b167d;font-size:21px}.question-bank__exam-builder-head p{margin:3px 0 0;color:#66557e}.question-bank__exam-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.question-bank__exam-card{padding:13px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__exam-card--active{border:2px solid #6d28d9;background:#f8f5ff}.question-bank__exam-card h4{margin:0 0 7px;font-size:17px}.question-bank__exam-numbers{display:flex;flex-wrap:wrap;gap:7px 14px;margin-bottom:9px;color:#52677a}.question-bank__exam-numbers strong{color:#08746f}.question-bank__exam-progress{height:9px;margin-bottom:10px;overflow:hidden;border-radius:999px;background:#e8eef1}.question-bank__exam-progress span{display:block;height:100%;border-radius:999px;background:#6d28d9}.question-bank__exam-card .question-bank__editor-actions{gap:6px}.question-bank__exam-card .question-bank__button{min-height:34px;padding:5px 9px}.question-bank__exam-card form{margin:0}.question-bank__duplicate-report{margin-top:12px;padding:13px 14px;border:1px solid #8b5cf6;border-left:5px solid #6d28d9;border-radius:9px;background:#fff}.question-bank__duplicate-report h4{margin:0 0 6px;color:#3b167d}.question-bank__duplicate-report>p{margin:0 0 9px;color:#52677a}.question-bank__duplicate-undo{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:10px 0;padding:10px 12px;border-radius:7px;background:#e8f8f3;color:#075f59}.question-bank__duplicate-undo form,.question-bank__duplicate-candidate form{margin:0}.question-bank__duplicate-pairs{display:grid;gap:10px;margin-top:10px}.question-bank__duplicate-pair{padding:11px;border:1px solid #ded7ef;border-radius:8px;background:#f8f6fc}.question-bank__duplicate-pair-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.question-bank__duplicate-score{padding:4px 7px;border-radius:999px;background:#ede9fe;color:#4c1d95;font-weight:900}.question-bank__duplicate-candidates{display:grid;grid-template-columns:1fr 1fr;gap:9px}.question-bank__duplicate-candidate{display:flex;align-items:flex-start;flex-direction:column;gap:8px;padding:10px;border:1px solid #d7e2e7;border-radius:7px;background:#fff}.question-bank__duplicate-candidate strong{color:#17384b}.question-bank__duplicate-candidate p{flex:1;margin:0;color:#334e60;line-height:1.45}.question-bank__duplicate-exact{padding:9px 11px;border-radius:7px;background:#fff3e6;color:#8a3c00;font-weight:800}.question-bank__duplicate-empty{padding:12px;border-radius:7px;background:#e8f8f3;color:#075f59;font-weight:800}.question-bank__exam-form{display:grid;grid-template-columns:minmax(240px,2fr) minmax(160px,1fr) auto;align-items:end;gap:10px;margin:0 0 13px;padding:13px;border:1px solid #cbb9ee;border-radius:9px;background:#fff}.question-bank__exam-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__exam-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #b9cbd4;border-radius:7px}@media(max-width:900px){.question-bank__exam-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.question-bank__exam-builder-head{align-items:stretch;flex-direction:column}.question-bank__exam-grid,.question-bank__exam-form,.question-bank__duplicate-candidates{grid-template-columns:1fr}}
 </style>
 <main class="question-bank">
     <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
@@ -3855,6 +3968,9 @@ echo $OUTPUT->header();
         $exam2duplicatereport = is_array($SESSION->ncbahm_exam2_duplicate_report ?? null)
             ? $SESSION->ncbahm_exam2_duplicate_report
             : null;
+        $lastexam2deferred = is_array($SESSION->ncbahm_last_exam2_deferred ?? null)
+            ? $SESSION->ncbahm_last_exam2_deferred
+            : null;
         if ($showexam2duplicatereport && $exam2duplicatereport !== null):
         ?>
         <section class="question-bank__duplicate-report" aria-live="polite">
@@ -3862,7 +3978,36 @@ echo $OUTPUT->header();
             <p><?php echo $displaylang === 'es'
                 ? 'Se compararon las preguntas que ocupan posiciones en Simulation Exam 2. Este informe no modificó ni eliminó ninguna pregunta.'
                 : 'Questions assigned to Simulation Exam 2 positions were compared. This report did not change or delete any question.'; ?></p>
-            <div class="question-bank__duplicate-report-content"><?php echo s((string)$exam2duplicatereport['text']); ?></div>
+            <p><strong><?php echo $displaylang === 'es' ? 'Preguntas comparadas:' : 'Questions compared:'; ?></strong> <?php echo (int)($exam2duplicatereport['questionCount'] ?? 0); ?> · <strong><?php echo $displaylang === 'es' ? 'Pares para revisar:' : 'Pairs to review:'; ?></strong> <?php echo (int)($exam2duplicatereport['matchCount'] ?? 0); ?></p>
+            <?php if ($lastexam2deferred !== null): ?>
+            <div class="question-bank__duplicate-undo"><strong><?php echo $displaylang === 'es' ? 'Enviada al próximo examen:' : 'Sent to the next exam:'; ?> #<?php echo str_pad((string)(int)($lastexam2deferred['position'] ?? 0), 3, '0', STR_PAD_LEFT); ?> · <?php echo s((string)($lastexam2deferred['questionId'] ?? '')); ?></strong><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="deferexam2question"><input type="hidden" name="defermode" value="restore"><input type="hidden" name="questionid" value="<?php echo s((string)($lastexam2deferred['questionId'] ?? '')); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button" type="submit"><?php echo $displaylang === 'es' ? 'Deshacer' : 'Undo'; ?></button></form></div>
+            <?php endif; ?>
+            <?php $duplicatematches = is_array($exam2duplicatereport['matches'] ?? null) ? $exam2duplicatereport['matches'] : []; ?>
+            <?php if ($duplicatematches === []): ?>
+            <div class="question-bank__duplicate-empty"><?php echo $displaylang === 'es' ? 'No se encontraron posibles duplicados en el examen actual.' : 'No possible duplicates were found in the current exam.'; ?></div>
+            <?php else: ?>
+            <div class="question-bank__duplicate-pairs">
+                <?php foreach ($duplicatematches as $matchindex => $duplicatematch): ?>
+                <article class="question-bank__duplicate-pair">
+                    <header class="question-bank__duplicate-pair-head"><strong><?php echo ($matchindex + 1) . '. ' . ($displaylang === 'es' ? 'Posible repetición' : 'Possible duplicate'); ?></strong><span class="question-bank__duplicate-score"><?php echo (int)($duplicatematch['score'] ?? 0); ?>%</span></header>
+                    <?php if (!empty($duplicatematch['exact'])): ?><div class="question-bank__duplicate-exact"><?php echo $displaylang === 'es' ? 'El enunciado es idéntico. Conserve una y envíe la otra a Posibles exclusiones, no a otro examen.' : 'The wording is identical. Keep one and send the other to Possible exclusions, not to another exam.'; ?></div><?php endif; ?>
+                    <div class="question-bank__duplicate-candidates">
+                        <?php foreach (['left', 'right'] as $duplicateside):
+                            $duplicatecandidate = is_array($duplicatematch[$duplicateside] ?? null) ? $duplicatematch[$duplicateside] : [];
+                            $duplicateposition = (int)($duplicatecandidate['position'] ?? 0);
+                            $duplicateid = (string)($duplicatecandidate['questionId'] ?? '');
+                        ?>
+                        <section class="question-bank__duplicate-candidate">
+                            <strong>#<?php echo str_pad((string)$duplicateposition, 3, '0', STR_PAD_LEFT); ?> · <?php echo s($duplicateid); ?></strong>
+                            <p><?php echo s((string)($duplicatecandidate['prompt'] ?? '')); ?></p>
+                            <?php if (empty($duplicatematch['exact'])): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="deferexam2question"><input type="hidden" name="defermode" value="defer"><input type="hidden" name="questionid" value="<?php echo s($duplicateid); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Enviar esta pregunta al banco para el próximo examen y reemplazarla en Exam 2?' : 'Send this question to the bank for the next exam and replace it in Exam 2?'; ?>');"><?php echo $displaylang === 'es' ? 'Enviar al próximo examen' : 'Send to next exam'; ?></button></form><?php endif; ?>
+                        </section>
+                        <?php endforeach; ?>
+                    </div>
+                </article>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
             <div class="question-bank__editor-actions"><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cerrar informe' : 'Close report'; ?></a></div>
         </section>
         <?php endif; ?>
@@ -4093,6 +4238,7 @@ echo $OUTPUT->header();
             <span class="question-bank__badge question-bank__badge--<?php echo $question['_ready'] ? 'ready' : 'incomplete'; ?>"><?php echo $question['_excluded'] ? 'Excluded from active use' : ($question['_ready'] ? 'Ready for practice' : 'Needs completion'); ?></span>
             <?php if ($question['_examposition'] > 0): ?><span class="question-bank__badge question-bank__badge--exam">Simulation Exam 1 · position <?php echo (int)$question['_examposition']; ?></span><?php else: ?><span class="question-bank__badge">Not used in Exam 1</span><?php endif; ?>
             <?php if ($question['_exam2position'] > 0): ?><span class="question-bank__badge question-bank__badge--exam">Simulation Exam 2 review · position <?php echo (int)$question['_exam2position']; ?></span><?php endif; ?>
+            <?php if (!empty($question['_deferredfromexam2'])): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Reservada para el próximo examen' : 'Reserved for the next exam'; ?></span><?php endif; ?>
             <span class="question-bank__badge">Complexity: <?php echo s(ucfirst((string)($question['difficultyBand'] ?? 'unclassified'))); ?></span>
             <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php elseif ($question['_sourcekind'] === 'admin'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>
             <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion</span><?php elseif ($revisionstatus === 'deleted'): ?><span class="question-bank__badge question-bank__badge--incomplete">Deleted · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready">Approved</span><?php endif; ?>
