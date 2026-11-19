@@ -3991,6 +3991,23 @@ usort($filteredquestions, static function(array $left, array $right) use (
 });
 
 $resultcount = count($filteredquestions);
+if ($usagefilter === 'exam_project_pending'
+        && is_array($currentexamproject)
+        && $query !== ''
+        && $resultcount === 0) {
+    $projectpendingurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+        'usage' => 'exam_project_pending',
+        'examproject' => $examprojectid,
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ]));
+    $projectpendingurl->set_anchor('pending-questions');
+    redirect(
+        $projectpendingurl,
+        'That focused question is no longer pending. Continue with the next Exam question.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
 $totalpages = max(1, (int)ceil($resultcount / $perpage));
 $page = min($page, $totalpages - 1);
 $pagequestions = array_slice($filteredquestions, $page * $perpage, $perpage);
@@ -4503,6 +4520,7 @@ echo $OUTPUT->header();
     <?php if ($shownewquestionform): ?><section id="new-question" class="question-bank__new-question"><h3>Create a new question from your idea</h3><p>Describe what you want in your own words. The system will write the question, four choices, correct answer, feedback and classification. It will remain a draft until you approve it.</p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><textarea name="idea" maxlength="12000" required placeholder="Example: Create an inference question in which the student identifies the deputy ingredients of a formula from their clinical roles. Include realistic distractors and explain the hierarchy in the feedback."></textarea><input type="hidden" name="formaction" value="createnewquestion"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Create draft</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Cancel</a></div><?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?></form></section><?php endif; ?>
     <?php if ($customdraftcount > 0 && !$shownewquestionform): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
     <?php if ($reviewfilter === 'editing_drafts'): ?><section class="question-bank__review-progress"><strong>Saved editing drafts: <?php echo (int)$savededitingdraftcount; ?></strong><p>This view includes unfinished manual and automatic edits from earlier updates and review groups. The most recently saved drafts appear first. Continue the correction, approve the current version, edit manually or delete the question.</p></section><?php endif; ?>
+    <?php if ($usagefilter === 'exam_project_pending' && $query !== '' && $resultcount === 1): $focusedquestionid = (string)$filteredquestions[0]['questionId']; ?><section class="question-bank__review-progress"><strong><?php echo s((string)$currentexamproject['name']); ?> — focused question ready</strong><p><a class="question-bank__button question-bank__button--publish" href="#question-<?php echo s($focusedquestionid); ?>"><?php echo $displaylang === 'es' ? 'Continuar, revisar y publicar esta pregunta' : 'Continue, review and publish this question'; ?></a><?php if ($pendingexamprojecturl !== null): ?> <a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Omitir y volver a las pendientes' : 'Skip and return to pending questions'; ?></a><?php endif; ?></p></section><?php endif; ?>
     <?php if (in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, explicit concept-to-choice mappings, distractor analysis, feedback and classification. It also updates the oldest pending drafts created with an earlier reviewer while preserving their accumulated instructions. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><?php if ($usagefilter === 'exam_project_pending' && $examprojectid !== ''): ?><input type="hidden" name="usage" value="exam_project_pending"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Update or review next 5 questions</button></form></section><?php endif; ?>
     <?php if ($editquestion !== null && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts')):
         $editorstatus = (string)($editorrevision['status'] ?? 'original');
