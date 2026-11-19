@@ -2035,6 +2035,42 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     fi
 fi
 
+# Moodle's cache purge does not invalidate PHP-FPM OPcache when timestamp
+# validation is disabled. Reload the active PHP/web workers so the newly
+# installed administrator page is visible immediately.
+WEB_RUNTIME_RELOADED=()
+if command -v systemctl >/dev/null 2>&1; then
+    while IFS= read -r php_service; do
+        [[ -n "$php_service" ]] || continue
+        if systemctl reload "$php_service" >/dev/null 2>&1 \
+                || systemctl restart "$php_service" >/dev/null 2>&1; then
+            WEB_RUNTIME_RELOADED+=("$php_service")
+        fi
+    done < <(systemctl list-units --type=service --state=running --no-legend 2>/dev/null \
+        | awk '$1 ~ /^php[0-9.]+-fpm\.service$/ {print $1}')
+    for web_service in apache2.service httpd.service; do
+        if systemctl is-active --quiet "$web_service" 2>/dev/null \
+                && systemctl reload "$web_service" >/dev/null 2>&1; then
+            WEB_RUNTIME_RELOADED+=("$web_service")
+        fi
+    done
+else
+    for php_init in /etc/init.d/php*-fpm; do
+        [[ -x "$php_init" ]] || continue
+        if "$php_init" reload >/dev/null 2>&1; then
+            WEB_RUNTIME_RELOADED+=("$(basename "$php_init")")
+        fi
+    done
+    if [[ -x /etc/init.d/apache2 ]] && /etc/init.d/apache2 reload >/dev/null 2>&1; then
+        WEB_RUNTIME_RELOADED+=("apache2")
+    fi
+fi
+if ((${#WEB_RUNTIME_RELOADED[@]} > 0)); then
+    echo "OK: caché PHP/web recargada: ${WEB_RUNTIME_RELOADED[*]}"
+else
+    echo "AVISO: no se detectó un servicio PHP/Apache para recargar; los archivos instalados sí fueron verificados."
+fi
+
 PUBLIC_SAFETY_URL="https://www.acupuncturetests.com/study-guide/comparisons/safety-library.html?rev=$REVISION"
 curl -fsSL -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "$PUBLIC_SAFETY_URL" -o "$TEMP_DIR/public-safety-library.html"
 grep -Fq '← Study Guide' "$TEMP_DIR/public-safety-library.html"
