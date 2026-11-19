@@ -118,9 +118,11 @@ $simulationurl = new moodle_url('/blocks/menu/herbology-board.php', [
 ] + ($simulationexamnumber === 2 ? ['simulation' => 2] : []) + $languagecontext);
 $examsdashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/', [], 'board-level-herbology');
 $examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
+$simulationhistoryurl = $simulationurl->out(false) . '#herb-board-simulation-history';
 $examhistory = [];
+$simulationhistory = [];
 $clinicalhistory = [];
-if (($track === 'exams' && !$mixdomains) || $track === 'clinicalcases') {
+if (($track === 'exams' && !$mixdomains) || ($track === 'simulation' && !$mixdomains) || $track === 'clinicalcases') {
     $examhistorytable = new xmldb_table('block_menu_exam_attempts');
     if ($DB->get_manager()->table_exists($examhistorytable)) {
         if ($track === 'clinicalcases') {
@@ -133,6 +135,27 @@ if (($track === 'exams' && !$mixdomains) || $track === 'clinicalcases') {
                     'courseid' => $membershipcourseid,
                     'completed' => 'clinicalcases',
                     'incomplete' => 'clinicalincomplete',
+                ],
+                'timecompleted DESC, id DESC',
+                '*',
+                0,
+                10
+            ));
+        } else if ($track === 'simulation') {
+            $simulationhistory = array_values($DB->get_records_select(
+                'block_menu_exam_attempts',
+                'userid = :userid AND courseid = :courseid '
+                    . 'AND examtype IN (:legacylinear, :legacyadaptive, :exam1linear, :exam1adaptive, '
+                    . ':exam2linear, :exam2adaptive)',
+                [
+                    'userid' => $USER->id,
+                    'courseid' => $membershipcourseid,
+                    'legacylinear' => 'simulationlinear',
+                    'legacyadaptive' => 'simulationadaptive',
+                    'exam1linear' => 'simulation1linear',
+                    'exam1adaptive' => 'simulation1adaptive',
+                    'exam2linear' => 'simulation2linear',
+                    'exam2adaptive' => 'simulation2adaptive',
                 ],
                 'timecompleted DESC, id DESC',
                 '*',
@@ -2231,6 +2254,71 @@ echo $OUTPUT->header();
                 <p class="herb-board__simulation-note"><?php echo $ises
                     ? 'El reloj comienza al abrir una modalidad. A los 5 minutos restantes cambia a amarillo y, al llegar a cero, el intento se entrega automáticamente.'
                     : 'The clock begins when you open a mode. It turns yellow with 5 minutes remaining and submits automatically at zero.'; ?></p>
+                <section class="herb-board__exam-history herb-board__exam-history--combined"
+                    id="herb-board-simulation-history" aria-labelledby="herb-board-simulation-history-title">
+                    <header>
+                        <div>
+                            <span><?php echo $ises ? 'PROGRESO PERSONAL' : 'PERSONAL PROGRESS'; ?></span>
+                            <h4 id="herb-board-simulation-history-title">
+                                <?php echo $ises ? 'Historial de simulaciones' : 'Simulation History'; ?>
+                            </h4>
+                        </div>
+                        <small><?php echo $ises ? 'Últimos 10 intentos' : 'Last 10 attempts'; ?></small>
+                    </header>
+                    <?php if (!$simulationhistory) { ?>
+                        <p class="herb-board__exam-history-empty">
+                            <?php echo $ises
+                                ? 'Todavía no hay intentos de simulación registrados.'
+                                : 'No simulation attempts have been recorded yet.'; ?>
+                        </p>
+                    <?php } else { ?>
+                        <div class="herb-board__exam-history-list" role="list">
+                            <?php foreach ($simulationhistory as $attempt) {
+                                $attemptpercentage = $attempt->total > 0
+                                    ? (int)round(($attempt->score / $attempt->total) * 100)
+                                    : 0;
+                                $attemptminutes = intdiv((int)$attempt->duration, 60);
+                                $attemptseconds = (int)$attempt->duration % 60;
+                                $attemptduration = $attemptminutes > 0
+                                    ? $attemptminutes . ' min ' . $attemptseconds . ' s'
+                                    : $attemptseconds . ' s';
+                                $attemptexamnumber = str_starts_with((string)$attempt->examtype, 'simulation2') ? 2 : 1;
+                                $attemptmode = str_ends_with((string)$attempt->examtype, 'adaptive')
+                                    ? ($ises ? 'Adaptativo' : 'Adaptive')
+                                    : ($ises ? 'Lineal' : 'Linear');
+                                $attempttype = 'Exam ' . $attemptexamnumber . ' · ' . $attemptmode;
+                                $attemptpassed = $attemptpercentage >= 70;
+                                $attemptstatus = $attemptpassed
+                                    ? ($ises ? 'Aprobado' : 'Passed')
+                                    : ($ises ? 'No aprobado' : 'Not passed');
+                                $attemptclass = $attemptpassed ? 'is-passed' : 'is-failed';
+                            ?>
+                                <article role="listitem" class="<?php echo s($attemptclass); ?>">
+                                    <div>
+                                        <span><?php echo $ises ? 'Fecha y hora' : 'Date and time'; ?></span>
+                                        <strong><?php echo s(userdate((int)$attempt->timecompleted, get_string('strftimedatetimeshort'))); ?></strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Examen' : 'Exam'; ?></span>
+                                        <strong><?php echo s($attempttype); ?></strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Resultado' : 'Result'; ?></span>
+                                        <strong><?php echo (int)$attempt->score; ?>/<?php echo (int)$attempt->total; ?> · <?php echo $attemptpercentage; ?>%</strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Estado' : 'Status'; ?></span>
+                                        <strong><?php echo s($attemptstatus); ?></strong>
+                                    </div>
+                                    <div>
+                                        <span><?php echo $ises ? 'Duración' : 'Duration'; ?></span>
+                                        <strong><?php echo s($attemptduration); ?></strong>
+                                    </div>
+                                </article>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+                </section>
             <?php } else if ($domainshortages) { ?>
                 <div class="herb-board__mix-result herb-board__mix-result--shortage">
                     <h3 id="herb-board-simulation-title"><?php echo $ises ? 'La simulación se está preparando' : 'The simulation is being prepared'; ?></h3>
@@ -2332,6 +2420,7 @@ echo $OUTPUT->header();
                         <p data-simulation-result-message></p>
                         <div data-simulation-domain-results></div>
                         <a href="<?php echo $simulationurl->out(false); ?>"><?php echo $ises ? 'Configurar otra simulación' : 'Set up another simulation'; ?></a>
+                        <a href="<?php echo s($simulationhistoryurl); ?>"><?php echo $ises ? 'Ver historial de simulaciones' : 'View Simulation History'; ?></a>
                     </section>
 
                     <footer class="herb-board__simulation-controls" data-simulation-controls>

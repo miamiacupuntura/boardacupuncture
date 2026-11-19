@@ -2676,6 +2676,11 @@ a.herb-board__domain:focus {
     text-decoration: none !important;
 }
 
+.herb-board__simulation-result > a + a {
+    margin-left: 8px;
+    background: #31546b;
+}
+
 .herb-board__simulation-controls {
     display: flex;
     align-items: center;

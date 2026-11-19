@@ -57,6 +57,7 @@
                 await fetch(exam.dataset.historyUrl, {
                     method: 'POST',
                     credentials: 'same-origin',
+                    keepalive: true,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
                     body: body.toString(),
                 });
