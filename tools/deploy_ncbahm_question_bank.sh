@@ -79,6 +79,8 @@ grep -Fq 'buildsimilaritysearch' "$SOURCE_FILE"
 grep -Fq 'value="mergequestions"' "$SOURCE_FILE"
 grep -Fq 'value="undomergequestions"' "$SOURCE_FILE"
 grep -Fq 'Similar question and answer finder' "$SOURCE_FILE"
+grep -Fq 'customcanpublish' "$SOURCE_FILE"
+grep -Fq 'Complete the question, four answer choices, answer key and explanation before publishing.' "$SOURCE_FILE"
 
 mkdir -p "$BACKUP_DIR"
 cp -a -- "$TARGET" "$BACKUP_FILE"
@@ -104,6 +106,7 @@ grep -Fq 'if ($publishedexam2 === null):' "$TARGET"
 grep -Fq "'exam_project_pending'" "$TARGET"
 grep -Fq 'buildsimilaritysearch' "$TARGET"
 grep -Fq 'value="mergequestions"' "$TARGET"
+grep -Fq 'customcanpublish' "$TARGET"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
