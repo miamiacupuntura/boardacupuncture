@@ -4351,6 +4351,7 @@ echo $OUTPUT->header();
         </form>
         <?php endif; ?>
         <div class="question-bank__exam-grid">
+            <?php if ($publishedexam2 === null): ?>
             <?php $exam2progresspercent = $exam2targetcount > 0 ? min(100, (int)round($exam2reviewedcount * 100 / $exam2targetcount)) : 0; ?>
             <article class="question-bank__exam-card">
                 <h4>Exam 2</h4>
@@ -4361,6 +4362,7 @@ echo $OUTPUT->header();
                 <?php if ($publishedexam2 !== null): ?><div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$publishedexam2['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)$publishedexam2['version']; ?></span></div><?php endif; ?>
                 <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $exam2url->out(false); ?>"><?php echo $displaylang === 'es' ? 'Continuar revisión' : 'Continue review'; ?></a><a class="question-bank__button" href="<?php echo $exam2approvedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver listas' : 'View ready'; ?></a><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="scanexamduplicates"><input type="hidden" name="scanreturn" value="exam"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button" type="submit"><?php echo $displaylang === 'es' ? 'Buscar repetidas' : 'Check duplicates'; ?></button></form><?php if ($exam2isreadytopublish): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter(['publishexam2' => 1, 'sesskey' => sesskey(), 'lang' => $displaylang !== 'en' ? $displaylang : null])))->out(false); ?>" onclick="return confirm('<?php echo $publishedexam2 === null ? ($displaylang === 'es' ? '¿Publicar ahora las 100 preguntas de Exam 2 para los estudiantes?' : 'Publish all 100 Exam 2 questions for students now?') : ($displaylang === 'es' ? '¿Volver a publicar Exam 2 con las 100 preguntas actuales?' : 'Republish Exam 2 with the current 100 questions?'); ?>');"><?php echo $publishedexam2 === null ? ($displaylang === 'es' ? 'Publicar Exam 2' : 'Publish Exam 2') : ($displaylang === 'es' ? 'Volver a publicar Exam 2' : 'Republish Exam 2'); ?></a><?php else: ?><span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $displaylang === 'es' ? 'Publicar Exam 2' : 'Publish Exam 2'; ?></span><?php endif; ?><?php if ($publishedexam2 !== null): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => 2, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?></div>
             </article>
+            <?php endif; ?>
             <?php foreach ($examprojects as $projectid => $project):
                 $projectcount = (int)$project['currentCount'];
                 $projecttarget = (int)$project['targetCount'];
@@ -4394,7 +4396,7 @@ echo $OUTPUT->header();
         $lastexam2deferred = is_array($SESSION->ncbahm_last_exam2_deferred ?? null)
             ? $SESSION->ncbahm_last_exam2_deferred
             : null;
-        if ($showexam2duplicatereport && $exam2duplicatereport !== null):
+        if ($publishedexam2 === null && $showexam2duplicatereport && $exam2duplicatereport !== null):
         ?>
         <section class="question-bank__duplicate-report" aria-live="polite">
             <h4><?php echo $displaylang === 'es' ? 'Resultado de la búsqueda de preguntas repetidas' : 'Duplicate-question scan result'; ?></h4>
