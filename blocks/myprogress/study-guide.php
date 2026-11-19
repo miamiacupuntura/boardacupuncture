@@ -688,6 +688,7 @@ $boardmiscellaneousquizurl = new moodle_url(
 );
 $boardclinicalquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'clinical'] + $boardlanguagecontext);
 $boardclinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $boardlanguagecontext);
+$boardmockexamurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'mock'] + $boardlanguagecontext);
 $boardexamsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $boardlanguagecontext);
 $boardlinearexam1url = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'linear'] + $boardlanguagecontext);
 $boardlinearexam2url = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'linear', 'examset' => 2] + $boardlanguagecontext);
@@ -817,10 +818,10 @@ echo $OUTPUT->header();
 .subject-study-library__map-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}.subject-study-library__map-header h3{margin:0 0 5px;color:#123246;font-size:23px}.subject-study-library__map-header p{margin:0;color:#587083;line-height:1.5}.subject-study-library__map-copy{min-width:0}.subject-study-library__map-actions{display:flex;flex:0 0 auto;align-items:center;gap:9px}.subject-study-library__map-actions a{margin:0}
 .subject-study-library__journey{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
 .subject-study-library__journey-card{display:flex;min-height:235px;grid-column:span 2;flex-direction:column;padding:16px;border:1px solid #b9cbd6;border-top:4px solid #0b817d;border-radius:11px;background:#fff;color:#123246}
-.subject-study-library__journey-card:nth-child(5){border-top-color:#6d4bc3}.subject-study-library__journey-card:nth-child(6){border-top-color:#2563eb}.subject-study-library__journey-card:nth-child(7){border-top-color:#f77e25}
+.subject-study-library__journey-card:nth-child(5){border-top-color:#6d4bc3}.subject-study-library__journey-card:nth-child(6){border-top-color:#0b8f87}.subject-study-library__journey-card:nth-child(7){border-top-color:#2563eb}.subject-study-library__journey-card:nth-child(8){border-top-color:#f77e25}
 .subject-study-library__journey-heading{display:flex;align-items:flex-start;gap:11px;margin-bottom:13px}
 .subject-study-library__journey-step{display:inline-flex;width:31px;height:31px;flex:0 0 31px;align-items:center;justify-content:center;border-radius:50%;background:#0b817d;color:#fff;font-weight:900}
-.subject-study-library__journey-card:nth-child(5) .subject-study-library__journey-step{background:#6d4bc3}.subject-study-library__journey-card:nth-child(6) .subject-study-library__journey-step{background:#2563eb}.subject-study-library__journey-card:nth-child(7) .subject-study-library__journey-step{background:#e96512}
+.subject-study-library__journey-card:nth-child(5) .subject-study-library__journey-step{background:#6d4bc3}.subject-study-library__journey-card:nth-child(6) .subject-study-library__journey-step{background:#0b8f87}.subject-study-library__journey-card:nth-child(7) .subject-study-library__journey-step{background:#2563eb}.subject-study-library__journey-card:nth-child(8) .subject-study-library__journey-step{background:#e96512}
 .subject-study-library__journey-copy{display:block;min-width:0}.subject-study-library__journey-copy strong,.subject-study-library__journey-copy b{display:block}.subject-study-library__journey-copy strong{font-size:16px;line-height:1.25}.subject-study-library__journey-copy b{margin-top:5px;color:#08746f;font-size:10px;letter-spacing:.05em;text-transform:uppercase}
 .subject-study-library__journey-options{display:grid;gap:7px;margin-top:0}.subject-study-library__option-group{margin:8px 2px 0;padding:4px 2px 2px;border-bottom:2px solid #dbe7ec;color:#0b6f69;font-size:11px;font-weight:950;letter-spacing:.08em;line-height:1.2;text-transform:uppercase}.subject-study-library__option-group:first-child{margin-top:0}
 .subject-study-library__journey-option{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:9px 10px;border:1px solid #c8d5de;border-radius:8px;background:#f8fafc;color:#173f58;font-weight:850;line-height:1.25;text-decoration:none!important}
@@ -1075,6 +1076,23 @@ echo $OUTPUT->header();
                             <header class="subject-study-library__journey-heading">
                                 <span class="subject-study-library__journey-step">6</span>
                                 <span class="subject-study-library__journey-copy">
+                                    <strong>Mock Exam</strong>
+                                    <b><?php echo s($ises ? 'Practicar preguntas revisadas' : 'Practice reviewed questions'); ?></b>
+                                </span>
+                            </header>
+                            <nav class="subject-study-library__journey-options" aria-label="Mock Exam">
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardmockexamurl->out(false); ?>#mock-formulas"><span><?php echo s($ises ? 'Mock Exams de fórmulas' : 'Formula Mock Exams'); ?><small><?php echo s($ises ? 'Preguntas refinadas de Exam 1 y Exam 2' : 'Refined Exam 1 and Exam 2 questions'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option" href="<?php echo $boardmockexamurl->out(false); ?>#mock-herbs"><span><?php echo s($ises ? 'Mock Exams de hierbas' : 'Herbs Mock Exams'); ?><small><?php echo s($ises ? 'Hierbas, compatibilidad y seguridad' : 'Herbs, compatibility and safety'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardmockexamurl->out(false); ?>">
+                                    <span><?php echo s($ises ? 'Abrir todos los Mock Exams' : 'Open all Mock Exams'); ?><small><?php echo s($ises ? 'Abre el banco clasificado y su inventario' : 'Opens the classified bank and its inventory'); ?></small></span><span aria-hidden="true">›</span>
+                                </a>
+                            </nav>
+                        </section>
+
+                        <section class="subject-study-library__journey-card">
+                            <header class="subject-study-library__journey-heading">
+                                <span class="subject-study-library__journey-step">7</span>
+                                <span class="subject-study-library__journey-copy">
                                     <strong><?php echo s($ises ? 'Exámenes' : 'Exams'); ?></strong>
                                     <b><?php echo s($ises ? 'Medir tu preparación' : 'Measure your readiness'); ?></b>
                                 </span>
@@ -1103,7 +1121,7 @@ echo $OUTPUT->header();
 
                         <section class="subject-study-library__journey-card">
                             <header class="subject-study-library__journey-heading">
-                                <span class="subject-study-library__journey-step">7</span>
+                                <span class="subject-study-library__journey-step">8</span>
                                 <span class="subject-study-library__journey-copy">
                                     <strong><?php echo s($ises ? 'Simulación' : 'Simulation'); ?></strong>
                                     <b><?php echo s($ises ? 'Ensayar el día del examen' : 'Rehearse test day'); ?></b>
