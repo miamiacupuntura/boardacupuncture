@@ -424,6 +424,18 @@ $assessmentstarturls['simulationadaptive'] = (new moodle_url('/blocks/menu/herbo
     'track' => 'simulation',
     'exam' => 'adaptive',
 ] + $languageparams))->out(false);
+$assessmentstarturls['simulation1linear'] = $assessmentstarturls['simulationlinear'];
+$assessmentstarturls['simulation1adaptive'] = $assessmentstarturls['simulationadaptive'];
+$assessmentstarturls['simulation2linear'] = (new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'simulation',
+    'simulation' => 2,
+    'exam' => 'linear',
+] + $languageparams))->out(false);
+$assessmentstarturls['simulation2adaptive'] = (new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'simulation',
+    'simulation' => 2,
+    'exam' => 'adaptive',
+] + $languageparams))->out(false);
 
 $assessmentstartkey = [
     'linearincomplete' => 'linear',
@@ -609,10 +621,14 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
         $issimulation = str_starts_with($examtype, 'simulation');
         if ($isboardquiz) {
             $examname = $boardquiznamesbytype[$examtype];
-        } else if ($examtype === 'simulationadaptive') {
-            $examname = $ises ? 'Simulación adaptativa' : 'Adaptive Simulation';
-        } else if ($examtype === 'simulationlinear') {
-            $examname = $ises ? 'Simulación lineal' : 'Linear Simulation';
+        } else if (in_array($examtype, ['simulationadaptive', 'simulation1adaptive'], true)) {
+            $examname = $ises ? 'Examen de simulación 1 · Adaptativo' : 'Simulation Exam 1 · Adaptive';
+        } else if (in_array($examtype, ['simulationlinear', 'simulation1linear'], true)) {
+            $examname = $ises ? 'Examen de simulación 1 · Lineal' : 'Simulation Exam 1 · Linear';
+        } else if ($examtype === 'simulation2adaptive') {
+            $examname = $ises ? 'Examen de simulación 2 · Adaptativo' : 'Simulation Exam 2 · Adaptive';
+        } else if ($examtype === 'simulation2linear') {
+            $examname = $ises ? 'Examen de simulación 2 · Lineal' : 'Simulation Exam 2 · Linear';
         } else if (in_array($examtype, ['adaptive', 'adaptiveincomplete'], true)) {
             $examname = $ises ? 'Examen Board adaptativo' : 'Adaptive Board Exam';
         } else if (in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true)) {

@@ -15,6 +15,7 @@ function block_myprogress_herbology_override_empty(): array {
         'questions' => [],
         'customQuestions' => [],
         'examProjects' => [],
+        'publishedExams' => [],
     ];
 }
 

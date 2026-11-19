@@ -20,6 +20,7 @@ if ($track !== 'quiz' || !in_array($quizsection, ['all', 'herbs', 'formulas', 'c
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
 $domainkey = optional_param('domain', '', PARAM_ALPHANUMEXT);
 $clinicalexamkey = optional_param('caseexam', '', PARAM_ALPHANUMEXT);
+$simulationexamnumber = optional_param('simulation', 1, PARAM_INT) === 2 ? 2 : 1;
 $exammode = optional_param('exam', '', PARAM_ALPHA);
 if (!in_array($exammode, ['linear', 'adaptive'], true)) {
     $exammode = optional_param('mix', 0, PARAM_BOOL) ? 'linear' : '';
@@ -70,6 +71,9 @@ if ($domainkey !== '') {
 if ($mixdomains) {
     $pageparams['exam'] = $exammode;
 }
+if ($track === 'simulation' && $simulationexamnumber === 2) {
+    $pageparams['simulation'] = 2;
+}
 if ($domainpage > 0) {
     $pageparams['page'] = $domainpage;
 }
@@ -103,7 +107,9 @@ $clinicalquizoverviewurl = new moodle_url('/blocks/menu/herbology-board.php', [
 $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $languagecontext);
 $clinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
-$simulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $languagecontext);
+$simulationurl = new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'simulation',
+] + ($simulationexamnumber === 2 ? ['simulation' => 2] : []) + $languagecontext);
 $examsdashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/', [], 'board-level-herbology');
 $examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
 $examhistory = [];
@@ -425,6 +431,7 @@ if ($usesdomainbank && !is_readable($domainbankpath) && is_readable($domainseedp
     }
 }
 $domainbank = ['domains' => []];
+$publishedsimulationexam2 = null;
 if ($usesdomainbank && is_readable($domainbankpath)) {
     $decodedbank = json_decode(file_get_contents($domainbankpath), true);
     if (is_array($decodedbank) && isset($decodedbank['domains']) && is_array($decodedbank['domains'])) {
@@ -518,6 +525,13 @@ if ($usesdomainbank && is_readable($domaincandidatepath)) {
 }
 if ($usesdomainbank) {
     $questionrevisionstore = block_myprogress_herbology_override_load();
+    $storedsimulationexam2 = $questionrevisionstore['publishedExams']['simulation_exam_2'] ?? null;
+    if (is_array($storedsimulationexam2)
+            && ($storedsimulationexam2['status'] ?? '') === 'published'
+            && is_array($storedsimulationexam2['questions'] ?? null)
+            && count($storedsimulationexam2['questions']) === 100) {
+        $publishedsimulationexam2 = $storedsimulationexam2;
+    }
     $domainbank['domains'] = block_myprogress_herbology_merge_custom_questions(
         $domainbank['domains'] ?? [],
         $questionrevisionstore,
@@ -606,21 +620,57 @@ if ($selecteddomain !== null) {
 $mixedquestions = [];
 $domainshortages = [];
 if (in_array($track, ['exams', 'simulation'], true) && $mixdomains) {
-    foreach ($domainblueprint as $domain) {
-        $templatequestions = array_values(array_filter(
-            $domain['questions'],
-            static fn(array $question): bool => !empty($question['examTemplate']['globalPosition'])
-        ));
-        if (count($templatequestions) !== $domain['weight']) {
+    if ($track === 'simulation' && $simulationexamnumber === 2) {
+        if ($publishedsimulationexam2 === null) {
             $domainshortages[] = [
-                'name' => $domain['name'],
-                'required' => $domain['weight'],
-                'available' => count($templatequestions),
-                'missing' => max(0, $domain['weight'] - count($templatequestions)),
+                'name' => 'Simulation Exam 2',
+                'required' => 100,
+                'available' => 0,
+                'missing' => 100,
             ];
-            continue;
+        } else {
+            $mixedquestions = $publishedsimulationexam2['questions'];
+            if ($ises) {
+                foreach ($mixedquestions as &$publishedquestion) {
+                    $translation = $publishedquestion['translations']['es'] ?? null;
+                    if (is_array($translation)
+                            && !empty($translation['prompt'])
+                            && count($translation['options'] ?? []) === 4
+                            && !empty($translation['explanation'])) {
+                        $publishedquestion['prompt'] = $translation['prompt'];
+                        $publishedquestion['options'] = $translation['options'];
+                        $publishedquestion['explanation'] = $translation['explanation'];
+                    }
+                }
+                unset($publishedquestion);
+            }
+            $mixedquestions = array_values(array_filter($mixedquestions, $questionisready));
+            if (count($mixedquestions) !== 100) {
+                $domainshortages[] = [
+                    'name' => 'Simulation Exam 2',
+                    'required' => 100,
+                    'available' => count($mixedquestions),
+                    'missing' => max(0, 100 - count($mixedquestions)),
+                ];
+            }
         }
-        $mixedquestions = array_merge($mixedquestions, $templatequestions);
+    } else {
+        foreach ($domainblueprint as $domain) {
+            $templatequestions = array_values(array_filter(
+                $domain['questions'],
+                static fn(array $question): bool => !empty($question['examTemplate']['globalPosition'])
+            ));
+            if (count($templatequestions) !== $domain['weight']) {
+                $domainshortages[] = [
+                    'name' => $domain['name'],
+                    'required' => $domain['weight'],
+                    'available' => count($templatequestions),
+                    'missing' => max(0, $domain['weight'] - count($templatequestions)),
+                ];
+                continue;
+            }
+            $mixedquestions = array_merge($mixedquestions, $templatequestions);
+        }
     }
     if (!$domainshortages) {
         usort($mixedquestions, static fn(array $left, array $right): int =>
@@ -1049,7 +1099,7 @@ JS);
 }
 
 if ($track === 'simulation' && $mixdomains && count($mixedquestions) === 100) {
-    $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-simulation.js', ['v' => '2026111601']));
+    $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-simulation.js', ['v' => '2026111801']));
 }
 
 if ($track === 'clinicalcases' && $selectedclinicalexam !== null) {
@@ -2089,8 +2139,8 @@ echo $OUTPUT->header();
                 <div class="herb-board__simulation-intro">
                     <span><?php echo $ises ? 'SIMULACIÓN CRONOMETRADA' : 'TIMED SIMULATION'; ?></span>
                     <h3 id="herb-board-simulation-title"><?php echo $ises
-                        ? 'Examen de simulación 1'
-                        : 'Simulation Exam 1'; ?></h3>
+                        ? 'Examen de simulación ' . $simulationexamnumber
+                        : 'Simulation Exam ' . $simulationexamnumber; ?></h3>
                     <p><?php echo $ises
                         ? 'Reproduce una sesión completa de 100 preguntas en 2 horas y 30 minutos. No verás respuestas, explicaciones ni feedback hasta finalizar.'
                         : 'Rehearse a complete 100-question session in 2 hours and 30 minutes. Answers, explanations, and feedback stay hidden until you finish.'; ?></p>
@@ -2101,6 +2151,11 @@ echo $OUTPUT->header();
                         <span><strong>0</strong> <?php echo $ises ? 'feedback durante el intento' : 'feedback during the attempt'; ?></span>
                     </div>
                 </div>
+
+                <nav class="herb-board__simulation-exam-switch" aria-label="<?php echo $ises ? 'Seleccionar examen de simulación' : 'Select a simulation exam'; ?>">
+                    <a<?php echo $simulationexamnumber === 1 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $languagecontext))->out(false); ?>"><?php echo $ises ? 'Examen 1' : 'Exam 1'; ?></a>
+                    <?php if ($publishedsimulationexam2 !== null): ?><a<?php echo $simulationexamnumber === 2 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => 2] + $languagecontext))->out(false); ?>"><?php echo $ises ? 'Examen 2 · publicado' : 'Exam 2 · published'; ?></a><?php endif; ?>
+                </nav>
 
                 <section class="herb-board__simulation-blueprint" aria-labelledby="simulation-blueprint-title">
                     <header>
@@ -2130,10 +2185,12 @@ echo $OUTPUT->header();
                 $simulationlinearurl = new moodle_url('/blocks/menu/herbology-board.php', [
                     'track' => 'simulation',
                     'exam' => 'linear',
+                    'simulation' => $simulationexamnumber,
                 ] + $languagecontext);
                 $simulationadaptiveurl = new moodle_url('/blocks/menu/herbology-board.php', [
                     'track' => 'simulation',
                     'exam' => 'adaptive',
+                    'simulation' => $simulationexamnumber,
                 ] + $languagecontext);
                 ?>
                 <div class="herb-board__simulation-modes" aria-label="<?php echo $ises ? 'Modalidades de simulación' : 'Simulation modes'; ?>">
@@ -2172,6 +2229,7 @@ echo $OUTPUT->header();
                     data-history-url="<?php echo s((new moodle_url('/blocks/menu/herbology-exam-history.php'))->out(false)); ?>"
                     data-sesskey="<?php echo s(sesskey()); ?>"
                     data-exam-language="<?php echo $ises ? 'es' : 'en'; ?>"
+                    data-exam-number="<?php echo (int)$simulationexamnumber; ?>"
                     data-mode="<?php echo s($exammode); ?>"
                     data-duration="9000"
                     data-question-word="<?php echo $ises ? 'Pregunta' : 'Question'; ?>"
@@ -2183,7 +2241,7 @@ echo $OUTPUT->header();
                     data-time-expired="<?php echo $ises ? 'El tiempo terminó. El examen se entregó automáticamente.' : 'Time expired. The exam was submitted automatically.'; ?>">
                     <header class="herb-board__simulation-bar">
                         <div>
-                            <span><?php echo $ises ? 'EXAMEN DE SIMULACIÓN 1' : 'SIMULATION EXAM 1'; ?></span>
+                            <span><?php echo $ises ? 'EXAMEN DE SIMULACIÓN ' . $simulationexamnumber : 'SIMULATION EXAM ' . $simulationexamnumber; ?></span>
                             <strong><?php echo $ises ? 'Herbología China' : 'Chinese Herbology'; ?> · <?php echo $exammode === 'adaptive'
                                 ? ($ises ? 'Adaptativo' : 'Adaptive')
                                 : ($ises ? 'Lineal' : 'Linear'); ?></strong>

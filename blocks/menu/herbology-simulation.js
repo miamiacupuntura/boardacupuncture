@@ -9,6 +9,7 @@
 
         const questions = [...exam.querySelectorAll('.herb-board__simulation-question')];
         const mode = exam.dataset.mode || 'linear';
+        const examNumber = exam.dataset.examNumber === '2' ? '2' : '1';
         const clockButton = exam.querySelector('[data-simulation-clock]');
         const timeOutput = exam.querySelector('[data-simulation-time]');
         const counter = exam.querySelector('[data-simulation-counter]');
@@ -46,7 +47,7 @@
             const body = new URLSearchParams({
                 sesskey: exam.dataset.sesskey,
                 attemptuid: attemptUid,
-                examtype: `simulation${mode}`,
+                examtype: `simulation${examNumber}${mode}`,
                 score: String(score),
                 total: String(questions.length),
                 duration: String(Math.max(0, Math.round((Date.now() - startedAt) / 1000))),

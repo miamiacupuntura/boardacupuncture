@@ -35,7 +35,10 @@ $validexamtype = $isboardquizattempt || in_array(
     $examtype,
     [
         'linear', 'adaptive', 'linearincomplete', 'adaptiveincomplete',
-        'clinicalcases', 'clinicalincomplete', 'simulationlinear', 'simulationadaptive',
+        'clinicalcases', 'clinicalincomplete',
+        'simulationlinear', 'simulationadaptive',
+        'simulation1linear', 'simulation1adaptive',
+        'simulation2linear', 'simulation2adaptive',
     ],
     true
 );
