@@ -4137,11 +4137,13 @@ echo $OUTPUT->header();
                     'usage' => 'reserve',
                     'lang' => $displaylang !== 'en' ? $displaylang : null,
                 ]));
+                $projectaddurl->set_anchor('pending-questions');
                 $projectincludedurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
                     'examproject' => $projectid,
                     'examview' => 'included',
                     'lang' => $displaylang !== 'en' ? $displaylang : null,
                 ]));
+                $projectincludedurl->set_anchor('pending-questions');
             ?>
             <article class="question-bank__exam-card<?php echo $examprojectid === $projectid ? ' question-bank__exam-card--active' : ''; ?>">
                 <h4><?php echo s((string)$project['name']); ?></h4>
@@ -4324,7 +4326,17 @@ echo $OUTPUT->header();
         <?php if ($activefilters !== []): ?><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Limpiar todos los filtros' : 'Clear all filters'; ?></a><?php endif; ?>
     </section>
     <section class="question-bank__domains"><table><thead><tr><th>Domain</th><th>Classified</th><th>SCORM</th><th>Ready</th><th>Exam 1</th><th>Exam 2 review</th><th>Ready reserve</th></tr></thead><tbody><?php foreach ($domains as $domainid => $domain): ?><tr><td><strong>Domain <?php echo (int)$domain['number']; ?></strong> · <?php echo s($domain['name']); ?></td><td><?php echo (int)$domainstats[$domainid]['total']; ?></td><td><?php echo (int)$domainstats[$domainid]['scorm']; ?></td><td><?php echo (int)$domainstats[$domainid]['ready']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam1']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam2']; ?></td><td><?php echo (int)$domainstats[$domainid]['reserve']; ?></td></tr><?php endforeach; ?></tbody></table></section>
-    <div id="pending-questions" class="question-bank__result-head"><span><?php echo $usagefilter === 'exam2_review' ? ($displaylang === 'es' ? 'Preguntas pendientes — continúe aquí' : 'Pending questions — continue here') : ($displaylang === 'es' ? 'Preguntas filtradas' : 'Filtered questions'); ?></span><span><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
+    <div id="pending-questions" class="question-bank__result-head"><span><?php echo is_array($currentexamproject)
+        ? ($examprojectview === 'included'
+            ? ($displaylang === 'es'
+                ? 'Preguntas incluidas en ' . s((string)$currentexamproject['name'])
+                : 'Questions included in ' . s((string)$currentexamproject['name']))
+            : ($displaylang === 'es'
+                ? 'Preguntas disponibles — use «Agregar a ' . s((string)$currentexamproject['name']) . '» en cualquier pregunta'
+                : 'Available questions — use “Add to ' . s((string)$currentexamproject['name']) . '” on any question'))
+        : ($usagefilter === 'exam2_review'
+            ? ($displaylang === 'es' ? 'Preguntas pendientes — continúe aquí' : 'Pending questions — continue here')
+            : ($displaylang === 'es' ? 'Preguntas filtradas' : 'Filtered questions')); ?></span><span><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
     <?php if ($pagequestions === []): ?><div class="question-bank__item"><?php echo $displaylang === 'es' ? 'Ninguna pregunta coincide con estos filtros.' : 'No questions match these filters.'; ?></div><?php else: ?>
     <section class="question-bank__items"><?php foreach ($pagequestions as $question):
         $questionrevisionrecord = is_array($revisionstore['questions'][$question['questionId']] ?? null)
