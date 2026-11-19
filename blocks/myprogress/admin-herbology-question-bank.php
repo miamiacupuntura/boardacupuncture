@@ -32,7 +32,7 @@ $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-3.1';
+$aipromptversion = 'ncbahm-mock-editor-3.2';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
@@ -113,6 +113,16 @@ $findquestion = static function(array $questionbank, string $questionid): ?array
             if ((string)($question['questionId'] ?? '') === $questionid) {
                 return ['domainId' => $domainid, 'question' => $question];
             }
+        }
+    }
+    return null;
+};
+$findprohibitedanswerchoice = static function(array $options): ?string {
+    $prohibitedpattern = '/\b(?:all\s+of\s+(?:them|these|the\s+above)|none\s+of\s+(?:them|these|the\s+above)|both|[A-D]\s+(?:and|&)\s+[A-D]\s+(?:are|is)\s+correct|todos\s+ellos|todas\s+ellas|todos\s+los\s+anteriores|todas\s+las\s+anteriores|ninguno\s+de\s+(?:estos|ellos|los\s+anteriores)|ninguna\s+de\s+(?:estas|ellas|las\s+anteriores)|ambos|ambas)\b/iu';
+    foreach ($options as $option) {
+        $text = trim((string)(is_array($option) ? ($option['text'] ?? '') : $option));
+        if ($text !== '' && preg_match($prohibitedpattern, $text)) {
+            return $text;
         }
     }
     return null;
@@ -486,6 +496,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishcurrentques
             || trim((string)($snapshot['explanation'] ?? '')) === '') {
         throw new invalid_parameter_exception('This question is incomplete and cannot be published directly.');
     }
+    $prohibitedanswerchoice = $findprohibitedanswerchoice((array)$snapshot['options']);
+    if ($prohibitedanswerchoice === null) {
+        $prohibitedanswerchoice = $findprohibitedanswerchoice(
+            (array)($snapshot['translations']['es']['options'] ?? [])
+        );
+    }
+    if ($prohibitedanswerchoice !== null) {
+        throw new invalid_parameter_exception(
+            'This question cannot be approved until the combined answer choice “'
+                . $prohibitedanswerchoice . '” is replaced with one specific distractor.'
+        );
+    }
     $original = array_intersect_key($basequestion, array_flip([
         'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
         'translations', 'contentType', 'cognitiveLevel', 'difficultyBand', 'source',
@@ -582,6 +604,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
     $pinforexam2 = $usagefilter === 'exam2_review' && $approvalexamprojectid === '';
     if ($findquestion($basebank, $questionid) === null) {
         throw new invalid_parameter_exception('Unknown Herbology question ID.');
+    }
+    $approvaldraft = $revisionstore['questions'][$questionid]['draft'] ?? null;
+    $prohibitedanswerchoice = is_array($approvaldraft)
+        ? $findprohibitedanswerchoice((array)($approvaldraft['options'] ?? []))
+        : null;
+    if ($prohibitedanswerchoice === null && is_array($approvaldraft)) {
+        $prohibitedanswerchoice = $findprohibitedanswerchoice(
+            (array)($approvaldraft['translations']['es']['options'] ?? [])
+        );
+    }
+    if ($prohibitedanswerchoice !== null) {
+        throw new invalid_parameter_exception(
+            'This question cannot be approved until the combined answer choice “'
+                . $prohibitedanswerchoice . '” is replaced with one specific distractor.'
+        );
     }
     $savedat = gmdate(DATE_ATOM);
     $savedbyname = fullname($USER);
@@ -757,6 +794,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
     if (count(array_unique($normalizedoptions)) !== 4) {
         throw new invalid_parameter_exception('The four English answer choices must be different.');
     }
+    $prohibitedanswerchoice = $findprohibitedanswerchoice($options);
 
     $contenttype = optional_param('contenttype', 'other', PARAM_ALPHANUMEXT);
     $cognitivelevel = optional_param('cognitivelevel', 'apply', PARAM_ALPHA);
@@ -808,6 +846,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
         throw new invalid_parameter_exception('Explain why this question may need exclusion.');
     }
     if ($savemode === 'publish') {
+        if ($prohibitedanswerchoice !== null) {
+            throw new invalid_parameter_exception(
+                'Replace the combined answer choice “' . $prohibitedanswerchoice
+                    . '” with one specific distractor before publishing.'
+            );
+        }
         $status = 'approved';
     } else if ($savemode === 'exclude') {
         $status = 'exclusion_candidate';
@@ -2179,6 +2223,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             \core\output\notification::NOTIFY_SUCCESS
         );
     }
+    $prohibitedanswerchoice = $findprohibitedanswerchoice(
+        (array)($customrecord['draft']['options'] ?? [])
+    );
+    if ($prohibitedanswerchoice === null) {
+        $prohibitedanswerchoice = $findprohibitedanswerchoice(
+            (array)($customrecord['draft']['translations']['es']['options'] ?? [])
+        );
+    }
+    if ($prohibitedanswerchoice !== null) {
+        throw new invalid_parameter_exception(
+            'Replace the combined answer choice “' . $prohibitedanswerchoice
+                . '” with one specific distractor before publishing.'
+        );
+    }
     $savedat = gmdate(DATE_ATOM);
     $savedbyname = fullname($USER);
     block_myprogress_herbology_override_update(static function(array $store) use (
@@ -2378,7 +2436,7 @@ You are a senior NCBAHM Chinese Herbology mock-exam author. Create one original 
 Requirements:
 1. Determine the best fixed domain from these exact IDs: formula_differentiation, single_herb, dui_yao, safety_dispensing, formula_composition, scope_aliases.
 2. Write a concise board-style inference or analysis question with one defensible answer and exactly four parallel A-D choices.
-3. Never use “Both are correct,” “All of the above,” “None of the above,” or equivalent combined-answer shortcuts.
+3. Never use the word “Both” in an answer choice. Never use “All of them,” “All of the above,” “None of these,” “None of the above,” or any equivalent combined-answer shortcut. Apply the same prohibition to Spanish choices, including “Todos ellos,” “Todas ellas,” “Ninguno de estos,” “Ninguna de estas,” “Ambos,” and “Ambas.”
 4. Use NCBAHM guideline terminology. Herb names must use “Pinyin (Pharmaceutical Latin)” when herbs appear in the choices or explanation. Use standard formula names consistently.
 5. Do not state the diagnosis, tested action, formula, herb, hierarchy role, preparation rule, or other decisive answer in the stem when observable findings can support an inference instead.
 6. For clinical cases, use concise, memorable didactic settings when useful. Rotate real cities and countries across the United States, China, Spain and elsewhere. Real hospitals, universities or acupuncture schools may be neutral geographic or educational references only; never claim that they treated the fictional patient, hosted the fictional event, endorsed the item or supplied the answer. Every patient, student, clinician and active instructor must be fictional. Never attribute invented speech, teaching, care or affiliation to a real living professor or clinician. A historical scholar or published teaching may be named only when the administrator's idea supplies a verifiable source for it.
@@ -2414,7 +2472,7 @@ PROMPT;
             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
         );
     }
-    $decodecustomdraft = static function(string $generated) use ($domains): array {
+    $decodecustomdraft = static function(string $generated) use ($domains, $findprohibitedanswerchoice): array {
         $generated = trim($generated);
         if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $generated, $matches)) {
             $generated = $matches[1];
@@ -2441,7 +2499,7 @@ PROMPT;
             $label = strtoupper(trim((string)($option['label'] ?? '')));
             $text = trim((string)($option['text'] ?? ''));
             if (!in_array($label, ['A', 'B', 'C', 'D'], true) || $text === ''
-                    || preg_match('/\b(?:both|all)\b.*\b(?:correct|above)\b|\bnone\s+of\s+the\s+above\b/i', $text)) {
+                    || $findprohibitedanswerchoice([$text]) !== null) {
                 throw new UnexpectedValueException('The generated answer choices are invalid.');
             }
             $optionsbylabel[$label] = $text;
@@ -2470,6 +2528,11 @@ PROMPT;
         }
         if ($spanishprompt === '' || $spanishexplanation === '' || count($spanishoptionsbylabel) !== 4) {
             throw new UnexpectedValueException('The generated question omitted the complete Spanish translation.');
+        }
+        if ($findprohibitedanswerchoice(array_values($spanishoptionsbylabel)) !== null) {
+            throw new UnexpectedValueException(
+                'The Spanish draft used a prohibited combined-answer choice.'
+            );
         }
         $decoded['domainId'] = $domainid;
         $decoded['prompt'] = $prompt;
@@ -2798,7 +2861,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         array $sourcequestion,
         string $administratorproposal,
         bool $enforcefeedbackquality = true
-    ): array {
+    ) use ($findprohibitedanswerchoice): array {
         $generated = trim($generated);
         if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $generated, $matches)) {
             $generated = $matches[1];
@@ -2864,9 +2927,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             if (!in_array($label, ['A', 'B', 'C', 'D'], true) || $text === '') {
                 throw new UnexpectedValueException('Each AI answer choice needs a label and text.');
             }
-            if (preg_match('/\b(?:both|all)\b.*\b(?:correct|above)\b|\bnone\s+of\s+the\s+above\b|\b[A-D]\s+(?:and|&)\s+[A-D]\s+(?:are|is)\s+correct\b/i', $text)) {
+            if ($findprohibitedanswerchoice([$text]) !== null) {
                 throw new UnexpectedValueException(
-                    'The AI draft used a combined-answer choice such as "Both are correct" or "All of the above".'
+                    'The AI draft used a prohibited combined-answer choice. Replace it with one specific distractor.'
                 );
             }
             $optionsbylabel[$label] = $text;
@@ -3067,6 +3130,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         if ($spanishprompt === '' || $spanishexplanation === '' || count($spanishoptionsbylabel) !== 4) {
             throw new UnexpectedValueException('The AI draft omitted the complete Spanish translation.');
+        }
+        if ($findprohibitedanswerchoice(array_values($spanishoptionsbylabel)) !== null) {
+            throw new UnexpectedValueException(
+                'The Spanish AI draft used a prohibited combined-answer choice.'
+            );
         }
         if ($enforcefeedbackquality) {
             $missingmocksections = [];
@@ -3523,7 +3591,7 @@ Editorial rules:
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer.
 1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection or differentiation; Domain 2 must test individual-herb identification, properties, actions, indications, or comparison; Domain 3 must test Duì Yào pairing, compatibility, hierarchy, synergy, antagonism, or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing, or dispensing principle. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
-3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use "Both are correct," "All of the above," "None of the above," "A and B are correct," or any equivalent combined-answer shortcut. If the keyed source option is one of those shortcuts, preserve its LETTER and underlying tested fact but replace the shortcut with one self-contained, unambiguous answer statement. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
+3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use the word "Both" in an answer choice and never use "All of them," "All of the above," "None of these," "None of the above," "A and B are correct," or any equivalent combined-answer shortcut. Apply the same prohibition to Spanish choices, including "Todos ellos," "Todas ellas," "Ninguno de estos," "Ninguna de estas," "Ambos," and "Ambas." If the keyed source option is one of those shortcuts, preserve its LETTER and underlying tested fact but replace the shortcut with one self-contained, unambiguous answer statement. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
 3A. When the administrator requests a positive question, reconstruct the item rather than lightly editing it. Remove NOT, EXCEPT, incorrect, inaccurate, false, error and least-appropriate framing from the stem. Preserve the source-supported educational objective and keyed LETTER, rewrite the keyed option into a true source-supported statement, and rebuild the other three choices as plausible false or weaker statements. The final explanation must be educational feedback, never the administrator's instruction.
 4. Write mock-exam feedback in this explicit teaching sequence: "Inference step 1:", "Inference step 2:", "Option A:", "Option B:", "Option C:", and "Option D:". Step 1 must state what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence. Step 2 must explain why that conclusion selects the keyed answer. Identify which findings are decisive and which details are contextual distractors. Analyze the keyed choice and every distractor separately; never omit an option or use one generic sentence for several options. The Spanish explanation must use the parallel headings "Paso de inferencia 1:", "Paso de inferencia 2:", "Opción A:", "Opción B:", "Opción C:", and "Opción D:". Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
 4A. Whenever inference is created by replacing direct answer labels with observable findings, ingredient combinations, clinical roles or safety clues, the explanation must reveal and teach the hidden intermediate label after the learner answers. If formula names were removed from ingredient-based choices, keep the choices ingredient-only but explicitly map every option letter A-D to its source-supported Pinyin formula name in both English and Spanish feedback. Apply the equivalent mapping to similar questions: identify the pattern, herb action, preparation rule, hierarchy role, compatibility relationship or safety principle represented by each choice, and explain the decisive difference rather than merely restating the keyed option.
@@ -4640,6 +4708,10 @@ echo $OUTPUT->header();
         $options = $displaylang === 'es' && count($spanishoptions) === 4
             ? $spanishoptions
             : ($question['options'] ?? []);
+        $prohibitedanswerchoice = $findprohibitedanswerchoice((array)($question['options'] ?? []));
+        if ($prohibitedanswerchoice === null) {
+            $prohibitedanswerchoice = $findprohibitedanswerchoice($spanishoptions);
+        }
         $explanation = trim((string)($translation['explanation'] ?? '')) ?: (string)($question['explanation'] ?? '');
         $correctlabel = (string)($question['correctLabel'] ?? '');
         $domain = $domains[$question['_domainid']];
@@ -4719,13 +4791,14 @@ echo $OUTPUT->header();
             <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php elseif ($question['_sourcekind'] === 'admin'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>
             <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion</span><?php elseif ($revisionstatus === 'deleted'): ?><span class="question-bank__badge question-bank__badge--incomplete">Deleted · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Publicada' : 'Published'; ?></span><?php endif; ?>
             <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--exam">AI-assisted mock review</span><?php endif; ?>
+            <?php if ($prohibitedanswerchoice !== null): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $displaylang === 'es' ? 'Respuesta combinada prohibida · requiere corrección' : 'Prohibited combined answer · correction required'; ?></span><?php endif; ?>
             <?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><span class="question-bank__badge question-bank__badge--exam">Proposal pending publishing review</span><?php endif; ?>
             <?php if ($pendingexamprojecturl !== null && ($usagefilter !== 'exam_project_pending' || $query !== '')): ?><a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo '← ' . s((string)$pendingexamproject['name']) . ($displaylang === 'es' ? ' · revisión pendiente' : ' pending review'); ?></a><?php endif; ?>
             <?php if ($query !== '' && !$inlineapproval && $pendingexamprojecturl === null): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter !== 'exam_project_pending' && !$inlineapproval && !$question['_excluded'] && $question['_ready']): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
             <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$iscustomdraft): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
-            <?php if (in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible question without automatic review?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
-            <?php if (in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible version now? It will be removed from pending questions.');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+            <?php if ($prohibitedanswerchoice === null && in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible question without automatic review?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+            <?php if ($prohibitedanswerchoice === null && in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible version now? It will be removed from pending questions.');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if ($question['_sourcekind'] !== 'admin' && $revisionstatus !== 'deleted' && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a><?php endif; ?>
             <?php if (!$iscustomdraft): ?><form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'deleted' ? 'restoredeletedquestion' : 'deletequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'deleted' ? 'question-bank__button--primary' : 'question-bank__button--exclude'; ?>" type="submit"<?php if ($revisionstatus !== 'deleted'): ?> onclick="return confirm('Delete this question from the active bank and exams? You can restore it later from Deleted questions.');"<?php endif; ?>><?php echo $revisionstatus === 'deleted' ? 'Restore question' : 'Delete question'; ?></button></form><?php endif; ?>
             <?php endif; ?>
@@ -4760,7 +4833,7 @@ echo $OUTPUT->header();
         if ($sourcecardurl !== ''):
         ?> · <a href="<?php echo s($sourcecardurl); ?>" target="_blank" rel="noopener"><?php echo s($sourcecardlabel); ?></a><?php endif; ?></p><?php if (!$question['_ready']): ?><div class="question-bank__missing">Missing for practice readiness: <?php echo s(implode(', ', $question['_missing'])); ?>.</div><?php endif; ?>
         <?php if ($iscustomapproved): ?><section class="question-bank__decision-panel" aria-label="Continue after approving <?php echo s($question['questionId']); ?>"><div class="question-bank__applied-summary"><strong>Question approved and active.</strong> You can edit it, create another question, or return to the complete question bank.</div><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="button" disabled>Approved and published ✓</button><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="reopencustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit">Edit this question</button></form><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create another question</a><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Return to all questions</a></div></section><?php endif; ?>
-        <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customoriginalityclear ? '' : ' disabled'; ?> onclick="return confirm('Approve and publish this question?');">Approve and publish</button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
+        <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customoriginalityclear && $prohibitedanswerchoice === null ? '' : ' disabled'; ?> onclick="return confirm('Approve and publish this question?');">Approve and publish</button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
         <?php if ($inlineapproval): ?>
         <details class="question-bank__correction-request">
             <summary><?php echo $displaylang === 'es' ? 'Solicitar otro cambio' : 'Request another change'; ?></summary>
