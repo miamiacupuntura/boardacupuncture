@@ -652,6 +652,7 @@ grep -Fq 'value="undomergequestions"' "$TEMP_DIR/moodle/admin-herbology-question
 grep -Fq 'Similar question and answer finder' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq 'customcanpublish' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq 'Complete the question, four answer choices, answer key and explanation before publishing.' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq 'Always show the exact question that just completed automatic review.' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/dui-yao-practice-es.html"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/miscellaneous-practice-es.html"
 grep -Fq "Last course access" "$TEMP_DIR/moodle/admin-student-evaluations.php"

@@ -4100,17 +4100,15 @@ PROMPT;
                     $failurebatchid = (string)($existingrevision['aiBatchId'] ?? '');
                 }
             }
+            // A focused automatic review must return by question ID without the
+            // old readiness, domain, source or usage filters. The generated
+            // draft may legitimately change those classifications, and keeping
+            // the filters would make the same question disappear after review.
             $failureparams = $returnorigin
                 ? array_filter([
-                    'domain' => $domainfilter !== 'all' ? $domainfilter : null,
-                    'usage' => $usagefilter !== 'all' ? $usagefilter : null,
-                    'source' => $sourcefilter !== 'all' ? $sourcefilter : null,
-                    'lang' => $displaylang !== 'en' ? $displaylang : null,
-                    'examproject' => $examprojectid !== '' ? $examprojectid : null,
-                    'examview' => $examprojectid !== '' && $examprojectview !== 'candidates'
-                        ? $examprojectview
-                        : null,
                     'q' => $rewritequestionid,
+                    'examproject' => $examprojectid !== '' ? $examprojectid : null,
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
                 ])
                 : ($returneditingdrafts ? array_filter([
                     'review' => 'editing_drafts',
@@ -4246,17 +4244,14 @@ PROMPT;
     if ($generationerrors !== []) {
         $message .= ' ' . count($generationerrors) . ' question(s) could not be generated and remain pending.';
     }
+    // Always show the exact question that just completed automatic review.
+    // Old filters are intentionally removed because the new draft can move to
+    // another readiness or classification state during the review itself.
     $reviewurlparams = $returnorigin
         ? array_filter([
-            'domain' => $domainfilter !== 'all' ? $domainfilter : null,
-            'usage' => $usagefilter !== 'all' ? $usagefilter : null,
-            'source' => $sourcefilter !== 'all' ? $sourcefilter : null,
-            'lang' => $displaylang !== 'en' ? $displaylang : null,
-            'examproject' => $examprojectid !== '' ? $examprojectid : null,
-            'examview' => $examprojectid !== '' && $examprojectview !== 'candidates'
-                ? $examprojectview
-                : null,
             'q' => $rewritequestionid,
+            'examproject' => $examprojectid !== '' ? $examprojectid : null,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
         ])
         : ($returneditingdrafts ? array_filter([
             'review' => 'editing_drafts',
