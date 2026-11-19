@@ -59,7 +59,7 @@ MOODLE_FILES+=(
     single-herbs-category-warm-transform-phlegm.php
 )
 MENU_FILES=(herbology-board.php herbology-exam-history.php exam-history.php block_menu.php admin-open-assessment-as.php assessment-session.php)
-MENU_JS_FILES=(herbology-simulation.js assessment-profile-banner.js)
+MENU_ASSET_FILES=(herbology-simulation.js assessment-profile-banner.js styles.css)
 MENU_DATA_FILES=(herbology-domain-candidates.json)
 THEME_TEMPLATE_FILES=(frontpage.mustache)
 SCORM_FILES=(scorm_herbology_question_extract.py clinical_cases_extract.py scorm_word_export.py scorm_word_inventory.php)
@@ -87,7 +87,7 @@ for file in "${MENU_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/$file" -o "$TEMP_DIR/menu/$file"
     php -l "$TEMP_DIR/menu/$file" >/dev/null
 done
-for file in "${MENU_JS_FILES[@]}"; do
+for file in "${MENU_ASSET_FILES[@]}"; do
     curl -fsSL "$REPOSITORY/$REVISION/blocks/menu/$file" -o "$TEMP_DIR/menu/$file"
 done
 for file in "${MENU_DATA_FILES[@]}"; do
@@ -577,6 +577,7 @@ grep -Fq "'simulation2linear', 'simulation2adaptive'" "$TEMP_DIR/menu/herbology-
 grep -Fq "data-history-url" "$TEMP_DIR/menu/herbology-board.php"
 grep -Fq 'data-exam-number="<?php echo (int)$simulationexamnumber; ?>"' "$TEMP_DIR/menu/herbology-board.php"
 grep -Fq "herb-board__simulation-exam-switch" "$TEMP_DIR/menu/herbology-board.php"
+grep -Fq ".herb-board__simulation-exam-switch a[aria-current=\"page\"]" "$TEMP_DIR/menu/styles.css"
 grep -Fq 'examtype: `simulation${examNumber}${mode}`' "$TEMP_DIR/menu/herbology-simulation.js"
 grep -Fq "Board Simulation" "$TEMP_DIR/menu/exam-history.php"
 grep -Fq "Simulation Exam 2 · Linear" "$TEMP_DIR/menu/exam-history.php"
@@ -1864,7 +1865,7 @@ for file in "${MENU_FILES[@]}"; do
     cmp -s "$TEMP_DIR/menu/$file" "$target"
     php -l "$target" >/dev/null
 done
-for file in "${MENU_JS_FILES[@]}"; do
+for file in "${MENU_ASSET_FILES[@]}"; do
     target="$MENU_TARGET_DIR/$file"
     if [[ -f "$target" ]]; then
         cp -a "$target" "$BACKUP/menu/$file"
@@ -1943,6 +1944,7 @@ grep -Fq "'simulationlinear', 'simulationadaptive'" "$MENU_TARGET_DIR/herbology-
 grep -Fq "'simulation2linear', 'simulation2adaptive'" "$MENU_TARGET_DIR/herbology-exam-history.php"
 grep -Fq 'data-exam-number="<?php echo (int)$simulationexamnumber; ?>"' "$MENU_TARGET_DIR/herbology-board.php"
 grep -Fq "herb-board__simulation-exam-switch" "$MENU_TARGET_DIR/herbology-board.php"
+grep -Fq ".herb-board__simulation-exam-switch a[aria-current=\"page\"]" "$MENU_TARGET_DIR/styles.css"
 grep -Fq 'examtype: `simulation${examNumber}${mode}`' "$MENU_TARGET_DIR/herbology-simulation.js"
 grep -Fq "block_myprogress_herbology_apply_revisions_to_domains" "$MENU_TARGET_DIR/herbology-board.php"
 grep -Fq "empty(\$question['_excludedFromUse'])" "$MENU_TARGET_DIR/herbology-board.php"
