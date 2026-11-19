@@ -1218,6 +1218,15 @@ if ($examprojectid !== '') {
     $currentexamproject = $examprojects[$examprojectid];
     $currentexamquestionids = (array)$currentexamproject['approvedQuestionIds'];
 }
+$pendingexamproject = null;
+foreach ($examprojects as $storedexam) {
+    if ((int)$storedexam['missingCount'] > 0) {
+        $pendingexamproject = $storedexam;
+    }
+}
+if (is_array($currentexamproject) && (int)$currentexamproject['missingCount'] > 0) {
+    $pendingexamproject = $currentexamproject;
+}
 
 $isprocessedquestion = static function(array $question): bool {
     return (string)($question['_revision']['status'] ?? '') === 'approved'
@@ -4129,6 +4138,15 @@ $exam2approvedurl = new moodle_url('/blocks/myprogress/admin-herbology-question-
     'usage' => 'exam2_approved',
     'lang' => $displaylang !== 'en' ? $displaylang : null,
 ]));
+$pendingexamprojecturl = null;
+if (is_array($pendingexamproject)) {
+    $pendingexamprojecturl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+        'usage' => 'exam_project_pending',
+        'examproject' => (string)$pendingexamproject['id'],
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ]));
+    $pendingexamprojecturl->set_anchor('pending-questions');
+}
 $newquestionurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'newquestion' => 1,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
@@ -4684,7 +4702,8 @@ echo $OUTPUT->header();
             <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion</span><?php elseif ($revisionstatus === 'deleted'): ?><span class="question-bank__badge question-bank__badge--incomplete">Deleted · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Publicada' : 'Published'; ?></span><?php endif; ?>
             <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--exam">AI-assisted mock review</span><?php endif; ?>
             <?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><span class="question-bank__badge question-bank__badge--exam">Proposal pending publishing review</span><?php endif; ?>
-            <?php if ($query !== '' && !$inlineapproval): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
+            <?php if ($pendingexamprojecturl !== null && ($usagefilter !== 'exam_project_pending' || $query !== '')): ?><a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo '← ' . s((string)$pendingexamproject['name']) . ($displaylang === 'es' ? ' · revisión pendiente' : ' pending review'); ?></a><?php endif; ?>
+            <?php if ($query !== '' && !$inlineapproval && $pendingexamprojecturl === null): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter !== 'exam_project_pending' && !$inlineapproval && !$question['_excluded'] && $question['_ready']): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
             <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$iscustomdraft): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
             <?php if (in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible question without automatic review?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>

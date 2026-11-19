@@ -638,6 +638,7 @@ grep -Fq "\$projectaddurl->set_anchor('pending-questions')" "$TEMP_DIR/moodle/ad
 grep -Fq "'exam_project_pending'" "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq 'pending questions — continue here' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq 'if ($publishedexam2 === null):' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq '$pendingexamprojecturl->set_anchor' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/dui-yao-practice-es.html"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/miscellaneous-practice-es.html"
 grep -Fq "Last course access" "$TEMP_DIR/moodle/admin-student-evaluations.php"
