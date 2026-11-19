@@ -309,9 +309,9 @@ if ($DB->get_manager()->table_exists($customtable)) {
             continue;
         }
         $examkey = '';
-        if (in_array($examtype, ['linear', 'linearincomplete'], true)) {
+        if (in_array($examtype, ['linear', 'linearincomplete', 'exam2linear', 'e2linearincomplete'], true)) {
             $examkey = 'linear';
-        } else if (in_array($examtype, ['adaptive', 'adaptiveincomplete'], true)) {
+        } else if (in_array($examtype, ['adaptive', 'adaptiveincomplete', 'exam2adaptive', 'e2adaptiveincomplete'], true)) {
             $examkey = 'adaptive';
         } else if (in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true)) {
             $examkey = 'clinicalcases';
@@ -426,6 +426,16 @@ $assessmentstarturls['simulationadaptive'] = (new moodle_url('/blocks/menu/herbo
 ] + $languageparams))->out(false);
 $assessmentstarturls['simulation1linear'] = $assessmentstarturls['simulationlinear'];
 $assessmentstarturls['simulation1adaptive'] = $assessmentstarturls['simulationadaptive'];
+$assessmentstarturls['exam2linear'] = (new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'exams',
+    'exam' => 'linear',
+    'examset' => 2,
+] + $languageparams))->out(false);
+$assessmentstarturls['exam2adaptive'] = (new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'exams',
+    'exam' => 'adaptive',
+    'examset' => 2,
+] + $languageparams))->out(false);
 $assessmentstarturls['simulation2linear'] = (new moodle_url('/blocks/menu/herbology-board.php', [
     'track' => 'simulation',
     'simulation' => 2,
@@ -629,12 +639,16 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             $examname = $ises ? 'Exam 2 · Adaptativo' : 'Exam 2 · Adaptive';
         } else if ($examtype === 'simulation2linear') {
             $examname = $ises ? 'Exam 2 · Lineal' : 'Exam 2 · Linear';
+        } else if (in_array($examtype, ['exam2adaptive', 'e2adaptiveincomplete'], true)) {
+            $examname = $ises ? 'Exam 2 · Adaptativo' : 'Exam 2 · Adaptive';
+        } else if (in_array($examtype, ['exam2linear', 'e2linearincomplete'], true)) {
+            $examname = $ises ? 'Exam 2 · Lineal' : 'Exam 2 · Linear';
         } else if (in_array($examtype, ['adaptive', 'adaptiveincomplete'], true)) {
-            $examname = $ises ? 'Examen Board adaptativo' : 'Adaptive Board Exam';
+            $examname = $ises ? 'Exam 1 · Adaptativo' : 'Exam 1 · Adaptive';
         } else if (in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true)) {
             $examname = $ises ? 'Casos clínicos' : 'Clinical Cases';
         } else if (in_array($examtype, ['linear', 'linearincomplete'], true)) {
-            $examname = $ises ? 'Examen Board lineal' : 'Linear Board Exam';
+            $examname = $ises ? 'Exam 1 · Lineal' : 'Exam 1 · Linear';
         } else {
             $examname = ucwords(str_replace(['_', '-'], ' ', $examtype));
         }
@@ -646,6 +660,8 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
         $restartkey = [
             'linearincomplete' => 'linear',
             'adaptiveincomplete' => 'adaptive',
+            'e2linearincomplete' => 'exam2linear',
+            'e2adaptiveincomplete' => 'exam2adaptive',
             'clinicalincomplete' => 'clinicalcases',
         ][$examtype] ?? $examtype;
         $historyrows[] = [

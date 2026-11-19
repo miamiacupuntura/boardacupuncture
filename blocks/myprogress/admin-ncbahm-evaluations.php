@@ -144,8 +144,12 @@ $attemptname = static function(string $examtype) use (&$quiznames): string {
         'simulation1adaptive' => 'Exam 1 · Adaptive',
         'simulation2linear' => 'Exam 2 · Linear',
         'simulation2adaptive' => 'Exam 2 · Adaptive',
-        'linear' => 'Linear Board Exam',
-        'adaptive' => 'Adaptive Board Exam',
+        'linear' => 'Exam 1 · Linear',
+        'adaptive' => 'Exam 1 · Adaptive',
+        'exam2linear' => 'Exam 2 · Linear',
+        'exam2adaptive' => 'Exam 2 · Adaptive',
+        'e2linear' => 'Exam 2 · Linear',
+        'e2adaptive' => 'Exam 2 · Adaptive',
         'clinicalcases' => 'Clinical Cases Exam',
     ];
     return $names[$base] ?? ucwords(str_replace(['_', '-'], ' ', $base));

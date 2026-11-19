@@ -21,6 +21,7 @@ $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
 $domainkey = optional_param('domain', '', PARAM_ALPHANUMEXT);
 $clinicalexamkey = optional_param('caseexam', '', PARAM_ALPHANUMEXT);
 $simulationexamnumber = optional_param('simulation', 1, PARAM_INT) === 2 ? 2 : 1;
+$practiceexamnumber = optional_param('examset', 1, PARAM_INT) === 2 ? 2 : 1;
 $exammode = optional_param('exam', '', PARAM_ALPHA);
 if (!in_array($exammode, ['linear', 'adaptive'], true)) {
     $exammode = optional_param('mix', 0, PARAM_BOOL) ? 'linear' : '';
@@ -74,6 +75,9 @@ if ($mixdomains) {
 if ($track === 'simulation' && $simulationexamnumber === 2) {
     $pageparams['simulation'] = 2;
 }
+if ($track === 'exams' && $practiceexamnumber === 2) {
+    $pageparams['examset'] = 2;
+}
 if ($domainpage > 0) {
     $pageparams['page'] = $domainpage;
 }
@@ -106,7 +110,9 @@ $clinicalquizoverviewurl = new moodle_url('/blocks/menu/herbology-board.php', [
 ] + $languagecontext);
 $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'domains'] + $languagecontext);
 $clinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $languagecontext);
-$examsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext);
+$examsurl = new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'exams',
+] + ($practiceexamnumber === 2 ? ['examset' => 2] : []) + $languagecontext);
 $simulationurl = new moodle_url('/blocks/menu/herbology-board.php', [
     'track' => 'simulation',
 ] + ($simulationexamnumber === 2 ? ['simulation' => 2] : []) + $languagecontext);
@@ -138,6 +144,7 @@ if (($track === 'exams' && !$mixdomains) || $track === 'clinicalcases') {
                 'block_menu_exam_attempts',
                 'userid = :userid AND courseid = :courseid '
                     . 'AND examtype IN (:linear, :adaptive, :linearincomplete, :adaptiveincomplete, '
+                    . ':exam2linear, :exam2adaptive, :e2linearincomplete, :e2adaptiveincomplete, '
                     . ':clinical, :clinicalincomplete)',
                 [
                     'userid' => $USER->id,
@@ -146,6 +153,10 @@ if (($track === 'exams' && !$mixdomains) || $track === 'clinicalcases') {
                     'adaptive' => 'adaptive',
                     'linearincomplete' => 'linearincomplete',
                     'adaptiveincomplete' => 'adaptiveincomplete',
+                    'exam2linear' => 'exam2linear',
+                    'exam2adaptive' => 'exam2adaptive',
+                    'e2linearincomplete' => 'e2linearincomplete',
+                    'e2adaptiveincomplete' => 'e2adaptiveincomplete',
                     'clinical' => 'clinicalcases',
                     'clinicalincomplete' => 'clinicalincomplete',
                 ],
@@ -620,7 +631,9 @@ if ($selecteddomain !== null) {
 $mixedquestions = [];
 $domainshortages = [];
 if (in_array($track, ['exams', 'simulation'], true) && $mixdomains) {
-    if ($track === 'simulation' && $simulationexamnumber === 2) {
+    $usepublishedexam2 = ($track === 'simulation' && $simulationexamnumber === 2)
+        || ($track === 'exams' && $practiceexamnumber === 2);
+    if ($usepublishedexam2) {
         if ($publishedsimulationexam2 === null) {
             $domainshortages[] = [
                 'name' => 'Exam 2',
@@ -700,6 +713,8 @@ if (exam) {
     const sourceTitle = sourceViewer?.querySelector('[data-exam-source-title]');
     const sourceReturn = sourceViewer?.querySelector('[data-exam-source-return]');
     const mode = exam.dataset.examMode || 'linear';
+    const examType = exam.dataset.examType || mode;
+    const incompleteExamType = exam.dataset.incompleteType || `${mode}incomplete`;
     const difficultyRank = {foundation: 0, application: 1, analysis: 2};
     let remaining = [...questions];
     const history = [];
@@ -859,7 +874,7 @@ if (exam) {
         scoreText.textContent = `${exam.dataset.scoreWord}: ${percentage}% (${score}/${answered})`;
     };
 
-    const saveAttempt = async (examType = mode) => {
+    const saveAttempt = async (attemptType = examType) => {
         if (attemptSaving || attemptSaved) {
             return;
         }
@@ -871,7 +886,7 @@ if (exam) {
         const body = new URLSearchParams({
             sesskey: exam.dataset.sesskey,
             attemptuid: savingUid,
-            examtype: examType,
+            examtype: attemptType,
             score: String(score),
             total: String(questions.length),
             duration: String(Math.max(0, Math.round((Date.now() - attemptStartedAt) / 1000))),
@@ -987,7 +1002,7 @@ if (exam) {
         }
         restartButton.disabled = true;
         if (!examFinished && answered > 0) {
-            await saveAttempt(`${mode}incomplete`);
+            await saveAttempt(incompleteExamType);
         }
         const priorOrder = [...history, ...remaining];
         questions.forEach(question => {
@@ -2998,13 +3013,22 @@ echo $OUTPUT->header();
             $linearurl = new moodle_url('/blocks/menu/herbology-board.php', [
                 'track' => 'exams',
                 'exam' => 'linear',
+                'examset' => $practiceexamnumber,
             ] + $languagecontext);
             $adaptiveurl = new moodle_url('/blocks/menu/herbology-board.php', [
                 'track' => 'exams',
                 'exam' => 'adaptive',
+                'examset' => $practiceexamnumber,
             ] + $languagecontext);
             ?>
             <?php if ($track === 'exams' && !$mixdomains) { ?>
+                <nav class="herb-board__simulation-exam-switch" aria-label="<?php echo $ises ? 'Seleccionar examen con feedback' : 'Select an exam with feedback'; ?>">
+                    <a<?php echo $practiceexamnumber === 1 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext))->out(false); ?>">Exam 1</a>
+                    <?php if ($publishedsimulationexam2 !== null): ?><a<?php echo $practiceexamnumber === 2 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'examset' => 2] + $languagecontext))->out(false); ?>">Exam 2</a><?php endif; ?>
+                </nav>
+                <p class="herb-board__exam-minimum"><strong>Exam <?php echo (int)$practiceexamnumber; ?>:</strong> <?php echo $ises
+                    ? 'muestra la respuesta correcta y el feedback tipo mock después de cada respuesta.'
+                    : 'shows the correct answer and mock-style feedback after every response.'; ?></p>
                 <div class="herb-board__exam-models" aria-label="<?php echo $ises ? 'Modalidades de examen' : 'Exam modes'; ?>">
                     <a class="herb-board__exam-model" href="<?php echo $linearurl->out(false); ?>">
                         <strong><?php echo $ises ? 'Examen lineal' : 'Linear exam'; ?></strong>
@@ -3086,7 +3110,10 @@ echo $OUTPUT->header();
                                 );
                                 $attemptcomplete = !in_array(
                                     $attempt->examtype,
-                                    ['clinicalincomplete', 'linearincomplete', 'adaptiveincomplete'],
+                                    [
+                                        'clinicalincomplete', 'linearincomplete', 'adaptiveincomplete',
+                                        'e2linearincomplete', 'e2adaptiveincomplete',
+                                    ],
                                     true
                                 );
                                 $attemptpassed = $attemptcomplete && $attemptpercentage >= 70;
@@ -3104,13 +3131,14 @@ echo $OUTPUT->header();
                                         : ($ises ? 'Casos clínicos' : 'Clinical Cases');
                                     $attempttype = $attemptkind;
                                 } else {
-                                    $attempttype = in_array(
+                                    $attemptnumber = str_starts_with($attempt->examtype, 'exam2')
+                                            || str_starts_with($attempt->examtype, 'e2') ? 2 : 1;
+                                    $attemptmode = in_array(
                                         $attempt->examtype,
-                                        ['adaptive', 'adaptiveincomplete'],
+                                        ['adaptive', 'adaptiveincomplete', 'exam2adaptive', 'e2adaptiveincomplete'],
                                         true
-                                    )
-                                        ? ($ises ? 'Adaptativo' : 'Adaptive')
-                                        : ($ises ? 'Lineal' : 'Linear');
+                                    ) ? ($ises ? 'Adaptativo' : 'Adaptive') : ($ises ? 'Lineal' : 'Linear');
+                                    $attempttype = 'Exam ' . $attemptnumber . ' · ' . $attemptmode;
                                 }
                             ?>
                                 <article role="listitem" class="<?php echo s($attemptclass); ?>">
@@ -3148,6 +3176,8 @@ echo $OUTPUT->header();
             <?php } else if ($mixdomains && count($mixedquestions) === 100) { ?>
                 <form id="herbology-domain-exam" class="herb-board__exam"
                     data-exam-mode="<?php echo s($exammode); ?>"
+                    data-exam-type="<?php echo s($practiceexamnumber === 2 ? 'exam2' . $exammode : $exammode); ?>"
+                    data-incomplete-type="<?php echo s($practiceexamnumber === 2 ? 'e2' . $exammode . 'incomplete' : $exammode . 'incomplete'); ?>"
                     data-exam-language="<?php echo $ises ? 'es' : 'en'; ?>"
                     data-history-url="<?php echo s((new moodle_url('/blocks/menu/herbology-exam-history.php'))->out(false)); ?>"
                     data-sesskey="<?php echo s(sesskey()); ?>"
@@ -3172,9 +3202,9 @@ echo $OUTPUT->header();
                         : 'Restart and shuffle the exam? Current answers will be cleared and, if you started answering, the attempt will be saved as Not completed.'; ?>">
                     <div class="herb-board__exam-heading">
                         <div>
-                            <span><?php echo $exammode === 'adaptive'
-                                ? ($ises ? 'Examen adaptativo' : 'Adaptive exam')
-                                : ($ises ? 'Examen lineal' : 'Linear exam'); ?></span>
+                            <span>Exam <?php echo (int)$practiceexamnumber; ?> · <?php echo $exammode === 'adaptive'
+                                ? ($ises ? 'Adaptativo' : 'Adaptive')
+                                : ($ises ? 'Lineal' : 'Linear'); ?></span>
                             <h4><?php echo $ises ? 'Herbología China · 100 preguntas' : 'Chinese Herbology · 100 Questions'; ?></h4>
                         </div>
                         <p><?php echo $ises

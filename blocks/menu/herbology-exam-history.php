@@ -35,6 +35,7 @@ $validexamtype = $isboardquizattempt || in_array(
     $examtype,
     [
         'linear', 'adaptive', 'linearincomplete', 'adaptiveincomplete',
+        'exam2linear', 'exam2adaptive', 'e2linearincomplete', 'e2adaptiveincomplete',
         'clinicalcases', 'clinicalincomplete',
         'simulationlinear', 'simulationadaptive',
         'simulation1linear', 'simulation1adaptive',
@@ -45,7 +46,10 @@ $validexamtype = $isboardquizattempt || in_array(
 $isclinicalattempt = in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true);
 $isincompleteattempt = in_array(
     $examtype,
-    ['linearincomplete', 'adaptiveincomplete', 'clinicalincomplete'],
+    [
+        'linearincomplete', 'adaptiveincomplete', 'e2linearincomplete', 'e2adaptiveincomplete',
+        'clinicalincomplete',
+    ],
     true
 );
 $validtotal = $isboardquizattempt

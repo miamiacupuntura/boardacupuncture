@@ -155,8 +155,12 @@ $assessmentname = static function(string $examtype) use (&$quiznames, $text): st
         'simulation1adaptive' => $text('Exam 1 · Adaptive', 'Exam 1 · Adaptativo'),
         'simulation2linear' => $text('Exam 2 · Linear', 'Exam 2 · Lineal'),
         'simulation2adaptive' => $text('Exam 2 · Adaptive', 'Exam 2 · Adaptativo'),
-        'linear' => $text('Linear Board Exam', 'Examen Board lineal'),
-        'adaptive' => $text('Adaptive Board Exam', 'Examen Board adaptativo'),
+        'linear' => $text('Exam 1 · Linear', 'Exam 1 · Lineal'),
+        'adaptive' => $text('Exam 1 · Adaptive', 'Exam 1 · Adaptativo'),
+        'exam2linear' => $text('Exam 2 · Linear', 'Exam 2 · Lineal'),
+        'exam2adaptive' => $text('Exam 2 · Adaptive', 'Exam 2 · Adaptativo'),
+        'e2linear' => $text('Exam 2 · Linear', 'Exam 2 · Lineal'),
+        'e2adaptive' => $text('Exam 2 · Adaptive', 'Exam 2 · Adaptativo'),
         'clinicalcases' => $text('Clinical Cases Exam', 'Examen de casos clínicos'),
     ];
     if (isset($names[$base])) {
