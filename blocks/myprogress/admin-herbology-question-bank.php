@@ -519,11 +519,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishcurrentques
         $store['questions'][$questionid] = $record;
         return $store;
     });
+    $nextpendingurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+        'usage' => 'exam2_review',
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ]));
+    $nextpendingurl->set_anchor('pending-questions');
     redirect(
-        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
-            'usage' => 'exam2_review',
-            'lang' => $displaylang !== 'en' ? $displaylang : null,
-        ])),
+        $nextpendingurl,
         'Question approved and published without automatic review. It was removed from pending questions.',
         null,
         \core\output\notification::NOTIFY_SUCCESS
@@ -627,21 +629,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
         }
     }
     if ($remainingbatchquestions !== []) {
+        $remainingbatchurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+            'usage' => 'exam2_review',
+            'review' => 'ai_drafts',
+            'aibatch' => $reviewbatch,
+        ]);
+        $remainingbatchurl->set_anchor('pending-questions');
         redirect(
-            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
-                'usage' => 'exam2_review',
-                'review' => 'ai_drafts',
-                'aibatch' => $reviewbatch,
-            ]),
+            $remainingbatchurl,
             'Question accepted and published. It was removed from this pending review screen.',
             null,
             \core\output\notification::NOTIFY_SUCCESS
         );
     }
+    $pendingquestionsurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+        'usage' => 'exam2_review',
+    ]);
+    $pendingquestionsurl->set_anchor('pending-questions');
     redirect(
-        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
-            'usage' => 'exam2_review',
-        ]),
+        $pendingquestionsurl,
         'Question accepted and published. This five-question review group is complete.',
         null,
         \core\output\notification::NOTIFY_SUCCESS
@@ -3723,6 +3729,7 @@ $exam2url = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php
     'usage' => 'exam2_review',
     'lang' => $displaylang !== 'en' ? $displaylang : null,
 ]));
+$exam2url->set_anchor('pending-questions');
 $exam2approvedurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'usage' => 'exam2_approved',
     'lang' => $displaylang !== 'en' ? $displaylang : null,
@@ -4137,7 +4144,7 @@ echo $OUTPUT->header();
         <?php if ($activefilters !== []): ?><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Limpiar todos los filtros' : 'Clear all filters'; ?></a><?php endif; ?>
     </section>
     <section class="question-bank__domains"><table><thead><tr><th>Domain</th><th>Classified</th><th>SCORM</th><th>Ready</th><th>Exam 1</th><th>Exam 2 review</th><th>Ready reserve</th></tr></thead><tbody><?php foreach ($domains as $domainid => $domain): ?><tr><td><strong>Domain <?php echo (int)$domain['number']; ?></strong> · <?php echo s($domain['name']); ?></td><td><?php echo (int)$domainstats[$domainid]['total']; ?></td><td><?php echo (int)$domainstats[$domainid]['scorm']; ?></td><td><?php echo (int)$domainstats[$domainid]['ready']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam1']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam2']; ?></td><td><?php echo (int)$domainstats[$domainid]['reserve']; ?></td></tr><?php endforeach; ?></tbody></table></section>
-    <div class="question-bank__result-head"><span><?php echo $displaylang === 'es' ? 'Preguntas filtradas' : 'Filtered questions'; ?></span><span><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
+    <div id="pending-questions" class="question-bank__result-head"><span><?php echo $usagefilter === 'exam2_review' ? ($displaylang === 'es' ? 'Preguntas pendientes — continúe aquí' : 'Pending questions — continue here') : ($displaylang === 'es' ? 'Preguntas filtradas' : 'Filtered questions'); ?></span><span><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
     <?php if ($pagequestions === []): ?><div class="question-bank__item"><?php echo $displaylang === 'es' ? 'Ninguna pregunta coincide con estos filtros.' : 'No questions match these filters.'; ?></div><?php else: ?>
     <section class="question-bank__items"><?php foreach ($pagequestions as $question):
         $questionrevisionrecord = is_array($revisionstore['questions'][$question['questionId']] ?? null)
