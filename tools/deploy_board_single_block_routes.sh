@@ -337,7 +337,7 @@ for quiz_html in "$FORMULA_HTML_TEMP" "$FORMULA_ES_HTML_TEMP"; do
     grep -Fq "formula-practice.js?v=20261111-3" "$quiz_html"
 done
 for quiz_html in "$SINGLE_HERB_HTML_TEMP" "$SINGLE_HERB_ES_HTML_TEMP"; do
-    grep -Fq "20261111-1" "$quiz_html"
+    grep -Fq "20261119-1" "$quiz_html"
 done
 
 grep -Fq "Exam History" "$EXAM_HISTORY_TEMP"

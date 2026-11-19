@@ -34,7 +34,7 @@ php -l "$TEMP_DIR/tools/inject_library_navigation.php" >/dev/null
 grep -Fq "allResources: 'Exam History'" "$TEMP_DIR/library-navigation.js"
 grep -Fq "allResources: 'Historial de exámenes'" "$TEMP_DIR/library-navigation.js"
 grep -Fq "/blocks/menu/exam-history.php?lang=" "$TEMP_DIR/library-navigation.js"
-grep -Fq "library-navigation.js?v=20261111-1" "$TEMP_DIR/tools/inject_library_navigation.php"
+grep -Fq "library-navigation.js?v=20261119-1" "$TEMP_DIR/tools/inject_library_navigation.php"
 
 declare -a TARGETS=()
 declare -A SEEN=()
@@ -101,7 +101,7 @@ for target in "${TARGETS[@]}"; do
 
     dui_yao_page="$target/ma-huang-gui-zhi-dui-yao.html"
     [[ -f "$dui_yao_page" ]] || dui_yao_page="$target/dui-yao.html"
-    grep -Fq "library-navigation.js?v=20261111-1" "$dui_yao_page"
+    grep -Fq "library-navigation.js?v=20261119-1" "$dui_yao_page"
 
     if grep -Fq "library-navigation.js?v=20261108-14" "$target"/*.html; then
         echo "ERROR: quedan fichas con la versión anterior de Library navigation en $target" >&2
@@ -121,5 +121,5 @@ fi
 
 echo "OK: Library home fue reemplazado por Exam History."
 echo "OK: Exam History enlaza al historial de exámenes en English y Español."
-echo "OK: las fichas Dui Yao cargan library-navigation.js?v=20261111-1."
+echo "OK: las fichas Dui Yao cargan library-navigation.js?v=20261119-1."
 echo "RESPALDO: $BACKUP"

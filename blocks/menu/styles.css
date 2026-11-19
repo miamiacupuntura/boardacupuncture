@@ -1568,6 +1568,38 @@ a.herb-board__domain:focus {
     font-weight: 800;
 }
 
+.herb-board__mock-sizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 13px;
+    padding-top: 10px;
+    border-top: 1px solid #e4e0f2;
+}
+
+.herb-board__mock-sizes a {
+    display: inline-flex;
+    min-width: 38px;
+    min-height: 34px;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    border: 1px solid #b9a8e5;
+    border-radius: 7px;
+    background: #fff;
+    color: #5633ad;
+    font-size: .78rem;
+    font-weight: 850;
+    text-decoration: none !important;
+}
+
+.herb-board__mock-sizes a:hover,
+.herb-board__mock-sizes a:focus {
+    border-color: #6d4bc3;
+    background: #6d4bc3;
+    color: #fff;
+}
+
 .herb-board__domain-back {
     display: inline-flex;
     margin-bottom: 17px;
@@ -2996,6 +3028,11 @@ a.herb-board__domain:focus {
 .herb-board__exam-options label:has(input:checked) {
     border-color: #6d4bc3;
     background: #f4f0ff;
+}
+
+.herb-board__exam-options label.is-answer {
+    border-color: #45a98c;
+    background: #e9f8f2;
 }
 
 .herb-board__exam-options input {

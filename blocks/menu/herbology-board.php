@@ -10,9 +10,11 @@ $lang = optional_param('lang', '', PARAM_ALPHA);
 $ises = $lang === 'es' || ($lang === '' && current_language() === 'es');
 $fromlibrary = optional_param('from', 'library', PARAM_ALPHA) !== 'dashboard';
 $track = optional_param('track', 'herbs', PARAM_ALPHA);
-if (!in_array($track, ['practice', 'herbs', 'formulas', 'quiz', 'clinicalcases', 'domains', 'exams', 'simulation'], true)) {
+if (!in_array($track, ['practice', 'herbs', 'formulas', 'quiz', 'clinicalcases', 'domains', 'exams', 'simulation', 'mock'], true)) {
     $track = 'herbs';
 }
+$mockcategory = optional_param('mockcategory', '', PARAM_ALPHANUMEXT);
+$mocksize = max(1, min(100, optional_param('mocksize', 10, PARAM_INT)));
 $quizsection = optional_param('quizsection', 'all', PARAM_ALPHA);
 if ($track !== 'quiz' || !in_array($quizsection, ['all', 'herbs', 'formulas', 'clinical'], true)) {
     $quizsection = 'all';
@@ -84,6 +86,10 @@ if ($domainpage > 0) {
 if ($clinicalexamkey !== '') {
     $pageparams['caseexam'] = $clinicalexamkey;
 }
+if ($track === 'mock' && $mockcategory !== '') {
+    $pageparams['mockcategory'] = $mockcategory;
+    $pageparams['mocksize'] = $mocksize;
+}
 $pageurl = new moodle_url('/blocks/menu/herbology-board.php', $pageparams);
 $languageparams = $pageparams;
 if ($ises) {
@@ -116,6 +122,9 @@ $examsurl = new moodle_url('/blocks/menu/herbology-board.php', [
 $simulationurl = new moodle_url('/blocks/menu/herbology-board.php', [
     'track' => 'simulation',
 ] + ($simulationexamnumber === 2 ? ['simulation' => 2] : []) + $languagecontext);
+$mockurl = new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'mock',
+] + $languagecontext);
 $examsdashboardurl = $fromlibrary ? $libraryurl : new moodle_url('/my/', [], 'board-level-herbology');
 $examhistoryurl = $examsurl->out(false) . '#herb-board-exam-history';
 $simulationhistoryurl = $simulationurl->out(false) . '#herb-board-simulation-history';
@@ -453,7 +462,7 @@ if ($ises) {
 }
 $domainseedpath = __DIR__ . '/herbology-domain-bank.json';
 $domainbankdirectory = $CFG->dataroot . '/board-domain-banks';
-$usesdomainbank = in_array($track, ['domains', 'exams', 'simulation'], true);
+$usesdomainbank = in_array($track, ['domains', 'exams', 'simulation', 'mock'], true);
 if ($usesdomainbank) {
     make_writable_directory($domainbankdirectory);
 }
@@ -714,6 +723,137 @@ if (in_array($track, ['exams', 'simulation'], true) && $mixdomains) {
             <=> ((int)($right['examTemplate']['globalPosition'] ?? PHP_INT_MAX))
         );
     }
+}
+
+// Mock Exams reuse the approved Simulation Exam questions. They never copy or
+// rewrite the older Quiz banks. Exam 2 replaces an Exam 1 item with the same ID
+// because it contains the later editorial review and feedback.
+$mockcategorydefinitions = [
+    'formula_differentiation' => [
+        'group' => 'formulas',
+        'name' => 'Formula selection and differentiation',
+        'name_es' => 'Selección y diferenciación de fórmulas',
+    ],
+    'formula_composition' => [
+        'group' => 'formulas',
+        'name' => 'Formula composition and modification',
+        'name_es' => 'Composición y modificación de fórmulas',
+    ],
+    'single_herb' => [
+        'group' => 'herbs',
+        'name' => 'Individual herbs',
+        'name_es' => 'Hierbas individuales',
+    ],
+    'dui_yao' => [
+        'group' => 'herbs',
+        'name' => 'Duì Yào and compatibility',
+        'name_es' => 'Duì Yào y compatibilidad',
+    ],
+    'safety_dispensing' => [
+        'group' => 'herbs',
+        'name' => 'Safety and dispensing',
+        'name_es' => 'Seguridad y dispensación',
+    ],
+    'scope_aliases' => [
+        'group' => 'herbs',
+        'name' => 'Roster boundaries, aliases and substitutions',
+        'name_es' => 'Límites, alias y sustituciones',
+    ],
+];
+$mockquestionsbycategory = array_fill_keys(array_keys($mockcategorydefinitions), []);
+$mockinventory = [
+    'target' => 200,
+    'exam1Total' => 0,
+    'exam1Classified' => 0,
+    'exam2Total' => 0,
+    'exam2Classified' => 0,
+    'classified' => 0,
+    'unique' => 0,
+    'duplicates' => 0,
+    'pending' => 200,
+];
+foreach ($mockcategorydefinitions as $mockdomainid => $unusedmockdefinition) {
+    foreach ($domainbank['domains'][$mockdomainid] ?? [] as $examonequestion) {
+        if (empty($examonequestion['examTemplate']['globalPosition'])) {
+            continue;
+        }
+        $mockinventory['exam1Total']++;
+        if (empty($examonequestion['prompt'])
+                || count($examonequestion['options'] ?? []) !== 4
+                || empty($examonequestion['correctLabel'])
+                || empty($examonequestion['explanation'])) {
+            continue;
+        }
+        if ($ises) {
+            $translation = $examonequestion['translations']['es'] ?? null;
+            if (is_array($translation)
+                    && !empty($translation['prompt'])
+                    && count($translation['options'] ?? []) === 4
+                    && !empty($translation['explanation'])) {
+                $examonequestion['prompt'] = $translation['prompt'];
+                $examonequestion['options'] = $translation['options'];
+                $examonequestion['explanation'] = $translation['explanation'];
+            }
+        }
+        $examonequestion['mockSourceExam'] = 1;
+        $examonequestionid = (string)($examonequestion['questionId'] ?? '');
+        if ($examonequestionid !== '') {
+            $mockquestionsbycategory[$mockdomainid][$examonequestionid] = $examonequestion;
+            $mockinventory['exam1Classified']++;
+        }
+    }
+}
+if ($publishedsimulationexam2 !== null) {
+    foreach ($publishedsimulationexam2['questions'] as $publishedquestion) {
+        $mockinventory['exam2Total']++;
+        $publishedquestiondomain = (string)($publishedquestion['domainId'] ?? '');
+        if (!isset($mockquestionsbycategory[$publishedquestiondomain])
+                || empty($publishedquestion['prompt'])
+                || count($publishedquestion['options'] ?? []) !== 4
+                || empty($publishedquestion['correctLabel'])
+                || empty($publishedquestion['explanation'])) {
+            continue;
+        }
+        if ($ises) {
+            $translation = $publishedquestion['translations']['es'] ?? null;
+            if (is_array($translation)
+                    && !empty($translation['prompt'])
+                    && count($translation['options'] ?? []) === 4
+                    && !empty($translation['explanation'])) {
+                $publishedquestion['prompt'] = $translation['prompt'];
+                $publishedquestion['options'] = $translation['options'];
+                $publishedquestion['explanation'] = $translation['explanation'];
+            }
+        }
+        $publishedquestion['mockSourceExam'] = 2;
+        $publishedquestionid = (string)($publishedquestion['questionId'] ?? '');
+        if ($publishedquestionid !== '') {
+            $mockquestionsbycategory[$publishedquestiondomain][$publishedquestionid] = $publishedquestion;
+            $mockinventory['exam2Classified']++;
+        }
+    }
+}
+foreach ($mockquestionsbycategory as &$mockcategoryquestions) {
+    $mockcategoryquestions = array_values($mockcategoryquestions);
+    $mockinventory['unique'] += count($mockcategoryquestions);
+}
+unset($mockcategoryquestions);
+$mockinventory['classified'] = $mockinventory['exam1Classified'] + $mockinventory['exam2Classified'];
+$mockinventory['duplicates'] = max(0, $mockinventory['classified'] - $mockinventory['unique']);
+$mockinventory['pending'] = max(0, $mockinventory['target'] - $mockinventory['classified']);
+$selectedmockdefinition = $mockcategory !== ''
+    ? ($mockcategorydefinitions[$mockcategory] ?? null)
+    : null;
+$selectedmockquestions = [];
+if ($track === 'mock' && $mockcategory !== '' && $selectedmockdefinition === null) {
+    redirect($mockurl, $ises ? 'La categoría solicitada no existe.' : 'The requested category does not exist.', null,
+        \core\output\notification::NOTIFY_ERROR);
+}
+if ($track === 'mock' && $selectedmockdefinition !== null) {
+    $selectedmockquestions = $mockquestionsbycategory[$mockcategory];
+    shuffle($selectedmockquestions);
+    $mocksize = min($mocksize, max(1, count($selectedmockquestions)));
+    $selectedmockquestions = array_slice($selectedmockquestions, 0, $mocksize);
 }
 
 if ($track === 'exams' && $mixdomains && count($mixedquestions) === 100) {
@@ -1140,6 +1280,13 @@ if ($track === 'simulation' && $mixdomains && count($mixedquestions) === 100) {
     $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-simulation.js', ['v' => '2026111801']));
 }
 
+if ($track === 'mock' && $selectedmockquestions) {
+    $mockscriptpath = __DIR__ . '/herbology-mock-exam.js';
+    $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-mock-exam.js', [
+        'v' => is_readable($mockscriptpath) ? (string)filemtime($mockscriptpath) : '2026111901',
+    ]));
+}
+
 if ($track === 'clinicalcases' && $selectedclinicalexam !== null) {
     $clinicalscriptpath = __DIR__ . '/herbology-clinical-cases.js';
     $clinicalscriptversion = is_readable($clinicalscriptpath)
@@ -1154,13 +1301,15 @@ if ($track === 'clinicalcases' && $selectedclinicalexam !== null) {
 $PAGE->set_url($pageurl);
 $PAGE->set_context($membershipcontext);
 $PAGE->set_pagelayout('standard');
-$pagetitle = in_array($track, ['exams', 'simulation'], true)
+$pagetitle = $track === 'mock'
+    ? 'Mock Exam'
+    : (in_array($track, ['exams', 'simulation'], true)
     ? ($track === 'simulation'
         ? ($ises ? 'Simulación de Herbología' : 'Herbology Simulation')
         : ($ises ? 'Exámenes de Herbología' : 'Herbology Exams'))
     : (in_array($track, ['quiz', 'clinicalcases'], true)
         ? ($ises ? 'Quiz de Herbología' : 'Herbology Quiz')
-        : ($ises ? 'Práctica de Herbología' : 'Herbology Practice'));
+        : ($ises ? 'Práctica de Herbología' : 'Herbology Practice')));
 $PAGE->set_title($pagetitle);
 $PAGE->set_heading($pagetitle);
 $PAGE->requires->js(new moodle_url('/blocks/menu/assessment-profile-banner.js', ['v' => '2026111601']));
@@ -1888,6 +2037,175 @@ echo $OUTPUT->header();
                     </a>
                 <?php } ?>
             </div>
+        </section>
+    <?php } else if ($track === 'mock') { ?>
+        <section class="herb-board__panel" aria-labelledby="herb-board-mock-title">
+            <div class="herb-board__panel-heading">
+                <div>
+                    <span class="herb-board__domain-kicker">MOCK EXAM</span>
+                    <h3 id="herb-board-mock-title"><?php echo $selectedmockdefinition === null
+                        ? ($ises ? 'Elige una categoría' : 'Choose a category')
+                        : s($selectedmockdefinition[$ises ? 'name_es' : 'name']); ?></h3>
+                    <p><?php echo $ises
+                        ? 'Estos exámenes reutilizan las preguntas aprobadas de Simulation Exam 1 y Exam 2 con su feedback refinado. Los Quizzes existentes no se modifican.'
+                        : 'These exams reuse the approved Simulation Exam 1 and Exam 2 questions with their refined feedback. Existing Quizzes are unchanged.'; ?></p>
+                </div>
+                <?php if ($selectedmockdefinition !== null): ?>
+                    <a class="herb-board__back" href="<?php echo $mockurl->out(false); ?>"><?php echo $ises
+                        ? '← Todas las categorías' : '← All categories'; ?></a>
+                <?php endif; ?>
+            </div>
+
+            <section class="herb-board__domain-summary" aria-label="<?php echo $ises
+                ? 'Inventario del banco de Mock Exams' : 'Mock Exam bank inventory'; ?>">
+                <span><strong><?php echo (int)$mockinventory['classified']; ?> / <?php echo (int)$mockinventory['target']; ?></strong>
+                    <?php echo $ises ? 'clasificadas automáticamente' : 'automatically classified'; ?></span>
+                <span><strong><?php echo (int)$mockinventory['exam1Classified']; ?> / 100</strong> Simulation Exam 1</span>
+                <span><strong><?php echo (int)$mockinventory['exam2Classified']; ?> / 100</strong> Simulation Exam 2</span>
+                <span><strong><?php echo (int)$mockinventory['unique']; ?></strong>
+                    <?php echo $ises ? 'preguntas únicas en Mock Exam' : 'unique Mock Exam questions'; ?></span>
+                <span><strong><?php echo (int)$mockinventory['pending']; ?></strong>
+                    <?php echo $ises ? 'pendientes de clasificar' : 'awaiting classification'; ?></span>
+                <span><strong><?php echo (int)$mockinventory['duplicates']; ?></strong>
+                    <?php echo $ises ? 'IDs repetidos entre exámenes' : 'IDs shared by both exams'; ?></span>
+            </section>
+            <p class="herb-board__exam-minimum"><?php echo $ises
+                ? 'El inventario se recalcula al abrir esta página. Una nueva publicación de Exam 2 actualiza automáticamente el banco de Mock Exams.'
+                : 'The inventory is recalculated whenever this page opens. Publishing a new Exam 2 version automatically updates the Mock Exam bank.'; ?></p>
+
+            <?php if ($publishedsimulationexam2 === null): ?>
+                <div class="herb-board__notice"><?php echo $ises
+                    ? 'Simulation Exam 2 todavía no está disponible en este servidor. Mientras tanto se muestran las preguntas clasificadas de Exam 1.'
+                    : 'Simulation Exam 2 is not available on this server yet. Classified Exam 1 questions are shown in the meantime.'; ?></div>
+            <?php endif; ?>
+
+            <?php if ($selectedmockdefinition === null): ?>
+                <?php foreach (['formulas', 'herbs'] as $mockgroup): ?>
+                    <h4 class="herb-board__subheading<?php echo $mockgroup === 'herbs' ? ' herb-board__subheading--spaced' : ''; ?>">
+                        <?php echo $mockgroup === 'formulas'
+                            ? ($ises ? 'Mock Exams de fórmulas' : 'Formula Mock Exams')
+                            : ($ises ? 'Mock Exams de hierbas, compatibilidad y seguridad' : 'Herbs, compatibility and safety Mock Exams'); ?>
+                    </h4>
+                    <div class="herb-board__domains">
+                        <?php foreach ($mockcategorydefinitions as $mockcategoryid => $mockdefinition):
+                            if ($mockdefinition['group'] !== $mockgroup) {
+                                continue;
+                            }
+                            $mockavailable = count($mockquestionsbycategory[$mockcategoryid]);
+                            $mockpresets = array_values(array_filter(
+                                [5, 10, 15, 25],
+                                static fn(int $size): bool => $size <= $mockavailable
+                            ));
+                            if ($mockavailable > 0 && !in_array($mockavailable, $mockpresets, true)) {
+                                $mockpresets[] = $mockavailable;
+                            }
+                        ?>
+                            <article class="herb-board__domain">
+                                <span class="herb-board__domain-number"><?php echo $ises ? 'Categoría Mock' : 'Mock category'; ?></span>
+                                <h4><?php echo s($mockdefinition[$ises ? 'name_es' : 'name']); ?></h4>
+                                <p><strong><?php echo $mockavailable; ?></strong> <?php echo $ises
+                                    ? 'preguntas únicas disponibles de Exam 1 y Exam 2.'
+                                    : 'unique questions available from Exam 1 and Exam 2.'; ?></p>
+                                <?php if ($mockpresets): ?>
+                                    <div class="herb-board__mock-sizes" aria-label="<?php echo $ises ? 'Cantidad de preguntas' : 'Number of questions'; ?>">
+                                        <?php foreach ($mockpresets as $mockpreset):
+                                            $mocklaunchurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                                                'track' => 'mock',
+                                                'mockcategory' => $mockcategoryid,
+                                                'mocksize' => $mockpreset,
+                                            ] + $languagecontext);
+                                        ?>
+                                            <a href="<?php echo $mocklaunchurl->out(false); ?>"><?php echo $mockpreset === $mockavailable
+                                                ? ($ises ? 'Todas (' . $mockpreset . ')' : 'All (' . $mockpreset . ')')
+                                                : $mockpreset; ?></a>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php else: ?>
+                                    <span class="herb-board__domain-status"><?php echo $ises
+                                        ? 'Pendiente de clasificación' : 'Awaiting classification'; ?></span>
+                                <?php endif; ?>
+                            </article>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php else if (!$selectedmockquestions): ?>
+                <div class="herb-board__notice"><?php echo $ises
+                    ? 'Esta categoría todavía no contiene preguntas clasificadas.'
+                    : 'This category does not contain classified questions yet.'; ?></div>
+            <?php else: ?>
+                <form id="herbology-mock-exam" class="herb-board__exam"
+                    data-question-word="<?php echo $ises ? 'Pregunta' : 'Question'; ?>"
+                    data-of-word="<?php echo $ises ? 'de' : 'of'; ?>"
+                    data-score-word="<?php echo $ises ? 'Aciertos' : 'Accuracy'; ?>"
+                    data-correct-word="<?php echo $ises ? 'correctas' : 'correct'; ?>"
+                    data-correct-feedback="<?php echo $ises ? 'Correcto' : 'Correct'; ?>"
+                    data-incorrect-feedback="<?php echo $ises ? 'Incorrecto' : 'Incorrect'; ?>"
+                    data-next-word="<?php echo $ises ? 'Siguiente →' : 'Next →'; ?>"
+                    data-finish-word="<?php echo $ises ? 'Ver resultado' : 'View result'; ?>"
+                    data-completed-word="<?php echo $ises ? 'Mock Exam completado' : 'Mock Exam complete'; ?>">
+                    <div class="herb-board__exam-heading">
+                        <div>
+                            <span>Mock Exam · <?php echo s($selectedmockdefinition[$ises ? 'name_es' : 'name']); ?></span>
+                            <h4><?php echo count($selectedmockquestions); ?> <?php echo $ises ? 'preguntas refinadas' : 'refined questions'; ?></h4>
+                        </div>
+                        <p><?php echo $ises
+                            ? 'La respuesta correcta y el feedback aparecen después de responder cada pregunta.'
+                            : 'The correct answer and feedback appear after each response.'; ?></p>
+                    </div>
+                    <div class="herb-board__exam-progress" aria-live="polite">
+                        <div class="herb-board__exam-progress-summary">
+                            <strong data-mock-progress-text></strong>
+                            <strong data-mock-score></strong>
+                        </div>
+                        <div class="herb-board__exam-progress-bar"><span data-mock-progress-bar></span></div>
+                    </div>
+                    <?php foreach ($selectedmockquestions as $mockquestionnumber => $mockquestion):
+                        $mockcorrecttext = '';
+                        foreach ($mockquestion['options'] as $mockoption) {
+                            if (($mockoption['label'] ?? '') === ($mockquestion['correctLabel'] ?? '')) {
+                                $mockcorrecttext = (string)($mockoption['text'] ?? '');
+                                break;
+                            }
+                        }
+                    ?>
+                        <fieldset class="herb-board__exam-question" hidden
+                            data-correct="<?php echo s((string)$mockquestion['correctLabel']); ?>">
+                            <legend>
+                                <span class="herb-board__exam-question-number"><?php echo $ises ? 'Pregunta' : 'Question'; ?> <?php echo $mockquestionnumber + 1; ?></span>
+                                <?php echo s((string)$mockquestion['prompt']); ?>
+                            </legend>
+                            <div class="herb-board__exam-options">
+                                <?php foreach ($mockquestion['options'] as $mockoption): ?>
+                                    <label>
+                                        <input type="radio" name="mock-question-<?php echo $mockquestionnumber + 1; ?>"
+                                            value="<?php echo s((string)$mockoption['label']); ?>">
+                                        <strong><?php echo s((string)$mockoption['label']); ?>.</strong>
+                                        <span><?php echo s((string)$mockoption['text']); ?></span>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                            <div class="herb-board__exam-feedback" hidden>
+                                <span class="herb-board__exam-verdict"></span>
+                                <strong><?php echo $ises ? 'Respuesta correcta' : 'Correct answer'; ?>:
+                                    <?php echo s((string)$mockquestion['correctLabel']); ?>. <?php echo s($mockcorrecttext); ?></strong>
+                                <p><?php echo s((string)$mockquestion['explanation']); ?></p>
+                                <p class="herb-board__exam-nomenclature"><strong><?php echo $ises ? 'Origen' : 'Source'; ?>:</strong>
+                                    Simulation Exam <?php echo (int)($mockquestion['mockSourceExam'] ?? 1); ?> ·
+                                    <?php echo s((string)($mockquestion['questionId'] ?? '')); ?></p>
+                            </div>
+                        </fieldset>
+                    <?php endforeach; ?>
+                    <div class="herb-board__exam-submit">
+                        <div class="herb-board__exam-navigation" data-mock-controls role="group">
+                            <button type="button" data-mock-previous><?php echo $ises ? '← Anterior' : '← Previous'; ?></button>
+                            <button type="button" data-mock-next><?php echo $ises ? 'Siguiente →' : 'Next →'; ?></button>
+                        </div>
+                        <output data-mock-result hidden></output>
+                        <button class="herb-board__exam-restart" type="button" data-mock-restart hidden><?php echo $ises
+                            ? '↻ Repetir con otra selección' : '↻ Repeat with another selection'; ?></button>
+                    </div>
+                </form>
+            <?php endif; ?>
         </section>
     <?php } else if ($track === 'herbs') { ?>
         <section class="herb-board__panel" aria-labelledby="herb-board-practice-title">
