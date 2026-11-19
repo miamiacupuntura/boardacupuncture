@@ -75,6 +75,10 @@ grep -Fq 'question-bank__active-filter-actions' "$SOURCE_FILE"
 grep -Fq 'findprohibitedanswerchoice' "$SOURCE_FILE"
 grep -Fq 'hasprohibitednegativewording' "$SOURCE_FILE"
 grep -Fq 'For channel-combination questions' "$SOURCE_FILE"
+grep -Fq 'buildsimilaritysearch' "$SOURCE_FILE"
+grep -Fq 'value="mergequestions"' "$SOURCE_FILE"
+grep -Fq 'value="undomergequestions"' "$SOURCE_FILE"
+grep -Fq 'Similar question and answer finder' "$SOURCE_FILE"
 
 mkdir -p "$BACKUP_DIR"
 cp -a -- "$TARGET" "$BACKUP_FILE"
@@ -98,6 +102,8 @@ php -l "$TARGET" >/dev/null
 grep -Fq "\$aipromptversion = 'ncbahm-mock-editor-3.4';" "$TARGET"
 grep -Fq 'if ($publishedexam2 === null):' "$TARGET"
 grep -Fq "'exam_project_pending'" "$TARGET"
+grep -Fq 'buildsimilaritysearch' "$TARGET"
+grep -Fq 'value="mergequestions"' "$TARGET"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -132,6 +138,7 @@ SOURCE_SHA256="$(sha256sum "$SOURCE_FILE" | awk '{print $1}')"
 
 echo "OK: NCBAHM Question Bank recuperado con la revisión $REVISION."
 echo "OK: Exam 2 publicado queda fuera del constructor; Exam 3 usa revisión consecutiva."
+echo "OK: buscador global de respuestas similares y fusión recuperable instalados."
 echo "OK: versión editorial ncbahm-mock-editor-3.4 instalada."
 echo "SHA256: $INSTALLED_SHA256"
 if [[ "${#WEB_RUNTIME_RELOADED[@]}" -gt 0 ]]; then

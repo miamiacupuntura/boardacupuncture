@@ -24,6 +24,9 @@ $shownewquestionform = (bool)optional_param('newquestion', 0, PARAM_BOOL);
 $showaiassistant = (bool)optional_param('aiassistant', 0, PARAM_BOOL);
 $showexamcreator = (bool)optional_param('createexam', 0, PARAM_BOOL);
 $showexam2duplicatereport = (bool)optional_param('duplicatescan', 0, PARAM_BOOL);
+$showsimilarityfinder = (bool)optional_param('similarfinder', 0, PARAM_BOOL);
+$similaritysearch = trim(optional_param('similarsearch', '', PARAM_TEXT));
+$similarityquestionid = optional_param('similarquestion', '', PARAM_ALPHANUMEXT);
 $publishexam2requested = (bool)optional_param('publishexam2', 0, PARAM_BOOL);
 $examprojectid = optional_param('examproject', '', PARAM_ALPHANUMEXT);
 $examprojectview = optional_param('examview', 'candidates', PARAM_ALPHA);
@@ -1949,6 +1952,342 @@ $buildexam2duplicatereport = static function(array $questions, bool $spanish): a
         'createdAt' => gmdate(DATE_ATOM),
     ];
 };
+
+/**
+ * Search the complete active bank for questions with similar answers or wording.
+ *
+ * When a question ID is supplied, answer similarity receives the highest weight
+ * and the result can be used by the administrator's merge workflow. Free-text
+ * searches are useful for a herb, formula, channel set or answer phrase.
+ */
+$buildsimilaritysearch = static function(
+    array $questions,
+    string $search,
+    string $requestedquestionid = ''
+): array {
+    $stopwords = array_fill_keys([
+        'the', 'and', 'with', 'that', 'this', 'from', 'into', 'than', 'then', 'which',
+        'what', 'when', 'where', 'patient', 'presents', 'reports', 'case', 'clinical',
+        'following', 'according', 'most', 'best', 'appropriate', 'select', 'choose',
+        'would', 'should', 'could', 'herb', 'formula', 'answer', 'correct', 'option',
+        'treatment', 'symptoms', 'signs', 'has', 'have', 'had', 'for', 'are', 'was',
+        'were', 'its', 'his', 'her', 'their', 'una', 'uno', 'que', 'con', 'por',
+        'para', 'como', 'cual', 'cuál', 'paciente', 'presenta', 'indique', 'seleccione',
+    ], true);
+    $tokens = static function(string $text) use ($stopwords): array {
+        $text = core_text::strtolower($text);
+        $text = preg_replace('/[^\p{L}\p{N}]+/u', ' ', $text) ?? '';
+        $parts = preg_split('/\s+/u', trim($text), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $parts = array_filter($parts, static function(string $part) use ($stopwords): bool {
+            // Two-letter Pinyin and channel abbreviations such as SP, ST and LU
+            // carry meaning and must remain searchable.
+            return core_text::strlen($part) >= 2 && !isset($stopwords[$part]);
+        });
+        return array_values(array_unique($parts));
+    };
+    $similarity = static function(array $left, array $right): float {
+        if ($left === [] || $right === []) {
+            return 0.0;
+        }
+        $union = count(array_unique(array_merge($left, $right)));
+        return $union > 0 ? count(array_intersect($left, $right)) / $union : 0.0;
+    };
+    $normalizetext = static function(string $text): string {
+        return core_text::strtolower(trim(preg_replace('/[^\p{L}\p{N}]+/u', ' ', $text) ?? ''));
+    };
+    $correctanswer = static function(array $question): string {
+        $correctlabel = strtoupper(trim((string)($question['correctLabel'] ?? '')));
+        foreach ((array)($question['options'] ?? []) as $option) {
+            if (strtoupper(trim((string)($option['label'] ?? ''))) === $correctlabel) {
+                return trim((string)($option['text'] ?? ''));
+            }
+        }
+        return '';
+    };
+    $active = [];
+    foreach ($questions as $question) {
+        $questionid = (string)($question['questionId'] ?? '');
+        if ($questionid === ''
+                || !empty($question['_excluded'])
+                || (string)($question['_revision']['status'] ?? '') === 'deleted') {
+            continue;
+        }
+        $prompt = trim((string)($question['prompt'] ?? ''));
+        $answer = $correctanswer($question);
+        $explanation = trim((string)($question['explanation'] ?? ''));
+        $optiontext = implode(' ', array_map(
+            static fn(array $option): string => (string)($option['text'] ?? ''),
+            is_array($question['options'] ?? null) ? $question['options'] : []
+        ));
+        $active[$questionid] = [
+            'questionId' => $questionid,
+            'prompt' => $prompt,
+            'answer' => $answer,
+            'explanation' => $explanation,
+            'domainId' => (string)($question['_domainid'] ?? $question['domainId'] ?? ''),
+            'sourceKind' => (string)($question['_sourcekind'] ?? $question['sourceKind'] ?? ''),
+            'exam1Position' => (int)($question['_examposition'] ?? 0),
+            'exam2Position' => (int)($question['_exam2position'] ?? 0),
+            'promptTokens' => $tokens($prompt),
+            'answerTokens' => $tokens($answer),
+            'explanationTokens' => $tokens($explanation),
+            'optionTokens' => $tokens($optiontext),
+            'fullTokens' => $tokens($prompt . ' ' . $optiontext . ' ' . $answer . ' ' . $explanation),
+            'normalizedAnswer' => $normalizetext($answer),
+        ];
+    }
+
+    $targetid = $requestedquestionid;
+    if ($targetid === '' && isset($active[$search])) {
+        $targetid = $search;
+    }
+    $target = $targetid !== '' && isset($active[$targetid]) ? $active[$targetid] : null;
+    $search = trim($search);
+    if ($target === null && $search === '') {
+        return ['target' => null, 'search' => '', 'matches' => [], 'comparedCount' => count($active)];
+    }
+
+    $querytokens = $target !== null
+        ? $target['fullTokens']
+        : $tokens($search);
+    $matches = [];
+    foreach ($active as $candidateid => $candidate) {
+        if ($target !== null && $candidateid === $target['questionId']) {
+            continue;
+        }
+        if ($target !== null) {
+            $promptscore = $similarity($target['promptTokens'], $candidate['promptTokens']);
+            $answerscore = $similarity($target['answerTokens'], $candidate['answerTokens']);
+            $explanationscore = $similarity(
+                $target['explanationTokens'],
+                $candidate['explanationTokens']
+            );
+            $optionscore = $similarity($target['optionTokens'], $candidate['optionTokens']);
+            $exactanswer = $target['normalizedAnswer'] !== ''
+                && $target['normalizedAnswer'] === $candidate['normalizedAnswer'];
+            if ($exactanswer) {
+                $answerscore = 1.0;
+            }
+            $score = max(
+                ($answerscore * 0.60) + ($promptscore * 0.30) + ($explanationscore * 0.10),
+                ($promptscore * 0.55) + ($optionscore * 0.25) + ($answerscore * 0.20),
+                $exactanswer ? 0.92 : 0.0
+            );
+        } else {
+            $promptscore = $similarity($querytokens, $candidate['promptTokens']);
+            $answerscore = $similarity($querytokens, $candidate['answerTokens']);
+            $explanationscore = $similarity($querytokens, $candidate['explanationTokens']);
+            $optionscore = $similarity($querytokens, $candidate['optionTokens']);
+            $exactanswer = $normalizetext($search) !== ''
+                && $normalizetext($search) === $candidate['normalizedAnswer'];
+            $score = max(
+                ($answerscore * 0.65) + ($promptscore * 0.25) + ($explanationscore * 0.10),
+                ($optionscore * 0.55) + ($promptscore * 0.30) + ($answerscore * 0.15),
+                $similarity($querytokens, $candidate['fullTokens']) * 0.90,
+                $exactanswer ? 1.0 : 0.0
+            );
+        }
+        if ($score < 0.08) {
+            continue;
+        }
+        $matches[] = $candidate + [
+            'score' => $score,
+            'similarityPercent' => (int)round($score * 100),
+            'answerSimilarityPercent' => (int)round($answerscore * 100),
+            'promptSimilarityPercent' => (int)round($promptscore * 100),
+            'exactAnswer' => $exactanswer,
+        ];
+    }
+    usort($matches, static function(array $left, array $right): int {
+        $scorecomparison = $right['score'] <=> $left['score'];
+        return $scorecomparison !== 0
+            ? $scorecomparison
+            : strcmp((string)$left['questionId'], (string)$right['questionId']);
+    });
+    return [
+        'target' => $target,
+        'search' => $target !== null ? (string)$target['questionId'] : $search,
+        'matches' => array_slice($matches, 0, 30),
+        'comparedCount' => count($active),
+    ];
+};
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'mergequestions') {
+    require_sesskey();
+    $keepquestionid = required_param('keepquestionid', PARAM_ALPHANUMEXT);
+    $duplicatequestionid = required_param('duplicatequestionid', PARAM_ALPHANUMEXT);
+    if ($keepquestionid === $duplicatequestionid) {
+        throw new invalid_parameter_exception('Choose two different questions to merge.');
+    }
+    $activebyid = [];
+    foreach ($allquestions as $candidatequestion) {
+        if (!empty($candidatequestion['_excluded'])
+                || (string)($candidatequestion['_revision']['status'] ?? '') === 'deleted') {
+            continue;
+        }
+        $activebyid[(string)$candidatequestion['questionId']] = $candidatequestion;
+    }
+    if (!isset($activebyid[$keepquestionid], $activebyid[$duplicatequestionid])) {
+        throw new invalid_parameter_exception(
+            'Both questions must still be active before they can be merged.'
+        );
+    }
+    if ((int)($activebyid[$duplicatequestionid]['_examposition'] ?? 0) > 0) {
+        throw new invalid_parameter_exception(
+            'The question selected for removal belongs to Exam 1. Keep that question and merge the other one into it.'
+        );
+    }
+    $savedat = gmdate(DATE_ATOM);
+    $savedbyname = fullname($USER);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $keepquestionid,
+        $duplicatequestionid,
+        $savedat,
+        $savedbyname,
+        $USER
+    ): array {
+        $questions = is_array($store['questions'] ?? null) ? $store['questions'] : [];
+        $previous = is_array($questions[$duplicatequestionid] ?? null)
+            ? $questions[$duplicatequestionid]
+            : [];
+        $history = is_array($previous['history'] ?? null) ? $previous['history'] : [];
+        if ($previous !== []) {
+            $history[] = array_diff_key($previous, ['history' => true, 'mergeRestoreRecord' => true]);
+            $history = array_slice($history, -20);
+        }
+        $removedfromprojects = [];
+        foreach ((array)($store['examProjects'] ?? []) as $projectid => $project) {
+            if (!is_array($project)) {
+                continue;
+            }
+            $projectquestionids = array_values(array_unique(array_map(
+                'strval',
+                is_array($project['questionIds'] ?? null) ? $project['questionIds'] : []
+            )));
+            if (!in_array($duplicatequestionid, $projectquestionids, true)) {
+                continue;
+            }
+            $removedfromprojects[] = (string)$projectid;
+            $project['questionIds'] = array_values(array_filter(
+                $projectquestionids,
+                static fn(string $id): bool => $id !== $duplicatequestionid
+            ));
+            $project['updatedAt'] = $savedat;
+            $store['examProjects'][$projectid] = $project;
+        }
+        $record = $previous;
+        $record['mergeRestoreRecord'] = array_diff_key($previous, ['mergeRestoreRecord' => true]);
+        $record['status'] = 'exclusion_candidate';
+        $record['requestReclassification'] = false;
+        $record['exclusionReason'] = 'Merged as a duplicate into ' . $keepquestionid
+            . '. The original remains preserved and can be restored.';
+        $record['mergedInto'] = $keepquestionid;
+        $record['mergedAt'] = $savedat;
+        $record['mergedById'] = (int)$USER->id;
+        $record['mergedByName'] = $savedbyname;
+        $record['mergedRemovedFromProjects'] = $removedfromprojects;
+        $record['revisionNumber'] = (int)($previous['revisionNumber'] ?? 0) + 1;
+        $record['savedAt'] = $savedat;
+        $record['savedById'] = (int)$USER->id;
+        $record['savedByName'] = $savedbyname;
+        $record['history'] = $history;
+        unset($record['examProjectId']);
+        $questions[$duplicatequestionid] = $record;
+        $store['questions'] = $questions;
+        return $store;
+    });
+    $SESSION->ncbahm_last_question_merge = [
+        'keptQuestionId' => $keepquestionid,
+        'mergedQuestionId' => $duplicatequestionid,
+        'createdAt' => $savedat,
+    ];
+    $mergeurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+        'similarfinder' => 1,
+        'similarquestion' => $keepquestionid,
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ]));
+    $mergeurl->set_anchor('similarity-finder');
+    redirect(
+        $mergeurl,
+        $displaylang === 'es'
+            ? 'Fusión completada: se conservó ' . $keepquestionid . ' y ' . $duplicatequestionid
+                . ' pasó a Posibles exclusiones. No se eliminó ningún contenido.'
+            : 'Merge completed: ' . $keepquestionid . ' was kept and ' . $duplicatequestionid
+                . ' moved to Possible exclusions. No content was deleted.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'undomergequestions') {
+    require_sesskey();
+    $duplicatequestionid = required_param('duplicatequestionid', PARAM_ALPHANUMEXT);
+    $currentrecord = $revisionstore['questions'][$duplicatequestionid] ?? null;
+    if (!is_array($currentrecord)
+            || (string)($currentrecord['status'] ?? '') !== 'exclusion_candidate'
+            || trim((string)($currentrecord['mergedInto'] ?? '')) === ''
+            || !array_key_exists('mergeRestoreRecord', $currentrecord)
+            || !is_array($currentrecord['mergeRestoreRecord'])) {
+        throw new invalid_parameter_exception('This question does not have a reversible merge.');
+    }
+    $keptquestionid = (string)$currentrecord['mergedInto'];
+    $savedat = gmdate(DATE_ATOM);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $duplicatequestionid,
+        $savedat
+    ): array {
+        $current = $store['questions'][$duplicatequestionid] ?? null;
+        if (!is_array($current)
+                || !is_array($current['mergeRestoreRecord'] ?? null)) {
+            throw new invalid_parameter_exception('The merge can no longer be restored.');
+        }
+        $restore = $current['mergeRestoreRecord'];
+        $projectids = array_values(array_filter(array_map(
+            'strval',
+            is_array($current['mergedRemovedFromProjects'] ?? null)
+                ? $current['mergedRemovedFromProjects']
+                : []
+        )));
+        if ($restore === []) {
+            unset($store['questions'][$duplicatequestionid]);
+        } else {
+            $store['questions'][$duplicatequestionid] = $restore;
+        }
+        foreach ($projectids as $projectid) {
+            $project = $store['examProjects'][$projectid] ?? null;
+            if (!is_array($project)) {
+                continue;
+            }
+            $questionids = array_values(array_unique(array_map(
+                'strval',
+                is_array($project['questionIds'] ?? null) ? $project['questionIds'] : []
+            )));
+            if (!in_array($duplicatequestionid, $questionids, true)
+                    && count($questionids) < (int)($project['targetCount'] ?? 100)) {
+                $questionids[] = $duplicatequestionid;
+            }
+            $project['questionIds'] = $questionids;
+            $project['updatedAt'] = $savedat;
+            $store['examProjects'][$projectid] = $project;
+        }
+        return $store;
+    });
+    unset($SESSION->ncbahm_last_question_merge);
+    $restoreurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+        'similarfinder' => 1,
+        'similarquestion' => $keptquestionid,
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ]));
+    $restoreurl->set_anchor('similarity-finder');
+    redirect(
+        $restoreurl,
+        $displaylang === 'es'
+            ? 'La fusión se deshizo y la pregunta volvió a su estado anterior.'
+            : 'The merge was undone and the question returned to its previous state.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
 
 $saveassistantturn = static function(string $request, string $response): void {
     global $SESSION;
@@ -4294,6 +4633,20 @@ $assistanturl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank
     'aiassistant' => 1,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
 ]));
+$similarityurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+    'similarfinder' => 1,
+    'lang' => $displaylang !== 'en' ? $displaylang : null,
+]));
+$similarityurl->set_anchor('similarity-finder');
+$showsimilarityfinder = $showsimilarityfinder
+    || $similaritysearch !== ''
+    || $similarityquestionid !== '';
+$similarityreport = $showsimilarityfinder
+    ? $buildsimilaritysearch($allquestions, $similaritysearch, $similarityquestionid)
+    : ['target' => null, 'search' => '', 'matches' => [], 'comparedCount' => 0];
+$lastquestionmerge = is_array($SESSION->ncbahm_last_question_merge ?? null)
+    ? $SESSION->ncbahm_last_question_merge
+    : null;
 $createexamurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'createexam' => 1,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
@@ -4494,10 +4847,82 @@ echo $OUTPUT->header();
 .question-bank__button--language{min-height:32px;padding:5px 10px;border-color:#7c5bc4;background:#f4f0ff;color:#4c1d95!important}
 .question-bank__exam-builder{margin:0 0 16px;padding:16px;border:1px solid #cbb9ee;border-radius:11px;background:#faf8ff}.question-bank__exam-builder-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.question-bank__exam-builder-head h3{margin:0;color:#3b167d;font-size:21px}.question-bank__exam-builder-head p{margin:3px 0 0;color:#66557e}.question-bank__exam-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.question-bank__exam-card{padding:13px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__exam-card--active{border:2px solid #6d28d9;background:#f8f5ff}.question-bank__exam-card h4{margin:0 0 7px;font-size:17px}.question-bank__exam-numbers{display:flex;flex-wrap:wrap;gap:7px 14px;margin-bottom:9px;color:#52677a}.question-bank__exam-numbers strong{color:#08746f}.question-bank__exam-progress{height:9px;margin-bottom:10px;overflow:hidden;border-radius:999px;background:#e8eef1}.question-bank__exam-progress span{display:block;height:100%;border-radius:999px;background:#6d28d9}.question-bank__published-exam{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;padding:8px 10px;border-radius:7px;background:#e8f8f3;color:#075f59}.question-bank__published-exam span{font-size:12px}.question-bank__exam-card .question-bank__editor-actions{gap:6px}.question-bank__exam-card .question-bank__button{min-height:34px;padding:5px 9px}.question-bank__exam-card form{margin:0}.question-bank__duplicate-report{margin-top:12px;padding:13px 14px;border:1px solid #8b5cf6;border-left:5px solid #6d28d9;border-radius:9px;background:#fff}.question-bank__duplicate-report h4{margin:0 0 6px;color:#3b167d}.question-bank__duplicate-report>p{margin:0 0 9px;color:#52677a}.question-bank__duplicate-undo{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:10px 0;padding:10px 12px;border-radius:7px;background:#e8f8f3;color:#075f59}.question-bank__duplicate-undo form,.question-bank__duplicate-candidate form{margin:0}.question-bank__duplicate-pairs{display:grid;gap:10px;margin-top:10px}.question-bank__duplicate-pair{padding:11px;border:1px solid #ded7ef;border-radius:8px;background:#f8f6fc}.question-bank__duplicate-pair-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.question-bank__duplicate-score{padding:4px 7px;border-radius:999px;background:#ede9fe;color:#4c1d95;font-weight:900}.question-bank__duplicate-candidates{display:grid;grid-template-columns:1fr 1fr;gap:9px}.question-bank__duplicate-candidate{display:flex;align-items:flex-start;flex-direction:column;gap:8px;padding:10px;border:1px solid #d7e2e7;border-radius:7px;background:#fff}.question-bank__duplicate-candidate strong{color:#17384b}.question-bank__duplicate-candidate p{flex:1;margin:0;color:#334e60;line-height:1.45}.question-bank__duplicate-exact{padding:9px 11px;border-radius:7px;background:#fff3e6;color:#8a3c00;font-weight:800}.question-bank__duplicate-empty{padding:12px;border-radius:7px;background:#e8f8f3;color:#075f59;font-weight:800}.question-bank__exam-form{display:grid;grid-template-columns:minmax(240px,2fr) minmax(160px,1fr) auto;align-items:end;gap:10px;margin:0 0 13px;padding:13px;border:1px solid #cbb9ee;border-radius:9px;background:#fff}.question-bank__exam-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__exam-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #b9cbd4;border-radius:7px}@media(max-width:900px){.question-bank__exam-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.question-bank__exam-builder-head{align-items:stretch;flex-direction:column}.question-bank__exam-grid,.question-bank__exam-form,.question-bank__duplicate-candidates{grid-template-columns:1fr}}
 .question-bank__publish-readiness{margin:0 0 10px;padding:8px 10px;border-radius:7px;background:#fff3e6;color:#8a3c00;font-size:12px;font-weight:850}.question-bank__publish-readiness.is-ready{background:#e8f8f3;color:#075f59}.question-bank__button[disabled]{cursor:not-allowed;opacity:.55}
+.question-bank__similarity-finder{margin:0 0 16px;padding:16px;border:1px solid #0b8f87;border-left:5px solid #0b8f87;border-radius:11px;background:#f5fbfa}.question-bank__similarity-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.question-bank__similarity-head h3{margin:0 0 5px;color:#075f59;font-size:21px}.question-bank__similarity-head p{max-width:900px;margin:0;color:#52677a}.question-bank__similarity-form{display:grid;grid-template-columns:minmax(280px,1fr) auto;align-items:end;gap:10px;margin:14px 0 8px}.question-bank__similarity-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:900}.question-bank__similarity-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #9bbdc0;border-radius:7px;background:#fff}.question-bank__similarity-note{margin:7px 0 12px;color:#52677a;font-size:13px}.question-bank__similarity-target{padding:12px;border:2px solid #6d28d9;border-radius:8px;background:#fff}.question-bank__similarity-target>span{display:block;color:#6d28d9;font-size:11px;font-weight:900;text-transform:uppercase}.question-bank__similarity-target>strong{display:block;margin:3px 0 5px;font-size:17px}.question-bank__similarity-target p{margin:0 0 7px}.question-bank__similarity-summary{margin:12px 0 8px;color:#52677a}.question-bank__similarity-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.question-bank__similarity-result{padding:12px;border:1px solid #c9dadd;border-radius:8px;background:#fff}.question-bank__similarity-result>header{display:flex;align-items:center;justify-content:space-between;gap:9px}.question-bank__similarity-result>p{margin:9px 0;color:#334e60;line-height:1.45}.question-bank__similarity-answer{margin:8px 0;padding:8px 10px;border-radius:6px;background:#eef9f6;color:#075f59}.question-bank__similarity-result>small{display:block;margin-bottom:9px;color:#66557e}.question-bank__merge-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;padding-top:9px;border-top:1px solid #e1eaed}.question-bank__merge-actions form{margin:0}@media(max-width:800px){.question-bank__similarity-results,.question-bank__similarity-form{grid-template-columns:1fr}.question-bank__similarity-head{flex-direction:column}}
 </style>
 <main class="question-bank">
-    <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
+    <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button" href="<?php echo $similarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar answers'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
     <?php if ($displaylang === 'es'): ?><section class="question-bank__language-state"><strong>Vista en español activa</strong>Los controles principales y las traducciones disponibles se muestran en español. Cuando una pregunta todavía no tiene traducción guardada, se identifica claramente y se conserva el original inglés para evitar una traducción clínica no verificada.</section><?php endif; ?>
+    <?php if ($showsimilarityfinder):
+        $similaritytarget = is_array($similarityreport['target'] ?? null)
+            ? $similarityreport['target']
+            : null;
+        $similaritymatches = is_array($similarityreport['matches'] ?? null)
+            ? $similarityreport['matches']
+            : [];
+        $similarityformvalue = $similaritytarget !== null
+            ? (string)$similaritytarget['questionId']
+            : $similaritysearch;
+    ?>
+    <section id="similarity-finder" class="question-bank__similarity-finder" aria-live="polite">
+        <header class="question-bank__similarity-head"><div><h3><?php echo $displaylang === 'es' ? 'Buscador de preguntas y respuestas similares' : 'Similar question and answer finder'; ?></h3><p><?php echo $displaylang === 'es'
+            ? 'Busca en todo el banco activo, no solamente en un examen. Puedes usar un ID, una respuesta correcta, una hierba, una fórmula, canales o una frase.'
+            : 'Searches the complete active bank, not only one exam. Enter a question ID, correct answer, herb, formula, channels or a phrase.'; ?></p></div><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a></header>
+        <form class="question-bank__similarity-form" method="get" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+            <label><span><?php echo $displaylang === 'es' ? 'ID o contenido de la respuesta' : 'Question ID or answer content'; ?></span><input type="text" name="similarsearch" value="<?php echo s($similarityformvalue); ?>" maxlength="500" placeholder="<?php echo $displaylang === 'es' ? 'Ejemplo: Gan Jiang, SP ST LU o SCORM-SH-…' : 'Example: Gan Jiang, SP ST LU or SCORM-SH-…'; ?>" required></label>
+            <input type="hidden" name="similarfinder" value="1">
+            <?php if ($displaylang !== 'en'): ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><?php endif; ?>
+            <button class="question-bank__button question-bank__button--primary" type="submit"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar'; ?></button>
+        </form>
+        <p class="question-bank__similarity-note"><?php echo $displaylang === 'es'
+            ? 'La búsqueda compara enunciado, respuesta correcta, opciones y explicación. Una fusión conserva la pregunta elegida y mueve la otra a Posibles exclusiones; nunca la elimina.'
+            : 'The search compares the prompt, correct answer, choices and explanation. A merge keeps the selected question and moves the other to Possible exclusions; it never deletes it.'; ?></p>
+        <?php if ($lastquestionmerge !== null
+                && is_array($revisionstore['questions'][$lastquestionmerge['mergedQuestionId'] ?? ''] ?? null)
+                && (string)($revisionstore['questions'][$lastquestionmerge['mergedQuestionId']]['mergedInto'] ?? '')
+                    === (string)($lastquestionmerge['keptQuestionId'] ?? '')): ?>
+        <div class="question-bank__duplicate-undo"><strong><?php echo $displaylang === 'es' ? 'Última fusión:' : 'Last merge:'; ?> <?php echo s((string)$lastquestionmerge['mergedQuestionId']); ?> → <?php echo s((string)$lastquestionmerge['keptQuestionId']); ?></strong><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="undomergequestions"><input type="hidden" name="duplicatequestionid" value="<?php echo s((string)$lastquestionmerge['mergedQuestionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button" type="submit"><?php echo $displaylang === 'es' ? 'Deshacer fusión' : 'Undo merge'; ?></button></form></div>
+        <?php endif; ?>
+        <?php if ($similaritytarget !== null): ?>
+        <article class="question-bank__similarity-target"><span><?php echo $displaylang === 'es' ? 'Pregunta de referencia' : 'Reference question'; ?></span><strong><?php echo s((string)$similaritytarget['questionId']); ?></strong><p><?php echo s((string)$similaritytarget['prompt']); ?></p><div><b><?php echo $displaylang === 'es' ? 'Respuesta correcta:' : 'Correct answer:'; ?></b> <?php echo s((string)$similaritytarget['answer']); ?></div><?php if ((int)$similaritytarget['exam1Position'] > 0): ?><small>Exam 1 · <?php echo $displaylang === 'es' ? 'posición' : 'position'; ?> <?php echo (int)$similaritytarget['exam1Position']; ?> · <?php echo $displaylang === 'es' ? 'debe conservarse' : 'must be kept'; ?></small><?php elseif ((int)$similaritytarget['exam2Position'] > 0): ?><small>Exam 2 · <?php echo $displaylang === 'es' ? 'posición' : 'position'; ?> <?php echo (int)$similaritytarget['exam2Position']; ?></small><?php endif; ?></article>
+        <?php endif; ?>
+        <?php if ($similarityformvalue !== ''): ?>
+        <div class="question-bank__similarity-summary"><strong><?php echo count($similaritymatches); ?></strong> <?php echo $displaylang === 'es' ? 'coincidencias mostradas de' : 'matches shown after comparing'; ?> <strong><?php echo (int)($similarityreport['comparedCount'] ?? 0); ?></strong> <?php echo $displaylang === 'es' ? 'preguntas activas.' : 'active questions.'; ?></div>
+        <?php if ($similaritymatches === []): ?><div class="question-bank__duplicate-empty"><?php echo $displaylang === 'es' ? 'No se encontraron respuestas o preguntas suficientemente similares.' : 'No sufficiently similar answers or questions were found.'; ?></div><?php else: ?>
+        <div class="question-bank__similarity-results">
+            <?php foreach ($similaritymatches as $similaritymatch):
+                $matchid = (string)$similaritymatch['questionId'];
+                $matchviewurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+                    'q' => $matchid,
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                ]));
+                $matchviewurl->set_anchor('question-' . $matchid);
+                $matchreferenceurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+                    'similarfinder' => 1,
+                    'similarquestion' => $matchid,
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                ]));
+                $matchreferenceurl->set_anchor('similarity-finder');
+            ?>
+            <article class="question-bank__similarity-result">
+                <header><strong><?php echo s($matchid); ?></strong><span class="question-bank__duplicate-score"><?php echo (int)$similaritymatch['similarityPercent']; ?>%</span></header>
+                <p><?php echo s((string)$similaritymatch['prompt']); ?></p>
+                <div class="question-bank__similarity-answer"><b><?php echo $displaylang === 'es' ? 'Respuesta correcta:' : 'Correct answer:'; ?></b> <?php echo s((string)$similaritymatch['answer']); ?></div>
+                <small><?php echo $displaylang === 'es' ? 'Respuesta' : 'Answer'; ?>: <?php echo (int)$similaritymatch['answerSimilarityPercent']; ?>% · <?php echo $displaylang === 'es' ? 'Enunciado' : 'Prompt'; ?>: <?php echo (int)$similaritymatch['promptSimilarityPercent']; ?>%<?php echo !empty($similaritymatch['exactAnswer']) ? ($displaylang === 'es' ? ' · misma respuesta' : ' · same answer') : ''; ?></small>
+                <?php if ((int)$similaritymatch['exam1Position'] > 0): ?><small class="question-bank__similarity-usage">Exam 1 · <?php echo $displaylang === 'es' ? 'posición' : 'position'; ?> <?php echo (int)$similaritymatch['exam1Position']; ?> · <?php echo $displaylang === 'es' ? 'debe conservarse' : 'must be kept'; ?></small><?php elseif ((int)$similaritymatch['exam2Position'] > 0): ?><small class="question-bank__similarity-usage">Exam 2 · <?php echo $displaylang === 'es' ? 'posición' : 'position'; ?> <?php echo (int)$similaritymatch['exam2Position']; ?></small><?php endif; ?>
+                <div class="question-bank__editor-actions"><a class="question-bank__button" href="<?php echo $matchviewurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver pregunta' : 'View question'; ?></a><a class="question-bank__button" href="<?php echo $matchreferenceurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Usar como referencia' : 'Use as reference'; ?></a></div>
+                <?php if ($similaritytarget !== null): ?>
+                <div class="question-bank__merge-actions">
+                    <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="mergequestions"><input type="hidden" name="keepquestionid" value="<?php echo s((string)$similaritytarget['questionId']); ?>"><input type="hidden" name="duplicatequestionid" value="<?php echo s($matchid); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo (int)$similaritymatch['exam1Position'] > 0 ? ' disabled title="Exam 1 questions must be kept"' : ''; ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Conservar ' . s((string)$similaritytarget['questionId']) . ' y fusionar ' . s($matchid) . ' como duplicada recuperable?' : 'Keep ' . s((string)$similaritytarget['questionId']) . ' and merge ' . s($matchid) . ' as a recoverable duplicate?'; ?>');"><?php echo $displaylang === 'es' ? 'Conservar ' : 'Keep '; ?><?php echo s((string)$similaritytarget['questionId']); ?></button></form>
+                    <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="mergequestions"><input type="hidden" name="keepquestionid" value="<?php echo s($matchid); ?>"><input type="hidden" name="duplicatequestionid" value="<?php echo s((string)$similaritytarget['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button" type="submit"<?php echo (int)$similaritytarget['exam1Position'] > 0 ? ' disabled title="Exam 1 questions must be kept"' : ''; ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Conservar ' . s($matchid) . ' y fusionar ' . s((string)$similaritytarget['questionId']) . ' como duplicada recuperable?' : 'Keep ' . s($matchid) . ' and merge ' . s((string)$similaritytarget['questionId']) . ' as a recoverable duplicate?'; ?>');"><?php echo $displaylang === 'es' ? 'Conservar ' : 'Keep '; ?><?php echo s($matchid); ?></button></form>
+                </div>
+                <?php endif; ?>
+            </article>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+        <?php endif; ?>
+    </section>
+    <?php endif; ?>
     <section id="exam-builder" class="question-bank__exam-builder" aria-label="<?php echo $displaylang === 'es' ? 'Administrador de exámenes' : 'Exam builder'; ?>">
         <header class="question-bank__exam-builder-head"><div><h3><?php echo $displaylang === 'es' ? 'Administrador de exámenes' : 'Exam builder'; ?></h3><p><?php echo $displaylang === 'es' ? 'Crea y nombra exámenes; el progreso muestra cuántas preguntas están listas y cuántas faltan.' : 'Create and name exams; progress shows how many questions are ready and how many are still missing.'; ?></p></div><a class="question-bank__button question-bank__button--publish" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? '+ Crear examen' : '+ Create exam'; ?></a></header>
         <?php if ($showexamcreator): ?>
@@ -4822,6 +5247,15 @@ echo $OUTPUT->header();
             ])
         );
         $questionlanguageurl->set_anchor('question-' . (string)$question['questionId']);
+        $questionsimilarityurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter([
+                'similarfinder' => 1,
+                'similarquestion' => (string)$question['questionId'],
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ])
+        );
+        $questionsimilarityurl->set_anchor('similarity-finder');
         $questioninexamproject = $examprojectid !== ''
             && in_array((string)$question['questionId'], $currentexamquestionids, true);
         $currentexamprojectfull = is_array($currentexamproject)
@@ -4853,6 +5287,7 @@ echo $OUTPUT->header();
             <?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><span class="question-bank__badge question-bank__badge--exam">Proposal pending publishing review</span><?php endif; ?>
             <?php if ($pendingexamprojecturl !== null && ($usagefilter !== 'exam_project_pending' || $query !== '')): ?><a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo '← ' . s((string)$pendingexamproject['name']) . ($displaylang === 'es' ? ' · revisión pendiente' : ' pending review'); ?></a><?php endif; ?>
             <?php if ($query !== '' && !$inlineapproval && $pendingexamprojecturl === null): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
+            <?php if (!$question['_excluded']): ?><a class="question-bank__button" href="<?php echo $questionsimilarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar respuestas similares' : 'Find similar answers'; ?></a><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter !== 'exam_project_pending' && !$inlineapproval && !$question['_excluded'] && $question['_ready']): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
             <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$iscustomdraft): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible question without automatic review?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
