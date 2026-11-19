@@ -689,11 +689,15 @@ $boardmiscellaneousquizurl = new moodle_url(
 $boardclinicalquizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz', 'quizsection' => 'clinical'] + $boardlanguagecontext);
 $boardclinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $boardlanguagecontext);
 $boardexamsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $boardlanguagecontext);
-$boardlinearexamurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'linear'] + $boardlanguagecontext);
-$boardadaptiveexamurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'adaptive'] + $boardlanguagecontext);
+$boardlinearexam1url = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'linear'] + $boardlanguagecontext);
+$boardlinearexam2url = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'linear', 'examset' => 2] + $boardlanguagecontext);
+$boardadaptiveexam1url = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'adaptive'] + $boardlanguagecontext);
+$boardadaptiveexam2url = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'adaptive', 'examset' => 2] + $boardlanguagecontext);
 $boardsimulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $boardlanguagecontext);
-$boardlinearsimulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'linear'] + $boardlanguagecontext);
-$boardadaptivesimulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'adaptive'] + $boardlanguagecontext);
+$boardlinearsimulation1url = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'linear'] + $boardlanguagecontext);
+$boardlinearsimulation2url = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'linear', 'simulation' => 2] + $boardlanguagecontext);
+$boardadaptivesimulation1url = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'adaptive'] + $boardlanguagecontext);
+$boardadaptivesimulation2url = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'adaptive', 'simulation' => 2] + $boardlanguagecontext);
 if ($showconstruction) {
     $pageurl->param('view', 'construction');
 } elseif ($showlibrary) {
@@ -822,6 +826,7 @@ echo $OUTPUT->header();
 .subject-study-library__journey-option{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:9px 10px;border:1px solid #c8d5de;border-radius:8px;background:#f8fafc;color:#173f58;font-weight:850;line-height:1.25;text-decoration:none!important}
 .subject-study-library__journey-option small{display:block;margin-top:4px;color:#64748b;font-size:13px;font-weight:600;line-height:1.35}.subject-study-library__journey-option small.subject-study-library__journey-option-heading{color:inherit;font-size:inherit;font-weight:inherit;line-height:1.25}.subject-study-library__journey-option span:last-child{align-self:center;font-size:18px}
 .subject-study-library__journey-option:hover,.subject-study-library__journey-option:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b}
+.subject-study-library__journey-choice{overflow:hidden;border:1px solid #c8d5de;border-radius:8px;background:#f8fafc;color:#173f58}.subject-study-library__journey-choice summary{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:9px 10px;cursor:pointer;font-weight:850;line-height:1.25;list-style:none}.subject-study-library__journey-choice summary::-webkit-details-marker{display:none}.subject-study-library__journey-choice summary small{display:block;margin-top:4px;color:#64748b;font-size:13px;font-weight:600;line-height:1.35}.subject-study-library__journey-choice summary>span:last-child{align-self:center;font-size:18px;transition:transform .15s ease}.subject-study-library__journey-choice[open] summary>span:last-child{transform:rotate(90deg)}.subject-study-library__journey-choice summary:hover,.subject-study-library__journey-choice summary:focus-visible{background:#edf9f6;color:#075f5b}.subject-study-library__journey-choice-links{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:8px;border-top:1px solid #d8e2e7;background:#fff}.subject-study-library__journey-choice-links a{display:block;padding:8px;border:1px solid #b8c8d5;border-radius:7px;background:#f8fafc;color:#173f58;text-align:center;text-decoration:none!important}.subject-study-library__journey-choice-links a strong,.subject-study-library__journey-choice-links a small{display:block}.subject-study-library__journey-choice-links a small{margin-top:3px;color:#64748b;font-size:11px;font-weight:600;line-height:1.25}.subject-study-library__journey-choice-links a:hover,.subject-study-library__journey-choice-links a:focus{border-color:#0b817d;background:#edf9f6;color:#075f5b}
 .subject-study-library__journey-option--smart{border:2px solid #6d28d9;background:linear-gradient(135deg,#f5f0ff,#fff8e9);color:#4c1d95}.subject-study-library__journey-option--smart small{color:#6b4ba1}.subject-study-library__journey-option--smart:hover,.subject-study-library__journey-option--smart:focus{border-color:#4c1d95;background:#eee6ff;color:#3b167c}.subject-study-library__smart-top{border:2px solid #6d28d9!important;background:linear-gradient(135deg,#f5f0ff,#fff8e9)!important;color:#4c1d95!important;white-space:nowrap}.subject-study-library__smart-top:hover,.subject-study-library__smart-top:focus{border-color:#4c1d95!important;background:#eee6ff!important;color:#3b167c!important}.subject-study-library__score-top{border:2px solid #ea6a19!important;background:linear-gradient(135deg,#fff3e8,#fffaf5)!important;color:#9a3f08!important;white-space:nowrap}.subject-study-library__score-top:hover,.subject-study-library__score-top:focus{border-color:#c54b08!important;background:#ffe6cf!important;color:#7c2d06!important}
 .subject-study-library__journey-option--primary{min-height:46px;align-items:center;justify-content:center;margin-bottom:3px;background:#f7fcfb;font-size:14px;text-align:center}.subject-study-library__journey-option--primary:hover,.subject-study-library__journey-option--primary:focus{background:#0b817d;color:#fff}
 .subject-study-library__search{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px;padding:18px;border:1px solid #d4dde4;border-radius:11px;background:#fff}.subject-study-library__search label{display:grid;gap:6px;color:#213e51;font-weight:800}.subject-study-library__search input{width:100%;min-height:48px;box-sizing:border-box;padding:10px 13px;border:1px solid #9fb3c1;border-radius:8px;background:#fff;color:#17232a;font-size:16px}.subject-study-library__search input:focus{border-color:#2563eb;outline:3px solid rgba(37,99,235,.16)}.subject-study-library__search-count{padding-bottom:12px;color:#52677a;font-size:13px;font-weight:800;white-space:nowrap}
@@ -1075,8 +1080,20 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Exámenes' : 'Exams'); ?>">
-                                <a class="subject-study-library__journey-option" href="<?php echo $boardlinearexamurl->out(false); ?>"><span><?php echo s($ises ? 'Examen lineal' : 'Linear exam'); ?><small><?php echo s($ises ? '100 preguntas · historial' : '100 questions · history'); ?></small></span><span aria-hidden="true">›</span></a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $boardadaptiveexamurl->out(false); ?>"><span><?php echo s($ises ? 'Examen adaptativo' : 'Adaptive exam'); ?><small><?php echo s($ises ? '100 preguntas · historial' : '100 questions · history'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <details class="subject-study-library__journey-choice">
+                                    <summary><span><?php echo s($ises ? 'Examen lineal' : 'Linear exam'); ?><small><?php echo s($ises ? 'Elegir Exam 1 o Exam 2 · feedback inmediato' : 'Choose Exam 1 or Exam 2 · immediate feedback'); ?></small></span><span aria-hidden="true">›</span></summary>
+                                    <div class="subject-study-library__journey-choice-links">
+                                        <a href="<?php echo $boardlinearexam1url->out(false); ?>"><strong>Exam 1</strong><small><?php echo s($ises ? 'Lineal · con feedback' : 'Linear · with feedback'); ?></small></a>
+                                        <a href="<?php echo $boardlinearexam2url->out(false); ?>"><strong>Exam 2</strong><small><?php echo s($ises ? 'Lineal · con feedback' : 'Linear · with feedback'); ?></small></a>
+                                    </div>
+                                </details>
+                                <details class="subject-study-library__journey-choice">
+                                    <summary><span><?php echo s($ises ? 'Examen adaptativo' : 'Adaptive exam'); ?><small><?php echo s($ises ? 'Elegir Exam 1 o Exam 2 · feedback inmediato' : 'Choose Exam 1 or Exam 2 · immediate feedback'); ?></small></span><span aria-hidden="true">›</span></summary>
+                                    <div class="subject-study-library__journey-choice-links">
+                                        <a href="<?php echo $boardadaptiveexam1url->out(false); ?>"><strong>Exam 1</strong><small><?php echo s($ises ? 'Adaptativo · con feedback' : 'Adaptive · with feedback'); ?></small></a>
+                                        <a href="<?php echo $boardadaptiveexam2url->out(false); ?>"><strong>Exam 2</strong><small><?php echo s($ises ? 'Adaptativo · con feedback' : 'Adaptive · with feedback'); ?></small></a>
+                                    </div>
+                                </details>
                                 <a class="subject-study-library__journey-option" href="<?php echo $boardclinicalcasesurl->out(false); ?>"><span><?php echo s($ises ? 'Examen de casos clínicos' : 'Clinical Cases exam'); ?><small><?php echo s($ises ? '63 preguntas · historial' : '63 questions · history'); ?></small></span><span aria-hidden="true">›</span></a>
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardexamsurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Abrir todos los exámenes' : 'Open all Exams'); ?><small><?php echo s($ises ? 'Abre el módulo completo de exámenes' : 'Opens the complete Exams module'); ?></small></span><span aria-hidden="true">›</span>
@@ -1093,8 +1110,20 @@ echo $OUTPUT->header();
                                 </span>
                             </header>
                             <nav class="subject-study-library__journey-options" aria-label="<?php echo s($ises ? 'Simulación' : 'Simulation'); ?>">
-                                <a class="subject-study-library__journey-option" href="<?php echo $boardlinearsimulationurl->out(false); ?>"><span><?php echo s($ises ? 'Simulación lineal' : 'Linear simulation'); ?><small><?php echo s($ises ? '100 preguntas · 150 minutos' : '100 questions · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></a>
-                                <a class="subject-study-library__journey-option" href="<?php echo $boardadaptivesimulationurl->out(false); ?>"><span><?php echo s($ises ? 'Simulación adaptativa' : 'Adaptive simulation'); ?><small><?php echo s($ises ? '100 preguntas · 150 minutos' : '100 questions · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></a>
+                                <details class="subject-study-library__journey-choice">
+                                    <summary><span><?php echo s($ises ? 'Simulación lineal' : 'Linear simulation'); ?><small><?php echo s($ises ? 'Elegir Exam 1 o Exam 2 · 150 minutos' : 'Choose Exam 1 or Exam 2 · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></summary>
+                                    <div class="subject-study-library__journey-choice-links">
+                                        <a href="<?php echo $boardlinearsimulation1url->out(false); ?>"><strong>Exam 1</strong><small><?php echo s($ises ? 'Lineal · feedback al terminar' : 'Linear · feedback after finishing'); ?></small></a>
+                                        <a href="<?php echo $boardlinearsimulation2url->out(false); ?>"><strong>Exam 2</strong><small><?php echo s($ises ? 'Lineal · feedback al terminar' : 'Linear · feedback after finishing'); ?></small></a>
+                                    </div>
+                                </details>
+                                <details class="subject-study-library__journey-choice">
+                                    <summary><span><?php echo s($ises ? 'Simulación adaptativa' : 'Adaptive simulation'); ?><small><?php echo s($ises ? 'Elegir Exam 1 o Exam 2 · 150 minutos' : 'Choose Exam 1 or Exam 2 · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></summary>
+                                    <div class="subject-study-library__journey-choice-links">
+                                        <a href="<?php echo $boardadaptivesimulation1url->out(false); ?>"><strong>Exam 1</strong><small><?php echo s($ises ? 'Adaptativo · feedback al terminar' : 'Adaptive · feedback after finishing'); ?></small></a>
+                                        <a href="<?php echo $boardadaptivesimulation2url->out(false); ?>"><strong>Exam 2</strong><small><?php echo s($ises ? 'Adaptativo · feedback al terminar' : 'Adaptive · feedback after finishing'); ?></small></a>
+                                    </div>
+                                </details>
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardsimulationurl->out(false); ?>">
                                     <span><?php echo s($ises ? 'Abrir todas las simulaciones' : 'Open all Simulations'); ?><small><?php echo s($ises ? 'Abre el módulo completo de simulación' : 'Opens the complete Simulation module'); ?></small></span><span aria-hidden="true">›</span>
                                 </a>

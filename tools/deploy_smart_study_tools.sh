@@ -1163,6 +1163,11 @@ if grep -Fq 'Choose a Board Level activity' "$TEMP_DIR/moodle/study-guide.php" |
     exit 1
 fi
 grep -Fq 'subject-study-library__option-group' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq 'subject-study-library__journey-choice-links' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq "'examset' => 2" "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq "'simulation' => 2" "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq 'Choose Exam 1 or Exam 2 · immediate feedback' "$TEMP_DIR/moodle/study-guide.php"
+grep -Fq 'Choose Exam 1 or Exam 2 · 150 minutes' "$TEMP_DIR/moodle/study-guide.php"
 php -r '$html=file_get_contents($argv[1]); $groups=["single-herbs","formulas","dui-yao","safety"]; $previous=-1; foreach ($groups as $group) { $position=strpos($html, "data-main-guide-group=\"".$group."\""); if ($position === false || $position <= $previous) { exit(1); } $previous=$position; }' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq '/study-guide/comparisons/formula-category-map.html' "$TEMP_DIR/moodle/study-guide.php"
 grep -Fq '$fromformulamap' "$TEMP_DIR/moodle/formula-list.php"
