@@ -643,6 +643,8 @@ grep -Fq 'question-bank__active-filter-actions' "$TEMP_DIR/moodle/admin-herbolog
 grep -Fq 'focused question ready' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq 'findprohibitedanswerchoice' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq 'All of them' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq 'hasprohibitednegativewording' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
+grep -Fq 'NOT-correct, incorrect, EXCEPT' "$TEMP_DIR/moodle/admin-herbology-question-bank.php"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/dui-yao-practice-es.html"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/miscellaneous-practice-es.html"
 grep -Fq "Last course access" "$TEMP_DIR/moodle/admin-student-evaluations.php"
