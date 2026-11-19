@@ -85,6 +85,7 @@
     status: document.querySelector('[data-herb-status]'),
     setup: document.querySelector('[data-herb-setup]'),
     modeButtons: [...document.querySelectorAll('[data-herb-mode]')],
+    mock: document.querySelector('[data-herb-mock]'),
     modeHelp: document.querySelector('[data-herb-mode-help]'),
     categoryField: document.querySelector('[data-herb-category-field]'),
     category: document.querySelector('[data-herb-category]'),
@@ -563,6 +564,10 @@
     state.useMaximum = false;
     setMode(button.dataset.herbMode);
   }));
+  elements.mock?.addEventListener('click', () => {
+    const language = spanish ? '&lang=es' : '';
+    window.location.href = `/blocks/menu/herbology-board.php?track=mock${language}#mock-herbs`;
+  });
   elements.category.addEventListener('change', () => {
     state.useMaximum = false;
     updateSetup();

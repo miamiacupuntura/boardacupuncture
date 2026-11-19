@@ -630,6 +630,8 @@ grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/formula-practice-es.ht
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/single-herb-practice-es.html"
 grep -Fq '/blocks/myprogress/study-guide.php?area=herbology&amp;view=library' "$TEMP_DIR/static/single-herb-practice.html"
 grep -Fq '/blocks/myprogress/study-guide.php?area=herbology&amp;view=library&amp;lang=es' "$TEMP_DIR/static/single-herb-practice-es.html"
+grep -Fq 'data-herb-mock' "$TEMP_DIR/static/single-herb-practice.html"
+grep -Fq 'track=mock${language}#mock-herbs' "$TEMP_DIR/static/single-herb-practice.js"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/dui-yao-practice-es.html"
 grep -Fq "assessment-profile-banner.js" "$TEMP_DIR/static/miscellaneous-practice-es.html"
 grep -Fq "Last course access" "$TEMP_DIR/moodle/admin-student-evaluations.php"
