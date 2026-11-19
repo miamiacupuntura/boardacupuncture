@@ -142,8 +142,6 @@ grep -Fq 'feedbackQuality' "$TEMP_DIR/scorm/scorm_herbology_question_extract.py"
 grep -Fq 'Yang, the book author' "$TEMP_DIR/moodle/single-herbs-study-guide.php"
 grep -Fq 'Yang, autor del libro' "$TEMP_DIR/moodle/single-herbs-study-guide-es.php"
 grep -Fq 'Yang, autor del libro' "$TEMP_DIR/menu/herbology-board.php"
-grep -Fq 'Open all Mock Exams' "$TEMP_DIR/moodle/study-guide.php"
-grep -Fq '$boardmockexamurl' "$TEMP_DIR/moodle/study-guide.php"
 for file in "$TEMP_DIR"/moodle/single-herbs-category-*.php; do
     grep -Fq 'Yang, the book author' "$file"
     grep -Fq 'Yang, autor del libro' "$file"

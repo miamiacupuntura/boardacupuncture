@@ -2081,7 +2081,7 @@ echo $OUTPUT->header();
 
             <?php if ($selectedmockdefinition === null): ?>
                 <?php foreach (['formulas', 'herbs'] as $mockgroup): ?>
-                    <h4 id="mock-<?php echo s($mockgroup); ?>" class="herb-board__subheading<?php echo $mockgroup === 'herbs' ? ' herb-board__subheading--spaced' : ''; ?>">
+                    <h4 class="herb-board__subheading<?php echo $mockgroup === 'herbs' ? ' herb-board__subheading--spaced' : ''; ?>">
                         <?php echo $mockgroup === 'formulas'
                             ? ($ises ? 'Mock Exams de fórmulas' : 'Formula Mock Exams')
                             : ($ises ? 'Mock Exams de hierbas, compatibilidad y seguridad' : 'Herbs, compatibility and safety Mock Exams'); ?>
