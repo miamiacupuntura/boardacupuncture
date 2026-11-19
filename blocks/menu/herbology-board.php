@@ -623,7 +623,7 @@ if (in_array($track, ['exams', 'simulation'], true) && $mixdomains) {
     if ($track === 'simulation' && $simulationexamnumber === 2) {
         if ($publishedsimulationexam2 === null) {
             $domainshortages[] = [
-                'name' => 'Simulation Exam 2',
+                'name' => 'Exam 2',
                 'required' => 100,
                 'available' => 0,
                 'missing' => 100,
@@ -647,7 +647,7 @@ if (in_array($track, ['exams', 'simulation'], true) && $mixdomains) {
             $mixedquestions = array_values(array_filter($mixedquestions, $questionisready));
             if (count($mixedquestions) !== 100) {
                 $domainshortages[] = [
-                    'name' => 'Simulation Exam 2',
+                    'name' => 'Exam 2',
                     'required' => 100,
                     'available' => count($mixedquestions),
                     'missing' => max(0, 100 - count($mixedquestions)),
@@ -2138,9 +2138,7 @@ echo $OUTPUT->header();
             <?php if (!$mixdomains) { ?>
                 <div class="herb-board__simulation-intro">
                     <span><?php echo $ises ? 'SIMULACIÓN CRONOMETRADA' : 'TIMED SIMULATION'; ?></span>
-                    <h3 id="herb-board-simulation-title"><?php echo $ises
-                        ? 'Examen de simulación ' . $simulationexamnumber
-                        : 'Simulation Exam ' . $simulationexamnumber; ?></h3>
+                    <h3 id="herb-board-simulation-title">Exam <?php echo (int)$simulationexamnumber; ?></h3>
                     <p><?php echo $ises
                         ? 'Reproduce una sesión completa de 100 preguntas en 2 horas y 30 minutos. No verás respuestas, explicaciones ni feedback hasta finalizar.'
                         : 'Rehearse a complete 100-question session in 2 hours and 30 minutes. Answers, explanations, and feedback stay hidden until you finish.'; ?></p>
@@ -2153,8 +2151,8 @@ echo $OUTPUT->header();
                 </div>
 
                 <nav class="herb-board__simulation-exam-switch" aria-label="<?php echo $ises ? 'Seleccionar examen de simulación' : 'Select a simulation exam'; ?>">
-                    <a<?php echo $simulationexamnumber === 1 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $languagecontext))->out(false); ?>"><?php echo $ises ? 'Examen 1' : 'Exam 1'; ?></a>
-                    <?php if ($publishedsimulationexam2 !== null): ?><a<?php echo $simulationexamnumber === 2 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => 2] + $languagecontext))->out(false); ?>"><?php echo $ises ? 'Examen 2 · publicado' : 'Exam 2 · published'; ?></a><?php endif; ?>
+                    <a<?php echo $simulationexamnumber === 1 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $languagecontext))->out(false); ?>">Exam 1</a>
+                    <?php if ($publishedsimulationexam2 !== null): ?><a<?php echo $simulationexamnumber === 2 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => 2] + $languagecontext))->out(false); ?>">Exam 2</a><?php endif; ?>
                 </nav>
 
                 <section class="herb-board__simulation-blueprint" aria-labelledby="simulation-blueprint-title">
@@ -2241,7 +2239,7 @@ echo $OUTPUT->header();
                     data-time-expired="<?php echo $ises ? 'El tiempo terminó. El examen se entregó automáticamente.' : 'Time expired. The exam was submitted automatically.'; ?>">
                     <header class="herb-board__simulation-bar">
                         <div>
-                            <span><?php echo $ises ? 'EXAMEN DE SIMULACIÓN ' . $simulationexamnumber : 'SIMULATION EXAM ' . $simulationexamnumber; ?></span>
+                            <span>EXAM <?php echo (int)$simulationexamnumber; ?></span>
                             <strong><?php echo $ises ? 'Herbología China' : 'Chinese Herbology'; ?> · <?php echo $exammode === 'adaptive'
                                 ? ($ises ? 'Adaptativo' : 'Adaptive')
                                 : ($ises ? 'Lineal' : 'Linear'); ?></strong>

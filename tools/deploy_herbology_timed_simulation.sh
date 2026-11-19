@@ -101,6 +101,6 @@ if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     run_moodle_cli "$MOODLE_ROOT/admin/cli/purge_caches.php"
 fi
 
-echo "OK: Simulation Exam 1 quedó disponible en modalidad lineal y adaptativa."
+echo "OK: Exam 1 quedó disponible en modalidad lineal y adaptativa."
 echo "Respaldo: $BACKUP_DIR"
 echo "Verifica: /blocks/menu/herbology-board.php?track=simulation&from=library"

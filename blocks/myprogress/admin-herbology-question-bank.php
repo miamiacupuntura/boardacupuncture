@@ -826,7 +826,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
     $redirectparams = ['edit' => $questionid];
     if ($status === 'approved' && $returnusage === 'exam2_review' && $returnreview !== 'ai_drafts') {
         $redirectparams = ['usage' => 'exam2_review', 'advance' => 1];
-        $message = 'Approved revision saved. Opening the next pending Simulation Exam 2 question.';
+        $message = 'Approved revision saved. Opening the next pending Exam 2 question.';
     }
     if ($returnusage !== '') {
         $redirectparams['usage'] = $returnusage;
@@ -1186,8 +1186,8 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexam2')
                 'lang' => $displaylang !== 'en' ? $displaylang : null,
             ])),
             $displaylang === 'es'
-                ? 'Simulation Exam 2 no se publicó: debe tener exactamente 100 preguntas aprobadas y cero pendientes.'
-                : 'Simulation Exam 2 was not published: it must contain exactly 100 approved questions and zero pending questions.',
+                ? 'Exam 2 no se publicó: debe tener exactamente 100 preguntas aprobadas y cero pendientes.'
+                : 'Exam 2 was not published: it must contain exactly 100 approved questions and zero pending questions.',
             null,
             \core\output\notification::NOTIFY_ERROR
         );
@@ -1200,10 +1200,10 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexam2')
             continue;
         }
         if (!$isprocessedquestion($question) || !$question['_ready'] || $question['_excluded']) {
-            throw new invalid_parameter_exception('Every Simulation Exam 2 question must be approved and ready.');
+            throw new invalid_parameter_exception('Every Exam 2 question must be approved and ready.');
         }
         if (isset($questionsbyposition[$position])) {
-            throw new invalid_parameter_exception('Simulation Exam 2 contains a repeated position.');
+            throw new invalid_parameter_exception('Exam 2 contains a repeated position.');
         }
         $snapshot = array_intersect_key($question, array_flip([
             'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
@@ -1218,11 +1218,11 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexam2')
     }
     ksort($questionsbyposition, SORT_NUMERIC);
     if (array_keys($questionsbyposition) !== range(1, 100)) {
-        throw new invalid_parameter_exception('Simulation Exam 2 must contain every position from 1 through 100.');
+        throw new invalid_parameter_exception('Exam 2 must contain every position from 1 through 100.');
     }
     foreach ($exam2slotsbydomain as $domainid => $positions) {
         if (($publisheddomaincounts[$domainid] ?? 0) !== count($positions)) {
-            throw new invalid_parameter_exception('Simulation Exam 2 does not match the required domain blueprint.');
+            throw new invalid_parameter_exception('Exam 2 does not match the required domain blueprint.');
         }
     }
     $publishedat = gmdate(DATE_ATOM);
@@ -1239,7 +1239,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexam2')
         $previousversion = (int)($publishedexams['simulation_exam_2']['version'] ?? 0);
         $publishedexams['simulation_exam_2'] = [
             'id' => 'simulation_exam_2',
-            'name' => 'Simulation Exam 2',
+            'name' => 'Exam 2',
             'status' => 'published',
             'version' => $previousversion + 1,
             'targetCount' => 100,
@@ -1258,8 +1258,8 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexam2')
             'lang' => $displaylang !== 'en' ? $displaylang : null,
         ])),
         $displaylang === 'es'
-            ? 'Simulation Exam 2 publicado: 100 preguntas activas para los estudiantes.'
-            : 'Simulation Exam 2 published: 100 questions are active for students.',
+            ? 'Exam 2 publicado: 100 preguntas activas para los estudiantes.'
+            : 'Exam 2 published: 100 questions are active for students.',
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -1609,8 +1609,8 @@ $buildexam2duplicatereport = static function(array $questions, bool $spanish): a
     $matches = array_slice($matches, 0, 30);
     $lines = [];
     $lines[] = $spanish
-        ? 'Revisión de posibles duplicados — Simulation Exam 2'
-        : 'Possible duplicate review — Simulation Exam 2';
+        ? 'Revisión de posibles duplicados — Exam 2'
+        : 'Possible duplicate review — Exam 2';
     $lines[] = ($spanish ? 'Preguntas comparadas: ' : 'Questions compared: ') . $questioncount;
     $lines[] = ($spanish ? 'Pares que requieren revisión humana: ' : 'Pairs requiring human review: ')
         . $totalmatches;
@@ -1687,8 +1687,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'scanexamduplicates
     require_sesskey();
     $scanreturn = optional_param('scanreturn', 'assistant', PARAM_ALPHA);
     $scanrequest = $displaylang === 'es'
-        ? 'Revisar las 100 candidatas de Simulation Exam 2 para detectar posibles preguntas repetidas.'
-        : 'Review the 100 Simulation Exam 2 candidates for possible duplicate questions.';
+        ? 'Revisar las 100 candidatas de Exam 2 para detectar posibles preguntas repetidas.'
+        : 'Review the 100 Exam 2 candidates for possible duplicate questions.';
     $scanreport = $buildexam2duplicatereport($allquestions, $displaylang === 'es');
     if ($scanreturn !== 'exam') {
         $saveassistantturn($scanrequest, (string)$scanreport['text']);
@@ -1782,8 +1782,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'deferexam2question
                 ? 'La pregunta se reservó para otro examen y su posición fue ocupada por otra candidata.'
                 : 'The question was reserved for another exam and its position was filled by another candidate.')
             : ($displaylang === 'es'
-                ? 'La pregunta volvió a estar disponible para Simulation Exam 2.'
-                : 'The question is available for Simulation Exam 2 again.'),
+                ? 'La pregunta volvió a estar disponible para Exam 2.'
+                : 'The question is available for Exam 2 again.'),
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -2543,7 +2543,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     if ($pendingquestions === []) {
         redirect(
             new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['usage' => 'exam2_review']),
-            'There are no unreviewed Simulation Exam 2 candidates available for a new five-question batch.',
+            'There are no unreviewed Exam 2 candidates available for a new five-question batch.',
             null,
             \core\output\notification::NOTIFY_SUCCESS
         );
@@ -3603,7 +3603,7 @@ if ($advancetonext && $usagefilter === 'exam2_review') {
     }
     redirect(
         new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['usage' => 'exam2_review']),
-        'All current Simulation Exam 2 candidate questions have an approved review.',
+        'All current Exam 2 candidate questions have an approved review.',
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -3803,8 +3803,8 @@ $filterlabels = $displaylang === 'es' ? [
 ];
 $filtervalues = $displaylang === 'es' ? [
     'ready' => 'Lista para práctica', 'incomplete' => 'Necesita completarse',
-    'exam1' => 'Simulation Exam 1', 'exam2_review' => 'Simulation Exam 2 · revisión pendiente',
-    'exam2_approved' => 'Simulation Exam 2 · aprobadas', 'reserve' => 'Banco de reserva listo',
+    'exam1' => 'Exam 1', 'exam2_review' => 'Exam 2 · revisión pendiente',
+    'exam2_approved' => 'Exam 2 · aprobadas', 'reserve' => 'Banco de reserva listo',
     'curated' => 'Banco curado', 'scorm' => 'Módulos SCORM', 'admin' => 'Creada por administrador',
     'recall' => 'Memoria / directa', 'application' => 'Aplicación', 'inference' => 'Inferencia',
     'analysis' => 'Análisis / diferencial', 'herb_properties' => 'Propiedades de hierbas',
@@ -3817,8 +3817,8 @@ $filtervalues = $displaylang === 'es' ? [
     'deleted' => 'Preguntas eliminadas',
 ] : [
     'ready' => 'Ready for practice', 'incomplete' => 'Needs completion',
-    'exam1' => 'Simulation Exam 1', 'exam2_review' => 'Simulation Exam 2 pending review',
-    'exam2_approved' => 'Simulation Exam 2 approved', 'reserve' => 'Ready reserve bank',
+    'exam1' => 'Exam 1', 'exam2_review' => 'Exam 2 pending review',
+    'exam2_approved' => 'Exam 2 approved', 'reserve' => 'Ready reserve bank',
     'curated' => 'Curated bank', 'scorm' => 'SCORM modules', 'admin' => 'Administrator-authored',
     'recall' => 'Recall / direct', 'application' => 'Application', 'inference' => 'Inference',
     'analysis' => 'Analysis / differential', 'herb_properties' => 'Herb properties',
@@ -4111,7 +4111,7 @@ echo $OUTPUT->header();
         <header class="question-bank__exam-builder-head"><div><h3><?php echo $displaylang === 'es' ? 'Administrador de exámenes' : 'Exam builder'; ?></h3><p><?php echo $displaylang === 'es' ? 'Crea y nombra exámenes; el progreso muestra cuántas preguntas están listas y cuántas faltan.' : 'Create and name exams; progress shows how many questions are ready and how many are still missing.'; ?></p></div><a class="question-bank__button question-bank__button--publish" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? '+ Crear examen' : '+ Create exam'; ?></a></header>
         <?php if ($showexamcreator): ?>
         <form class="question-bank__exam-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
-            <label><span><?php echo $displaylang === 'es' ? 'Nombre del examen' : 'Exam name'; ?></span><input type="text" name="examname" maxlength="100" required placeholder="<?php echo $displaylang === 'es' ? 'Ejemplo: Simulation Exam 3' : 'Example: Simulation Exam 3'; ?>"></label>
+            <label><span><?php echo $displaylang === 'es' ? 'Nombre del examen' : 'Exam name'; ?></span><input type="text" name="examname" maxlength="100" required placeholder="<?php echo $displaylang === 'es' ? 'Ejemplo: Exam 3' : 'Example: Exam 3'; ?>"></label>
             <label><span><?php echo $displaylang === 'es' ? 'Cantidad total de preguntas' : 'Target number of questions'; ?></span><input type="number" name="targetcount" min="1" max="500" value="100" required></label>
             <div class="question-bank__editor-actions"><input type="hidden" name="formaction" value="createexamproject"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></button><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cancelar' : 'Cancel'; ?></a></div>
         </form>
@@ -4119,13 +4119,13 @@ echo $OUTPUT->header();
         <div class="question-bank__exam-grid">
             <?php $exam2progresspercent = $exam2targetcount > 0 ? min(100, (int)round($exam2reviewedcount * 100 / $exam2targetcount)) : 0; ?>
             <article class="question-bank__exam-card">
-                <h4>Simulation Exam 2</h4>
+                <h4>Exam 2</h4>
                 <div class="question-bank__exam-numbers"><span><?php echo $displaylang === 'es' ? 'Creadas/listas:' : 'Created/ready:'; ?> <strong><?php echo (int)$exam2reviewedcount; ?> / <?php echo (int)$exam2targetcount; ?></strong></span><span><?php echo $displaylang === 'es' ? 'Pendientes:' : 'Pending:'; ?> <strong><?php echo max(0, (int)$exam2targetcount - (int)$exam2reviewedcount); ?></strong></span></div>
                 <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="<?php echo (int)$exam2targetcount; ?>" aria-valuenow="<?php echo (int)$exam2reviewedcount; ?>"><span style="width:<?php echo (int)$exam2progresspercent; ?>%"></span></div>
                 <?php $exam2isreadytopublish = $exam2reviewedcount === $exam2targetcount && $exam2targetcount === 100; ?>
                 <div class="question-bank__publish-readiness<?php echo $exam2isreadytopublish ? ' is-ready' : ''; ?>"><?php echo $exam2isreadytopublish ? ($displaylang === 'es' ? 'Listo para publicar: 100 de 100 aprobadas.' : 'Ready to publish: 100 of 100 approved.') : ($displaylang === 'es' ? 'Aún no se puede publicar: faltan ' . max(0, 100 - (int)$exam2reviewedcount) . ' preguntas por aprobar.' : 'Not ready to publish: ' . max(0, 100 - (int)$exam2reviewedcount) . ' questions still need approval.'); ?></div>
                 <?php if ($publishedexam2 !== null): ?><div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$publishedexam2['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)$publishedexam2['version']; ?></span></div><?php endif; ?>
-                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $exam2url->out(false); ?>"><?php echo $displaylang === 'es' ? 'Continuar revisión' : 'Continue review'; ?></a><a class="question-bank__button" href="<?php echo $exam2approvedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver listas' : 'View ready'; ?></a><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="scanexamduplicates"><input type="hidden" name="scanreturn" value="exam"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button" type="submit"><?php echo $displaylang === 'es' ? 'Buscar repetidas' : 'Check duplicates'; ?></button></form><?php if ($exam2isreadytopublish): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter(['publishexam2' => 1, 'sesskey' => sesskey(), 'lang' => $displaylang !== 'en' ? $displaylang : null])))->out(false); ?>" onclick="return confirm('<?php echo $publishedexam2 === null ? ($displaylang === 'es' ? '¿Publicar ahora las 100 preguntas de Simulation Exam 2 para los estudiantes?' : 'Publish all 100 Simulation Exam 2 questions for students now?') : ($displaylang === 'es' ? '¿Volver a publicar Simulation Exam 2 con las 100 preguntas actuales?' : 'Republish Simulation Exam 2 with the current 100 questions?'); ?>');"><?php echo $publishedexam2 === null ? ($displaylang === 'es' ? 'Publicar Simulation Exam 2' : 'Publish Simulation Exam 2') : ($displaylang === 'es' ? 'Volver a publicar Simulation Exam 2' : 'Republish Simulation Exam 2'); ?></a><?php else: ?><span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $displaylang === 'es' ? 'Publicar Simulation Exam 2' : 'Publish Simulation Exam 2'; ?></span><?php endif; ?><?php if ($publishedexam2 !== null): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => 2, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?></div>
+                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $exam2url->out(false); ?>"><?php echo $displaylang === 'es' ? 'Continuar revisión' : 'Continue review'; ?></a><a class="question-bank__button" href="<?php echo $exam2approvedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver listas' : 'View ready'; ?></a><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="scanexamduplicates"><input type="hidden" name="scanreturn" value="exam"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button" type="submit"><?php echo $displaylang === 'es' ? 'Buscar repetidas' : 'Check duplicates'; ?></button></form><?php if ($exam2isreadytopublish): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter(['publishexam2' => 1, 'sesskey' => sesskey(), 'lang' => $displaylang !== 'en' ? $displaylang : null])))->out(false); ?>" onclick="return confirm('<?php echo $publishedexam2 === null ? ($displaylang === 'es' ? '¿Publicar ahora las 100 preguntas de Exam 2 para los estudiantes?' : 'Publish all 100 Exam 2 questions for students now?') : ($displaylang === 'es' ? '¿Volver a publicar Exam 2 con las 100 preguntas actuales?' : 'Republish Exam 2 with the current 100 questions?'); ?>');"><?php echo $publishedexam2 === null ? ($displaylang === 'es' ? 'Publicar Exam 2' : 'Publish Exam 2') : ($displaylang === 'es' ? 'Volver a publicar Exam 2' : 'Republish Exam 2'); ?></a><?php else: ?><span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $displaylang === 'es' ? 'Publicar Exam 2' : 'Publish Exam 2'; ?></span><?php endif; ?><?php if ($publishedexam2 !== null): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => 2, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?></div>
             </article>
             <?php foreach ($examprojects as $projectid => $project):
                 $projectcount = (int)$project['currentCount'];
@@ -4163,8 +4163,8 @@ echo $OUTPUT->header();
         <section class="question-bank__duplicate-report" aria-live="polite">
             <h4><?php echo $displaylang === 'es' ? 'Resultado de la búsqueda de preguntas repetidas' : 'Duplicate-question scan result'; ?></h4>
             <p><?php echo $displaylang === 'es'
-                ? 'Se compararon las preguntas que ocupan posiciones en Simulation Exam 2. Este informe no modificó ni eliminó ninguna pregunta.'
-                : 'Questions assigned to Simulation Exam 2 positions were compared. This report did not change or delete any question.'; ?></p>
+                ? 'Se compararon las preguntas que ocupan posiciones en Exam 2. Este informe no modificó ni eliminó ninguna pregunta.'
+                : 'Questions assigned to Exam 2 positions were compared. This report did not change or delete any question.'; ?></p>
             <p><strong><?php echo $displaylang === 'es' ? 'Preguntas comparadas:' : 'Questions compared:'; ?></strong> <?php echo (int)($exam2duplicatereport['questionCount'] ?? 0); ?> · <strong><?php echo $displaylang === 'es' ? 'Pares para revisar:' : 'Pairs to review:'; ?></strong> <?php echo (int)($exam2duplicatereport['matchCount'] ?? 0); ?></p>
             <?php if ($lastexam2deferred !== null): ?>
             <div class="question-bank__duplicate-undo"><strong><?php echo $displaylang === 'es' ? 'Enviada al próximo examen:' : 'Sent to the next exam:'; ?> #<?php echo str_pad((string)(int)($lastexam2deferred['position'] ?? 0), 3, '0', STR_PAD_LEFT); ?> · <?php echo s((string)($lastexam2deferred['questionId'] ?? '')); ?></strong><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="deferexam2question"><input type="hidden" name="defermode" value="restore"><input type="hidden" name="questionid" value="<?php echo s((string)($lastexam2deferred['questionId'] ?? '')); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button" type="submit"><?php echo $displaylang === 'es' ? 'Deshacer' : 'Undo'; ?></button></form></div>
@@ -4299,12 +4299,12 @@ echo $OUTPUT->header();
     </form>
     <?php if ($editquestion['_exam2position'] > 0 && !$editquestion['_excluded']): ?><form id="question-rewrite-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($editquestion['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s((string)($editorrevisionfull['aiBatchId'] ?? '')); ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"></form><?php endif; ?>
     <?php endif; ?>
-    <nav class="question-bank__summary" aria-label="Question bank totals and filters"><a class="question-bank__summary-card" href="<?php echo $summaryurls['classified']->out(false); ?>"><span>Classified candidates</span><strong><?php echo (int)$totals['total']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['proposals']->out(false); ?>"><span>Publishing proposals</span><strong><?php echo (int)$pendingproposalcount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['reclassification']->out(false); ?>"><span>Pending reclassification</span><strong><?php echo (int)$pendingreclassificationcount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['exclusions']->out(false); ?>"><span>Possible exclusions</span><strong><?php echo (int)$possibleexclusioncount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm']->out(false); ?>"><span>SCORM classified</span><strong><?php echo (int)$scormquestioncount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_inference']->out(false); ?>"><span>SCORM needing inference</span><strong><?php echo (int)$scormneedsinference; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_feedback']->out(false); ?>"><span>SCORM needing feedback</span><strong><?php echo (int)$scormneedsfeedback; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_candidates']->out(false); ?>"><span>SCORM simulation candidates</span><strong><?php echo (int)$scormsimulationcandidates; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['ready']->out(false); ?>"><span>Ready for practice</span><strong><?php echo (int)$totals['ready']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['exam1']->out(false); ?>"><span>Simulation Exam 1</span><strong><?php echo (int)$totals['exam1']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['reserve']->out(false); ?>"><span>Ready reserve bank</span><strong><?php echo (int)$totals['reserve']; ?></strong></a></nav>
+    <nav class="question-bank__summary" aria-label="Question bank totals and filters"><a class="question-bank__summary-card" href="<?php echo $summaryurls['classified']->out(false); ?>"><span>Classified candidates</span><strong><?php echo (int)$totals['total']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['proposals']->out(false); ?>"><span>Publishing proposals</span><strong><?php echo (int)$pendingproposalcount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['reclassification']->out(false); ?>"><span>Pending reclassification</span><strong><?php echo (int)$pendingreclassificationcount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['exclusions']->out(false); ?>"><span>Possible exclusions</span><strong><?php echo (int)$possibleexclusioncount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm']->out(false); ?>"><span>SCORM classified</span><strong><?php echo (int)$scormquestioncount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_inference']->out(false); ?>"><span>SCORM needing inference</span><strong><?php echo (int)$scormneedsinference; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_feedback']->out(false); ?>"><span>SCORM needing feedback</span><strong><?php echo (int)$scormneedsfeedback; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_candidates']->out(false); ?>"><span>SCORM simulation candidates</span><strong><?php echo (int)$scormsimulationcandidates; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['ready']->out(false); ?>"><span>Ready for practice</span><strong><?php echo (int)$totals['ready']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['exam1']->out(false); ?>"><span>Exam 1</span><strong><?php echo (int)$totals['exam1']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['reserve']->out(false); ?>"><span>Ready reserve bank</span><strong><?php echo (int)$totals['reserve']; ?></strong></a></nav>
     <form class="question-bank__filters" method="get" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
         <label><span>Search ID or text</span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="Example: DY-001, Ma Huang Tang"></label>
         <label><span>Domain</span><select name="domain"><option value="all">All domains</option><?php foreach ($domains as $domainid => $domain): ?><option value="<?php echo s($domainid); ?>"<?php echo $domainfilter === $domainid ? ' selected' : ''; ?>>Domain <?php echo (int)$domain['number']; ?> · <?php echo s($domain['name']); ?></option><?php endforeach; ?></select></label>
         <label><span>Readiness</span><select name="readiness"><option value="all">All questions</option><option value="ready"<?php echo $readinessfilter === 'ready' ? ' selected' : ''; ?>>Ready for practice</option><option value="incomplete"<?php echo $readinessfilter === 'incomplete' ? ' selected' : ''; ?>>Needs completion</option></select></label>
-        <label><span>Exam use</span><select name="usage"><option value="all">All uses</option><option value="exam1"<?php echo $usagefilter === 'exam1' ? ' selected' : ''; ?>>Simulation Exam 1</option><option value="exam2_review"<?php echo $usagefilter === 'exam2_review' ? ' selected' : ''; ?>>Simulation Exam 2 pending review</option><option value="exam2_approved"<?php echo $usagefilter === 'exam2_approved' ? ' selected' : ''; ?>>Simulation Exam 2 approved</option><option value="reserve"<?php echo $usagefilter === 'reserve' ? ' selected' : ''; ?>>Ready reserve bank</option></select></label>
+        <label><span>Exam use</span><select name="usage"><option value="all">All uses</option><option value="exam1"<?php echo $usagefilter === 'exam1' ? ' selected' : ''; ?>>Exam 1</option><option value="exam2_review"<?php echo $usagefilter === 'exam2_review' ? ' selected' : ''; ?>>Exam 2 pending review</option><option value="exam2_approved"<?php echo $usagefilter === 'exam2_approved' ? ' selected' : ''; ?>>Exam 2 approved</option><option value="reserve"<?php echo $usagefilter === 'reserve' ? ' selected' : ''; ?>>Ready reserve bank</option></select></label>
         <label><span>Source</span><select name="source"><option value="all">All sources</option><option value="curated"<?php echo $sourcefilter === 'curated' ? ' selected' : ''; ?>>Curated bank</option><option value="scorm"<?php echo $sourcefilter === 'scorm' ? ' selected' : ''; ?>>SCORM modules</option><option value="admin"<?php echo $sourcefilter === 'admin' ? ' selected' : ''; ?>>Administrator-authored</option></select></label>
         <label><span>Cognitive level</span><select name="cognitive"><option value="all">All cognitive levels</option><option value="recall"<?php echo $cognitivefilter === 'recall' ? ' selected' : ''; ?>>Recall / direct</option><option value="application"<?php echo $cognitivefilter === 'application' ? ' selected' : ''; ?>>Application</option><option value="inference"<?php echo $cognitivefilter === 'inference' ? ' selected' : ''; ?>>Inference</option><option value="analysis"<?php echo $cognitivefilter === 'analysis' ? ' selected' : ''; ?>>Analysis / differential</option></select></label>
         <label><span>Content focus</span><select name="content"><option value="all">All content</option><option value="herb_properties"<?php echo $contentfilter === 'herb_properties' ? ' selected' : ''; ?>>Herb properties</option><option value="formula_hierarchy"<?php echo $contentfilter === 'formula_hierarchy' ? ' selected' : ''; ?>>Formula hierarchy</option><option value="herb_processing"<?php echo $contentfilter === 'herb_processing' ? ' selected' : ''; ?>>Herb processing</option><option value="clinical_case"<?php echo $contentfilter === 'clinical_case' ? ' selected' : ''; ?>>Clinical cases</option><option value="other"<?php echo $contentfilter === 'other' ? ' selected' : ''; ?>>Other content</option></select></label>
@@ -4410,7 +4410,7 @@ echo $OUTPUT->header();
         $currentexamprojectfull = is_array($currentexamproject)
             && (int)$currentexamproject['currentCount'] >= (int)$currentexamproject['targetCount'];
     ?><article id="question-<?php echo s($question['questionId']); ?>" class="question-bank__item<?php echo $question['_excluded'] ? ' question-bank__item--excluded' : ''; ?>">
-        <?php if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true) && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span><?php echo $usagefilter === 'exam2_approved' ? 'Approved Exam 2 position' : 'Temporary review order'; ?></span><strong><?php echo $usagefilter === 'exam2_approved' ? 'Simulation Exam 2 Question ' : 'Proposed Exam 2 Question '; ?><?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
+        <?php if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true) && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span><?php echo $usagefilter === 'exam2_approved' ? 'Approved Exam 2 position' : 'Temporary review order'; ?></span><strong><?php echo $usagefilter === 'exam2_approved' ? 'Exam 2 Question ' : 'Proposed Exam 2 Question '; ?><?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
         <div class="question-bank__meta">
             <span class="question-bank__id"><?php echo s($question['questionId'] ?? 'Unnumbered'); ?></span>
             <?php if ($hasspanishtranslation): ?><a class="question-bank__button question-bank__button--language" href="<?php echo $questionlanguageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Ver en español'; ?></a><?php else: ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="translatequestion"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--language" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Crear traducción al español</button></form><?php if ($displaylang === 'es'): ?><a class="question-bank__button" href="<?php echo $questionlanguageurl->out(false); ?>">← English</a><?php endif; ?><?php endif; ?>
@@ -4423,8 +4423,8 @@ echo $OUTPUT->header();
             <?php if ($question['_sourcekind'] === 'scorm' && in_array($question['_feedbackquality'], ['missing', 'brief'], true)): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo s(ucfirst($question['_feedbackquality'])); ?> feedback</span><?php endif; ?>
             <?php if ($question['_simulationcandidate']): ?><span class="question-bank__badge question-bank__badge--ready">Simulation candidate</span><?php endif; ?>
             <span class="question-bank__badge question-bank__badge--<?php echo $question['_ready'] ? 'ready' : 'incomplete'; ?>"><?php echo $question['_excluded'] ? 'Excluded from active use' : ($question['_ready'] ? 'Ready for practice' : 'Needs completion'); ?></span>
-            <?php if ($question['_examposition'] > 0): ?><span class="question-bank__badge question-bank__badge--exam">Simulation Exam 1 · position <?php echo (int)$question['_examposition']; ?></span><?php else: ?><span class="question-bank__badge">Not used in Exam 1</span><?php endif; ?>
-            <?php if ($question['_exam2position'] > 0): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $isprocessedquestion($question) ? ($displaylang === 'es' ? 'Simulation Exam 2 publicada' : 'Simulation Exam 2 published') : ($displaylang === 'es' ? 'Revisión de Simulation Exam 2' : 'Simulation Exam 2 review'); ?> · <?php echo $displaylang === 'es' ? 'posición' : 'position'; ?> <?php echo (int)$question['_exam2position']; ?></span><?php endif; ?>
+            <?php if ($question['_examposition'] > 0): ?><span class="question-bank__badge question-bank__badge--exam">Exam 1 · position <?php echo (int)$question['_examposition']; ?></span><?php else: ?><span class="question-bank__badge">Not used in Exam 1</span><?php endif; ?>
+            <?php if ($question['_exam2position'] > 0): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $isprocessedquestion($question) ? ($displaylang === 'es' ? 'Exam 2 publicada' : 'Exam 2 published') : ($displaylang === 'es' ? 'Revisión de Exam 2' : 'Exam 2 review'); ?> · <?php echo $displaylang === 'es' ? 'posición' : 'position'; ?> <?php echo (int)$question['_exam2position']; ?></span><?php endif; ?>
             <?php if (!empty($question['_deferredfromexam2'])): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Reservada para el próximo examen' : 'Reserved for the next exam'; ?></span><?php endif; ?>
             <span class="question-bank__badge">Complexity: <?php echo s(ucfirst((string)($question['difficultyBand'] ?? 'unclassified'))); ?></span>
             <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php elseif ($question['_sourcekind'] === 'admin'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>

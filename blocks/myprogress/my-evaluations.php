@@ -149,12 +149,12 @@ $assessmentname = static function(string $examtype) use (&$quiznames, $text): st
         return $text('Single Herbs Quiz · Chapter ', 'Quiz de hierbas individuales · Capítulo ') . $matches[1];
     }
     $names = [
-        'simulationlinear' => $text('Linear Simulation', 'Simulación lineal'),
-        'simulationadaptive' => $text('Adaptive Simulation', 'Simulación adaptativa'),
-        'simulation1linear' => $text('Simulation Exam 1 · Linear', 'Examen de simulación 1 · Lineal'),
-        'simulation1adaptive' => $text('Simulation Exam 1 · Adaptive', 'Examen de simulación 1 · Adaptativo'),
-        'simulation2linear' => $text('Simulation Exam 2 · Linear', 'Examen de simulación 2 · Lineal'),
-        'simulation2adaptive' => $text('Simulation Exam 2 · Adaptive', 'Examen de simulación 2 · Adaptativo'),
+        'simulationlinear' => $text('Exam 1 · Linear', 'Exam 1 · Lineal'),
+        'simulationadaptive' => $text('Exam 1 · Adaptive', 'Exam 1 · Adaptativo'),
+        'simulation1linear' => $text('Exam 1 · Linear', 'Exam 1 · Lineal'),
+        'simulation1adaptive' => $text('Exam 1 · Adaptive', 'Exam 1 · Adaptativo'),
+        'simulation2linear' => $text('Exam 2 · Linear', 'Exam 2 · Lineal'),
+        'simulation2adaptive' => $text('Exam 2 · Adaptive', 'Exam 2 · Adaptativo'),
         'linear' => $text('Linear Board Exam', 'Examen Board lineal'),
         'adaptive' => $text('Adaptive Board Exam', 'Examen Board adaptativo'),
         'clinicalcases' => $text('Clinical Cases Exam', 'Examen de casos clínicos'),

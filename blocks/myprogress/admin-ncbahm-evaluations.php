@@ -138,12 +138,12 @@ $attemptname = static function(string $examtype) use (&$quiznames): string {
     if (str_starts_with($base, 'bqd_')) return 'Dui Yao Quiz';
     if (str_starts_with($base, 'bqm_')) return 'Supplemental Quiz · ' . substr($base, 4);
     $names = [
-        'simulationlinear' => 'Linear Simulation',
-        'simulationadaptive' => 'Adaptive Simulation',
-        'simulation1linear' => 'Simulation Exam 1 · Linear',
-        'simulation1adaptive' => 'Simulation Exam 1 · Adaptive',
-        'simulation2linear' => 'Simulation Exam 2 · Linear',
-        'simulation2adaptive' => 'Simulation Exam 2 · Adaptive',
+        'simulationlinear' => 'Exam 1 · Linear',
+        'simulationadaptive' => 'Exam 1 · Adaptive',
+        'simulation1linear' => 'Exam 1 · Linear',
+        'simulation1adaptive' => 'Exam 1 · Adaptive',
+        'simulation2linear' => 'Exam 2 · Linear',
+        'simulation2adaptive' => 'Exam 2 · Adaptive',
         'linear' => 'Linear Board Exam',
         'adaptive' => 'Adaptive Board Exam',
         'clinicalcases' => 'Clinical Cases Exam',

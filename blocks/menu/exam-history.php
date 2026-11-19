@@ -622,13 +622,13 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
         if ($isboardquiz) {
             $examname = $boardquiznamesbytype[$examtype];
         } else if (in_array($examtype, ['simulationadaptive', 'simulation1adaptive'], true)) {
-            $examname = $ises ? 'Examen de simulación 1 · Adaptativo' : 'Simulation Exam 1 · Adaptive';
+            $examname = $ises ? 'Exam 1 · Adaptativo' : 'Exam 1 · Adaptive';
         } else if (in_array($examtype, ['simulationlinear', 'simulation1linear'], true)) {
-            $examname = $ises ? 'Examen de simulación 1 · Lineal' : 'Simulation Exam 1 · Linear';
+            $examname = $ises ? 'Exam 1 · Lineal' : 'Exam 1 · Linear';
         } else if ($examtype === 'simulation2adaptive') {
-            $examname = $ises ? 'Examen de simulación 2 · Adaptativo' : 'Simulation Exam 2 · Adaptive';
+            $examname = $ises ? 'Exam 2 · Adaptativo' : 'Exam 2 · Adaptive';
         } else if ($examtype === 'simulation2linear') {
-            $examname = $ises ? 'Examen de simulación 2 · Lineal' : 'Simulation Exam 2 · Linear';
+            $examname = $ises ? 'Exam 2 · Lineal' : 'Exam 2 · Linear';
         } else if (in_array($examtype, ['adaptive', 'adaptiveincomplete'], true)) {
             $examname = $ises ? 'Examen Board adaptativo' : 'Adaptive Board Exam';
         } else if (in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true)) {
