@@ -31,7 +31,7 @@ $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-3.0';
+$aipromptversion = 'ncbahm-mock-editor-3.1';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
@@ -2746,6 +2746,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         if ($spanishprompt === '' || $spanishexplanation === '' || count($spanishoptionsbylabel) !== 4) {
             throw new UnexpectedValueException('The AI draft omitted the complete Spanish translation.');
         }
+        if ($enforcefeedbackquality) {
+            $missingmocksections = [];
+            foreach (['Inference step 1:', 'Inference step 2:'] as $heading) {
+                if (stripos($explanation, $heading) === false) {
+                    $missingmocksections[] = $heading;
+                }
+            }
+            foreach (['A', 'B', 'C', 'D'] as $label) {
+                if (stripos($explanation, 'Option ' . $label . ':') === false) {
+                    $missingmocksections[] = 'Option ' . $label . ':';
+                }
+            }
+            foreach (['Paso de inferencia 1:', 'Paso de inferencia 2:'] as $heading) {
+                if (stripos($spanishexplanation, $heading) === false) {
+                    $missingmocksections[] = $heading;
+                }
+            }
+            foreach (['A', 'B', 'C', 'D'] as $label) {
+                if (!preg_match('/\bOpci[oó]n\s+' . $label . '\s*:/iu', $spanishexplanation)) {
+                    $missingmocksections[] = 'Opción ' . $label . ':';
+                }
+            }
+            if ($missingmocksections !== []) {
+                throw new UnexpectedValueException(
+                    'Mock-style feedback is incomplete. Add the two inference steps and separate analysis of '
+                        . 'A, B, C and D in both languages. Missing: '
+                        . implode(', ', $missingmocksections) . '.'
+                );
+            }
+        }
         if ($requestsingredientwork && $requestsformulanamesremoved) {
             foreach ($spanishoptionsbylabel as $optiontext) {
                 if (preg_match('/\b(?:decocci[oó]n|polvo|p[ií]ldora|f[oó]rmula)\b/iu', $optiontext)
@@ -2995,8 +3025,8 @@ You are the dedicated NCBAHM feedback editor. The question stem, four choices an
 Requirements:
 1. Preserve the keyed answer and rely only on the FINAL QUESTION, SOURCE QUESTION and source-supported facts. Do not change or propose changes to the stem, choices or answer letter.
 2. Apply every cumulative administrator instruction that concerns reasoning, terminology, ingredients, formula identification or feedback. Give special priority to LATEST ADMINISTRATOR INSTRUCTION. Never copy an administrator instruction into the explanation as if it were educational feedback.
-3. Teach both inference steps explicitly: first infer the hidden pattern, action, safety or processing principle from the evidence; then connect it to the keyed answer.
-4. Analyze A, B, C and D separately. For every distractor, state the precise reason it is weaker in this case. Avoid generic statements.
+3. Teach both inference steps explicitly under the headings "Inference step 1:" and "Inference step 2:"; first infer the hidden pattern, action, safety or processing principle from the evidence, then connect it to the keyed answer. Use "Paso de inferencia 1:" and "Paso de inferencia 2:" in Spanish.
+4. Analyze A, B, C and D separately under the headings "Option A:", "Option B:", "Option C:", and "Option D:". Use the parallel headings "Opción A:", "Opción B:", "Opción C:", and "Opción D:" in Spanish. For every distractor, state the precise reason it is weaker in this case. Avoid generic statements.
 5. When choices contain ingredient combinations, identify the source-supported formula or precise therapeutic strategy represented by each option. Name at least one distinctive ingredient from each option, explain its relevant action, and connect that action to why the option fits or fails. Do not invent a canonical formula name when the source does not establish one.
 6. When formula names were deliberately removed from ingredient-only choices, keep them out of the choices but identify the corresponding formula names in the feedback when they are source-supported or unambiguously established by the supplied material.
 7. Use NCBAHM guideline terminology and standard Pinyin. Do not introduce unrelated facts, unsupported citations or new clinical findings.
@@ -3173,7 +3203,7 @@ Editorial rules:
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
 3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use "Both are correct," "All of the above," "None of the above," "A and B are correct," or any equivalent combined-answer shortcut. If the keyed source option is one of those shortcuts, preserve its LETTER and underlying tested fact but replace the shortcut with one self-contained, unambiguous answer statement. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
 3A. When the administrator requests a positive question, reconstruct the item rather than lightly editing it. Remove NOT, EXCEPT, incorrect, inaccurate, false, error and least-appropriate framing from the stem. Preserve the source-supported educational objective and keyed LETTER, rewrite the keyed option into a true source-supported statement, and rebuild the other three choices as plausible false or weaker statements. The final explanation must be educational feedback, never the administrator's instruction.
-4. Write mock-exam feedback that explicitly explains both inference steps: (a) what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence; and (b) why that conclusion selects the correct answer. Identify which findings are decisive and which details are contextual distractors. Then explain briefly why each answer-choice distractor is weaker. Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
+4. Write mock-exam feedback in this explicit teaching sequence: "Inference step 1:", "Inference step 2:", "Option A:", "Option B:", "Option C:", and "Option D:". Step 1 must state what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence. Step 2 must explain why that conclusion selects the keyed answer. Identify which findings are decisive and which details are contextual distractors. Analyze the keyed choice and every distractor separately; never omit an option or use one generic sentence for several options. The Spanish explanation must use the parallel headings "Paso de inferencia 1:", "Paso de inferencia 2:", "Opción A:", "Opción B:", "Opción C:", and "Opción D:". Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
 4A. Whenever inference is created by replacing direct answer labels with observable findings, ingredient combinations, clinical roles or safety clues, the explanation must reveal and teach the hidden intermediate label after the learner answers. If formula names were removed from ingredient-based choices, keep the choices ingredient-only but explicitly map every option letter A-D to its source-supported Pinyin formula name in both English and Spanish feedback. Apply the equivalent mapping to similar questions: identify the pattern, herb action, preparation rule, hierarchy role, compatibility relationship or safety principle represented by each choice, and explain the decisive difference rather than merely restating the keyed option.
 4B. Improve the feedback automatically on every review; do not wait for the administrator to request it. Analyze A, B, C and D separately. When choices are ingredient combinations, identify the source-supported formula or precise therapeutic strategy behind each option, name at least one distinctive ingredient from each combination, explain that ingredient's relevant action, and connect it to why the option fits or fails. Generic statements such as “targets phlegm” or “is for food stagnation” are insufficient. If a combination is not a source-supported canonical formula, do not invent a formula name; describe its precise strategy instead.
 5. In clinical cases, add one or two plausible contextual details when useful: age, illness duration, a relevant health history, temperature with measurement site, pulse rate, or respiratory rate. Use physiologically coherent values and include these details sparingly; they must not contradict the source, change the keyed answer, create a second defensible diagnosis, or replace the Chinese-medicine reasoning being tested.
