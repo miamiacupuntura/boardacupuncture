@@ -117,7 +117,7 @@ $findquestion = static function(array $questionbank, string $questionid): ?array
     return null;
 };
 
-$formaction = optional_param('formaction', '', PARAM_ALPHA);
+$formaction = optional_param('formaction', '', PARAM_ALPHANUMEXT);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'createexamproject') {
     require_sesskey();
     $examname = trim(required_param('examname', PARAM_TEXT));
