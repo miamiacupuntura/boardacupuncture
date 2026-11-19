@@ -516,6 +516,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishcurrentques
         $record['history'] = $history;
         $record['proposalStatus'] = 'reviewed';
         $record['directApproval'] = true;
+        $record['exam2Pinned'] = true;
         $store['questions'][$questionid] = $record;
         return $store;
     });
@@ -538,6 +539,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
     $returnorigin = (bool)optional_param('returnorigin', 0, PARAM_BOOL);
     $returneditingdrafts = (bool)optional_param('returneditingdrafts', 0, PARAM_BOOL);
     $returneditingpage = max(0, optional_param('returneditingpage', 0, PARAM_INT));
+    $pinforexam2 = $usagefilter === 'exam2_review';
     if ($findquestion($basebank, $questionid) === null) {
         throw new invalid_parameter_exception('Unknown Herbology question ID.');
     }
@@ -545,6 +547,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
     $savedbyname = fullname($USER);
     block_myprogress_herbology_override_update(static function(array $store) use (
         $questionid,
+        $pinforexam2,
         $savedat,
         $savedbyname,
         $USER
@@ -563,6 +566,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
         $previous['approved'] = $previous['draft'];
         $previous['requestReclassification'] = false;
         $previous['proposalStatus'] = 'reviewed';
+        if ($pinforexam2) {
+            $previous['exam2Pinned'] = true;
+        }
         $previous['revisionNumber'] = (int)($previous['revisionNumber'] ?? 0) + 1;
         $previous['savedAt'] = $savedat;
         $previous['savedById'] = (int)$USER->id;
@@ -1041,6 +1047,7 @@ foreach ($domains as $domainid => $domain) {
             'savedByName' => (string)($proposalrecord['proposalSavedByName'] ?? ''),
         ];
         $question['_deferredfromexam2'] = !empty($proposalrecord['deferredFromExam2']);
+        $question['_exam2pinned'] = !empty($proposalrecord['exam2Pinned']);
         $allquestions[] = $question;
     }
 }
@@ -1132,6 +1139,7 @@ $exam2quality = static function(array $question): array {
     $cognitiverank = ['analysis' => 0, 'inference' => 1, 'application' => 2, 'recall' => 3];
     $feedbackrank = in_array($question['_feedbackquality'], ['detailed', 'curated'], true) ? 0 : 1;
     return [
+        !empty($question['_exam2pinned']) ? 0 : 1,
         $question['_simulationcandidate'] ? 0 : 1,
         $cognitiverank[$question['_cognitive']] ?? 4,
         $feedbackrank,
@@ -3321,6 +3329,14 @@ PROMPT;
     }
     $savedat = gmdate(DATE_ATOM);
     $savedbyname = fullname($USER);
+    $exam2positionsforreview = [];
+    foreach ($pendingquestions as $pendingquestion) {
+        $pendingquestionid = (string)($pendingquestion['questionId'] ?? '');
+        $pendingposition = (int)($pendingquestion['_exam2position'] ?? 0);
+        if ($pendingquestionid !== '' && $pendingposition > 0) {
+            $exam2positionsforreview[$pendingquestionid] = $pendingposition;
+        }
+    }
     block_myprogress_herbology_override_update(static function(array $store) use (
         $generateddrafts,
         $basebank,
@@ -3334,6 +3350,7 @@ PROMPT;
         $issinglequestionrewrite,
         $examprojectid,
         $examprojectview,
+        $exam2positionsforreview,
         $USER
     ): array {
         $batchposition = 0;
@@ -3385,6 +3402,10 @@ PROMPT;
                 ? (int)$previous['aiBatchPosition']
                 : $batchposition;
             $record['aiPromptVersion'] = $aipromptversion;
+            if (isset($exam2positionsforreview[$questionid])) {
+                $record['exam2Pinned'] = true;
+                $record['exam2LastPosition'] = (int)$exam2positionsforreview[$questionid];
+            }
             if ($examprojectid !== '') {
                 $record['examProjectId'] = $examprojectid;
                 $record['examProjectView'] = $examprojectview;
@@ -3508,13 +3529,22 @@ $filteredquestions = array_values(array_filter(
         $currentexamquestionids,
         $isprocessedquestion
     ): bool {
+        $isfocusedreviewdraft = $query !== ''
+            && strcasecmp($query, (string)($question['questionId'] ?? '')) === 0
+            && in_array(
+                (string)($question['_revision']['status'] ?? ''),
+                ['draft', 'pending_reclassification'],
+                true
+            );
         if ($reviewfilter !== 'deleted'
                 && ($question['_revision']['status'] ?? '') === 'deleted') return false;
         if ($domainfilter !== 'all' && $question['_domainid'] !== $domainfilter) return false;
         if ($readinessfilter === 'ready' && !$question['_ready']) return false;
         if ($readinessfilter === 'incomplete' && $question['_ready']) return false;
         if ($usagefilter === 'exam1' && $question['_examposition'] === 0) return false;
-        if ($usagefilter === 'exam2_review' && $question['_exam2position'] === 0) return false;
+        if ($usagefilter === 'exam2_review'
+                && $question['_exam2position'] === 0
+                && !$isfocusedreviewdraft) return false;
         if ($usagefilter === 'exam2_review' && $isprocessedquestion($question)) return false;
         if ($usagefilter === 'exam2_approved' && $question['_exam2position'] === 0) return false;
         if ($usagefilter === 'exam2_approved' && !$isprocessedquestion($question)) return false;
