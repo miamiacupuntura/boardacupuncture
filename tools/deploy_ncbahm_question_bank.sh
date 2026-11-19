@@ -68,7 +68,7 @@ php -l "$SOURCE_FILE" >/dev/null
 # These markers identify the current consecutive Exam 3 workflow and the
 # editorial safeguards. Their absence means the requested revision is not the
 # recovery build expected by this installer.
-grep -Fq "\$aipromptversion = 'ncbahm-mock-editor-3.4';" "$SOURCE_FILE"
+grep -Fq "\$aipromptversion = 'ncbahm-mock-editor-3.5';" "$SOURCE_FILE"
 grep -Fq "'exam_project_pending'" "$SOURCE_FILE"
 grep -Fq 'if ($publishedexam2 === null):' "$SOURCE_FILE"
 grep -Fq 'question-bank__active-filter-actions' "$SOURCE_FILE"
@@ -82,6 +82,9 @@ grep -Fq 'Similar question and answer finder' "$SOURCE_FILE"
 grep -Fq 'customcanpublish' "$SOURCE_FILE"
 grep -Fq 'Complete the question, four answer choices, answer key and explanation before publishing.' "$SOURCE_FILE"
 grep -Fq 'Always show the exact question that just completed automatic review.' "$SOURCE_FILE"
+grep -Fq 'stripdecorativeicons' "$SOURCE_FILE"
+grep -Fq 'sourceFeedbackRequiresRebuild' "$SOURCE_FILE"
+grep -Fq 'Mnemonic source notes must be rebuilt as complete mock feedback' "$SOURCE_FILE"
 
 mkdir -p "$BACKUP_DIR"
 cp -a -- "$TARGET" "$BACKUP_FILE"
@@ -102,13 +105,15 @@ INSTALLED=1
 
 cmp -s "$SOURCE_FILE" "$TARGET"
 php -l "$TARGET" >/dev/null
-grep -Fq "\$aipromptversion = 'ncbahm-mock-editor-3.4';" "$TARGET"
+grep -Fq "\$aipromptversion = 'ncbahm-mock-editor-3.5';" "$TARGET"
 grep -Fq 'if ($publishedexam2 === null):' "$TARGET"
 grep -Fq "'exam_project_pending'" "$TARGET"
 grep -Fq 'buildsimilaritysearch' "$TARGET"
 grep -Fq 'value="mergequestions"' "$TARGET"
 grep -Fq 'customcanpublish' "$TARGET"
 grep -Fq 'Always show the exact question that just completed automatic review.' "$TARGET"
+grep -Fq 'stripdecorativeicons' "$TARGET"
+grep -Fq 'sourceFeedbackRequiresRebuild' "$TARGET"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -144,7 +149,7 @@ SOURCE_SHA256="$(sha256sum "$SOURCE_FILE" | awk '{print $1}')"
 echo "OK: NCBAHM Question Bank recuperado con la revisión $REVISION."
 echo "OK: Exam 2 publicado queda fuera del constructor; Exam 3 usa revisión consecutiva."
 echo "OK: buscador global de respuestas similares y fusión recuperable instalados."
-echo "OK: versión editorial ncbahm-mock-editor-3.4 instalada."
+echo "OK: versión editorial ncbahm-mock-editor-3.5 instalada."
 echo "SHA256: $INSTALLED_SHA256"
 if [[ "${#WEB_RUNTIME_RELOADED[@]}" -gt 0 ]]; then
     echo "RUNTIME RECARGADO: ${WEB_RUNTIME_RELOADED[*]}"
