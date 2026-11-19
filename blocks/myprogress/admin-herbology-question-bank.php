@@ -3211,36 +3211,43 @@ PROMPT;
                     );
                 }
                 $responsecontent = (string)($response->get_response_data()['generatedcontent'] ?? '');
+                $requiresmultistagereview = trim($administratorproposal) !== '';
                 $generateddraft = $decodeaidraft(
                     $responsecontent,
                     $sourcequestion,
                     $administratorproposal,
-                    false
+                    !$requiresmultistagereview
                 );
-                $generateddraft = $refinefeedback(
-                    $generateddraft,
-                    $sourcepayload,
-                    $administratorproposal,
-                    $latestadministratorproposal,
-                    $currentreviewversion
-                );
-                $generateddraft = $decodeaidraft(
-                    json_encode(
-                        $generateddraft,
-                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
-                    ),
-                    $sourcequestion,
-                    $administratorproposal
-                );
-                $generateddraft['instructionCompliance'] = [
-                    'status' => 'verified',
-                    'note' => $validateinstructioncompliance(
+                if ($requiresmultistagereview) {
+                    $generateddraft = $refinefeedback(
                         $generateddraft,
                         $sourcepayload,
                         $administratorproposal,
                         $latestadministratorproposal,
                         $currentreviewversion
-                    ),
+                    );
+                    $generateddraft = $decodeaidraft(
+                        json_encode(
+                            $generateddraft,
+                            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
+                        ),
+                        $sourcequestion,
+                        $administratorproposal
+                    );
+                    $compliancenote = $validateinstructioncompliance(
+                        $generateddraft,
+                        $sourcepayload,
+                        $administratorproposal,
+                        $latestadministratorproposal,
+                        $currentreviewversion
+                    );
+                } else {
+                    $compliancenote = 'The automatic review passed the local answer-key, structure, translation, '
+                        . 'inference and feedback checks. No special administrator instruction was pending.';
+                }
+                $generateddraft['instructionCompliance'] = [
+                    'status' => 'verified',
+                    'note' => $compliancenote,
                 ];
                 $generateddrafts[$questionid] = $generateddraft;
                 $lasterror = null;
@@ -3901,6 +3908,20 @@ document.querySelectorAll('.question-bank__automatic-review-form').forEach(funct
                 : 'Automatic review in progress for ' + questionId
                     + '. You will return to this question when it finishes.';
         }
+        if (!document.getElementById('question-bank-review-progress')) {
+            var overlay = document.createElement('div');
+            overlay.id = 'question-bank-review-progress';
+            overlay.className = 'question-bank__review-progress-overlay';
+            overlay.setAttribute('role', 'status');
+            overlay.setAttribute('aria-live', 'assertive');
+            overlay.innerHTML = '<span class="question-bank__review-spinner" aria-hidden="true"></span><strong>'
+                + (spanish ? 'Revisando ' : 'Reviewing ') + questionId + '</strong><small>'
+                + (spanish
+                    ? 'Espere en esta página. Regresará automáticamente a la versión corregida.'
+                    : 'Please remain on this page. You will return automatically to the corrected version.')
+                + '</small>';
+            document.body.appendChild(overlay);
+        }
     });
 });
 JS);
@@ -3915,6 +3936,7 @@ echo $OUTPUT->header();
 .question-bank__ai-batch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;padding:14px 16px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__ai-batch p{margin:0;color:#66557e;line-height:1.45}.question-bank__ai-batch form{flex:0 0 auto}.question-bank__ai-batch .question-bank__button:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__ai-draft-note{margin:10px 0;padding:10px 12px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;font-weight:800}@media(max-width:700px){.question-bank__ai-batch{align-items:stretch;flex-direction:column}}
 .question-bank__decision-panel{display:grid;gap:12px;margin-top:15px;padding:15px;border:1px solid #cbb9ee;border-radius:10px;background:#faf8ff}.question-bank__decision-panel label{display:block;color:#4c1d95;font-weight:900}.question-bank__decision-panel textarea{box-sizing:border-box;width:100%;min-height:105px;margin-top:7px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__decision-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.question-bank__button--approve{border-color:#08746f;background:#08746f;color:#fff!important}.question-bank__button--approve:hover{background:#075f5b}.question-bank__button--approve:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__applied-summary{padding:10px 12px;border-left:4px solid #0b8f87;border-radius:7px;background:#eaf9f3;color:#075f50;line-height:1.45}
 .question-bank__review-location{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0;padding:12px 14px;border-left:4px solid #6d28d9;border-radius:8px;background:#f4efff;color:#3b167d}.question-bank__review-location strong{font-size:1rem}.question-bank__review-location span{flex:1 1 300px}.question-bank__review-location form{margin:0}.question-bank__action-status{font-weight:850;color:#4c1d95}.question-bank__correction-request{margin-top:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__correction-request summary{padding:12px 14px;color:#4c1d95;font-weight:900;cursor:pointer}.question-bank__correction-request form{padding:0 14px 14px}.question-bank__correction-request label{display:block;color:#4c1d95;font-weight:900}.question-bank__correction-request textarea{box-sizing:border-box;width:100%;min-height:100px;margin-top:7px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}
+.question-bank__review-progress-overlay{position:fixed;z-index:10000;right:22px;bottom:22px;display:grid;grid-template-columns:auto 1fr;max-width:430px;align-items:center;gap:4px 11px;padding:15px 18px;border:2px solid #6d28d9;border-radius:11px;background:#fff;box-shadow:0 12px 35px rgba(43,24,80,.25);color:#3b167d}.question-bank__review-progress-overlay strong{font-size:16px}.question-bank__review-progress-overlay small{grid-column:2;color:#52677a;line-height:1.4}.question-bank__review-spinner{grid-row:1/3;width:24px;height:24px;border:4px solid #ded7ef;border-top-color:#6d28d9;border-radius:50%;animation:question-bank-spin .85s linear infinite}@keyframes question-bank-spin{to{transform:rotate(360deg)}}@media(max-width:600px){.question-bank__review-progress-overlay{right:10px;bottom:10px;left:10px;max-width:none}}
 .question-bank__quick-review{margin-left:auto}.question-bank__quick-review .question-bank__decision-actions{margin:0}@media(max-width:700px){.question-bank__quick-review{width:100%;margin-left:0}}
 .question-bank__language-state{margin:0 0 16px;padding:12px 15px;border-left:5px solid #0b8f87;border-radius:8px;background:#eaf9f3;color:#075f50}.question-bank__language-state strong{display:block}.question-bank__translation-missing{margin:8px 0 12px;padding:9px 12px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed;color:#8a4b08;font-weight:800}
 .question-bank__rewrite-ready{margin:0 0 14px;padding:13px 15px;border-left:5px solid #0b8f87;border-radius:8px;background:#eaf9f3;color:#075f50;line-height:1.5}.question-bank__rewrite-ready strong{display:block;font-size:17px}.question-bank__rewrite-summary{display:block;margin-top:8px;padding-top:8px;border-top:1px solid #acdcca}.question-bank__rewrite-summary strong{display:inline;font-size:inherit}.question-bank__rewrite-ready--outdated{border-left-color:#d97706;background:#fff7ed;color:#9a3412}.question-bank__rewrite-ready .question-bank__button{margin-top:10px}.question-bank__rewrite-again{margin-top:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__rewrite-again summary{padding:13px 14px;color:#4c1d95;font-weight:900;cursor:pointer}.question-bank__rewrite-again .question-bank__proposal-box{margin:0;border:0;border-top:1px solid #ded7ef;border-radius:0 0 9px 9px}
