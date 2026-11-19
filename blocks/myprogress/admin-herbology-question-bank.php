@@ -35,7 +35,7 @@ $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-3.6';
+$aipromptversion = 'ncbahm-mock-editor-3.7';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
@@ -149,6 +149,24 @@ $stripdecorativeicons = static function(string $text): string {
     $text = preg_replace('/[ \t]+([,.;:!?])/u', '$1', $text) ?? $text;
     $text = preg_replace('/(?:\R[ \t]*){3,}/u', "\n\n", $text) ?? $text;
     return trim($text);
+};
+$ischannelcombinationquestion = static function(array $options): bool {
+    $channeloptioncount = 0;
+    foreach ($options as $option) {
+        $text = strtoupper(trim((string)(is_array($option) ? ($option['text'] ?? '') : $option)));
+        preg_match_all('/\b(?:LU|LI|ST|SP|HT|SI|BL|KI|KD|PC|SJ|TE|TH|GB|LV|LR)\b/u', $text, $matches);
+        $channels = array_values(array_unique($matches[0] ?? []));
+        $remainder = preg_replace(
+            '/\b(?:LU|LI|ST|SP|HT|SI|BL|KI|KD|PC|SJ|TE|TH|GB|LV|LR)\b/u',
+            '',
+            $text
+        );
+        $remainder = preg_replace('/[\s,;:\/\+&\-]+/u', '', (string)$remainder);
+        if (count($channels) >= 2 && $remainder === '') {
+            $channeloptioncount++;
+        }
+    }
+    return $channeloptioncount >= 3;
 };
 
 $formaction = optional_param('formaction', '', PARAM_ALPHANUMEXT);
@@ -3736,6 +3754,8 @@ Strong feedback is mandatory during every automatic review, even without an admi
 
 When sourceFeedbackRequiresRebuild is true, the source contains mnemonic or icon-led notes rather than final educational feedback. Set compliant to false if the draft copies “Mnemonic,” “Memory Tip,” “Quick Match,” initial-equals-keyword lists, emoji, decorative arrows or icon bullets. The final explanation must instead convert the supported facts into two inference steps and separate clinical analysis of A, B, C and D.
 
+When channelCombinationRequiresHerbMapping is true, inspect every Option A-D paragraph in the English and Spanish explanations. Each paragraph must explicitly identify the source-supported comparison herb represented by that option's complete channel set and explain the distinguishing channel or action. Set compliant to false when a paragraph only says that a channel is missing, extra, important or insufficient without naming the corresponding herb. Do not accept invented mappings unsupported by sourceFeedback.
+
 Evaluate the LATEST ADMINISTRATOR INSTRUCTION separately after checking the cumulative instructions. When the latest instruction asks to improve, expand, correct, name something in, or otherwise modify the feedback/explanation, compare the DRAFT with PREVIOUS VISIBLE VERSION. Set latestInstructionApplied to true only when the current English or Spanish explanation visibly contains new wording that implements that exact request. A generic rewrite, an unchanged explanation, a reviewSummary claim, or a change made only to the stem or choices does not count. Copy one exact new clause from the explanation into latestInstructionEvidence; it must be the passage that implements the latest request and must not appear in the previous explanation.
 
 Required JSON:
@@ -3866,6 +3886,7 @@ Requirements:
 8. The Spanish explanation must be a complete, clinically faithful version of the English explanation and must retain Pinyin, option letters and the same reasoning.
 9. Before returning JSON, verify that the explanations visibly implement the latest feedback instruction and contain meaningful analysis for all four choices.
 10. Use plain educational prose only. Never copy emoji, pictographs, decorative arrows, icon bullets, “Mnemonic,” “Memory Tip,” or “Quick Match” formatting from the source. When the source uses a mnemonic list, retain its supported herb facts but rebuild them as option-specific clinical reasoning.
+11. When channelCombinationRequiresHerbMapping is true, identify in every Option A-D paragraph the source-supported herb represented by that exact channel set, in both English and Spanish. Use the Pinyin and Pharmaceutical Latin form from relevantGuidelineNames when available. Explain the distinguishing channel or action; a generic statement that a choice merely lacks or adds a channel is insufficient. Do not invent a mapping absent from sourceFeedback.
 
 Required JSON:
 {"explanation":"Complete English feedback.","spanishExplanation":"Complete Spanish feedback.","feedbackSummary":"One concise sentence describing the substantive feedback improvement."}
@@ -3947,7 +3968,8 @@ PROMPT;
             array_map(
                 static fn(array $option): string => (string)($option['text'] ?? ''),
                 $sourcequestion['options'] ?? []
-            )
+            ),
+            [(string)($sourcequestion['explanation'] ?? '')]
         ));
         $relevantnames = [];
         foreach ($guidelinenames as $herb) {
@@ -4019,6 +4041,9 @@ PROMPT;
             '/\b(?:mnemonic|memory\s+tip|quick\s+match)\b|[\x{1F000}-\x{1FAFF}]|(?:^|\s)[A-Z]\s*=\s*\p{L}/imu',
             $sourcefeedbacktext
         ) === 1;
+        $sourcechannelcombination = $ischannelcombinationquestion(
+            (array)($sourcequestion['options'] ?? [])
+        );
         $sourcepayload = [
             'id' => $questionid,
             'domain' => $domains[$question['_domainid']]['number'] . ' · ' . $domains[$question['_domainid']]['name'],
@@ -4028,6 +4053,7 @@ PROMPT;
             'correctLabel' => (string)($sourcequestion['correctLabel'] ?? ''),
             'sourceFeedback' => $stripdecorativeicons($sourcefeedbacktext),
             'sourceFeedbackRequiresRebuild' => $sourcemnemonicfeedback,
+            'channelCombinationRequiresHerbMapping' => $sourcechannelcombination,
             'prohibitedSourceAnswerChoice' => $findprohibitedanswerchoice(
                 (array)($sourcequestion['options'] ?? [])
             ),
@@ -4046,7 +4072,7 @@ Editorial rules:
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer.
 1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection or differentiation; Domain 2 must test individual-herb identification, properties, actions, indications, or comparison; Domain 3 must test Duì Yào pairing, compatibility, hierarchy, synergy, antagonism, or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing, or dispensing principle. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
-2A. For channel-combination questions, do not invent a patient vignette, tongue, pulse or diagnosis when the source supplies only herb actions and channel relationships. Build the two-step inference directly from the supplied actions: first map each action to its organ system or burner, then select the channel set that covers those targets. Preserve standard channel abbreviations such as SP, ST and LU and the keyed answer LETTER. In the feedback, explain every option separately by identifying the channels supported by the tested herb and why the extra or missing channels in each distractor instead fit the comparison herbs named in sourceFeedback. Treat the keyed set as the best source-supported combination being tested rather than claiming it is an exhaustive monograph when the source does not establish exhaustiveness.
+2A. For channel-combination questions, do not invent a patient vignette, tongue, pulse or diagnosis when the source supplies only herb actions and channel relationships. Build the two-step inference directly from the supplied actions: first map each action to its organ system or burner, then select the channel set that covers those targets. Preserve standard channel abbreviations such as SP, ST and LU and the keyed answer LETTER. When channelCombinationRequiresHerbMapping is true, every Option A-D paragraph in both languages must explicitly name the source-supported herb represented by that exact channel set, using relevantGuidelineNames when available, and explain the distinguishing channel or action. Do not merely say that a distractor lacks or adds a channel. For the warm-Yang comparison, for example, SP/ST/LU maps to Gan Jiang, HT/KI/SP maps to Fu Zi, HT/KI/LV/SP maps to Rou Gui, and SP/ST/KI/LV maps to Xiao Hui Xiang when those mappings are present in sourceFeedback. Treat the keyed set as the best source-supported combination being tested rather than claiming it is an exhaustive monograph when the source does not establish exhaustiveness.
 3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use the word "Both" in an answer choice, including comparative statements such as "Both are acrid and warm," and never use "All of them," "All of the above," "None of these," "None of the above," "A and B are correct," or any equivalent combined-answer shortcut. Apply the same prohibition to Spanish choices, including "Todos ellos," "Todas ellas," "Ninguno de estos," "Ninguna de estas," "Ambos," and "Ambas." When prohibitedSourceAnswerChoice is nonempty, that exact source choice must be replaced. Preserve its LETTER and underlying tested fact, but write one self-contained, unambiguous answer statement that assesses a single specific property, herb, formula, channel set or clinical conclusion. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
 3A. Every final question must be positively worded. Always remove NOT-correct, incorrect, inaccurate, false, error, EXCEPT and least-appropriate framing from the stem, even when the administrator did not explicitly request this change. Reconstruct the item rather than lightly editing it: preserve the source-supported educational objective and keyed LETTER, rewrite the keyed option into a true source-supported statement, and rebuild the other three choices as plausible false or weaker statements. Apply the same rule to the Spanish stem. The final explanation must be educational feedback, never the administrator's instruction.
 4. Write mock-exam feedback in this explicit teaching sequence: "Inference step 1:", "Inference step 2:", "Option A:", "Option B:", "Option C:", and "Option D:". Step 1 must state what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence. Step 2 must explain why that conclusion selects the keyed answer. Identify which findings are decisive and which details are contextual distractors. Analyze the keyed choice and every distractor separately; never omit an option or use one generic sentence for several options. The Spanish explanation must use the parallel headings "Paso de inferencia 1:", "Paso de inferencia 2:", "Opción A:", "Opción B:", "Opción C:", and "Opción D:". Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
@@ -4098,7 +4124,8 @@ PROMPT;
                 }
                 $responsecontent = (string)($response->get_response_data()['generatedcontent'] ?? '');
                 $requiresmultistagereview = trim($administratorproposal) !== ''
-                    || $sourcemnemonicfeedback;
+                    || $sourcemnemonicfeedback
+                    || $sourcechannelcombination;
                 $generateddraft = $decodeaidraft(
                     $responsecontent,
                     $sourcequestion,
