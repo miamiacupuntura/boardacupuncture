@@ -588,11 +588,11 @@
 
 .board-hub__card--board-level .board-hub__action--board-simulation {
     flex-basis: 100%;
-    order: 6;
+    order: 7;
 }
 
 .board-hub__card--board-level .board-hub__action--board-exams {
-    order: 5;
+    order: 6;
     background: #6d4bc3;
     color: #fff !important;
 }
@@ -604,9 +604,16 @@
     color: #fff !important;
 }
 
+.board-hub__card--board-level .board-hub__action--board-mock-exam {
+    order: 5;
+    border: 0;
+    background: #0b8f87;
+    color: #fff !important;
+}
+
 .board-hub__card--board-level .board-hub__action--exam-history {
     flex-basis: 100%;
-    order: 7;
+    order: 8;
     border: 0;
     background: #0f766e;
     color: #fff !important;

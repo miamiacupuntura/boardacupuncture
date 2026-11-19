@@ -415,6 +415,11 @@ class block_menu extends block_base {
                     ]);
                     $quizaction = '<a class="board-hub__action board-hub__action--board-quiz" href="'
                         . $quizurl->out(false) . '">Quiz</a>';
+                    $mockexamurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                        'track' => 'mock',
+                    ]);
+                    $mockexamaction = '<a class="board-hub__action board-hub__action--board-mock-exam" href="'
+                        . $mockexamurl->out(false) . '">Mock Exam</a>';
                     $examsurl = new moodle_url('/blocks/menu/herbology-board.php', [
                         'track' => 'exams',
                     ]);
@@ -430,12 +435,13 @@ class block_menu extends block_base {
                         . 'board-hub__action--board-mock" aria-disabled="true">'
                         . s($boardpracticelabels[$subject['area']]) . '</span>';
                     $quizaction = '';
+                    $mockexamaction = '';
                     $examsaction = '';
                     $simulationaction = '<span class="board-hub__action board-hub__action--pending '
                         . 'board-hub__action--board-simulation" aria-disabled="true">Simulation</span>';
                 }
                 $boardlevelactions = $libraryaction . $studyguideaction . $mockquestionsaction
-                    . $quizaction . $examsaction . $simulationaction . $examhistoryaction
+                    . $quizaction . $mockexamaction . $examsaction . $simulationaction . $examhistoryaction
                     . $studyscoreaction . $smartstudytoolsaction;
 
                 $boardlevelcards .= '<article id="board-level-' . s($subject['area'])

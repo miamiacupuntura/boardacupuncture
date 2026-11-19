@@ -1996,6 +1996,8 @@ grep -Fq "/blocks/myprogress/smart-study-tools.php" "$MENU_TARGET_DIR/block_menu
 grep -Fq '>✨ Smart Study Tools</a>' "$MENU_TARGET_DIR/block_menu.php"
 grep -Fq "board-hub__action--study-score" "$MENU_TARGET_DIR/block_menu.php"
 grep -Fq "board-hub__action--smart-tools" "$MENU_TARGET_DIR/block_menu.php"
+grep -Fq "board-hub__action--board-mock-exam" "$MENU_TARGET_DIR/block_menu.php"
+grep -Fq "'track' => 'mock'" "$MENU_TARGET_DIR/block_menu.php"
 
 [[ -d "$THEME_TEMPLATE_TARGET_DIR" ]] || { echo "ERROR: no existe $THEME_TEMPLATE_TARGET_DIR" >&2; exit 1; }
 for file in "${THEME_TEMPLATE_FILES[@]}"; do
