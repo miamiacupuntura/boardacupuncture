@@ -15,6 +15,8 @@ if (!in_array($track, ['practice', 'herbs', 'formulas', 'quiz', 'clinicalcases',
 }
 $mockcategory = optional_param('mockcategory', '', PARAM_ALPHANUMEXT);
 $mocksize = max(1, min(100, optional_param('mocksize', 10, PARAM_INT)));
+$mockherbchapter = max(0, optional_param('mockherbchapter', 0, PARAM_INT));
+$mockinventoryrequest = optional_param('inventory', 0, PARAM_BOOL);
 $quizsection = optional_param('quizsection', 'all', PARAM_ALPHA);
 if ($track !== 'quiz' || !in_array($quizsection, ['all', 'herbs', 'formulas', 'clinical'], true)) {
     $quizsection = 'all';
@@ -89,6 +91,9 @@ if ($clinicalexamkey !== '') {
 if ($track === 'mock' && $mockcategory !== '') {
     $pageparams['mockcategory'] = $mockcategory;
     $pageparams['mocksize'] = $mocksize;
+    if ($mockcategory === 'single_herb' && $mockherbchapter > 0) {
+        $pageparams['mockherbchapter'] = $mockherbchapter;
+    }
 }
 $pageurl = new moodle_url('/blocks/menu/herbology-board.php', $pageparams);
 $languageparams = $pageparams;
@@ -841,6 +846,118 @@ unset($mockcategoryquestions);
 $mockinventory['classified'] = $mockinventory['exam1Classified'] + $mockinventory['exam2Classified'];
 $mockinventory['duplicates'] = max(0, $mockinventory['classified'] - $mockinventory['unique']);
 $mockinventory['pending'] = max(0, $mockinventory['target'] - $mockinventory['classified']);
+
+// Individual-herb Mock questions are also indexed by the broader Yang chapter
+// used by the Single Herbs Quiz. This lets the public selector show only the
+// categories that currently contain refined Exam 1 or Exam 2 questions.
+$mockyangchapters = [
+    2 => ['guides' => [1, 2], 'name' => 'Herbs that release the Exterior', 'name_es' => 'Hierbas que liberan el Exterior'],
+    3 => ['guides' => [3, 4, 5, 6, 7, 8], 'name' => 'Herbs that clear Heat', 'name_es' => 'Hierbas que eliminan el Calor'],
+    4 => ['guides' => [9, 10, 11], 'name' => 'Herbs that drain downwards', 'name_es' => 'Hierbas que drenan hacia abajo'],
+    5 => ['guides' => [12], 'name' => 'Herbs that expel Wind-Dampness', 'name_es' => 'Hierbas que expulsan Viento-Humedad'],
+    6 => ['guides' => [16], 'name' => 'Herbs that transform Dampness', 'name_es' => 'Hierbas que transforman la Humedad'],
+    7 => ['guides' => [30], 'name' => 'Aromatic substances, external application, and opening the orifices', 'name_es' => 'Sustancias aromáticas, uso externo y apertura de orificios'],
+    8 => ['guides' => [13, 14, 15], 'name' => 'Herbs that transform Phlegm', 'name_es' => 'Hierbas que transforman la Flema'],
+    9 => ['guides' => [17], 'name' => 'Food stagnation, parasites, and vomiting', 'name_es' => 'Estancamiento de alimentos, parásitos y vómito'],
+    10 => ['guides' => [18], 'name' => 'Herbs that regulate the Qi', 'name_es' => 'Hierbas que regulan el Qi'],
+    11 => ['guides' => [19], 'name' => 'Herbs that regulate the Blood', 'name_es' => 'Hierbas que regulan la Sangre'],
+    12 => ['guides' => [20], 'name' => 'Herbs that stop bleeding', 'name_es' => 'Hierbas que detienen el sangrado'],
+    13 => ['guides' => [21], 'name' => 'Herbs that warm the Interior and expel Cold', 'name_es' => 'Hierbas que calientan el Interior y expulsan Frío'],
+    14 => ['guides' => [23, 24, 25, 26], 'name' => 'Herbs that tonify', 'name_es' => 'Hierbas que tonifican'],
+    15 => ['guides' => [27], 'name' => 'Herbs that stabilize and bind', 'name_es' => 'Hierbas que estabilizan y contienen'],
+    16 => ['guides' => [28, 29], 'name' => 'Substances that calm the Mind', 'name_es' => 'Sustancias que calman la Mente'],
+    17 => ['guides' => [31], 'name' => 'Herbs that subdue Liver-Yang and extinguish Liver-Wind', 'name_es' => 'Hierbas que someten Yang de Hígado y extinguen Viento de Hígado'],
+];
+$mocknormalizetext = static function(string $text): string {
+    $text = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    if (function_exists('transliterator_transliterate')) {
+        $transliterated = transliterator_transliterate('Any-Latin; Latin-ASCII; Lower()', $text);
+        if (is_string($transliterated)) {
+            $text = $transliterated;
+        }
+    } else if (function_exists('iconv')) {
+        $converted = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $text);
+        if (is_string($converted)) {
+            $text = strtolower($converted);
+        }
+    }
+    return trim((string)preg_replace('/[^a-z0-9]+/', ' ', strtolower($text)));
+};
+$mockchapterbyguidenumber = [];
+foreach ($mockyangchapters as $mockchapternumber => $mockchapterdefinition) {
+    foreach ($mockchapterdefinition['guides'] as $mockguidenumber) {
+        $mockchapterbyguidenumber[$mockguidenumber] = $mockchapternumber;
+    }
+}
+$mockchapterbyherbname = [];
+$mockherbpropertiespath = __DIR__ . '/../myprogress/single-herb-properties.json';
+if (is_readable($mockherbpropertiespath)) {
+    $mockherbproperties = json_decode(file_get_contents($mockherbpropertiespath), true);
+    foreach ($mockherbproperties['herbs'] ?? [] as $mockherbprofile) {
+        $mockherbchaptervalue = $mockchapterbyguidenumber[(int)($mockherbprofile['guideNumber'] ?? 0)] ?? 0;
+        $mockherbname = $mocknormalizetext((string)($mockherbprofile['name'] ?? ''));
+        if ($mockherbchaptervalue > 0 && $mockherbname !== '') {
+            $mockchapterbyherbname[$mockherbname] = $mockherbchaptervalue;
+        }
+    }
+}
+uksort($mockchapterbyherbname, static fn(string $left, string $right): int => strlen($right) <=> strlen($left));
+$mockherbquestionsbychapter = array_fill_keys(array_keys($mockyangchapters), []);
+foreach ($mockquestionsbycategory['single_herb'] ?? [] as $mocksingleherbquestion) {
+    $mocksourceherb = '';
+    $mocksourceurl = (string)($mocksingleherbquestion['sourceCard']['url'] ?? '');
+    if ($mocksourceurl !== '') {
+        $mocksourcequery = [];
+        parse_str((string)parse_url($mocksourceurl, PHP_URL_QUERY), $mocksourcequery);
+        $mocksourceherb = (string)($mocksourcequery['herb'] ?? '');
+    }
+    $mockcorrecttext = '';
+    foreach ($mocksingleherbquestion['options'] ?? [] as $mockoption) {
+        if ((string)($mockoption['label'] ?? '') === (string)($mocksingleherbquestion['correctLabel'] ?? '')) {
+            $mockcorrecttext = (string)($mockoption['text'] ?? '');
+            break;
+        }
+    }
+    $mockquestionchapter = 0;
+    foreach ([$mocksourceherb, $mockcorrecttext] as $mockclassificationtext) {
+        $mockclassificationtext = $mocknormalizetext($mockclassificationtext);
+        if ($mockclassificationtext === '') {
+            continue;
+        }
+        foreach ($mockchapterbyherbname as $mockknownherb => $mockknownchapter) {
+            if (preg_match('/(?:^| )' . preg_quote($mockknownherb, '/') . '(?: |$)/', $mockclassificationtext) === 1) {
+                $mockquestionchapter = $mockknownchapter;
+                break 2;
+            }
+        }
+    }
+    if ($mockquestionchapter > 0) {
+        $mocksingleherbquestion['_mockHerbChapter'] = $mockquestionchapter;
+        $mockherbquestionsbychapter[$mockquestionchapter][] = $mocksingleherbquestion;
+    }
+}
+
+if ($track === 'mock' && $mockinventoryrequest) {
+    $mockinventorycategories = [];
+    foreach ($mockyangchapters as $mockchapternumber => $mockchapterdefinition) {
+        $mockchaptercount = count($mockherbquestionsbychapter[$mockchapternumber]);
+        if ($mockchaptercount === 0) {
+            continue;
+        }
+        $mockinventorycategories[] = [
+            'id' => (string)$mockchapternumber,
+            'name' => $mockchapterdefinition[$ises ? 'name_es' : 'name'],
+            'count' => $mockchaptercount,
+        ];
+    }
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode([
+        'success' => true,
+        'categories' => $mockinventorycategories,
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
+
 $selectedmockdefinition = $mockcategory !== ''
     ? ($mockcategorydefinitions[$mockcategory] ?? null)
     : null;
@@ -850,7 +967,9 @@ if ($track === 'mock' && $mockcategory !== '' && $selectedmockdefinition === nul
         \core\output\notification::NOTIFY_ERROR);
 }
 if ($track === 'mock' && $selectedmockdefinition !== null) {
-    $selectedmockquestions = $mockquestionsbycategory[$mockcategory];
+    $selectedmockquestions = $mockcategory === 'single_herb' && $mockherbchapter > 0
+        ? ($mockherbquestionsbychapter[$mockherbchapter] ?? [])
+        : $mockquestionsbycategory[$mockcategory];
     shuffle($selectedmockquestions);
     $mocksize = min($mocksize, max(1, count($selectedmockquestions)));
     $selectedmockquestions = array_slice($selectedmockquestions, 0, $mocksize);
@@ -2145,7 +2264,11 @@ echo $OUTPUT->header();
                     data-completed-word="<?php echo $ises ? 'Mock Exam completado' : 'Mock Exam complete'; ?>">
                     <div class="herb-board__exam-heading">
                         <div>
-                            <span>Mock Exam · <?php echo s($selectedmockdefinition[$ises ? 'name_es' : 'name']); ?></span>
+                            <span>Mock Exam · <?php echo s(
+                                $mockcategory === 'single_herb' && isset($mockyangchapters[$mockherbchapter])
+                                    ? $mockyangchapters[$mockherbchapter][$ises ? 'name_es' : 'name']
+                                    : $selectedmockdefinition[$ises ? 'name_es' : 'name']
+                            ); ?></span>
                             <h4><?php echo count($selectedmockquestions); ?> <?php echo $ises ? 'preguntas refinadas' : 'refined questions'; ?></h4>
                         </div>
                         <p><?php echo $ises

@@ -5,8 +5,10 @@
   const copy = {
     loadError: spanish ? 'No se pudo cargar el banco de hierbas.' : 'The Single Herbs bank could not be loaded.',
     ready: spanish ? 'Banco de preguntas listo.' : 'Question bank ready.',
+    mockReady: spanish ? 'Categorías de Mock Exam listas.' : 'Mock Exam categories ready.',
     noQuestions: spanish ? 'No hay preguntas para esta categoría.' : 'No questions are available for this category.',
     start: count => spanish ? `Comenzar Quiz (${count}) →` : `Start Quiz (${count}) →`,
+    startMock: count => spanish ? `Comenzar Mock Exam (${count}) →` : `Start Mock Exam (${count}) →`,
     allAvailable: count => spanish ? `Todas (${count})` : `All (${count})`,
     maximumAvailable: count => spanish
       ? `Máximo disponible para esta selección: ${count} preguntas.`
@@ -20,7 +22,10 @@
         : 'Includes questions from every verified Single Herbs profile.',
       category: spanish
         ? 'Incluye preguntas de las hierbas que pertenecen a una categoría del libro de Yang, autor del libro.'
-        : "Includes questions from the herbs in one category in the book by Yang, the book author."
+        : "Includes questions from the herbs in one category in the book by Yang, the book author.",
+      mock: spanish
+        ? 'Muestra únicamente categorías que ya tienen preguntas refinadas de Exam 1 o Exam 2.'
+        : 'Shows only categories that already contain refined Exam 1 or Exam 2 questions.'
     },
     position: (position, total) => spanish ? `Pregunta ${position} de ${total}` : `Question ${position} of ${total}`,
     correct: spanish ? 'Correcto' : 'Correct',
@@ -85,10 +90,11 @@
     status: document.querySelector('[data-herb-status]'),
     setup: document.querySelector('[data-herb-setup]'),
     modeButtons: [...document.querySelectorAll('[data-herb-mode]')],
-    mock: document.querySelector('[data-herb-mock]'),
     modeHelp: document.querySelector('[data-herb-mode-help]'),
     categoryField: document.querySelector('[data-herb-category-field]'),
     category: document.querySelector('[data-herb-category]'),
+    mockCategoryField: document.querySelector('[data-herb-mock-category-field]'),
+    mockCategory: document.querySelector('[data-herb-mock-category]'),
     sizes: [...document.querySelectorAll('[data-herb-size]')],
     maxSize: document.querySelector('[data-herb-size-max]'),
     maxHelp: document.querySelector('[data-herb-max-help]'),
@@ -122,6 +128,7 @@
   const state = {
     allQuestions: [],
     categories: [],
+    mockCategories: [],
     mode: 'all',
     session: [],
     currentIndex: 0,
@@ -159,15 +166,32 @@
   }
 
   function filteredQuestions() {
+    if (state.mode === 'mock') return [];
     if (state.mode !== 'category') return [...state.allQuestions];
     const guideNumbers = new Set(guideNumbersByYangChapter.get(Number(elements.category.value)) || []);
     return state.allQuestions.filter(question => guideNumbers.has(Number(question.profile.guideNumber || 0)));
   }
 
+  function selectedMockCategory() {
+    return state.mockCategories.find(category => String(category.id) === elements.mockCategory?.value) || null;
+  }
+
+  function availableQuestions() {
+    return state.mode === 'mock'
+      ? Number(selectedMockCategory()?.count || 0)
+      : filteredQuestions().length;
+  }
+
   function updateUrl() {
     const url = new URL(window.location.href);
     url.searchParams.delete('category');
+    url.searchParams.delete('mockcategory');
+    url.searchParams.delete('mode');
     if (state.mode === 'category') url.searchParams.set('category', elements.category.value);
+    if (state.mode === 'mock') {
+      url.searchParams.set('mode', 'mock');
+      if (elements.mockCategory.value) url.searchParams.set('mockcategory', elements.mockCategory.value);
+    }
     url.searchParams.set('size', String(state.size));
     history.replaceState(null, '', url);
     if (elements.language) {
@@ -176,11 +200,12 @@
   }
 
   function setMode(mode, refresh = true) {
-    state.mode = mode === 'category' ? 'category' : 'all';
+    state.mode = ['category', 'mock'].includes(mode) ? mode : 'all';
     elements.modeButtons.forEach(button => {
       button.setAttribute('aria-pressed', String(button.dataset.herbMode === state.mode));
     });
     elements.categoryField.hidden = state.mode !== 'category';
+    elements.mockCategoryField.hidden = state.mode !== 'mock';
     elements.modeHelp.textContent = copy.modeHelp[state.mode];
     if (refresh) updateSetup();
   }
@@ -303,30 +328,39 @@
       ).length;
       option(elements.category, category.number, `${category.title} (${count})`);
     });
+    state.mockCategories.forEach(category => {
+      option(elements.mockCategory, category.id, `${category.name} (${category.count})`);
+    });
     const params = new URLSearchParams(window.location.search);
     const requestedCategory = params.get('category');
+    const requestedMockCategory = params.get('mockcategory');
     const requestedSize = Number(params.get('size'));
     const validCategory = [...elements.category.options].some(item => item.value === requestedCategory);
+    const validMockCategory = [...elements.mockCategory.options].some(item => item.value === requestedMockCategory);
     if (validCategory) elements.category.value = requestedCategory;
+    if (validMockCategory) elements.mockCategory.value = requestedMockCategory;
     if (Number.isInteger(requestedSize) && requestedSize > 0 && requestedSize <= state.allQuestions.length) {
       state.size = requestedSize;
     }
-    setMode(validCategory ? 'category' : 'all', false);
-    state.useMaximum = state.mode === 'category' && requestedSize === filteredQuestions().length;
+    const requestedMode = params.get('mode') === 'mock' && state.mockCategories.length
+      ? 'mock'
+      : (validCategory ? 'category' : 'all');
+    setMode(requestedMode, false);
+    state.useMaximum = state.mode !== 'all' && requestedSize === availableQuestions();
   }
 
   function updateSetup() {
-    const available = filteredQuestions().length;
+    const available = availableQuestions();
     const presets = elements.sizes.map(button => Number(button.dataset.herbSize));
     if (state.mode === 'all' && !presets.includes(state.size)) {
       state.size = 25;
       state.useMaximum = false;
     }
-    if (state.useMaximum && state.mode === 'category') state.size = available;
+    if (state.useMaximum && state.mode !== 'all') state.size = available;
     if (state.useMaximum && presets.includes(available)) state.useMaximum = false;
     if (available > 0 && state.size > available) {
       state.size = available;
-      state.useMaximum = state.mode === 'category';
+      state.useMaximum = state.mode !== 'all';
     }
     if (available > 0 && state.size < 1) state.size = Math.min(25, available);
     elements.available.textContent = String(available);
@@ -336,16 +370,20 @@
       button.disabled = size > available;
       button.setAttribute('aria-pressed', String(!state.useMaximum && size === state.size));
     });
-    const showMaximum = state.mode === 'category' && available > 0 && !presets.includes(available);
+    const showMaximum = state.mode !== 'all' && available > 0 && !presets.includes(available);
     elements.maxSize.hidden = !showMaximum;
     elements.maxSize.textContent = copy.allAvailable(available);
     elements.maxSize.setAttribute('aria-pressed', String(showMaximum && state.useMaximum));
     elements.maxHelp.textContent = state.mode === 'all'
       ? copy.sessionMaximum
       : copy.maximumAvailable(available);
-    elements.start.textContent = copy.start(Math.min(state.size, available));
+    elements.start.textContent = state.mode === 'mock'
+      ? copy.startMock(Math.min(state.size, available))
+      : copy.start(Math.min(state.size, available));
     elements.start.disabled = available === 0;
-    elements.status.textContent = available ? copy.ready : copy.noQuestions;
+    elements.status.textContent = available
+      ? (state.mode === 'mock' ? copy.mockReady : copy.ready)
+      : copy.noQuestions;
     updateUrl();
   }
 
@@ -474,6 +512,19 @@
   }
 
   function startSession() {
+    if (state.mode === 'mock') {
+      const category = selectedMockCategory();
+      if (!category) return;
+      const params = new URLSearchParams({
+        track: 'mock',
+        mockcategory: 'single_herb',
+        mockherbchapter: String(category.id),
+        mocksize: String(Math.min(state.size, Number(category.count)))
+      });
+      if (spanish) params.set('lang', 'es');
+      window.location.href = `/blocks/menu/herbology-board.php?${params}`;
+      return;
+    }
     const pool = filteredQuestions();
     centralAttemptUid = createCentralAttemptUid();
     centralStartedAt = Date.now();
@@ -557,18 +608,18 @@
   }));
   elements.maxSize.addEventListener('click', () => {
     state.useMaximum = true;
-    state.size = filteredQuestions().length;
+    state.size = availableQuestions();
     updateSetup();
   });
   elements.modeButtons.forEach(button => button.addEventListener('click', () => {
     state.useMaximum = false;
     setMode(button.dataset.herbMode);
   }));
-  elements.mock?.addEventListener('click', () => {
-    const language = spanish ? '&lang=es' : '';
-    window.location.href = `/blocks/menu/herbology-board.php?track=mock${language}#mock-herbs`;
-  });
   elements.category.addEventListener('change', () => {
+    state.useMaximum = false;
+    updateSetup();
+  });
+  elements.mockCategory.addEventListener('change', () => {
     state.useMaximum = false;
     updateSetup();
   });
@@ -603,23 +654,42 @@
     });
   }
 
+  const mockInventoryUrl = `/blocks/menu/herbology-board.php?track=mock&inventory=1${spanish ? '&lang=es' : ''}`;
+  const mockInventoryRequest = fetch(mockInventoryUrl, { credentials: 'same-origin' })
+    .then(response => response.ok ? response.json() : { success: false, categories: [] })
+    .catch(() => ({ success: false, categories: [] }));
+
   Promise.all([
     fetch('/blocks/myprogress/single-herb-properties.json', { credentials: 'same-origin' }),
     fetch('herb-comparison-bank-data.json', { credentials: 'same-origin' }),
-    fetch('/blocks/myprogress/single-herb-card-index.json', { credentials: 'same-origin' })
+    fetch('/blocks/myprogress/single-herb-card-index.json', { credentials: 'same-origin' }),
+    mockInventoryRequest
   ])
-    .then(async responses => {
-      responses.forEach(response => {
+    .then(async ([herbResponse, yangResponse, guidelineResponse, mockInventory]) => {
+      [herbResponse, yangResponse, guidelineResponse].forEach(response => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
       });
-      return Promise.all(responses.map(response => response.json()));
+      const [herbData, yangData, guideline] = await Promise.all([
+        herbResponse.json(),
+        yangResponse.json(),
+        guidelineResponse.json()
+      ]);
+      return [herbData, yangData, guideline, mockInventory];
     })
-    .then(([herbData, yangData, guideline]) => {
+    .then(([herbData, yangData, guideline, mockInventory]) => {
       if (guideline.total !== 304 || guideline.herbs?.length !== 304) {
         throw new Error('Unexpected 2026 herb guideline inventory');
       }
       state.allQuestions = buildQuestions(herbData, guideline);
       state.categories = buildCategories(yangData);
+      state.mockCategories = Array.isArray(mockInventory.categories) ? mockInventory.categories : [];
+      const mockModeButton = elements.modeButtons.find(button => button.dataset.herbMode === 'mock');
+      if (mockModeButton && !state.mockCategories.length) {
+        mockModeButton.disabled = true;
+        mockModeButton.title = spanish
+          ? 'Todavía no hay preguntas Mock clasificadas por categoría.'
+          : 'No Mock questions have been classified by category yet.';
+      }
       if (!state.allQuestions.length || state.allQuestions.length > guideline.total || !state.categories.length) {
         throw new Error('Single Herbs Quiz does not match the 2026 guideline inventory');
       }
