@@ -2128,7 +2128,7 @@ echo $OUTPUT->header();
                         <?php endforeach; ?>
                     </div>
                 <?php endforeach; ?>
-            <?php else if (!$selectedmockquestions): ?>
+            <?php elseif (!$selectedmockquestions): ?>
                 <div class="herb-board__notice"><?php echo $ises
                     ? 'Esta categoría todavía no contiene preguntas clasificadas.'
                     : 'This category does not contain classified questions yet.'; ?></div>
