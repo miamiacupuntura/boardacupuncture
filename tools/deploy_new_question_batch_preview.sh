@@ -86,6 +86,9 @@ grep -Fq 'data-result-filter-context' "$SOURCE_FILE"
 grep -Fq '$resultfiltercontext' "$SOURCE_FILE"
 grep -Fq '$similarityscopequestions' "$SOURCE_FILE"
 grep -Fq 'Comparing within:' "$SOURCE_FILE"
+grep -Fq 'Open and edit' "$SOURCE_FILE"
+grep -Fq 'Add or replace questions' "$SOURCE_FILE"
+grep -Fq "this.closest('.question-bank__exam-builder').hidden=true" "$SOURCE_FILE"
 
 mkdir -p "$BACKUP_DIR"
 cp -a -- "$TARGET" "$BACKUP_FILE"
@@ -116,6 +119,7 @@ grep -Fq '$draftchannelherbmapping' "$TARGET"
 grep -Fq '$ensurechannelherbmappingfeedback' "$TARGET"
 grep -Fq 'data-result-filter-context' "$TARGET"
 grep -Fq '$similarityscopequestions' "$TARGET"
+grep -Fq 'Open and edit' "$TARGET"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -157,6 +161,7 @@ echo "OK: el feedback de opciones por canales identifica la hierba correspondien
 echo "OK: el mapeo A-D se inserta de forma determinística aunque el proveedor de IA lo omita."
 echo "OK: el encabezado del listado muestra los filtros que producen las preguntas visibles."
 echo "OK: Find similar questions compara solo dentro del examen activo cuando existe uno."
+echo "OK: Exam builder puede cerrarse y cada examen guardado puede abrirse y editarse."
 echo "OK: ninguna pregunta se publica automáticamente."
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256: $INSTALLED_SHA256"
