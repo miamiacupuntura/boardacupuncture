@@ -29,6 +29,8 @@ $similaritysearch = trim(optional_param('similarsearch', '', PARAM_TEXT));
 $similarityquestionid = optional_param('similarquestion', '', PARAM_ALPHANUMEXT);
 $publishexam2requested = (bool)optional_param('publishexam2', 0, PARAM_BOOL);
 $publishexamprojectrequested = optional_param('publishexamproject', '', PARAM_ALPHANUMEXT);
+$publishexamerror = optional_param('publishexamerror', '', PARAM_ALPHANUMEXT);
+$publishexamdetail = trim(optional_param('publishexamdetail', '', PARAM_TEXT));
 $examprojectid = optional_param('examproject', '', PARAM_ALPHANUMEXT);
 $examprojectview = optional_param('examview', 'candidates', PARAM_ALPHA);
 $advancetonext = (bool)optional_param('advance', 0, PARAM_BOOL);
@@ -1537,10 +1539,21 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamprojec
         'examproject' => $publishingprojectid,
         'lang' => $displaylang,
     ]);
+    $publisherrorurl = static function(string $code, string $detail = '') use (
+        $publishingprojectid,
+        $displaylang
+    ): moodle_url {
+        return new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+            'examproject' => $publishingprojectid,
+            'lang' => $displaylang,
+            'publishexamerror' => $code,
+            'publishexamdetail' => $detail !== '' ? $detail : null,
+        ]));
+    };
     $publishingproject = $examprojects[$publishingprojectid] ?? null;
     if (!is_array($publishingproject)) {
         redirect(
-            $publishreturnurl,
+            $publisherrorurl('project'),
             $displaylang === 'es'
                 ? 'El examen no se publicó porque el proyecto ya no existe.'
                 : 'The exam was not published because the project no longer exists.',
@@ -1558,7 +1571,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamprojec
             || (int)($publishingproject['currentCount'] ?? 0) !== 100
             || (int)($publishingproject['missingCount'] ?? 1) !== 0) {
         redirect(
-            $publishreturnurl,
+            $publisherrorurl('count'),
             $displaylang === 'es'
                 ? 'El examen no se publicó: debe contener exactamente 100 preguntas aprobadas y cero pendientes.'
                 : 'The exam was not published: it must contain exactly 100 approved questions and zero pending questions.',
@@ -1577,7 +1590,6 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamprojec
         $publishingquestion = $questionsbyid[$publishingquestionid] ?? null;
         if (!is_array($publishingquestion)
                 || !$isprocessedquestion($publishingquestion)
-                || !$publishingquestion['_ready']
                 || $publishingquestion['_excluded']) {
             $publishingissues[] = $publishingquestionid;
             continue;
@@ -1591,7 +1603,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamprojec
     }
     if ($publishingissues !== []) {
         redirect(
-            $publishreturnurl,
+            $publisherrorurl('questions', implode(', ', array_slice($publishingissues, 0, 10))),
             ($displaylang === 'es'
                 ? 'El examen no se publicó. Estas preguntas necesitan volver a aprobarse o completarse: '
                 : 'The exam was not published. These questions must be approved or completed again: ')
@@ -1615,7 +1627,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamprojec
                 array_keys($requiredprojectdomaincounts)
             ));
             redirect(
-                $publishreturnurl,
+                $publisherrorurl('blueprint', $actualdomaincounts),
                 ($displaylang === 'es'
                     ? 'El examen no se publicó porque sus proporciones actuales son '
                     : 'The exam was not published because its current domain counts are ')
@@ -5192,7 +5204,7 @@ echo $OUTPUT->header();
 .question-bank__active-filters{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:-6px 0 16px;padding:10px 12px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#3b167d}.question-bank__active-filters-title{margin-right:2px;font-weight:950}.question-bank__active-filters-count{color:#66557e;font-weight:800}.question-bank__active-filter{display:inline-flex;gap:4px;padding:6px 9px;border:1px solid #cbb9ee;border-radius:999px;background:#fff;color:#4c1d95}.question-bank__active-filter strong{font-weight:900}.question-bank__active-filter-actions{display:flex;gap:8px;margin-left:auto}.question-bank__active-filters .question-bank__button{min-height:32px;padding:5px 10px}.question-bank__active-filter-actions .question-bank__button{margin-left:0}@media(max-width:700px){.question-bank__active-filters{align-items:stretch;flex-direction:column}.question-bank__active-filter-actions{flex-direction:column;width:100%;margin-left:0}.question-bank__active-filters .question-bank__button{width:100%;margin-left:0}}
 .question-bank__button--language{min-height:32px;padding:5px 10px;border-color:#7c5bc4;background:#f4f0ff;color:#4c1d95!important}
 .question-bank__exam-builder{margin:0 0 16px;padding:16px;border:1px solid #cbb9ee;border-radius:11px;background:#faf8ff}.question-bank__exam-builder-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.question-bank__exam-builder-head h3{margin:0;color:#3b167d;font-size:21px}.question-bank__exam-builder-head p{margin:3px 0 0;color:#66557e}.question-bank__exam-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.question-bank__exam-card{padding:13px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__exam-card--active{border:2px solid #6d28d9;background:#f8f5ff}.question-bank__exam-card h4{margin:0 0 7px;font-size:17px}.question-bank__exam-numbers{display:flex;flex-wrap:wrap;gap:7px 14px;margin-bottom:9px;color:#52677a}.question-bank__exam-numbers strong{color:#08746f}.question-bank__exam-progress{height:9px;margin-bottom:10px;overflow:hidden;border-radius:999px;background:#e8eef1}.question-bank__exam-progress span{display:block;height:100%;border-radius:999px;background:#6d28d9}.question-bank__published-exam{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;padding:8px 10px;border-radius:7px;background:#e8f8f3;color:#075f59}.question-bank__published-exam span{font-size:12px}.question-bank__exam-card .question-bank__editor-actions{gap:6px}.question-bank__exam-card .question-bank__button{min-height:34px;padding:5px 9px}.question-bank__exam-card form{margin:0}.question-bank__duplicate-report{margin-top:12px;padding:13px 14px;border:1px solid #8b5cf6;border-left:5px solid #6d28d9;border-radius:9px;background:#fff}.question-bank__duplicate-report h4{margin:0 0 6px;color:#3b167d}.question-bank__duplicate-report>p{margin:0 0 9px;color:#52677a}.question-bank__duplicate-undo{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:10px 0;padding:10px 12px;border-radius:7px;background:#e8f8f3;color:#075f59}.question-bank__duplicate-undo form,.question-bank__duplicate-candidate form{margin:0}.question-bank__duplicate-pairs{display:grid;gap:10px;margin-top:10px}.question-bank__duplicate-pair{padding:11px;border:1px solid #ded7ef;border-radius:8px;background:#f8f6fc}.question-bank__duplicate-pair-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.question-bank__duplicate-score{padding:4px 7px;border-radius:999px;background:#ede9fe;color:#4c1d95;font-weight:900}.question-bank__duplicate-candidates{display:grid;grid-template-columns:1fr 1fr;gap:9px}.question-bank__duplicate-candidate{display:flex;align-items:flex-start;flex-direction:column;gap:8px;padding:10px;border:1px solid #d7e2e7;border-radius:7px;background:#fff}.question-bank__duplicate-candidate strong{color:#17384b}.question-bank__duplicate-candidate p{flex:1;margin:0;color:#334e60;line-height:1.45}.question-bank__duplicate-exact{padding:9px 11px;border-radius:7px;background:#fff3e6;color:#8a3c00;font-weight:800}.question-bank__duplicate-empty{padding:12px;border-radius:7px;background:#e8f8f3;color:#075f59;font-weight:800}.question-bank__exam-form{display:grid;grid-template-columns:minmax(240px,2fr) minmax(160px,1fr) auto;align-items:end;gap:10px;margin:0 0 13px;padding:13px;border:1px solid #cbb9ee;border-radius:9px;background:#fff}.question-bank__exam-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__exam-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #b9cbd4;border-radius:7px}@media(max-width:900px){.question-bank__exam-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.question-bank__exam-builder-head{align-items:stretch;flex-direction:column}.question-bank__exam-grid,.question-bank__exam-form,.question-bank__duplicate-candidates{grid-template-columns:1fr}}
-.question-bank__publish-readiness{margin:0 0 10px;padding:8px 10px;border-radius:7px;background:#fff3e6;color:#8a3c00;font-size:12px;font-weight:850}.question-bank__publish-readiness.is-ready{background:#e8f8f3;color:#075f59}.question-bank__button[disabled]{cursor:not-allowed;opacity:.55}
+.question-bank__publish-readiness{margin:0 0 10px;padding:8px 10px;border-radius:7px;background:#fff3e6;color:#8a3c00;font-size:12px;font-weight:850}.question-bank__publish-readiness.is-ready{background:#e8f8f3;color:#075f59}.question-bank__publish-error{margin:0 0 10px;padding:9px 10px;border:1px solid #ef4444;border-radius:7px;background:#fff1f2;color:#991b1b;font-size:12px;font-weight:850}.question-bank__button[disabled]{cursor:not-allowed;opacity:.55}
 .question-bank__similarity-finder{margin:0 0 16px;padding:16px;border:1px solid #0b8f87;border-left:5px solid #0b8f87;border-radius:11px;background:#f5fbfa}.question-bank__similarity-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.question-bank__similarity-head h3{margin:0 0 5px;color:#075f59;font-size:21px}.question-bank__similarity-head p{max-width:900px;margin:0;color:#52677a}.question-bank__similarity-form{display:grid;grid-template-columns:minmax(280px,1fr) auto;align-items:end;gap:10px;margin:14px 0 8px}.question-bank__similarity-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:900}.question-bank__similarity-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #9bbdc0;border-radius:7px;background:#fff}.question-bank__similarity-note{margin:7px 0 12px;color:#52677a;font-size:13px}.question-bank__similarity-target{padding:12px;border:2px solid #6d28d9;border-radius:8px;background:#fff}.question-bank__similarity-target>span{display:block;color:#6d28d9;font-size:11px;font-weight:900;text-transform:uppercase}.question-bank__similarity-target>strong{display:block;margin:3px 0 5px;font-size:17px}.question-bank__similarity-target p{margin:0 0 7px}.question-bank__similarity-summary{margin:12px 0 8px;color:#52677a}.question-bank__similarity-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.question-bank__similarity-result{padding:12px;border:1px solid #c9dadd;border-radius:8px;background:#fff}.question-bank__similarity-result>header{display:flex;align-items:center;justify-content:space-between;gap:9px}.question-bank__similarity-result>p{margin:9px 0;color:#334e60;line-height:1.45}.question-bank__similarity-answer{margin:8px 0;padding:8px 10px;border-radius:6px;background:#eef9f6;color:#075f59}.question-bank__similarity-result>small{display:block;margin-bottom:9px;color:#66557e}.question-bank__merge-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;padding-top:9px;border-top:1px solid #e1eaed}.question-bank__merge-actions form{margin:0}@media(max-width:800px){.question-bank__similarity-results,.question-bank__similarity-form{grid-template-columns:1fr}.question-bank__similarity-head{flex-direction:column}}
 </style>
 <main class="question-bank">
@@ -5300,6 +5312,28 @@ echo $OUTPUT->header();
                     && (int)($project['publishedExamNumber'] ?? 0) >= 3;
                 $projectexamnumber = (int)($project['publishedExamNumber'] ?? 0);
                 $projectpercent = $projecttarget > 0 ? min(100, (int)round($projectcount * 100 / $projecttarget)) : 0;
+                $projectpublisherrormessage = '';
+                if ($examprojectid === $projectid && $publishexamerror !== '') {
+                    if ($publishexamerror === 'count') {
+                        $projectpublisherrormessage = $displaylang === 'es'
+                            ? 'No se publicó: el proyecto debe contener exactamente 100 preguntas aprobadas.'
+                            : 'Not published: the project must contain exactly 100 approved questions.';
+                    } else if ($publishexamerror === 'questions') {
+                        $projectpublisherrormessage = ($displaylang === 'es'
+                            ? 'No se publicó: estas preguntas ya no están aprobadas o activas: '
+                            : 'Not published: these questions are no longer approved or active: ')
+                            . $publishexamdetail;
+                    } else if ($publishexamerror === 'blueprint') {
+                        $projectpublisherrormessage = ($displaylang === 'es'
+                            ? 'No se publicó: las proporciones actuales son '
+                            : 'Not published: the current domain counts are ')
+                            . $publishexamdetail . ' (required: 28/24/18/15/10/5).';
+                    } else {
+                        $projectpublisherrormessage = $displaylang === 'es'
+                            ? 'No se publicó porque el proyecto ya no está disponible.'
+                            : 'Not published because the project is no longer available.';
+                    }
+                }
                 $projectaddurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
                     'examproject' => $projectid,
                     'usage' => 'exam_project_pending',
@@ -5323,6 +5357,7 @@ echo $OUTPUT->header();
                 <div class="question-bank__exam-numbers"><span><?php echo $displaylang === 'es' ? 'Aprobadas:' : 'Approved:'; ?> <strong><?php echo $projectcount; ?> / <?php echo $projecttarget; ?></strong></span><span><?php echo $displaylang === 'es' ? 'Pendientes:' : 'Pending:'; ?> <strong><?php echo $projectmissing; ?></strong></span></div>
                 <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="<?php echo $projecttarget; ?>" aria-valuenow="<?php echo $projectcount; ?>"><span style="width:<?php echo $projectpercent; ?>%"></span></div>
                 <div class="question-bank__publish-readiness<?php echo $projectisreadytopublish ? ' is-ready' : ''; ?>"><?php echo $projectisreadytopublish ? ($displaylang === 'es' ? 'Listo para publicar: 100 de 100 aprobadas.' : 'Ready to publish: 100 of 100 approved.') : ($displaylang === 'es' ? 'Aún no se puede publicar: faltan ' . $projectmissing . ' preguntas por aprobar.' : 'Not ready to publish: ' . $projectmissing . ' questions still need approval.'); ?></div>
+                <?php if ($projectpublisherrormessage !== ''): ?><div class="question-bank__publish-error" role="alert"><?php echo s($projectpublisherrormessage); ?></div><?php endif; ?>
                 <?php if ($projectispublished): ?><div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$project['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)($project['publishedVersion'] ?? 1); ?></span></div><?php endif; ?>
                 <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $projectaddurl->out(false); ?>"><?php echo $projectcount > 0 ? ($displaylang === 'es' ? 'Continuar revisión' : 'Continue review') : ($displaylang === 'es' ? 'Comenzar revisión' : 'Start review'); ?></a><a class="question-bank__button" href="<?php echo $projectincludedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver aprobadas' : 'View approved'; ?> (<?php echo $projectcount; ?>)</a><?php if ($projectisreadytopublish): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectpublishurl->out(false); ?>"><?php echo $projectispublished ? ($displaylang === 'es' ? 'Volver a publicar' : 'Republish') : ($displaylang === 'es' ? 'Publicar examen' : 'Publish exam'); ?></a><?php else: ?><span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $displaylang === 'es' ? 'Publicar examen' : 'Publish exam'; ?></span><?php endif; ?><?php if ($projectispublished): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => $projectexamnumber, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?><?php if ($examprojectid === $projectid): ?><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a><?php endif; ?></div>
             </article>
