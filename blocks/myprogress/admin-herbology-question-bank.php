@@ -1394,12 +1394,21 @@ if ($examprojectid !== '') {
 }
 $pendingexamproject = null;
 foreach ($examprojects as $storedexam) {
-    if ((int)$storedexam['missingCount'] > 0) {
+    if ((string)($storedexam['status'] ?? 'draft') !== 'published'
+            && (int)$storedexam['missingCount'] > 0) {
         $pendingexamproject = $storedexam;
     }
 }
-if (is_array($currentexamproject) && (int)$currentexamproject['missingCount'] > 0) {
+// There is only one active review project in the filter: the newest unpublished,
+// incomplete exam. Old project IDs can remain in bookmarked URLs after publishing,
+// so move a pending-review request to the actual active project automatically.
+if ($usagefilter === 'exam_project_pending' && is_array($pendingexamproject)) {
+    $examprojectid = (string)$pendingexamproject['id'];
+    $currentexamproject = $examprojects[$examprojectid];
+    $currentexamquestionids = (array)$currentexamproject['approvedQuestionIds'];
     $pendingexamproject = $currentexamproject;
+} else if ($usagefilter === 'exam_project_pending') {
+    $usagefilter = 'all';
 }
 
 $isprocessedquestion = static function(array $question): bool {
@@ -1467,6 +1476,12 @@ $exam2candidatecount = count($exam2positions);
 $publishedexam2 = is_array($revisionstore['publishedExams']['simulation_exam_2'] ?? null)
     ? $revisionstore['publishedExams']['simulation_exam_2']
     : null;
+if ($usagefilter === 'exam2_review' && $publishedexam2 !== null) {
+    $usagefilter = 'all';
+}
+if ($usagefilter === 'exam2_approved' && $publishedexam2 === null) {
+    $usagefilter = 'all';
+}
 $requiredprojectdomaincounts = [
     'formula_differentiation' => 28,
     'single_herb' => 24,
@@ -7182,7 +7197,7 @@ echo $OUTPUT->header();
         <label><span>Search ID or text</span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="Example: DY-001, Ma Huang Tang"></label>
         <label><span>Domain</span><select name="domain"><option value="all">All domains</option><?php foreach ($domains as $domainid => $domain): ?><option value="<?php echo s($domainid); ?>"<?php echo $domainfilter === $domainid ? ' selected' : ''; ?>>Domain <?php echo (int)$domain['number']; ?> · <?php echo s($domain['name']); ?></option><?php endforeach; ?></select></label>
         <label><span>Readiness</span><select name="readiness"><option value="all">All questions</option><option value="ready"<?php echo $readinessfilter === 'ready' ? ' selected' : ''; ?>>Ready for practice</option><option value="incomplete"<?php echo $readinessfilter === 'incomplete' ? ' selected' : ''; ?>>Needs completion</option></select></label>
-        <label><span>Exam use</span><select name="usage"><option value="all">All uses</option><option value="exam1"<?php echo $usagefilter === 'exam1' ? ' selected' : ''; ?>>Exam 1</option><option value="exam2_review"<?php echo $usagefilter === 'exam2_review' ? ' selected' : ''; ?>>Exam 2 pending review</option><option value="exam2_approved"<?php echo $usagefilter === 'exam2_approved' ? ' selected' : ''; ?>>Exam 2 approved</option><?php if (is_array($currentexamproject)): ?><option value="exam_project_pending"<?php echo $usagefilter === 'exam_project_pending' ? ' selected' : ''; ?>><?php echo s((string)$currentexamproject['name']); ?> pending review</option><?php endif; ?><option value="reserve"<?php echo $usagefilter === 'reserve' ? ' selected' : ''; ?>>Ready reserve bank</option></select></label>
+        <label><span>Exam use</span><select name="usage"><option value="all">All uses</option><option value="exam1"<?php echo $usagefilter === 'exam1' ? ' selected' : ''; ?>>Exam 1</option><?php if ($publishedexam2 === null && $exam2candidatecount > 0): ?><option value="exam2_review"<?php echo $usagefilter === 'exam2_review' ? ' selected' : ''; ?>>Exam 2 pending review</option><?php endif; ?><?php if ($publishedexam2 !== null): ?><option value="exam2_approved"<?php echo $usagefilter === 'exam2_approved' ? ' selected' : ''; ?>>Exam 2 approved</option><?php endif; ?><?php if (is_array($pendingexamproject)): ?><option value="exam_project_pending"<?php echo $usagefilter === 'exam_project_pending' ? ' selected' : ''; ?>><?php echo s((string)$pendingexamproject['name']); ?> pending review</option><?php endif; ?><option value="reserve"<?php echo $usagefilter === 'reserve' ? ' selected' : ''; ?>>Ready reserve bank</option></select><small><?php echo $displaylang === 'es' ? 'Solo se muestra el examen activo; los exámenes publicados desaparecen de revisión pendiente.' : 'Only the active exam is shown; published exams are removed from pending review.'; ?></small></label>
         <label><span>Source</span><select name="source" onchange="if(this.value==='admin'&&this.form.elements.usage){this.form.elements.usage.value='all';}"><option value="all">All sources</option><option value="curated"<?php echo $sourcefilter === 'curated' ? ' selected' : ''; ?>>Curated bank</option><option value="scorm"<?php echo $sourcefilter === 'scorm' ? ' selected' : ''; ?>>SCORM modules</option><option value="admin"<?php echo $sourcefilter === 'admin' ? ' selected' : ''; ?>><?php echo $displaylang === 'es' ? 'Preguntas creadas' : 'Created questions'; ?> — <?php echo (int)$customquestiontotalcount; ?> <?php echo $displaylang === 'es' ? 'total' : 'total'; ?> · <?php echo (int)$customdraftcount; ?> <?php echo $displaylang === 'es' ? 'borradores' : 'drafts'; ?> · <?php echo (int)$customapprovedcount; ?> <?php echo $displaylang === 'es' ? 'aprobadas' : 'approved'; ?></option></select><small><?php echo $displaylang === 'es' ? 'Al elegir Preguntas creadas, Uso en examen cambia a Todos los usos. Use Preparación para separar borradores y aprobadas.' : 'Selecting Created questions changes Exam use to All uses. Use Readiness to separate drafts from approved questions.'; ?></small></label>
         <label><span>Cognitive level</span><select name="cognitive"><option value="all">All cognitive levels</option><option value="recall"<?php echo $cognitivefilter === 'recall' ? ' selected' : ''; ?>>Recall / direct</option><option value="application"<?php echo $cognitivefilter === 'application' ? ' selected' : ''; ?>>Application</option><option value="inference"<?php echo $cognitivefilter === 'inference' ? ' selected' : ''; ?>>Inference</option><option value="analysis"<?php echo $cognitivefilter === 'analysis' ? ' selected' : ''; ?>>Analysis / differential</option></select></label>
         <label><span>Content focus</span><select name="content"><option value="all">All content</option><option value="herb_properties"<?php echo $contentfilter === 'herb_properties' ? ' selected' : ''; ?>>Herb properties</option><option value="formula_hierarchy"<?php echo $contentfilter === 'formula_hierarchy' ? ' selected' : ''; ?>>Formula hierarchy</option><option value="herb_processing"<?php echo $contentfilter === 'herb_processing' ? ' selected' : ''; ?>>Herb processing</option><option value="clinical_case"<?php echo $contentfilter === 'clinical_case' ? ' selected' : ''; ?>>Clinical cases</option><option value="other"<?php echo $contentfilter === 'other' ? ' selected' : ''; ?>>Other content</option></select></label>
