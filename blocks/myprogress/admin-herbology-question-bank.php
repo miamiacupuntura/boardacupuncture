@@ -2443,6 +2443,7 @@ $buildsimilaritysearch = static function(
             'prompt' => $prompt,
             'answer' => $answer,
             'explanation' => $explanation,
+            'optionText' => $optiontext,
             'domainId' => (string)($question['_domainid'] ?? $question['domainId'] ?? ''),
             'sourceKind' => (string)($question['_sourcekind'] ?? $question['sourceKind'] ?? ''),
             'exam1Position' => (int)($question['_examposition'] ?? 0),
@@ -2469,6 +2470,8 @@ $buildsimilaritysearch = static function(
     $querytokens = $target !== null
         ? $target['fullTokens']
         : $tokens($search);
+    $normalizedsearchphrase = $target === null ? $normalizetext($search) : '';
+    $requiresliteralphrase = $target === null && count($querytokens) >= 3;
     $matches = [];
     foreach ($active as $candidateid => $candidate) {
         if ($target !== null && $candidateid === $target['questionId']) {
@@ -2493,6 +2496,22 @@ $buildsimilaritysearch = static function(
                 $exactanswer ? 0.92 : 0.0
             );
         } else {
+            if ($requiresliteralphrase) {
+                $literalfields = [
+                    $candidate['prompt'],
+                    $candidate['answer'],
+                    $candidate['explanation'],
+                    $candidate['optionText'],
+                ];
+                $hasliteralphrase = count(array_filter(
+                    $literalfields,
+                    static fn(string $field): bool => $normalizedsearchphrase !== ''
+                        && strpos($normalizetext($field), $normalizedsearchphrase) !== false
+                )) > 0;
+                if (!$hasliteralphrase) {
+                    continue;
+                }
+            }
             $promptscore = $similarity($querytokens, $candidate['promptTokens']);
             $answerscore = $similarity($querytokens, $candidate['answerTokens']);
             $explanationscore = $similarity($querytokens, $candidate['explanationTokens']);
@@ -3295,6 +3314,124 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'askassistant') {
         ]));
         $duplicateurl->set_anchor('question-bank-ai');
         redirect($duplicateurl);
+    }
+    $assistantfilterterm = '';
+    $assistantfilteransweronly = false;
+    if (preg_match(
+        '/^\s*(?:por\s+favor[,:]?\s*)?'
+            . '(?:filtra(?:r)?|busca(?:r)?|muestra(?:me)?|filter|search(?:\s+for)?|show(?:\s+me)?)\s+'
+            . '(?:las?\s+)?(?:(?:preguntas?|questions?)\s+)?'
+            . '(?:(?:que\s+)?(?:contienen?|tienen?)\s+|(?:con|sobre|de|para|with|about|for)\s+)?'
+            . '(.+?)\s*[.!?]*$/iu',
+        $assistantrequest,
+        $assistantfiltermatches
+    )) {
+        $assistantfilterterm = trim((string)($assistantfiltermatches[1] ?? ''), " \t\n\r\0\x0B\"'“”");
+    }
+    if ($assistantfilterterm !== '' && preg_match(
+        '/^(?:(?:cuya|donde\s+la|con\s+la|whose)\s+)?'
+            . '(?:respuesta|answer)(?:\s+correcta|\s+correct)?'
+            . '(?:\s+(?:es|sea|is|equals?))?\s*:?[\s\"“”\']*(.+?)\s*[\"“”\']*$/iu',
+        $assistantfilterterm,
+        $assistantanswerfiltermatches
+    )) {
+        $assistantfilterterm = trim((string)($assistantanswerfiltermatches[1] ?? ''));
+        $assistantfilteransweronly = true;
+    } else if ($assistantfilterterm !== '' && preg_match(
+        '/\b(?:respuesta|answer)\b/iu',
+        $assistantrequest
+    )) {
+        $assistantfilteransweronly = true;
+    }
+    if ($assistantfilterterm !== '') {
+        $normalizeassistantfilter = static function(string $text): string {
+            $text = core_text::strtolower(html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+            return trim(preg_replace('/[^\p{L}\p{N}]+/u', ' ', $text) ?? '');
+        };
+        $normalizedassistantfilter = $normalizeassistantfilter($assistantfilterterm);
+        $assistantfiltercount = 0;
+        foreach ($allquestions as $assistantfilterquestion) {
+            if (!empty($assistantfilterquestion['_excluded'])
+                    || (string)($assistantfilterquestion['_revision']['status'] ?? '') === 'deleted') {
+                continue;
+            }
+            $assistantfiltertranslation = is_array($assistantfilterquestion['translations']['es'] ?? null)
+                ? $assistantfilterquestion['translations']['es']
+                : [];
+            $assistantfilterparts = [
+                (string)($assistantfilterquestion['questionId'] ?? ''),
+                (string)($assistantfilterquestion['prompt'] ?? ''),
+                (string)($assistantfilterquestion['explanation'] ?? ''),
+                (string)($assistantfiltertranslation['prompt'] ?? ''),
+                (string)($assistantfiltertranslation['explanation'] ?? ''),
+                (string)($assistantfilterquestion['source']['title'] ?? ''),
+                (string)($assistantfilterquestion['source']['section'] ?? ''),
+                (string)($assistantfilterquestion['sourceCard']['label'] ?? ''),
+            ];
+            $assistantfiltercorrectlabel = strtoupper(trim((string)(
+                $assistantfilterquestion['correctLabel'] ?? ''
+            )));
+            $assistantfiltercorrectanswer = '';
+            foreach ((array)($assistantfilterquestion['options'] ?? []) as $assistantfilteroption) {
+                $assistantfilterparts[] = (string)($assistantfilteroption['text'] ?? '');
+                if (strtoupper(trim((string)($assistantfilteroption['label'] ?? '')))
+                        === $assistantfiltercorrectlabel) {
+                    $assistantfiltercorrectanswer = (string)($assistantfilteroption['text'] ?? '');
+                }
+            }
+            foreach ((array)($assistantfiltertranslation['options'] ?? []) as $assistantfilteroption) {
+                $assistantfilterparts[] = (string)($assistantfilteroption['text'] ?? '');
+            }
+            $assistantfilterhaystack = $assistantfilteransweronly
+                ? $assistantfiltercorrectanswer
+                : implode(' ', $assistantfilterparts);
+            if ($normalizedassistantfilter !== '' && strpos(
+                $normalizeassistantfilter($assistantfilterhaystack),
+                $normalizedassistantfilter
+            ) !== false) {
+                $assistantfiltercount++;
+            }
+        }
+        $assistantfilterresponse = $assistantfiltercount > 0
+            ? 'Filtro exacto aplicado' . ($assistantfilteransweronly ? ' a la respuesta correcta' : '')
+                . ': “' . $assistantfilterterm . '”. Coincidencias verificadas: '
+                . $assistantfiltercount . '.'
+            : 'No se encontraron preguntas activas que contengan exactamente “'
+                . $assistantfilterterm . '”. No se abrió ninguna pregunta no relacionada.';
+        $saveassistantturn($assistantrequest, $assistantfilterresponse);
+        if ($assistantfiltercount > 0) {
+            $assistantfilterurl = new moodle_url(
+                '/blocks/myprogress/admin-herbology-question-bank.php',
+                array_filter($assistantfilteransweronly ? [
+                    'sameansweraudit' => 1,
+                    'sameanswersearch' => $assistantfilterterm,
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                ] : [
+                    'q' => $assistantfilterterm,
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                ])
+            );
+            if ($assistantfilteransweronly) {
+                $assistantfilterurl->set_anchor('same-answer-audit');
+            }
+            redirect(
+                $assistantfilterurl,
+                $assistantfilterresponse,
+                null,
+                \core\output\notification::NOTIFY_SUCCESS
+            );
+        }
+        $assistantfilterurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+            'aiassistant' => 1,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ]));
+        $assistantfilterurl->set_anchor('question-bank-ai');
+        redirect(
+            $assistantfilterurl,
+            $assistantfilterresponse,
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
     }
     $assistanthistory = is_array($SESSION->ncbahm_question_bank_ai_history ?? null)
         ? array_slice($SESSION->ncbahm_question_bank_ai_history, -8)
