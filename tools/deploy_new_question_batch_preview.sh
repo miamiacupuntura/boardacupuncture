@@ -84,6 +84,8 @@ grep -Fq '$ensurechannelherbmappingfeedback' "$SOURCE_FILE"
 grep -Fq 'The complete channel set' "$SOURCE_FILE"
 grep -Fq 'data-result-filter-context' "$SOURCE_FILE"
 grep -Fq '$resultfiltercontext' "$SOURCE_FILE"
+grep -Fq '$similarityscopequestions' "$SOURCE_FILE"
+grep -Fq 'Comparing within:' "$SOURCE_FILE"
 
 mkdir -p "$BACKUP_DIR"
 cp -a -- "$TARGET" "$BACKUP_FILE"
@@ -113,6 +115,7 @@ grep -Fq 'Only the active exam is shown' "$TARGET"
 grep -Fq '$draftchannelherbmapping' "$TARGET"
 grep -Fq '$ensurechannelherbmappingfeedback' "$TARGET"
 grep -Fq 'data-result-filter-context' "$TARGET"
+grep -Fq '$similarityscopequestions' "$TARGET"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -153,6 +156,7 @@ echo "OK: Exam use muestra solo el examen activo y oculta proyectos publicados p
 echo "OK: el feedback de opciones por canales identifica la hierba correspondiente a cada grupo A-D."
 echo "OK: el mapeo A-D se inserta de forma determinística aunque el proveedor de IA lo omita."
 echo "OK: el encabezado del listado muestra los filtros que producen las preguntas visibles."
+echo "OK: Find similar questions compara solo dentro del examen activo cuando existe uno."
 echo "OK: ninguna pregunta se publica automáticamente."
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256: $INSTALLED_SHA256"

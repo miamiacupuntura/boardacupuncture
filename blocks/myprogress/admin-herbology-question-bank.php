@@ -2445,7 +2445,7 @@ $buildexam2duplicatereport = static function(array $questions, bool $spanish): a
 };
 
 /**
- * Search the complete active bank for questions with similar answers or wording.
+ * Search the supplied scope for questions with similar answers or wording.
  *
  * When a question ID is supplied, answer similarity receives the highest weight
  * and the result can be used by the administrator's merge workflow. Free-text
@@ -6442,16 +6442,58 @@ $assistanturl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank
     'aiassistant' => 1,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
 ]));
+$similaritycontextproject = is_array($currentexamproject)
+        && (string)($currentexamproject['status'] ?? 'draft') !== 'published'
+    ? $currentexamproject
+    : $pendingexamproject;
 $similarityurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'similarfinder' => 1,
+    'examproject' => is_array($similaritycontextproject)
+        ? (string)$similaritycontextproject['id']
+        : null,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
 ]));
 $similarityurl->set_anchor('similarity-finder');
 $showsimilarityfinder = $showsimilarityfinder
     || $similaritysearch !== ''
     || $similarityquestionid !== '';
+$similarityscopeids = [];
+$similarityscopeactive = false;
+$similarityscopename = $displaylang === 'es' ? 'Banco activo completo' : 'Complete active bank';
+if (is_array($currentexamproject)) {
+    $similarityscopeactive = true;
+    $similarityscopeids = array_values(array_unique(array_merge(
+        array_map('strval', $currentexamquestionids),
+        array_map('strval', $currentexamcandidateids)
+    )));
+    $similarityscopename = (string)$currentexamproject['name'];
+} else if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true)) {
+    $similarityscopeactive = true;
+    $similarityscopeids = array_keys($exam2positions);
+    $similarityscopename = 'Exam 2';
+} else if ($usagefilter === 'exam1') {
+    $similarityscopeactive = true;
+    $similarityscopeids = array_values(array_map(
+        static fn(array $question): string => (string)$question['questionId'],
+        array_filter(
+            $allquestions,
+            static fn(array $question): bool => (int)($question['_examposition'] ?? 0) > 0
+        )
+    ));
+    $similarityscopename = 'Exam 1';
+}
+$similarityscopelookup = array_fill_keys($similarityscopeids, true);
+$similarityscopequestions = !$similarityscopeactive
+    ? $allquestions
+    : array_values(array_filter(
+        $allquestions,
+        static fn(array $question): bool => isset(
+            $similarityscopelookup[(string)($question['questionId'] ?? '')]
+        ) || ($similarityquestionid !== ''
+            && (string)($question['questionId'] ?? '') === $similarityquestionid)
+    ));
 $similarityreport = $showsimilarityfinder
-    ? $buildsimilaritysearch($allquestions, $similaritysearch, $similarityquestionid)
+    ? $buildsimilaritysearch($similarityscopequestions, $similaritysearch, $similarityquestionid)
     : ['target' => null, 'search' => '', 'matches' => [], 'comparedCount' => 0];
 $sameanswerurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'sameansweraudit' => 1,
@@ -6947,12 +6989,17 @@ echo $OUTPUT->header();
             : $similaritysearch;
     ?>
     <section id="similarity-finder" class="question-bank__similarity-finder" aria-live="polite">
-        <header class="question-bank__similarity-head"><div><h3><?php echo $displaylang === 'es' ? 'Buscador de preguntas y respuestas similares' : 'Similar question and answer finder'; ?></h3><p><?php echo $displaylang === 'es'
-            ? 'Busca en todo el banco activo, no solamente en un examen. Puedes usar un ID, una respuesta correcta, una hierba, una fórmula, canales o una frase.'
-            : 'Searches the complete active bank, not only one exam. Enter a question ID, correct answer, herb, formula, channels or a phrase.'; ?></p></div><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a></header>
+        <header class="question-bank__similarity-head"><div><h3><?php echo $displaylang === 'es' ? 'Buscador de preguntas y respuestas similares' : 'Similar question and answer finder'; ?></h3><p><strong><?php echo $displaylang === 'es' ? 'Comparando dentro de:' : 'Comparing within:'; ?> <?php echo s($similarityscopename); ?></strong><br><?php echo $similarityscopeactive
+            ? ($displaylang === 'es'
+                ? 'La búsqueda se limita a las preguntas aprobadas y pendientes seleccionadas para este examen. Puedes usar un ID, una respuesta correcta, una hierba, una fórmula, canales o una frase.'
+                : 'The search is limited to approved and pending questions selected for this exam. Enter a question ID, correct answer, herb, formula, channels or a phrase.')
+            : ($displaylang === 'es'
+                ? 'No hay un examen seleccionado; la búsqueda usa el banco activo completo.'
+                : 'No exam is selected; the search uses the complete active bank.'); ?></p></div><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a></header>
         <form class="question-bank__similarity-form" method="get" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
             <label><span><?php echo $displaylang === 'es' ? 'ID o contenido de la respuesta' : 'Question ID or answer content'; ?></span><input type="text" name="similarsearch" value="<?php echo s($similarityformvalue); ?>" maxlength="500" placeholder="<?php echo $displaylang === 'es' ? 'Ejemplo: Gan Jiang, SP ST LU o SCORM-SH-…' : 'Example: Gan Jiang, SP ST LU or SCORM-SH-…'; ?>" required></label>
             <input type="hidden" name="similarfinder" value="1">
+            <?php if (is_array($currentexamproject)): ?><input type="hidden" name="examproject" value="<?php echo s((string)$currentexamproject['id']); ?>"><?php endif; ?>
             <?php if ($displaylang !== 'en'): ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><?php endif; ?>
             <button class="question-bank__button question-bank__button--primary" type="submit"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar'; ?></button>
         </form>
@@ -6969,19 +7016,25 @@ echo $OUTPUT->header();
         <article class="question-bank__similarity-target"><span><?php echo $displaylang === 'es' ? 'Pregunta de referencia' : 'Reference question'; ?></span><strong><?php echo s((string)$similaritytarget['questionId']); ?></strong><p><?php echo s((string)$similaritytarget['prompt']); ?></p><div><b><?php echo $displaylang === 'es' ? 'Respuesta correcta:' : 'Correct answer:'; ?></b> <?php echo s((string)$similaritytarget['answer']); ?></div><?php if ((int)$similaritytarget['exam1Position'] > 0): ?><small>Exam 1 · <?php echo $displaylang === 'es' ? 'posición' : 'position'; ?> <?php echo (int)$similaritytarget['exam1Position']; ?> · <?php echo $displaylang === 'es' ? 'debe conservarse' : 'must be kept'; ?></small><?php elseif ((int)$similaritytarget['exam2Position'] > 0): ?><small>Exam 2 · <?php echo $displaylang === 'es' ? 'posición' : 'position'; ?> <?php echo (int)$similaritytarget['exam2Position']; ?></small><?php endif; ?></article>
         <?php endif; ?>
         <?php if ($similarityformvalue !== ''): ?>
-        <div class="question-bank__similarity-summary"><strong><?php echo count($similaritymatches); ?></strong> <?php echo $displaylang === 'es' ? 'coincidencias mostradas de' : 'matches shown after comparing'; ?> <strong><?php echo (int)($similarityreport['comparedCount'] ?? 0); ?></strong> <?php echo $displaylang === 'es' ? 'preguntas activas.' : 'active questions.'; ?></div>
+        <div class="question-bank__similarity-summary"><strong><?php echo count($similaritymatches); ?></strong> <?php echo $displaylang === 'es' ? 'coincidencias mostradas después de comparar' : 'matches shown after comparing'; ?> <strong><?php echo (int)($similarityreport['comparedCount'] ?? 0); ?></strong> <?php echo $displaylang === 'es' ? 'preguntas de ' : 'questions within '; ?><strong><?php echo s($similarityscopename); ?></strong>.</div>
         <?php if ($similaritymatches === []): ?><div class="question-bank__duplicate-empty"><?php echo $displaylang === 'es' ? 'No se encontraron respuestas o preguntas suficientemente similares.' : 'No sufficiently similar answers or questions were found.'; ?></div><?php else: ?>
         <div class="question-bank__similarity-results">
             <?php foreach ($similaritymatches as $similaritymatch):
                 $matchid = (string)$similaritymatch['questionId'];
                 $matchviewurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
                     'q' => $matchid,
+                    'examproject' => is_array($currentexamproject)
+                        ? (string)$currentexamproject['id']
+                        : null,
                     'lang' => $displaylang !== 'en' ? $displaylang : null,
                 ]));
                 $matchviewurl->set_anchor('question-' . $matchid);
                 $matchreferenceurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
                     'similarfinder' => 1,
                     'similarquestion' => $matchid,
+                    'examproject' => is_array($currentexamproject)
+                        ? (string)$currentexamproject['id']
+                        : null,
                     'lang' => $displaylang !== 'en' ? $displaylang : null,
                 ]));
                 $matchreferenceurl->set_anchor('similarity-finder');
@@ -6990,6 +7043,9 @@ echo $OUTPUT->header();
                     $matchtableurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
                         'mergeleft' => (string)$similaritytarget['questionId'],
                         'mergeright' => $matchid,
+                        'examproject' => is_array($currentexamproject)
+                            ? (string)$currentexamproject['id']
+                            : null,
                         'lang' => $displaylang !== 'en' ? $displaylang : null,
                     ]));
                     $matchtableurl->set_anchor('merge-composer');
@@ -7447,6 +7503,9 @@ echo $OUTPUT->header();
             array_filter([
                 'similarfinder' => 1,
                 'similarquestion' => (string)$question['questionId'],
+                'examproject' => is_array($currentexamproject)
+                    ? (string)$currentexamproject['id']
+                    : null,
                 'lang' => $displaylang !== 'en' ? $displaylang : null,
             ])
         );
