@@ -837,6 +837,17 @@ a { color: inherit; }
 }
 
 .formula-practice-availability p { margin: 0; color: var(--muted); }
+.formula-practice-launch-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.formula-practice-mock {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #6d28d9;
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+}
+.formula-practice-mock:hover { background: #5720b7; color: #fff; }
 .formula-practice-start,
 .formula-practice-next,
 .formula-practice-finish {
@@ -1154,7 +1165,8 @@ select:focus-visible { outline: 3px solid #185cca; outline-offset: 3px; }
   .formula-study-modes a { min-height: 0; }
   .formula-practice-controls { grid-template-columns: 1fr; }
   .formula-practice-availability { align-items: stretch; flex-direction: column; }
-  .formula-practice-start { width: 100%; }
+  .formula-practice-launch-actions,.formula-practice-start,.formula-practice-mock { width: 100%; }
+  .formula-practice-mock { text-align: center; }
   .formula-practice-question h2 { font-size: 17px; }
   .formula-practice-finish { width: 100%; }
   .formula-practice-source-viewer { padding: 0; }

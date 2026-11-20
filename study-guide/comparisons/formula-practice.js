@@ -98,6 +98,7 @@
     maxHelp: document.querySelector('[data-practice-max-help]'),
     available: document.querySelector('[data-practice-available]'),
     start: document.querySelector('[data-practice-start]'),
+    mock: document.querySelector('[data-practice-mock]'),
     history: document.querySelector('[data-practice-history]'),
     historyStats: document.querySelector('[data-practice-history-stats]'),
     weaknesses: document.querySelector('[data-practice-weaknesses]'),
@@ -144,6 +145,19 @@
     answeredBySource: new Map()
   };
   let activeSourceLink = null;
+
+  function syncMockLink() {
+    if (!elements.mock) return;
+    elements.mock.hidden = !modificationsOnly;
+    if (!modificationsOnly) return;
+    const mockUrl = new URL('/blocks/menu/herbology-board.php', window.location.origin);
+    mockUrl.searchParams.set('track', 'mock');
+    mockUrl.searchParams.set('mockcategory', 'formula_composition');
+    mockUrl.searchParams.set('mocksize', String(Number(state.size) || 10));
+    mockUrl.searchParams.set('from', 'library');
+    if (spanish) mockUrl.searchParams.set('lang', 'es');
+    elements.mock.href = mockUrl.pathname + mockUrl.search;
+  }
 
   function readHistory() {
     try {
@@ -314,6 +328,7 @@
     elements.start.disabled = count === 0;
     elements.start.textContent = text.startPractice(sessionCount);
     elements.status.textContent = count ? text.available : text.noQuestions;
+    syncMockLink();
     updateUrl();
   }
 
