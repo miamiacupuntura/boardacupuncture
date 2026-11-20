@@ -27,6 +27,9 @@ $showexam2duplicatereport = (bool)optional_param('duplicatescan', 0, PARAM_BOOL)
 $showsimilarityfinder = (bool)optional_param('similarfinder', 0, PARAM_BOOL);
 $similaritysearch = trim(optional_param('similarsearch', '', PARAM_TEXT));
 $similarityquestionid = optional_param('similarquestion', '', PARAM_ALPHANUMEXT);
+$showsameansweraudit = (bool)optional_param('sameansweraudit', 0, PARAM_BOOL);
+$sameanswersearch = trim(optional_param('sameanswersearch', '', PARAM_TEXT));
+$sameanswerpage = max(0, optional_param('sameanswerpage', 0, PARAM_INT));
 $publishexam2requested = (bool)optional_param('publishexam2', 0, PARAM_BOOL);
 $publishexamprojectrequested = optional_param('publishexamproject', '', PARAM_ALPHANUMEXT);
 $rebalanceexamprojectrequested = optional_param('rebalanceexamproject', '', PARAM_ALPHANUMEXT);
@@ -2523,6 +2526,150 @@ $buildsimilaritysearch = static function(
         'search' => $target !== null ? (string)$target['questionId'] : $search,
         'matches' => array_slice($matches, 0, 30),
         'comparedCount' => count($active),
+    ];
+};
+
+/**
+ * Group active Formula and Individual Herb questions by canonical correct answer.
+ *
+ * Sharing an answer is an audit signal, not proof of duplication.  The report
+ * deliberately preserves every question until the administrator compares the
+ * learning objective, stem and feedback in the existing similarity workflow.
+ */
+$buildsameansweraudit = static function(
+    array $questions,
+    array $domains,
+    string $search = ''
+): array {
+    $answerdomains = [
+        'formula_differentiation' => 'formula',
+        'formula_composition' => 'formula',
+        'single_herb' => 'herb',
+    ];
+    $correctanswer = static function(array $question): string {
+        $correctlabel = strtoupper(trim((string)($question['correctLabel'] ?? '')));
+        foreach ((array)($question['options'] ?? []) as $option) {
+            if (strtoupper(trim((string)($option['label'] ?? ''))) === $correctlabel) {
+                return trim((string)($option['text'] ?? ''));
+            }
+        }
+        return '';
+    };
+    $canonicalanswer = static function(string $answer): string {
+        $answer = html_entity_decode(strip_tags($answer), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $answer = preg_replace('/^\s*[A-D]\s*[\.\):\-]\s*/iu', '', $answer) ?? $answer;
+        // Remove translations and pharmaceutical names in parentheses while
+        // retaining preparation qualifiers that can change the tested herb.
+        $answer = preg_replace_callback('/\s*\(([^()]*)\)/u', static function(array $match): string {
+            $qualifier = core_text::strtolower(trim((string)$match[1]));
+            return preg_match('/\b(?:raw|prepared|fried|honey|wine|vinegar|charred|calcined|fresh)\b/u', $qualifier)
+                ? ' ' . $qualifier . ' '
+                : ' ';
+        }, $answer) ?? $answer;
+        if (function_exists('transliterator_transliterate')) {
+            $transliterated = transliterator_transliterate('NFD; [:Nonspacing Mark:] Remove; NFC', $answer);
+            if (is_string($transliterated)) {
+                $answer = $transliterated;
+            }
+        }
+        $answer = core_text::strtolower($answer);
+        $answer = preg_replace('/[^\p{L}\p{N}]+/u', ' ', $answer) ?? '';
+        return trim(preg_replace('/\s+/u', ' ', $answer) ?? '');
+    };
+    $normalizesearch = static function(string $text): string {
+        $text = core_text::strtolower($text);
+        return trim(preg_replace('/\s+/u', ' ', preg_replace('/[^\p{L}\p{N}]+/u', ' ', $text) ?? '') ?? '');
+    };
+
+    $groups = [];
+    foreach ($questions as $question) {
+        $domainid = (string)($question['_domainid'] ?? $question['domainId'] ?? '');
+        if (!isset($answerdomains[$domainid])
+                || !empty($question['_excluded'])
+                || (string)($question['_revision']['status'] ?? '') === 'deleted') {
+            continue;
+        }
+        $answer = $correctanswer($question);
+        $canonical = $canonicalanswer($answer);
+        $canonicalparts = preg_split('/\s+/u', $canonical, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        if ($answer === ''
+                || core_text::strlen($answer) > 180
+                || count($canonicalparts) < 1
+                || count($canonicalparts) > 10
+                || preg_match('/^(?:yes|no|true|false|all|none|both|correct|incorrect|si|sí|verdadero|falso)$/u', $canonical)) {
+            continue;
+        }
+        if (!isset($groups[$canonical])) {
+            $groups[$canonical] = [
+                'key' => hash('sha256', $canonical),
+                'canonicalAnswer' => $canonical,
+                'answer' => $answer,
+                'types' => [],
+                'questions' => [],
+            ];
+        }
+        $groups[$canonical]['types'][$answerdomains[$domainid]] = true;
+        $groups[$canonical]['questions'][] = [
+            'questionId' => (string)($question['questionId'] ?? ''),
+            'prompt' => trim((string)($question['prompt'] ?? '')),
+            'explanation' => trim((string)($question['explanation'] ?? '')),
+            'domainId' => $domainid,
+            'domainNumber' => (int)($domains[$domainid]['number'] ?? 0),
+            'domainName' => (string)($domains[$domainid]['name'] ?? $domainid),
+            'sourceKind' => (string)($question['_sourcekind'] ?? $question['sourceKind'] ?? ''),
+            'exam1Position' => (int)($question['_examposition'] ?? 0),
+            'exam2Position' => (int)($question['_exam2position'] ?? 0),
+            'ready' => !empty($question['_ready']),
+        ];
+    }
+
+    $searchneedle = $normalizesearch($search);
+    $repeatedgroups = [];
+    foreach ($groups as $group) {
+        if (count($group['questions']) < 2) {
+            continue;
+        }
+        $group['types'] = array_keys($group['types']);
+        sort($group['types'], SORT_STRING);
+        $group['count'] = count($group['questions']);
+        $promptkeys = [];
+        foreach ($group['questions'] as $groupquestion) {
+            $promptkey = $normalizesearch((string)$groupquestion['prompt']);
+            if ($promptkey !== '') {
+                $promptkeys[$promptkey] = ($promptkeys[$promptkey] ?? 0) + 1;
+            }
+        }
+        $group['exactPromptDuplicates'] = array_sum(array_map(
+            static fn(int $count): int => $count > 1 ? $count : 0,
+            $promptkeys
+        ));
+        if ($searchneedle !== '') {
+            $searchparts = [$group['answer'], $group['canonicalAnswer']];
+            foreach ($group['questions'] as $groupquestion) {
+                $searchparts[] = (string)$groupquestion['questionId'];
+                $searchparts[] = (string)$groupquestion['prompt'];
+            }
+            if (strpos($normalizesearch(implode(' ', $searchparts)), $searchneedle) === false) {
+                continue;
+            }
+        }
+        $repeatedgroups[] = $group;
+    }
+    usort($repeatedgroups, static function(array $left, array $right): int {
+        $countcomparison = (int)$right['count'] <=> (int)$left['count'];
+        if ($countcomparison !== 0) {
+            return $countcomparison;
+        }
+        return strnatcasecmp((string)$left['answer'], (string)$right['answer']);
+    });
+    return [
+        'groups' => $repeatedgroups,
+        'groupCount' => count($repeatedgroups),
+        'questionCount' => array_sum(array_map(
+            static fn(array $group): int => (int)$group['count'],
+            $repeatedgroups
+        )),
+        'search' => $search,
     ];
 };
 
@@ -5416,6 +5563,21 @@ $showsimilarityfinder = $showsimilarityfinder
 $similarityreport = $showsimilarityfinder
     ? $buildsimilaritysearch($allquestions, $similaritysearch, $similarityquestionid)
     : ['target' => null, 'search' => '', 'matches' => [], 'comparedCount' => 0];
+$sameanswerurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+    'sameansweraudit' => 1,
+    'lang' => $displaylang !== 'en' ? $displaylang : null,
+]));
+$sameanswerurl->set_anchor('same-answer-audit');
+$showsameansweraudit = $showsameansweraudit || $sameanswersearch !== '';
+$sameanswerreport = $buildsameansweraudit($allquestions, $domains, $sameanswersearch);
+$sameanswerperpage = 20;
+$sameanswertotalpages = max(1, (int)ceil((int)$sameanswerreport['groupCount'] / $sameanswerperpage));
+$sameanswerpage = min($sameanswerpage, $sameanswertotalpages - 1);
+$sameanswerpagegroups = array_slice(
+    (array)$sameanswerreport['groups'],
+    $sameanswerpage * $sameanswerperpage,
+    $sameanswerperpage
+);
 $lastquestionmerge = is_array($SESSION->ncbahm_last_question_merge ?? null)
     ? $SESSION->ncbahm_last_question_merge
     : null;
@@ -5760,11 +5922,69 @@ echo $OUTPUT->header();
 .question-bank__button--language{min-height:32px;padding:5px 10px;border-color:#7c5bc4;background:#f4f0ff;color:#4c1d95!important}
 .question-bank__exam-builder{margin:0 0 16px;padding:16px;border:1px solid #cbb9ee;border-radius:11px;background:#faf8ff}.question-bank__exam-builder-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.question-bank__exam-builder-head h3{margin:0;color:#3b167d;font-size:21px}.question-bank__exam-builder-head p{margin:3px 0 0;color:#66557e}.question-bank__exam-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.question-bank__exam-card{padding:13px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__exam-card--active{border:2px solid #6d28d9;background:#f8f5ff}.question-bank__exam-card h4{margin:0 0 7px;font-size:17px}.question-bank__exam-numbers{display:flex;flex-wrap:wrap;gap:7px 14px;margin-bottom:9px;color:#52677a}.question-bank__exam-numbers strong{color:#08746f}.question-bank__exam-progress{height:9px;margin-bottom:10px;overflow:hidden;border-radius:999px;background:#e8eef1}.question-bank__exam-progress span{display:block;height:100%;border-radius:999px;background:#6d28d9}.question-bank__published-exam{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;padding:8px 10px;border-radius:7px;background:#e8f8f3;color:#075f59}.question-bank__published-exam span{font-size:12px}.question-bank__exam-card .question-bank__editor-actions{gap:6px}.question-bank__exam-card .question-bank__button{min-height:34px;padding:5px 9px}.question-bank__exam-card form{margin:0}.question-bank__duplicate-report{margin-top:12px;padding:13px 14px;border:1px solid #8b5cf6;border-left:5px solid #6d28d9;border-radius:9px;background:#fff}.question-bank__duplicate-report h4{margin:0 0 6px;color:#3b167d}.question-bank__duplicate-report>p{margin:0 0 9px;color:#52677a}.question-bank__duplicate-undo{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:10px 0;padding:10px 12px;border-radius:7px;background:#e8f8f3;color:#075f59}.question-bank__duplicate-undo form,.question-bank__duplicate-candidate form{margin:0}.question-bank__duplicate-pairs{display:grid;gap:10px;margin-top:10px}.question-bank__duplicate-pair{padding:11px;border:1px solid #ded7ef;border-radius:8px;background:#f8f6fc}.question-bank__duplicate-pair-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.question-bank__duplicate-score{padding:4px 7px;border-radius:999px;background:#ede9fe;color:#4c1d95;font-weight:900}.question-bank__duplicate-candidates{display:grid;grid-template-columns:1fr 1fr;gap:9px}.question-bank__duplicate-candidate{display:flex;align-items:flex-start;flex-direction:column;gap:8px;padding:10px;border:1px solid #d7e2e7;border-radius:7px;background:#fff}.question-bank__duplicate-candidate strong{color:#17384b}.question-bank__duplicate-candidate p{flex:1;margin:0;color:#334e60;line-height:1.45}.question-bank__duplicate-exact{padding:9px 11px;border-radius:7px;background:#fff3e6;color:#8a3c00;font-weight:800}.question-bank__duplicate-empty{padding:12px;border-radius:7px;background:#e8f8f3;color:#075f59;font-weight:800}.question-bank__exam-form{display:grid;grid-template-columns:minmax(240px,2fr) minmax(160px,1fr) auto;align-items:end;gap:10px;margin:0 0 13px;padding:13px;border:1px solid #cbb9ee;border-radius:9px;background:#fff}.question-bank__exam-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__exam-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #b9cbd4;border-radius:7px}@media(max-width:900px){.question-bank__exam-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.question-bank__exam-builder-head{align-items:stretch;flex-direction:column}.question-bank__exam-grid,.question-bank__exam-form,.question-bank__duplicate-candidates{grid-template-columns:1fr}}
 .question-bank__publish-readiness{margin:0 0 10px;padding:8px 10px;border-radius:7px;background:#fff3e6;color:#8a3c00;font-size:12px;font-weight:850}.question-bank__publish-readiness.is-ready{background:#e8f8f3;color:#075f59}.question-bank__publish-error{margin:0 0 10px;padding:9px 10px;border:1px solid #ef4444;border-radius:7px;background:#fff1f2;color:#991b1b;font-size:12px;font-weight:850}.question-bank__button[disabled]{cursor:not-allowed;opacity:.55}
+.question-bank__same-answer-audit{margin:0 0 16px;padding:16px;border:1px solid #6d28d9;border-left:5px solid #6d28d9;border-radius:11px;background:#faf8ff}.question-bank__same-answer-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.question-bank__same-answer-head h3{margin:0 0 5px;color:#3b167d;font-size:21px}.question-bank__same-answer-head p{max-width:900px;margin:0;color:#66557e}.question-bank__same-answer-stats{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.question-bank__same-answer-stats span{padding:6px 9px;border-radius:999px;background:#ede9fe;color:#4c1d95;font-weight:850}.question-bank__same-answer-form{display:grid;grid-template-columns:minmax(280px,1fr) auto auto;align-items:end;gap:9px;margin:12px 0}.question-bank__same-answer-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:900}.question-bank__same-answer-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #ad9bd2;border-radius:7px;background:#fff}.question-bank__same-answer-list{display:grid;gap:12px;margin-top:12px}.question-bank__same-answer-group{padding:13px;border:1px solid #d8ccef;border-radius:9px;background:#fff}.question-bank__same-answer-group>header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.question-bank__same-answer-group h4{margin:0;color:#3b167d;font-size:18px}.question-bank__same-answer-group header small{display:block;margin-top:4px;color:#66557e}.question-bank__same-answer-count{flex:0 0 auto;padding:5px 8px;border-radius:999px;background:#ede9fe;color:#4c1d95;font-weight:900}.question-bank__same-answer-warning{margin:9px 0 0;padding:8px 10px;border-radius:7px;background:#fff3e6;color:#8a3c00;font-weight:800}.question-bank__same-answer-questions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.question-bank__same-answer-question{padding:10px;border:1px solid #e1e8ec;border-radius:7px;background:#f8fafc}.question-bank__same-answer-question>header{display:flex;align-items:center;justify-content:space-between;gap:8px}.question-bank__same-answer-question p{margin:7px 0;color:#334e60;line-height:1.4}.question-bank__same-answer-question small{display:block;margin-bottom:8px;color:#60758a}.question-bank__same-answer-group>.question-bank__editor-actions{margin-top:10px;padding-top:10px;border-top:1px solid #e1e8ec}@media(max-width:800px){.question-bank__same-answer-head{flex-direction:column}.question-bank__same-answer-form,.question-bank__same-answer-questions{grid-template-columns:1fr}}
 .question-bank__similarity-finder{margin:0 0 16px;padding:16px;border:1px solid #0b8f87;border-left:5px solid #0b8f87;border-radius:11px;background:#f5fbfa}.question-bank__similarity-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.question-bank__similarity-head h3{margin:0 0 5px;color:#075f59;font-size:21px}.question-bank__similarity-head p{max-width:900px;margin:0;color:#52677a}.question-bank__similarity-form{display:grid;grid-template-columns:minmax(280px,1fr) auto;align-items:end;gap:10px;margin:14px 0 8px}.question-bank__similarity-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:900}.question-bank__similarity-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #9bbdc0;border-radius:7px;background:#fff}.question-bank__similarity-note{margin:7px 0 12px;color:#52677a;font-size:13px}.question-bank__similarity-target{padding:12px;border:2px solid #6d28d9;border-radius:8px;background:#fff}.question-bank__similarity-target>span{display:block;color:#6d28d9;font-size:11px;font-weight:900;text-transform:uppercase}.question-bank__similarity-target>strong{display:block;margin:3px 0 5px;font-size:17px}.question-bank__similarity-target p{margin:0 0 7px}.question-bank__similarity-summary{margin:12px 0 8px;color:#52677a}.question-bank__similarity-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.question-bank__similarity-result{padding:12px;border:1px solid #c9dadd;border-radius:8px;background:#fff}.question-bank__similarity-result>header{display:flex;align-items:center;justify-content:space-between;gap:9px}.question-bank__similarity-result>p{margin:9px 0;color:#334e60;line-height:1.45}.question-bank__similarity-answer{margin:8px 0;padding:8px 10px;border-radius:6px;background:#eef9f6;color:#075f59}.question-bank__similarity-result>small{display:block;margin-bottom:9px;color:#66557e}.question-bank__merge-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;padding-top:9px;border-top:1px solid #e1eaed}.question-bank__merge-actions form{margin:0}@media(max-width:800px){.question-bank__similarity-results,.question-bank__similarity-form{grid-template-columns:1fr}.question-bank__similarity-head{flex-direction:column}}
 </style>
 <main class="question-bank">
-    <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button" href="<?php echo $similarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar answers'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
+    <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button" href="<?php echo $similarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar answers'; ?></a><a class="question-bank__button question-bank__button--similar" href="<?php echo $sameanswerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Revisar respuestas repetidas' : 'Review repeated answers'; ?> (<?php echo (int)$sameanswerreport['groupCount']; ?>)</a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
     <?php if ($displaylang === 'es'): ?><section class="question-bank__language-state"><strong>Vista en español activa</strong>Los controles principales y las traducciones disponibles se muestran en español. Cuando una pregunta todavía no tiene traducción guardada, se identifica claramente y se conserva el original inglés para evitar una traducción clínica no verificada.</section><?php endif; ?>
+    <?php if ($showsameansweraudit): ?>
+    <section id="same-answer-audit" class="question-bank__same-answer-audit">
+        <header class="question-bank__same-answer-head"><div><h3><?php echo $displaylang === 'es' ? 'Revisión de respuestas repetidas' : 'Repeated-answer review'; ?></h3><p><?php echo $displaylang === 'es'
+            ? 'Agrupa preguntas activas de fórmulas y hierbas individuales que tienen la misma respuesta correcta. Compartir respuesta no significa que sean duplicadas: compare el objetivo, el caso clínico y la explicación antes de fusionar.'
+            : 'Groups active Formula and Individual Herb questions with the same correct answer. A shared answer does not prove duplication: compare the objective, clinical case and explanation before merging.'; ?></p></div><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a></header>
+        <div class="question-bank__same-answer-stats"><span><?php echo (int)$sameanswerreport['groupCount']; ?> <?php echo $displaylang === 'es' ? 'respuestas repetidas' : 'repeated answers'; ?></span><span><?php echo (int)$sameanswerreport['questionCount']; ?> <?php echo $displaylang === 'es' ? 'preguntas para comparar' : 'questions to compare'; ?></span><span><?php echo $displaylang === 'es' ? 'Página' : 'Page'; ?> <?php echo (int)$sameanswerpage + 1; ?> / <?php echo (int)$sameanswertotalpages; ?></span></div>
+        <form class="question-bank__same-answer-form" method="get" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+            <label><span><?php echo $displaylang === 'es' ? 'Buscar fórmula, hierba, ID o texto' : 'Search formula, herb, ID or wording'; ?></span><input type="search" name="sameanswersearch" value="<?php echo s($sameanswersearch); ?>" maxlength="300" placeholder="<?php echo $displaylang === 'es' ? 'Ejemplo: Liu Wei Di Huang Wan' : 'Example: Liu Wei Di Huang Wan'; ?>"></label>
+            <input type="hidden" name="sameansweraudit" value="1">
+            <?php if ($displaylang !== 'en'): ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><?php endif; ?>
+            <button class="question-bank__button question-bank__button--publish" type="submit"><?php echo $displaylang === 'es' ? 'Buscar grupos' : 'Search groups'; ?></button>
+            <?php if ($sameanswersearch !== ''): ?><a class="question-bank__button" href="<?php echo $sameanswerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver todos' : 'Show all'; ?></a><?php endif; ?>
+        </form>
+        <?php if ($sameanswerpagegroups === []): ?><div class="question-bank__duplicate-empty"><?php echo $displaylang === 'es' ? 'No se encontraron respuestas repetidas con esta búsqueda.' : 'No repeated answers matched this search.'; ?></div><?php else: ?>
+        <div class="question-bank__same-answer-list">
+            <?php foreach ($sameanswerpagegroups as $sameanswergroup):
+                $sameanswergroupquestions = (array)$sameanswergroup['questions'];
+                $sameanswerreferenceid = (string)($sameanswergroupquestions[0]['questionId'] ?? '');
+                $sameanswergroupcompareurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+                    'similarfinder' => 1,
+                    'similarquestion' => $sameanswerreferenceid,
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                ]));
+                $sameanswergroupcompareurl->set_anchor('similarity-finder');
+                $sameanswertypelabel = in_array('formula', (array)$sameanswergroup['types'], true)
+                    ? ($displaylang === 'es' ? 'Fórmula' : 'Formula')
+                    : ($displaylang === 'es' ? 'Hierba individual' : 'Individual herb');
+            ?>
+            <article class="question-bank__same-answer-group">
+                <header><div><h4><?php echo s((string)$sameanswergroup['answer']); ?></h4><small><?php echo s($sameanswertypelabel); ?> · <?php echo $displaylang === 'es' ? 'misma respuesta correcta normalizada' : 'same normalized correct answer'; ?></small></div><span class="question-bank__same-answer-count"><?php echo (int)$sameanswergroup['count']; ?> <?php echo $displaylang === 'es' ? 'preguntas' : 'questions'; ?></span></header>
+                <?php if ((int)$sameanswergroup['exactPromptDuplicates'] > 1): ?><div class="question-bank__same-answer-warning"><?php echo $displaylang === 'es' ? 'Prioridad alta: este grupo contiene enunciados exactamente repetidos.' : 'High priority: this group contains exactly repeated prompts.'; ?></div><?php endif; ?>
+                <div class="question-bank__same-answer-questions">
+                    <?php foreach ($sameanswergroupquestions as $sameanswerquestion):
+                        $sameanswerquestionid = (string)$sameanswerquestion['questionId'];
+                        $sameanswerviewurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+                            'q' => $sameanswerquestionid,
+                            'lang' => $displaylang !== 'en' ? $displaylang : null,
+                        ]));
+                        $sameanswerviewurl->set_anchor('question-' . $sameanswerquestionid);
+                        $sameanswercompareurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+                            'similarfinder' => 1,
+                            'similarquestion' => $sameanswerquestionid,
+                            'lang' => $displaylang !== 'en' ? $displaylang : null,
+                        ]));
+                        $sameanswercompareurl->set_anchor('similarity-finder');
+                    ?>
+                    <section class="question-bank__same-answer-question"><header><strong><?php echo s($sameanswerquestionid); ?></strong><span class="question-bank__badge">Domain <?php echo (int)$sameanswerquestion['domainNumber']; ?></span></header><p><?php echo s((string)$sameanswerquestion['prompt']); ?></p><small><?php echo s((string)$sameanswerquestion['domainName']); ?><?php if ((int)$sameanswerquestion['exam1Position'] > 0): ?> · Exam 1 #<?php echo (int)$sameanswerquestion['exam1Position']; ?><?php elseif ((int)$sameanswerquestion['exam2Position'] > 0): ?> · Exam 2 #<?php echo (int)$sameanswerquestion['exam2Position']; ?><?php endif; ?></small><div class="question-bank__editor-actions"><a class="question-bank__button" href="<?php echo $sameanswerviewurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver pregunta' : 'View question'; ?></a><a class="question-bank__button question-bank__button--similar" href="<?php echo $sameanswercompareurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Comparar' : 'Compare'; ?></a></div></section>
+                    <?php endforeach; ?>
+                </div>
+                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $sameanswergroupcompareurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Revisar este grupo y decidir' : 'Review this group and decide'; ?></a></div>
+            </article>
+            <?php endforeach; ?>
+        </div>
+        <?php if ($sameanswertotalpages > 1): ?><nav class="question-bank__pagination" aria-label="<?php echo $displaylang === 'es' ? 'Páginas de respuestas repetidas' : 'Repeated-answer pages'; ?>"><?php for ($sameanswerpageindex = 0; $sameanswerpageindex < $sameanswertotalpages; $sameanswerpageindex++): $sameanswerpageurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter(['sameansweraudit' => 1, 'sameanswersearch' => $sameanswersearch !== '' ? $sameanswersearch : null, 'sameanswerpage' => $sameanswerpageindex > 0 ? $sameanswerpageindex : null, 'lang' => $displaylang !== 'en' ? $displaylang : null])); $sameanswerpageurl->set_anchor('same-answer-audit'); ?><a href="<?php echo $sameanswerpageurl->out(false); ?>"<?php echo $sameanswerpageindex === $sameanswerpage ? ' aria-current="page"' : ''; ?>><?php echo $sameanswerpageindex + 1; ?></a><?php endfor; ?></nav><?php endif; ?>
+        <?php endif; ?>
+    </section>
+    <?php endif; ?>
     <?php if ($showsimilarityfinder):
         $similaritytarget = is_array($similarityreport['target'] ?? null)
             ? $similarityreport['target']
