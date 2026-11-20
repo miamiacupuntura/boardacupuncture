@@ -29,6 +29,7 @@ $similaritysearch = trim(optional_param('similarsearch', '', PARAM_TEXT));
 $similarityquestionid = optional_param('similarquestion', '', PARAM_ALPHANUMEXT);
 $publishexam2requested = (bool)optional_param('publishexam2', 0, PARAM_BOOL);
 $publishexamprojectrequested = optional_param('publishexamproject', '', PARAM_ALPHANUMEXT);
+$rebalanceexamprojectrequested = optional_param('rebalanceexamproject', '', PARAM_ALPHANUMEXT);
 $publishexamerror = optional_param('publishexamerror', '', PARAM_ALPHANUMEXT);
 $publishexamdetail = trim(optional_param('publishexamdetail', '', PARAM_TEXT));
 $examprojectid = optional_param('examproject', '', PARAM_ALPHANUMEXT);
@@ -1436,19 +1437,20 @@ $exam2candidatecount = count($exam2positions);
 $publishedexam2 = is_array($revisionstore['publishedExams']['simulation_exam_2'] ?? null)
     ? $revisionstore['publishedExams']['simulation_exam_2']
     : null;
+$requiredprojectdomaincounts = [
+    'formula_differentiation' => 28,
+    'single_herb' => 24,
+    'dui_yao' => 18,
+    'safety_dispensing' => 15,
+    'formula_composition' => 10,
+    'scope_aliases' => 5,
+];
 
 $currentexamcandidateids = [];
 $examprojectpositions = [];
 if (is_array($currentexamproject)) {
     $projecttarget = (int)$currentexamproject['targetCount'];
-    $projectweights = [
-        'formula_differentiation' => 28,
-        'single_herb' => 24,
-        'dui_yao' => 18,
-        'safety_dispensing' => 15,
-        'formula_composition' => 10,
-        'scope_aliases' => 5,
-    ];
+    $projectweights = $requiredprojectdomaincounts;
     $projecttargets = [];
     $projectfractions = [];
     $projectallocated = 0;
@@ -1527,6 +1529,163 @@ if (is_array($currentexamproject)) {
     }
     $examprojects[$examprojectid]['pendingCandidateCount'] = count($currentexamcandidateids);
     $currentexamproject = $examprojects[$examprojectid];
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $rebalanceexamprojectrequested !== '') {
+    require_sesskey();
+    $rebalancingprojectid = $rebalanceexamprojectrequested;
+    $rebalancingproject = $examprojects[$rebalancingprojectid] ?? null;
+    $rebalancereturnurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+        'examproject' => $rebalancingprojectid,
+        'lang' => $displaylang,
+    ]);
+    if (!is_array($rebalancingproject)
+            || (string)($rebalancingproject['status'] ?? '') === 'published') {
+        redirect(
+            $rebalancereturnurl,
+            $displaylang === 'es'
+                ? 'No se modificó el examen: el proyecto no está disponible para rebalanceo.'
+                : 'The exam was not changed: the project is not available for rebalancing.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $rebalancingapprovedids = array_values(array_map(
+        'strval',
+        (array)($rebalancingproject['approvedQuestionIds'] ?? [])
+    ));
+    if ((int)($rebalancingproject['targetCount'] ?? 0) !== 100
+            || count($rebalancingapprovedids) !== 100) {
+        redirect(
+            $rebalancereturnurl,
+            $displaylang === 'es'
+                ? 'No se modificó el examen: el rebalanceo requiere exactamente 100 preguntas aprobadas.'
+                : 'The exam was not changed: rebalancing requires exactly 100 approved questions.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $rebalancingquestionsbyid = [];
+    foreach ($allquestions as $rebalancingquestion) {
+        $rebalancingquestionsbyid[(string)$rebalancingquestion['questionId']] = $rebalancingquestion;
+    }
+    $rebalancingdomaincounts = array_fill_keys(array_keys($requiredprojectdomaincounts), 0);
+    foreach ($rebalancingapprovedids as $rebalancingquestionid) {
+        $rebalancingquestion = $rebalancingquestionsbyid[$rebalancingquestionid] ?? null;
+        if (is_array($rebalancingquestion)
+                && isset($rebalancingdomaincounts[(string)$rebalancingquestion['_domainid']])) {
+            $rebalancingdomaincounts[(string)$rebalancingquestion['_domainid']]++;
+        }
+    }
+    $rebalancingsurplus = [];
+    $rebalancingmissing = [];
+    foreach ($requiredprojectdomaincounts as $rebalancingdomainid => $rebalancingrequiredcount) {
+        $difference = (int)$rebalancingdomaincounts[$rebalancingdomainid] - $rebalancingrequiredcount;
+        if ($difference > 0) {
+            $rebalancingsurplus[$rebalancingdomainid] = $difference;
+        } else if ($difference < 0) {
+            $rebalancingmissing[$rebalancingdomainid] = abs($difference);
+        }
+    }
+    $rebalancingremovecount = array_sum($rebalancingsurplus);
+    if ($rebalancingremovecount < 1 || $rebalancingremovecount !== array_sum($rebalancingmissing)) {
+        redirect(
+            $rebalancereturnurl,
+            $displaylang === 'es'
+                ? 'No se modificó el examen porque no necesita un intercambio equilibrado.'
+                : 'The exam was not changed because it does not need a balanced replacement.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $rebalancingremovedids = [];
+    foreach (array_reverse($rebalancingapprovedids) as $rebalancingquestionid) {
+        $rebalancingquestion = $rebalancingquestionsbyid[$rebalancingquestionid] ?? null;
+        $rebalancingdomainid = is_array($rebalancingquestion)
+            ? (string)$rebalancingquestion['_domainid']
+            : '';
+        if (($rebalancingsurplus[$rebalancingdomainid] ?? 0) < 1) {
+            continue;
+        }
+        $rebalancingremovedids[] = $rebalancingquestionid;
+        $rebalancingsurplus[$rebalancingdomainid]--;
+        if (count($rebalancingremovedids) === $rebalancingremovecount) {
+            break;
+        }
+    }
+    if (count($rebalancingremovedids) !== $rebalancingremovecount) {
+        redirect(
+            $rebalancereturnurl,
+            $displaylang === 'es'
+                ? 'No se modificó el examen porque no pudieron identificarse todas las preguntas excedentes.'
+                : 'The exam was not changed because all surplus questions could not be identified.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $rebalancingremovedlookup = array_fill_keys($rebalancingremovedids, true);
+    $rebalancedat = gmdate(DATE_ATOM);
+    $rebalancedbyname = fullname($USER);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $rebalancingprojectid,
+        $rebalancingremovedids,
+        $rebalancingremovedlookup,
+        $rebalancingmissing,
+        $rebalancedat,
+        $rebalancedbyname,
+        $USER
+    ): array {
+        $project = is_array($store['examProjects'][$rebalancingprojectid] ?? null)
+            ? $store['examProjects'][$rebalancingprojectid]
+            : [];
+        $project['questionIds'] = array_values(array_filter(
+            array_map('strval', (array)($project['questionIds'] ?? [])),
+            static fn(string $questionid): bool => !isset($rebalancingremovedlookup[$questionid])
+        ));
+        $history = is_array($project['rebalanceHistory'] ?? null)
+            ? $project['rebalanceHistory']
+            : [];
+        $history[] = [
+            'removedQuestionIds' => $rebalancingremovedids,
+            'replacementDomains' => $rebalancingmissing,
+            'savedAt' => $rebalancedat,
+            'savedById' => (int)$USER->id,
+            'savedByName' => $rebalancedbyname,
+        ];
+        $project['rebalanceHistory'] = array_slice($history, -20);
+        $project['status'] = 'draft';
+        $project['updatedAt'] = $rebalancedat;
+        $store['examProjects'][$rebalancingprojectid] = $project;
+        foreach ($rebalancingremovedids as $removedquestionid) {
+            if (!is_array($store['questions'][$removedquestionid] ?? null)) {
+                continue;
+            }
+            if ((string)($store['questions'][$removedquestionid]['examProjectId'] ?? '')
+                    === $rebalancingprojectid) {
+                unset($store['questions'][$removedquestionid]['examProjectId']);
+                $store['questions'][$removedquestionid]['removedFromExamProjectAt'] = $rebalancedat;
+            }
+        }
+        return $store;
+    });
+    $rebalancenexturl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+        'examproject' => $rebalancingprojectid,
+        'usage' => 'exam_project_pending',
+        'lang' => $displaylang,
+    ]);
+    $rebalancenexturl->set_anchor('pending-questions');
+    redirect(
+        $rebalancenexturl,
+        ($displaylang === 'es'
+            ? count($rebalancingremovedids) . ' preguntas excedentes regresaron al banco aprobado. Revise '
+            : count($rebalancingremovedids) . ' surplus questions returned to the approved bank. Review ')
+            . array_sum($rebalancingmissing)
+            . ($displaylang === 'es'
+                ? ' reemplazos de los dominios faltantes.'
+                : ' replacements from the missing domains.'),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
 }
 
 if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamproject')
@@ -1612,14 +1771,6 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamprojec
             \core\output\notification::NOTIFY_ERROR
         );
     }
-    $requiredprojectdomaincounts = [
-        'formula_differentiation' => 28,
-        'single_herb' => 24,
-        'dui_yao' => 18,
-        'safety_dispensing' => 15,
-        'formula_composition' => 10,
-        'scope_aliases' => 5,
-    ];
     foreach ($requiredprojectdomaincounts as $publisheddomainid => $requiredcount) {
         if ((int)($publisheddomaincounts[$publisheddomainid] ?? 0) !== $requiredcount) {
             $actualdomaincounts = implode('/', array_map(
@@ -5351,6 +5502,11 @@ echo $OUTPUT->header();
                     'sesskey' => sesskey(),
                     'lang' => $displaylang !== 'en' ? $displaylang : null,
                 ]));
+                $projectrebalanceurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+                    'rebalanceexamproject' => $projectid,
+                    'sesskey' => sesskey(),
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                ]));
             ?>
             <article class="question-bank__exam-card<?php echo $examprojectid === $projectid ? ' question-bank__exam-card--active' : ''; ?>">
                 <h4><?php echo s((string)$project['name']); ?></h4>
@@ -5358,6 +5514,7 @@ echo $OUTPUT->header();
                 <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="<?php echo $projecttarget; ?>" aria-valuenow="<?php echo $projectcount; ?>"><span style="width:<?php echo $projectpercent; ?>%"></span></div>
                 <div class="question-bank__publish-readiness<?php echo $projectisreadytopublish ? ' is-ready' : ''; ?>"><?php echo $projectisreadytopublish ? ($displaylang === 'es' ? 'Listo para publicar: 100 de 100 aprobadas.' : 'Ready to publish: 100 of 100 approved.') : ($displaylang === 'es' ? 'Aún no se puede publicar: faltan ' . $projectmissing . ' preguntas por aprobar.' : 'Not ready to publish: ' . $projectmissing . ' questions still need approval.'); ?></div>
                 <?php if ($projectpublisherrormessage !== ''): ?><div class="question-bank__publish-error" role="alert"><?php echo s($projectpublisherrormessage); ?></div><?php endif; ?>
+                <?php if ($examprojectid === $projectid && $publishexamerror === 'blueprint'): ?><div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectrebalanceurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Corregir proporciones' : 'Fix domain proportions'; ?></a><small><?php echo $displaylang === 'es' ? 'Las preguntas excedentes permanecen aprobadas en el banco; solo se sustituyen dentro de este examen.' : 'Surplus questions remain approved in the bank; only their exam membership is replaced.'; ?></small></div><?php endif; ?>
                 <?php if ($projectispublished): ?><div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$project['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)($project['publishedVersion'] ?? 1); ?></span></div><?php endif; ?>
                 <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $projectaddurl->out(false); ?>"><?php echo $projectcount > 0 ? ($displaylang === 'es' ? 'Continuar revisión' : 'Continue review') : ($displaylang === 'es' ? 'Comenzar revisión' : 'Start review'); ?></a><a class="question-bank__button" href="<?php echo $projectincludedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver aprobadas' : 'View approved'; ?> (<?php echo $projectcount; ?>)</a><?php if ($projectisreadytopublish): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectpublishurl->out(false); ?>"><?php echo $projectispublished ? ($displaylang === 'es' ? 'Volver a publicar' : 'Republish') : ($displaylang === 'es' ? 'Publicar examen' : 'Publish exam'); ?></a><?php else: ?><span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $displaylang === 'es' ? 'Publicar examen' : 'Publish exam'; ?></span><?php endif; ?><?php if ($projectispublished): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => $projectexamnumber, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?><?php if ($examprojectid === $projectid): ?><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a><?php endif; ?></div>
             </article>

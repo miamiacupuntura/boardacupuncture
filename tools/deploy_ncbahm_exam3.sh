@@ -76,6 +76,7 @@ for relative in "${FILES[@]}"; do
 done
 
 grep -Fq "\$publishexamprojectrequested = optional_param('publishexamproject'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "\$rebalanceexamprojectrequested = optional_param('rebalanceexamproject'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "'publishexamproject' => \$projectid" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$publishexamerror = optional_param('publishexamerror'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Ready to publish: 100 of 100 approved.' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
