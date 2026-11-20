@@ -68,6 +68,9 @@ grep -Fq '$decodecustomresponse' "$SOURCE_FILE"
 grep -Fq "'custompreview' =>" "$SOURCE_FILE"
 grep -Fq "'creationBatchPosition' =>" "$SOURCE_FILE"
 grep -Fq 'the administrator sees the stem, choices, key and feedback just produced' "$SOURCE_FILE"
+grep -Fq '$customanswermarkers' "$SOURCE_FILE"
+grep -Fq 'id="new-question-batch-preview"' "$SOURCE_FILE"
+grep -Fq '↑ Batch index' "$SOURCE_FILE"
 
 mkdir -p "$BACKUP_DIR"
 cp -a -- "$TARGET" "$BACKUP_FILE"
@@ -90,6 +93,7 @@ php -l "$TARGET" >/dev/null
 grep -Fq 'Create one or several questions' "$TARGET"
 grep -Fq '$decodecustomresponse' "$TARGET"
 grep -Fq "'custompreview' =>" "$TARGET"
+grep -Fq 'id="new-question-batch-preview"' "$TARGET"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -121,6 +125,8 @@ INSTALLED_SHA256="$(sha256sum "$TARGET" | awk '{print $1}')"
 echo "OK: la pregunta nueva se abre inmediatamente en pantalla para revisión."
 echo "OK: el formulario acepta hasta 5 preguntas en un solo bloque."
 echo "OK: cada sección se guarda como borrador independiente y el lote completo se muestra junto."
+echo "OK: los bloques sin encabezados se detectan por sus etiquetas Correct answer / Respuesta correcta."
+echo "OK: un índice visible permite abrir cada pregunta creada."
 echo "OK: ninguna pregunta se publica automáticamente."
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256: $INSTALLED_SHA256"
