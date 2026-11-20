@@ -78,6 +78,8 @@ grep -Fq "if (\$sourcefilter === 'admin' && \$usagefilter !== 'all')" "$SOURCE_F
 grep -Fq "this.form.elements.usage.value='all'" "$SOURCE_FILE"
 grep -Fq "(\$storedexam['status'] ?? 'draft') !== 'published'" "$SOURCE_FILE"
 grep -Fq 'Only the active exam is shown' "$SOURCE_FILE"
+grep -Fq '$draftchannelherbmapping' "$SOURCE_FILE"
+grep -Fq '$visiblechannelherbmapping' "$SOURCE_FILE"
 
 mkdir -p "$BACKUP_DIR"
 cp -a -- "$TARGET" "$BACKUP_FILE"
@@ -104,6 +106,7 @@ grep -Fq 'id="new-question-batch-preview"' "$TARGET"
 grep -Fq '$customquestiontotalcount' "$TARGET"
 grep -Fq "if (\$sourcefilter === 'admin' && \$usagefilter !== 'all')" "$TARGET"
 grep -Fq 'Only the active exam is shown' "$TARGET"
+grep -Fq '$draftchannelherbmapping' "$TARGET"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -141,6 +144,7 @@ echo "OK: Source muestra Created questions con total, borradores y aprobadas."
 echo "OK: la tarjeta Created questions abre el filtro completo con un clic."
 echo "OK: Created questions elimina automáticamente filtros incompatibles de Exam use."
 echo "OK: Exam use muestra solo el examen activo y oculta proyectos publicados pendientes antiguos."
+echo "OK: el feedback de opciones por canales identifica la hierba correspondiente a cada grupo A-D."
 echo "OK: ninguna pregunta se publica automáticamente."
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256: $INSTALLED_SHA256"

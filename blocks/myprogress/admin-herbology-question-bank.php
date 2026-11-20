@@ -4679,6 +4679,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         ))) !== 4) {
             throw new UnexpectedValueException('The AI answer choices must be four unique A-D options.');
         }
+        // Channel choices may have been introduced or reordered by an earlier
+        // visible draft even when the immutable source item did not use them.
+        // Validate the feedback against the final A-D choices the learner sees.
+        $draftchannelherbmapping = $buildchannelherbmapping(array_map(
+            static fn(string $label): array => [
+                'label' => $label,
+                'text' => $optionsbylabel[$label],
+            ],
+            ['A', 'B', 'C', 'D']
+        ));
+        if ($draftchannelherbmapping !== []) {
+            $requiredchannelherbmappings = $draftchannelherbmapping;
+        }
         $sourceformulabylabel = [];
         foreach (($sourcequestion['options'] ?? []) as $sourceoption) {
             $sourceoptionlabel = strtoupper(trim((string)($sourceoption['label'] ?? '')));
@@ -5379,10 +5392,16 @@ PROMPT;
         ) === 1;
         $sourcechannelcombination = $ischannelcombinationquestion(
             (array)($sourcequestion['options'] ?? [])
-        );
+        ) || $ischannelcombinationquestion((array)($question['options'] ?? []));
         $sourcechannelherbmapping = $buildchannelherbmapping(
             (array)($sourcequestion['options'] ?? [])
         );
+        $visiblechannelherbmapping = $buildchannelherbmapping(
+            (array)($question['options'] ?? [])
+        );
+        if ($visiblechannelherbmapping !== []) {
+            $sourcechannelherbmapping = $visiblechannelherbmapping;
+        }
         $questionsourcecard = is_array($sourcequestion['sourceCard'] ?? null)
             ? $sourcequestion['sourceCard']
             : [];
