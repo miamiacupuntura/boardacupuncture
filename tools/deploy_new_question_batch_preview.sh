@@ -74,6 +74,8 @@ grep -Fq '↑ Batch index' "$SOURCE_FILE"
 grep -Fq '$customquestiontotalcount' "$SOURCE_FILE"
 grep -Fq 'Created questions' "$SOURCE_FILE"
 grep -Fq "'custom' => \$makesummaryurl(['source' => 'admin'])" "$SOURCE_FILE"
+grep -Fq "if (\$sourcefilter === 'admin' && \$usagefilter !== 'all')" "$SOURCE_FILE"
+grep -Fq "this.form.elements.usage.value='all'" "$SOURCE_FILE"
 
 mkdir -p "$BACKUP_DIR"
 cp -a -- "$TARGET" "$BACKUP_FILE"
@@ -98,6 +100,7 @@ grep -Fq '$decodecustomresponse' "$TARGET"
 grep -Fq "'custompreview' =>" "$TARGET"
 grep -Fq 'id="new-question-batch-preview"' "$TARGET"
 grep -Fq '$customquestiontotalcount' "$TARGET"
+grep -Fq "if (\$sourcefilter === 'admin' && \$usagefilter !== 'all')" "$TARGET"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -133,6 +136,7 @@ echo "OK: los bloques sin encabezados se detectan por sus etiquetas Correct answ
 echo "OK: un índice visible permite abrir cada pregunta creada."
 echo "OK: Source muestra Created questions con total, borradores y aprobadas."
 echo "OK: la tarjeta Created questions abre el filtro completo con un clic."
+echo "OK: Created questions elimina automáticamente filtros incompatibles de Exam use."
 echo "OK: ninguna pregunta se publica automáticamente."
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256: $INSTALLED_SHA256"
