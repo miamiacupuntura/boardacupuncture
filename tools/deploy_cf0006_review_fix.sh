@@ -76,6 +76,8 @@ php -l "$QUESTION_BANK_SOURCE" >/dev/null
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$SOURCE_DATA"
 grep -Fq "ncbahm-mock-editor-4.1" "$QUESTION_BANK_SOURCE"
 grep -Fq "sourceFeedbackMissing" "$QUESTION_BANK_SOURCE"
+grep -Fq '$directreturnorigin' "$QUESTION_BANK_SOURCE"
+grep -Fq 'Approve and publish this ready question?' "$QUESTION_BANK_SOURCE"
 grep -Fq '"questionId": "CF-0006"' "$SOURCE_DATA"
 grep -Fq 'Which statement correctly differentiates Gui Zhi Tang' "$SOURCE_DATA"
 grep -Fq 'Option D: Incorrect. It reverses the formulas' "$SOURCE_DATA"
@@ -140,6 +142,7 @@ INSTALLED_SHA256="$(sha256sum "$MOODLE_ROOT/${RELATIVE_FILES[1]}" | awk '{print 
 echo "OK: CF-0006 ya no contiene None of above ni su equivalente en español."
 echo "OK: CF-0006 incluye feedback completo para A, B, C y D en ambos idiomas."
 echo "OK: la revisión automática fuerza una segunda comprobación cuando falta feedback o existe una respuesta combinada prohibida."
+echo "OK: las preguntas originales listas muestran Aprobar y publicar también desde la búsqueda general."
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256 DATOS: $INSTALLED_SHA256"
 if [[ "${#WEB_RUNTIME_RELOADED[@]}" -gt 0 ]]; then
