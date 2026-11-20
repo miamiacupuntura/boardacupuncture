@@ -36,6 +36,7 @@ $examprojectid = optional_param('examproject', '', PARAM_ALPHANUMEXT);
 $examprojectview = optional_param('examview', 'candidates', PARAM_ALPHA);
 $advancetonext = (bool)optional_param('advance', 0, PARAM_BOOL);
 $download = optional_param('download', '', PARAM_ALPHANUMEXT);
+$inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
@@ -4833,6 +4834,256 @@ $scormsimulationcandidates = count(array_filter(
     static fn(array $question): bool => $question['_sourcekind'] === 'scorm' && $question['_simulationcandidate']
 ));
 
+// Build the domain inventory from the live bank, published snapshots and active
+// exam projects.  This replaces the old fixed Exam 1 / Exam 2-only summary and
+// is also returned by the lightweight inventory JSON endpoint used below.
+$inventorydomainstats = [];
+foreach ($domains as $inventorydomainid => $inventorydomain) {
+    $inventorydomainstats[$inventorydomainid] = [
+        'total' => 0,
+        'scorm' => 0,
+        'ready' => 0,
+        'reserve' => 0,
+    ];
+}
+$inventoryquestionbyid = [];
+foreach ($activequestions as $inventoryquestion) {
+    $inventoryquestionid = (string)($inventoryquestion['questionId'] ?? '');
+    $inventoryquestiondomainid = (string)($inventoryquestion['_domainid'] ?? '');
+    if ($inventoryquestionid === '' || !isset($inventorydomainstats[$inventoryquestiondomainid])) {
+        continue;
+    }
+    $inventoryquestionbyid[$inventoryquestionid] = $inventoryquestion;
+    $inventorydomainstats[$inventoryquestiondomainid]['total']++;
+    if (($inventoryquestion['_sourcekind'] ?? '') === 'scorm') {
+        $inventorydomainstats[$inventoryquestiondomainid]['scorm']++;
+    }
+    if (!empty($inventoryquestion['_ready'])) {
+        $inventorydomainstats[$inventoryquestiondomainid]['ready']++;
+    }
+}
+
+$inventoryexamcolumns = [];
+$inventoryusedquestionids = [];
+$exam1domaincounts = array_fill_keys(array_keys($domains), 0);
+foreach ($activequestions as $inventoryquestion) {
+    if ((int)($inventoryquestion['_examposition'] ?? 0) <= 0) {
+        continue;
+    }
+    $inventoryquestionid = (string)($inventoryquestion['questionId'] ?? '');
+    $inventoryquestiondomainid = (string)($inventoryquestion['_domainid'] ?? '');
+    if (isset($exam1domaincounts[$inventoryquestiondomainid])) {
+        $exam1domaincounts[$inventoryquestiondomainid]++;
+    }
+    if ($inventoryquestionid !== '') {
+        $inventoryusedquestionids[$inventoryquestionid] = true;
+    }
+}
+$inventoryexamcolumns[] = [
+    'key' => 'exam-1',
+    'number' => 1,
+    'sort' => 1,
+    'label' => 'Exam 1',
+    'state' => 'published',
+    'stateLabel' => $displaylang === 'es' ? 'Publicado' : 'Published',
+    'counts' => $exam1domaincounts,
+    'total' => array_sum($exam1domaincounts),
+];
+
+$publishedinventoryprojectids = [];
+$publishedinventoryexamnumbers = [1 => true];
+foreach ((array)($revisionstore['publishedExams'] ?? []) as $publishedinventorykey => $publishedinventoryexam) {
+    if (!is_array($publishedinventoryexam)) {
+        continue;
+    }
+    $publishedinventorynumber = (int)($publishedinventoryexam['examNumber'] ?? 0);
+    if ($publishedinventorynumber <= 0
+            && preg_match('/^simulation_exam_(\d+)$/', (string)$publishedinventorykey, $publishedinventorymatch)) {
+        $publishedinventorynumber = (int)$publishedinventorymatch[1];
+    }
+    if ($publishedinventorynumber <= 1) {
+        continue;
+    }
+    $publishedinventorycounts = array_fill_keys(array_keys($domains), 0);
+    foreach ((array)($publishedinventoryexam['domainCounts'] ?? []) as $publishedinventorydomainid => $publishedinventorycount) {
+        if (isset($publishedinventorycounts[$publishedinventorydomainid])) {
+            $publishedinventorycounts[$publishedinventorydomainid] = max(0, (int)$publishedinventorycount);
+        }
+    }
+    $publishedinventoryquestioncounts = array_fill_keys(array_keys($domains), 0);
+    foreach ((array)($publishedinventoryexam['questions'] ?? []) as $publishedinventoryquestion) {
+        if (!is_array($publishedinventoryquestion)) {
+            continue;
+        }
+        $publishedinventoryquestionid = (string)($publishedinventoryquestion['questionId'] ?? '');
+        $publishedinventorydomainid = (string)($publishedinventoryquestion['domainId'] ?? '');
+        if (!isset($publishedinventoryquestioncounts[$publishedinventorydomainid])
+                && isset($inventoryquestionbyid[$publishedinventoryquestionid])) {
+            $publishedinventorydomainid = (string)$inventoryquestionbyid[$publishedinventoryquestionid]['_domainid'];
+        }
+        if (isset($publishedinventoryquestioncounts[$publishedinventorydomainid])) {
+            $publishedinventoryquestioncounts[$publishedinventorydomainid]++;
+        }
+        if ($publishedinventoryquestionid !== '') {
+            $inventoryusedquestionids[$publishedinventoryquestionid] = true;
+        }
+    }
+    if (array_sum($publishedinventorycounts) === 0) {
+        $publishedinventorycounts = $publishedinventoryquestioncounts;
+    }
+    $publishedinventoryprojectid = (string)($publishedinventoryexam['projectId'] ?? '');
+    if ($publishedinventoryprojectid !== '') {
+        $publishedinventoryprojectids[$publishedinventoryprojectid] = true;
+    }
+    $publishedinventoryexamnumbers[$publishedinventorynumber] = true;
+    $inventoryexamcolumns[] = [
+        'key' => 'exam-' . $publishedinventorynumber,
+        'number' => $publishedinventorynumber,
+        'sort' => $publishedinventorynumber,
+        'label' => 'Exam ' . $publishedinventorynumber,
+        'state' => 'published',
+        'stateLabel' => $displaylang === 'es' ? 'Publicado' : 'Published',
+        'counts' => $publishedinventorycounts,
+        'total' => array_sum($publishedinventorycounts),
+    ];
+}
+
+// Exam 2 predates the general project builder.  Until it has a published
+// snapshot, expose its current review allocation as a live exam column.
+if (!isset($publishedinventoryexamnumbers[2])) {
+    $exam2reviewdomaincounts = array_fill_keys(array_keys($domains), 0);
+    foreach ($allquestions as $inventoryquestion) {
+        if ((int)($inventoryquestion['_exam2position'] ?? 0) <= 0 || !empty($inventoryquestion['_excluded'])) {
+            continue;
+        }
+        $inventoryquestionid = (string)($inventoryquestion['questionId'] ?? '');
+        $inventoryquestiondomainid = (string)($inventoryquestion['_domainid'] ?? '');
+        if (isset($exam2reviewdomaincounts[$inventoryquestiondomainid])) {
+            $exam2reviewdomaincounts[$inventoryquestiondomainid]++;
+        }
+        if ($inventoryquestionid !== '') {
+            $inventoryusedquestionids[$inventoryquestionid] = true;
+        }
+    }
+    $inventoryexamcolumns[] = [
+        'key' => 'exam-2-review',
+        'number' => 2,
+        'sort' => 2,
+        'label' => $displaylang === 'es' ? 'Exam 2 · revisión' : 'Exam 2 review',
+        'state' => 'review',
+        'stateLabel' => $displaylang === 'es' ? 'En revisión' : 'In review',
+        'counts' => $exam2reviewdomaincounts,
+        'total' => array_sum($exam2reviewdomaincounts),
+    ];
+} else {
+    // Keep the live Exam 2 allocation unavailable to the reserve while it can
+    // still be reviewed and republished.
+    foreach ($allquestions as $inventoryquestion) {
+        if ((int)($inventoryquestion['_exam2position'] ?? 0) > 0) {
+            $inventoryquestionid = (string)($inventoryquestion['questionId'] ?? '');
+            if ($inventoryquestionid !== '') {
+                $inventoryusedquestionids[$inventoryquestionid] = true;
+            }
+        }
+    }
+}
+
+$inventoryprojectsort = 1000;
+foreach ($examprojects as $inventoryprojectid => $inventoryproject) {
+    foreach ((array)($inventoryproject['activeQuestionIds'] ?? $inventoryproject['questionIds'] ?? []) as $inventoryprojectquestionid) {
+        $inventoryprojectquestionid = (string)$inventoryprojectquestionid;
+        if ($inventoryprojectquestionid !== '') {
+            $inventoryusedquestionids[$inventoryprojectquestionid] = true;
+        }
+    }
+    if ((string)($inventoryproject['status'] ?? '') === 'published'
+            || isset($publishedinventoryprojectids[(string)$inventoryprojectid])) {
+        continue;
+    }
+    $inventoryprojectcounts = array_fill_keys(array_keys($domains), 0);
+    foreach ((array)($inventoryproject['approvedQuestionIds'] ?? []) as $inventoryprojectquestionid) {
+        $inventoryprojectquestionid = (string)$inventoryprojectquestionid;
+        if (!isset($inventoryquestionbyid[$inventoryprojectquestionid])) {
+            continue;
+        }
+        $inventoryprojectdomainid = (string)$inventoryquestionbyid[$inventoryprojectquestionid]['_domainid'];
+        if (isset($inventoryprojectcounts[$inventoryprojectdomainid])) {
+            $inventoryprojectcounts[$inventoryprojectdomainid]++;
+        }
+    }
+    $inventoryprojectnumber = 0;
+    if (preg_match('/\bExam\s+(\d+)\b/i', (string)($inventoryproject['name'] ?? ''), $inventoryprojectmatch)) {
+        $inventoryprojectnumber = (int)$inventoryprojectmatch[1];
+    }
+    $inventoryexamcolumns[] = [
+        'key' => 'project-' . (string)$inventoryprojectid,
+        'number' => $inventoryprojectnumber,
+        'sort' => $inventoryprojectnumber > 0 ? $inventoryprojectnumber : $inventoryprojectsort++,
+        'label' => trim((string)($inventoryproject['name'] ?? '')) ?: ($displaylang === 'es' ? 'Examen en construcción' : 'Exam in progress'),
+        'state' => 'review',
+        'stateLabel' => $displaylang === 'es' ? 'En revisión' : 'In review',
+        'counts' => $inventoryprojectcounts,
+        'total' => array_sum($inventoryprojectcounts),
+        'target' => (int)($inventoryproject['targetCount'] ?? 0),
+    ];
+}
+usort($inventoryexamcolumns, static function(array $left, array $right): int {
+    $sortcomparison = (int)$left['sort'] <=> (int)$right['sort'];
+    return $sortcomparison !== 0 ? $sortcomparison : strcmp((string)$left['key'], (string)$right['key']);
+});
+
+$reservequestionidlookup = [];
+foreach ($activequestions as $inventoryquestion) {
+    $inventoryquestionid = (string)($inventoryquestion['questionId'] ?? '');
+    $inventoryquestiondomainid = (string)($inventoryquestion['_domainid'] ?? '');
+    if ($inventoryquestionid === ''
+            || empty($inventoryquestion['_ready'])
+            || !empty($inventoryquestion['_excluded'])
+            || isset($inventoryusedquestionids[$inventoryquestionid])
+            || !isset($inventorydomainstats[$inventoryquestiondomainid])) {
+        continue;
+    }
+    $reservequestionidlookup[$inventoryquestionid] = true;
+    $inventorydomainstats[$inventoryquestiondomainid]['reserve']++;
+}
+$totals['reserve'] = count($reservequestionidlookup);
+
+$inventorydomainsnapshot = [];
+foreach ($domains as $inventorydomainid => $inventorydomain) {
+    $inventorydomainsnapshot[] = [
+        'id' => $inventorydomainid,
+        'number' => (int)$inventorydomain['number'],
+        'name' => (string)$inventorydomain['name'],
+        'total' => (int)$inventorydomainstats[$inventorydomainid]['total'],
+        'scorm' => (int)$inventorydomainstats[$inventorydomainid]['scorm'],
+        'ready' => (int)$inventorydomainstats[$inventorydomainid]['ready'],
+        'reserve' => (int)$inventorydomainstats[$inventorydomainid]['reserve'],
+    ];
+}
+$inventorysnapshot = [
+    'generatedAt' => gmdate(DATE_ATOM),
+    'language' => $displaylang,
+    'labels' => [
+        'domain' => $displaylang === 'es' ? 'Dominio' : 'Domain',
+        'classified' => $displaylang === 'es' ? 'Clasificadas' : 'Classified',
+        'scorm' => 'SCORM',
+        'ready' => $displaylang === 'es' ? 'Listas' : 'Ready',
+        'reserve' => $displaylang === 'es' ? 'Reserva disponible' : 'Available reserve',
+    ],
+    'totals' => [
+        'total' => (int)$totals['total'],
+        'ready' => (int)$totals['ready'],
+        'reserve' => (int)$totals['reserve'],
+    ],
+    'exams' => array_values($inventoryexamcolumns),
+    'domains' => $inventorydomainsnapshot,
+];
+$inventorysnapshot['version'] = hash('sha256', json_encode([
+    $inventorysnapshot['totals'],
+    $inventorysnapshot['exams'],
+    $inventorysnapshot['domains'],
+]));
+
 $filteredquestions = array_values(array_filter(
     $allquestions,
     static function(array $question) use (
@@ -4849,7 +5100,8 @@ $filteredquestions = array_values(array_filter(
         $examprojectview,
         $currentexamquestionids,
         $currentexamcandidateids,
-        $isprocessedquestion
+        $isprocessedquestion,
+        $reservequestionidlookup
     ): bool {
         $isfocusedreviewdraft = $query !== ''
             && strcasecmp($query, (string)($question['questionId'] ?? '')) === 0
@@ -4872,7 +5124,8 @@ $filteredquestions = array_values(array_filter(
         if ($usagefilter === 'exam2_approved' && !$isprocessedquestion($question)) return false;
         if ($usagefilter === 'exam_project_pending'
                 && !in_array((string)$question['questionId'], $currentexamcandidateids, true)) return false;
-        if ($usagefilter === 'reserve' && (!$question['_ready'] || $question['_examposition'] > 0)) return false;
+        if ($usagefilter === 'reserve'
+                && !isset($reservequestionidlookup[(string)($question['questionId'] ?? '')])) return false;
         if ($sourcefilter !== 'all' && $question['_sourcekind'] !== $sourcefilter) return false;
         if ($cognitivefilter !== 'all' && $question['_cognitive'] !== $cognitivefilter) return false;
         if ($reviewfilter === 'needs_inference' && !$question['_needsinference']) return false;
@@ -4961,6 +5214,16 @@ usort($filteredquestions, static function(array $left, array $right) use (
 });
 
 $resultcount = count($filteredquestions);
+$inventorysnapshot['resultCount'] = $resultcount;
+$inventorysnapshot['resultText'] = $displaylang === 'es'
+    ? $resultcount . ' ' . ($resultcount === 1 ? 'resultado' : 'resultados')
+    : $resultcount . ' result' . ($resultcount === 1 ? '' : 's');
+if ($inventoryjson) {
+    header('Content-Type: application/json; charset=utf-8');
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    echo json_encode($inventorysnapshot, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
 if ($usagefilter === 'exam_project_pending'
         && is_array($currentexamproject)
         && $query !== ''
@@ -5332,11 +5595,151 @@ document.querySelectorAll('.question-bank__automatic-review-form').forEach(funct
     });
 });
 JS);
+$PAGE->requires->js_init_code(<<<'JS'
+(function() {
+    var root = document.querySelector('[data-question-bank-inventory]');
+    if (!root) {
+        return;
+    }
+    var endpoint = root.getAttribute('data-endpoint');
+    var table = root.querySelector('[data-inventory-table]');
+    var status = root.querySelector('[data-inventory-status]');
+    var refreshButton = root.querySelector('[data-inventory-refresh]');
+    var currentVersion = root.getAttribute('data-version') || '';
+    var refreshing = false;
+    var spanish = new URLSearchParams(window.location.search).get('lang') === 'es';
+
+    function appendCell(row, tagName, text, attributes) {
+        var cell = document.createElement(tagName);
+        cell.textContent = text;
+        Object.keys(attributes || {}).forEach(function(name) {
+            cell.setAttribute(name, attributes[name]);
+        });
+        row.appendChild(cell);
+        return cell;
+    }
+
+    function render(snapshot) {
+        if (!table || !snapshot || !Array.isArray(snapshot.domains) || !Array.isArray(snapshot.exams)) {
+            return;
+        }
+        var head = document.createElement('thead');
+        var headRow = document.createElement('tr');
+        appendCell(headRow, 'th', snapshot.labels.domain);
+        appendCell(headRow, 'th', snapshot.labels.classified);
+        appendCell(headRow, 'th', snapshot.labels.scorm);
+        appendCell(headRow, 'th', snapshot.labels.ready);
+        snapshot.exams.forEach(function(exam) {
+            var heading = appendCell(headRow, 'th', exam.label, {'data-inventory-state': exam.state});
+            var detail = document.createElement('small');
+            detail.textContent = exam.stateLabel + ' · ' + exam.total;
+            heading.appendChild(detail);
+        });
+        appendCell(headRow, 'th', snapshot.labels.reserve);
+        head.appendChild(headRow);
+
+        var body = document.createElement('tbody');
+        snapshot.domains.forEach(function(domain) {
+            var row = document.createElement('tr');
+            var domainCell = document.createElement('td');
+            var domainNumber = document.createElement('strong');
+            domainNumber.textContent = (spanish ? 'Dominio ' : 'Domain ') + domain.number;
+            domainCell.appendChild(domainNumber);
+            domainCell.appendChild(document.createTextNode(' · ' + domain.name));
+            row.appendChild(domainCell);
+            appendCell(row, 'td', domain.total);
+            appendCell(row, 'td', domain.scorm);
+            appendCell(row, 'td', domain.ready);
+            snapshot.exams.forEach(function(exam) {
+                appendCell(row, 'td', (exam.counts && exam.counts[domain.id]) || 0, {
+                    'data-inventory-exam': exam.key
+                });
+            });
+            appendCell(row, 'td', domain.reserve);
+            body.appendChild(row);
+        });
+        table.replaceChildren(head, body);
+        Object.keys(snapshot.totals || {}).forEach(function(totalName) {
+            document.querySelectorAll('[data-inventory-total="' + totalName + '"]').forEach(function(node) {
+                node.textContent = snapshot.totals[totalName];
+            });
+        });
+    }
+
+    function showStatus(message, className) {
+        if (!status) {
+            return;
+        }
+        status.textContent = message;
+        status.classList.remove('is-refreshing', 'is-error');
+        if (className) {
+            status.classList.add(className);
+        }
+    }
+
+    function refreshInventory() {
+        if (refreshing || !endpoint || document.hidden) {
+            return;
+        }
+        refreshing = true;
+        if (refreshButton) {
+            refreshButton.disabled = true;
+        }
+        showStatus(spanish ? 'Actualizando inventario…' : 'Updating inventory…', 'is-refreshing');
+        fetch(endpoint, {
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: {'Accept': 'application/json'}
+        }).then(function(response) {
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+            return response.json();
+        }).then(function(snapshot) {
+            if (snapshot.version && snapshot.version !== currentVersion) {
+                render(snapshot);
+                currentVersion = snapshot.version;
+                root.setAttribute('data-version', currentVersion);
+            }
+            if (snapshot.resultText) {
+                document.querySelectorAll('[data-inventory-result-count]').forEach(function(node) {
+                    node.textContent = snapshot.resultText;
+                });
+            }
+            var updated = snapshot.generatedAt ? new Date(snapshot.generatedAt) : new Date();
+            showStatus((spanish ? 'Actualizado automáticamente: ' : 'Automatically updated: ')
+                + updated.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'}));
+        }).catch(function() {
+            showStatus(spanish
+                ? 'No se pudo actualizar. Se intentará nuevamente en 30 segundos.'
+                : 'Could not update. It will try again in 30 seconds.', 'is-error');
+        }).finally(function() {
+            refreshing = false;
+            if (refreshButton) {
+                refreshButton.disabled = false;
+            }
+        });
+    }
+
+    if (refreshButton) {
+        refreshButton.addEventListener('click', refreshInventory);
+    }
+    window.setTimeout(refreshInventory, 1000);
+    window.setInterval(refreshInventory, 30000);
+    window.addEventListener('focus', refreshInventory);
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            refreshInventory();
+        }
+    });
+})();
+JS);
 
 echo $OUTPUT->header();
 ?>
 <style>
 .question-bank{max-width:1380px;margin:0 auto 45px;color:#173448}.question-bank__hero{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px;padding:22px 24px;border-left:5px solid #0b8f87;border-radius:12px;background:linear-gradient(135deg,#eef9f6,#fff8ef)}.question-bank__hero h2{margin:0 0 5px;font-size:30px}.question-bank__hero p{max-width:850px;margin:0;color:#52677a;line-height:1.5}.question-bank__actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button{display:inline-flex;min-height:40px;align-items:center;justify-content:center;padding:8px 13px;border:1px solid #b8c8d2;border-radius:8px;background:#fff;color:#24465b!important;font-weight:850;text-decoration:none!important}.question-bank__button:hover{border-color:#0b8f87;background:#eef9f6}.question-bank__summary{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-bottom:12px}.question-bank__summary article{display:flex;min-height:42px;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border:1px solid #d5e0e6;border-radius:8px;background:#fff}.question-bank__summary-card{display:flex;min-height:42px;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border:1px solid #d5e0e6;border-radius:8px;background:#fff;color:#173448!important;text-decoration:none!important;transition:border-color .15s ease,background .15s ease,transform .15s ease}.question-bank__summary-card:hover,.question-bank__summary-card:focus{border-color:#0b8f87;background:#eef9f6;transform:translateY(-1px)}.question-bank__summary span{color:#64748b;font-size:11px;font-weight:800;line-height:1.2}.question-bank__summary strong{flex:0 0 auto;color:#08746f;font-size:19px;line-height:1}.question-bank__filters{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:10px;margin-bottom:16px;padding:15px;border:1px solid #d7e2e7;border-radius:11px;background:#fff}.question-bank__filters label span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__filters input,.question-bank__filters select{width:100%;min-height:42px;box-sizing:border-box;padding:8px 10px;border:1px solid #b9cbd4;border-radius:7px;background:#fff}.question-bank__filter-actions{display:flex;align-items:end;gap:7px}.question-bank__filter-actions button{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__domains{margin-bottom:16px;overflow-x:auto;border:1px solid #d7e2e7;border-radius:11px;background:#fff}.question-bank__domains table{width:100%;border-collapse:collapse}.question-bank__domains th,.question-bank__domains td{padding:10px 12px;border-top:1px solid #e1e8ec;text-align:left}.question-bank__domains th{background:#f3f8f8;font-size:11px;text-transform:uppercase}.question-bank__result-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px;padding:12px 15px;border-left:4px solid #0b8f87;border-radius:7px;background:#f3f8f8;font-weight:850}.question-bank__items{display:grid;gap:13px}.question-bank__item{padding:17px;border:1px solid #d5e0e6;border-radius:11px;background:#fff}.question-bank__meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:10px}.question-bank__id{color:#102a43;font-size:16px;font-weight:950}.question-bank__badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#edf2f5;color:#455d6d;font-size:11px;font-weight:850}.question-bank__badge--ready{background:#ddf6ec;color:#076c55}.question-bank__badge--incomplete{background:#fff0dd;color:#a34d00}.question-bank__badge--exam{background:#eee8ff;color:#5630a8}.question-bank__badge--scorm{background:#e8f1ff;color:#1d4f91}.question-bank__item h3{margin:0 0 12px;font-size:18px;line-height:1.45}.question-bank__options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:0 0 12px;padding:0;list-style:none}.question-bank__options li{padding:9px 11px;border:1px solid #e0e7eb;border-radius:7px;background:#f8fafc}.question-bank__options li.is-correct{border-color:#7bcbb6;background:#eaf9f3;color:#075f50;font-weight:850}.question-bank__explanation{margin-top:10px;padding:12px 14px;border-left:4px solid #0b8f87;border-radius:7px;background:#effaf7;line-height:1.5}.question-bank__source{margin:10px 0 0;color:#60758a;font-size:12px}.question-bank__missing{margin-top:10px;padding:10px 12px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed;color:#9a3412;font-weight:750}.question-bank__pagination{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:18px}.question-bank__pagination a{display:inline-flex;min-width:36px;min-height:36px;align-items:center;justify-content:center;border:1px solid #c6d4dc;border-radius:7px;background:#fff;text-decoration:none}.question-bank__pagination a[aria-current="page"]{border-color:#0b8f87;background:#0b8f87;color:#fff}@media(max-width:1050px){.question-bank__summary{grid-template-columns:repeat(3,minmax(0,1fr))}.question-bank__filters{grid-template-columns:1fr 1fr}.question-bank__filter-actions{align-items:stretch}}@media(max-width:700px){.question-bank__hero{flex-direction:column}.question-bank__summary{grid-template-columns:repeat(2,minmax(0,1fr))}.question-bank__filters,.question-bank__options{grid-template-columns:1fr}.question-bank__filter-actions{flex-direction:column}.question-bank__button{width:100%;box-sizing:border-box}}@media(max-width:480px){.question-bank__summary{grid-template-columns:1fr}}
+.question-bank__inventory-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid #d7e2e7;background:#f8fbfb}.question-bank__inventory-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}.question-bank__inventory-title strong{color:#173448}.question-bank__inventory-status{color:#60758a;font-size:12px;font-weight:750}.question-bank__inventory-status.is-refreshing{color:#6d28d9}.question-bank__inventory-status.is-error{color:#b42318}.question-bank__inventory-refresh{min-height:32px;padding:5px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff;color:#24465b;font-size:12px;font-weight:850;cursor:pointer}.question-bank__inventory-refresh:hover{border-color:#0b8f87;background:#eef9f6}.question-bank__inventory-refresh:disabled{cursor:wait;opacity:.65}.question-bank__domains th[data-inventory-state="review"]{background:#f4f0ff;color:#4c1d95}.question-bank__domains th small{display:block;margin-top:2px;font-size:9px;line-height:1.2;text-transform:none}.question-bank__domains td[data-inventory-exam]{font-weight:800;color:#4c1d95}@media(max-width:700px){.question-bank__inventory-head{align-items:stretch;flex-direction:column}.question-bank__inventory-refresh{width:100%}}
 .question-bank__editor{margin-bottom:18px;padding:20px;border:2px solid #6d28d9;border-radius:12px;background:#faf8ff}.question-bank__editor-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px}.question-bank__editor-head h3{margin:0 0 4px;font-size:23px}.question-bank__editor-head p{margin:0;color:#66557e}.question-bank__editor-grid{display:grid;grid-template-columns:1fr;gap:14px}.question-bank__editor-panel{padding:15px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__editor-panel h4{margin:0 0 12px}.question-bank__editor-field{display:block;margin-bottom:11px}.question-bank__editor-field>span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__editor input[type=text],.question-bank__editor textarea,.question-bank__editor select{box-sizing:border-box;width:100%;padding:9px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff}.question-bank__editor textarea{min-height:92px;resize:vertical}.question-bank__editor-classification{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}.question-bank__editor-check{display:flex;align-items:flex-start;gap:9px;margin:15px 0;padding:13px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed}.question-bank__editor-check input{margin-top:4px}.question-bank__editor-actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button--primary{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__button--publish{border-color:#6d28d9;background:#6d28d9;color:#fff!important}.question-bank__button--exclude{border-color:#b42318;background:#fff1f0;color:#9f1d16!important}.question-bank__exclusion-note{margin:10px 0;padding:12px 14px;border-left:4px solid #b42318;border-radius:7px;background:#fff1f0;color:#7a271a}.question-bank__item--excluded{border-color:#f1a6a0;background:#fffafa}.question-bank__edit-link{margin-left:auto}@media(max-width:850px){.question-bank__editor-classification{grid-template-columns:1fr}.question-bank__editor-head{display:block}.question-bank__editor-head .question-bank__button{margin-top:10px}}
 .question-bank__meta form{margin:0}.question-bank__meta .question-bank__delete-form:first-of-type{margin-left:auto}.question-bank__edit-link+.question-bank__delete-form{margin-left:0!important}
 .question-bank__temporary-order{display:flex;align-items:center;gap:10px;margin:-17px -17px 14px;padding:11px 16px;border-radius:10px 10px 0 0;background:#4c1d95;color:#fff}.question-bank__temporary-order span{font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.question-bank__temporary-order strong{font-size:24px;line-height:1}.question-bank__temporary-order small{font-weight:800;opacity:.85}.question-bank__temporary-order--editor{margin:0 0 12px;border-radius:8px}.question-bank__review-progress{margin-bottom:16px;padding:14px 16px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#4c1d95}.question-bank__review-progress strong{font-size:17px}.question-bank__review-progress p{margin:4px 0 0}
@@ -5692,7 +6095,7 @@ echo $OUTPUT->header();
     </form>
     <?php if ($editquestion['_exam2position'] > 0 && !$editquestion['_excluded']): ?><form id="question-rewrite-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($editquestion['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s((string)($editorrevisionfull['aiBatchId'] ?? '')); ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"></form><?php endif; ?>
     <?php endif; ?>
-    <nav class="question-bank__summary" aria-label="Question bank totals and filters"><a class="question-bank__summary-card" href="<?php echo $summaryurls['classified']->out(false); ?>"><span>Classified candidates</span><strong><?php echo (int)$totals['total']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['proposals']->out(false); ?>"><span>Publishing proposals</span><strong><?php echo (int)$pendingproposalcount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['reclassification']->out(false); ?>"><span>Pending reclassification</span><strong><?php echo (int)$pendingreclassificationcount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['exclusions']->out(false); ?>"><span>Possible exclusions</span><strong><?php echo (int)$possibleexclusioncount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm']->out(false); ?>"><span>SCORM classified</span><strong><?php echo (int)$scormquestioncount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_inference']->out(false); ?>"><span>SCORM needing inference</span><strong><?php echo (int)$scormneedsinference; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_feedback']->out(false); ?>"><span>SCORM needing feedback</span><strong><?php echo (int)$scormneedsfeedback; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_candidates']->out(false); ?>"><span>SCORM simulation candidates</span><strong><?php echo (int)$scormsimulationcandidates; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['ready']->out(false); ?>"><span>Ready for practice</span><strong><?php echo (int)$totals['ready']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['exam1']->out(false); ?>"><span>Exam 1</span><strong><?php echo (int)$totals['exam1']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['reserve']->out(false); ?>"><span>Ready reserve bank</span><strong><?php echo (int)$totals['reserve']; ?></strong></a></nav>
+    <nav class="question-bank__summary" aria-label="Question bank totals and filters"><a class="question-bank__summary-card" href="<?php echo $summaryurls['classified']->out(false); ?>"><span>Classified candidates</span><strong data-inventory-total="total"><?php echo (int)$totals['total']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['proposals']->out(false); ?>"><span>Publishing proposals</span><strong><?php echo (int)$pendingproposalcount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['reclassification']->out(false); ?>"><span>Pending reclassification</span><strong><?php echo (int)$pendingreclassificationcount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['exclusions']->out(false); ?>"><span>Possible exclusions</span><strong><?php echo (int)$possibleexclusioncount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm']->out(false); ?>"><span>SCORM classified</span><strong><?php echo (int)$scormquestioncount; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_inference']->out(false); ?>"><span>SCORM needing inference</span><strong><?php echo (int)$scormneedsinference; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_feedback']->out(false); ?>"><span>SCORM needing feedback</span><strong><?php echo (int)$scormneedsfeedback; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['scorm_candidates']->out(false); ?>"><span>SCORM simulation candidates</span><strong><?php echo (int)$scormsimulationcandidates; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['ready']->out(false); ?>"><span>Ready for practice</span><strong data-inventory-total="ready"><?php echo (int)$totals['ready']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['exam1']->out(false); ?>"><span>Exam 1</span><strong><?php echo (int)$totals['exam1']; ?></strong></a><a class="question-bank__summary-card" href="<?php echo $summaryurls['reserve']->out(false); ?>"><span>Ready reserve bank</span><strong data-inventory-total="reserve"><?php echo (int)$totals['reserve']; ?></strong></a></nav>
     <form class="question-bank__filters" method="get" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
         <label><span>Search ID or text</span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="Example: DY-001, Ma Huang Tang"></label>
         <label><span>Domain</span><select name="domain"><option value="all">All domains</option><?php foreach ($domains as $domainid => $domain): ?><option value="<?php echo s($domainid); ?>"<?php echo $domainfilter === $domainid ? ' selected' : ''; ?>>Domain <?php echo (int)$domain['number']; ?> · <?php echo s($domain['name']); ?></option><?php endforeach; ?></select></label>
@@ -5713,10 +6116,40 @@ echo $OUTPUT->header();
         <?php else: ?>
             <?php foreach ($activefilters as $activefilter): ?><span class="question-bank__active-filter"><strong><?php echo s($activefilter['label']); ?>:</strong> <?php echo s($activefilter['value']); ?></span><?php endforeach; ?>
         <?php endif; ?>
-        <span class="question-bank__active-filters-count"><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span>
+        <span class="question-bank__active-filters-count" data-inventory-result-count><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span>
         <?php if ($pendingexamprojecturl !== null || $activefilters !== []): ?><div class="question-bank__active-filter-actions"><?php if ($pendingexamprojecturl !== null && $usagefilter !== 'exam_project_pending'): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo s((string)$pendingexamproject['name']) . ($displaylang === 'es' ? ' · revisión pendiente' : ' pending review'); ?></a><?php endif; ?><?php if ($activefilters !== []): ?><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Limpiar todos los filtros' : 'Clear all filters'; ?></a><?php endif; ?></div><?php endif; ?>
     </section>
-    <section class="question-bank__domains"><table><thead><tr><th>Domain</th><th>Classified</th><th>SCORM</th><th>Ready</th><th>Exam 1</th><th>Exam 2 review</th><th>Ready reserve</th></tr></thead><tbody><?php foreach ($domains as $domainid => $domain): ?><tr><td><strong>Domain <?php echo (int)$domain['number']; ?></strong> · <?php echo s($domain['name']); ?></td><td><?php echo (int)$domainstats[$domainid]['total']; ?></td><td><?php echo (int)$domainstats[$domainid]['scorm']; ?></td><td><?php echo (int)$domainstats[$domainid]['ready']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam1']; ?></td><td><?php echo (int)$domainstats[$domainid]['exam2']; ?></td><td><?php echo (int)$domainstats[$domainid]['reserve']; ?></td></tr><?php endforeach; ?></tbody></table></section>
+    <?php $inventoryendpointurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        array_merge($baseparams, ['inventoryjson' => 1])
+    ); ?>
+    <section class="question-bank__domains" data-question-bank-inventory data-endpoint="<?php echo s($inventoryendpointurl->out(false)); ?>" data-version="<?php echo s((string)$inventorysnapshot['version']); ?>">
+        <header class="question-bank__inventory-head">
+            <div class="question-bank__inventory-title">
+                <strong><?php echo $displaylang === 'es' ? 'Inventario dinámico por dominio' : 'Live inventory by domain'; ?></strong>
+                <span class="question-bank__inventory-status" data-inventory-status aria-live="polite"><?php echo $displaylang === 'es' ? 'Se actualiza automáticamente cada 30 segundos.' : 'Updates automatically every 30 seconds.'; ?></span>
+            </div>
+            <button class="question-bank__inventory-refresh" type="button" data-inventory-refresh><?php echo $displaylang === 'es' ? 'Actualizar ahora' : 'Refresh now'; ?></button>
+        </header>
+        <table data-inventory-table>
+            <thead><tr>
+                <th><?php echo s((string)$inventorysnapshot['labels']['domain']); ?></th>
+                <th><?php echo s((string)$inventorysnapshot['labels']['classified']); ?></th>
+                <th><?php echo s((string)$inventorysnapshot['labels']['scorm']); ?></th>
+                <th><?php echo s((string)$inventorysnapshot['labels']['ready']); ?></th>
+                <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): ?><th data-inventory-state="<?php echo s((string)$inventoryexamcolumn['state']); ?>"><?php echo s((string)$inventoryexamcolumn['label']); ?><small><?php echo s((string)$inventoryexamcolumn['stateLabel']); ?> · <?php echo (int)$inventoryexamcolumn['total']; ?></small></th><?php endforeach; ?>
+                <th><?php echo s((string)$inventorysnapshot['labels']['reserve']); ?></th>
+            </tr></thead>
+            <tbody><?php foreach ($domains as $domainid => $domain): ?><tr>
+                <td><strong><?php echo $displaylang === 'es' ? 'Dominio ' : 'Domain '; ?><?php echo (int)$domain['number']; ?></strong> · <?php echo s($domain['name']); ?></td>
+                <td><?php echo (int)$inventorydomainstats[$domainid]['total']; ?></td>
+                <td><?php echo (int)$inventorydomainstats[$domainid]['scorm']; ?></td>
+                <td><?php echo (int)$inventorydomainstats[$domainid]['ready']; ?></td>
+                <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): ?><td data-inventory-exam="<?php echo s((string)$inventoryexamcolumn['key']); ?>"><?php echo (int)($inventoryexamcolumn['counts'][$domainid] ?? 0); ?></td><?php endforeach; ?>
+                <td><?php echo (int)$inventorydomainstats[$domainid]['reserve']; ?></td>
+            </tr><?php endforeach; ?></tbody>
+        </table>
+    </section>
     <div id="pending-questions" class="question-bank__result-head"><span><?php echo is_array($currentexamproject)
         ? ($examprojectview === 'included'
             ? ($displaylang === 'es'
@@ -5731,7 +6164,7 @@ echo $OUTPUT->header();
                     : 'Available questions for ' . s((string)$currentexamproject['name']))))
         : ($usagefilter === 'exam2_review'
             ? ($displaylang === 'es' ? 'Preguntas pendientes — continúe aquí' : 'Pending questions — continue here')
-            : ($displaylang === 'es' ? 'Preguntas filtradas' : 'Filtered questions')); ?></span><span><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
+            : ($displaylang === 'es' ? 'Preguntas filtradas' : 'Filtered questions')); ?></span><span data-inventory-result-count><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
     <?php if ($pagequestions === []): ?><div class="question-bank__item"><?php echo $displaylang === 'es' ? 'Ninguna pregunta coincide con estos filtros.' : 'No questions match these filters.'; ?></div><?php else: ?>
     <section class="question-bank__items"><?php foreach ($pagequestions as $question):
         $questionrevisionrecord = is_array($revisionstore['questions'][$question['questionId']] ?? null)
