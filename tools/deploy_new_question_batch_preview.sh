@@ -89,6 +89,10 @@ grep -Fq 'Comparing within:' "$SOURCE_FILE"
 grep -Fq 'Open and edit' "$SOURCE_FILE"
 grep -Fq 'Add or replace questions' "$SOURCE_FILE"
 grep -Fq "this.closest('.question-bank__exam-builder').hidden=true" "$SOURCE_FILE"
+grep -Fq 'Exam to compare' "$SOURCE_FILE"
+grep -Fq '$similarityexamselection' "$SOURCE_FILE"
+grep -Fq '$publishedprojectrepairs' "$SOURCE_FILE"
+grep -Fq 'Remove one before adding another' "$SOURCE_FILE"
 
 mkdir -p "$BACKUP_DIR"
 cp -a -- "$TARGET" "$BACKUP_FILE"
@@ -120,6 +124,8 @@ grep -Fq '$ensurechannelherbmappingfeedback' "$TARGET"
 grep -Fq 'data-result-filter-context' "$TARGET"
 grep -Fq '$similarityscopequestions' "$TARGET"
 grep -Fq 'Open and edit' "$TARGET"
+grep -Fq 'Exam to compare' "$TARGET"
+grep -Fq '$publishedprojectrepairs' "$TARGET"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -162,6 +168,8 @@ echo "OK: el mapeo A-D se inserta de forma determinística aunque el proveedor d
 echo "OK: el encabezado del listado muestra los filtros que producen las preguntas visibles."
 echo "OK: Find similar questions compara solo dentro del examen activo cuando existe uno."
 echo "OK: Exam builder puede cerrarse y cada examen guardado puede abrirse y editarse."
+echo "OK: Similar finder permite elegir el examen que se desea comparar."
+echo "OK: los exámenes no pueden superar su cantidad objetivo y los publicados se reparan desde su versión guardada."
 echo "OK: ninguna pregunta se publica automáticamente."
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256: $INSTALLED_SHA256"
