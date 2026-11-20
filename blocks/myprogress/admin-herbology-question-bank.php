@@ -28,6 +28,7 @@ $showsimilarityfinder = (bool)optional_param('similarfinder', 0, PARAM_BOOL);
 $similaritysearch = trim(optional_param('similarsearch', '', PARAM_TEXT));
 $similarityquestionid = optional_param('similarquestion', '', PARAM_ALPHANUMEXT);
 $publishexam2requested = (bool)optional_param('publishexam2', 0, PARAM_BOOL);
+$publishexamprojectrequested = optional_param('publishexamproject', '', PARAM_ALPHANUMEXT);
 $examprojectid = optional_param('examproject', '', PARAM_ALPHANUMEXT);
 $examprojectview = optional_param('examview', 'candidates', PARAM_ALPHA);
 $advancetonext = (bool)optional_param('advance', 0, PARAM_BOOL);
@@ -1526,12 +1527,26 @@ if (is_array($currentexamproject)) {
     $currentexamproject = $examprojects[$examprojectid];
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamproject') {
+if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamproject')
+        || ($_SERVER['REQUEST_METHOD'] === 'GET' && $publishexamprojectrequested !== '')) {
     require_sesskey();
-    $publishingprojectid = required_param('examproject', PARAM_ALPHANUMEXT);
+    $publishingprojectid = $_SERVER['REQUEST_METHOD'] === 'POST'
+        ? required_param('examproject', PARAM_ALPHANUMEXT)
+        : $publishexamprojectrequested;
+    $publishreturnurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+        'examproject' => $publishingprojectid,
+        'lang' => $displaylang,
+    ]);
     $publishingproject = $examprojects[$publishingprojectid] ?? null;
     if (!is_array($publishingproject)) {
-        throw new invalid_parameter_exception('Unknown exam project.');
+        redirect(
+            $publishreturnurl,
+            $displaylang === 'es'
+                ? 'El examen no se publicó porque el proyecto ya no existe.'
+                : 'The exam was not published because the project no longer exists.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
     }
     $publishingtarget = (int)($publishingproject['targetCount'] ?? 0);
     $publishingids = array_values(array_unique(array_map(
@@ -1543,10 +1558,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamproject
             || (int)($publishingproject['currentCount'] ?? 0) !== 100
             || (int)($publishingproject['missingCount'] ?? 1) !== 0) {
         redirect(
-            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
-                'examproject' => $publishingprojectid,
-                'lang' => $displaylang,
-            ]),
+            $publishreturnurl,
             $displaylang === 'es'
                 ? 'El examen no se publicó: debe contener exactamente 100 preguntas aprobadas y cero pendientes.'
                 : 'The exam was not published: it must contain exactly 100 approved questions and zero pending questions.',
@@ -1560,15 +1572,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamproject
     }
     $publisheddomaincounts = array_fill_keys(array_keys($domains), 0);
     $publishedquestions = [];
+    $publishingissues = [];
     foreach ($publishingids as $publishingindex => $publishingquestionid) {
         $publishingquestion = $questionsbyid[$publishingquestionid] ?? null;
         if (!is_array($publishingquestion)
                 || !$isprocessedquestion($publishingquestion)
                 || !$publishingquestion['_ready']
                 || $publishingquestion['_excluded']) {
-            throw new invalid_parameter_exception(
-                'Every project question must remain approved, complete and active before publication.'
-            );
+            $publishingissues[] = $publishingquestionid;
+            continue;
         }
         $snapshot = array_intersect_key($publishingquestion, array_flip([
             'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
@@ -1576,6 +1588,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamproject
         ]));
         $publishedquestions[] = $snapshot;
         $publisheddomaincounts[(string)$publishingquestion['_domainid']]++;
+    }
+    if ($publishingissues !== []) {
+        redirect(
+            $publishreturnurl,
+            ($displaylang === 'es'
+                ? 'El examen no se publicó. Estas preguntas necesitan volver a aprobarse o completarse: '
+                : 'The exam was not published. These questions must be approved or completed again: ')
+                . implode(', ', array_slice($publishingissues, 0, 10)),
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
     }
     $requiredprojectdomaincounts = [
         'formula_differentiation' => 28,
@@ -1587,8 +1610,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamproject
     ];
     foreach ($requiredprojectdomaincounts as $publisheddomainid => $requiredcount) {
         if ((int)($publisheddomaincounts[$publisheddomainid] ?? 0) !== $requiredcount) {
-            throw new invalid_parameter_exception(
-                'The exam does not match the required 28/24/18/15/10/5 domain blueprint.'
+            $actualdomaincounts = implode('/', array_map(
+                static fn(string $domainid): int => (int)($publisheddomaincounts[$domainid] ?? 0),
+                array_keys($requiredprojectdomaincounts)
+            ));
+            redirect(
+                $publishreturnurl,
+                ($displaylang === 'es'
+                    ? 'El examen no se publicó porque sus proporciones actuales son '
+                    : 'The exam was not published because its current domain counts are ')
+                    . $actualdomaincounts . ' (required: 28/24/18/15/10/5).',
+                null,
+                \core\output\notification::NOTIFY_ERROR
             );
         }
     }
@@ -5279,6 +5312,11 @@ echo $OUTPUT->header();
                     'lang' => $displaylang !== 'en' ? $displaylang : null,
                 ]));
                 $projectincludedurl->set_anchor('pending-questions');
+                $projectpublishurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+                    'publishexamproject' => $projectid,
+                    'sesskey' => sesskey(),
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                ]));
             ?>
             <article class="question-bank__exam-card<?php echo $examprojectid === $projectid ? ' question-bank__exam-card--active' : ''; ?>">
                 <h4><?php echo s((string)$project['name']); ?></h4>
@@ -5286,7 +5324,7 @@ echo $OUTPUT->header();
                 <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="<?php echo $projecttarget; ?>" aria-valuenow="<?php echo $projectcount; ?>"><span style="width:<?php echo $projectpercent; ?>%"></span></div>
                 <div class="question-bank__publish-readiness<?php echo $projectisreadytopublish ? ' is-ready' : ''; ?>"><?php echo $projectisreadytopublish ? ($displaylang === 'es' ? 'Listo para publicar: 100 de 100 aprobadas.' : 'Ready to publish: 100 of 100 approved.') : ($displaylang === 'es' ? 'Aún no se puede publicar: faltan ' . $projectmissing . ' preguntas por aprobar.' : 'Not ready to publish: ' . $projectmissing . ' questions still need approval.'); ?></div>
                 <?php if ($projectispublished): ?><div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$project['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)($project['publishedVersion'] ?? 1); ?></span></div><?php endif; ?>
-                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $projectaddurl->out(false); ?>"><?php echo $projectcount > 0 ? ($displaylang === 'es' ? 'Continuar revisión' : 'Continue review') : ($displaylang === 'es' ? 'Comenzar revisión' : 'Start review'); ?></a><a class="question-bank__button" href="<?php echo $projectincludedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver aprobadas' : 'View approved'; ?> (<?php echo $projectcount; ?>)</a><?php if ($projectisreadytopublish): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="examproject" value="<?php echo s($projectid); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" name="formaction" value="publishexamproject"><?php echo $projectispublished ? ($displaylang === 'es' ? 'Volver a publicar' : 'Republish') : ($displaylang === 'es' ? 'Publicar examen' : 'Publish exam'); ?></button></form><?php else: ?><span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $displaylang === 'es' ? 'Publicar examen' : 'Publish exam'; ?></span><?php endif; ?><?php if ($projectispublished): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => $projectexamnumber, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?><?php if ($examprojectid === $projectid): ?><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a><?php endif; ?></div>
+                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $projectaddurl->out(false); ?>"><?php echo $projectcount > 0 ? ($displaylang === 'es' ? 'Continuar revisión' : 'Continue review') : ($displaylang === 'es' ? 'Comenzar revisión' : 'Start review'); ?></a><a class="question-bank__button" href="<?php echo $projectincludedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver aprobadas' : 'View approved'; ?> (<?php echo $projectcount; ?>)</a><?php if ($projectisreadytopublish): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectpublishurl->out(false); ?>"><?php echo $projectispublished ? ($displaylang === 'es' ? 'Volver a publicar' : 'Republish') : ($displaylang === 'es' ? 'Publicar examen' : 'Publish exam'); ?></a><?php else: ?><span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $displaylang === 'es' ? 'Publicar examen' : 'Publish exam'; ?></span><?php endif; ?><?php if ($projectispublished): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => $projectexamnumber, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?><?php if ($examprojectid === $projectid): ?><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a><?php endif; ?></div>
             </article>
             <?php endforeach; ?>
         </div>
