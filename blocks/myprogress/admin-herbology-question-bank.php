@@ -223,6 +223,39 @@ $buildchannelherbmapping = static function(array $options) use ($normalizechanne
     }
     return count($mapping) === 4 ? $mapping : [];
 };
+$ensurechannelherbmappingfeedback = static function(
+    string $feedback,
+    array $mapping,
+    array $optionsbylabel,
+    bool $spanish
+): string {
+    $headingpattern = $spanish ? 'Opci[oó]n' : 'Option';
+    foreach ($mapping as $label => $herbname) {
+        $paragraphpattern = '/(?:^|\s)' . $headingpattern . '\s+' . preg_quote($label, '/')
+            . '\s*:\s*(.*?)(?=\s+' . $headingpattern . '\s+[A-D]\s*:|$)/isu';
+        $paragraph = '';
+        if (preg_match($paragraphpattern, $feedback, $paragraphmatch)) {
+            $paragraph = trim((string)$paragraphmatch[1]);
+        }
+        if ($paragraph !== '' && stripos($paragraph, $herbname) !== false) {
+            continue;
+        }
+        $channelset = trim((string)($optionsbylabel[$label] ?? ''));
+        $channelset = trim((string)preg_replace('/^\s*[A-D][.\):]\s*/iu', '', $channelset));
+        $mappingclause = $spanish
+            ? 'El conjunto completo de canales ' . $channelset . ' corresponde a ' . $herbname . '.'
+            : 'The complete channel set ' . $channelset . ' corresponds to ' . $herbname . '.';
+        $targetheadingpattern = '/(^|\s)(' . $headingpattern . '\s+' . preg_quote($label, '/')
+            . '\s*:\s*)/iu';
+        $feedback = (string)preg_replace_callback(
+            $targetheadingpattern,
+            static fn(array $matches): string => $matches[1] . $matches[2] . $mappingclause . ' ',
+            $feedback,
+            1
+        );
+    }
+    return trim($feedback);
+};
 
 $formaction = optional_param('formaction', '', PARAM_ALPHANUMEXT);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'createexamproject') {
@@ -4589,6 +4622,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         bool $enforcefeedbackquality = true
     ) use (
         $buildchannelherbmapping,
+        $ensurechannelherbmappingfeedback,
         $findprohibitedanswerchoice,
         $hasprohibitednegativewording,
         $stripdecorativeicons
@@ -4882,6 +4916,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         if ($spanishprompt === '' || $spanishexplanation === '' || count($spanishoptionsbylabel) !== 4) {
             throw new UnexpectedValueException('The AI draft omitted the complete Spanish translation.');
+        }
+        if ($requiredchannelherbmappings !== []) {
+            // This is intentionally deterministic. AI providers sometimes obey
+            // the prose request only partially and leave generic "wrong channels"
+            // comments. Insert the verified A-D mapping before final validation.
+            $explanation = $ensurechannelherbmappingfeedback(
+                $explanation,
+                $requiredchannelherbmappings,
+                $optionsbylabel,
+                false
+            );
+            $spanishexplanation = $ensurechannelherbmappingfeedback(
+                $spanishexplanation,
+                $requiredchannelherbmappings,
+                $spanishoptionsbylabel,
+                true
+            );
         }
         if ($hasprohibitednegativewording($spanishprompt)) {
             throw new UnexpectedValueException(
