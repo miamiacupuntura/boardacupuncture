@@ -5458,7 +5458,30 @@ echo $OUTPUT->header();
                 $projectcount = (int)$project['currentCount'];
                 $projecttarget = (int)$project['targetCount'];
                 $projectmissing = (int)$project['missingCount'];
-                $projectisreadytopublish = $projecttarget === 100 && $projectcount === 100 && $projectmissing === 0;
+                $projectapprovedlookup = array_fill_keys(
+                    array_map('strval', (array)($project['approvedQuestionIds'] ?? [])),
+                    true
+                );
+                $projectdomaincounts = array_fill_keys(array_keys($requiredprojectdomaincounts), 0);
+                foreach ($allquestions as $projectbankquestion) {
+                    if (!isset($projectapprovedlookup[(string)$projectbankquestion['questionId']])) {
+                        continue;
+                    }
+                    $projectbankdomainid = (string)$projectbankquestion['_domainid'];
+                    if (isset($projectdomaincounts[$projectbankdomainid])) {
+                        $projectdomaincounts[$projectbankdomainid]++;
+                    }
+                }
+                $projectblueprintmatches = $projectdomaincounts === $requiredprojectdomaincounts;
+                $projecthasallapproved = $projecttarget === 100
+                    && $projectcount === 100
+                    && $projectmissing === 0;
+                $projectneedsrebalance = $projecthasallapproved && !$projectblueprintmatches;
+                $projectisreadytopublish = $projecthasallapproved && $projectblueprintmatches;
+                $projectdomaincountlabel = implode('/', array_map(
+                    static fn(string $domainid): int => (int)$projectdomaincounts[$domainid],
+                    array_keys($requiredprojectdomaincounts)
+                ));
                 $projectispublished = (string)($project['status'] ?? '') === 'published'
                     && (int)($project['publishedExamNumber'] ?? 0) >= 3;
                 $projectexamnumber = (int)($project['publishedExamNumber'] ?? 0);
@@ -5512,9 +5535,9 @@ echo $OUTPUT->header();
                 <h4><?php echo s((string)$project['name']); ?></h4>
                 <div class="question-bank__exam-numbers"><span><?php echo $displaylang === 'es' ? 'Aprobadas:' : 'Approved:'; ?> <strong><?php echo $projectcount; ?> / <?php echo $projecttarget; ?></strong></span><span><?php echo $displaylang === 'es' ? 'Pendientes:' : 'Pending:'; ?> <strong><?php echo $projectmissing; ?></strong></span></div>
                 <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="<?php echo $projecttarget; ?>" aria-valuenow="<?php echo $projectcount; ?>"><span style="width:<?php echo $projectpercent; ?>%"></span></div>
-                <div class="question-bank__publish-readiness<?php echo $projectisreadytopublish ? ' is-ready' : ''; ?>"><?php echo $projectisreadytopublish ? ($displaylang === 'es' ? 'Listo para publicar: 100 de 100 aprobadas.' : 'Ready to publish: 100 of 100 approved.') : ($displaylang === 'es' ? 'Aún no se puede publicar: faltan ' . $projectmissing . ' preguntas por aprobar.' : 'Not ready to publish: ' . $projectmissing . ' questions still need approval.'); ?></div>
+                <div class="question-bank__publish-readiness<?php echo $projectisreadytopublish ? ' is-ready' : ''; ?>"><?php echo $projectisreadytopublish ? ($displaylang === 'es' ? 'Listo para publicar: 100 de 100 aprobadas y proporciones correctas.' : 'Ready to publish: 100 of 100 approved with the correct domain proportions.') : ($projectneedsrebalance ? (($displaylang === 'es' ? 'Necesita rebalanceo: proporciones actuales ' : 'Needs rebalancing: current domain counts ') . $projectdomaincountlabel . ' (required: 28/24/18/15/10/5).') : ($displaylang === 'es' ? 'Aún no se puede publicar: faltan ' . $projectmissing . ' preguntas por aprobar.' : 'Not ready to publish: ' . $projectmissing . ' questions still need approval.')); ?></div>
                 <?php if ($projectpublisherrormessage !== ''): ?><div class="question-bank__publish-error" role="alert"><?php echo s($projectpublisherrormessage); ?></div><?php endif; ?>
-                <?php if ($examprojectid === $projectid && $publishexamerror === 'blueprint'): ?><div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectrebalanceurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Corregir proporciones' : 'Fix domain proportions'; ?></a><small><?php echo $displaylang === 'es' ? 'Las preguntas excedentes permanecen aprobadas en el banco; solo se sustituyen dentro de este examen.' : 'Surplus questions remain approved in the bank; only their exam membership is replaced.'; ?></small></div><?php endif; ?>
+                <?php if ($projectneedsrebalance): ?><div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectrebalanceurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Corregir proporciones' : 'Fix domain proportions'; ?></a><small><?php echo $displaylang === 'es' ? 'Las preguntas excedentes permanecen aprobadas en el banco; solo se sustituyen dentro de este examen.' : 'Surplus questions remain approved in the bank; only their exam membership is replaced.'; ?></small></div><?php endif; ?>
                 <?php if ($projectispublished): ?><div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$project['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)($project['publishedVersion'] ?? 1); ?></span></div><?php endif; ?>
                 <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $projectaddurl->out(false); ?>"><?php echo $projectcount > 0 ? ($displaylang === 'es' ? 'Continuar revisión' : 'Continue review') : ($displaylang === 'es' ? 'Comenzar revisión' : 'Start review'); ?></a><a class="question-bank__button" href="<?php echo $projectincludedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver aprobadas' : 'View approved'; ?> (<?php echo $projectcount; ?>)</a><?php if ($projectisreadytopublish): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectpublishurl->out(false); ?>"><?php echo $projectispublished ? ($displaylang === 'es' ? 'Volver a publicar' : 'Republish') : ($displaylang === 'es' ? 'Publicar examen' : 'Publish exam'); ?></a><?php else: ?><span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $displaylang === 'es' ? 'Publicar examen' : 'Publish exam'; ?></span><?php endif; ?><?php if ($projectispublished): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => $projectexamnumber, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?><?php if ($examprojectid === $projectid): ?><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a><?php endif; ?></div>
             </article>
