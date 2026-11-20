@@ -6,7 +6,7 @@
   <meta name="description" content="Examen de selección múltiple basado en las 51 parejas oficiales Dui Yao.">
   <title>Quiz de Dui Yao | AcupunctureTests</title>
   <style>
-    :root{color-scheme:light;--green:#087c69;--navy:#102a43;--line:#bfd8d3;--soft:#f4faf8;--blue:#2b63e8}
+    :root{color-scheme:light;--green:#087c69;--navy:#102a43;--line:#bfd8d3;--soft:#f4faf8;--blue:#2b63e8;--purple:#6d28d9}
     *{box-sizing:border-box}body{margin:0;background:#f5f7fa;color:var(--navy);font:16px/1.45 Arial,sans-serif}
     .dui-practice{width:min(940px,calc(100% - 24px));margin:24px auto 56px}.dui-practice__top,.dui-practice__card{border:1px solid var(--line);border-radius:14px;background:#fff}
     .dui-practice__top{border-top:5px solid var(--green);padding:22px}.dui-practice__actions{display:flex;justify-content:flex-end;gap:9px;margin-bottom:12px}
@@ -15,7 +15,7 @@
     h1{margin:5px 0 8px;font-size:clamp(30px,5vw,44px)}h2{margin-top:0}.dui-practice__card{margin-top:16px;padding:22px}
     .dui-practice__status{margin:12px 0;padding:10px 12px;border-radius:8px;background:var(--soft);font-weight:700}.dui-practice__status.is-error{background:#fff0ed;color:#a33}
     label{display:grid;gap:6px;font-weight:800}select{width:min(240px,100%);height:42px;padding:7px 10px;border:1px solid #9db8c8;border-radius:8px;background:#fff}
-    button{border:0;border-radius:9px;font:inherit;font-weight:900;cursor:pointer}.dui-practice__primary{margin-top:16px;padding:10px 16px;background:var(--green);color:#fff}
+    button{border:0;border-radius:9px;font:inherit;font-weight:900;cursor:pointer}.dui-practice__primary{padding:10px 16px;background:var(--green);color:#fff}.dui-practice__launch-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:16px}.dui-practice__mock{padding:10px 16px;border-radius:9px;background:var(--purple);color:#fff;font-weight:900;text-decoration:none}.dui-practice__mock:hover{background:#5720b7}.dui-practice__mock-help{display:block;margin-top:8px;color:#526b84}
     .dui-practice__primary:disabled{opacity:.5;cursor:not-allowed}.dui-practice__meta{display:flex;justify-content:space-between;gap:12px;font-weight:900}
     .dui-practice__track{height:8px;margin:12px 0 20px;border-radius:999px;background:#e5edf1;overflow:hidden}.dui-practice__bar{height:100%;width:0;background:var(--green)}
     .dui-practice__context{padding:14px;border-left:4px solid var(--green);background:var(--soft);font-size:18px;font-weight:700}
@@ -43,7 +43,8 @@
     <p class="dui-practice__status" data-dui-status>Cargando banco de preguntas…</p>
     <label>Conjunto de preguntas<select data-dui-set><option value="mixed" selected>Dui Yao mixto</option><option value="reverse">Dui Yao inverso — acción → pareja</option></select></label>
     <label>Cantidad de preguntas<select data-dui-size><option value="10">10</option><option value="25" selected>25</option><option value="51">51</option></select></label>
-    <button class="dui-practice__primary" type="button" data-dui-start disabled>Comenzar Quiz</button>
+    <div class="dui-practice__launch-actions"><button class="dui-practice__primary" type="button" data-dui-start disabled>Comenzar Quiz</button><a class="dui-practice__mock" data-dui-mock href="/blocks/menu/herbology-board.php?track=mock&amp;mockcategory=dui_yao&amp;mocksize=25&amp;from=library&amp;lang=es">Mock Exam</a></div>
+    <small class="dui-practice__mock-help">Mock Exam usa las preguntas refinadas de Duì Yào de los exámenes publicados y las mantiene separadas de este Quiz de 51 parejas.</small>
   </section>
   <section class="dui-practice__card" data-dui-workspace hidden>
     <div class="dui-practice__meta"><span data-dui-work-title>Quiz de Dui Yao</span><span data-dui-position></span></div>
@@ -59,6 +60,6 @@
     <button class="dui-practice__primary" type="button" data-dui-repeat>Intentar nuevamente</button>
   </section>
 </main>
-<script src="dui-yao-practice.js?v=20261111-6" defer></script>
+<script src="dui-yao-practice.js?v=20261120-1" defer></script>
 <script src="/blocks/menu/assessment-profile-banner.js?v=2026111601" defer></script>
 </body></html>

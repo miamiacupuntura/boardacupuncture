@@ -36,6 +36,7 @@
     setup: document.querySelector('[data-dui-setup]'),
     set: document.querySelector('[data-dui-set]'),
     size: document.querySelector('[data-dui-size]'),
+    mock: document.querySelector('[data-dui-mock]'),
     workTitle: document.querySelector('[data-dui-work-title]'),
     start: document.querySelector('[data-dui-start]'),
     workspace: document.querySelector('[data-dui-workspace]'),
@@ -69,6 +70,17 @@
     startedAt: 0,
     attemptUid: ''
   };
+
+  function syncMockLink() {
+    if (!elements.mock) return;
+    const mockUrl = new URL('/blocks/menu/herbology-board.php', window.location.origin);
+    mockUrl.searchParams.set('track', 'mock');
+    mockUrl.searchParams.set('mockcategory', 'dui_yao');
+    mockUrl.searchParams.set('mocksize', String(Number(elements.size.value) || 25));
+    mockUrl.searchParams.set('from', 'library');
+    if (spanish) mockUrl.searchParams.set('lang', 'es');
+    elements.mock.href = mockUrl.pathname + mockUrl.search;
+  }
 
   function shuffle(values) {
     const copyValues = values.slice();
@@ -362,6 +374,7 @@
   }
 
   elements.start.addEventListener('click', startQuiz);
+  elements.size.addEventListener('change', syncMockLink);
   elements.back.addEventListener('click', () => {
     if (state.index === 0) return;
     state.index -= 1;
@@ -392,6 +405,7 @@
   }
 
   if ([10, 25, 51].includes(initialSize)) elements.size.value = String(initialSize);
+  syncMockLink();
 
   fetch('dui-yao-data.json', {credentials: 'same-origin'})
     .then(response => {
