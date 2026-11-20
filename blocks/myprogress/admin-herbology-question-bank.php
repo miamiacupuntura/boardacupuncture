@@ -45,7 +45,7 @@ $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-3.8';
+$aipromptversion = 'ncbahm-mock-editor-4.0';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
@@ -4094,6 +4094,140 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
     }
 
+    // Give the reviewer a stable diversification target when a formula or herb
+    // appears repeatedly as the correct answer.  The source card remains the
+    // authority: a target may be used only when its exact fact is present there.
+    $answerdiversitybyquestion = [];
+    $answerdiversityreport = $buildsameansweraudit($allquestions, $domains);
+    $formuladiversityfocuscycle = [
+        'clinical_differentiation',
+        'formula_hierarchy_or_ingredient_role',
+        'clinical_differentiation',
+        'ingredient_function_within_formula',
+        'clinical_differentiation',
+        'composition_or_modification',
+        'clinical_differentiation',
+        'preparation_or_processing',
+    ];
+    $herbdiversityfocuscycle = [
+        'clinical_herb_differentiation',
+        'distinctive_dosage',
+        'preparation_or_processing',
+        'safety_or_contraindication',
+        'channel_or_function_differentiation',
+    ];
+    foreach ((array)($answerdiversityreport['groups'] ?? []) as $answerdiversitygroup) {
+        $groupquestions = array_values((array)($answerdiversitygroup['questions'] ?? []));
+        $groupcount = count($groupquestions);
+        $focuscycle = in_array('formula', (array)($answerdiversitygroup['types'] ?? []), true)
+            ? $formuladiversityfocuscycle
+            : $herbdiversityfocuscycle;
+        foreach ($groupquestions as $groupindex => $groupquestion) {
+            $groupquestionid = (string)($groupquestion['questionId'] ?? '');
+            if ($groupquestionid === '') {
+                continue;
+            }
+            $answerdiversitybyquestion[$groupquestionid] = [
+                'canonicalCorrectAnswer' => (string)($answerdiversitygroup['answer'] ?? ''),
+                'activeQuestionCount' => $groupcount,
+                'occurrenceNumber' => $groupindex + 1,
+                'preferredFocus' => $focuscycle[$groupindex % count($focuscycle)],
+                'instruction' => 'Diversify only when the supplied source-card evidence explicitly supports the '
+                    . 'preferred focus. Never infer a hierarchy role, exact dose, preparation method or processing '
+                    . 'method from general knowledge or ingredient order.',
+            ];
+        }
+    }
+
+    $sourcecarddirectories = array_values(array_unique([
+        $CFG->dirroot . '/study-guide/comparisons',
+        dirname($CFG->dirroot) . '/study-guide/comparisons',
+        '/var/www/acupuncturetests-study-guide/current/comparisons',
+        '/var/www/html/study-guide/comparisons',
+    ]));
+    $loadsourcecardevidence = static function(array $sourcecard) use ($sourcecarddirectories): string {
+        $sourcecardurl = trim((string)($sourcecard['url'] ?? ''));
+        $sourcecardpath = (string)(parse_url($sourcecardurl, PHP_URL_PATH) ?? '');
+        if (!preg_match('#^/study-guide/comparisons/([^/]+\.html)$#i', $sourcecardpath, $matches)) {
+            return '';
+        }
+        $filename = (string)$matches[1];
+        foreach ($sourcecarddirectories as $directory) {
+            $candidate = rtrim($directory, '/') . '/' . $filename;
+            if (!is_readable($candidate)) {
+                continue;
+            }
+            $html = (string)file_get_contents($candidate);
+            $html = preg_replace('#<(?:script|style)\b[^>]*>.*?</(?:script|style)>#is', ' ', $html) ?? $html;
+            $text = preg_replace('/<[^>]+>/', ' ', $html) ?? $html;
+            $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $text = trim(preg_replace('/\s+/u', ' ', $text) ?? '');
+            return core_text::substr($text, 0, 16000);
+        }
+        return '';
+    };
+
+    $normalizeherbevidencekey = static function(string $value): string {
+        $value = core_text::strtolower(trim($value));
+        return trim(preg_replace('/[^\p{L}\p{N}]+/u', ' ', $value) ?? '');
+    };
+    $herbprofileevidencebyname = [];
+    foreach ([
+        ['file' => $CFG->dirroot . '/blocks/myprogress/single-herb-properties.json', 'collection' => 'herbs'],
+        ['file' => $CFG->dirroot . '/blocks/myprogress/single-herb-rich-profiles.json', 'collection' => 'profiles'],
+    ] as $herbevidencesource) {
+        if (!is_readable($herbevidencesource['file'])) {
+            continue;
+        }
+        $decodedherbevidence = json_decode((string)file_get_contents($herbevidencesource['file']), true);
+        foreach ((array)($decodedherbevidence[$herbevidencesource['collection']] ?? []) as $herbprofile) {
+            if (!is_array($herbprofile)) {
+                continue;
+            }
+            $herbkey = $normalizeherbevidencekey((string)($herbprofile['name'] ?? ''));
+            if ($herbkey !== '') {
+                $herbprofileevidencebyname[$herbkey] = array_replace_recursive(
+                    (array)($herbprofileevidencebyname[$herbkey] ?? []),
+                    $herbprofile
+                );
+            }
+        }
+    }
+    $herbsafetypath = $CFG->dirroot . '/blocks/myprogress/single-herb-safety-supplement.json';
+    if (is_readable($herbsafetypath)) {
+        $decodedherbsafety = json_decode((string)file_get_contents($herbsafetypath), true);
+        foreach ((array)($decodedherbsafety['herbs'] ?? []) as $herbname => $herbsafety) {
+            $herbkey = $normalizeherbevidencekey((string)$herbname);
+            if ($herbkey !== '' && is_array($herbsafety)) {
+                $herbprofileevidencebyname[$herbkey] = array_replace_recursive(
+                    (array)($herbprofileevidencebyname[$herbkey] ?? []),
+                    ['supplementalSafetyAndPreparation' => $herbsafety]
+                );
+            }
+        }
+    }
+    $loadherbprofileevidence = static function(array $sourcecard) use (
+        $herbprofileevidencebyname,
+        $normalizeherbevidencekey
+    ): string {
+        $sourcecardurl = trim((string)($sourcecard['url'] ?? ''));
+        $sourcecardpath = (string)(parse_url($sourcecardurl, PHP_URL_PATH) ?? '');
+        if ($sourcecardpath !== '/blocks/myprogress/single-herbs-study-guide.php') {
+            return '';
+        }
+        $query = [];
+        parse_str((string)(parse_url($sourcecardurl, PHP_URL_QUERY) ?? ''), $query);
+        $herbkey = $normalizeherbevidencekey((string)($query['herb'] ?? ''));
+        $profile = $herbprofileevidencebyname[$herbkey] ?? null;
+        if (!is_array($profile)) {
+            return '';
+        }
+        return core_text::substr((string)json_encode(
+            $profile,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        ), 0, 16000);
+    };
+
     $decodeaidraft = static function(
         string $generated,
         array $sourcequestion,
@@ -4601,6 +4735,8 @@ When sourceFeedbackRequiresRebuild is true, the source contains mnemonic or icon
 
 When channelCombinationRequiresHerbMapping is true, inspect every Option A-D paragraph in the English and Spanish explanations. Each paragraph must explicitly identify the source-supported comparison herb represented by that option's complete channel set and explain the distinguishing channel or action. When requiredChannelHerbMappings is nonempty, require the exact A-D herb names supplied there. Set compliant to false when a paragraph only says that a channel is missing, extra, important or insufficient without naming the corresponding herb. Do not accept invented mappings unsupported by sourceFeedback.
 
+When answerRepetition.activeQuestionCount is at least 3, inspect the preferredFocus and the actual sourceCardEvidence and herbProfileEvidence. A diversified hierarchy, dosage, preparation, processing, ingredient-role or modification question is compliant only when the exact tested fact is stated in sourceFeedback, sourceCardEvidence or herbProfileEvidence. Never accept a hierarchy role inferred from ingredient order, a deputy/assistant/envoy role when the source names only a chief, an estimated dose, or an invented preparation method. If the preferred focus lacks source support, require the draft to preserve the original source objective. The keyed answer LETTER must remain unchanged in either case.
+
 Evaluate the LATEST ADMINISTRATOR INSTRUCTION separately after checking the cumulative instructions. When the latest instruction asks to improve, expand, correct, name something in, or otherwise modify the feedback/explanation, compare the DRAFT with PREVIOUS VISIBLE VERSION. Set latestInstructionApplied to true only when the current English or Spanish explanation visibly contains new wording that implements that exact request. A generic rewrite, an unchanged explanation, a reviewSummary claim, or a change made only to the stem or choices does not count. Copy one exact new clause from the explanation into latestInstructionEvidence; it must be the passage that implements the latest request and must not appear in the previous explanation.
 
 Required JSON:
@@ -4732,6 +4868,7 @@ Requirements:
 9. Before returning JSON, verify that the explanations visibly implement the latest feedback instruction and contain meaningful analysis for all four choices.
 10. Use plain educational prose only. Never copy emoji, pictographs, decorative arrows, icon bullets, “Mnemonic,” “Memory Tip,” or “Quick Match” formatting from the source. When the source uses a mnemonic list, retain its supported herb facts but rebuild them as option-specific clinical reasoning.
 11. When channelCombinationRequiresHerbMapping is true, identify in every Option A-D paragraph the source-supported herb represented by that exact channel set, in both English and Spanish. When requiredChannelHerbMappings is nonempty, reproduce the exact mapped herb name for its corresponding letter. Use the Pinyin and Pharmaceutical Latin form from relevantGuidelineNames when available. Explain the distinguishing channel or action; a generic statement that a choice merely lacks or adds a channel is insufficient. Do not invent a mapping absent from sourceFeedback.
+12. For a repeated-answer diversification item, explain the tested hierarchy role, exact dosage, preparation, processing, ingredient function or modification using only the explicit sourceFeedback, sourceCardEvidence or herbProfileEvidence. Do not add other hierarchy assignments, dose ranges or processing instructions that the supplied evidence does not state.
 
 Required JSON:
 {"explanation":"Complete English feedback.","spanishExplanation":"Complete Spanish feedback.","feedbackSummary":"One concise sentence describing the substantive feedback improvement."}
@@ -4892,6 +5029,20 @@ PROMPT;
         $sourcechannelherbmapping = $buildchannelherbmapping(
             (array)($sourcequestion['options'] ?? [])
         );
+        $questionsourcecard = is_array($sourcequestion['sourceCard'] ?? null)
+            ? $sourcequestion['sourceCard']
+            : [];
+        $sourcecardevidence = $loadsourcecardevidence($questionsourcecard);
+        $herbprofileevidence = $loadherbprofileevidence($questionsourcecard);
+        $answerrepetition = is_array($answerdiversitybyquestion[$questionid] ?? null)
+            ? $answerdiversitybyquestion[$questionid]
+            : [
+                'canonicalCorrectAnswer' => '',
+                'activeQuestionCount' => 1,
+                'occurrenceNumber' => 1,
+                'preferredFocus' => 'preserve_source_objective',
+                'instruction' => 'No repeated-answer diversification is required.',
+            ];
         $sourcepayload = [
             'id' => $questionid,
             'domain' => $domains[$question['_domainid']]['number'] . ' · ' . $domains[$question['_domainid']]['name'],
@@ -4907,6 +5058,10 @@ PROMPT;
                 (array)($sourcequestion['options'] ?? [])
             ),
             'source' => $sourcequestion['source'] ?? [],
+            'sourceCard' => $sourcequestion['sourceCard'] ?? [],
+            'sourceCardEvidence' => $sourcecardevidence,
+            'herbProfileEvidence' => $herbprofileevidence,
+            'answerRepetition' => $answerrepetition,
             'administratorProposal' => $administratorproposal,
             'administratorInstructionHistory' => $instructionhistory,
             'latestAdministratorInstruction' => $latestadministratorproposal,
@@ -4918,8 +5073,9 @@ PROMPT;
 You are a senior NCBAHM Chinese Herbology mock-exam item editor. Return one review draft as strict JSON only; do not use Markdown or commentary.
 
 Editorial rules:
-1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer.
-1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection or differentiation; Domain 2 must test individual-herb identification, properties, actions, indications, or comparison; Domain 3 must test Duì Yào pairing, compatibility, hierarchy, synergy, antagonism, or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing, or dispensing principle. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
+1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer. The controlled repeated-answer transformation in rule 1B is the only exception to preserving the original answer concept; it still must preserve the keyed LETTER and use an explicit fact from sourceCardEvidence or herbProfileEvidence.
+1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection, differentiation or a source-supported formula-architecture clue that distinguishes the formula; Domain 2 must test individual-herb identification, properties, actions, indications, comparison, or a source-supported distinctive dose or processing fact; Domain 3 must test Duì Yào pairing, compatibility, synergy, antagonism or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing or dispensing principle; Domain 5 must test formula composition, chief/deputy/assistant/envoy hierarchy, ingredient roles or formula modification. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
+1B. Use answerRepetition to reduce redundant questions. When activeQuestionCount is at least 3, use preferredFocus as a rotation target only if sourceFeedback, sourceCardEvidence or herbProfileEvidence explicitly states the needed fact. Formula-answer groups rotate through clinical differentiation, hierarchy or ingredient role, ingredient function, composition or modification, and preparation or processing. Individual-herb groups rotate through clinical differentiation, distinctive dosage, preparation or processing, safety or contraindication, and channel or function differentiation. Preserve the correct LETTER by placing the new source-supported correct fact at that letter and rebuild all distractors in parallel form. Never infer hierarchy from ingredient order, never assign deputy/assistant/envoy roles when the source only names a chief, never invent or approximate a dose, and never invent a preparation or processing method. If preferredFocus is unsupported or conflicts with the fixed domain, retain the original objective and improve its differentiation instead. Do not transform every repeated answer: clinical occurrences remain clinical, while supported hierarchy, dosage, processing, safety and composition occurrences diversify the set.
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
 2A. For channel-combination questions, do not invent a patient vignette, tongue, pulse or diagnosis when the source supplies only herb actions and channel relationships. Build the two-step inference directly from the supplied actions: first map each action to its organ system or burner, then select the channel set that covers those targets. Preserve standard channel abbreviations such as SP, ST and LU and the keyed answer LETTER. When channelCombinationRequiresHerbMapping is true, every Option A-D paragraph in both languages must explicitly name the source-supported herb represented by that exact channel set, using relevantGuidelineNames when available, and explain the distinguishing channel or action. When requiredChannelHerbMappings is nonempty, copy each exact mapped herb name into the matching option paragraph in both languages. Do not merely say that a distractor lacks or adds a channel. For the warm-Yang comparison, SP/ST/LU maps to Gan Jiang, HT/KI/SP maps to Fu Zi, HT/KI/LV/SP maps to Rou Gui, and SP/ST/KI/LV maps to Xiao Hui Xiang. Treat the keyed set as the best source-supported combination being tested rather than claiming it is an exhaustive monograph when the source does not establish exhaustiveness.
 3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use the word "Both" in an answer choice, including comparative statements such as "Both are acrid and warm," and never use "All of them," "All of the above," "None of these," "None of the above," "A and B are correct," or any equivalent combined-answer shortcut. Apply the same prohibition to Spanish choices, including "Todos ellos," "Todas ellas," "Ninguno de estos," "Ninguna de estas," "Ambos," and "Ambas." When prohibitedSourceAnswerChoice is nonempty, that exact source choice must be replaced. Preserve its LETTER and underlying tested fact, but write one self-contained, unambiguous answer statement that assesses a single specific property, herb, formula, channel set or clinical conclusion. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
@@ -4972,9 +5128,12 @@ PROMPT;
                     );
                 }
                 $responsecontent = (string)($response->get_response_data()['generatedcontent'] ?? '');
+                $requiresdiversificationreview = (int)($answerrepetition['activeQuestionCount'] ?? 1) >= 3
+                    && ($sourcecardevidence !== '' || $herbprofileevidence !== '');
                 $requiresmultistagereview = trim($administratorproposal) !== ''
                     || $sourcemnemonicfeedback
-                    || $sourcechannelcombination;
+                    || $sourcechannelcombination
+                    || $requiresdiversificationreview;
                 $generateddraft = $decodeaidraft(
                     $responsecontent,
                     $sourcequestion,
@@ -6608,7 +6767,7 @@ echo $OUTPUT->header();
     <?php if ($customdraftcount > 0 && !$shownewquestionform): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
     <?php if ($reviewfilter === 'editing_drafts'): ?><section class="question-bank__review-progress"><strong>Saved editing drafts: <?php echo (int)$savededitingdraftcount; ?></strong><p>This view includes unfinished manual and automatic edits from earlier updates and review groups. The most recently saved drafts appear first. Continue the correction, approve the current version, edit manually or delete the question.</p></section><?php endif; ?>
     <?php if ($usagefilter === 'exam_project_pending' && $query !== '' && $resultcount === 1): $focusedquestionid = (string)$filteredquestions[0]['questionId']; ?><section class="question-bank__review-progress"><strong><?php echo s((string)$currentexamproject['name']); ?> — focused question ready</strong><p><a class="question-bank__button question-bank__button--publish" href="#question-<?php echo s($focusedquestionid); ?>"><?php echo $displaylang === 'es' ? 'Continuar, revisar y publicar esta pregunta' : 'Continue, review and publish this question'; ?></a><?php if ($pendingexamprojecturl !== null): ?> <a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Omitir y volver a las pendientes' : 'Skip and return to pending questions'; ?></a><?php endif; ?></p></section><?php endif; ?>
-    <?php if (in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, explicit concept-to-choice mappings, distractor analysis, feedback and classification. It also updates the oldest pending drafts created with an earlier reviewer while preserving their accumulated instructions. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><?php if ($usagefilter === 'exam_project_pending' && $examprojectid !== ''): ?><input type="hidden" name="usage" value="exam_project_pending"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Update or review next 5 questions</button></form></section><?php endif; ?>
+    <?php if (in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, explicit concept-to-choice mappings, distractor analysis, feedback and classification. Repeated formula or herb answers are rotated, when their source cards support it, into ingredient hierarchy, distinctive dosage, preparation, processing, composition or modification questions. Unsupported facts are never invented. It also updates the oldest pending drafts created with an earlier reviewer while preserving their accumulated instructions. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><?php if ($usagefilter === 'exam_project_pending' && $examprojectid !== ''): ?><input type="hidden" name="usage" value="exam_project_pending"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Update or review next 5 questions</button></form></section><?php endif; ?>
     <?php if ($editquestion !== null && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts')):
         $editorstatus = (string)($editorrevision['status'] ?? 'original');
         $editorisaidraft = $editorstatus === 'draft'
