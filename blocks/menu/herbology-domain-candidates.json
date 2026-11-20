@@ -573,27 +573,27 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "What is the difference between Gui Zhi Tang (Cinnamon Twig Decoction) and Ma Huang Tang (Ephedra decoction)?",
+        "prompt": "Which statement correctly differentiates Gui Zhi Tang (Cinnamon Twig Decoction) from Ma Huang Tang (Ephedra Decoction) in an externally contracted wind-cold presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Gui Zhi Tang (Cinnamon Twig Decoction) uses for externally-contracted wind-cold; Ma Huang Tang (Ephedra decoction) does not."
+            "text": "Gui Zhi Tang (Cinnamon Twig Decoction) is used for every externally contracted wind-cold presentation, whereas Ma Huang Tang (Ephedra Decoction) is reserved for interior cold."
           },
           {
             "label": "B",
-            "text": "Gui Zhi Tang (Cinnamon Twig Decoction) uses for wind-cold of excess type; Ma Huang Tang (Ephedra decoction) uses for wind-cold of deficient type;"
+            "text": "Gui Zhi Tang (Cinnamon Twig Decoction) treats exterior excess with absence of sweating, whereas Ma Huang Tang (Ephedra Decoction) treats exterior deficiency with spontaneous sweating."
           },
           {
             "label": "C",
-            "text": "Gui Zhi Tang (Cinnamon Twig Decoction) uses for chills with sweating; Ma Huang Tang (Ephedra decoction) uses for chills without sweating;"
+            "text": "Gui Zhi Tang (Cinnamon Twig Decoction) treats exterior deficiency with spontaneous sweating, whereas Ma Huang Tang (Ephedra Decoction) treats exterior excess with absence of sweating."
           },
           {
             "label": "D",
-            "text": "None of above"
+            "text": "Gui Zhi Tang (Cinnamon Twig Decoction) strongly induces sweating for a tight pulse, whereas Ma Huang Tang (Ephedra Decoction) gently harmonizes the nutritive and defensive levels for a moderate pulse."
           }
         ],
         "correctLabel": "C",
-        "explanation": "",
+        "explanation": "Inference step 1: The decisive distinction is the condition of the exterior and whether sweating is present. Exterior deficiency with disharmony of the nutritive and defensive levels produces spontaneous sweating and commonly a moderate or floating-weak pulse; exterior excess constrains the exterior, producing pronounced chills, body aches, absence of sweating and a floating-tight pulse. Inference step 2: Gui Zhi Tang (Cinnamon Twig Decoction) gently harmonizes the nutritive and defensive levels in exterior deficiency, while Ma Huang Tang (Ephedra Decoction) more strongly releases exterior excess and promotes sweating. Option A: Incorrect. Both formulas address externally contracted wind-cold; Ma Huang Tang is not an interior-cold formula. Option B: Incorrect. It reverses the indications: absence of sweating and exterior excess favor Ma Huang Tang, while spontaneous sweating and exterior deficiency favor Gui Zhi Tang. Option C: Correct. It accurately differentiates Gui Zhi Tang for exterior deficiency with spontaneous sweating from Ma Huang Tang for exterior excess without sweating. Option D: Incorrect. It reverses the formulas' relative strategies and pulse associations: strong diaphoresis with a floating-tight pulse belongs to Ma Huang Tang, whereas gentle harmonization with a moderate or floating-weak pulse belongs to Gui Zhi Tang.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
@@ -607,26 +607,26 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Cuál es la diferencia entre Gui Zhi Tang (Cinnamon Twig Decoction) y Ma Huang Tang (Ephedra Decoction)?",
+            "prompt": "¿Qué afirmación diferencia correctamente Gui Zhi Tang (Cinnamon Twig Decoction) de Ma Huang Tang (Ephedra Decoction) en una presentación de Viento-Frío contraído externamente?",
             "options": [
               {
                 "label": "A",
-                "text": "Gui Zhi Tang (Cinnamon Twig Decoction) utiliza para Viento-Frío contratado externamente; Ma Huang Tang (Ephedra Decoction) no."
+                "text": "Gui Zhi Tang (Cinnamon Twig Decoction) se utiliza para toda presentación de Viento-Frío contraído externamente, mientras Ma Huang Tang (Ephedra Decoction) se reserva para Frío interno."
               },
               {
                 "label": "B",
-                "text": "Gui Zhi Tang (Cinnamon Twig Decoction) utiliza para Viento-Frío de tipo exceso; Ma Huang Tang (Ephedra Decoction) utiliza para Viento-Frío de tipo deficiente;"
+                "text": "Gui Zhi Tang (Cinnamon Twig Decoction) trata exceso exterior sin sudoración, mientras Ma Huang Tang (Ephedra Decoction) trata deficiencia exterior con sudoración espontánea."
               },
               {
                 "label": "C",
-                "text": "Gui Zhi Tang (Cinnamon Twig Decoction) utiliza para escalofríos con sudor; Ma Huang Tang (Ephedra Decoction) utiliza para escalofríos sin sudoración;"
+                "text": "Gui Zhi Tang (Cinnamon Twig Decoction) trata deficiencia exterior con sudoración espontánea, mientras Ma Huang Tang (Ephedra Decoction) trata exceso exterior sin sudoración."
               },
               {
                 "label": "D",
-                "text": "Ninguna de las anteriores"
+                "text": "Gui Zhi Tang (Cinnamon Twig Decoction) induce fuertemente la sudoración cuando el pulso es tenso, mientras Ma Huang Tang (Ephedra Decoction) armoniza suavemente los niveles nutritivo y defensivo cuando el pulso es moderado."
               }
             ],
-            "explanation": ""
+            "explanation": "Paso de inferencia 1: La distinción decisiva es el estado del exterior y la presencia o ausencia de sudoración. La deficiencia exterior con desarmonía de los niveles nutritivo y defensivo produce sudoración espontánea y suele presentar un pulso moderado o flotante-débil; el exceso exterior constriñe la superficie y produce escalofríos intensos, dolores corporales, ausencia de sudoración y pulso flotante-tenso. Paso de inferencia 2: Gui Zhi Tang (Cinnamon Twig Decoction) armoniza suavemente los niveles nutritivo y defensivo en la deficiencia exterior, mientras Ma Huang Tang (Ephedra Decoction) libera con mayor fuerza el exceso exterior y promueve la sudoración. Opción A: Incorrecta. Las dos fórmulas tratan Viento-Frío contraído externamente; Ma Huang Tang no es una fórmula para Frío interno. Opción B: Incorrecta. Invierte las indicaciones: la ausencia de sudoración con exceso exterior favorece Ma Huang Tang, mientras la sudoración espontánea con deficiencia exterior favorece Gui Zhi Tang. Opción C: Correcta. Diferencia con precisión Gui Zhi Tang para deficiencia exterior con sudoración espontánea de Ma Huang Tang para exceso exterior sin sudoración. Opción D: Incorrecta. Invierte las estrategias relativas y las asociaciones del pulso: la diaforesis fuerte con pulso flotante-tenso corresponde a Ma Huang Tang, mientras la armonización suave con pulso moderado o flotante-débil corresponde a Gui Zhi Tang."
           }
         },
         "nomenclature": {

@@ -52,7 +52,7 @@ $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-4.0';
+$aipromptversion = 'ncbahm-mock-editor-4.1';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
@@ -5241,6 +5241,8 @@ Apply the same inference-feedback standard even when the administrator supplied 
 
 Strong feedback is mandatory during every automatic review, even without an administrator comment. The explanation must contain a specific analysis of A, B, C and D. For ingredient-combination choices, identify the source-supported formula or therapeutic strategy represented by each combination, name at least one distinctive ingredient from that option, state its relevant action, and explain why that action fits or fails the case. A sentence such as “Option B targets phlegm” or “Option D is for food stagnation” is too vague and is not compliant. Do not invent a canonical formula name when the source does not support one; in that case name the precise therapeutic strategy and still analyze a distinctive ingredient.
 
+When sourceFeedbackMissing is true, the source item has no usable explanation. Require a newly written explanation with both inference steps and distinct analysis of A, B, C and D in English and Spanish. When prohibitedSourceAnswerChoice is nonempty, inspect the final choices directly and set compliant to false if that shortcut or any equivalent remains. “All of them,” “None of the above,” “Both,” combined-letter answers and their Spanish equivalents must be replaced by one specific, independently assessable distractor.
+
 When sourceFeedbackRequiresRebuild is true, the source contains mnemonic or icon-led notes rather than final educational feedback. Set compliant to false if the draft copies “Mnemonic,” “Memory Tip,” “Quick Match,” initial-equals-keyword lists, emoji, decorative arrows or icon bullets. The final explanation must instead convert the supported facts into two inference steps and separate clinical analysis of A, B, C and D.
 
 When channelCombinationRequiresHerbMapping is true, inspect every Option A-D paragraph in the English and Spanish explanations. Each paragraph must explicitly identify the source-supported comparison herb represented by that option's complete channel set and explain the distinguishing channel or action. When requiredChannelHerbMappings is nonempty, require the exact A-D herb names supplied there. Set compliant to false when a paragraph only says that a channel is missing, extra, important or insufficient without naming the corresponding herb. Do not accept invented mappings unsupported by sourceFeedback.
@@ -5529,6 +5531,8 @@ PROMPT;
             ]));
         }
         $sourcefeedbacktext = (string)($sourcequestion['explanation'] ?? '');
+        $sourcefeedbackmissing = trim($sourcefeedbacktext) === ''
+            || preg_match('/^not\s+completed\.?$/i', trim($sourcefeedbacktext)) === 1;
         $sourcemnemonicfeedback = preg_match(
             '/\b(?:mnemonic|memory\s+tip|quick\s+match)\b|[\x{1F000}-\x{1FAFF}]|(?:^|\s)[A-Z]\s*=\s*\p{L}/imu',
             $sourcefeedbacktext
@@ -5545,6 +5549,9 @@ PROMPT;
         if ($visiblechannelherbmapping !== []) {
             $sourcechannelherbmapping = $visiblechannelherbmapping;
         }
+        $sourceprohibitedanswerchoice = $findprohibitedanswerchoice(
+            (array)($sourcequestion['options'] ?? [])
+        );
         $questionsourcecard = is_array($sourcequestion['sourceCard'] ?? null)
             ? $sourcequestion['sourceCard']
             : [];
@@ -5567,12 +5574,11 @@ PROMPT;
             'options' => $sourcequestion['options'] ?? [],
             'correctLabel' => (string)($sourcequestion['correctLabel'] ?? ''),
             'sourceFeedback' => $stripdecorativeicons($sourcefeedbacktext),
+            'sourceFeedbackMissing' => $sourcefeedbackmissing,
             'sourceFeedbackRequiresRebuild' => $sourcemnemonicfeedback,
             'channelCombinationRequiresHerbMapping' => $sourcechannelcombination,
             'requiredChannelHerbMappings' => $sourcechannelherbmapping,
-            'prohibitedSourceAnswerChoice' => $findprohibitedanswerchoice(
-                (array)($sourcequestion['options'] ?? [])
-            ),
+            'prohibitedSourceAnswerChoice' => $sourceprohibitedanswerchoice,
             'source' => $sourcequestion['source'] ?? [],
             'sourceCard' => $sourcequestion['sourceCard'] ?? [],
             'sourceCardEvidence' => $sourcecardevidence,
@@ -5600,6 +5606,7 @@ Editorial rules:
 4A. Whenever inference is created by replacing direct answer labels with observable findings, ingredient combinations, clinical roles or safety clues, the explanation must reveal and teach the hidden intermediate label after the learner answers. If formula names were removed from ingredient-based choices, keep the choices ingredient-only but explicitly map every option letter A-D to its source-supported Pinyin formula name in both English and Spanish feedback. Apply the equivalent mapping to similar questions: identify the pattern, herb action, preparation rule, hierarchy role, compatibility relationship or safety principle represented by each choice, and explain the decisive difference rather than merely restating the keyed option.
 4B. Improve the feedback automatically on every review; do not wait for the administrator to request it. Analyze A, B, C and D separately. When choices are ingredient combinations, identify the source-supported formula or precise therapeutic strategy behind each option, name at least one distinctive ingredient from each combination, explain that ingredient's relevant action, and connect it to why the option fits or fails. Generic statements such as “targets phlegm” or “is for food stagnation” are insufficient. If a combination is not a source-supported canonical formula, do not invent a formula name; describe its precise strategy instead.
 4C. When sourceFeedbackRequiresRebuild is true, the source explanation is a mnemonic, acronym list, “Memory Tip,” “Quick Match,” or icon-led note rather than final mock feedback. Treat its herb-action associations only as source evidence. Do not copy its presentation, slogan, initials, emoji, arrows or keyword list into the final explanation. Reconstruct the educational objective as a genuine two-step inference and write complete, separate clinical reasoning for A, B, C and D in both languages. The final explanation must stand on its own without the mnemonic.
+4D. When sourceFeedbackMissing is true, write the complete explanation from the source-supported stem, choices, answer key and source-card evidence; never return “Not completed” or leave the field empty. When prohibitedSourceAnswerChoice is nonempty, replace that source shortcut with one specific false or weaker statement that remains parallel to the other choices. Never copy the prohibited choice into the final English or Spanish options.
 5. In clinical cases, add one or two plausible contextual details when useful: age, illness duration, a relevant health history, temperature with measurement site, pulse rate, or respiratory rate. Use physiologically coherent values and include these details sparingly; they must not contradict the source, change the keyed answer, create a second defensible diagnosis, or replace the Chinese-medicine reasoning being tested.
 6. Some cases may use a realistic clinical handoff, seminar, case-history conference or teaching round. Rotate real geographic settings across the United States, China, Spain and other countries, including recognizable cities such as Miami, Boston, New York, San Francisco, Beijing, Shanghai, Chengdu, Madrid and Barcelona. A real hospital, university or acupuncture school may appear only as a neutral geographic or educational reference and never as a claim that the institution treated the fictional patient, hosted the fictional event, endorses the item or supplied the answer. Examples of safe neutral anchors include “during a fictional seminar in Boston near Massachusetts General Hospital” and “during a fictional academic exchange in Chengdu.” All patients, students, clinicians and active instructors in the scenario must have clearly fictional names. Do not attribute invented patient care, speech, teaching, affiliation or professional conduct to a real living professor, clinician, acupuncturist or public figure. A real historical Chinese-medicine scholar or a real professor's published teaching may be named only when that person and teaching are explicitly supported by the question's source metadata. When findings could require urgent conventional care, state that medical evaluation and stabilization occurred before the acupuncture visit.
 7. Vary the narrative format and use the setting as a concise didactic hook rather than filler. Some vignettes may show a fictional physician presenting a fictional case to acupuncture students during a teaching session. Others may have the physician recall a previously treated fictional patient and ask the students to reason from the historical findings. Another format may show a fictional acupuncture student presenting a case during a clinical or medical round while an instructor asks the group to complete the two inference steps. Give the student-presented case enough decisive findings for one defensible answer, optionally include one secondary contextual detail, and do not let the student or instructor state the diagnosis or answer being tested. Keep every patient case invented and use past tense where appropriate.
@@ -5647,6 +5654,8 @@ PROMPT;
                 $requiresdiversificationreview = (int)($answerrepetition['activeQuestionCount'] ?? 1) >= 3
                     && ($sourcecardevidence !== '' || $herbprofileevidence !== '');
                 $requiresmultistagereview = trim($administratorproposal) !== ''
+                    || $sourcefeedbackmissing
+                    || $sourceprohibitedanswerchoice !== null
                     || $sourcemnemonicfeedback
                     || $sourcechannelcombination
                     || $requiresdiversificationreview;
