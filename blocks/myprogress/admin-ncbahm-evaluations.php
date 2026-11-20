@@ -134,6 +134,12 @@ $attemptname = static function(string $examtype) use (&$quiznames): string {
         : $examtype;
     if (isset($quiznames[$base])) return $quiznames[$base];
     if (preg_match('/^bqh_(\d+)$/', $base, $matches)) return 'Single Herbs Quiz · Chapter ' . $matches[1];
+    if (preg_match('/^simulation(\d+)(linear|adaptive)$/', $base, $matches)) {
+        return 'Exam ' . (int)$matches[1] . ' · ' . ucfirst($matches[2]);
+    }
+    if (preg_match('/^(?:exam|e)(\d+)(linear|adaptive)$/', $base, $matches)) {
+        return 'Exam ' . (int)$matches[1] . ' · ' . ucfirst($matches[2]);
+    }
     if (str_starts_with($base, 'bqf_')) return 'Formula Quiz · supplemental category';
     if (str_starts_with($base, 'bqd_')) return 'Dui Yao Quiz';
     if (str_starts_with($base, 'bqm_')) return 'Supplemental Quiz · ' . substr($base, 4);

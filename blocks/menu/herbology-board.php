@@ -24,8 +24,8 @@ if ($track !== 'quiz' || !in_array($quizsection, ['all', 'herbs', 'formulas', 'c
 $sectionkey = optional_param('section', '', PARAM_ALPHANUMEXT);
 $domainkey = optional_param('domain', '', PARAM_ALPHANUMEXT);
 $clinicalexamkey = optional_param('caseexam', '', PARAM_ALPHANUMEXT);
-$simulationexamnumber = optional_param('simulation', 1, PARAM_INT) === 2 ? 2 : 1;
-$practiceexamnumber = optional_param('examset', 1, PARAM_INT) === 2 ? 2 : 1;
+$simulationexamnumber = max(1, min(99, optional_param('simulation', 1, PARAM_INT)));
+$practiceexamnumber = max(1, min(99, optional_param('examset', 1, PARAM_INT)));
 $exammode = optional_param('exam', '', PARAM_ALPHA);
 if (!in_array($exammode, ['linear', 'adaptive'], true)) {
     $exammode = optional_param('mix', 0, PARAM_BOOL) ? 'linear' : '';
@@ -76,11 +76,11 @@ if ($domainkey !== '') {
 if ($mixdomains) {
     $pageparams['exam'] = $exammode;
 }
-if ($track === 'simulation' && $simulationexamnumber === 2) {
-    $pageparams['simulation'] = 2;
+if ($track === 'simulation' && $simulationexamnumber > 1) {
+    $pageparams['simulation'] = $simulationexamnumber;
 }
-if ($track === 'exams' && $practiceexamnumber === 2) {
-    $pageparams['examset'] = 2;
+if ($track === 'exams' && $practiceexamnumber > 1) {
+    $pageparams['examset'] = $practiceexamnumber;
 }
 if ($domainpage > 0) {
     $pageparams['page'] = $domainpage;
@@ -123,10 +123,10 @@ $domainsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'do
 $clinicalcasesurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'clinicalcases'] + $languagecontext);
 $examsurl = new moodle_url('/blocks/menu/herbology-board.php', [
     'track' => 'exams',
-] + ($practiceexamnumber === 2 ? ['examset' => 2] : []) + $languagecontext);
+] + ($practiceexamnumber > 1 ? ['examset' => $practiceexamnumber] : []) + $languagecontext);
 $simulationurl = new moodle_url('/blocks/menu/herbology-board.php', [
     'track' => 'simulation',
-] + ($simulationexamnumber === 2 ? ['simulation' => 2] : []) + $languagecontext);
+] + ($simulationexamnumber > 1 ? ['simulation' => $simulationexamnumber] : []) + $languagecontext);
 $mockurl = new moodle_url('/blocks/menu/herbology-board.php', [
     'track' => 'mock',
 ] + $languagecontext);
@@ -160,7 +160,7 @@ if (($track === 'exams' && !$mixdomains) || ($track === 'simulation' && !$mixdom
                 'block_menu_exam_attempts',
                 'userid = :userid AND courseid = :courseid '
                     . 'AND examtype IN (:legacylinear, :legacyadaptive, :exam1linear, :exam1adaptive, '
-                    . ':exam2linear, :exam2adaptive)',
+                    . ':exam2linear, :exam2adaptive, :exam3linear, :exam3adaptive)',
                 [
                     'userid' => $USER->id,
                     'courseid' => $membershipcourseid,
@@ -170,6 +170,8 @@ if (($track === 'exams' && !$mixdomains) || ($track === 'simulation' && !$mixdom
                     'exam1adaptive' => 'simulation1adaptive',
                     'exam2linear' => 'simulation2linear',
                     'exam2adaptive' => 'simulation2adaptive',
+                    'exam3linear' => 'simulation3linear',
+                    'exam3adaptive' => 'simulation3adaptive',
                 ],
                 'timecompleted DESC, id DESC',
                 '*',
@@ -182,6 +184,7 @@ if (($track === 'exams' && !$mixdomains) || ($track === 'simulation' && !$mixdom
                 'userid = :userid AND courseid = :courseid '
                     . 'AND examtype IN (:linear, :adaptive, :linearincomplete, :adaptiveincomplete, '
                     . ':exam2linear, :exam2adaptive, :e2linearincomplete, :e2adaptiveincomplete, '
+                    . ':exam3linear, :exam3adaptive, :e3linearincomplete, :e3adaptiveincomplete, '
                     . ':clinical, :clinicalincomplete)',
                 [
                     'userid' => $USER->id,
@@ -194,6 +197,10 @@ if (($track === 'exams' && !$mixdomains) || ($track === 'simulation' && !$mixdom
                     'exam2adaptive' => 'exam2adaptive',
                     'e2linearincomplete' => 'e2linearincomplete',
                     'e2adaptiveincomplete' => 'e2adaptiveincomplete',
+                    'exam3linear' => 'exam3linear',
+                    'exam3adaptive' => 'exam3adaptive',
+                    'e3linearincomplete' => 'e3linearincomplete',
+                    'e3adaptiveincomplete' => 'e3adaptiveincomplete',
                     'clinical' => 'clinicalcases',
                     'clinicalincomplete' => 'clinicalincomplete',
                 ],
@@ -479,6 +486,7 @@ if ($usesdomainbank && !is_readable($domainbankpath) && is_readable($domainseedp
     }
 }
 $domainbank = ['domains' => []];
+$publishedsimulationexams = [];
 $publishedsimulationexam2 = null;
 if ($usesdomainbank && is_readable($domainbankpath)) {
     $decodedbank = json_decode(file_get_contents($domainbankpath), true);
@@ -573,13 +581,21 @@ if ($usesdomainbank && is_readable($domaincandidatepath)) {
 }
 if ($usesdomainbank) {
     $questionrevisionstore = block_myprogress_herbology_override_load();
-    $storedsimulationexam2 = $questionrevisionstore['publishedExams']['simulation_exam_2'] ?? null;
-    if (is_array($storedsimulationexam2)
-            && ($storedsimulationexam2['status'] ?? '') === 'published'
-            && is_array($storedsimulationexam2['questions'] ?? null)
-            && count($storedsimulationexam2['questions']) === 100) {
-        $publishedsimulationexam2 = $storedsimulationexam2;
+    foreach ((array)($questionrevisionstore['publishedExams'] ?? []) as $publishedexamkey => $storedexam) {
+        if (!preg_match('/^simulation_exam_(\d+)$/', (string)$publishedexamkey, $publishedmatch)
+                || !is_array($storedexam)
+                || ($storedexam['status'] ?? '') !== 'published'
+                || !is_array($storedexam['questions'] ?? null)
+                || count($storedexam['questions']) !== 100) {
+            continue;
+        }
+        $storedexamnumber = (int)$publishedmatch[1];
+        if ($storedexamnumber >= 2 && $storedexamnumber <= 99) {
+            $publishedsimulationexams[$storedexamnumber] = $storedexam;
+        }
     }
+    ksort($publishedsimulationexams, SORT_NUMERIC);
+    $publishedsimulationexam2 = $publishedsimulationexams[2] ?? null;
     $domainbank['domains'] = block_myprogress_herbology_merge_custom_questions(
         $domainbank['domains'] ?? [],
         $questionrevisionstore,
@@ -668,18 +684,18 @@ if ($selecteddomain !== null) {
 $mixedquestions = [];
 $domainshortages = [];
 if (in_array($track, ['exams', 'simulation'], true) && $mixdomains) {
-    $usepublishedexam2 = ($track === 'simulation' && $simulationexamnumber === 2)
-        || ($track === 'exams' && $practiceexamnumber === 2);
-    if ($usepublishedexam2) {
-        if ($publishedsimulationexam2 === null) {
+    $selectedexamnumber = $track === 'simulation' ? $simulationexamnumber : $practiceexamnumber;
+    if ($selectedexamnumber > 1) {
+        $selectedpublishedexam = $publishedsimulationexams[$selectedexamnumber] ?? null;
+        if ($selectedpublishedexam === null) {
             $domainshortages[] = [
-                'name' => 'Exam 2',
+                'name' => 'Exam ' . $selectedexamnumber,
                 'required' => 100,
                 'available' => 0,
                 'missing' => 100,
             ];
         } else {
-            $mixedquestions = $publishedsimulationexam2['questions'];
+            $mixedquestions = $selectedpublishedexam['questions'];
             if ($ises) {
                 foreach ($mixedquestions as &$publishedquestion) {
                     $translation = $publishedquestion['translations']['es'] ?? null;
@@ -697,7 +713,7 @@ if (in_array($track, ['exams', 'simulation'], true) && $mixdomains) {
             $mixedquestions = array_values(array_filter($mixedquestions, $questionisready));
             if (count($mixedquestions) !== 100) {
                 $domainshortages[] = [
-                    'name' => 'Exam 2',
+                    'name' => 'Exam ' . $selectedexamnumber,
                     'required' => 100,
                     'available' => count($mixedquestions),
                     'missing' => max(0, 100 - count($mixedquestions)),
@@ -731,8 +747,8 @@ if (in_array($track, ['exams', 'simulation'], true) && $mixdomains) {
 }
 
 // Mock Exams reuse the approved Simulation Exam questions. They never copy or
-// rewrite the older Quiz banks. Exam 2 replaces an Exam 1 item with the same ID
-// because it contains the later editorial review and feedback.
+// rewrite the older Quiz banks. Later published exams replace earlier items
+// with the same ID because they contain the newer editorial review and feedback.
 $mockcategorydefinitions = [
     'formula_differentiation' => [
         'group' => 'formulas',
@@ -767,15 +783,15 @@ $mockcategorydefinitions = [
 ];
 $mockquestionsbycategory = array_fill_keys(array_keys($mockcategorydefinitions), []);
 $mockinventory = [
-    'target' => 200,
+    'target' => 100 * (1 + count($publishedsimulationexams)),
     'exam1Total' => 0,
     'exam1Classified' => 0,
-    'exam2Total' => 0,
-    'exam2Classified' => 0,
+    'totalByExam' => [],
+    'classifiedByExam' => [],
     'classified' => 0,
     'unique' => 0,
     'duplicates' => 0,
-    'pending' => 200,
+    'pending' => 0,
 ];
 foreach ($mockcategorydefinitions as $mockdomainid => $unusedmockdefinition) {
     foreach ($domainbank['domains'][$mockdomainid] ?? [] as $examonequestion) {
@@ -808,9 +824,11 @@ foreach ($mockcategorydefinitions as $mockdomainid => $unusedmockdefinition) {
         }
     }
 }
-if ($publishedsimulationexam2 !== null) {
-    foreach ($publishedsimulationexam2['questions'] as $publishedquestion) {
-        $mockinventory['exam2Total']++;
+foreach ($publishedsimulationexams as $mocksourceexamnumber => $publishedsimulationexam) {
+    $mockinventory['totalByExam'][$mocksourceexamnumber] = 0;
+    $mockinventory['classifiedByExam'][$mocksourceexamnumber] = 0;
+    foreach ($publishedsimulationexam['questions'] as $publishedquestion) {
+        $mockinventory['totalByExam'][$mocksourceexamnumber]++;
         $publishedquestiondomain = (string)($publishedquestion['domainId'] ?? '');
         if (!isset($mockquestionsbycategory[$publishedquestiondomain])
                 || empty($publishedquestion['prompt'])
@@ -830,11 +848,11 @@ if ($publishedsimulationexam2 !== null) {
                 $publishedquestion['explanation'] = $translation['explanation'];
             }
         }
-        $publishedquestion['mockSourceExam'] = 2;
+        $publishedquestion['mockSourceExam'] = $mocksourceexamnumber;
         $publishedquestionid = (string)($publishedquestion['questionId'] ?? '');
         if ($publishedquestionid !== '') {
             $mockquestionsbycategory[$publishedquestiondomain][$publishedquestionid] = $publishedquestion;
-            $mockinventory['exam2Classified']++;
+            $mockinventory['classifiedByExam'][$mocksourceexamnumber]++;
         }
     }
 }
@@ -843,7 +861,8 @@ foreach ($mockquestionsbycategory as &$mockcategoryquestions) {
     $mockinventory['unique'] += count($mockcategoryquestions);
 }
 unset($mockcategoryquestions);
-$mockinventory['classified'] = $mockinventory['exam1Classified'] + $mockinventory['exam2Classified'];
+$mockinventory['classified'] = $mockinventory['exam1Classified']
+    + array_sum($mockinventory['classifiedByExam']);
 $mockinventory['duplicates'] = max(0, $mockinventory['classified'] - $mockinventory['unique']);
 $mockinventory['pending'] = max(0, $mockinventory['target'] - $mockinventory['classified']);
 
@@ -1396,7 +1415,10 @@ JS);
 }
 
 if ($track === 'simulation' && $mixdomains && count($mixedquestions) === 100) {
-    $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-simulation.js', ['v' => '2026111801']));
+    $simulationscriptpath = __DIR__ . '/herbology-simulation.js';
+    $PAGE->requires->js(new moodle_url('/blocks/menu/herbology-simulation.js', [
+        'v' => is_readable($simulationscriptpath) ? (string)filemtime($simulationscriptpath) : '2026112001',
+    ]));
 }
 
 if ($track === 'mock' && $selectedmockquestions) {
@@ -2166,8 +2188,8 @@ echo $OUTPUT->header();
                         ? ($ises ? 'Elige una categoría' : 'Choose a category')
                         : s($selectedmockdefinition[$ises ? 'name_es' : 'name']); ?></h3>
                     <p><?php echo $ises
-                        ? 'Estos exámenes reutilizan las preguntas aprobadas de Simulation Exam 1 y Exam 2 con su feedback refinado. Los Quizzes existentes no se modifican.'
-                        : 'These exams reuse the approved Simulation Exam 1 and Exam 2 questions with their refined feedback. Existing Quizzes are unchanged.'; ?></p>
+                        ? 'Estos exámenes reutilizan las preguntas aprobadas de todos los Simulation Exams publicados con su feedback refinado. Los Quizzes existentes no se modifican.'
+                        : 'These exams reuse approved questions from every published Simulation Exam with their refined feedback. Existing Quizzes are unchanged.'; ?></p>
                 </div>
                 <?php if ($selectedmockdefinition !== null): ?>
                     <a class="herb-board__back" href="<?php echo $mockurl->out(false); ?>"><?php echo $ises
@@ -2180,7 +2202,7 @@ echo $OUTPUT->header();
                 <span><strong><?php echo (int)$mockinventory['classified']; ?> / <?php echo (int)$mockinventory['target']; ?></strong>
                     <?php echo $ises ? 'clasificadas automáticamente' : 'automatically classified'; ?></span>
                 <span><strong><?php echo (int)$mockinventory['exam1Classified']; ?> / 100</strong> Simulation Exam 1</span>
-                <span><strong><?php echo (int)$mockinventory['exam2Classified']; ?> / 100</strong> Simulation Exam 2</span>
+                <?php foreach ($mockinventory['classifiedByExam'] as $mockexamnumber => $mockclassifiedcount): ?><span><strong><?php echo (int)$mockclassifiedcount; ?> / 100</strong> Simulation Exam <?php echo (int)$mockexamnumber; ?></span><?php endforeach; ?>
                 <span><strong><?php echo (int)$mockinventory['unique']; ?></strong>
                     <?php echo $ises ? 'preguntas únicas en Mock Exam' : 'unique Mock Exam questions'; ?></span>
                 <span><strong><?php echo (int)$mockinventory['pending']; ?></strong>
@@ -2189,8 +2211,8 @@ echo $OUTPUT->header();
                     <?php echo $ises ? 'IDs repetidos entre exámenes' : 'IDs shared by both exams'; ?></span>
             </section>
             <p class="herb-board__exam-minimum"><?php echo $ises
-                ? 'El inventario se recalcula al abrir esta página. Una nueva publicación de Exam 2 actualiza automáticamente el banco de Mock Exams.'
-                : 'The inventory is recalculated whenever this page opens. Publishing a new Exam 2 version automatically updates the Mock Exam bank.'; ?></p>
+                ? 'El inventario se recalcula al abrir esta página. Publicar o volver a publicar cualquier examen actualiza automáticamente el banco de Mock Exams.'
+                : 'The inventory is recalculated whenever this page opens. Publishing or republishing any exam automatically updates the Mock Exam bank.'; ?></p>
 
             <?php if ($publishedsimulationexam2 === null): ?>
                 <div class="herb-board__notice"><?php echo $ises
@@ -2631,7 +2653,7 @@ echo $OUTPUT->header();
 
                 <nav class="herb-board__simulation-exam-switch" aria-label="<?php echo $ises ? 'Seleccionar examen de simulación' : 'Select a simulation exam'; ?>">
                     <a<?php echo $simulationexamnumber === 1 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $languagecontext))->out(false); ?>">Exam 1</a>
-                    <?php if ($publishedsimulationexam2 !== null): ?><a<?php echo $simulationexamnumber === 2 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => 2] + $languagecontext))->out(false); ?>">Exam 2</a><?php endif; ?>
+                    <?php foreach (array_keys($publishedsimulationexams) as $publishedexamnumber): ?><a<?php echo $simulationexamnumber === $publishedexamnumber ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => $publishedexamnumber] + $languagecontext))->out(false); ?>">Exam <?php echo (int)$publishedexamnumber; ?></a><?php endforeach; ?>
                 </nav>
 
                 <section class="herb-board__simulation-blueprint" aria-labelledby="simulation-blueprint-title">
@@ -2723,7 +2745,11 @@ echo $OUTPUT->header();
                                 $attemptduration = $attemptminutes > 0
                                     ? $attemptminutes . ' min ' . $attemptseconds . ' s'
                                     : $attemptseconds . ' s';
-                                $attemptexamnumber = str_starts_with((string)$attempt->examtype, 'simulation2') ? 2 : 1;
+                                $attemptexamnumber = preg_match(
+                                    '/^simulation(\d+)(?:linear|adaptive)$/',
+                                    (string)$attempt->examtype,
+                                    $simulationattemptmatch
+                                ) ? (int)$simulationattemptmatch[1] : 1;
                                 $attemptmode = str_ends_with((string)$attempt->examtype, 'adaptive')
                                     ? ($ises ? 'Adaptativo' : 'Adaptive')
                                     : ($ises ? 'Lineal' : 'Linear');
@@ -3554,7 +3580,7 @@ echo $OUTPUT->header();
             <?php if ($track === 'exams' && !$mixdomains) { ?>
                 <nav class="herb-board__simulation-exam-switch" aria-label="<?php echo $ises ? 'Seleccionar examen con feedback' : 'Select an exam with feedback'; ?>">
                     <a<?php echo $practiceexamnumber === 1 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext))->out(false); ?>">Exam 1</a>
-                    <?php if ($publishedsimulationexam2 !== null): ?><a<?php echo $practiceexamnumber === 2 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'examset' => 2] + $languagecontext))->out(false); ?>">Exam 2</a><?php endif; ?>
+                    <?php foreach (array_keys($publishedsimulationexams) as $publishedexamnumber): ?><a<?php echo $practiceexamnumber === $publishedexamnumber ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'examset' => $publishedexamnumber] + $languagecontext))->out(false); ?>">Exam <?php echo (int)$publishedexamnumber; ?></a><?php endforeach; ?>
                 </nav>
                 <p class="herb-board__exam-minimum"><strong>Exam <?php echo (int)$practiceexamnumber; ?>:</strong> <?php echo $ises
                     ? 'muestra la respuesta correcta y el feedback tipo mock después de cada respuesta.'
@@ -3661,8 +3687,11 @@ echo $OUTPUT->header();
                                         : ($ises ? 'Casos clínicos' : 'Clinical Cases');
                                     $attempttype = $attemptkind;
                                 } else {
-                                    $attemptnumber = str_starts_with($attempt->examtype, 'exam2')
-                                            || str_starts_with($attempt->examtype, 'e2') ? 2 : 1;
+                                    $attemptnumber = preg_match(
+                                        '/^(?:exam|e)(\d+)(?:linear|adaptive)/',
+                                        (string)$attempt->examtype,
+                                        $practiceattemptmatch
+                                    ) ? (int)$practiceattemptmatch[1] : 1;
                                     $attemptmode = in_array(
                                         $attempt->examtype,
                                         ['adaptive', 'adaptiveincomplete', 'exam2adaptive', 'e2adaptiveincomplete'],
@@ -3706,8 +3735,8 @@ echo $OUTPUT->header();
             <?php } else if ($mixdomains && count($mixedquestions) === 100) { ?>
                 <form id="herbology-domain-exam" class="herb-board__exam"
                     data-exam-mode="<?php echo s($exammode); ?>"
-                    data-exam-type="<?php echo s($practiceexamnumber === 2 ? 'exam2' . $exammode : $exammode); ?>"
-                    data-incomplete-type="<?php echo s($practiceexamnumber === 2 ? 'e2' . $exammode . 'incomplete' : $exammode . 'incomplete'); ?>"
+                    data-exam-type="<?php echo s($practiceexamnumber > 1 ? 'exam' . $practiceexamnumber . $exammode : $exammode); ?>"
+                    data-incomplete-type="<?php echo s($practiceexamnumber > 1 ? 'e' . $practiceexamnumber . $exammode . 'incomplete' : $exammode . 'incomplete'); ?>"
                     data-exam-language="<?php echo $ises ? 'es' : 'en'; ?>"
                     data-history-url="<?php echo s((new moodle_url('/blocks/menu/herbology-exam-history.php'))->out(false)); ?>"
                     data-sesskey="<?php echo s(sesskey()); ?>"

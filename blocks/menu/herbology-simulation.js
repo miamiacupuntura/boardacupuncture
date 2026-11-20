@@ -9,7 +9,7 @@
 
         const questions = [...exam.querySelectorAll('.herb-board__simulation-question')];
         const mode = exam.dataset.mode || 'linear';
-        const examNumber = exam.dataset.examNumber === '2' ? '2' : '1';
+        const examNumber = String(Math.max(1, Math.min(99, Number.parseInt(exam.dataset.examNumber || '1', 10) || 1)));
         const clockButton = exam.querySelector('[data-simulation-clock]');
         const timeOutput = exam.querySelector('[data-simulation-time]');
         const counter = exam.querySelector('[data-simulation-counter]');

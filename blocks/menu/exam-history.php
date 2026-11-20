@@ -309,9 +309,11 @@ if ($DB->get_manager()->table_exists($customtable)) {
             continue;
         }
         $examkey = '';
-        if (in_array($examtype, ['linear', 'linearincomplete', 'exam2linear', 'e2linearincomplete'], true)) {
+        if (in_array($examtype, ['linear', 'linearincomplete', 'exam2linear', 'e2linearincomplete'], true)
+                || preg_match('/^(?:exam|e)\d+linearincomplete$|^exam\d+linear$/', $examtype)) {
             $examkey = 'linear';
-        } else if (in_array($examtype, ['adaptive', 'adaptiveincomplete', 'exam2adaptive', 'e2adaptiveincomplete'], true)) {
+        } else if (in_array($examtype, ['adaptive', 'adaptiveincomplete', 'exam2adaptive', 'e2adaptiveincomplete'], true)
+                || preg_match('/^(?:exam|e)\d+adaptiveincomplete$|^exam\d+adaptive$/', $examtype)) {
             $examkey = 'adaptive';
         } else if (in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true)) {
             $examkey = 'clinicalcases';
@@ -452,6 +454,22 @@ $assessmentstartkey = [
     'adaptiveincomplete' => 'adaptive',
     'clinicalincomplete' => 'clinicalcases',
 ][$startassessment] ?? $startassessment;
+if (preg_match('/^e(\d+)(linear|adaptive)incomplete$/', $assessmentstartkey, $dynamicstartmatch)) {
+    $assessmentstartkey = 'exam' . $dynamicstartmatch[1] . $dynamicstartmatch[2];
+}
+if (preg_match('/^exam(\d+)(linear|adaptive)$/', $assessmentstartkey, $dynamicstartmatch)) {
+    $assessmentstarturls[$assessmentstartkey] = (new moodle_url('/blocks/menu/herbology-board.php', [
+        'track' => 'exams',
+        'exam' => $dynamicstartmatch[2],
+        'examset' => (int)$dynamicstartmatch[1],
+    ] + $languageparams))->out(false);
+} else if (preg_match('/^simulation(\d+)(linear|adaptive)$/', $assessmentstartkey, $dynamicstartmatch)) {
+    $assessmentstarturls[$assessmentstartkey] = (new moodle_url('/blocks/menu/herbology-board.php', [
+        'track' => 'simulation',
+        'exam' => $dynamicstartmatch[2],
+        'simulation' => (int)$dynamicstartmatch[1],
+    ] + $languageparams))->out(false);
+}
 if ($startassessment !== '' && isset($assessmentstarturls[$assessmentstartkey])) {
     redirect(new moodle_url($assessmentstarturls[$assessmentstartkey]));
 }
@@ -635,14 +653,16 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             $examname = $ises ? 'Exam 1 · Adaptativo' : 'Exam 1 · Adaptive';
         } else if (in_array($examtype, ['simulationlinear', 'simulation1linear'], true)) {
             $examname = $ises ? 'Exam 1 · Lineal' : 'Exam 1 · Linear';
-        } else if ($examtype === 'simulation2adaptive') {
-            $examname = $ises ? 'Exam 2 · Adaptativo' : 'Exam 2 · Adaptive';
-        } else if ($examtype === 'simulation2linear') {
-            $examname = $ises ? 'Exam 2 · Lineal' : 'Exam 2 · Linear';
-        } else if (in_array($examtype, ['exam2adaptive', 'e2adaptiveincomplete'], true)) {
-            $examname = $ises ? 'Exam 2 · Adaptativo' : 'Exam 2 · Adaptive';
-        } else if (in_array($examtype, ['exam2linear', 'e2linearincomplete'], true)) {
-            $examname = $ises ? 'Exam 2 · Lineal' : 'Exam 2 · Linear';
+        } else if (preg_match('/^simulation(\d+)(linear|adaptive)$/', $examtype, $dynamicattemptmatch)) {
+            $examname = 'Exam ' . (int)$dynamicattemptmatch[1] . ' · '
+                . ($dynamicattemptmatch[2] === 'adaptive'
+                    ? ($ises ? 'Adaptativo' : 'Adaptive')
+                    : ($ises ? 'Lineal' : 'Linear'));
+        } else if (preg_match('/^(?:exam|e)(\d+)(linear|adaptive)(?:incomplete)?$/', $examtype, $dynamicattemptmatch)) {
+            $examname = 'Exam ' . (int)$dynamicattemptmatch[1] . ' · '
+                . ($dynamicattemptmatch[2] === 'adaptive'
+                    ? ($ises ? 'Adaptativo' : 'Adaptive')
+                    : ($ises ? 'Lineal' : 'Linear'));
         } else if (in_array($examtype, ['adaptive', 'adaptiveincomplete'], true)) {
             $examname = $ises ? 'Exam 1 · Adaptativo' : 'Exam 1 · Adaptive';
         } else if (in_array($examtype, ['clinicalcases', 'clinicalincomplete'], true)) {
@@ -664,6 +684,9 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             'e2adaptiveincomplete' => 'exam2adaptive',
             'clinicalincomplete' => 'clinicalcases',
         ][$examtype] ?? $examtype;
+        if (preg_match('/^e(\d+)(linear|adaptive)incomplete$/', $restartkey, $dynamicrestartmatch)) {
+            $restartkey = 'exam' . $dynamicrestartmatch[1] . $dynamicrestartmatch[2];
+        }
         $historyrows[] = [
             'key' => 'board-' . (int) $attempt->id,
             'timestamp' => (int) $attempt->timecompleted,

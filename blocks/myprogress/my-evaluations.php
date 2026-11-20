@@ -148,6 +148,18 @@ $assessmentname = static function(string $examtype) use (&$quiznames, $text): st
     if (preg_match('/^bqh_(\d+)$/', $base, $matches)) {
         return $text('Single Herbs Quiz · Chapter ', 'Quiz de hierbas individuales · Capítulo ') . $matches[1];
     }
+    if (preg_match('/^simulation(\d+)(linear|adaptive)$/', $base, $matches)) {
+        $mode = $matches[2] === 'adaptive'
+            ? $text('Adaptive', 'Adaptativo')
+            : $text('Linear', 'Lineal');
+        return 'Exam ' . (int)$matches[1] . ' · ' . $mode;
+    }
+    if (preg_match('/^(?:exam|e)(\d+)(linear|adaptive)$/', $base, $matches)) {
+        $mode = $matches[2] === 'adaptive'
+            ? $text('Adaptive', 'Adaptativo')
+            : $text('Linear', 'Lineal');
+        return 'Exam ' . (int)$matches[1] . ' · ' . $mode;
+    }
     $names = [
         'simulationlinear' => $text('Exam 1 · Linear', 'Exam 1 · Lineal'),
         'simulationadaptive' => $text('Exam 1 · Adaptive', 'Exam 1 · Adaptativo'),

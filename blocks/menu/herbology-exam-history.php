@@ -31,7 +31,20 @@ $duration = required_param('duration', PARAM_INT);
 $language = optional_param('language', 'en', PARAM_ALPHA);
 
 $isboardquizattempt = preg_match('/^bq[dfhm]_[a-z0-9]{1,16}$/', $examtype) === 1;
-$validexamtype = $isboardquizattempt || in_array(
+$isdynamicpublishedexam = preg_match('/^exam(?:[2-9]|[1-9]\d)(?:linear|adaptive)$/', $examtype) === 1;
+$isdynamicincompleteexam = preg_match(
+    '/^e(?:[2-9]|[1-9]\d)(?:linear|adaptive)incomplete$/',
+    $examtype
+) === 1;
+$isdynamicsimulation = preg_match(
+    '/^simulation(?:[1-9]|[1-9]\d)(?:linear|adaptive)$/',
+    $examtype
+) === 1;
+$validexamtype = $isboardquizattempt
+    || $isdynamicpublishedexam
+    || $isdynamicincompleteexam
+    || $isdynamicsimulation
+    || in_array(
     $examtype,
     [
         'linear', 'adaptive', 'linearincomplete', 'adaptiveincomplete',
@@ -51,7 +64,7 @@ $isincompleteattempt = in_array(
         'clinicalincomplete',
     ],
     true
-);
+) || $isdynamicincompleteexam;
 $validtotal = $isboardquizattempt
     ? $total >= 1 && $total < 100
     : ($isclinicalattempt
