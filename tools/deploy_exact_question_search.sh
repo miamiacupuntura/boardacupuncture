@@ -68,6 +68,7 @@ grep -Fq '$assistantfilteransweronly' "$SOURCE_FILE"
 grep -Fq 'Filtro exacto aplicado' "$SOURCE_FILE"
 grep -Fq "'sameansweraudit' => 1" "$SOURCE_FILE"
 grep -Fq "No se abrió ninguna pregunta no relacionada" "$SOURCE_FILE"
+grep -Fq 'This report is specifically an audit of repeated correct answers.' "$SOURCE_FILE"
 
 mkdir -p "$BACKUP_DIR"
 cp -a -- "$TARGET" "$BACKUP_FILE"
@@ -89,6 +90,7 @@ cmp -s "$SOURCE_FILE" "$TARGET"
 php -l "$TARGET" >/dev/null
 grep -Fq '$requiresliteralphrase' "$TARGET"
 grep -Fq '$assistantfilteransweronly' "$TARGET"
+grep -Fq 'This report is specifically an audit of repeated correct answers.' "$TARGET"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -121,6 +123,7 @@ echo "OK: filtro exacto de fórmulas y hierbas instalado."
 echo "OK: los nombres de tres o más términos requieren una coincidencia literal normalizada."
 echo "OK: Ask AI ejecuta órdenes de filtro sin inventar identificadores de preguntas."
 echo "OK: las búsquedas por respuesta correcta abren la revisión de respuestas repetidas."
+echo "OK: la revisión repetida filtra solo la respuesta correcta, nunca el enunciado ni los distractores."
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256: $INSTALLED_SHA256"
 if [[ "${#WEB_RUNTIME_RELOADED[@]}" -gt 0 ]]; then

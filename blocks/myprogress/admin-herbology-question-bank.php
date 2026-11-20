@@ -2667,12 +2667,14 @@ $buildsameansweraudit = static function(
             $promptkeys
         ));
         if ($searchneedle !== '') {
-            $searchparts = [$group['answer'], $group['canonicalAnswer']];
-            foreach ($group['questions'] as $groupquestion) {
-                $searchparts[] = (string)$groupquestion['questionId'];
-                $searchparts[] = (string)$groupquestion['prompt'];
-            }
-            if (strpos($normalizesearch(implode(' ', $searchparts)), $searchneedle) === false) {
+            // This report is specifically an audit of repeated correct answers.
+            // Searching stems or IDs here can select a generic answer group such
+            // as "All of them" merely because one stem mentions the requested
+            // formula, then expose unrelated questions from the same group.
+            $answersearchtext = $normalizesearch(
+                (string)$group['answer'] . ' ' . (string)$group['canonicalAnswer']
+            );
+            if (strpos($answersearchtext, $searchneedle) === false) {
                 continue;
             }
         }
@@ -6561,7 +6563,7 @@ echo $OUTPUT->header();
             : 'Groups active Formula and Individual Herb questions with the same correct answer. A shared answer does not prove duplication: compare the objective, clinical case and explanation before merging.'; ?></p></div><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a></header>
         <div class="question-bank__same-answer-stats"><span><?php echo (int)$sameanswerreport['groupCount']; ?> <?php echo $displaylang === 'es' ? 'respuestas repetidas' : 'repeated answers'; ?></span><span><?php echo (int)$sameanswerreport['questionCount']; ?> <?php echo $displaylang === 'es' ? 'preguntas para comparar' : 'questions to compare'; ?></span><span><?php echo $displaylang === 'es' ? 'Página' : 'Page'; ?> <?php echo (int)$sameanswerpage + 1; ?> / <?php echo (int)$sameanswertotalpages; ?></span></div>
         <form class="question-bank__same-answer-form" method="get" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
-            <label><span><?php echo $displaylang === 'es' ? 'Buscar fórmula, hierba, ID o texto' : 'Search formula, herb, ID or wording'; ?></span><input type="search" name="sameanswersearch" value="<?php echo s($sameanswersearch); ?>" maxlength="300" placeholder="<?php echo $displaylang === 'es' ? 'Ejemplo: Liu Wei Di Huang Wan' : 'Example: Liu Wei Di Huang Wan'; ?>"></label>
+            <label><span><?php echo $displaylang === 'es' ? 'Buscar en la respuesta correcta' : 'Search the correct answer'; ?></span><input type="search" name="sameanswersearch" value="<?php echo s($sameanswersearch); ?>" maxlength="300" placeholder="<?php echo $displaylang === 'es' ? 'Ejemplo: Liu Wei Di Huang Wan' : 'Example: Liu Wei Di Huang Wan'; ?>"><small><?php echo $displaylang === 'es' ? 'Coincidencia literal en la respuesta; no busca en el enunciado ni en respuestas incorrectas.' : 'Literal match in the correct answer; stems and incorrect choices are not searched.'; ?></small></label>
             <input type="hidden" name="sameansweraudit" value="1">
             <?php if ($displaylang !== 'en'): ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><?php endif; ?>
             <button class="question-bank__button question-bank__button--publish" type="submit"><?php echo $displaylang === 'es' ? 'Buscar grupos' : 'Search groups'; ?></button>
