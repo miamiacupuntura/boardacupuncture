@@ -19,6 +19,12 @@ $cognitivefilter = optional_param('cognitive', 'all', PARAM_ALPHA);
 $contentfilter = optional_param('content', 'all', PARAM_ALPHANUMEXT);
 $reviewfilter = optional_param('review', 'all', PARAM_ALPHANUMEXT);
 $aibatchfilter = optional_param('aibatch', '', PARAM_ALPHANUMEXT);
+$custompreview = trim(optional_param('custompreview', '', PARAM_RAW));
+$custompreviewids = array_slice(array_values(array_unique(array_filter(
+    array_map('trim', explode(',', $custompreview)),
+    static fn(string $questionid): bool => preg_match('/^[A-Za-z0-9_-]+$/', $questionid) === 1
+))), 0, 5);
+$custompreview = implode(',', $custompreviewids);
 $editquestionid = optional_param('edit', '', PARAM_ALPHANUMEXT);
 $shownewquestionform = (bool)optional_param('newquestion', 0, PARAM_BOOL);
 $showaiassistant = (bool)optional_param('aiassistant', 0, PARAM_BOOL);
@@ -3661,12 +3667,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         ? trim((string)($customrecord['idea'] ?? ''))
         : trim(required_param('idea', PARAM_RAW));
     $correction = $iscustomrewrite ? trim(required_param('correction', PARAM_RAW)) : '';
-    if ($idea === '' || core_text::strlen($idea) > 12000) {
-        throw new invalid_parameter_exception('Describe the question idea in 12,000 characters or fewer.');
+    if ($idea === '' || core_text::strlen($idea) > 60000) {
+        throw new invalid_parameter_exception(
+            'Enter one question or a batch of up to 5 questions in 60,000 characters or fewer.'
+        );
     }
     if (core_text::strlen($correction) > 12000) {
         throw new invalid_parameter_exception('Correction instructions must be 12,000 characters or fewer.');
     }
+    $splitcustomquestionblock = static function(string $block): array {
+        $block = trim(str_replace(["\r\n", "\r"], "\n", $block));
+        $parts = preg_split('/(?=^\s*#{2,6}\s+\S)/mu', $block) ?: [$block];
+        $parts = array_values(array_filter(array_map('trim', $parts), static fn(string $part): bool => $part !== ''));
+        $splitonheading = count($parts) > 1;
+        if (count($parts) <= 1) {
+            $parts = preg_split(
+                '/(?=^\s*(?:question|pregunta)\s+\d+\s*[\.\):\-—]?\s+)/imu',
+                $block
+            ) ?: [$block];
+            $parts = array_values(array_filter(array_map('trim', $parts), static fn(string $part): bool => $part !== ''));
+            $splitonheading = count($parts) > 1;
+        }
+        if (count($parts) <= 1 && preg_match('/^\s*---+\s*$/mu', $block)) {
+            $parts = preg_split('/^\s*---+\s*$/mu', $block) ?: [$block];
+            $parts = array_values(array_filter(array_map('trim', $parts), static fn(string $part): bool => $part !== ''));
+        }
+        if ($splitonheading && count($parts) > 1
+                && !preg_match(
+                    '/^\s*(?:#{2,6}\s+|(?:question|pregunta)\s+\d+\b)/iu',
+                    $parts[0]
+                )) {
+            array_shift($parts);
+        }
+        return $parts === [] ? [$block] : array_values($parts);
+    };
+    $customquestionideas = $iscustomrewrite ? [$idea] : $splitcustomquestionblock($idea);
+    if (count($customquestionideas) > 5) {
+        throw new invalid_parameter_exception(
+            'Create no more than 5 questions in one block. Split a larger collection into smaller batches.'
+        );
+    }
+    $custombatchcount = count($customquestionideas);
     $currentdraft = $iscustomrewrite && is_array($customrecord['draft'] ?? null)
         ? $customrecord['draft']
         : null;
@@ -3792,7 +3833,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     );
     $relatedquestions = array_slice($relatedquestions, 0, 12);
     $customprompt = <<<'PROMPT'
-You are a senior NCBAHM Chinese Herbology mock-exam author. Create one original English question from the administrator's idea and return strict JSON only.
+You are a senior NCBAHM Chinese Herbology mock-exam author. Convert the administrator's input into the requested original English question or questions and return strict JSON only.
 
 Requirements:
 1. Determine the best fixed domain from these exact IDs: formula_differentiation, single_herb, dui_yao, safety_dispensing, formula_composition, scope_aliases.
@@ -3810,13 +3851,23 @@ Requirements:
 13. Provide a complete, clinically faithful Spanish translation in translations.es for the final stem, all four choices and the full explanation. Preserve Pinyin, pharmaceutical Latin, answer letters and the keyed concept exactly.
 14. Use plain educational text only. Do not output emoji, pictographs, decorative arrows, icon bullets or key symbols in any field.
 15. If the supplied idea contains a mnemonic, acronym list, “Memory Tip,” “Quick Match,” or icon-led notes, treat it only as raw source evidence. Convert the useful facts into a genuine inference question and complete A-D distractor analysis; do not copy the mnemonic format into the final explanation.
+16. If an input section already contains a stem, four choices, a keyed answer and an explanation, preserve its tested fact and correct answer. Polish it to these mock-exam standards, but do not replace it with a different educational objective.
 
-Required JSON:
+Required JSON object for each question:
 {"domainId":"single_herb","prompt":"...","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"correctLabel":"A","explanation":"...","translations":{"es":{"prompt":"...","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"explanation":"..."}},"contentType":"clinical_case","cognitiveLevel":"infer","difficultyBand":"inference","reviewSummary":"..."}
 
 ADMINISTRATOR IDEA:
 PROMPT;
     $customprompt .= "\n" . $idea;
+    if ($custombatchcount > 1) {
+        $customprompt .= "\n\nBATCH CREATION:\n"
+            . "The administrator supplied " . $custombatchcount
+            . " separate questions in one block. Treat every heading-delimited section as one independent source item. "
+            . "Return a strict JSON array containing exactly " . $custombatchcount
+            . " complete question objects in the same order. Each object must follow the Required JSON schema above. "
+            . "Do not merge two source questions, omit one, or turn them into variations of a single question. "
+            . "Keep each question faithful to the facts in its own section while applying every editorial rule.";
+    }
     if ($currentdraft !== null) {
         $customprompt .= "\n\nCURRENT DRAFT:\n" . json_encode(
             $currentdraft,
@@ -3934,9 +3985,44 @@ PROMPT;
         );
         return $decoded;
     };
+    $decodecustomresponse = static function(string $generated) use (
+        $custombatchcount,
+        $decodecustomdraft
+    ): array {
+        if ($custombatchcount === 1) {
+            return [$decodecustomdraft($generated)];
+        }
+        $generated = trim($generated);
+        if (preg_match('/```(?:json)?\s*(\[.*\])\s*```/is', $generated, $matches)) {
+            $generated = $matches[1];
+        } else {
+            $firstbracket = strpos($generated, '[');
+            $lastbracket = strrpos($generated, ']');
+            if ($firstbracket !== false && $lastbracket !== false && $lastbracket > $firstbracket) {
+                $generated = substr($generated, $firstbracket, $lastbracket - $firstbracket + 1);
+            }
+        }
+        $batch = json_decode($generated, true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($batch) || !array_is_list($batch) || count($batch) !== $custombatchcount) {
+            throw new UnexpectedValueException(
+                'The generated batch must contain exactly ' . $custombatchcount . ' questions.'
+            );
+        }
+        $decodedbatch = [];
+        foreach ($batch as $batchitem) {
+            if (!is_array($batchitem)) {
+                throw new UnexpectedValueException('Every generated batch item must be a question object.');
+            }
+            $decodedbatch[] = $decodecustomdraft(json_encode(
+                $batchitem,
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
+            ));
+        }
+        return $decodedbatch;
+    };
     $manager = \core\di::get(\core_ai\manager::class);
-    $decoded = null;
-    $originality = null;
+    $decodedbatch = null;
+    $originalitybatch = null;
     $lastgenerationerror = null;
     $lastduplicate = null;
     for ($generationattempt = 1; $generationattempt <= 3; $generationattempt++) {
@@ -3966,26 +4052,80 @@ PROMPT;
                     $response->get_errormessage() ?: 'The AI provider returned an error.'
                 );
             }
-            $decoded = $decodecustomdraft(
+            $decodedbatch = $decodecustomresponse(
                 (string)($response->get_response_data()['generatedcontent'] ?? '')
             );
-            $originality = $findnearestquestion($decoded);
-            if (!empty($originality['isDuplicate'])) {
-                $lastduplicate = $originality;
-                throw new UnexpectedValueException(
-                    'The proposed item is too similar to existing question '
-                    . $originality['questionId'] . '.'
-                );
+            $originalitybatch = [];
+            $validatedbatch = [];
+            foreach ($decodedbatch as $decodedindex => $decodeditem) {
+                $itemoriginality = $findnearestquestion($decodeditem);
+                if (!empty($itemoriginality['isDuplicate'])) {
+                    $lastduplicate = $itemoriginality;
+                    throw new UnexpectedValueException(
+                        'Proposed item ' . ($decodedindex + 1)
+                        . ' is too similar to existing question '
+                        . $itemoriginality['questionId'] . '.'
+                    );
+                }
+                $candidateprompt = (string)($decodeditem['prompt'] ?? '');
+                $candidateoptions = implode(' ', array_map(
+                    static fn(array $option): string => (string)($option['text'] ?? ''),
+                    (array)($decodeditem['options'] ?? [])
+                ));
+                $candidateanswer = $correctoptiontext($decodeditem);
+                $candidateprompttokens = $similaritytokens($candidateprompt);
+                $candidatefulltokens = $similaritytokens($candidateprompt . ' ' . $candidateoptions);
+                $candidateanswertokens = $similaritytokens($candidateanswer);
+                foreach ($validatedbatch as $validatedindex => $validateditem) {
+                    $promptscore = $jaccardsimilarity(
+                        $candidateprompttokens,
+                        $validateditem['promptTokens']
+                    );
+                    $fullscore = $jaccardsimilarity(
+                        $candidatefulltokens,
+                        $validateditem['fullTokens']
+                    );
+                    $answerscore = $jaccardsimilarity(
+                        $candidateanswertokens,
+                        $validateditem['answerTokens']
+                    );
+                    $combinedscore = ($promptscore * 0.65) + ($answerscore * 0.35);
+                    $score = max($promptscore, $fullscore, $combinedscore);
+                    $isbatchduplicate = $promptscore >= 0.72
+                        || $fullscore >= 0.78
+                        || ($promptscore >= 0.50 && $answerscore >= 0.80);
+                    if ($isbatchduplicate) {
+                        $lastduplicate = [
+                            'questionId' => 'new batch item ' . ($validatedindex + 1),
+                            'prompt' => $validateditem['prompt'],
+                            'score' => $score,
+                        ];
+                        throw new UnexpectedValueException(
+                            'Proposed batch item ' . ($decodedindex + 1)
+                            . ' duplicates batch item ' . ($validatedindex + 1) . '.'
+                        );
+                    }
+                }
+                $validatedbatch[] = [
+                    'prompt' => $candidateprompt,
+                    'promptTokens' => $candidateprompttokens,
+                    'fullTokens' => $candidatefulltokens,
+                    'answerTokens' => $candidateanswertokens,
+                ];
+                $originalitybatch[] = $itemoriginality;
             }
             $lastgenerationerror = null;
             break;
         } catch (Throwable $error) {
-            $decoded = null;
-            $originality = null;
+            $decodedbatch = null;
+            $originalitybatch = null;
             $lastgenerationerror = $error;
         }
     }
-    if (!is_array($decoded) || !is_array($originality)) {
+    if (!is_array($decodedbatch)
+            || !is_array($originalitybatch)
+            || count($decodedbatch) !== $custombatchcount
+            || count($originalitybatch) !== $custombatchcount) {
         $duplicatemessage = $lastduplicate !== null
             ? ' The closest existing item was ' . $lastduplicate['questionId'] . '.'
             : '';
@@ -3997,30 +4137,11 @@ PROMPT;
             \core\output\notification::NOTIFY_ERROR
         );
     }
-    $domainid = (string)$decoded['domainId'];
-    $prompt = (string)$decoded['prompt'];
-    $explanation = (string)$decoded['explanation'];
-    $correctlabel = (string)$decoded['correctLabel'];
-    $optionsbylabel = [];
-    foreach ($decoded['options'] as $option) {
-        $optionsbylabel[(string)$option['label']] = (string)$option['text'];
-    }
-    $contenttype = (string)($decoded['contentType'] ?? 'other');
     $allowedcontenttypes = [
         'clinical_case', 'herb_properties', 'formula_selection', 'formula_composition',
         'formula_hierarchy', 'dui_yao', 'herb_processing', 'safety_dispensing',
         'roster_aliases', 'other',
     ];
-    if (!in_array($contenttype, $allowedcontenttypes, true)) {
-        $contenttype = 'other';
-    }
-    $cognitivelevel = in_array(($decoded['cognitiveLevel'] ?? ''), ['infer', 'analyze'], true)
-        ? (string)$decoded['cognitiveLevel']
-        : 'infer';
-    $difficultyband = $cognitivelevel === 'analyze' ? 'analysis' : 'inference';
-    if ($customquestionid === '') {
-        $customquestionid = 'ADMIN-HB-' . gmdate('Ymd-His') . '-' . strtoupper(bin2hex(random_bytes(2)));
-    }
     $sourcepaths = [
         'formula_differentiation' => '/blocks/myprogress/formulas-study-guide.php',
         'single_herb' => '/blocks/myprogress/single-herbs-study-guide.php',
@@ -4029,79 +4150,100 @@ PROMPT;
         'formula_composition' => '/blocks/myprogress/formulas-study-guide.php',
         'scope_aliases' => '/blocks/menu/herbology-board.php',
     ];
-    $sourcepath = $sourcepaths[$domainid] ?? '/blocks/menu/herbology-board.php';
-    $sourceurl = new moodle_url($sourcepath, ['lang' => 'en']);
-    $sourceurles = new moodle_url($sourcepath, ['lang' => 'es']);
-    $question = [
-        'questionId' => $customquestionid,
-        'domainId' => $domainid,
-        'prompt' => $prompt,
-        'options' => array_map(
-            static fn(string $label): array => ['label' => $label, 'text' => $optionsbylabel[$label]],
-            ['A', 'B', 'C', 'D']
-        ),
-        'correctLabel' => $correctlabel,
-        'explanation' => $explanation,
-        'translations' => $decoded['translations'],
-        'contentType' => $contenttype,
-        'cognitiveLevel' => $cognitivelevel,
-        'difficultyBand' => $difficultyband,
-        'sourceKind' => 'admin',
-        'source' => [
-            'title' => 'Administrator-authored NCBAHM question',
-            'section' => 'Idea supplied by ' . fullname($USER),
-            'locator' => 'Administrator idea · ' . core_text::substr($idea, 0, 220),
-        ],
-        'sourceCard' => [
-            'label' => 'Open supporting study guide',
-            'labelEs' => 'Abrir guía de estudio de apoyo',
-            'url' => $sourceurl->out(false),
-            'urlEs' => $sourceurles->out(false),
-        ],
-        'editorial' => [
-            'simulationCandidate' => true,
-            'inferenceUpgradeRequired' => false,
-            'feedbackQuality' => 'curated',
-            'feedbackRecommendation' => 'Administrator approval required before use.',
-        ],
-        'examTemplate' => ['globalPosition' => 0],
-    ];
     $savedat = gmdate(DATE_ATOM);
     $savedbyname = fullname($USER);
-    $reviewsummary = trim((string)($decoded['reviewSummary'] ?? ''));
-    $originalityrecord = [
-        'status' => 'clear',
-        'comparedCount' => (int)($originality['comparedCount'] ?? 0),
-        'nearestQuestionId' => (string)($originality['questionId'] ?? ''),
-        'similarityPercent' => round(((float)($originality['score'] ?? 0.0)) * 100, 1),
-        'checkedAt' => $savedat,
-    ];
-    block_myprogress_herbology_override_update(static function(array $store) use (
-        $customquestionid,
-        $question,
-        $idea,
-        $correction,
-        $reviewsummary,
-        $originalityrecord,
-        $domainid,
-        $savedat,
-        $savedbyname,
-        $USER
-    ): array {
-        $previous = is_array($store['customQuestions'][$customquestionid] ?? null)
-            ? $store['customQuestions'][$customquestionid]
+    $customcreationbatchid = 'admin-batch-' . gmdate('Ymd-His') . '-'
+        . strtoupper(bin2hex(random_bytes(2)));
+    $customrecords = [];
+    $createdcustomquestionids = [];
+    foreach ($decodedbatch as $decodedindex => $decoded) {
+        $domainid = (string)$decoded['domainId'];
+        $prompt = (string)$decoded['prompt'];
+        $explanation = (string)$decoded['explanation'];
+        $correctlabel = (string)$decoded['correctLabel'];
+        $optionsbylabel = [];
+        foreach ($decoded['options'] as $option) {
+            $optionsbylabel[(string)$option['label']] = (string)$option['text'];
+        }
+        $contenttype = (string)($decoded['contentType'] ?? 'other');
+        if (!in_array($contenttype, $allowedcontenttypes, true)) {
+            $contenttype = 'other';
+        }
+        $cognitivelevel = in_array(($decoded['cognitiveLevel'] ?? ''), ['infer', 'analyze'], true)
+            ? (string)$decoded['cognitiveLevel']
+            : 'infer';
+        $difficultyband = $cognitivelevel === 'analyze' ? 'analysis' : 'inference';
+        $itemquestionid = $iscustomrewrite
+            ? $customquestionid
+            : 'ADMIN-HB-' . gmdate('Ymd-His') . '-' . strtoupper(bin2hex(random_bytes(2)));
+        $itemidea = (string)($customquestionideas[$decodedindex] ?? $idea);
+        $sourcepath = $sourcepaths[$domainid] ?? '/blocks/menu/herbology-board.php';
+        $sourceurl = new moodle_url($sourcepath, ['lang' => 'en']);
+        $sourceurles = new moodle_url($sourcepath, ['lang' => 'es']);
+        $question = [
+            'questionId' => $itemquestionid,
+            'domainId' => $domainid,
+            'prompt' => $prompt,
+            'options' => array_map(
+                static fn(string $label): array => [
+                    'label' => $label,
+                    'text' => $optionsbylabel[$label],
+                ],
+                ['A', 'B', 'C', 'D']
+            ),
+            'correctLabel' => $correctlabel,
+            'explanation' => $explanation,
+            'translations' => $decoded['translations'],
+            'contentType' => $contenttype,
+            'cognitiveLevel' => $cognitivelevel,
+            'difficultyBand' => $difficultyband,
+            'sourceKind' => 'admin',
+            'source' => [
+                'title' => 'Administrator-authored NCBAHM question',
+                'section' => 'Idea supplied by ' . fullname($USER),
+                'locator' => 'Administrator idea · ' . core_text::substr($itemidea, 0, 220),
+            ],
+            'sourceCard' => [
+                'label' => 'Open supporting study guide',
+                'labelEs' => 'Abrir guía de estudio de apoyo',
+                'url' => $sourceurl->out(false),
+                'urlEs' => $sourceurles->out(false),
+            ],
+            'editorial' => [
+                'simulationCandidate' => true,
+                'inferenceUpgradeRequired' => false,
+                'feedbackQuality' => 'curated',
+                'feedbackRecommendation' => 'Administrator approval required before use.',
+            ],
+            'examTemplate' => ['globalPosition' => 0],
+        ];
+        $originality = $originalitybatch[$decodedindex];
+        $originalityrecord = [
+            'status' => 'clear',
+            'comparedCount' => (int)($originality['comparedCount'] ?? 0),
+            'nearestQuestionId' => (string)($originality['questionId'] ?? ''),
+            'similarityPercent' => round(((float)($originality['score'] ?? 0.0)) * 100, 1),
+            'checkedAt' => $savedat,
+        ];
+        $previous = is_array($revisionstore['customQuestions'][$itemquestionid] ?? null)
+            ? $revisionstore['customQuestions'][$itemquestionid]
             : [];
-        $corrections = is_array($previous['corrections'] ?? null) ? $previous['corrections'] : [];
+        $corrections = is_array($previous['corrections'] ?? null)
+            ? $previous['corrections']
+            : [];
         if ($correction !== '') {
             $corrections[] = $correction;
         }
-        $store['customQuestions'][$customquestionid] = [
-            'questionId' => $customquestionid,
+        $customrecords[$itemquestionid] = [
+            'questionId' => $itemquestionid,
             'domainId' => $domainid,
             'status' => 'draft',
-            'idea' => $idea,
+            'idea' => $itemidea,
+            'creationBatchId' => $customcreationbatchid,
+            'creationBatchPosition' => $decodedindex + 1,
+            'creationBatchCount' => $custombatchcount,
             'corrections' => array_slice($corrections, -20),
-            'reviewSummary' => $reviewsummary,
+            'reviewSummary' => trim((string)($decoded['reviewSummary'] ?? '')),
             'originality' => $originalityrecord,
             'draft' => $question,
             'approved' => is_array($previous['approved'] ?? null) ? $previous['approved'] : null,
@@ -4110,16 +4252,42 @@ PROMPT;
             'savedById' => (int)$USER->id,
             'savedByName' => $savedbyname,
         ];
+        $createdcustomquestionids[] = $itemquestionid;
+    }
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $customrecords
+    ): array {
+        foreach ($customrecords as $itemquestionid => $customrecordtosave) {
+            $store['customQuestions'][$itemquestionid] = $customrecordtosave;
+        }
         return $store;
     });
-    redirect(
-        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
-            'q' => $customquestionid,
+    // Open the complete draft card immediately after creation or revision so
+    // the administrator sees the stem, choices, key and feedback just produced.
+    $customquestionpreviewurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        array_filter([
+            'q' => $custombatchcount === 1 ? $createdcustomquestionids[0] : null,
+            'custompreview' => $custombatchcount > 1
+                ? implode(',', $createdcustomquestionids)
+                : null,
             'source' => 'admin',
-        ]),
+            'readiness' => $custombatchcount > 1 ? 'incomplete' : null,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ])
+    );
+    $customquestionpreviewurl->set_anchor(
+        $custombatchcount === 1
+            ? 'question-' . $createdcustomquestionids[0]
+            : 'pending-questions'
+    );
+    redirect(
+        $customquestionpreviewurl,
         $iscustomrewrite
             ? 'New-question draft revised. Review the current version before approving it.'
-            : 'New-question draft created. Review it before approving it.',
+            : ($custombatchcount . ' new-question draft'
+                . ($custombatchcount === 1 ? '' : 's')
+                . ' created. Review every question before approving it.'),
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -5821,6 +5989,7 @@ $filteredquestions = array_values(array_filter(
         $contentfilter,
         $reviewfilter,
         $aibatchfilter,
+        $custompreviewids,
         $examprojectid,
         $examprojectview,
         $currentexamquestionids,
@@ -5828,6 +5997,10 @@ $filteredquestions = array_values(array_filter(
         $isprocessedquestion,
         $reservequestionidlookup
     ): bool {
+        if ($custompreviewids !== []
+                && !in_array((string)($question['questionId'] ?? ''), $custompreviewids, true)) {
+            return false;
+        }
         $isfocusedreviewdraft = $query !== ''
             && strcasecmp($query, (string)($question['questionId'] ?? '')) === 0
             && in_array(
@@ -5909,8 +6082,14 @@ usort($filteredquestions, static function(array $left, array $right) use (
     $domains,
     $usagefilter,
     $reviewfilter,
-    $examprojectpositions
+    $examprojectpositions,
+    $custompreviewids
 ): int {
+    if ($custompreviewids !== []) {
+        $custompreviewpositions = array_flip($custompreviewids);
+        return ($custompreviewpositions[(string)($left['questionId'] ?? '')] ?? PHP_INT_MAX)
+            <=> ($custompreviewpositions[(string)($right['questionId'] ?? '')] ?? PHP_INT_MAX);
+    }
     if ($reviewfilter === 'editing_drafts') {
         $savedcomparison = strcmp(
             (string)($right['_revision']['savedAt'] ?? ''),
@@ -5979,6 +6158,7 @@ $baseparams = array_filter([
     'content' => $contentfilter !== 'all' ? $contentfilter : null,
     'review' => $reviewfilter !== 'all' ? $reviewfilter : null,
     'aibatch' => $aibatchfilter !== '' ? $aibatchfilter : null,
+    'custompreview' => $custompreview !== '' ? $custompreview : null,
     'examproject' => $examprojectid !== '' ? $examprojectid : null,
     'examview' => $examprojectid !== '' && $examprojectview !== 'candidates' ? $examprojectview : null,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
@@ -6068,6 +6248,12 @@ foreach ([
 }
 if ($aibatchfilter !== '') {
     $activefilters[] = ['label' => $filterlabels['batch'], 'value' => $aibatchfilter];
+}
+if ($custompreviewids !== []) {
+    $activefilters[] = [
+        'label' => $displaylang === 'es' ? 'Lote recién creado' : 'Newly created batch',
+        'value' => count($custompreviewids) . ($displaylang === 'es' ? ' preguntas' : ' questions'),
+    ];
 }
 if (is_array($currentexamproject)) {
     $activefilters[] = [
@@ -6902,7 +7088,7 @@ echo $OUTPUT->header();
         <?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?>
     </section>
     <?php endif; ?>
-    <?php if ($shownewquestionform): ?><section id="new-question" class="question-bank__new-question"><h3>Create a new question from your idea</h3><p>Describe what you want in your own words. The system will write the question, four choices, correct answer, feedback and classification. It will remain a draft until you approve it.</p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><textarea name="idea" maxlength="12000" required placeholder="Example: Create an inference question in which the student identifies the deputy ingredients of a formula from their clinical roles. Include realistic distractors and explain the hierarchy in the feedback."></textarea><input type="hidden" name="formaction" value="createnewquestion"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Create draft</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Cancel</a></div><?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?></form></section><?php endif; ?>
+    <?php if ($shownewquestionform): ?><section id="new-question" class="question-bank__new-question"><h3>Create one or several questions</h3><p>Paste one question idea or a complete block containing up to 5 questions. Separate multiple questions with headings such as <strong>### Question 1</strong>, <strong>### 2.</strong>, or a line containing <strong>---</strong>. The system creates an independent draft for each question and immediately displays the complete batch for your review.</p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."></textarea><input type="hidden" name="formaction" value="createnewquestion"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Create and preview drafts</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Cancel</a></div><?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?></form></section><?php endif; ?>
     <?php if ($customdraftcount > 0 && !$shownewquestionform): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
     <?php if ($reviewfilter === 'editing_drafts'): ?><section class="question-bank__review-progress"><strong>Saved editing drafts: <?php echo (int)$savededitingdraftcount; ?></strong><p>This view includes unfinished manual and automatic edits from earlier updates and review groups. The most recently saved drafts appear first. Continue the correction, approve the current version, edit manually or delete the question.</p></section><?php endif; ?>
     <?php if ($usagefilter === 'exam_project_pending' && $query !== '' && $resultcount === 1): $focusedquestionid = (string)$filteredquestions[0]['questionId']; ?><section class="question-bank__review-progress"><strong><?php echo s((string)$currentexamproject['name']); ?> — focused question ready</strong><p><a class="question-bank__button question-bank__button--publish" href="#question-<?php echo s($focusedquestionid); ?>"><?php echo $displaylang === 'es' ? 'Continuar, revisar y publicar esta pregunta' : 'Continue, review and publish this question'; ?></a><?php if ($pendingexamprojecturl !== null): ?> <a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Omitir y volver a las pendientes' : 'Skip and return to pending questions'; ?></a><?php endif; ?></p></section><?php endif; ?>
@@ -7078,6 +7264,8 @@ echo $OUTPUT->header();
         $iscustomapproved = $question['_sourcekind'] === 'admin' && $customstatus === 'approved';
         $customhasapprovedversion = is_array($customrecord['approved'] ?? null);
         $customreviewsummary = trim((string)($customrecord['reviewSummary'] ?? ''));
+        $custombatchposition = (int)($customrecord['creationBatchPosition'] ?? 0);
+        $custombatchtotal = (int)($customrecord['creationBatchCount'] ?? 0);
         $customoriginality = is_array($customrecord['originality'] ?? null)
             ? $customrecord['originality']
             : [];
@@ -7168,7 +7356,7 @@ echo $OUTPUT->header();
             <?php if ($question['_exam2position'] > 0): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $isprocessedquestion($question) ? ($displaylang === 'es' ? 'Exam 2 publicada' : 'Exam 2 published') : ($displaylang === 'es' ? 'Revisión de Exam 2' : 'Exam 2 review'); ?> · <?php echo $displaylang === 'es' ? 'posición' : 'position'; ?> <?php echo (int)$question['_exam2position']; ?></span><?php endif; ?>
             <?php if (!empty($question['_deferredfromexam2'])): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Reservada para el próximo examen' : 'Reserved for the next exam'; ?></span><?php endif; ?>
             <span class="question-bank__badge">Complexity: <?php echo s(ucfirst((string)($question['difficultyBand'] ?? 'unclassified'))); ?></span>
-            <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php elseif ($question['_sourcekind'] === 'admin'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>
+            <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php if ($custombatchtotal > 1): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Lote nuevo' : 'New batch'; ?> · <?php echo $custombatchposition; ?> / <?php echo $custombatchtotal; ?></span><?php endif; ?><?php elseif ($question['_sourcekind'] === 'admin'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>
             <?php if ($iscustomdraft): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta ahora?' : 'Approve and publish this question now?'; ?>');"<?php endif; ?>><?php echo $customcanpublish ? ($displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish') : s($custompublishblocker); ?></button></form><?php endif; ?>
             <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion</span><?php elseif ($revisionstatus === 'deleted'): ?><span class="question-bank__badge question-bank__badge--incomplete">Deleted · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Publicada' : 'Published'; ?></span><?php endif; ?>
             <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--exam">AI-assisted mock review</span><?php endif; ?>
