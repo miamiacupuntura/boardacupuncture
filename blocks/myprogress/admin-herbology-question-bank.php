@@ -6332,6 +6332,12 @@ if (is_array($currentexamproject)) {
                 : ''),
     ];
 }
+$resultfiltercontext = $activefilters === []
+    ? [$displaylang === 'es' ? 'Todas las preguntas' : 'All questions']
+    : array_map(
+        static fn(array $filter): string => (string)$filter['label'] . ': ' . (string)$filter['value'],
+        $activefilters
+    );
 $makesummaryurl = static function(array $params = []) use ($displaylang, $examprojectid): moodle_url {
     if ($examprojectid !== '') {
         $params['examproject'] = $examprojectid;
@@ -6764,6 +6770,7 @@ echo $OUTPUT->header();
 .question-bank__editor-panel--editing{border-color:#cbb9ee}.question-bank__panel-intro{margin:-6px 0 14px;color:#60758a;font-size:12px;line-height:1.45}.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:150px}.question-bank__editor-panel--editing .question-bank__editor-classification{grid-template-columns:1fr;margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__editor-panel--editing .question-bank__editor-classification h5{margin:0 0 2px}.question-bank__editor-panel--editing .question-bank__editor-classification .question-bank__panel-intro{margin:0 0 8px}.question-bank__editor-panel--editing .question-bank__editor-actions{margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__proposal-form{display:grid;gap:12px}.question-bank__proposal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-toolbar p{margin:0;color:#66557e}.question-bank__proposal-box{display:block;margin-top:14px;padding:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-box>span{display:block;margin-bottom:7px;color:#4c1d95;font-weight:900}.question-bank__proposal-box textarea{box-sizing:border-box;width:100%;min-height:150px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__proposal-saved{display:block;margin-top:7px;color:#66557e;font-size:12px}.question-bank__proposal-review{margin-top:14px;padding:14px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;white-space:pre-wrap}@media(max-width:850px){.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:120px}.question-bank__proposal-toolbar{align-items:stretch;flex-direction:column}}
 .question-bank__new-question{margin-bottom:18px;padding:20px;border:2px solid #0b8f87;border-radius:12px;background:#f2fbf9}.question-bank__new-question h3{margin:0 0 6px;font-size:24px}.question-bank__new-question p{margin:0 0 14px;color:#52677a}.question-bank__new-question textarea{box-sizing:border-box;width:100%;min-height:180px;padding:13px 14px;border:1px solid #9db8c3;border-radius:8px;background:#fff;resize:vertical}.question-bank__new-question .question-bank__editor-actions{margin-top:12px}
 .question-bank__filters label>small{display:block;margin-top:5px;color:#64748b;font-size:10px;line-height:1.3}
+.question-bank__result-context{display:flex;min-width:0;align-items:baseline;flex-wrap:wrap;gap:5px 9px}.question-bank__result-context strong{white-space:nowrap}.question-bank__result-context span{color:#52677a;font-weight:750;line-height:1.35}.question-bank__result-head>span:last-child{flex:0 0 auto;white-space:nowrap}@media(max-width:700px){.question-bank__result-head{align-items:flex-start;flex-direction:column}.question-bank__result-head>span:last-child{white-space:normal}}
 .question-bank__batch-preview{margin:16px 0;padding:16px 18px;border:2px solid #0b8f87;border-radius:12px;background:#eefaf8}.question-bank__batch-preview h3{margin:0 0 5px;color:#075e59}.question-bank__batch-preview p{margin:0 0 12px;color:#38566b}.question-bank__batch-preview nav{display:flex;flex-wrap:wrap;gap:8px}.question-bank__batch-preview a{display:inline-flex;align-items:center;gap:5px;padding:9px 12px;border:1px solid #0b8f87;border-radius:999px;background:#fff;color:#075e59;font-weight:850;text-decoration:none}.question-bank__batch-preview a:hover,.question-bank__batch-preview a:focus{background:#0b8f87;color:#fff}
 .question-bank__assistant{margin-bottom:18px;padding:20px;border:2px solid #6d28d9;border-radius:12px;background:#faf8ff}.question-bank__assistant h3{margin:0 0 6px;font-size:24px}.question-bank__assistant>p{margin:0 0 14px;color:#66557e;line-height:1.45}.question-bank__assistant textarea{box-sizing:border-box;width:100%;min-height:150px;padding:13px 14px;border:1px solid #aebfca;border-radius:8px;background:#fff;resize:vertical}.question-bank__assistant-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}.question-bank__assistant-history{display:grid;gap:10px;margin:0 0 14px}.question-bank__assistant-turn{padding:12px 14px;border:1px solid #ded7ef;border-radius:8px;background:#fff}.question-bank__assistant-turn strong{display:block;margin-bottom:5px;color:#4c1d95}.question-bank__assistant-response{margin-top:9px;padding-top:9px;border-top:1px solid #e7e1f1;white-space:pre-wrap;line-height:1.5}
 .question-bank__technical-exports{margin:0 0 16px;border:1px solid #d7e2e7;border-radius:9px;background:#fff}.question-bank__technical-exports summary{padding:11px 14px;color:#52677a;font-weight:850;cursor:pointer}.question-bank__technical-exports>div{padding:0 14px 14px}.question-bank__technical-exports p{margin:0 0 10px;color:#60758a;line-height:1.45}
@@ -7273,21 +7280,7 @@ echo $OUTPUT->header();
         <nav><?php foreach ($custompreviewids as $custompreviewindex => $custompreviewid): ?><a href="#question-<?php echo s($custompreviewid); ?>"><?php echo $displaylang === 'es' ? 'Pregunta' : 'Question'; ?> <?php echo $custompreviewindex + 1; ?> <small><?php echo s($custompreviewid); ?></small></a><?php endforeach; ?></nav>
     </section>
     <?php endif; ?>
-    <div id="pending-questions" class="question-bank__result-head"><span><?php echo is_array($currentexamproject)
-        ? ($examprojectview === 'included'
-            ? ($displaylang === 'es'
-                ? 'Preguntas incluidas en ' . s((string)$currentexamproject['name'])
-                : 'Questions included in ' . s((string)$currentexamproject['name']))
-            : ($usagefilter === 'exam_project_pending'
-                ? ($displaylang === 'es'
-                    ? 'Preguntas pendientes de ' . s((string)$currentexamproject['name']) . ' — continúe aquí'
-                    : s((string)$currentexamproject['name']) . ' pending questions — continue here')
-                : ($displaylang === 'es'
-                    ? 'Preguntas disponibles para ' . s((string)$currentexamproject['name'])
-                    : 'Available questions for ' . s((string)$currentexamproject['name']))))
-        : ($usagefilter === 'exam2_review'
-            ? ($displaylang === 'es' ? 'Preguntas pendientes — continúe aquí' : 'Pending questions — continue here')
-            : ($displaylang === 'es' ? 'Preguntas filtradas' : 'Filtered questions')); ?></span><span data-inventory-result-count><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
+    <div id="pending-questions" class="question-bank__result-head"><div class="question-bank__result-context" data-result-filter-context><strong><?php echo $displaylang === 'es' ? 'Preguntas mostradas:' : 'Questions shown:'; ?></strong><span><?php echo s(implode(' · ', $resultfiltercontext)); ?></span></div><span data-inventory-result-count><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
     <?php if ($pagequestions === []): ?><div class="question-bank__item"><?php echo $displaylang === 'es' ? 'Ninguna pregunta coincide con estos filtros.' : 'No questions match these filters.'; ?></div><?php else: ?>
     <section class="question-bank__items"><?php foreach ($pagequestions as $question):
         $questionrevisionrecord = is_array($revisionstore['questions'][$question['questionId']] ?? null)
