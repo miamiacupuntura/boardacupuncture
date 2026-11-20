@@ -78,7 +78,7 @@ done
 grep -Fq "\$publishexamprojectrequested = optional_param('publishexamproject'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "'publishexamproject' => \$projectid" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Ready to publish: 100 of 100 approved.' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq 'required 28/24/18/15/10/5 domain blueprint' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'required: 28/24/18/15/10/5' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '$publishedsimulationexams' "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq "'simulation3linear'" "$TEMP_DIR/blocks/menu/herbology-board.php"
 grep -Fq '$isdynamicpublishedexam' "$TEMP_DIR/blocks/menu/herbology-exam-history.php"
