@@ -148,7 +148,7 @@ function block_myprogress_herbology_apply_revision(
     if (is_array($draft)) {
         foreach ([
             'prompt', 'options', 'correctLabel', 'explanation', 'translations',
-            'contentType', 'cognitiveLevel', 'difficultyBand',
+            'contentType', 'cognitiveLevel', 'difficultyBand', 'source', 'sourceCard',
         ] as $field) {
             if (array_key_exists($field, $draft)) {
                 $question[$field] = $draft[$field];
