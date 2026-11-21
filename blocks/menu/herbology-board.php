@@ -488,6 +488,7 @@ if ($usesdomainbank && !is_readable($domainbankpath) && is_readable($domainseedp
 $domainbank = ['domains' => []];
 $publishedsimulationexams = [];
 $publishedsimulationexam2 = null;
+$questionrevisionstore = ['questions' => []];
 if ($usesdomainbank && is_readable($domainbankpath)) {
     $decodedbank = json_decode(file_get_contents($domainbankpath), true);
     if (is_array($decodedbank) && isset($decodedbank['domains']) && is_array($decodedbank['domains'])) {
@@ -782,6 +783,25 @@ $mockcategorydefinitions = [
     ],
 ];
 $mockquestionsbycategory = array_fill_keys(array_keys($mockcategorydefinitions), []);
+$mockexcludedquestionids = [];
+$mockonlyquestioncategories = [];
+$mockcategorybydomain = array_fill_keys(array_keys($mockcategorydefinitions), true);
+foreach ((array)($questionrevisionstore['questions'] ?? []) as $mockrevisionquestionid => $mockrevision) {
+    if (!is_array($mockrevision)) {
+        continue;
+    }
+    $mockrevisionstatus = (string)($mockrevision['status'] ?? '');
+    if (in_array($mockrevisionstatus, ['exclusion_candidate', 'study_archive', 'deleted'], true)) {
+        $mockexcludedquestionids[(string)$mockrevisionquestionid] = true;
+    }
+    if ($mockrevisionstatus === 'study_archive'
+            && in_array((string)($mockrevision['archiveModule'] ?? ''), ['mock_only', 'study_reference'], true)) {
+        $mockrevisioncategory = (string)($mockrevision['mockCategory'] ?? $mockrevision['domainId'] ?? '');
+        if (isset($mockcategorybydomain[$mockrevisioncategory])) {
+            $mockonlyquestioncategories[(string)$mockrevisionquestionid] = $mockrevisioncategory;
+        }
+    }
+}
 $mockinventory = [
     'target' => 100 * (1 + count($publishedsimulationexams)),
     'exam1Total' => 0,
@@ -792,9 +812,14 @@ $mockinventory = [
     'unique' => 0,
     'duplicates' => 0,
     'pending' => 0,
+    'mockOnly' => 0,
 ];
 foreach ($mockcategorydefinitions as $mockdomainid => $unusedmockdefinition) {
     foreach ($domainbank['domains'][$mockdomainid] ?? [] as $examonequestion) {
+        $examonequestionid = (string)($examonequestion['questionId'] ?? '');
+        if ($examonequestionid === '' || isset($mockexcludedquestionids[$examonequestionid])) {
+            continue;
+        }
         if (empty($examonequestion['examTemplate']['globalPosition'])) {
             continue;
         }
@@ -817,7 +842,6 @@ foreach ($mockcategorydefinitions as $mockdomainid => $unusedmockdefinition) {
             }
         }
         $examonequestion['mockSourceExam'] = 1;
-        $examonequestionid = (string)($examonequestion['questionId'] ?? '');
         if ($examonequestionid !== '') {
             $mockquestionsbycategory[$mockdomainid][$examonequestionid] = $examonequestion;
             $mockinventory['exam1Classified']++;
@@ -830,7 +854,10 @@ foreach ($publishedsimulationexams as $mocksourceexamnumber => $publishedsimulat
     foreach ($publishedsimulationexam['questions'] as $publishedquestion) {
         $mockinventory['totalByExam'][$mocksourceexamnumber]++;
         $publishedquestiondomain = (string)($publishedquestion['domainId'] ?? '');
+        $publishedquestionid = (string)($publishedquestion['questionId'] ?? '');
         if (!isset($mockquestionsbycategory[$publishedquestiondomain])
+                || $publishedquestionid === ''
+                || isset($mockexcludedquestionids[$publishedquestionid])
                 || empty($publishedquestion['prompt'])
                 || count($publishedquestion['options'] ?? []) !== 4
                 || empty($publishedquestion['correctLabel'])
@@ -849,11 +876,37 @@ foreach ($publishedsimulationexams as $mocksourceexamnumber => $publishedsimulat
             }
         }
         $publishedquestion['mockSourceExam'] = $mocksourceexamnumber;
-        $publishedquestionid = (string)($publishedquestion['questionId'] ?? '');
         if ($publishedquestionid !== '') {
             $mockquestionsbycategory[$publishedquestiondomain][$publishedquestionid] = $publishedquestion;
             $mockinventory['classifiedByExam'][$mocksourceexamnumber]++;
         }
+    }
+}
+foreach ($mockonlyquestioncategories as $mockonlyquestionid => $mockonlycategory) {
+    foreach ($domainbank['domains'][$mockonlycategory] ?? [] as $mockonlyquestion) {
+        if ((string)($mockonlyquestion['questionId'] ?? '') !== $mockonlyquestionid
+                || empty($mockonlyquestion['prompt'])
+                || count($mockonlyquestion['options'] ?? []) !== 4
+                || empty($mockonlyquestion['correctLabel'])
+                || empty($mockonlyquestion['explanation'])) {
+            continue;
+        }
+        if ($ises) {
+            $translation = $mockonlyquestion['translations']['es'] ?? null;
+            if (is_array($translation)
+                    && !empty($translation['prompt'])
+                    && count($translation['options'] ?? []) === 4
+                    && !empty($translation['explanation'])) {
+                $mockonlyquestion['prompt'] = $translation['prompt'];
+                $mockonlyquestion['options'] = $translation['options'];
+                $mockonlyquestion['explanation'] = $translation['explanation'];
+            }
+        }
+        $mockonlyquestion['mockSourceExam'] = 0;
+        $mockonlyquestion['mockSourceLabel'] = $ises ? 'Pregunta exclusiva de Mock' : 'Mock-only question';
+        $mockquestionsbycategory[$mockonlycategory][$mockonlyquestionid] = $mockonlyquestion;
+        $mockinventory['mockOnly']++;
+        break;
     }
 }
 foreach ($mockquestionsbycategory as &$mockcategoryquestions) {
@@ -862,7 +915,8 @@ foreach ($mockquestionsbycategory as &$mockcategoryquestions) {
 }
 unset($mockcategoryquestions);
 $mockinventory['classified'] = $mockinventory['exam1Classified']
-    + array_sum($mockinventory['classifiedByExam']);
+    + array_sum($mockinventory['classifiedByExam'])
+    + $mockinventory['mockOnly'];
 $mockinventory['duplicates'] = max(0, $mockinventory['classified'] - $mockinventory['unique']);
 $mockinventory['pending'] = max(0, $mockinventory['target'] - $mockinventory['classified']);
 
@@ -2188,8 +2242,8 @@ echo $OUTPUT->header();
                         ? ($ises ? 'Elige una categoría' : 'Choose a category')
                         : s($selectedmockdefinition[$ises ? 'name_es' : 'name']); ?></h3>
                     <p><?php echo $ises
-                        ? 'Estos exámenes reutilizan las preguntas aprobadas de todos los Simulation Exams publicados con su feedback refinado. Los Quizzes existentes no se modifican.'
-                        : 'These exams reuse approved questions from every published Simulation Exam with their refined feedback. Existing Quizzes are unchanged.'; ?></p>
+                        ? 'Estos exámenes reutilizan las preguntas aprobadas de todos los Simulation Exams y también las preguntas educativas enviadas exclusivamente a Mock. Los Quizzes existentes no se modifican.'
+                        : 'These exams reuse approved questions from every published Simulation Exam and educational questions sent exclusively to Mock. Existing Quizzes are unchanged.'; ?></p>
                 </div>
                 <?php if ($selectedmockdefinition !== null): ?>
                     <a class="herb-board__back" href="<?php echo $mockurl->out(false); ?>"><?php echo $ises
@@ -2203,6 +2257,8 @@ echo $OUTPUT->header();
                     <?php echo $ises ? 'clasificadas automáticamente' : 'automatically classified'; ?></span>
                 <span><strong><?php echo (int)$mockinventory['exam1Classified']; ?> / 100</strong> Simulation Exam 1</span>
                 <?php foreach ($mockinventory['classifiedByExam'] as $mockexamnumber => $mockclassifiedcount): ?><span><strong><?php echo (int)$mockclassifiedcount; ?> / 100</strong> Simulation Exam <?php echo (int)$mockexamnumber; ?></span><?php endforeach; ?>
+                <span><strong><?php echo (int)$mockinventory['mockOnly']; ?></strong>
+                    <?php echo $ises ? 'preguntas exclusivas de Mock' : 'Mock-only questions'; ?></span>
                 <span><strong><?php echo (int)$mockinventory['unique']; ?></strong>
                     <?php echo $ises ? 'preguntas únicas en Mock Exam' : 'unique Mock Exam questions'; ?></span>
                 <span><strong><?php echo (int)$mockinventory['pending']; ?></strong>
@@ -2245,8 +2301,8 @@ echo $OUTPUT->header();
                                 <span class="herb-board__domain-number"><?php echo $ises ? 'Categoría Mock' : 'Mock category'; ?></span>
                                 <h4><?php echo s($mockdefinition[$ises ? 'name_es' : 'name']); ?></h4>
                                 <p><strong><?php echo $mockavailable; ?></strong> <?php echo $ises
-                                    ? 'preguntas únicas disponibles de Exam 1 y Exam 2.'
-                                    : 'unique questions available from Exam 1 and Exam 2.'; ?></p>
+                                    ? 'preguntas únicas disponibles de los Simulation Exams y del banco exclusivo de Mock.'
+                                    : 'unique questions available from Simulation Exams and the Mock-only bank.'; ?></p>
                                 <?php if ($mockpresets): ?>
                                     <div class="herb-board__mock-sizes" aria-label="<?php echo $ises ? 'Cantidad de preguntas' : 'Number of questions'; ?>">
                                         <?php foreach ($mockpresets as $mockpreset):
@@ -2335,7 +2391,7 @@ echo $OUTPUT->header();
                                     <?php echo s((string)$mockquestion['correctLabel']); ?>. <?php echo s($mockcorrecttext); ?></strong>
                                 <p><?php echo s((string)$mockquestion['explanation']); ?></p>
                                 <p class="herb-board__exam-nomenclature"><strong><?php echo $ises ? 'Origen' : 'Source'; ?>:</strong>
-                                    Simulation Exam <?php echo (int)($mockquestion['mockSourceExam'] ?? 1); ?> ·
+                                    <?php echo s((string)($mockquestion['mockSourceLabel'] ?? ('Simulation Exam ' . (int)($mockquestion['mockSourceExam'] ?? 1)))); ?> ·
                                     <?php echo s((string)($mockquestion['questionId'] ?? '')); ?></p>
                             </div>
                         </fieldset>

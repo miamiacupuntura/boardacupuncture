@@ -165,6 +165,9 @@ function block_myprogress_herbology_apply_revision(
         'revisionNumber' => (int)($revision['revisionNumber'] ?? 1),
         'aiBatchId' => (string)($revision['aiBatchId'] ?? ''),
         'aiPromptVersion' => (string)($revision['aiPromptVersion'] ?? ''),
+        'archiveModule' => (string)($revision['archiveModule'] ?? ''),
+        'mockCategory' => (string)($revision['mockCategory'] ?? ''),
+        'mockPlacementStatus' => (string)($revision['mockPlacementStatus'] ?? ''),
     ];
     return $question;
 }
