@@ -144,7 +144,7 @@
     {
       "number": 6,
       "slug": "cang-er-zi-xin-yi-hua-dui-yao",
-      "title": "Cāng Ěr Zǐ + Xīn Yí Huā",
+      "title": "Cang Er Zi + Xin Yi",
       "characters": "苍耳子 + 辛夷花",
       "category": {
         "en": "Open the Nasal Passages",
@@ -155,13 +155,13 @@
         "es": "Expulsar Viento y abrir pasajes nasales para congestión, presión sinusal y olfato reducido."
       },
       "formulas": {
-        "en": "Cāng Ěr Zǐ Sǎn.",
-        "es": "Cāng Ěr Zǐ Sǎn."
+        "en": "Cang Er Zi San.",
+        "es": "Cang Er Zi San."
       },
       "formulaBridge": null,
       "herbs": [
         "Cang Er Zi",
-        "Xin Yi Hua"
+        "Xin Yi"
       ]
     },
     {

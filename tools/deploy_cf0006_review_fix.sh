@@ -101,6 +101,25 @@ php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (count($data["pairs"] ?? []) < 32) { exit(1); }' "$DUI_YAO_SOURCE_DATA"
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (($data["total"] ?? 0) !== 304 || count($data["herbs"] ?? []) !== 304) { exit(1); }' "$APPENDIX_A_SOURCE_DATA"
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (($data["total"] ?? 0) !== 181 || count($data["formulas"] ?? []) !== 181) { exit(1); }' "$APPENDIX_C_SOURCE_DATA"
+php -r '
+$pairs=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+$roster=json_decode(file_get_contents($argv[2]), true, 512, JSON_THROW_ON_ERROR);
+$official=[];
+foreach (($roster["herbs"] ?? []) as $herb) {
+    $official[strtolower(trim((string)($herb["name"] ?? "")))]=true;
+}
+$invalid=[];
+foreach (($pairs["pairs"] ?? []) as $pair) {
+    foreach (($pair["herbs"] ?? []) as $herbname) {
+        if (!isset($official[strtolower(trim((string)$herbname))])) {
+            $invalid[]="pair ".($pair["number"] ?? "?").": ".$herbname;
+        }
+    }
+}
+if ($invalid !== []) {
+    fwrite(STDERR, "ERROR: el banco Duì Yào contiene hierbas fuera del Appendix A: ".implode(", ", $invalid)."\n");
+    exit(1);
+}' "$DUI_YAO_SOURCE_DATA" "$APPENDIX_A_SOURCE_DATA"
 grep -Fq "ncbahm-mock-editor-4.5" "$QUESTION_BANK_SOURCE"
 grep -Fq "sourceFeedbackMissing" "$QUESTION_BANK_SOURCE"
 grep -Fq '$exam5canonicalrepairs' "$QUESTION_BANK_SOURCE"
@@ -192,6 +211,10 @@ grep -Fq 'maHuangThreeLevelsRepairedAt' "$QUESTION_BANK_SOURCE"
 grep -Fq '$completequestioninput' "$QUESTION_BANK_SOURCE"
 grep -Fq '$normalizecreatedquestionpinyin' "$QUESTION_BANK_SOURCE"
 grep -Fq 'pinyinTonesRemovedAt' "$QUESTION_BANK_SOURCE"
+grep -Fq 'tone-free-pinyin-all-question-snapshots-v2' "$QUESTION_BANK_SOURCE"
+grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_domains' "$QUESTION_BANK_SOURCE"
+grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_question' "$OVERRIDES_SOURCE"
+grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_domains' "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq '$findcreatedquestionguidelineviolations' "$QUESTION_BANK_SOURCE"
 grep -Fq 'guidelineRosterValidatedAt' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Every named herb and formula must belong to the current NCBAHM guideline.' "$QUESTION_BANK_SOURCE"
@@ -558,6 +581,8 @@ echo "OK: Crear preguntas ofrece Usar la pregunta exactamente como está escrita
 echo "OK: una pregunta completa pegada se detecta automáticamente y no hereda el objetivo especial de la pregunta anterior."
 echo "OK: ADMIN-HB-20261121-191027-3A3B conserva la sibilancia leve como único síntoma y Mǎ Huáng como respuesta correcta."
 echo "OK: las preguntas creadas muestran Pinyin sin marcas tonales en inglés y español sin eliminar los acentos propios del español."
+echo "OK: la misma limpieza cubre preguntas curadas, SCORM, revisiones guardadas y copias de exámenes ya publicados."
+echo "OK: los 51 pares Duì Yào se verifican contra el Appendix A; Xin Yi usa el nombre oficial del guideline."
 echo "OK: todas las hierbas nombradas se comprueban contra las 304 del Appendix A y todas las fórmulas contra las 181 del Appendix C vigente."
 echo "OK: cualquier hierba o fórmula fuera del guideline bloquea la publicación y muestra el nombre conflictivo."
 echo "OK: los borradores creados para el examen aparecen en su cola y el aviso distingue creadas publicadas de borradores pendientes."

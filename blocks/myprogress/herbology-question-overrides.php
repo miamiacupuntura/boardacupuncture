@@ -20,6 +20,107 @@ function block_myprogress_herbology_override_empty(): array {
     ];
 }
 
+/**
+ * Remove tone marks from Pinyin without removing ordinary Spanish accents.
+ *
+ * Replacements are discovered only in the English/source side of a question.
+ * The exact same Pinyin tokens are then replaced in the Spanish translation,
+ * which leaves words such as "opción" and "fórmula" untouched.
+ */
+function block_myprogress_herbology_remove_pinyin_tones_from_question(array $question): array {
+    $tonemap = [
+        'ā' => 'a', 'á' => 'a', 'ǎ' => 'a', 'à' => 'a',
+        'ē' => 'e', 'é' => 'e', 'ě' => 'e', 'è' => 'e',
+        'ī' => 'i', 'í' => 'i', 'ǐ' => 'i', 'ì' => 'i',
+        'ō' => 'o', 'ó' => 'o', 'ǒ' => 'o', 'ò' => 'o',
+        'ū' => 'u', 'ú' => 'u', 'ǔ' => 'u', 'ù' => 'u',
+        'ǖ' => 'ü', 'ǘ' => 'ü', 'ǚ' => 'ü', 'ǜ' => 'ü',
+        'ǹ' => 'n', 'ń' => 'n', 'ň' => 'n', 'ḿ' => 'm',
+        'Ā' => 'A', 'Á' => 'A', 'Ǎ' => 'A', 'À' => 'A',
+        'Ē' => 'E', 'É' => 'E', 'Ě' => 'E', 'È' => 'E',
+        'Ī' => 'I', 'Í' => 'I', 'Ǐ' => 'I', 'Ì' => 'I',
+        'Ō' => 'O', 'Ó' => 'O', 'Ǒ' => 'O', 'Ò' => 'O',
+        'Ū' => 'U', 'Ú' => 'U', 'Ǔ' => 'U', 'Ù' => 'U',
+        'Ǖ' => 'Ü', 'Ǘ' => 'Ü', 'Ǚ' => 'Ü', 'Ǜ' => 'Ü',
+        'Ǹ' => 'N', 'Ń' => 'N', 'Ň' => 'N', 'Ḿ' => 'M',
+    ];
+    $englishfields = [];
+    foreach (['prompt', 'options', 'explanation', 'reviewSummary', 'source', 'nomenclature'] as $field) {
+        if (array_key_exists($field, $question)) {
+            $englishfields[$field] = $question[$field];
+        }
+    }
+    if (is_array($question['sourceCard'] ?? null)) {
+        $englishfields['sourceCardLabel'] = (string)($question['sourceCard']['label'] ?? '');
+    }
+    $replacements = [];
+    $scan = static function($candidate) use (&$scan, &$replacements, $tonemap): void {
+        if (is_array($candidate)) {
+            foreach ($candidate as $nestedvalue) {
+                $scan($nestedvalue);
+            }
+            return;
+        }
+        if (!is_string($candidate) || $candidate === '') {
+            return;
+        }
+        preg_match_all('/[\p{L}\p{M}\x{2019}\x{0027}-]+/u', $candidate, $matches);
+        foreach ((array)($matches[0] ?? []) as $token) {
+            $normalizedtoken = strtr((string)$token, $tonemap);
+            if ($normalizedtoken !== (string)$token) {
+                $replacements[(string)$token] = $normalizedtoken;
+            }
+        }
+    };
+    $scan($englishfields);
+    if ($replacements === []) {
+        return $question;
+    }
+    $replace = static function($value) use (&$replace, $replacements) {
+        if (is_array($value)) {
+            foreach ($value as $key => $nestedvalue) {
+                $value[$key] = $replace($nestedvalue);
+            }
+            return $value;
+        }
+        return is_string($value) ? strtr($value, $replacements) : $value;
+    };
+    foreach (array_keys($englishfields) as $field) {
+        if ($field === 'sourceCardLabel') {
+            $question['sourceCard']['label'] = $replace(
+                (string)($question['sourceCard']['label'] ?? '')
+            );
+            continue;
+        }
+        $question[$field] = $replace($question[$field]);
+    }
+    if (is_array($question['translations']['es'] ?? null)) {
+        $question['translations']['es'] = $replace($question['translations']['es']);
+    }
+    if (is_array($question['sourceCard'] ?? null)) {
+        $question['sourceCard']['labelEs'] = $replace(
+            (string)($question['sourceCard']['labelEs'] ?? '')
+        );
+    }
+    return $question;
+}
+
+function block_myprogress_herbology_remove_pinyin_tones_from_domains(array $domains): array {
+    foreach ($domains as &$questions) {
+        if (!is_array($questions)) {
+            continue;
+        }
+        foreach ($questions as &$question) {
+            if (is_array($question)) {
+                $question = block_myprogress_herbology_remove_pinyin_tones_from_question($question);
+            }
+        }
+        unset($question);
+    }
+    unset($questions);
+    return $domains;
+}
+
 function block_myprogress_herbology_override_load_unlocked(string $path): array {
     if (!is_readable($path)) {
         return block_myprogress_herbology_override_empty();

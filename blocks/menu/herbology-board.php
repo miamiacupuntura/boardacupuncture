@@ -235,8 +235,8 @@ $domainblueprint = [
     [
         'number' => 3,
         'id' => 'dui_yao',
-        'name' => 'Duì Yào and compatibility',
-        'name_es' => 'Duì Yào y compatibilidad',
+        'name' => 'Dui Yao and compatibility',
+        'name_es' => 'Dui Yao y compatibilidad',
         'weight' => 18,
         'focus' => 'Combined action, each herb’s contribution and the pair’s traditional relationship.',
         'focus_es' => 'Acción combinada, contribución de cada hierba y relación tradicional del par.',
@@ -607,6 +607,24 @@ if ($usesdomainbank) {
         $questionrevisionstore,
         false
     );
+    $domainbank['domains'] = block_myprogress_herbology_remove_pinyin_tones_from_domains(
+        $domainbank['domains']
+    );
+    foreach ($publishedsimulationexams as &$publishedsimulationexam) {
+        if (!is_array($publishedsimulationexam['questions'] ?? null)) {
+            continue;
+        }
+        foreach ($publishedsimulationexam['questions'] as &$publishedquestion) {
+            if (is_array($publishedquestion)) {
+                $publishedquestion = block_myprogress_herbology_remove_pinyin_tones_from_question(
+                    $publishedquestion
+                );
+            }
+        }
+        unset($publishedquestion);
+    }
+    unset($publishedsimulationexam);
+    $publishedsimulationexam2 = $publishedsimulationexams[2] ?? null;
 }
 $domaincandidateinventory = $domainbank['sourceInventory'] ?? $domaincandidateinventory;
 $questionisready = static function(array $question): bool {
@@ -768,8 +786,8 @@ $mockcategorydefinitions = [
     ],
     'dui_yao' => [
         'group' => 'herbs',
-        'name' => 'Duì Yào and compatibility',
-        'name_es' => 'Duì Yào y compatibilidad',
+        'name' => 'Dui Yao and compatibility',
+        'name_es' => 'Dui Yao y compatibilidad',
     ],
     'safety_dispensing' => [
         'group' => 'herbs',
