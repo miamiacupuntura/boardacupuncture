@@ -719,6 +719,79 @@ if ($formulavduiyaorepairids !== []) {
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
+$scopequestionformatrepairids = [];
+foreach ((array)($revisionstore['customQuestions'] ?? []) as $scopequestionid => $scopequestionrecord) {
+    if (!is_array($scopequestionrecord)
+            || (string)($scopequestionrecord['status'] ?? 'draft') !== 'draft'
+            || !empty($scopequestionrecord['scopeQuestionFormatRepairedAt'])
+            || !is_array($scopequestionrecord['draft'] ?? null)) {
+        continue;
+    }
+    $scopedrafttext = core_text::strtolower(core_text::specialtoascii((string)json_encode(
+        $scopequestionrecord['draft'],
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+    )));
+    $isziwankuandonghua = (int)($scopequestionrecord['formulaDuiYaoPairNumber'] ?? 0) === 40
+        || (core_text::strpos($scopedrafttext, 'she gan ma huang tang') !== false
+            && core_text::strpos($scopedrafttext, 'zi wan') !== false
+            && core_text::strpos($scopedrafttext, 'kuan dong hua') !== false);
+    $hasanswerreasoning = core_text::strpos($scopedrafttext, 'source-supported modification') !== false
+        || core_text::strpos($scopedrafttext, 'modificacion respaldada') !== false;
+    if ($isziwankuandonghua && $hasanswerreasoning) {
+        $scopequestionformatrepairids[] = (string)$scopequestionid;
+    }
+}
+if ($scopequestionformatrepairids !== []) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $scopequestionformatrepairids
+    ): array {
+        $savedat = gmdate(DATE_ATOM);
+        foreach ($scopequestionformatrepairids as $scopequestionid) {
+            $record = $store['customQuestions'][$scopequestionid] ?? null;
+            if (!is_array($record)
+                    || (string)($record['status'] ?? 'draft') !== 'draft'
+                    || !is_array($record['draft'] ?? null)) {
+                continue;
+            }
+            $draft = $record['draft'];
+            $draft['prompt'] = 'Shè Gān Má Huáng Tāng supplies a complete coordinated formula strategy, '
+                . 'whereas the Duì Yào Zǐ Wǎn (Asteris Radix) + Kuǎn Dōng Huā (Farfarae Flos) '
+                . 'has the focused action of moistening the Lung, descending Qi, transforming Phlegm, '
+                . 'and stopping cough. Which prescribing plan correctly assigns each to its appropriate therapeutic level?';
+            $draft['options'] = [
+                ['label' => 'A', 'text' => 'Shè Gān Má Huáng Tāng for the complete presentation; Zǐ Wǎn + Kuǎn Dōng Huā for the focused objective.'],
+                ['label' => 'B', 'text' => 'Zǐ Wǎn + Kuǎn Dōng Huā for the complete presentation; Shè Gān Má Huáng Tāng for the focused objective.'],
+                ['label' => 'C', 'text' => 'Zǐ Wǎn + Kuǎn Dōng Huā for both the complete presentation and the focused objective.'],
+                ['label' => 'D', 'text' => 'Shè Gān Má Huáng Tāng for both the complete presentation and the focused objective.'],
+            ];
+            $draft['correctLabel'] = 'A';
+            $draft['explanation'] = 'Inference step 1: Shè Gān Má Huáng Tāng represents the complete formula-level strategy, while Zǐ Wǎn + Kuǎn Dōng Huā provides the focused compatibility action of moistening the Lung, descending Qi, transforming Phlegm, and stopping cough. Inference step 2: The full presentation calls for the complete formula; the focused objective may use the pair as a core pair, supported modification, or brief prescription, but not as an automatic equivalent of the formula. Option A: Correct. It assigns each intervention to its supported therapeutic level. Option B: Incorrect. It reverses the complete and focused levels. Option C: Incorrect. The pair does not reproduce the complete formula architecture. Option D: Incorrect. The formula is not automatically required when only the pair’s focused objective is intended.';
+            $draft['translations']['es'] = [
+                'prompt' => 'Shè Gān Má Huáng Tāng aporta una estrategia coordinada de fórmula completa, mientras que el Duì Yào Zǐ Wǎn (Asteris Radix) + Kuǎn Dōng Huā (Farfarae Flos) tiene la acción focal de humedecer el Pulmón, hacer descender el Qi, transformar la Flema y detener la tos. ¿Qué plan terapéutico asigna correctamente cada uno a su nivel apropiado?',
+                'options' => [
+                    ['label' => 'A', 'text' => 'Shè Gān Má Huáng Tāng para la presentación completa; Zǐ Wǎn + Kuǎn Dōng Huā para el objetivo focal.'],
+                    ['label' => 'B', 'text' => 'Zǐ Wǎn + Kuǎn Dōng Huā para la presentación completa; Shè Gān Má Huáng Tāng para el objetivo focal.'],
+                    ['label' => 'C', 'text' => 'Zǐ Wǎn + Kuǎn Dōng Huā tanto para la presentación completa como para el objetivo focal.'],
+                    ['label' => 'D', 'text' => 'Shè Gān Má Huáng Tāng tanto para la presentación completa como para el objetivo focal.'],
+                ],
+                'explanation' => 'Paso de inferencia 1: Shè Gān Má Huáng Tāng representa la estrategia completa de la fórmula, mientras que Zǐ Wǎn + Kuǎn Dōng Huā aporta la acción focal de compatibilidad de humedecer el Pulmón, hacer descender el Qi, transformar la Flema y detener la tos. Paso de inferencia 2: La presentación completa requiere la fórmula; el objetivo focal puede usar la pareja como núcleo, modificación respaldada o prescripción breve, pero no como equivalente automático de la fórmula. Opción A: Correcta. Asigna cada intervención a su nivel terapéutico respaldado. Opción B: Incorrecta. Invierte los niveles completo y focal. Opción C: Incorrecta. La pareja no reproduce la arquitectura completa de la fórmula. Opción D: Incorrecta. La fórmula no es obligatoria automáticamente cuando solo se busca el objetivo focal de la pareja.',
+            ];
+            $record['draft'] = $draft;
+            $record['reviewSummary'] = 'Converted the formula-versus-Duì-Yào rationale into a direct question with four concise, parallel prescribing choices.';
+            $record['originality'] = array_replace((array)($record['originality'] ?? []), [
+                'status' => 'clear',
+                'checkedAt' => $savedat,
+            ]);
+            $record['scopeQuestionFormatRepairedAt'] = $savedat;
+            $record['savedAt'] = $savedat;
+            $record['savedByName'] = 'Formula-versus-Duì-Yào question-format repair';
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $store['customQuestions'][$scopequestionid] = $record;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $fuzirouguicustomid = 'ADMIN-HB-20261121-054320-94BA';
 $fuzirouguirepairapplied = false;
 $fuzirouguirecord = $revisionstore['customQuestions'][$fuzirouguicustomid] ?? null;
@@ -6179,32 +6252,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $pairplain = count($herbs) >= 2 ? $herbs[0] . ' + ' . $herbs[1] : $pair;
         $correctkey = 'correct';
         $claims = [
-            'patent' => [
-                'en' => 'Treat ' . $pairplain . ' as a commercial patent formula that is interchangeable with ' . $formulaen . '.',
-                'es' => 'Tratar ' . $pairplain . ' como una fórmula patente comercial intercambiable con ' . $formulaes . '.',
-                'feedbackEn' => 'Incorrect. A two-herb compatibility relationship does not become a commercial patent formula.',
-                'feedbackEs' => 'Incorrecta. Una relación de compatibilidad de dos hierbas no se convierte en fórmula patente comercial.',
+            'reverse' => [
+                'en' => $pairplain . ' for the complete presentation; ' . $formulaen . ' for the focused objective.',
+                'es' => $pairplain . ' para la presentación completa; ' . $formulaes . ' para el objetivo focal.',
+                'feedbackEn' => 'Incorrect. This reverses the therapeutic levels: the pair has the focused action, while the formula supplies the complete coordinated strategy.',
+                'feedbackEs' => 'Incorrecta. Invierte los niveles terapéuticos: la pareja tiene la acción focal y la fórmula aporta la estrategia coordinada completa.',
             ],
-            'automatic' => [
-                'en' => 'Replace ' . $formulaen . ' automatically whenever ' . $pairplain . ' appears, without considering the remaining ingredients, roles, proportions, dose, or preparation.',
-                'es' => 'Sustituir automáticamente ' . $formulaes . ' siempre que aparezca ' . $pairplain . ', sin considerar los demás ingredientes, funciones, proporciones, dosis ni preparación.',
-                'feedbackEn' => 'Incorrect. Shared ingredients do not establish therapeutic equivalence, and the rest of the formula architecture remains decisive.',
-                'feedbackEs' => 'Incorrecta. Compartir ingredientes no establece equivalencia terapéutica y la arquitectura restante de la fórmula sigue siendo decisiva.',
+            'pairall' => [
+                'en' => $pairplain . ' for both the complete presentation and the focused objective.',
+                'es' => $pairplain . ' tanto para la presentación completa como para el objetivo focal.',
+                'feedbackEn' => 'Incorrect. The pair is not an automatic equivalent of the complete classical formula.',
+                'feedbackEs' => 'Incorrecta. La pareja no es un equivalente automático de la fórmula clásica completa.',
             ],
             'correct' => [
-                'en' => 'Choose ' . $formulaen . ' when its complete pattern architecture and coordinated strategy are required; use ' . $pairplain . ' for the narrow objective of ' . lcfirst($actionen) . ' as a core pair, source-supported modification, or brief prescription, not as an automatic equivalent of the formula.',
-                'es' => 'Elegir ' . $formulaes . ' cuando se requiere su arquitectura completa de patrón y estrategia coordinada; usar ' . $pairplain . ' para el objetivo estrecho de ' . lcfirst($actiones) . ' como pareja central, modificación respaldada por la fuente o prescripción breve, no como equivalente automático de la fórmula.',
+                'en' => $formulaen . ' for the complete presentation; ' . $pairplain . ' for the focused objective.',
+                'es' => $formulaes . ' para la presentación completa; ' . $pairplain . ' para el objetivo focal.',
                 'feedbackEn' => 'Correct. It selects the complete formula for the full therapeutic architecture while limiting the pair to its documented narrow objective and supported uses.',
                 'feedbackEs' => 'Correcta. Selecciona la fórmula completa para la arquitectura terapéutica total y limita la pareja a su objetivo estrecho documentado y sus usos respaldados.',
             ],
-            'scope' => [
-                'en' => 'Use ' . $pairplain . ' for every presentation treated by ' . $formulaen . ' because a core pair always has the full therapeutic scope of the classical prescription.',
-                'es' => 'Usar ' . $pairplain . ' para toda presentación tratada por ' . $formulaes . ' porque una pareja central siempre tiene el alcance terapéutico completo de la prescripción clásica.',
-                'feedbackEn' => 'Incorrect. A core pair may be central to a formula without reproducing the complete formula’s therapeutic scope.',
-                'feedbackEs' => 'Incorrecta. Una pareja central puede ser esencial para una fórmula sin reproducir todo su alcance terapéutico.',
+            'formulaall' => [
+                'en' => $formulaen . ' for both the complete presentation and the focused objective.',
+                'es' => $formulaes . ' tanto para la presentación completa como para el objetivo focal.',
+                'feedbackEn' => 'Incorrect. This ignores the pair’s documented narrow role as a core pair, supported modification, or brief prescription.',
+                'feedbackEs' => 'Incorrecta. Omite el papel estrecho documentado de la pareja como núcleo, modificación respaldada o prescripción breve.',
             ],
         ];
-        $order = ['patent', 'automatic', 'scope'];
+        $order = ['reverse', 'pairall', 'formulaall'];
         $correctindex = $pairnumber % 4;
         array_splice($order, $correctindex, 0, [$correctkey]);
         $labels = ['A', 'B', 'C', 'D'];
@@ -6213,12 +6286,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $feedback = [
             'Inference step 1: ' . $pair . ' has the focused action to ' . lcfirst($actionen)
                 . ', while ' . $formulaen . ' represents a complete formula context.',
-            'Inference step 2: The correct decision must preserve the difference between a narrow compatibility objective and a complete formula architecture.',
+            'Inference step 2: The correct decision assigns the formula to the complete presentation and the pair only to its documented focused objective; the pair is neither a commercial patent formula nor an automatic equivalent of the classical formula.',
         ];
         $feedbackes = [
             'Paso de inferencia 1: ' . $pair . ' tiene la acción focal de ' . lcfirst($actiones)
                 . ', mientras que ' . $formulaes . ' representa un contexto de fórmula completa.',
-            'Paso de inferencia 2: La decisión correcta debe conservar la diferencia entre un objetivo estrecho de compatibilidad y una arquitectura de fórmula completa.',
+            'Paso de inferencia 2: La decisión correcta asigna la fórmula a la presentación completa y la pareja solo a su objetivo focal documentado; la pareja no es una fórmula patente comercial ni un equivalente automático de la fórmula clásica.',
         ];
         $correctlabel = '';
         foreach ($order as $index => $claimkey) {
@@ -6235,17 +6308,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $sourcecard = (string)($scopeevidence['sourceCard'] ?? '');
         return [
             'domainId' => 'dui_yao',
-            'prompt' => 'A study group compares the classical formula ' . $formulaen . ' with the Duì Yào '
-                . $pair . ', whose focused action is to ' . lcfirst($actionen)
-                . '. Which prescribing principle most accurately distinguishes when to choose the formula and when to choose the pair?',
+            'prompt' => $formulaen . ' supplies a complete coordinated formula strategy, whereas the Duì Yào '
+                . $pair . ' has the documented focused action to ' . lcfirst($actionen)
+                . '. Which prescribing plan correctly assigns each to its appropriate therapeutic level?',
             'options' => $options,
             'correctLabel' => $correctlabel,
             'explanation' => implode(' ', $feedback),
             'translations' => [
                 'es' => [
-                    'prompt' => 'Un grupo de estudio compara la fórmula clásica ' . $formulaes . ' con el Duì Yào '
-                        . $pair . ', cuya acción focal es ' . lcfirst($actiones)
-                        . '. ¿Qué principio terapéutico distingue con mayor precisión cuándo elegir la fórmula y cuándo elegir la pareja?',
+                    'prompt' => $formulaes . ' aporta una estrategia coordinada de fórmula completa, mientras que el Duì Yào '
+                        . $pair . ' tiene la acción focal documentada de ' . lcfirst($actiones)
+                        . '. ¿Qué plan terapéutico asigna correctamente cada uno a su nivel apropiado?',
                     'options' => $optionses,
                     'explanation' => implode(' ', $feedbackes),
                 ],
@@ -6424,7 +6497,7 @@ PROMPT;
     }
     if ($formulavduiyaoscopeidea) {
         $customprompt .= "\n\nMANDATORY FORMULA-VERSUS-DUÌ-YÀO OBJECTIVE — DO NOT SUBSTITUTE:\n"
-            . "Use every selected relationship below exactly once and create one question from each relationship. These relationships were chosen because their herbs and primary formulas are the least used in recent administrator-authored questions. Do not substitute Gui Zhi + Bai Shao or any other familiar pair unless it is explicitly present below. Test when the complete formula is selected for a full pattern and when its Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Show the selected formula and both herbs of the pair in the visible stem or choices. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula. A generic single-herb action or indication question is invalid. Do not invent a formula relationship absent from the evidence."
+            . "Use every selected relationship below exactly once and create one question from each relationship. These relationships were chosen because their herbs and primary formulas are the least used in recent administrator-authored questions. Do not substitute Gui Zhi + Bai Shao or any other familiar pair unless it is explicitly present below. Put the therapeutic comparison and narrow action into a genuinely interrogative stem ending in a direct question. Keep every A-D choice short and parallel: use a concise formula/pair assignment, not a paragraph of reasoning. Never place the complete-pattern rationale, the list 'core pair, source-supported modification, or brief prescription,' or the automatic-equivalence explanation inside the keyed choice; teach those details only in the explanation. Test when the complete formula is selected for a full pattern and when its Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Show the selected formula and both herbs of the pair in the visible stem or choices. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula in the explanation. A generic single-herb action or indication question is invalid. Do not invent a formula relationship absent from the evidence."
             . "\n\nSELECTED VERIFIED FORMULA-DUÌ-YÀO RELATIONSHIPS:\n"
             . json_encode(
                 $formulavduiyaoscopeevidence,
@@ -6661,6 +6734,37 @@ PROMPT;
                         JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
                     );
                     $generatedcontentlower = $normalizescopetext((string)$generatedcontent);
+                    $scopeprompt = trim((string)($decodeditem['prompt'] ?? ''));
+                    $scopespanishprompt = trim((string)($decodeditem['translations']['es']['prompt'] ?? ''));
+                    if (preg_match('/\?\s*$/u', $scopeprompt) !== 1
+                            || preg_match('/\?\s*$/u', $scopespanishprompt) !== 1) {
+                        throw new UnexpectedValueException(
+                            'The formula-versus-Duì-Yào comparison must be written as a direct question, not as answer reasoning.'
+                        );
+                    }
+                    $scopeoptiontexts = array_merge(
+                        array_map(
+                            static fn(array $option): string => (string)($option['text'] ?? ''),
+                            (array)($decodeditem['options'] ?? [])
+                        ),
+                        array_map(
+                            static fn(array $option): string => (string)($option['text'] ?? ''),
+                            (array)($decodeditem['translations']['es']['options'] ?? [])
+                        )
+                    );
+                    foreach ($scopeoptiontexts as $scopeoptiontext) {
+                        $scopeoptionwords = preg_split(
+                            '/\s+/u',
+                            trim($scopeoptiontext),
+                            -1,
+                            PREG_SPLIT_NO_EMPTY
+                        ) ?: [];
+                        if (count($scopeoptionwords) > 40) {
+                            throw new UnexpectedValueException(
+                                'Formula-versus-Duì-Yào choices must be concise assignments; move all reasoning into the explanation.'
+                            );
+                        }
+                    }
                     $matchedevidence = null;
                     foreach ($formulavduiyaoscopeevidence as $scopeevidence) {
                         $pairvisible = core_text::strpos(
