@@ -46,6 +46,9 @@ $publishexamerror = optional_param('publishexamerror', '', PARAM_ALPHANUMEXT);
 $publishexamdetail = trim(optional_param('publishexamdetail', '', PARAM_TEXT));
 $examprojectid = optional_param('examproject', '', PARAM_ALPHANUMEXT);
 $examprojectview = optional_param('examview', 'candidates', PARAM_ALPHA);
+$newquestiontargetdomain = optional_param('targetdomain', '', PARAM_ALPHANUMEXT);
+$newquestiontargetexam = optional_param('targetexamproject', '', PARAM_ALPHANUMEXT);
+$newquestionneededcount = max(0, min(10, optional_param('needed', 0, PARAM_INT)));
 $advancetonext = (bool)optional_param('advance', 0, PARAM_BOOL);
 $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
@@ -67,6 +70,11 @@ $domains = [
 ];
 if ($domainfilter !== 'all' && !isset($domains[$domainfilter])) {
     $domainfilter = 'all';
+}
+if ($newquestiontargetdomain !== '' && !isset($domains[$newquestiontargetdomain])) {
+    $newquestiontargetdomain = '';
+    $newquestiontargetexam = '';
+    $newquestionneededcount = 0;
 }
 if (!in_array($readinessfilter, ['all', 'ready', 'incomplete'], true)) {
     $readinessfilter = 'all';
@@ -2273,6 +2281,9 @@ $requiredprojectdomaincounts = [
 
 $currentexamcandidateids = [];
 $examprojectpositions = [];
+$projectremainingbydomain = array_fill_keys(array_keys($domains), 0);
+$projectcandidatecountbydomain = array_fill_keys(array_keys($domains), 0);
+$projectshortagebydomain = array_fill_keys(array_keys($domains), 0);
 if (is_array($currentexamproject)) {
     $projecttarget = (int)$currentexamproject['targetCount'];
     $projectweights = $requiredprojectdomaincounts;
@@ -2330,18 +2341,22 @@ if (is_array($currentexamproject)) {
                 || $projectquestion['_excluded']
                 || $projectquestion['_examposition'] > 0
                 || $projectquestion['_exam2position'] > 0
-                || $isprocessedquestion($projectquestion)
                 || isset($projectexcludedlookup[$projectquestionid])
                 || isset($usedbyotherprojects[$projectquestionid])) {
             continue;
         }
         $projecteligiblebydomain[$projectquestion['_domainid']][] = $projectquestion;
     }
-    $projectquality = static function(array $question) use ($examprojectid, $previouslyselectedids): array {
+    $projectquality = static function(array $question) use (
+        $examprojectid,
+        $previouslyselectedids,
+        $isprocessedquestion
+    ): array {
         $questionid = (string)($question['questionId'] ?? '');
         $cognitiverank = ['analysis' => 0, 'inference' => 1, 'application' => 2, 'recall' => 3];
         return [
             isset($previouslyselectedids[$questionid]) ? 0 : 1,
+            $isprocessedquestion($question) ? 0 : 1,
             $question['_ready'] ? 0 : 1,
             $question['_simulationcandidate'] ? 0 : 1,
             $cognitiverank[$question['_cognitive']] ?? 4,
@@ -2356,7 +2371,18 @@ if (is_array($currentexamproject)) {
             static fn(array $left, array $right): int => $projectquality($left) <=> $projectquality($right)
         );
         $projectneed = max(0, (int)$projecttargets[$projectdomainid] - (int)$approvedbydomain[$projectdomainid]);
-        foreach (array_slice($projecteligiblebydomain[$projectdomainid], 0, $projectneed) as $projectquestion) {
+        $projectremainingbydomain[$projectdomainid] = $projectneed;
+        $selectedprojectquestions = array_slice(
+            $projecteligiblebydomain[$projectdomainid],
+            0,
+            $projectneed
+        );
+        $projectcandidatecountbydomain[$projectdomainid] = count($selectedprojectquestions);
+        $projectshortagebydomain[$projectdomainid] = max(
+            0,
+            $projectneed - $projectcandidatecountbydomain[$projectdomainid]
+        );
+        foreach ($selectedprojectquestions as $projectquestion) {
             $projectposition++;
             $projectquestionid = (string)$projectquestion['questionId'];
             $currentexamcandidateids[] = $projectquestionid;
@@ -4463,10 +4489,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             'Rewrite the negative stem as a positive question before publishing.'
         );
     }
+    $customtargetexamid = (string)($customrecord['targetExamProjectId'] ?? '');
+    $customcreationbatchid = (string)($customrecord['creationBatchId'] ?? '');
+    $remainingcustombatchids = [];
+    if ($customcreationbatchid !== '') {
+        foreach ((array)($revisionstore['customQuestions'] ?? []) as $batchquestionid => $batchrecord) {
+            if ((string)$batchquestionid === $customquestionid
+                    || !is_array($batchrecord)
+                    || (string)($batchrecord['creationBatchId'] ?? '') !== $customcreationbatchid
+                    || (string)($batchrecord['status'] ?? '') !== 'draft') {
+                continue;
+            }
+            $remainingcustombatchids[] = (string)$batchquestionid;
+        }
+        usort($remainingcustombatchids, static function(string $left, string $right) use (
+            $revisionstore
+        ): int {
+            return (int)($revisionstore['customQuestions'][$left]['creationBatchPosition'] ?? 0)
+                <=> (int)($revisionstore['customQuestions'][$right]['creationBatchPosition'] ?? 0);
+        });
+    }
+    if ($customtargetexamid !== '') {
+        $targetexam = $examprojects[$customtargetexamid] ?? null;
+        if (!is_array($targetexam)
+                || (string)($targetexam['status'] ?? 'draft') === 'published') {
+            throw new invalid_parameter_exception(
+                'The target exam is no longer available for this new question.'
+            );
+        }
+        if (count((array)($targetexam['questionIds'] ?? []))
+                >= (int)($targetexam['targetCount'] ?? 100)) {
+            throw new invalid_parameter_exception('The target exam is already full.');
+        }
+    }
     $savedat = gmdate(DATE_ATOM);
     $savedbyname = fullname($USER);
     block_myprogress_herbology_override_update(static function(array $store) use (
         $customquestionid,
+        $customtargetexamid,
         $savedat,
         $savedbyname,
         $USER
@@ -4487,14 +4547,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $record['savedByName'] = $savedbyname;
         $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
         $store['customQuestions'][$customquestionid] = $record;
+        if ($customtargetexamid !== '') {
+            $project = $store['examProjects'][$customtargetexamid] ?? null;
+            if (!is_array($project)
+                    || (string)($project['status'] ?? 'draft') === 'published') {
+                throw new invalid_parameter_exception(
+                    'The target exam is no longer available for this new question.'
+                );
+            }
+            $questionids = array_values(array_unique(array_filter(array_map(
+                'strval',
+                (array)($project['questionIds'] ?? [])
+            ))));
+            if (!in_array($customquestionid, $questionids, true)) {
+                if (count($questionids) >= (int)($project['targetCount'] ?? 100)) {
+                    throw new invalid_parameter_exception('The target exam is already full.');
+                }
+                $questionids[] = $customquestionid;
+            }
+            $project['questionIds'] = $questionids;
+            $project['updatedAt'] = $savedat;
+            $store['examProjects'][$customtargetexamid] = $project;
+        }
         return $store;
     });
-    redirect(
-        new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
-            'q' => $customquestionid,
+    $customapprovalurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        array_filter([
+            'q' => $remainingcustombatchids === [] ? $customquestionid : null,
+            'custompreview' => $remainingcustombatchids !== []
+                ? implode(',', array_slice($remainingcustombatchids, 0, 5))
+                : null,
             'source' => 'admin',
-        ]),
-        'New question approved and added to the question bank.',
+            'readiness' => $remainingcustombatchids !== [] ? 'incomplete' : null,
+            'examproject' => $customtargetexamid !== '' ? $customtargetexamid : null,
+        ])
+    );
+    $customapprovalurl->set_anchor(
+        $remainingcustombatchids !== []
+            ? 'new-question-batch-preview'
+            : 'question-' . $customquestionid
+    );
+    redirect(
+        $customapprovalurl,
+        $customtargetexamid !== ''
+            ? 'New question approved and assigned to the active exam.'
+                . ($remainingcustombatchids !== [] ? ' Continue with the remaining batch drafts.' : '')
+            : 'New question approved and added to the question bank.',
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -4521,6 +4620,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     }
     if ($iscustomrewrite && (string)($customrecord['status'] ?? 'draft') !== 'draft') {
         throw new invalid_parameter_exception('Only an unpublished administrator-authored draft can be revised.');
+    }
+    $customtargetdomain = $iscustomrewrite
+        ? (string)($customrecord['targetDomainId'] ?? '')
+        : $newquestiontargetdomain;
+    $customtargetexamid = $iscustomrewrite
+        ? (string)($customrecord['targetExamProjectId'] ?? '')
+        : $newquestiontargetexam;
+    if ($customtargetdomain !== '' && !isset($domains[$customtargetdomain])) {
+        throw new invalid_parameter_exception('Unknown target domain for the new questions.');
+    }
+    if ($customtargetexamid !== '') {
+        $targetexam = $examprojects[$customtargetexamid] ?? null;
+        if (!is_array($targetexam)
+                || (string)($targetexam['status'] ?? 'draft') === 'published') {
+            throw new invalid_parameter_exception('The target exam is not available for new questions.');
+        }
     }
     $idea = $iscustomrewrite
         ? trim((string)($customrecord['idea'] ?? ''))
@@ -4731,6 +4846,11 @@ Required JSON object for each question:
 
 ADMINISTRATOR IDEA:
 PROMPT;
+    if ($customtargetdomain !== '') {
+        $customprompt .= "\n\nMANDATORY TARGET DOMAIN:\nEvery generated item must use domainId "
+            . $customtargetdomain
+            . '. This batch is filling a documented shortage in the active exam; do not choose another domain.';
+    }
     $customprompt .= "\n" . $idea;
     if ($custombatchcount > 1) {
         $customprompt .= "\n\nBATCH CREATION:\n"
@@ -4928,6 +5048,15 @@ PROMPT;
             $decodedbatch = $decodecustomresponse(
                 (string)($response->get_response_data()['generatedcontent'] ?? '')
             );
+            if ($customtargetdomain !== '') {
+                foreach ($decodedbatch as $decodeditem) {
+                    if ((string)($decodeditem['domainId'] ?? '') !== $customtargetdomain) {
+                        throw new UnexpectedValueException(
+                            'Every generated question must use the required exam-shortage domain.'
+                        );
+                    }
+                }
+            }
             $originalitybatch = [];
             $validatedbatch = [];
             foreach ($decodedbatch as $decodedindex => $decodeditem) {
@@ -5031,6 +5160,11 @@ PROMPT;
     $createdcustomquestionids = [];
     foreach ($decodedbatch as $decodedindex => $decoded) {
         $domainid = (string)$decoded['domainId'];
+        if ($customtargetdomain !== '' && $domainid !== $customtargetdomain) {
+            throw new UnexpectedValueException(
+                'The generated question did not use the required exam-shortage domain.'
+            );
+        }
         $prompt = (string)$decoded['prompt'];
         $explanation = (string)$decoded['explanation'];
         $correctlabel = (string)$decoded['correctLabel'];
@@ -5115,6 +5249,8 @@ PROMPT;
             'creationBatchId' => $customcreationbatchid,
             'creationBatchPosition' => $decodedindex + 1,
             'creationBatchCount' => $custombatchcount,
+            'targetDomainId' => $customtargetdomain,
+            'targetExamProjectId' => $customtargetexamid,
             'corrections' => array_slice($corrections, -20),
             'reviewSummary' => trim((string)($decoded['reviewSummary'] ?? '')),
             'originality' => $originalityrecord,
@@ -7278,6 +7414,26 @@ $newquestionurl = new moodle_url('/blocks/myprogress/admin-herbology-question-ba
     'newquestion' => 1,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
 ]));
+$projectshortagecreateurls = [];
+if (is_array($currentexamproject)) {
+    foreach ($projectshortagebydomain as $shortagedomainid => $shortagecount) {
+        if ($shortagecount < 1) {
+            continue;
+        }
+        $projectshortagecreateurls[$shortagedomainid] = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter([
+                'newquestion' => 1,
+                'targetdomain' => $shortagedomainid,
+                'targetexamproject' => (string)$currentexamproject['id'],
+                'needed' => $shortagecount,
+                'examproject' => (string)$currentexamproject['id'],
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ])
+        );
+        $projectshortagecreateurls[$shortagedomainid]->set_anchor('new-question');
+    }
+}
 $assistanturl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'aiassistant' => 1,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
@@ -8135,11 +8291,53 @@ echo $OUTPUT->header();
         <?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?>
     </section>
     <?php endif; ?>
-    <?php if ($shownewquestionform): ?><section id="new-question" class="question-bank__new-question"><h3>Create one or several questions</h3><p>Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as <strong>### Question 1</strong> or <strong>### 2.</strong>, lines containing <strong>---</strong>, and repeated <strong>Correct answer:</strong> or <strong>Respuesta correcta:</strong> labels. It creates an independent draft for each question and immediately displays a visible index of the complete batch.</p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."></textarea><input type="hidden" name="formaction" value="createnewquestion"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Create and preview drafts</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Cancel</a></div><?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?></form></section><?php endif; ?>
+    <?php if ($shownewquestionform): ?><section id="new-question" class="question-bank__new-question">
+        <h3><?php echo $displaylang === 'es' ? 'Crear una o varias preguntas' : 'Create one or several questions'; ?></h3>
+        <?php if ($newquestiontargetdomain !== '' && isset($domains[$newquestiontargetdomain])): ?>
+            <div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Faltante del examen activo:' : 'Active-exam shortage:'; ?></strong>
+                <?php echo s((string)($currentexamproject['name'] ?? '')); ?> <?php echo $displaylang === 'es' ? 'necesita' : 'needs'; ?>
+                <?php echo (int)$newquestionneededcount; ?> <?php echo $displaylang === 'es' ? 'pregunta(s) nueva(s) de' : 'new question(s) from'; ?>
+                Domain <?php echo (int)$domains[$newquestiontargetdomain]['number']; ?> · <?php echo s((string)$domains[$newquestiontargetdomain]['name']); ?>.
+                <?php echo $displaylang === 'es'
+                    ? 'Las preguntas aprobadas desde este formulario se agregarán automáticamente al examen.'
+                    : 'Questions approved from this form will be added to the exam automatically.'; ?>
+            </div>
+        <?php endif; ?>
+        <p>Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as <strong>### Question 1</strong> or <strong>### 2.</strong>, lines containing <strong>---</strong>, and repeated <strong>Correct answer:</strong> or <strong>Respuesta correcta:</strong> labels. It creates an independent draft for each question and immediately displays a visible index of the complete batch.</p>
+        <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+            <textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."></textarea>
+            <input type="hidden" name="formaction" value="createnewquestion">
+            <input type="hidden" name="targetdomain" value="<?php echo s($newquestiontargetdomain); ?>">
+            <input type="hidden" name="targetexamproject" value="<?php echo s($newquestiontargetexam); ?>">
+            <input type="hidden" name="needed" value="<?php echo (int)$newquestionneededcount; ?>">
+            <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+            <div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Create and preview drafts</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Cancel</a></div>
+            <?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?>
+        </form>
+    </section><?php endif; ?>
     <?php if ($customdraftcount > 0 && !$shownewquestionform): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
     <?php if ($reviewfilter === 'editing_drafts'): ?><section class="question-bank__review-progress"><strong>Saved editing drafts: <?php echo (int)$savededitingdraftcount; ?></strong><p>This view includes unfinished manual and automatic edits from earlier updates and review groups. The most recently saved drafts appear first. Continue the correction, approve the current version, edit manually or delete the question.</p></section><?php endif; ?>
     <?php if ($reviewfilter === 'study_archive'): ?><section class="question-bank__review-progress"><strong><?php echo $displaylang === 'es' ? 'Preguntas exclusivas de Mock' : 'Mock-only questions'; ?>: <?php echo (int)$studyarchivecount; ?></strong><p><?php echo $displaylang === 'es' ? 'Estas preguntas se conservan completas y se ubican automáticamente en el Mock correspondiente a su dominio. No pertenecen al banco board ni a los Simulation Exams. Puede restaurarlas al banco cuando quiera.' : 'These questions are preserved in full and automatically placed in the Mock category matching their domain. They do not belong to the board bank or Simulation Exams. You can restore them to the board bank at any time.'; ?></p></section><?php endif; ?>
     <?php if ($usagefilter === 'exam_project_pending' && $query !== '' && $resultcount === 1): $focusedquestionid = (string)$filteredquestions[0]['questionId']; ?><section class="question-bank__review-progress"><strong><?php echo s((string)$currentexamproject['name']); ?> — focused question ready</strong><p><a class="question-bank__button question-bank__button--publish" href="#question-<?php echo s($focusedquestionid); ?>"><?php echo $displaylang === 'es' ? 'Continuar, revisar y publicar esta pregunta' : 'Continue, review and publish this question'; ?></a><?php if ($pendingexamprojecturl !== null): ?> <a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Omitir y volver a las pendientes' : 'Skip and return to pending questions'; ?></a><?php endif; ?></p></section><?php endif; ?>
+    <?php if ($usagefilter === 'exam_project_pending' && array_sum($projectshortagebydomain) > 0): ?>
+    <section class="question-bank__review-progress">
+        <strong><?php echo $displaylang === 'es' ? 'El banco no tiene suficientes preguntas únicas para completar este examen.' : 'The bank does not have enough unique questions to complete this exam.'; ?></strong>
+        <p><?php echo $displaylang === 'es'
+            ? 'No se reutilizarán preguntas publicadas en Exams anteriores. Las candidatas disponibles aparecen abajo; para los espacios restantes deben crearse preguntas nuevas con fuente.'
+            : 'Questions published in earlier Exams will not be reused. Available candidates appear below; the remaining positions require new sourced questions.'; ?></p>
+        <?php foreach ($projectshortagebydomain as $shortagedomainid => $shortagecount): ?>
+            <?php if ($shortagecount < 1): continue; endif; ?>
+            <div class="question-bank__decision-actions">
+                <span><strong>Domain <?php echo (int)$domains[$shortagedomainid]['number']; ?> · <?php echo s((string)$domains[$shortagedomainid]['name']); ?>:</strong>
+                    <?php echo (int)$projectremainingbydomain[$shortagedomainid]; ?> <?php echo $displaylang === 'es' ? 'espacios pendientes,' : 'positions pending,'; ?>
+                    <?php echo (int)$projectcandidatecountbydomain[$shortagedomainid]; ?> <?php echo $displaylang === 'es' ? 'candidata(s) disponible(s) y' : 'candidate(s) available and'; ?>
+                    <?php echo (int)$shortagecount; ?> <?php echo $displaylang === 'es' ? 'pregunta(s) nueva(s) requerida(s).' : 'new question(s) required.'; ?>
+                </span>
+                <?php if (isset($projectshortagecreateurls[$shortagedomainid])): ?><a class="question-bank__button question-bank__button--primary" href="<?php echo $projectshortagecreateurls[$shortagedomainid]->out(false); ?>"><?php echo $displaylang === 'es' ? 'Crear preguntas faltantes' : 'Create missing questions'; ?></a><?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    </section>
+    <?php endif; ?>
     <?php if (in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, explicit concept-to-choice mappings, distractor analysis, feedback and classification. Repeated formula or herb answers are rotated, when their source cards support it, into ingredient hierarchy, distinctive dosage, preparation, processing, composition or modification questions. Unsupported facts are never invented. It also updates the oldest pending drafts created with an earlier reviewer while preserving their accumulated instructions. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><?php if ($usagefilter === 'exam_project_pending' && $examprojectid !== ''): ?><input type="hidden" name="usage" value="exam_project_pending"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Update or review next 5 questions</button></form></section><?php endif; ?>
     <?php if ($editquestion !== null && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts')):
         $editorstatus = (string)($editorrevision['status'] ?? 'original');
@@ -8395,6 +8593,10 @@ echo $OUTPUT->header();
         $questioninexamproject = $examprojectid !== ''
             && in_array((string)$question['questionId'], $currentexamquestionids, true);
         $questionusedinpriorexam = isset($questionsusedinpriorexams[(string)$question['questionId']]);
+        $isapprovedreservecandidate = $usagefilter === 'exam_project_pending'
+            && isset($examprojectpositions[(string)$question['questionId']])
+            && $isprocessedquestion($question)
+            && !$questioninexamproject;
         $currentexamprojectfull = is_array($currentexamproject)
             && (int)$currentexamproject['currentCount'] >= (int)$currentexamproject['targetCount'];
         $excludeexamconfirm = is_array($currentexamproject)
@@ -8435,8 +8637,9 @@ echo $OUTPUT->header();
             <?php if ($pendingexamprojecturl !== null && ($usagefilter !== 'exam_project_pending' || $query !== '')): ?><a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo '← ' . s((string)$pendingexamproject['name']) . ($displaylang === 'es' ? ' · revisión pendiente' : ' pending review'); ?></a><?php endif; ?>
             <?php if ($query !== '' && !$inlineapproval && $pendingexamprojecturl === null): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter !== 'exam_project_pending' && !$inlineapproval && !$question['_excluded'] && $question['_ready'] && ($questioninexamproject || !$questionusedinpriorexam)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
+            <?php if ($isapprovedreservecandidate): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="add"><input type="hidden" name="returnexamview" value="candidates"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo ($displaylang === 'es' ? 'Agregar pregunta aprobada a ' : 'Add approved question to ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter === 'exam_project_pending' && isset($examprojectpositions[(string)$question['questionId']]) && (string)($currentexamproject['status'] ?? 'draft') !== 'published'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="excludeexamcandidate"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm(<?php echo s(json_encode($excludeexamconfirm, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); ?>);"><?php echo ($displaylang === 'es' ? 'Excluir de ' : 'Exclude from ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
-            <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$iscustomdraft): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
+            <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$iscustomdraft && !$isapprovedreservecandidate): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $question['_ready'] && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><?php if (!in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><input type="hidden" name="returnorigin" value="1"><?php endif; ?><?php if ($question['_exam2position'] > 0): ?><input type="hidden" name="pinforexam2" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta lista?' : 'Approve and publish this ready question?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && !$visibleherbplacementmissing && in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible version now? It will be removed from pending questions.');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && !$visibleherbplacementmissing && !in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta versión ahora?' : 'Approve and publish this version now?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
