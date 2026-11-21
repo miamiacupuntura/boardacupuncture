@@ -109,6 +109,7 @@ grep -Fq "'SCORM-FD-E4D38EA9FCBA' => 'CF-0056'" "$QUESTION_BANK_SOURCE"
 grep -Fq '$questionsusedinpriorexams' "$QUESTION_BANK_SOURCE"
 grep -Fq 'priorExamQuestionIdsSkipped' "$QUESTION_BANK_SOURCE"
 grep -Fq "'prior_exam'" "$QUESTION_BANK_SOURCE"
+grep -Fq 'fd012BilingualRepairAt' "$QUESTION_BANK_SOURCE"
 grep -Fq "'study_archive'" "$OVERRIDES_SOURCE"
 grep -Fq "'archiveModule'" "$OVERRIDES_SOURCE"
 grep -Fq "'mockOnly'" "$HERBOLOGY_BOARD_SOURCE"
@@ -145,6 +146,28 @@ $text=json_encode($found, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 if (!is_array($found) || trim((string)($found["explanation"] ?? "")) === ""
         || preg_match("/Both of them|None of them|Ambos\\.|Ninguno de ellos/u", (string)$text)) {
     fwrite(STDERR, "ERROR: CF-0056 todavía contiene la comparación combinada defectuosa.\n");
+    exit(1);
+}' "$SOURCE_DATA"
+php -r '
+$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+$found=null;
+foreach (($data["domains"] ?? []) as $questions) {
+    foreach ($questions as $question) {
+        if (($question["questionId"] ?? "") === "FD-012") { $found=$question; break 2; }
+    }
+}
+$english=(string)($found["prompt"] ?? "");
+$spanish=(string)($found["translations"]["es"]["prompt"] ?? "");
+$englishfeedback=(string)($found["explanation"] ?? "");
+$spanishfeedback=(string)($found["translations"]["es"]["explanation"] ?? "");
+$spanishoptions=(array)($found["translations"]["es"]["options"] ?? []);
+if (!is_array($found) || !str_starts_with($english, "During a study seminar")
+        || !str_starts_with($spanish, "Durante un seminario")
+        || count($spanishoptions) !== 4
+        || !str_contains((string)($spanishoptions[2]["text"] ?? ""), "Decocción")
+        || !str_contains($englishfeedback, "Inference step 1")
+        || !str_contains($spanishfeedback, "Paso de inferencia 1")) {
+    fwrite(STDERR, "ERROR: FD-012 no contiene versiones completas en inglés y español.\n");
     exit(1);
 }' "$SOURCE_DATA"
 
@@ -331,6 +354,7 @@ echo "OK: una opción que concatena otras dos también queda bloqueada como resp
 echo "OK: SCORM-FD-E4D38EA9FCBA usa la comparación corregida de Yu Ping Feng San y Mu Li San."
 echo "OK: las preguntas ya publicadas en otro examen se omiten de los exámenes nuevos y se reemplazan por preguntas del mismo dominio."
 echo "OK: la publicación queda bloqueada si un examen todavía contiene una pregunta usada anteriormente."
+echo "OK: FD-012 contiene versiones completas y separadas en inglés y español."
 echo "OK: $CF0126_OVERRIDE_RESULT"
 echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"
 echo "OK: revisión instalada: $REVISION"

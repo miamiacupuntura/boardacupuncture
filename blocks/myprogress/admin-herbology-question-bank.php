@@ -165,6 +165,73 @@ foreach ($bank['domains'] as &$questions) {
 }
 unset($questions);
 $revisionstore = block_myprogress_herbology_override_load();
+$fd012canonical = null;
+foreach (($bank['domains'] ?? []) as $questions) {
+    foreach ((array)$questions as $question) {
+        if ((string)($question['questionId'] ?? '') === 'FD-012') {
+            $fd012canonical = $question;
+            break 2;
+        }
+    }
+}
+$fd012storedrecord = $revisionstore['questions']['FD-012'] ?? null;
+$fd012snapshotneedsrepair = static function($snapshot): bool {
+    if (!is_array($snapshot)) {
+        return false;
+    }
+    $prompt = (string)($snapshot['prompt'] ?? '');
+    if (preg_match('/[¿¡]|\b(?:Durante|paciente|fiebre|fórmula|presenta)\b/iu', $prompt)) {
+        return true;
+    }
+    $englishoptions = array_values((array)($snapshot['options'] ?? []));
+    $spanishoptions = array_values((array)($snapshot['translations']['es']['options'] ?? []));
+    if (count($spanishoptions) !== 4) {
+        return true;
+    }
+    foreach ($spanishoptions as $index => $spanishoption) {
+        if (trim((string)($spanishoption['text'] ?? '')) !== ''
+                && trim((string)($spanishoption['text'] ?? ''))
+                    === trim((string)($englishoptions[$index]['text'] ?? ''))) {
+            return true;
+        }
+    }
+    return false;
+};
+$fd012repairkeys = [];
+if (is_array($fd012canonical) && is_array($fd012storedrecord)) {
+    foreach (['original', 'draft', 'approved'] as $snapshotkey) {
+        if ($fd012snapshotneedsrepair($fd012storedrecord[$snapshotkey] ?? null)) {
+            $fd012repairkeys[] = $snapshotkey;
+        }
+    }
+}
+if ($fd012repairkeys !== []) {
+    $fd012replacement = array_intersect_key($fd012canonical, array_flip([
+        'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+        'contentType', 'cognitiveLevel', 'difficultyBand',
+    ]));
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $fd012repairkeys,
+        $fd012replacement
+    ): array {
+        $record = $store['questions']['FD-012'] ?? null;
+        if (!is_array($record)) {
+            return $store;
+        }
+        foreach ($fd012repairkeys as $snapshotkey) {
+            if (!is_array($record[$snapshotkey] ?? null)) {
+                continue;
+            }
+            $record[$snapshotkey] = array_replace($record[$snapshotkey], $fd012replacement);
+        }
+        $record['fd012BilingualRepairAt'] = gmdate(DATE_ATOM);
+        $record['savedAt'] = gmdate(DATE_ATOM);
+        $record['savedByName'] = 'FD-012 bilingual repair';
+        $store['questions']['FD-012'] = $record;
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $publishedprojectrepairs = [];
 $questionsusedinpriorexams = [];
 foreach (($bank['domains'] ?? []) as $questions) {

@@ -56855,7 +56855,7 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Board-style clinical selection generated from an official Appendix C formula profile."
         },
-        "prompt": "A patient has the following presentation: Fever at night that recedes by morning without sweating, emaciation and a red tongue with little coat. Which formula best matches this presentation?",
+        "prompt": "During a study seminar in Chengdu, a patient presents with fever at night that recedes by morning without sweating, emaciation, and a red tongue with little coating. Which formula best matches this presentation?",
         "options": [
           {
             "label": "A",
@@ -56875,7 +56875,7 @@
           }
         ],
         "correctLabel": "C",
-        "explanation": "Qing Hao Bie Jia Tang (Sweet Wormwood and Soft-shelled Turtle Shell Decoction) treats Heat smoldering in the Yin level after a febrile disease with depleted Yin and fluids. Action: Nourish Yin and vent hidden Heat. Decisive clue: The board clue is the daily rhythm: fever appears at night and recedes by morning, yet there is no sweat as it resolves. Add emaciation without loss of appetite, a red tongue with little coat and a fine-rapid pulse after a febrile illness. Safety: Not for the early Qi-level stage of warm disease, pure excess Heat, marked digestive weakness or presentations with spasms/convulsions. Bie Jia (Trionycis Carapax) is animal-derived and requires sourcing and allergy review; Qing Hao (Artemisiae annuae Herba) is added near the end to preserve volatile constituents. Persistent night fever, weight loss, bleeding or recurrent fever requires medical evaluation.",
+        "explanation": "Inference step 1: Fever that appears at night and recedes by morning without sweating, together with emaciation and a red tongue with little coating, indicates Heat smoldering at the Yin level after depletion of Yin and fluids. Inference step 2: Qing Hao Bie Jia Tang (Sweet Wormwood and Soft-shelled Turtle Shell Decoction) nourishes Yin and vents hidden Heat without promoting sweating. Option A: Huang Lian Jie Du Tang treats intense excess Fire-Toxin rather than depleted Yin with hidden Heat. Option B: Ma Xing Shi Gan Tang treats Lung Heat with wheezing and sweating, which does not match this presentation. Option C: Correct. Qing Hao Bie Jia Tang matches the characteristic nightly fever, morning resolution without sweating, emaciation, and red, scantily coated tongue. Option D: Long Dan Xie Gan Tang drains Liver and Gallbladder Damp-Heat rather than treating Yin-level hidden Heat.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
@@ -56889,26 +56889,26 @@
         },
         "translations": {
           "es": {
-            "prompt": "Un paciente presenta el siguiente cuadro: Fiebre nocturna que cede por la mañana sin sudor, adelgazamiento y lengua roja con poca capa. ¿Qué fórmula corresponde mejor a esta presentación?",
+            "prompt": "Durante un seminario de estudio en Chengdu, una paciente presenta fiebre nocturna que desaparece por la mañana sin sudoración, emaciación y una lengua roja con poco recubrimiento. ¿Qué fórmula se ajusta mejor a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity)"
+                "text": "Huang Lian Jie Du Tang (Decocción de Coptis para resolver la toxicidad)"
               },
               {
                 "label": "B",
-                "text": "Ma Xing Shi Gan Tang (Ephedra, Apricot Kernel, Gypsum and Licorice Decoction)"
+                "text": "Ma Xing Shi Gan Tang (Decocción de efedra, semilla de albaricoque, yeso y regaliz)"
               },
               {
                 "label": "C",
-                "text": "Qing Hao Bie Jia Tang (Sweet Wormwood and Soft-shelled Turtle Shell Decoction)"
+                "text": "Qing Hao Bie Jia Tang (Decocción de artemisa dulce y caparazón de tortuga de concha blanda)"
               },
               {
                 "label": "D",
-                "text": "Long Dan Xie Gan Tang (Gentian Decoction to Drain the Liver)"
+                "text": "Long Dan Xie Gan Tang (Decocción de genciana para drenar el Hígado)"
               }
             ],
-            "explanation": "Qing Hao Bie Jia Tang (Sweet Wormwood and Soft-shelled Turtle Shell Decoction) trata Calor latente en el nivel Yin después de enfermedad febril, con Yin y líquidos agotados. Acción: Nutre Yin y libera Calor oculto. Pista decisiva: La pista de board es el ritmo diario: la fiebre aparece de noche y cede por la mañana, pero no hay sudor al resolverse. Añade adelgazamiento sin pérdida de apetito, lengua roja con poca capa y pulso fino-rápido tras enfermedad febril. Seguridad: No corresponde a etapa temprana del nivel Qi de enfermedad tibia, Calor de exceso puro, debilidad digestiva marcada ni cuadros con espasmos/convulsiones. Bie Jia (Trionycis Carapax) es de origen animal y exige revisar procedencia y alergias; Qing Hao (Artemisiae annuae Herba) se añade cerca del final para preservar componentes volátiles. Fiebre nocturna persistente, pérdida de peso, sangrado o fiebre recurrente requiere evaluación médica."
+            "explanation": "Paso de inferencia 1: La fiebre que aparece por la noche y desaparece por la mañana sin sudoración, junto con emaciación y una lengua roja con poco recubrimiento, indica Calor latente en el nivel Yin después del agotamiento del Yin y los líquidos. Paso de inferencia 2: Qing Hao Bie Jia Tang (Decocción de artemisa dulce y caparazón de tortuga de concha blanda) nutre el Yin y libera el Calor oculto sin provocar sudoración. Opción A: Huang Lian Jie Du Tang trata Fuego-Toxina intenso de exceso, no Yin agotado con Calor oculto. Opción B: Ma Xing Shi Gan Tang trata Calor de Pulmón con sibilancias y sudoración, lo cual no corresponde a esta presentación. Opción C: Correcta. Qing Hao Bie Jia Tang corresponde a la fiebre nocturna característica, su desaparición matutina sin sudoración, la emaciación y la lengua roja con poco recubrimiento. Opción D: Long Dan Xie Gan Tang drena Humedad-Calor de Hígado y Vesícula Biliar, no Calor oculto en el nivel Yin."
           }
         },
         "nomenclature": {
