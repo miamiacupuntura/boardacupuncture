@@ -772,6 +772,144 @@ $formulavduiyaocanonical = [
     ],
     'reviewSummary' => 'Replaced the unrelated single-herb item with the requested formula-versus-Duì-Yào prescribing-boundary inference.',
 ];
+$mahuangthreelevelscanonical = [
+    'domainId' => 'dui_yao',
+    'prompt' => 'A 29-year-old patient develops severe chills, mild fever, absence of sweating, generalized body aches, headache, slight wheezing, and a floating-tight pulse after exposure to cold wind. Which prescription best treats the complete presentation while correctly distinguishing an individual herb, a Duì Yào, and a complete formula?',
+    'options' => [
+        [
+            'label' => 'A',
+            'text' => 'Mǎ Huáng (Ephedrae Herba) alone, for the isolated objective of strongly releasing the Exterior and promoting sweating.',
+        ],
+        [
+            'label' => 'B',
+            'text' => 'Mǎ Huáng (Ephedrae Herba) + Guì Zhī (Cinnamomi Ramulus), as a focused Duì Yào for strongly releasing an excess Wind-Cold Exterior pattern.',
+        ],
+        [
+            'label' => 'C',
+            'text' => 'Mǎ Huáng Tāng (Ephedra Decoction), as the complete coordinated formula for this full exterior Wind-Cold excess pattern.',
+        ],
+        [
+            'label' => 'D',
+            'text' => 'Guì Zhī Tāng (Cinnamon Twig Decoction), for an exterior-deficiency presentation with spontaneous sweating and a floating-moderate pulse.',
+        ],
+    ],
+    'correctLabel' => 'C',
+    'explanation' => 'Inference step 1: Severe chills, mild fever, absence of sweating, body aches, headache, slight wheezing, and a floating-tight pulse identify a complete exterior Wind-Cold excess pattern. Inference step 2: Mǎ Huáng Tāng coordinates Mǎ Huáng, Guì Zhī, Xìng Rén, and Zhì Gān Cǎo to release the Exterior, promote sweating, and restore Lung Qi descent, so the complete pattern requires the complete formula rather than only one component or its core pair. Option A: Incorrect. Mǎ Huáng alone represents a narrower single-herb intervention and does not reproduce the coordinated formula architecture. Option B: Incorrect. Mǎ Huáng + Guì Zhī is the focused Duì Yào that strongly releases an excess Wind-Cold Exterior pattern, but the pair is not an automatic equivalent of the complete formula. Option C: Correct. Mǎ Huáng Tāng matches the complete presentation and therapeutic strategy. Option D: Incorrect. Guì Zhī Tāng is associated with exterior deficiency, spontaneous sweating, and a floating-moderate pulse rather than the unsweating exterior excess shown here.',
+    'translations' => [
+        'es' => [
+            'prompt' => 'Una paciente de 29 años presenta escalofríos intensos, fiebre leve, ausencia de sudoración, dolor corporal generalizado, cefalea, sibilancias leves y pulso flotante-tenso después de exponerse a viento frío. ¿Qué prescripción trata mejor la presentación completa y distingue correctamente una hierba individual, un Duì Yào y una fórmula completa?',
+            'options' => [
+                [
+                    'label' => 'A',
+                    'text' => 'Mǎ Huáng (Ephedrae Herba) sola, para el objetivo aislado de liberar fuertemente el Exterior y promover la sudoración.',
+                ],
+                [
+                    'label' => 'B',
+                    'text' => 'Mǎ Huáng (Ephedrae Herba) + Guì Zhī (Cinnamomi Ramulus), como Duì Yào focal para liberar fuertemente un patrón exterior de Viento-Frío por exceso.',
+                ],
+                [
+                    'label' => 'C',
+                    'text' => 'Mǎ Huáng Tāng (Decocción de efedra), como fórmula coordinada completa para este patrón exterior pleno de Viento-Frío por exceso.',
+                ],
+                [
+                    'label' => 'D',
+                    'text' => 'Guì Zhī Tāng (Decocción de ramita de canela), para una presentación de deficiencia exterior con sudoración espontánea y pulso flotante-moderado.',
+                ],
+            ],
+            'explanation' => 'Paso de inferencia 1: Los escalofríos intensos, la fiebre leve, la ausencia de sudoración, el dolor corporal, la cefalea, las sibilancias leves y el pulso flotante-tenso identifican un patrón exterior completo de Viento-Frío por exceso. Paso de inferencia 2: Mǎ Huáng Tāng coordina Mǎ Huáng, Guì Zhī, Xìng Rén y Zhì Gān Cǎo para liberar el Exterior, promover la sudoración y restaurar el descenso del Qi de Pulmón; por eso el patrón completo requiere la fórmula completa y no solo un componente o su pareja central. Opción A: Incorrecta. Mǎ Huáng sola representa una intervención más estrecha de una sola hierba y no reproduce la arquitectura coordinada de la fórmula. Opción B: Incorrecta. Mǎ Huáng + Guì Zhī es el Duì Yào focal que libera fuertemente un patrón exterior de Viento-Frío por exceso, pero la pareja no equivale automáticamente a la fórmula completa. Opción C: Correcta. Mǎ Huáng Tāng corresponde a la presentación completa y a su estrategia terapéutica. Opción D: Incorrecta. Guì Zhī Tāng corresponde a deficiencia exterior, sudoración espontánea y pulso flotante-moderado, no al exceso exterior sin sudoración mostrado aquí.',
+        ],
+    ],
+    'contentType' => 'dui_yao',
+    'cognitiveLevel' => 'analyze',
+    'difficultyBand' => 'analysis',
+    'sourceKind' => 'admin',
+    'source' => [
+        'title' => 'Mǎ Huáng + Guì Zhī Duì Yào study card',
+        'section' => 'Individual herb, Duì Yào, or complete formula?',
+        'locator' => 'Three prescribing levels for exterior Wind-Cold excess',
+    ],
+    'sourceCard' => [
+        'label' => 'Open Mǎ Huáng + Guì Zhī Duì Yào reference',
+        'labelEs' => 'Abrir referencia Duì Yào de Mǎ Huáng + Guì Zhī',
+        'url' => '/study-guide/comparisons/ma-huang-gui-zhi-dui-yao.html',
+        'urlEs' => '/study-guide/comparisons/ma-huang-gui-zhi-dui-yao-es.html',
+    ],
+    'editorial' => [
+        'simulationCandidate' => true,
+        'inferenceUpgradeRequired' => false,
+        'feedbackQuality' => 'curated',
+        'feedbackRecommendation' => 'Administrator approval required before use.',
+    ],
+    'examTemplate' => ['globalPosition' => 0],
+    'nomenclature' => [
+        'herbs' => [
+            ['pinyin' => 'Ma Huang', 'pharmaceuticalName' => 'Ephedrae Herba'],
+            ['pinyin' => 'Gui Zhi', 'pharmaceuticalName' => 'Cinnamomi Ramulus'],
+        ],
+        'formulas' => [
+            ['pinyin' => 'Ma Huang Tang', 'englishName' => 'Ephedra Decoction'],
+            ['pinyin' => 'Gui Zhi Tang', 'englishName' => 'Cinnamon Twig Decoction'],
+        ],
+    ],
+    'reviewSummary' => 'Preserved the requested three-level comparison: Mǎ Huáng alone, Mǎ Huáng + Guì Zhī as the focused Duì Yào, and Mǎ Huáng Tāng as the complete formula.',
+];
+$mahuangthreelevelsrepairids = [];
+foreach ((array)($revisionstore['customQuestions'] ?? []) as $mahuangquestionid => $mahuangrecord) {
+    if (!is_array($mahuangrecord)
+            || (string)($mahuangrecord['status'] ?? 'draft') !== 'draft'
+            || !empty($mahuangrecord['maHuangThreeLevelsRepairedAt'])) {
+        continue;
+    }
+    $mahuangidea = core_text::strtolower(core_text::specialtoascii(
+        (string)($mahuangrecord['idea'] ?? '')
+    ));
+    $mahuangexplicitrequest = core_text::strpos($mahuangidea, 'ma huang tang') !== false
+        && core_text::strpos($mahuangidea, 'gui zhi') !== false
+        && preg_match('/(?:dui\s*yao|pair|pareja)/u', $mahuangidea) === 1
+        && preg_match('/(?:alone|individual\s+herb|herb\s+alone|sola|hierba\s+sola)/u', $mahuangidea) === 1;
+    if ($mahuangexplicitrequest) {
+        $mahuangthreelevelsrepairids[] = (string)$mahuangquestionid;
+    }
+}
+if ($mahuangthreelevelsrepairids !== []) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $mahuangthreelevelsrepairids,
+        $mahuangthreelevelscanonical,
+        $duiyaoclassificationtargetexamid
+    ): array {
+        $savedat = gmdate(DATE_ATOM);
+        foreach ($mahuangthreelevelsrepairids as $mahuangquestionid) {
+            $record = $store['customQuestions'][$mahuangquestionid] ?? null;
+            if (!is_array($record) || (string)($record['status'] ?? 'draft') !== 'draft') {
+                continue;
+            }
+            $correcteddraft = $mahuangthreelevelscanonical;
+            $correcteddraft['questionId'] = $mahuangquestionid;
+            $record['domainId'] = 'dui_yao';
+            $record['targetDomainId'] = 'dui_yao';
+            if ((string)($record['targetExamProjectId'] ?? '') === ''
+                    && $duiyaoclassificationtargetexamid !== '') {
+                $record['targetExamProjectId'] = $duiyaoclassificationtargetexamid;
+            }
+            $record['draft'] = $correcteddraft;
+            $record['reviewSummary'] = (string)$mahuangthreelevelscanonical['reviewSummary'];
+            $record['formulaDuiYaoPairNumber'] = 1;
+            $record['formulaDuiYaoPair'] = 'Mǎ Huáng + Guì Zhī';
+            $record['formulaDuiYaoFormulaContext'] = 'Mǎ Huáng Tāng';
+            $record['originality'] = array_replace((array)($record['originality'] ?? []), [
+                'status' => 'clear',
+                'checkedAt' => $savedat,
+            ]);
+            $record['maHuangThreeLevelsRepairedAt'] = $savedat;
+            $record['savedAt'] = $savedat;
+            $record['savedByName'] = 'Mǎ Huáng three-level objective repair';
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $store['customQuestions'][$mahuangquestionid] = $record;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $formulavduiyaorepairids = [];
 foreach ((array)($revisionstore['customQuestions'] ?? []) as $scopequestionid => $scopequestionrecord) {
     if (!is_array($scopequestionrecord)
@@ -6282,6 +6420,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $idea = $iscustomrewrite
         ? trim((string)($customrecord['idea'] ?? ''))
         : trim(required_param('idea', PARAM_RAW));
+    $preserveexactquestion = !$iscustomrewrite
+        && (bool)optional_param('preserveexactquestion', 0, PARAM_BOOL);
     $usedinstructiontemplateid = $iscustomrewrite
         ? (string)($customrecord['instructionTemplateId'] ?? '')
         : optional_param('instructiontemplateid', '', PARAM_ALPHANUMEXT);
@@ -6318,6 +6458,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $customtargetexamid = (string)($pendingexamproject['id'] ?? '');
         }
     }
+    $normalizedexactidea = core_text::strtolower(core_text::specialtoascii($idea));
+    $mahuangthreelevelsrequest = core_text::strpos($normalizedexactidea, 'ma huang tang') !== false
+        && core_text::strpos($normalizedexactidea, 'gui zhi') !== false
+        && preg_match('/(?:dui\s*yao|pair|pareja)/u', $normalizedexactidea) === 1
+        && preg_match(
+            '/(?:alone|individual\s+herb|herb\s+alone|sola|hierba\s+sola)/u',
+            $normalizedexactidea
+        ) === 1;
+    if ($mahuangthreelevelsrequest) {
+        $customtargetdomain = 'dui_yao';
+        if ($customtargetexamid === '' && is_array($pendingexamproject)) {
+            $customtargetexamid = (string)($pendingexamproject['id'] ?? '');
+        }
+    }
     $normalizedscopeidea = core_text::strtolower($idea);
     $formulavduiyaoscopeidea = preg_match('/\b(?:duì\s*yào|dui\s*yao)\b/iu', $normalizedscopeidea) === 1
         && preg_match('/\bf[oó]rmula\b/iu', $normalizedscopeidea) === 1
@@ -6325,6 +6479,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             '/\b(?:choose|select|when|difference|distinction|scope|equivalent|core|modification|prescription|elegir|seleccionar|cu[aá]ndo|diferencia|distinci[oó]n|alcance|equivalente|central|modificaci[oó]n|prescripci[oó]n)\b/iu',
             $normalizedscopeidea
         ) === 1;
+    if ($mahuangthreelevelsrequest) {
+        $formulavduiyaoscopeidea = true;
+    }
     if ($formulavduiyaoscopeidea) {
         $customtargetdomain = 'dui_yao';
     }
@@ -6354,6 +6511,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         return $parts === [] ? [$block] : array_values($parts);
     };
+    $parsepreservedquestion = static function(string $block): array {
+        $block = trim(str_replace(["\r\n", "\r"], "\n", $block));
+        $optionpattern = '/^\s*\d+\.\s*\*{0,2}([A-D])\.\s*\*{0,2}\s*(.+?)(?=^\s*\d+\.\s*\*{0,2}[A-D]\.\s*\*{0,2}|^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\s*:\s*\*{0,2})/imsu';
+        if (preg_match_all($optionpattern, $block, $optionmatches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE) !== 4) {
+            throw new invalid_parameter_exception(
+                'Exact import requires one complete question with four numbered A-D choices.'
+            );
+        }
+        if (preg_match(
+            '/^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\s*:\s*\*{0,2}\s*([A-D])\b/imu',
+            $block,
+            $answermatch
+        ) !== 1) {
+            throw new invalid_parameter_exception('Exact import requires a Correct answer: A-D line.');
+        }
+        if (preg_match(
+            '/^\s*\*{0,2}(?:Explanation|Explicaci[oó]n)\s*:\s*\*{0,2}\s*(.+?)(?=^\s*\*{0,2}(?:Source|Fuente)\s*:|\z)/imsu',
+            $block,
+            $explanationmatch
+        ) !== 1) {
+            throw new invalid_parameter_exception('Exact import requires an Explanation: section.');
+        }
+        $firstoptionoffset = (int)$optionmatches[0][0][1];
+        $prompt = trim(substr($block, 0, $firstoptionoffset));
+        $prompt = preg_replace('/^\s*#{1,6}\s*/u', '', $prompt) ?? $prompt;
+        $prompt = preg_replace('/^\s*(?:Question|Pregunta)\s*\d+\s*[:.\-]?\s*/iu', '', $prompt) ?? $prompt;
+        $prompt = trim($prompt, " \t\n\r\0\x0B#*");
+        if ($prompt === '' || preg_match('/\?\s*$/u', $prompt) !== 1) {
+            throw new invalid_parameter_exception('Exact import requires a complete interrogative stem.');
+        }
+        $options = [];
+        foreach ($optionmatches as $optionmatch) {
+            $label = strtoupper((string)$optionmatch[1][0]);
+            $text = trim((string)$optionmatch[2][0]);
+            $text = preg_replace('/\*{1,2}\s*$/u', '', $text) ?? $text;
+            $text = trim($text, " \t\n\r\0\x0B*");
+            $options[] = ['label' => $label, 'text' => $text];
+        }
+        return [
+            'prompt' => $prompt,
+            'options' => $options,
+            'correctLabel' => strtoupper((string)$answermatch[1]),
+            'explanation' => trim((string)$explanationmatch[1]),
+        ];
+    };
     $customquestionideas = $iscustomrewrite ? [$idea] : $splitcustomquestionblock($idea);
     if (!$iscustomrewrite && count($customquestionideas) === 1) {
         preg_match_all(
@@ -6372,6 +6574,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     if (!$iscustomrewrite
             && count($customquestionideas) === 1
             && $formulavduiyaoscopeidea
+            && !$mahuangthreelevelsrequest
+            && !$preserveexactquestion
             && $newquestionneededcount > 1) {
         // A general formula-versus-Duì-Yào principle is a reusable educational
         // objective. When it is filling an exam shortage, create a manageable
@@ -6386,6 +6590,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         throw new invalid_parameter_exception(
             'Create no more than 5 questions in one block. Split a larger collection into smaller batches.'
         );
+    }
+    $preservedquestionbatch = [];
+    if ($preserveexactquestion) {
+        foreach ($customquestionideas as $preservedquestionblock) {
+            $preservedquestionbatch[] = $parsepreservedquestion($preservedquestionblock);
+        }
     }
     $custombatchcount = count($customquestionideas);
     $formulavduiyaoscopeevidence = [];
@@ -6452,6 +6662,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 continue;
             }
             $pairnumber = (int)($scopepair['number'] ?? 0);
+            if ($mahuangthreelevelsrequest && $pairnumber !== 1) {
+                continue;
+            }
             $primaryformula = rtrim(explode(';', $formulaenglish)[0], ". \t\n\r\0\x0B");
             $normalizedformula = $normalizescopetext($primaryformula);
             $scopeherbs = array_values((array)($scopepair['herbs'] ?? []));
@@ -6795,6 +7008,10 @@ PROMPT;
             . "Keep Liu Wei Di Huang Wan as the base; keep processed Fu Zi plus Rou Gui as the Duì Yào; identify the Ba Wei Di Huang Wan/Jin Gui Shen Qi Wan lineage; explain the shift toward Kidney Yang and water transformation; and preserve the source-dependent Rou Gui versus Gui Zhi distinction. "
             . "A generic question about Fu Zi indications is invalid.";
     }
+    if ($mahuangthreelevelsrequest) {
+        $customprompt .= "\n\nMANDATORY MǍ HUÁNG THREE-LEVEL OBJECTIVE — PRESERVE EXACTLY:\n"
+            . "Create exactly one direct positive question that visibly distinguishes Mǎ Huáng alone, Mǎ Huáng + Guì Zhī as a focused Duì Yào, and Mǎ Huáng Tāng as the complete formula. The clinical findings must show a complete exterior Wind-Cold excess pattern: severe chills, mild fever, absence of sweating, generalized body aches, headache, slight wheezing, and a floating-tight pulse. The keyed answer must be Mǎ Huáng Tāng. Contrast the individual herb's narrow role, the pair's focused role, and Guì Zhī Tāng for exterior deficiency. Do not substitute another herb, pair, formula, pattern, or educational objective.";
+    }
     if ($formulavduiyaoscopeidea) {
         $customprompt .= "\n\nMANDATORY FORMULA-VERSUS-DUÌ-YÀO OBJECTIVE — DO NOT SUBSTITUTE:\n"
             . "Use every selected relationship below exactly once and create one question from each relationship. These relationships were chosen because their herbs and primary formulas are the least used in recent administrator-authored questions. Do not substitute Gui Zhi + Bai Shao or any other familiar pair unless it is explicitly present below. Put the therapeutic comparison and narrow action into a genuinely interrogative stem ending in a direct question. Keep every A-D choice short and parallel: use a concise formula/pair assignment, not a paragraph of reasoning. Never place the complete-pattern rationale, the list 'core pair, source-supported modification, or brief prescription,' or the automatic-equivalence explanation inside the keyed choice; teach those details only in the explanation. Test when the complete formula is selected for a full pattern and when its Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Show the selected formula and both herbs of the pair in the visible stem or choices. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula in the explanation. A generic single-herb action or indication question is invalid. Do not invent a formula relationship absent from the evidence."
@@ -6803,6 +7020,10 @@ PROMPT;
                 $formulavduiyaoscopeevidence,
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
             );
+    }
+    if ($preserveexactquestion) {
+        $customprompt .= "\n\nEXACT IMPORT MODE — ENGLISH CONTENT IS IMMUTABLE:\n"
+            . "The administrator supplied a finished question. Preserve its English stem, A-D choices, correct answer, and explanation exactly. Use the model only to classify it and provide its faithful Spanish translation. Do not rewrite, improve, rotate, replace, or reinterpret the English educational objective.";
     }
     $customprompt .= "\n" . $idea;
     if ($custombatchcount > 1) {
@@ -7001,6 +7222,28 @@ PROMPT;
             $decodedbatch = $decodecustomresponse(
                 (string)($response->get_response_data()['generatedcontent'] ?? '')
             );
+            if ($mahuangthreelevelsrequest && !$preserveexactquestion) {
+                $decodedbatch = [$decodecustomdraft(json_encode(
+                    $mahuangthreelevelscanonical,
+                    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
+                ))];
+            }
+            if ($preserveexactquestion) {
+                foreach ($decodedbatch as $preservedindex => $decodeditem) {
+                    if (!isset($preservedquestionbatch[$preservedindex])) {
+                        throw new UnexpectedValueException(
+                            'Exact import did not return every supplied question.'
+                        );
+                    }
+                    $preservedenglish = $preservedquestionbatch[$preservedindex];
+                    $decodedbatch[$preservedindex]['prompt'] = $preservedenglish['prompt'];
+                    $decodedbatch[$preservedindex]['options'] = $preservedenglish['options'];
+                    $decodedbatch[$preservedindex]['correctLabel'] = $preservedenglish['correctLabel'];
+                    $decodedbatch[$preservedindex]['explanation'] = $preservedenglish['explanation'];
+                    $decodedbatch[$preservedindex]['reviewSummary'] =
+                        'Imported the completed English question exactly as supplied; only classification and Spanish translation were added.';
+                }
+            }
             if ($customtargetdomain !== '') {
                 foreach ($decodedbatch as $decodeditem) {
                     if ((string)($decodeditem['domainId'] ?? '') !== $customtargetdomain) {
@@ -7026,7 +7269,36 @@ PROMPT;
                     }
                 }
             }
-            if ($formulavduiyaoscopeidea) {
+            if ($mahuangthreelevelsrequest && !$preserveexactquestion) {
+                foreach ($decodedbatch as $decodeditem) {
+                    $generatedcontent = $normalizescopetext((string)json_encode(
+                        $decodeditem,
+                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                    ));
+                    foreach (['ma huang tang', 'ma huang', 'gui zhi', 'dui yao'] as $requiredanchor) {
+                        if (core_text::strpos($generatedcontent, $requiredanchor) === false) {
+                            throw new UnexpectedValueException(
+                                'The Mǎ Huáng three-level question omitted required content: '
+                                    . $requiredanchor . '.'
+                            );
+                        }
+                    }
+                    $correcttext = '';
+                    foreach ((array)($decodeditem['options'] ?? []) as $decodedoption) {
+                        if ((string)($decodedoption['label'] ?? '')
+                                === (string)($decodeditem['correctLabel'] ?? '')) {
+                            $correcttext = $normalizescopetext((string)($decodedoption['text'] ?? ''));
+                            break;
+                        }
+                    }
+                    if (core_text::strpos($correcttext, 'ma huang tang') === false) {
+                        throw new UnexpectedValueException(
+                            'Mǎ Huáng Tāng must remain the keyed answer for the complete presentation.'
+                        );
+                    }
+                }
+            }
+            if ($formulavduiyaoscopeidea && !$preserveexactquestion) {
                 $matchedscopenumbers = [];
                 foreach ($decodedbatch as $decodeditem) {
                     $generatedcontent = json_encode(
@@ -7181,6 +7453,21 @@ PROMPT;
             $decodedbatch = null;
             $originalitybatch = null;
             $lastgenerationerror = $error;
+        }
+    }
+    if ((!is_array($decodedbatch) || !is_array($originalitybatch))
+            && $mahuangthreelevelsrequest
+            && !$preserveexactquestion) {
+        try {
+            $mahuangfallback = $decodecustomdraft(json_encode(
+                $mahuangthreelevelscanonical,
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
+            ));
+            $decodedbatch = [$mahuangfallback];
+            $originalitybatch = [$findnearestquestion($mahuangfallback)];
+            $lastgenerationerror = null;
+        } catch (Throwable $mahuangfallbackerror) {
+            $lastgenerationerror = $mahuangfallbackerror;
         }
     }
     if ((!is_array($decodedbatch) || !is_array($originalitybatch))
@@ -10808,7 +11095,10 @@ echo $OUTPUT->header();
             <input type="hidden" name="targetexamproject" value="<?php echo s($newquestiontargetexam); ?>">
             <input type="hidden" name="needed" value="<?php echo (int)$newquestionneededcount; ?>">
             <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
-            <div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Create and preview drafts</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Cancel</a></div>
+            <div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Crear y revisar borradores' : 'Create and preview drafts'; ?></button><button class="question-bank__button question-bank__button--approve" type="submit" name="preserveexactquestion" value="1"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Usar la pregunta exactamente como está escrita' : 'Use the question exactly as written'; ?></button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cancelar' : 'Cancel'; ?></a></div>
+            <small class="question-bank__proposal-saved"><?php echo $displaylang === 'es'
+                ? 'La opción exacta importa el enunciado, A-D, la respuesta y la explicación sin reescribirlos; solo agrega clasificación y traducción al español antes de mostrarlos para edición.'
+                : 'Exact mode imports the stem, A-D choices, answer and explanation without rewriting them; it only adds classification and a Spanish translation before opening the editable draft.'; ?></small>
             <?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?>
         </form>
     </section><?php endif; ?>
