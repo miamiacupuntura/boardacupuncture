@@ -5700,6 +5700,104 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             ];
         }
     }
+    $buildformulavduiyaoscopefallback = static function(array $scopeevidence): array {
+        $pairnumber = (int)($scopeevidence['pairNumber'] ?? 0);
+        $pair = trim((string)($scopeevidence['pair'] ?? ''));
+        $actionen = rtrim(trim((string)($scopeevidence['narrowAction']['en'] ?? '')), '.');
+        $actiones = rtrim(trim((string)($scopeevidence['narrowAction']['es'] ?? '')), '.');
+        $formulacontexten = trim((string)($scopeevidence['formulaContext']['en'] ?? ''));
+        $formulacontextes = trim((string)($scopeevidence['formulaContext']['es'] ?? $formulacontexten));
+        $formulaen = rtrim(trim(explode(';', $formulacontexten)[0]), '.');
+        $formulaes = rtrim(trim(explode(';', $formulacontextes)[0]), '.');
+        $herbs = array_values(array_filter(array_map(
+            'strval',
+            (array)($scopeevidence['herbs'] ?? [])
+        )));
+        $pairplain = count($herbs) >= 2 ? $herbs[0] . ' + ' . $herbs[1] : $pair;
+        $correctkey = 'correct';
+        $claims = [
+            'patent' => [
+                'en' => 'Treat ' . $pairplain . ' as a commercial patent formula that is interchangeable with ' . $formulaen . '.',
+                'es' => 'Tratar ' . $pairplain . ' como una fórmula patente comercial intercambiable con ' . $formulaes . '.',
+                'feedbackEn' => 'Incorrect. A two-herb compatibility relationship does not become a commercial patent formula.',
+                'feedbackEs' => 'Incorrecta. Una relación de compatibilidad de dos hierbas no se convierte en fórmula patente comercial.',
+            ],
+            'automatic' => [
+                'en' => 'Replace ' . $formulaen . ' automatically whenever ' . $pairplain . ' appears, without considering the remaining ingredients, roles, proportions, dose, or preparation.',
+                'es' => 'Sustituir automáticamente ' . $formulaes . ' siempre que aparezca ' . $pairplain . ', sin considerar los demás ingredientes, funciones, proporciones, dosis ni preparación.',
+                'feedbackEn' => 'Incorrect. Shared ingredients do not establish therapeutic equivalence, and the rest of the formula architecture remains decisive.',
+                'feedbackEs' => 'Incorrecta. Compartir ingredientes no establece equivalencia terapéutica y la arquitectura restante de la fórmula sigue siendo decisiva.',
+            ],
+            'correct' => [
+                'en' => 'Choose ' . $formulaen . ' when its complete pattern architecture and coordinated strategy are required; use ' . $pairplain . ' for the narrow objective of ' . lcfirst($actionen) . ' as a core pair, source-supported modification, or brief prescription, not as an automatic equivalent of the formula.',
+                'es' => 'Elegir ' . $formulaes . ' cuando se requiere su arquitectura completa de patrón y estrategia coordinada; usar ' . $pairplain . ' para el objetivo estrecho de ' . lcfirst($actiones) . ' como pareja central, modificación respaldada por la fuente o prescripción breve, no como equivalente automático de la fórmula.',
+                'feedbackEn' => 'Correct. It selects the complete formula for the full therapeutic architecture while limiting the pair to its documented narrow objective and supported uses.',
+                'feedbackEs' => 'Correcta. Selecciona la fórmula completa para la arquitectura terapéutica total y limita la pareja a su objetivo estrecho documentado y sus usos respaldados.',
+            ],
+            'scope' => [
+                'en' => 'Use ' . $pairplain . ' for every presentation treated by ' . $formulaen . ' because a core pair always has the full therapeutic scope of the classical prescription.',
+                'es' => 'Usar ' . $pairplain . ' para toda presentación tratada por ' . $formulaes . ' porque una pareja central siempre tiene el alcance terapéutico completo de la prescripción clásica.',
+                'feedbackEn' => 'Incorrect. A core pair may be central to a formula without reproducing the complete formula’s therapeutic scope.',
+                'feedbackEs' => 'Incorrecta. Una pareja central puede ser esencial para una fórmula sin reproducir todo su alcance terapéutico.',
+            ],
+        ];
+        $order = ['patent', 'automatic', 'scope'];
+        $correctindex = $pairnumber % 4;
+        array_splice($order, $correctindex, 0, [$correctkey]);
+        $labels = ['A', 'B', 'C', 'D'];
+        $options = [];
+        $optionses = [];
+        $feedback = [
+            'Inference step 1: ' . $pair . ' has the focused action to ' . lcfirst($actionen)
+                . ', while ' . $formulaen . ' represents a complete formula context.',
+            'Inference step 2: The correct decision must preserve the difference between a narrow compatibility objective and a complete formula architecture.',
+        ];
+        $feedbackes = [
+            'Paso de inferencia 1: ' . $pair . ' tiene la acción focal de ' . lcfirst($actiones)
+                . ', mientras que ' . $formulaes . ' representa un contexto de fórmula completa.',
+            'Paso de inferencia 2: La decisión correcta debe conservar la diferencia entre un objetivo estrecho de compatibilidad y una arquitectura de fórmula completa.',
+        ];
+        $correctlabel = '';
+        foreach ($order as $index => $claimkey) {
+            $label = $labels[$index];
+            $claim = $claims[$claimkey];
+            $options[] = ['label' => $label, 'text' => $claim['en']];
+            $optionses[] = ['label' => $label, 'text' => $claim['es']];
+            $feedback[] = 'Option ' . $label . ': ' . $claim['feedbackEn'];
+            $feedbackes[] = 'Opción ' . $label . ': ' . $claim['feedbackEs'];
+            if ($claimkey === $correctkey) {
+                $correctlabel = $label;
+            }
+        }
+        $sourcecard = (string)($scopeevidence['sourceCard'] ?? '');
+        return [
+            'domainId' => 'dui_yao',
+            'prompt' => 'A study group compares the classical formula ' . $formulaen . ' with the Duì Yào '
+                . $pair . ', whose focused action is to ' . lcfirst($actionen)
+                . '. Which prescribing principle most accurately distinguishes when to choose the formula and when to choose the pair?',
+            'options' => $options,
+            'correctLabel' => $correctlabel,
+            'explanation' => implode(' ', $feedback),
+            'translations' => [
+                'es' => [
+                    'prompt' => 'Un grupo de estudio compara la fórmula clásica ' . $formulaes . ' con el Duì Yào '
+                        . $pair . ', cuya acción focal es ' . lcfirst($actiones)
+                        . '. ¿Qué principio terapéutico distingue con mayor precisión cuándo elegir la fórmula y cuándo elegir la pareja?',
+                    'options' => $optionses,
+                    'explanation' => implode(' ', $feedbackes),
+                ],
+            ],
+            'contentType' => 'dui_yao',
+            'cognitiveLevel' => 'analyze',
+            'difficultyBand' => 'analysis',
+            'reviewSummary' => 'Applied the general formula-versus-Duì-Yào scope rule using verified pair '
+                . $pairnumber . ' and its documented formula context.',
+            'sourceCard' => [
+                'url' => $sourcecard,
+                'urlEs' => preg_replace('/\.html$/', '-es.html', $sourcecard),
+            ],
+        ];
+    };
     $currentdraft = $iscustomrewrite && is_array($customrecord['draft'] ?? null)
         ? $customrecord['draft']
         : null;
@@ -6213,6 +6311,33 @@ PROMPT;
             $lastgenerationerror = $error;
         }
     }
+    if ((!is_array($decodedbatch) || !is_array($originalitybatch))
+            && $formulavduiyaoscopeidea
+            && $custombatchcount === 1
+            && $formulavduiyaoscopeevidence !== []) {
+        // The abstract scope rule is fully represented in the verified pair
+        // table.  If the language model fails validation, build a complete
+        // question from that same evidence instead of returning an empty form.
+        foreach ($formulavduiyaoscopeevidence as $scopefallbackevidence) {
+            try {
+                $scopefallback = $decodecustomdraft(json_encode(
+                    $buildformulavduiyaoscopefallback($scopefallbackevidence),
+                    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
+                ));
+                $scopefallbackoriginality = $findnearestquestion($scopefallback);
+                if (!empty($scopefallbackoriginality['isDuplicate'])) {
+                    $lastduplicate = $scopefallbackoriginality;
+                    continue;
+                }
+                $decodedbatch = [$scopefallback];
+                $originalitybatch = [$scopefallbackoriginality];
+                $lastgenerationerror = null;
+                break;
+            } catch (Throwable $scopefallbackerror) {
+                $lastgenerationerror = $scopefallbackerror;
+            }
+        }
+    }
     if (!is_array($decodedbatch)
             || !is_array($originalitybatch)
             || count($decodedbatch) !== $custombatchcount
@@ -6220,10 +6345,24 @@ PROMPT;
         $duplicatemessage = $lastduplicate !== null
             ? ' The closest existing item was ' . $lastduplicate['questionId'] . '.'
             : '';
+        $SESSION->ncbahm_new_question_recovery = [
+            'idea' => $idea,
+            'targetDomain' => $customtargetdomain,
+            'targetExamProject' => $customtargetexamid,
+            'needed' => $newquestionneededcount,
+            'error' => $lastgenerationerror instanceof Throwable
+                ? $lastgenerationerror->getMessage()
+                : 'Question generation failed validation.',
+        ];
         redirect(
-            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['newquestion' => 1]),
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+                'newquestion' => 1,
+                'targetdomain' => $customtargetdomain !== '' ? $customtargetdomain : null,
+                'targetexamproject' => $customtargetexamid !== '' ? $customtargetexamid : null,
+                'needed' => $newquestionneededcount > 0 ? $newquestionneededcount : null,
+            ])),
             'The system could not create a sufficiently distinct, valid question after three attempts.'
-                . $duplicatemessage . ' Add a more specific educational objective and try again.',
+                . $duplicatemessage . ' Your complete input remains in the form for correction.',
             null,
             \core\output\notification::NOTIFY_ERROR
         );
@@ -6276,6 +6415,9 @@ PROMPT;
         $sourcepath = $sourcepaths[$domainid] ?? '/blocks/menu/herbology-board.php';
         $sourceurl = new moodle_url($sourcepath, ['lang' => 'en']);
         $sourceurles = new moodle_url($sourcepath, ['lang' => 'es']);
+        $decodedsourcecard = is_array($decoded['sourceCard'] ?? null)
+            ? $decoded['sourceCard']
+            : [];
         $question = [
             'questionId' => $itemquestionid,
             'domainId' => $domainid,
@@ -6300,10 +6442,10 @@ PROMPT;
                 'locator' => 'Administrator idea · ' . core_text::substr($itemidea, 0, 220),
             ],
             'sourceCard' => [
-                'label' => 'Open supporting study guide',
-                'labelEs' => 'Abrir guía de estudio de apoyo',
-                'url' => $sourceurl->out(false),
-                'urlEs' => $sourceurles->out(false),
+                'label' => (string)($decodedsourcecard['label'] ?? 'Open supporting study guide'),
+                'labelEs' => (string)($decodedsourcecard['labelEs'] ?? 'Abrir guía de estudio de apoyo'),
+                'url' => (string)($decodedsourcecard['url'] ?? $sourceurl->out(false)),
+                'urlEs' => (string)($decodedsourcecard['urlEs'] ?? $sourceurles->out(false)),
             ],
             'editorial' => [
                 'simulationCandidate' => true,
@@ -6360,6 +6502,7 @@ PROMPT;
         }
         return $store;
     });
+    unset($SESSION->ncbahm_new_question_recovery);
     // Open the complete draft card immediately after creation or revision so
     // the administrator sees the stem, choices, key and feedback just produced.
     $customquestionpreviewurl = new moodle_url(
@@ -9492,7 +9635,9 @@ echo $OUTPUT->header();
         <?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?>
     </section>
     <?php endif; ?>
-    <?php if ($shownewquestionform): ?><section id="new-question" class="question-bank__new-question">
+    <?php if ($shownewquestionform): $newquestionrecovery = is_array($SESSION->ncbahm_new_question_recovery ?? null)
+        ? $SESSION->ncbahm_new_question_recovery
+        : []; ?><section id="new-question" class="question-bank__new-question">
         <h3><?php echo $displaylang === 'es' ? 'Crear una o varias preguntas' : 'Create one or several questions'; ?></h3>
         <?php if ($newquestiontargetdomain !== '' && isset($domains[$newquestiontargetdomain])): ?>
             <div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Faltante del examen activo:' : 'Active-exam shortage:'; ?></strong>
@@ -9504,9 +9649,10 @@ echo $OUTPUT->header();
                     : 'Questions approved from this form will be added to the exam automatically.'; ?>
             </div>
         <?php endif; ?>
+        <?php if ($newquestionrecovery !== []): ?><div class="question-bank__publish-error" role="alert"><strong><?php echo $displaylang === 'es' ? 'La generación anterior no produjo un borrador válido.' : 'The previous generation did not produce a valid draft.'; ?></strong> <?php echo $displaylang === 'es' ? 'El texto completo se conservó abajo; puede corregirlo y volver a intentarlo.' : 'The complete text was preserved below; you can correct it and try again.'; ?><?php if (trim((string)($newquestionrecovery['error'] ?? '')) !== ''): ?> <small><?php echo s((string)$newquestionrecovery['error']); ?></small><?php endif; ?></div><?php endif; ?>
         <p>Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as <strong>### Question 1</strong> or <strong>### 2.</strong>, lines containing <strong>---</strong>, and repeated <strong>Correct answer:</strong> or <strong>Respuesta correcta:</strong> labels. It creates an independent draft for each question and immediately displays a visible index of the complete batch.</p>
         <form class="question-bank__creation-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
-            <textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."></textarea>
+            <textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."><?php echo s((string)($newquestionrecovery['idea'] ?? '')); ?></textarea>
             <input type="hidden" name="formaction" value="createnewquestion">
             <input type="hidden" name="targetdomain" value="<?php echo s($newquestiontargetdomain); ?>">
             <input type="hidden" name="targetexamproject" value="<?php echo s($newquestiontargetexam); ?>">
