@@ -5558,12 +5558,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
     }
     $normalizedscopeidea = core_text::strtolower($idea);
-    $formulavduiyaoscopeidea = (core_text::strpos(
-        $normalizedscopeidea,
-        'commercial patent formula'
-    ) !== false && core_text::strpos($normalizedscopeidea, 'automatic equivalent') !== false)
-        || (core_text::strpos($normalizedscopeidea, 'fórmula patente comercial') !== false
-            && core_text::strpos($normalizedscopeidea, 'equivalente automático') !== false);
+    $formulavduiyaoscopeidea = preg_match('/\b(?:duì\s*yào|dui\s*yao)\b/iu', $normalizedscopeidea) === 1
+        && preg_match('/\bf[oó]rmula\b/iu', $normalizedscopeidea) === 1
+        && preg_match(
+            '/\b(?:choose|select|when|difference|distinction|scope|equivalent|core|modification|prescription|elegir|seleccionar|cu[aá]ndo|diferencia|distinci[oó]n|alcance|equivalente|central|modificaci[oó]n|prescripci[oó]n)\b/iu',
+            $normalizedscopeidea
+        ) === 1;
     if ($formulavduiyaoscopeidea) {
         $customtargetdomain = 'dui_yao';
     }
@@ -5614,6 +5614,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         );
     }
     $custombatchcount = count($customquestionideas);
+    $formulavduiyaoscopeevidence = [];
+    if ($formulavduiyaoscopeidea && !empty($duiyaosmartpairs)) {
+        $scopepaircount = count($duiyaosmartpairs);
+        $scopepairstart = hexdec(substr(hash('sha256', $idea), 0, 7)) % $scopepaircount;
+        for ($scopepairoffset = 0; $scopepairoffset < min(12, $scopepaircount); $scopepairoffset++) {
+            $scopepair = $duiyaosmartpairs[($scopepairstart + $scopepairoffset) % $scopepaircount];
+            if (trim((string)($scopepair['formulas']['en'] ?? '')) === '') {
+                continue;
+            }
+            $formulavduiyaoscopeevidence[] = [
+                'pairNumber' => (int)($scopepair['number'] ?? 0),
+                'pair' => (string)($scopepair['title'] ?? ''),
+                'herbs' => array_values((array)($scopepair['herbs'] ?? [])),
+                'narrowAction' => $scopepair['action'] ?? [],
+                'formulaContext' => $scopepair['formulas'] ?? [],
+                'formulaBridge' => $scopepair['formulaBridge'] ?? null,
+                'sourceCard' => '/study-guide/comparisons/'
+                    . (string)($scopepair['slug'] ?? '') . '.html',
+            ];
+        }
+    }
     $currentdraft = $iscustomrewrite && is_array($customrecord['draft'] ?? null)
         ? $customrecord['draft']
         : null;
@@ -5777,7 +5798,12 @@ PROMPT;
     }
     if ($formulavduiyaoscopeidea) {
         $customprompt .= "\n\nMANDATORY FORMULA-VERSUS-DUÌ-YÀO OBJECTIVE — DO NOT SUBSTITUTE:\n"
-            . "Use Gui Zhi Tang and its core pair Gui Zhi + Bai Shao to test when the complete formula is selected for a full pattern and when the Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula. A generic single-herb action or indication question is invalid.";
+            . "Choose one appropriate verified relationship from the evidence below. Test when its complete formula is selected for a full pattern and when its Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Show the selected formula and both herbs of the pair in the visible stem or choices. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula. A generic single-herb action or indication question is invalid. Do not invent a formula relationship absent from the evidence."
+            . "\n\nVERIFIED FORMULA-DUÌ-YÀO RELATIONSHIPS:\n"
+            . json_encode(
+                $formulavduiyaoscopeevidence,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            );
     }
     $customprompt .= "\n" . $idea;
     if ($custombatchcount > 1) {
@@ -5962,27 +5988,20 @@ PROMPT;
                         'similarityPercent' => round($lastduplicate['score'] * 100, 1),
                     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             }
-            if ($formulavduiyaoscopeidea && $custombatchcount === 1) {
-                $decodedbatch = $decodecustomresponse(json_encode(
-                    $formulavduiyaocanonical,
-                    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
-                ));
-            } else {
-                $action = new \core_ai\aiactions\generate_text(
-                    contextid: $systemcontext->id,
-                    userid: (int)$USER->id,
-                    prompttext: $attemptprompt,
-                );
-                $response = $manager->process_action($action);
-                if (!$response->get_success()) {
-                    throw new RuntimeException(
-                        $response->get_errormessage() ?: 'The AI provider returned an error.'
-                    );
-                }
-                $decodedbatch = $decodecustomresponse(
-                    (string)($response->get_response_data()['generatedcontent'] ?? '')
+            $action = new \core_ai\aiactions\generate_text(
+                contextid: $systemcontext->id,
+                userid: (int)$USER->id,
+                prompttext: $attemptprompt,
+            );
+            $response = $manager->process_action($action);
+            if (!$response->get_success()) {
+                throw new RuntimeException(
+                    $response->get_errormessage() ?: 'The AI provider returned an error.'
                 );
             }
+            $decodedbatch = $decodecustomresponse(
+                (string)($response->get_response_data()['generatedcontent'] ?? '')
+            );
             if ($customtargetdomain !== '') {
                 foreach ($decodedbatch as $decodeditem) {
                     if ((string)($decodeditem['domainId'] ?? '') !== $customtargetdomain) {
@@ -6005,6 +6024,60 @@ PROMPT;
                                     . $requiredanchor . '.'
                             );
                         }
+                    }
+                }
+            }
+            if ($formulavduiyaoscopeidea) {
+                $normalizescopetext = static fn(string $text): string => core_text::strtolower(
+                    core_text::specialtoascii($text)
+                );
+                foreach ($decodedbatch as $decodeditem) {
+                    $generatedcontent = json_encode(
+                        $decodeditem,
+                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                    );
+                    $generatedcontentlower = $normalizescopetext((string)$generatedcontent);
+                    $matchedevidence = false;
+                    foreach ($formulavduiyaoscopeevidence as $scopeevidence) {
+                        $pairvisible = core_text::strpos(
+                            $generatedcontentlower,
+                            $normalizescopetext((string)$scopeevidence['pair'])
+                        ) !== false;
+                        if (!$pairvisible) {
+                            $pairvisible = count(array_filter(
+                                (array)($scopeevidence['herbs'] ?? []),
+                                static fn($herb): bool => core_text::strpos(
+                                    $generatedcontentlower,
+                                    $normalizescopetext((string)$herb)
+                                ) !== false
+                            )) >= 2;
+                        }
+                        $formulacontext = trim((string)($scopeevidence['formulaContext']['en'] ?? ''));
+                        $formulavisible = $formulacontext !== '' && core_text::strpos(
+                            $generatedcontentlower,
+                            $normalizescopetext(rtrim(explode(';', $formulacontext)[0], ". \t\n\r\0\x0B"))
+                        ) !== false;
+                        if ($pairvisible && $formulavisible) {
+                            $matchedevidence = true;
+                            break;
+                        }
+                    }
+                    $hasscopelanguage = preg_match(
+                        '/\b(?:narrow|focused|specific|brief|modification|estrech[oa]|espec[ií]fic[oa]|breve|modificaci[oó]n)\b/iu',
+                        (string)$generatedcontent
+                    ) === 1;
+                    $rejectsequivalence = preg_match(
+                        '/(?:not|never|neither|does\s+not|no\s+es|nunca|no\s+equivale|no\s+sustituye).{0,100}(?:equivalent|interchangeable|replace|patent|equivalente|intercambiable|sustitu|patente)/iu',
+                        (string)$generatedcontent
+                    ) === 1;
+                    if ((string)($decodeditem['domainId'] ?? '') !== 'dui_yao'
+                            || (string)($decodeditem['contentType'] ?? '') !== 'dui_yao'
+                            || !$matchedevidence
+                            || !$hasscopelanguage
+                            || !$rejectsequivalence) {
+                        throw new UnexpectedValueException(
+                            'The formula-versus-Duì-Yào item must use one verified formula/pair relationship, show the formula and both herbs, preserve the narrow-scope distinction, and reject automatic equivalence.'
+                        );
                     }
                 }
             }
