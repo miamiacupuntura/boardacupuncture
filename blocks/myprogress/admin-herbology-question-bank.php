@@ -338,6 +338,105 @@ if ($fd012repairkeys !== []) {
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
+$publishedquestionlookup = [];
+foreach ((array)($revisionstore['publishedExams'] ?? []) as $publishedexamrecord) {
+    foreach ((array)($publishedexamrecord['questions'] ?? []) as $publishedquestion) {
+        $publishedquestionid = is_array($publishedquestion)
+            ? (string)($publishedquestion['questionId'] ?? '')
+            : '';
+        if ($publishedquestionid !== '') {
+            $publishedquestionlookup[$publishedquestionid] = true;
+        }
+    }
+}
+$targetedapprovedrecords = [];
+foreach ((array)($revisionstore['customQuestions'] ?? []) as $customquestionid => $customrecord) {
+    $targetexamid = is_array($customrecord)
+        ? (string)($customrecord['targetExamProjectId'] ?? '')
+        : '';
+    if ($targetexamid === ''
+            || (string)($customrecord['status'] ?? '') !== 'approved'
+            || !is_array($customrecord['approved'] ?? null)
+            || isset($publishedquestionlookup[(string)$customquestionid])) {
+        continue;
+    }
+    $targetedapprovedrecords[] = [
+        'questionId' => (string)$customquestionid,
+        'examProjectId' => $targetexamid,
+        'savedAt' => (string)($customrecord['savedAt'] ?? ''),
+        'batchPosition' => (int)($customrecord['creationBatchPosition'] ?? 0),
+    ];
+}
+usort($targetedapprovedrecords, static function(array $left, array $right): int {
+    $savedcomparison = strcmp($left['savedAt'], $right['savedAt']);
+    return $savedcomparison !== 0
+        ? $savedcomparison
+        : ($left['batchPosition'] <=> $right['batchPosition']);
+});
+$simulatedprojects = (array)($revisionstore['examProjects'] ?? []);
+$targetedapprovedassignments = [];
+foreach ($targetedapprovedrecords as $targetedrecord) {
+    $targetexamid = $targetedrecord['examProjectId'];
+    $targetproject = $simulatedprojects[$targetexamid] ?? null;
+    if (!is_array($targetproject)
+            || (string)($targetproject['status'] ?? 'draft') === 'published') {
+        continue;
+    }
+    $targetquestionids = array_values(array_unique(array_filter(array_map(
+        'strval',
+        (array)($targetproject['questionIds'] ?? [])
+    ))));
+    $targetquestionid = $targetedrecord['questionId'];
+    if (in_array($targetquestionid, $targetquestionids, true)) {
+        continue;
+    }
+    if (count($targetquestionids) >= (int)($targetproject['targetCount'] ?? 100)) {
+        continue;
+    }
+    $targetquestionids[] = $targetquestionid;
+    $targetproject['questionIds'] = $targetquestionids;
+    $simulatedprojects[$targetexamid] = $targetproject;
+    $targetedapprovedassignments[$targetexamid][] = $targetquestionid;
+}
+if ($targetedapprovedassignments !== []) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $targetedapprovedassignments
+    ): array {
+        $assignedat = gmdate(DATE_ATOM);
+        foreach ($targetedapprovedassignments as $targetexamid => $questionids) {
+            $project = $store['examProjects'][$targetexamid] ?? null;
+            if (!is_array($project)
+                    || (string)($project['status'] ?? 'draft') === 'published') {
+                continue;
+            }
+            $projectquestionids = array_values(array_unique(array_filter(array_map(
+                'strval',
+                (array)($project['questionIds'] ?? [])
+            ))));
+            foreach ($questionids as $questionid) {
+                if (count($projectquestionids) >= (int)($project['targetCount'] ?? 100)) {
+                    break;
+                }
+                if (!in_array($questionid, $projectquestionids, true)) {
+                    $projectquestionids[] = $questionid;
+                }
+                if (is_array($store['customQuestions'][$questionid] ?? null)) {
+                    $store['customQuestions'][$questionid]['assignedToTargetExamAt'] = $assignedat;
+                }
+            }
+            $project['questionIds'] = $projectquestionids;
+            $project['updatedAt'] = $assignedat;
+            $project['targetedQuestionAssignmentRepairedAt'] = $assignedat;
+            $store['examProjects'][$targetexamid] = $project;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
+$targetedapprovedassignmentcount = array_sum(array_map(
+    'count',
+    $targetedapprovedassignments
+));
 $publishedprojectrepairs = [];
 $questionsusedinpriorexams = [];
 foreach (($bank['domains'] ?? []) as $questions) {
@@ -2328,6 +2427,9 @@ $examprojectpositions = [];
 $projectremainingbydomain = array_fill_keys(array_keys($domains), 0);
 $projectcandidatecountbydomain = array_fill_keys(array_keys($domains), 0);
 $projectshortagebydomain = array_fill_keys(array_keys($domains), 0);
+$projectcreatedapprovedbydomain = array_fill_keys(array_keys($domains), 0);
+$projectcreateddraftbydomain = array_fill_keys(array_keys($domains), 0);
+$projecttargetdraftlookup = [];
 if (is_array($currentexamproject)) {
     $projecttarget = (int)$currentexamproject['targetCount'];
     $projectweights = $requiredprojectdomaincounts;
@@ -2379,19 +2481,38 @@ if (is_array($currentexamproject)) {
         array_map('strval', $currentexamquestionids),
         true
     );
+    foreach ($customquestionrecords as $customquestionid => $customrecord) {
+        if ((string)($customrecord['targetExamProjectId'] ?? '') !== $examprojectid) {
+            continue;
+        }
+        $customdomainid = (string)($customrecord['domainId'] ?? '');
+        if (!isset($domains[$customdomainid])) {
+            continue;
+        }
+        if ((string)($customrecord['status'] ?? 'draft') === 'approved') {
+            $projectcreatedapprovedbydomain[$customdomainid]++;
+        } else if ((string)($customrecord['status'] ?? 'draft') === 'draft') {
+            $projectcreateddraftbydomain[$customdomainid]++;
+            $projecttargetdraftlookup[(string)$customquestionid] = true;
+        }
+    }
     $projecteligiblebydomain = array_fill_keys(array_keys($domains), []);
     foreach ($allquestions as $projectquestion) {
         $projectquestionid = (string)$projectquestion['questionId'];
+        $istargetedcustomdraft = isset($projecttargetdraftlookup[$projectquestionid]);
         $hasreviewablecontent = trim((string)($projectquestion['prompt'] ?? '')) !== ''
             && count((array)($projectquestion['options'] ?? [])) === 4
             && trim((string)($projectquestion['correctLabel'] ?? '')) !== '';
         if (!$hasreviewablecontent
                 || $projectquestion['_excluded']
-                || $projectquestion['_examposition'] > 0
-                || $projectquestion['_exam2position'] > 0
                 || isset($currentprojectapprovedlookup[$projectquestionid])
                 || isset($projectexcludedlookup[$projectquestionid])
                 || isset($usedbyotherprojects[$projectquestionid])) {
+            continue;
+        }
+        if (!$istargetedcustomdraft
+                && ($projectquestion['_examposition'] > 0
+                    || $projectquestion['_exam2position'] > 0)) {
             continue;
         }
         $projecteligiblebydomain[$projectquestion['_domainid']][] = $projectquestion;
@@ -2399,11 +2520,13 @@ if (is_array($currentexamproject)) {
     $projectquality = static function(array $question) use (
         $examprojectid,
         $previouslyselectedids,
-        $isprocessedquestion
+        $isprocessedquestion,
+        $projecttargetdraftlookup
     ): array {
         $questionid = (string)($question['questionId'] ?? '');
         $cognitiverank = ['analysis' => 0, 'inference' => 1, 'application' => 2, 'recall' => 3];
         return [
+            isset($projecttargetdraftlookup[$questionid]) ? 0 : 1,
             isset($previouslyselectedids[$questionid]) ? 0 : 1,
             $isprocessedquestion($question) ? 0 : 1,
             $question['_ready'] ? 0 : 1,
@@ -4595,6 +4718,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $record['savedById'] = (int)$USER->id;
         $record['savedByName'] = $savedbyname;
         $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        if ($customtargetexamid !== '') {
+            $record['assignedToTargetExamAt'] = $savedat;
+        }
         $store['customQuestions'][$customquestionid] = $record;
         if ($customtargetexamid !== '') {
             $project = $store['examProjects'][$customtargetexamid] ?? null;
@@ -7932,6 +8058,7 @@ echo $OUTPUT->header();
 .question-bank__temporary-order{display:flex;align-items:center;gap:10px;margin:-17px -17px 14px;padding:11px 16px;border-radius:10px 10px 0 0;background:#4c1d95;color:#fff}.question-bank__temporary-order span{font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.question-bank__temporary-order strong{font-size:24px;line-height:1}.question-bank__temporary-order small{font-weight:800;opacity:.85}.question-bank__temporary-order--editor{margin:0 0 12px;border-radius:8px}.question-bank__review-progress{margin-bottom:16px;padding:14px 16px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#4c1d95}.question-bank__review-progress strong{font-size:17px}.question-bank__review-progress p{margin:4px 0 0}
 .question-bank__ai-batch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;padding:14px 16px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__ai-batch p{margin:0;color:#66557e;line-height:1.45}.question-bank__ai-batch form{flex:0 0 auto}.question-bank__ai-batch .question-bank__button:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__ai-draft-note{margin:10px 0;padding:10px 12px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;font-weight:800}@media(max-width:700px){.question-bank__ai-batch{align-items:stretch;flex-direction:column}}
 .question-bank__decision-panel{display:grid;gap:12px;margin-top:15px;padding:15px;border:1px solid #cbb9ee;border-radius:10px;background:#faf8ff}.question-bank__decision-panel label{display:block;color:#4c1d95;font-weight:900}.question-bank__decision-panel textarea{box-sizing:border-box;width:100%;min-height:105px;margin-top:7px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__decision-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.question-bank__button--approve{border-color:#08746f;background:#08746f;color:#fff!important}.question-bank__button--approve:hover{background:#075f5b}.question-bank__button--approve:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__applied-summary{padding:10px 12px;border-left:4px solid #0b8f87;border-radius:7px;background:#eaf9f3;color:#075f50;line-height:1.45}
+.question-bank__decision-actions>span small{display:block;margin-top:4px;color:#66557e;font-size:12px;font-weight:750}
 .question-bank__review-location{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0;padding:12px 14px;border-left:4px solid #6d28d9;border-radius:8px;background:#f4efff;color:#3b167d}.question-bank__review-location strong{font-size:1rem}.question-bank__review-location span{flex:1 1 300px}.question-bank__review-location form{margin:0}.question-bank__action-status{font-weight:850;color:#4c1d95}.question-bank__correction-request{margin-top:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__correction-request summary{padding:12px 14px;color:#4c1d95;font-weight:900;cursor:pointer}.question-bank__correction-request form{padding:0 14px 14px}.question-bank__correction-request label{display:block;color:#4c1d95;font-weight:900}.question-bank__correction-request textarea{box-sizing:border-box;width:100%;min-height:100px;margin-top:7px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}
 .question-bank__review-progress-overlay{position:fixed;z-index:10000;right:22px;bottom:22px;display:grid;grid-template-columns:auto 1fr;max-width:430px;align-items:center;gap:4px 11px;padding:15px 18px;border:2px solid #6d28d9;border-radius:11px;background:#fff;box-shadow:0 12px 35px rgba(43,24,80,.25);color:#3b167d}.question-bank__review-progress-overlay strong{font-size:16px}.question-bank__review-progress-overlay small{grid-column:2;color:#52677a;line-height:1.4}.question-bank__review-spinner{grid-row:1/3;width:24px;height:24px;border:4px solid #ded7ef;border-top-color:#6d28d9;border-radius:50%;animation:question-bank-spin .85s linear infinite}@keyframes question-bank-spin{to{transform:rotate(360deg)}}@media(max-width:600px){.question-bank__review-progress-overlay{right:10px;bottom:10px;left:10px;max-width:none}}
 .question-bank__quick-review{margin-left:auto}.question-bank__quick-review .question-bank__decision-actions{margin:0}@media(max-width:700px){.question-bank__quick-review{width:100%;margin-left:0}}
@@ -8182,6 +8309,11 @@ echo $OUTPUT->header();
     <?php endif; ?>
     <section id="exam-builder" class="question-bank__exam-builder" aria-label="<?php echo $displaylang === 'es' ? 'Administrador de exámenes' : 'Exam builder'; ?>">
         <header class="question-bank__exam-builder-head"><div><h3><?php echo $displaylang === 'es' ? 'Administrador de exámenes' : 'Exam builder'; ?></h3><p><?php echo $displaylang === 'es' ? 'Crea, abre y edita exámenes guardados; el progreso muestra cuántas preguntas están listas y cuántas faltan.' : 'Create, open and edit saved exams; progress shows how many questions are ready and how many are still missing.'; ?></p></div><div class="question-bank__exam-builder-head-actions"><a class="question-bank__button question-bank__button--publish" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? '+ Crear examen' : '+ Create exam'; ?></a><button class="question-bank__button" type="button" onclick="this.closest('.question-bank__exam-builder').hidden=true"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></button></div></header>
+        <?php if ($targetedapprovedassignmentcount > 0): ?>
+        <div class="question-bank__publish-readiness is-ready"><strong><?php echo $displaylang === 'es' ? 'Asignación reparada:' : 'Assignment repaired:'; ?></strong> <?php echo $displaylang === 'es'
+            ? $targetedapprovedassignmentcount . ' pregunta' . ($targetedapprovedassignmentcount === 1 ? '' : 's') . ' ya publicada' . ($targetedapprovedassignmentcount === 1 ? '' : 's') . ' se incorporó' . ($targetedapprovedassignmentcount === 1 ? '' : 'n') . ' al examen para el que ' . ($targetedapprovedassignmentcount === 1 ? 'fue creada' : 'fueron creadas') . '. El total fue recalculado.'
+            : $targetedapprovedassignmentcount . ' already-published question' . ($targetedapprovedassignmentcount === 1 ? '' : 's') . ' ' . ($targetedapprovedassignmentcount === 1 ? 'was' : 'were') . ' added to the intended exam. The total was recalculated.'; ?></div>
+        <?php endif; ?>
         <?php if ($showexamcreator): ?>
         <form class="question-bank__exam-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
             <label><span><?php echo $displaylang === 'es' ? 'Nombre del examen' : 'Exam name'; ?></span><input type="text" name="examname" maxlength="100" required placeholder="<?php echo $displaylang === 'es' ? 'Ejemplo: Exam 3' : 'Example: Exam 3'; ?>"></label>
@@ -8443,6 +8575,9 @@ echo $OUTPUT->header();
                     <?php echo (int)$projectremainingbydomain[$shortagedomainid]; ?> <?php echo $displaylang === 'es' ? 'espacios pendientes,' : 'positions pending,'; ?>
                     <?php echo (int)$projectcandidatecountbydomain[$shortagedomainid]; ?> <?php echo $displaylang === 'es' ? 'candidata(s) disponible(s) y' : 'candidate(s) available and'; ?>
                     <?php echo (int)$shortagecount; ?> <?php echo $displaylang === 'es' ? 'pregunta(s) nueva(s) requerida(s).' : 'new question(s) required.'; ?>
+                    <small><?php echo $displaylang === 'es' ? 'Creadas específicamente para este examen:' : 'Created specifically for this exam:'; ?>
+                        <?php echo (int)$projectcreatedapprovedbydomain[$shortagedomainid]; ?> <?php echo $displaylang === 'es' ? 'publicada(s) y' : 'published and'; ?>
+                        <?php echo (int)$projectcreateddraftbydomain[$shortagedomainid]; ?> <?php echo $displaylang === 'es' ? 'borrador(es) pendiente(s).' : 'pending draft(s).'; ?></small>
                 </span>
                 <?php if (isset($projectshortagecreateurls[$shortagedomainid])): ?><a class="question-bank__button question-bank__button--primary" href="<?php echo $projectshortagecreateurls[$shortagedomainid]->out(false); ?>"><?php echo $displaylang === 'es' ? 'Crear preguntas faltantes' : 'Create missing questions'; ?></a><?php endif; ?>
             </div>
