@@ -3250,6 +3250,20 @@ $requiredprojectdomaincounts = [
     'formula_composition' => 10,
     'scope_aliases' => 5,
 ];
+$questionformatfamily = static function(array $question): string {
+    $prompt = core_text::strtolower(trim((string)($question['prompt'] ?? '')));
+    $normalizedprompt = trim((string)preg_replace('/\s+/u', ' ', $prompt));
+    $haspairedpatients = preg_match(
+        '/\b(?:one|a|first)\s+patient\b.{20,}\b(?:another|the\s+other|second)\b/u',
+        $normalizedprompt
+    ) === 1 || preg_match(
+        '/\b(?:un|una|primer|primera)\s+paciente\b.{20,}\b(?:otro|otra|segundo|segunda)\b/u',
+        $normalizedprompt
+    ) === 1 || preg_match('/\b(?:two\s+patients|dos\s+pacientes)\b/u', $normalizedprompt) === 1;
+    return $haspairedpatients
+        ? 'paired_patient_clinical_comparison'
+        : '';
+};
 
 $currentexamcandidateids = [];
 $examprojectpositions = [];
@@ -3261,6 +3275,7 @@ $projectcreateddraftbydomain = array_fill_keys(array_keys($domains), 0);
 $projecttargetdraftidsbydomain = array_fill_keys(array_keys($domains), []);
 $projecttargetdraftlookup = [];
 $projectduplicatecandidateids = [];
+$projectformatdeferredids = [];
 if (is_array($currentexamproject)) {
     $projecttarget = (int)$currentexamproject['targetCount'];
     $projectweights = $requiredprojectdomaincounts;
@@ -3282,6 +3297,12 @@ if (is_array($currentexamproject)) {
         $projectallocated++;
     }
     $approvedbydomain = array_fill_keys(array_keys($domains), 0);
+    $projectformatcaps = [
+        // A 100-question exam may contain at most three two-patient comparison
+        // prompts. The remaining questions stay available for later exams.
+        'paired_patient_clinical_comparison' => max(1, (int)round($projecttarget * 0.03)),
+    ];
+    $projectformatcounts = array_fill_keys(array_keys($projectformatcaps), 0);
     $projectpromptsignature = static function(array $question): string {
         $prompt = core_text::strtolower(trim((string)($question['prompt'] ?? '')));
         return trim((string)preg_replace('/[^\p{L}\p{N}]+/u', ' ', $prompt));
@@ -3290,6 +3311,10 @@ if (is_array($currentexamproject)) {
     foreach ($allquestions as $projectquestion) {
         if (in_array((string)$projectquestion['questionId'], $currentexamquestionids, true)) {
             $approvedbydomain[$projectquestion['_domainid']]++;
+            $approvedformatfamily = $questionformatfamily($projectquestion);
+            if (isset($projectformatcounts[$approvedformatfamily])) {
+                $projectformatcounts[$approvedformatfamily]++;
+            }
             $approvedsignature = $projectpromptsignature($projectquestion);
             if ($approvedsignature !== '') {
                 $selectedprojectpromptsignatures[$approvedsignature] = true;
@@ -3398,7 +3423,17 @@ if (is_array($currentexamproject)) {
                 $projectduplicatecandidateids[] = (string)$eligibleprojectquestion['questionId'];
                 continue;
             }
+            $eligibleformatfamily = $questionformatfamily($eligibleprojectquestion);
+            if (isset($projectformatcaps[$eligibleformatfamily])
+                    && (int)$projectformatcounts[$eligibleformatfamily]
+                        >= (int)$projectformatcaps[$eligibleformatfamily]) {
+                $projectformatdeferredids[] = (string)$eligibleprojectquestion['questionId'];
+                continue;
+            }
             $selectedprojectquestions[] = $eligibleprojectquestion;
+            if (isset($projectformatcounts[$eligibleformatfamily])) {
+                $projectformatcounts[$eligibleformatfamily]++;
+            }
             if ($eligiblesignature !== '') {
                 $selectedprojectpromptsignatures[$eligiblesignature] = true;
             }
@@ -3419,6 +3454,11 @@ if (is_array($currentexamproject)) {
     $examprojects[$examprojectid]['duplicateCandidateIdsSkipped'] = array_values(array_unique(
         $projectduplicatecandidateids
     ));
+    $examprojects[$examprojectid]['formatDeferredCandidateIds'] = array_values(array_unique(
+        $projectformatdeferredids
+    ));
+    $examprojects[$examprojectid]['formatFamilyCounts'] = $projectformatcounts;
+    $examprojects[$examprojectid]['formatFamilyCaps'] = $projectformatcaps;
     $currentexamproject = $examprojects[$examprojectid];
 }
 
@@ -9671,6 +9711,17 @@ echo $OUTPUT->header();
                     'strval',
                     (array)($project['priorExamQuestionIdsSkipped'] ?? [])
                 ))));
+                $projectformatdeferredcount = count(array_unique(array_filter(array_map(
+                    'strval',
+                    (array)($project['formatDeferredCandidateIds'] ?? [])
+                ))));
+                $projectpairedformatcount = (int)(
+                    $project['formatFamilyCounts']['paired_patient_clinical_comparison'] ?? 0
+                );
+                $projectpairedformatcap = (int)(
+                    $project['formatFamilyCaps']['paired_patient_clinical_comparison']
+                        ?? max(1, (int)round($projecttarget * 0.03))
+                );
                 $projectpercent = $projecttarget > 0 ? min(100, (int)round($projectcount * 100 / $projecttarget)) : 0;
                 $projectpublisherrormessage = '';
                 if ($examprojectid === $projectid && $publishexamerror !== '') {
@@ -9736,6 +9787,9 @@ echo $OUTPUT->header();
                 <?php if ($projectpriorskippedcount > 0): ?><div class="question-bank__publish-readiness is-ready"><?php echo $displaylang === 'es'
                     ? $projectpriorskippedcount . ' pregunta(s) ya usada(s) en otro examen se omitieron automáticamente y se sustituyeron en la revisión.'
                     : $projectpriorskippedcount . ' question(s) already used in another exam were automatically skipped and replaced in the review queue.'; ?></div><?php endif; ?>
+                <?php if ($projectformatdeferredcount > 0): ?><div class="question-bank__publish-readiness is-ready"><strong><?php echo $displaylang === 'es' ? 'Diversidad de formato:' : 'Format diversity:'; ?></strong> <?php echo $displaylang === 'es'
+                    ? 'se conservaron ' . min($projectpairedformatcount, $projectpairedformatcap) . ' de ' . $projectpairedformatcap . ' comparaciones de dos pacientes; ' . $projectformatdeferredcount . ' pregunta(s) con la misma plantilla quedaron en reserva y fueron sustituidas por otros formatos.'
+                    : min($projectpairedformatcount, $projectpairedformatcap) . ' of ' . $projectpairedformatcap . ' two-patient comparisons were retained; ' . $projectformatdeferredcount . ' question(s) using the same template were kept in reserve and replaced with other formats.'; ?></div><?php endif; ?>
                 <?php if ($projectpublisherrormessage !== ''): ?><div class="question-bank__publish-error" role="alert"><?php echo s($projectpublisherrormessage); ?></div><?php endif; ?>
                 <?php if ($projectneedsrebalance): ?><div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectrebalanceurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Corregir proporciones' : 'Fix domain proportions'; ?></a><small><?php echo $displaylang === 'es' ? 'Las preguntas excedentes permanecen aprobadas en el banco; solo se sustituyen dentro de este examen.' : 'Surplus questions remain approved in the bank; only their exam membership is replaced.'; ?></small></div><?php endif; ?>
                 <?php if ($projectispublished): ?><div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$project['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)($project['publishedVersion'] ?? 1); ?></span></div><?php endif; ?>
