@@ -627,6 +627,16 @@ foreach ((array)($revisionstore['customQuestions'] ?? []) as $scopequestionid =>
             || !empty($scopequestionrecord['formulaVsDuiYaoScopeRepairedAt'])) {
         continue;
     }
+    // This one-time migration repaired drafts that existed before the rotating
+    // formula/paired-herb generator was deployed. Never apply its fixed Gui Zhi
+    // + Bai Shao example to a question created afterward.
+    $scopelegacytimestamp = '';
+    if (preg_match('/^ADMIN-HB-(\d{8})-(\d{6})-/i', (string)$scopequestionid, $scopeidparts)) {
+        $scopelegacytimestamp = (string)$scopeidparts[1] . (string)$scopeidparts[2];
+    }
+    if ($scopelegacytimestamp === '' || $scopelegacytimestamp > '20261121143015') {
+        continue;
+    }
     $scopeidea = core_text::strtolower((string)($scopequestionrecord['idea'] ?? ''));
     $isscopeidea = (core_text::strpos($scopeidea, 'commercial patent formula') !== false
             && core_text::strpos($scopeidea, 'automatic equivalent') !== false)
@@ -5825,6 +5835,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $customquestionideas = array_fill(0, $detectedquestioncount, $idea);
         }
     }
+    if (!$iscustomrewrite
+            && count($customquestionideas) === 1
+            && $formulavduiyaoscopeidea
+            && $newquestionneededcount > 1) {
+        // A general formula-versus-Duì-Yào principle is a reusable educational
+        // objective. When it is filling an exam shortage, create a manageable
+        // batch with a different verified relationship for every item.
+        $customquestionideas = array_fill(
+            0,
+            min(5, $newquestionneededcount),
+            $idea
+        );
+    }
     if (count($customquestionideas) > 5) {
         throw new invalid_parameter_exception(
             'Create no more than 5 questions in one block. Split a larger collection into smaller batches.'
@@ -5832,24 +5855,151 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     }
     $custombatchcount = count($customquestionideas);
     $formulavduiyaoscopeevidence = [];
+    $formulavduiyaoscopefallbackpool = [];
+    $normalizescopetext = static fn(string $text): string => core_text::strtolower(
+        core_text::specialtoascii($text)
+    );
     if ($formulavduiyaoscopeidea && !empty($duiyaosmartpairs)) {
-        $scopepaircount = count($duiyaosmartpairs);
-        $scopepairstart = hexdec(substr(hash('sha256', $idea), 0, 7)) % $scopepaircount;
-        for ($scopepairoffset = 0; $scopepairoffset < min(12, $scopepaircount); $scopepairoffset++) {
-            $scopepair = $duiyaosmartpairs[($scopepairstart + $scopepairoffset) % $scopepaircount];
-            if (trim((string)($scopepair['formulas']['en'] ?? '')) === '') {
+        $scopepairusage = [];
+        $scopeformulausage = [];
+        $scopeherbusage = [];
+        foreach ((array)($revisionstore['customQuestions'] ?? []) as $existingcustomid => $existingcustomrecord) {
+            if (!is_array($existingcustomrecord) || (string)$existingcustomid === $customquestionid) {
                 continue;
             }
-            $formulavduiyaoscopeevidence[] = [
+            $existingpairnumber = (int)($existingcustomrecord['formulaDuiYaoPairNumber'] ?? 0);
+            $existingdrafttext = $normalizescopetext((string)json_encode(
+                $existingcustomrecord['draft'] ?? [],
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            ));
+            foreach ($duiyaosmartpairs as $scopepaircandidate) {
+                $candidatepairnumber = (int)($scopepaircandidate['number'] ?? 0);
+                if ($candidatepairnumber <= 0) {
+                    continue;
+                }
+                $candidateherbs = array_values(array_filter(array_map(
+                    'strval',
+                    (array)($scopepaircandidate['herbs'] ?? [])
+                )));
+                $pairisvisible = $existingpairnumber === $candidatepairnumber;
+                if (!$pairisvisible && count($candidateherbs) >= 2) {
+                    $pairisvisible = count(array_filter(
+                        $candidateherbs,
+                        static fn(string $herb): bool => core_text::strpos(
+                            $existingdrafttext,
+                            $normalizescopetext($herb)
+                        ) !== false
+                    )) >= 2;
+                }
+                if (!$pairisvisible) {
+                    continue;
+                }
+                $scopepairusage[$candidatepairnumber] = (int)($scopepairusage[$candidatepairnumber] ?? 0) + 1;
+                foreach ($candidateherbs as $candidateherb) {
+                    $normalizedherb = $normalizescopetext($candidateherb);
+                    $scopeherbusage[$normalizedherb] = (int)($scopeherbusage[$normalizedherb] ?? 0) + 1;
+                }
+                $candidateformula = trim((string)($scopepaircandidate['formulas']['en'] ?? ''));
+                $candidateformula = $normalizescopetext(rtrim(
+                    explode(';', $candidateformula)[0],
+                    ". \t\n\r\0\x0B"
+                ));
+                if ($candidateformula !== '') {
+                    $scopeformulausage[$candidateformula] = (int)($scopeformulausage[$candidateformula] ?? 0) + 1;
+                }
+                break;
+            }
+        }
+        $scopecandidates = [];
+        $scoperotationseed = count((array)($revisionstore['customQuestions'] ?? []));
+        foreach ($duiyaosmartpairs as $scopepair) {
+            $formulaenglish = trim((string)($scopepair['formulas']['en'] ?? ''));
+            if ($formulaenglish === '') {
+                continue;
+            }
+            $pairnumber = (int)($scopepair['number'] ?? 0);
+            $primaryformula = rtrim(explode(';', $formulaenglish)[0], ". \t\n\r\0\x0B");
+            $normalizedformula = $normalizescopetext($primaryformula);
+            $scopeherbs = array_values((array)($scopepair['herbs'] ?? []));
+            $candidateherbusage = array_sum(array_map(
+                static fn($herb): int => (int)($scopeherbusage[$normalizescopetext((string)$herb)] ?? 0),
+                $scopeherbs
+            ));
+            $scopecandidates[] = [
                 'pairNumber' => (int)($scopepair['number'] ?? 0),
                 'pair' => (string)($scopepair['title'] ?? ''),
-                'herbs' => array_values((array)($scopepair['herbs'] ?? [])),
+                'herbs' => $scopeherbs,
                 'narrowAction' => $scopepair['action'] ?? [],
                 'formulaContext' => $scopepair['formulas'] ?? [],
                 'formulaBridge' => $scopepair['formulaBridge'] ?? null,
                 'sourceCard' => '/study-guide/comparisons/'
                     . (string)($scopepair['slug'] ?? '') . '.html',
+                '_pairUsage' => (int)($scopepairusage[$pairnumber] ?? 0),
+                '_formulaUsage' => (int)($scopeformulausage[$normalizedformula] ?? 0),
+                '_herbUsage' => $candidateherbusage,
+                '_rotation' => hash(
+                    'sha256',
+                    $idea . '|' . $customtargetexamid . '|' . $scoperotationseed . '|' . $pairnumber
+                ),
             ];
+        }
+        usort($scopecandidates, static function(array $left, array $right): int {
+            return [
+                (int)$left['_pairUsage'],
+                (int)$left['_formulaUsage'],
+                (int)$left['_herbUsage'],
+                (string)$left['_rotation'],
+            ] <=> [
+                (int)$right['_pairUsage'],
+                (int)$right['_formulaUsage'],
+                (int)$right['_herbUsage'],
+                (string)$right['_rotation'],
+            ];
+        });
+        $formulavduiyaoscopefallbackpool = array_map(
+            static fn(array $candidate): array => array_diff_key($candidate, [
+                '_pairUsage' => true,
+                '_formulaUsage' => true,
+                '_herbUsage' => true,
+                '_rotation' => true,
+            ]),
+            array_slice($scopecandidates, 0, min(12, count($scopecandidates)))
+        );
+        // Supply exactly one unused relationship per requested question. This
+        // prevents the model from repeatedly choosing the most familiar pair
+        // from a long evidence list while preserving alternatives for fallback.
+        $selectedscopeformulas = [];
+        $selectedscopeherbs = [];
+        $relaxedscoperelationships = [];
+        foreach ($formulavduiyaoscopefallbackpool as $scopeevidencecandidate) {
+            $candidateformula = trim((string)($scopeevidencecandidate['formulaContext']['en'] ?? ''));
+            $candidateformula = $normalizescopetext(rtrim(
+                explode(';', $candidateformula)[0],
+                ". \t\n\r\0\x0B"
+            ));
+            $candidateherbs = array_values(array_filter(array_map(
+                static fn($herb): string => $normalizescopetext((string)$herb),
+                (array)($scopeevidencecandidate['herbs'] ?? [])
+            )));
+            if (isset($selectedscopeformulas[$candidateformula])
+                    || array_intersect($candidateherbs, array_keys($selectedscopeherbs)) !== []) {
+                $relaxedscoperelationships[] = $scopeevidencecandidate;
+                continue;
+            }
+            $formulavduiyaoscopeevidence[] = $scopeevidencecandidate;
+            $selectedscopeformulas[$candidateformula] = true;
+            foreach ($candidateherbs as $candidateherb) {
+                $selectedscopeherbs[$candidateherb] = true;
+            }
+            if (count($formulavduiyaoscopeevidence) >= $custombatchcount) {
+                break;
+            }
+        }
+        foreach ($relaxedscoperelationships as $scopeevidencecandidate) {
+            if (count($formulavduiyaoscopeevidence) >= $custombatchcount) {
+                break;
+            }
+            $formulavduiyaoscopeevidence[] = $scopeevidencecandidate;
         }
     }
     $buildformulavduiyaoscopefallback = static function(array $scopeevidence): array {
@@ -6113,8 +6263,8 @@ PROMPT;
     }
     if ($formulavduiyaoscopeidea) {
         $customprompt .= "\n\nMANDATORY FORMULA-VERSUS-DUÌ-YÀO OBJECTIVE — DO NOT SUBSTITUTE:\n"
-            . "Choose one appropriate verified relationship from the evidence below. Test when its complete formula is selected for a full pattern and when its Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Show the selected formula and both herbs of the pair in the visible stem or choices. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula. A generic single-herb action or indication question is invalid. Do not invent a formula relationship absent from the evidence."
-            . "\n\nVERIFIED FORMULA-DUÌ-YÀO RELATIONSHIPS:\n"
+            . "Use every selected relationship below exactly once and create one question from each relationship. These relationships were chosen because their herbs and primary formulas are the least used in recent administrator-authored questions. Do not substitute Gui Zhi + Bai Shao or any other familiar pair unless it is explicitly present below. Test when the complete formula is selected for a full pattern and when its Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Show the selected formula and both herbs of the pair in the visible stem or choices. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula. A generic single-herb action or indication question is invalid. Do not invent a formula relationship absent from the evidence."
+            . "\n\nSELECTED VERIFIED FORMULA-DUÌ-YÀO RELATIONSHIPS:\n"
             . json_encode(
                 $formulavduiyaoscopeevidence,
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
@@ -6343,16 +6493,14 @@ PROMPT;
                 }
             }
             if ($formulavduiyaoscopeidea) {
-                $normalizescopetext = static fn(string $text): string => core_text::strtolower(
-                    core_text::specialtoascii($text)
-                );
+                $matchedscopenumbers = [];
                 foreach ($decodedbatch as $decodeditem) {
                     $generatedcontent = json_encode(
                         $decodeditem,
                         JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
                     );
                     $generatedcontentlower = $normalizescopetext((string)$generatedcontent);
-                    $matchedevidence = false;
+                    $matchedevidence = null;
                     foreach ($formulavduiyaoscopeevidence as $scopeevidence) {
                         $pairvisible = core_text::strpos(
                             $generatedcontentlower,
@@ -6373,7 +6521,7 @@ PROMPT;
                             $normalizescopetext(rtrim(explode(';', $formulacontext)[0], ". \t\n\r\0\x0B"))
                         ) !== false;
                         if ($pairvisible && $formulavisible) {
-                            $matchedevidence = true;
+                            $matchedevidence = $scopeevidence;
                             break;
                         }
                     }
@@ -6387,13 +6535,20 @@ PROMPT;
                     ) === 1;
                     if ((string)($decodeditem['domainId'] ?? '') !== 'dui_yao'
                             || (string)($decodeditem['contentType'] ?? '') !== 'dui_yao'
-                            || !$matchedevidence
+                            || !is_array($matchedevidence)
                             || !$hasscopelanguage
                             || !$rejectsequivalence) {
                         throw new UnexpectedValueException(
                             'The formula-versus-Duì-Yào item must use one verified formula/pair relationship, show the formula and both herbs, preserve the narrow-scope distinction, and reject automatic equivalence.'
                         );
                     }
+                    $matchedscopenumber = (int)($matchedevidence['pairNumber'] ?? 0);
+                    if ($matchedscopenumber <= 0 || isset($matchedscopenumbers[$matchedscopenumber])) {
+                        throw new UnexpectedValueException(
+                            'Every formula-versus-Duì-Yào batch item must use a different selected herb pair and formula context.'
+                        );
+                    }
+                    $matchedscopenumbers[$matchedscopenumber] = true;
                 }
             }
             $originalitybatch = [];
@@ -6470,7 +6625,7 @@ PROMPT;
         // The abstract scope rule is fully represented in the verified pair
         // table.  If the language model fails validation, build a complete
         // question from that same evidence instead of returning an empty form.
-        foreach ($formulavduiyaoscopeevidence as $scopefallbackevidence) {
+        foreach ($formulavduiyaoscopefallbackpool as $scopefallbackevidence) {
             try {
                 $scopefallback = $decodecustomdraft(json_encode(
                     $buildformulavduiyaoscopefallback($scopefallbackevidence),
@@ -6518,6 +6673,37 @@ PROMPT;
             null,
             \core\output\notification::NOTIFY_ERROR
         );
+    }
+    $formulavduiyaoselectedbyindex = [];
+    if ($formulavduiyaoscopeidea) {
+        foreach ($decodedbatch as $decodedindex => $decodeditem) {
+            $decodedcontent = $normalizescopetext((string)json_encode(
+                $decodeditem,
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            ));
+            foreach ($formulavduiyaoscopefallbackpool as $scopeevidence) {
+                $visibleherbs = count(array_filter(
+                    (array)($scopeevidence['herbs'] ?? []),
+                    static fn($herb): bool => core_text::strpos(
+                        $decodedcontent,
+                        $normalizescopetext((string)$herb)
+                    ) !== false
+                ));
+                $formulacontext = trim((string)($scopeevidence['formulaContext']['en'] ?? ''));
+                $primaryformula = rtrim(
+                    explode(';', $formulacontext)[0],
+                    ". \t\n\r\0\x0B"
+                );
+                $formulavisible = $primaryformula !== '' && core_text::strpos(
+                    $decodedcontent,
+                    $normalizescopetext($primaryformula)
+                ) !== false;
+                if ($visibleherbs >= 2 && $formulavisible) {
+                    $formulavduiyaoselectedbyindex[$decodedindex] = $scopeevidence;
+                    break;
+                }
+            }
+        }
     }
     $allowedcontenttypes = [
         'clinical_case', 'herb_properties', 'formula_selection', 'formula_composition',
@@ -6608,6 +6794,15 @@ PROMPT;
             'examTemplate' => ['globalPosition' => 0],
         ];
         $originality = $originalitybatch[$decodedindex];
+        $scopeselection = $formulavduiyaoselectedbyindex[$decodedindex] ?? null;
+        $scopereviewsummary = '';
+        if (is_array($scopeselection)) {
+            $scopereviewsummary = 'Selected verified relationship ';
+            $scopereviewsummary .= 'Pair ' . (int)($scopeselection['pairNumber'] ?? 0);
+            $scopereviewsummary .= ': ' . trim((string)($scopeselection['pair'] ?? ''));
+            $scopereviewsummary .= '; formula context: '
+                . trim((string)($scopeselection['formulaContext']['en'] ?? '')) . '.';
+        }
         $originalityrecord = [
             'status' => 'clear',
             'comparedCount' => (int)($originality['comparedCount'] ?? 0),
@@ -6635,7 +6830,18 @@ PROMPT;
             'targetDomainId' => $customtargetdomain,
             'targetExamProjectId' => $customtargetexamid,
             'corrections' => array_slice($corrections, -20),
-            'reviewSummary' => trim((string)($decoded['reviewSummary'] ?? '')),
+            'reviewSummary' => $scopereviewsummary !== ''
+                ? $scopereviewsummary
+                : trim((string)($decoded['reviewSummary'] ?? '')),
+            'formulaDuiYaoPairNumber' => is_array($scopeselection)
+                ? (int)($scopeselection['pairNumber'] ?? 0)
+                : (int)($previous['formulaDuiYaoPairNumber'] ?? 0),
+            'formulaDuiYaoPair' => is_array($scopeselection)
+                ? trim((string)($scopeselection['pair'] ?? ''))
+                : trim((string)($previous['formulaDuiYaoPair'] ?? '')),
+            'formulaDuiYaoFormulaContext' => is_array($scopeselection)
+                ? trim((string)($scopeselection['formulaContext']['en'] ?? ''))
+                : trim((string)($previous['formulaDuiYaoFormulaContext'] ?? '')),
             'originality' => $originalityrecord,
             'draft' => $question,
             'approved' => is_array($previous['approved'] ?? null) ? $previous['approved'] : null,
@@ -9903,6 +10109,11 @@ echo $OUTPUT->header();
                     ? 'Las preguntas aprobadas desde este formulario se agregarán automáticamente al examen.'
                     : 'Questions approved from this form will be added to the exam automatically.'; ?>
             </div>
+            <?php if ($newquestiontargetdomain === 'dui_yao' && $newquestionneededcount > 1): ?>
+            <div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Creación variada por lote:' : 'Varied batch creation:'; ?></strong> <?php echo $displaylang === 'es'
+                ? 'Una regla general sobre fórmula frente a Duì Yào puede producir hasta 5 borradores por intento. Cada borrador utilizará otra pareja de hierbas y otra fórmula verificadas siempre que la tabla fuente lo permita.'
+                : 'A general formula-versus-Duì-Yào rule can produce up to 5 drafts per attempt. Every draft will use another verified herb pair and formula whenever the source table permits it.'; ?></div>
+            <?php endif; ?>
         <?php endif; ?>
         <?php if ($newquestionrecovery !== []): ?><div class="question-bank__publish-error" role="alert"><strong><?php echo $displaylang === 'es' ? 'La generación anterior no produjo un borrador válido.' : 'The previous generation did not produce a valid draft.'; ?></strong> <?php echo $displaylang === 'es' ? 'El texto completo se conservó abajo; puede corregirlo y volver a intentarlo.' : 'The complete text was preserved below; you can correct it and try again.'; ?><?php if (trim((string)($newquestionrecovery['error'] ?? '')) !== ''): ?> <small><?php echo s((string)$newquestionrecovery['error']); ?></small><?php endif; ?></div><?php endif; ?>
         <p>Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as <strong>### Question 1</strong> or <strong>### 2.</strong>, lines containing <strong>---</strong>, and repeated <strong>Correct answer:</strong> or <strong>Respuesta correcta:</strong> labels. It creates an independent draft for each question and immediately displays a visible index of the complete batch.</p>
