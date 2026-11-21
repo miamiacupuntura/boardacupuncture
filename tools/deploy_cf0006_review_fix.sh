@@ -19,7 +19,7 @@ if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     exit 1
 fi
 
-for command in curl php grep install stat cp cmp mkdir mktemp date rm mv sha256sum id awk dirname basename; do
+for command in curl php grep install stat cp cmp mkdir mktemp date rm mv sha256sum id awk dirname basename chown chmod; do
     command -v "$command" >/dev/null 2>&1 || {
         echo "ERROR: falta el comando $command" >&2
         exit 1
@@ -37,6 +37,9 @@ TEMP_DIR="$(mktemp -d)"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP_DIR="$BACKUP_ROOT/cf0006-review-fix-$TIMESTAMP"
 INSTALLED_FILES=()
+OVERRIDE_STORE_PATH=""
+OVERRIDE_STORE_BACKUP=""
+OVERRIDE_STORE_OWNER_GROUP=""
 
 cleanup() {
     rm -rf -- "$TEMP_DIR"
@@ -54,6 +57,15 @@ on_error() {
             echo "RECUPERACIÓN: se restauró $relative_file" >&2
         fi
     done
+    if [[ -n "$OVERRIDE_STORE_PATH" && -n "$OVERRIDE_STORE_BACKUP" \
+            && -f "$OVERRIDE_STORE_BACKUP" ]]; then
+        cp -a -- "$OVERRIDE_STORE_BACKUP" "$OVERRIDE_STORE_PATH"
+        if [[ -n "$OVERRIDE_STORE_OWNER_GROUP" ]]; then
+            chown "$OVERRIDE_STORE_OWNER_GROUP" "$OVERRIDE_STORE_PATH"
+            chmod 0660 "$OVERRIDE_STORE_PATH"
+        fi
+        echo "RECUPERACIÓN: se restauró el estado guardado de los exámenes." >&2
+    fi
     cleanup
     echo "ERROR: despliegue de CF-0006 detenido en la línea $line (código $status)." >&2
     exit "$status"
@@ -147,6 +159,19 @@ php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_
 
 CF0126_OVERRIDE_RESULT="No había una instalación Moodle disponible para revisar la copia guardada de CF-0126."
 if [[ -f "$MOODLE_ROOT/config.php" ]]; then
+    MOODLE_DATAROOT="$(php -r 'define("CLI_SCRIPT", true); require $argv[1]; global $CFG; echo $CFG->dataroot;' "$MOODLE_ROOT/config.php")"
+    OVERRIDE_STORE_PATH="$MOODLE_DATAROOT/board-domain-banks/herbology-question-overrides.json"
+    if id www-data >/dev/null 2>&1; then
+        OVERRIDE_STORE_OWNER_GROUP="$(id -u www-data):$(id -g www-data)"
+    else
+        OVERRIDE_STORE_OWNER_GROUP="$(stat -c '%u:%g' "$(dirname "$OVERRIDE_STORE_PATH")")"
+    fi
+    if [[ -f "$OVERRIDE_STORE_PATH" ]]; then
+        OVERRIDE_STORE_BACKUP="$BACKUP_DIR/dataroot/board-domain-banks/herbology-question-overrides.json"
+        mkdir -p "$(dirname "$OVERRIDE_STORE_BACKUP")"
+        cp -a -- "$OVERRIDE_STORE_PATH" "$OVERRIDE_STORE_BACKUP"
+        php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data["questions"] ?? null) || !is_array($data["examProjects"] ?? null)) { exit(1); }' "$OVERRIDE_STORE_PATH"
+    fi
     CF0126_OVERRIDE_RESULT="$(MOODLE_ROOT="$MOODLE_ROOT" php <<'PHP'
 <?php
 define('CLI_SCRIPT', true);
@@ -230,6 +255,18 @@ echo $changed
     : 'CF-0126 no tenía una copia guardada defectuosa.';
 PHP
 )"
+    if [[ -f "$OVERRIDE_STORE_PATH" ]]; then
+        chown "$OVERRIDE_STORE_OWNER_GROUP" "$OVERRIDE_STORE_PATH"
+        chmod 0660 "$OVERRIDE_STORE_PATH"
+        if [[ -f "$OVERRIDE_STORE_PATH.lock" ]]; then
+            chown "$OVERRIDE_STORE_OWNER_GROUP" "$OVERRIDE_STORE_PATH.lock"
+            chmod 0660 "$OVERRIDE_STORE_PATH.lock"
+        fi
+        php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data["questions"] ?? null) || !is_array($data["examProjects"] ?? null)) { exit(1); }' "$OVERRIDE_STORE_PATH"
+        OVERRIDE_PERMISSION_RESULT="Se restauró el acceso del servidor web al estado guardado de los exámenes."
+    else
+        OVERRIDE_PERMISSION_RESULT="No existía un archivo de estado de exámenes para reparar."
+    fi
 fi
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
@@ -271,6 +308,7 @@ echo "OK: All options are incorrect y sus equivalentes quedan bloqueados y deben
 echo "OK: CF-0126 contiene cuatro comparaciones independientes y feedback completo en ambos idiomas."
 echo "OK: una opción que concatena otras dos también queda bloqueada como respuesta combinada."
 echo "OK: $CF0126_OVERRIDE_RESULT"
+echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256 DATOS: $INSTALLED_SHA256"
 if [[ "${#WEB_RUNTIME_RELOADED[@]}" -gt 0 ]]; then
