@@ -2760,27 +2760,27 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "Both Yu Ping Feng San (Jade Windscreen Powder) and Mu Li San (Oyster Shell Powder) treat sweating from Qi deficiency, what is their difference?",
+        "prompt": "Two patients have deficiency-related sweating. The first has spontaneous sweating, aversion to drafts, and recurrent colds or allergies. The second has sweating that worsens at night with palpitations, anxiety, irritability, and fatigue. Which statement correctly differentiates the formula selection?",
         "options": [
           {
             "label": "A",
-            "text": "Mu Li San (Oyster Shell Powder) is for deficiency of protective Qi at the level of the Lungs with recurrent penetration of wind into the exterior. This is characterized by spontaneous sweating accompanied by aversion to wind or drafts, as well as recurrent infections or allergies."
+            "text": "Mu Li San (Oyster Shell Powder) is preferred for the first patient with recurrent exterior invasion, whereas Yu Ping Feng San (Jade Windscreen Powder) is preferred for the second patient's night sweating and palpitations."
           },
           {
             "label": "B",
-            "text": "Yu Ping Feng San (Jade Windscreen Powder), on the other hand, also treats deficiency of protective Qi, but this is complicated here by constraint from deficiency at the level of the nutritive Qi. Because the nutritive Qi is associated with the heart, there are symptoms of heart Qi deficiency such as anxiety and palpitations. Because of the presence of the heat from constraint, there will be irritability and restlessness and the sweating tend to worsen at night."
+            "text": "Yu Ping Feng San (Jade Windscreen Powder) is preferred for severe night sweating from blazing deficiency Fire, whereas Mu Li San (Oyster Shell Powder) is preferred for acute exterior excess with absence of sweating."
           },
           {
             "label": "C",
-            "text": "Both of them"
+            "text": "Yu Ping Feng San (Jade Windscreen Powder) and Mu Li San (Oyster Shell Powder) are interchangeable whenever sweating is attributed to Qi deficiency."
           },
           {
             "label": "D",
-            "text": "None of them"
+            "text": "Yu Ping Feng San (Jade Windscreen Powder) is preferred for the first patient's unstable exterior from Wei Qi deficiency, whereas Mu Li San (Oyster Shell Powder) is preferred for the second patient's deficiency sweating with Heart and nutritive-level signs."
           }
         ],
         "correctLabel": "D",
-        "explanation": "",
+        "explanation": "Inference step 1: Spontaneous sweating with aversion to drafts and recurrent colds or allergies indicates an unstable exterior from Wei Qi deficiency; sweating that worsens at night with palpitations, anxiety, irritability, and fatigue points instead to deficiency sweating involving the Heart and nutritive level. Inference step 2: Yu Ping Feng San (Jade Windscreen Powder) strengthens Wei Qi and stabilizes the exterior, while Mu Li San (Oyster Shell Powder) restrains deficiency sweating when palpitations and night worsening are prominent. Option A: Incorrect. It reverses the characteristic presentations of the two formulas. Option B: Incorrect. The second presentation is not blazing deficiency Fire, and acute exterior excess without sweating is not the indication for Mu Li San. Option C: Incorrect. The formulas are not interchangeable; the exterior-invasion history and the Heart-associated night symptoms distinguish them. Option D: Correct. It assigns Yu Ping Feng San to the unstable Wei Qi exterior and Mu Li San to the palpitations and night-sweating presentation.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
@@ -2794,26 +2794,26 @@
         },
         "translations": {
           "es": {
-            "prompt": "Tanto Yu Ping Feng San (Jade Windscreen Powder) como Mu Li San (Oyster Shell Powder) tratan el sudoración de deficiencia de Qi. ¿En qué se diferencian?",
+            "prompt": "Dos pacientes presentan sudoración por deficiencia. El primero tiene sudoración espontánea, aversión a las corrientes de aire y resfriados o alergias recurrentes. El segundo presenta sudoración que empeora por la noche, con palpitaciones, ansiedad, irritabilidad y fatiga. ¿Qué afirmación diferencia correctamente la selección de fórmulas?",
             "options": [
               {
                 "label": "A",
-                "text": "Mu Li San (Oyster Shell Powder) es para deficiencia de Qi protector en el nivel de la Pulmones con penetración recurrente del viento en el exterior. Esto se caracteriza por sudoración espontánea acompañado de aversión al viento o borradores, así como infecciones o alergias recurrentes."
+                "text": "Mu Li San (Oyster Shell Powder) se prefiere para el primer paciente con invasión exterior recurrente, mientras Yu Ping Feng San (Jade Windscreen Powder) se prefiere para la sudoración nocturna y las palpitaciones del segundo paciente."
               },
               {
                 "label": "B",
-                "text": "Yu Ping Feng San (Jade Windscreen Powder), por otro lado, también trata la deficiencia de Qi protector, pero esto es complicado aquí por la restricción de la deficiencia en el nivel del Qi nutritivo. Debido a que el Qi nutritivo está asociado con el Corazón, hay síntomas de deficiencia de Qi de Corazón como ansiedad y palpitaciones. Debido a la presencia del calor de la restricción, habrá irritabilidad e inquietud y el sudor tiende a empeorar por la noche."
+                "text": "Yu Ping Feng San (Jade Windscreen Powder) se prefiere para sudoración nocturna intensa por Fuego de deficiencia, mientras Mu Li San (Oyster Shell Powder) se prefiere para un exceso exterior agudo sin sudoración."
               },
               {
                 "label": "C",
-                "text": "Ambos."
+                "text": "Yu Ping Feng San (Jade Windscreen Powder) y Mu Li San (Oyster Shell Powder) son intercambiables siempre que la sudoración se atribuya a deficiencia de Qi."
               },
               {
                 "label": "D",
-                "text": "Ninguno de ellos"
+                "text": "Yu Ping Feng San (Jade Windscreen Powder) se prefiere para el exterior inestable por deficiencia de Wei Qi del primer paciente, mientras Mu Li San (Oyster Shell Powder) se prefiere para la sudoración por deficiencia con signos del Corazón y del nivel nutritivo del segundo paciente."
               }
             ],
-            "explanation": ""
+            "explanation": "Paso de inferencia 1: La sudoración espontánea con aversión a las corrientes de aire y resfriados o alergias recurrentes indica un exterior inestable por deficiencia de Wei Qi; la sudoración que empeora por la noche con palpitaciones, ansiedad, irritabilidad y fatiga apunta en cambio a sudoración por deficiencia que involucra el Corazón y el nivel nutritivo. Paso de inferencia 2: Yu Ping Feng San (Jade Windscreen Powder) fortalece el Wei Qi y estabiliza el exterior, mientras Mu Li San (Oyster Shell Powder) contiene la sudoración por deficiencia cuando predominan las palpitaciones y el empeoramiento nocturno. Opción A: Incorrecta. Invierte las presentaciones características de las dos fórmulas. Opción B: Incorrecta. La segunda presentación no corresponde a Fuego intenso por deficiencia, y el exceso exterior agudo sin sudoración no es la indicación de Mu Li San. Opción C: Incorrecta. Las fórmulas no son intercambiables; el historial de invasión exterior y los síntomas nocturnos asociados con el Corazón las diferencian. Opción D: Correcta. Asigna Yu Ping Feng San al exterior inestable por Wei Qi y Mu Li San a la presentación con palpitaciones y sudoración nocturna."
           }
         },
         "nomenclature": {

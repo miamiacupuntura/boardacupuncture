@@ -105,6 +105,7 @@ grep -Fq 'Mock-only questions' "$QUESTION_BANK_SOURCE"
 grep -Fq '$hasreviewablecontent' "$QUESTION_BANK_SOURCE"
 grep -Fq 'All options are incorrect' "$QUESTION_BANK_SOURCE"
 grep -Fq 'opci[oó]n(?:es)?' "$QUESTION_BANK_SOURCE"
+grep -Fq "'SCORM-FD-E4D38EA9FCBA' => 'CF-0056'" "$QUESTION_BANK_SOURCE"
 grep -Fq "'study_archive'" "$OVERRIDES_SOURCE"
 grep -Fq "'archiveModule'" "$OVERRIDES_SOURCE"
 grep -Fq "'mockOnly'" "$HERBOLOGY_BOARD_SOURCE"
@@ -126,6 +127,23 @@ if grep -A 120 -F '"questionId": "CF-0126"' "$SOURCE_DATA" \
     echo "ERROR: CF-0126 todavía contiene la versión combinada defectuosa." >&2
     exit 1
 fi
+grep -Fq '"questionId": "CF-0056"' "$SOURCE_DATA"
+grep -Fq 'Two patients have deficiency-related sweating' "$SOURCE_DATA"
+grep -Fq 'Option D: Correct. It assigns Yu Ping Feng San' "$SOURCE_DATA"
+php -r '
+$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+$found=null;
+foreach (($data["domains"] ?? []) as $questions) {
+    foreach ($questions as $question) {
+        if (($question["questionId"] ?? "") === "CF-0056") { $found=$question; break 2; }
+    }
+}
+$text=json_encode($found, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+if (!is_array($found) || trim((string)($found["explanation"] ?? "")) === ""
+        || preg_match("/Both of them|None of them|Ambos\\.|Ninguno de ellos/u", (string)$text)) {
+    fwrite(STDERR, "ERROR: CF-0056 todavía contiene la comparación combinada defectuosa.\n");
+    exit(1);
+}' "$SOURCE_DATA"
 
 mkdir -p "$BACKUP_DIR"
 for relative_file in "${RELATIVE_FILES[@]}"; do
@@ -307,6 +325,7 @@ echo "OK: Exam builder muestra candidatas SCORM revisables cuando se agota la re
 echo "OK: All options are incorrect y sus equivalentes quedan bloqueados y deben reescribirse."
 echo "OK: CF-0126 contiene cuatro comparaciones independientes y feedback completo en ambos idiomas."
 echo "OK: una opción que concatena otras dos también queda bloqueada como respuesta combinada."
+echo "OK: SCORM-FD-E4D38EA9FCBA usa la comparación corregida de Yu Ping Feng San y Mu Li San."
 echo "OK: $CF0126_OVERRIDE_RESULT"
 echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"
 echo "OK: revisión instalada: $REVISION"

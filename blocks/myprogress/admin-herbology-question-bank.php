@@ -126,6 +126,44 @@ if (is_readable($scormbankpath)) {
         }
     }
 }
+// A small number of SCORM imports are exact copies of curated source items
+// whose answer shortcuts have since been repaired. Apply the reviewed wording
+// before loading editorial revisions so the pending exam never falls back to
+// the obsolete Both/None version.
+$reviewedsourcealiases = [
+    'SCORM-FD-E4D38EA9FCBA' => 'CF-0056',
+];
+$reviewedsourcequestions = [];
+foreach (($bank['domains'] ?? []) as $questions) {
+    foreach ((array)$questions as $question) {
+        $questionid = (string)($question['questionId'] ?? '');
+        if (in_array($questionid, $reviewedsourcealiases, true)) {
+            $reviewedsourcequestions[$questionid] = $question;
+        }
+    }
+}
+foreach ($bank['domains'] as &$questions) {
+    foreach ($questions as &$question) {
+        $targetid = (string)($question['questionId'] ?? '');
+        $sourceid = (string)($reviewedsourcealiases[$targetid] ?? '');
+        $reviewedsource = $reviewedsourcequestions[$sourceid] ?? null;
+        if (!is_array($reviewedsource)) {
+            continue;
+        }
+        foreach ([
+            'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+            'contentType', 'cognitiveLevel', 'difficultyBand', 'nomenclature',
+        ] as $field) {
+            if (array_key_exists($field, $reviewedsource)) {
+                $question[$field] = $reviewedsource[$field];
+            }
+        }
+        $question['review']['status'] = 'practice-ready';
+        $question['review']['notes'] = 'Reviewed source correction applied to duplicated SCORM item.';
+    }
+    unset($question);
+}
+unset($questions);
 $revisionstore = block_myprogress_herbology_override_load();
 $publishedprojectrepairs = [];
 foreach ((array)($revisionstore['publishedExams'] ?? []) as $publishedexamrecord) {
