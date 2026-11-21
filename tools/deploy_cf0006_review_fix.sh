@@ -145,6 +145,93 @@ php -l "$MOODLE_ROOT/${RELATIVE_FILES[1]}" >/dev/null
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[2]}" >/dev/null
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$MOODLE_ROOT/${RELATIVE_FILES[3]}"
 
+CF0126_OVERRIDE_RESULT="No había una instalación Moodle disponible para revisar la copia guardada de CF-0126."
+if [[ -f "$MOODLE_ROOT/config.php" ]]; then
+    CF0126_OVERRIDE_RESULT="$(MOODLE_ROOT="$MOODLE_ROOT" php <<'PHP'
+<?php
+define('CLI_SCRIPT', true);
+$moodleroot = (string)getenv('MOODLE_ROOT');
+require $moodleroot . '/config.php';
+require_once $moodleroot . '/blocks/myprogress/herbology-question-overrides.php';
+
+$bank = json_decode(
+    (string)file_get_contents($moodleroot . '/blocks/menu/herbology-domain-candidates.json'),
+    true,
+    512,
+    JSON_THROW_ON_ERROR
+);
+$corrected = null;
+foreach ((array)($bank['domains'] ?? []) as $questions) {
+    foreach ((array)$questions as $question) {
+        if ((string)($question['questionId'] ?? '') === 'CF-0126') {
+            $corrected = $question;
+            break 2;
+        }
+    }
+}
+if (!is_array($corrected)) {
+    throw new RuntimeException('No se encontró CF-0126 en el banco instalado.');
+}
+
+$legacy = static function($snapshot): bool {
+    if (!is_array($snapshot)) {
+        return false;
+    }
+    $text = json_encode($snapshot, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    return preg_match(
+        '/All options are incorrects?|Todas las opciones son incorrectas|excess tire|exceso de neumático/iu',
+        (string)$text
+    ) === 1;
+};
+$fields = [
+    'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+    'contentType', 'cognitiveLevel', 'difficultyBand', 'source', 'sourceCard',
+];
+$replacement = array_intersect_key($corrected, array_flip($fields));
+$changed = false;
+block_myprogress_herbology_override_update(static function(array $store) use (
+    $legacy,
+    $replacement,
+    &$changed
+): array {
+    $record = $store['questions']['CF-0126'] ?? null;
+    if (!is_array($record)) {
+        return $store;
+    }
+    $recordchanged = false;
+    foreach (['draft', 'approved'] as $snapshotkey) {
+        if (!$legacy($record[$snapshotkey] ?? null)) {
+            continue;
+        }
+        $record[$snapshotkey] = array_replace((array)$record[$snapshotkey], $replacement);
+        if ($snapshotkey === 'draft') {
+            $record[$snapshotkey]['reviewSummary'] = 'Replaced combined-answer shortcuts with four independent comparisons and rebuilt feedback.';
+            $record[$snapshotkey]['instructionCompliance'] = [
+                'status' => 'verified',
+                'note' => 'CF-0126 now contains four independent answer choices and complete A-D feedback.',
+            ];
+        }
+        $recordchanged = true;
+    }
+    if (!$recordchanged) {
+        return $store;
+    }
+    $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+    $record['savedAt'] = gmdate(DATE_ATOM);
+    $record['savedByName'] = 'CF-0126 deployment migration';
+    $record['aiPromptVersion'] = 'ncbahm-mock-editor-4.3';
+    $record['cf0126MigratedAt'] = gmdate(DATE_ATOM);
+    $store['questions']['CF-0126'] = $record;
+    $changed = true;
+    return $store;
+});
+echo $changed
+    ? 'Se sustituyó la copia guardada defectuosa de CF-0126.'
+    : 'CF-0126 no tenía una copia guardada defectuosa.';
+PHP
+)"
+fi
+
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
         runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"
@@ -183,6 +270,7 @@ echo "OK: Exam builder muestra candidatas SCORM revisables cuando se agota la re
 echo "OK: All options are incorrect y sus equivalentes quedan bloqueados y deben reescribirse."
 echo "OK: CF-0126 contiene cuatro comparaciones independientes y feedback completo en ambos idiomas."
 echo "OK: una opción que concatena otras dos también queda bloqueada como respuesta combinada."
+echo "OK: $CF0126_OVERRIDE_RESULT"
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256 DATOS: $INSTALLED_SHA256"
 if [[ "${#WEB_RUNTIME_RELOADED[@]}" -gt 0 ]]; then
