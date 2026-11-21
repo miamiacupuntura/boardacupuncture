@@ -1241,6 +1241,19 @@ $findquestion = static function(array $questionbank, string $questionid): ?array
     }
     return null;
 };
+$findactiveexamprojectid = static function(array $store): string {
+    $activeprojects = array_filter(
+        (array)($store['examProjects'] ?? []),
+        static fn($project): bool => is_array($project)
+            && (string)($project['status'] ?? 'draft') !== 'published'
+    );
+    uasort($activeprojects, static fn(array $left, array $right): int => strcmp(
+        (string)($right['createdAt'] ?? ''),
+        (string)($left['createdAt'] ?? '')
+    ));
+    $activeproject = reset($activeprojects);
+    return is_array($activeproject) ? (string)($activeproject['id'] ?? '') : '';
+};
 $findprohibitedanswerchoice = static function(array $options): ?string {
     $prohibitedpattern = '/\b(?:'
         . 'all\s+of\s+(?:them|these|the\s+above)'
@@ -2083,7 +2096,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishcurrentquestion') {
     require_sesskey();
     $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
-    $directreturnorigin = (bool)optional_param('returnorigin', 0, PARAM_BOOL);
     $directpinforexam2 = (bool)optional_param('pinforexam2', 0, PARAM_BOOL);
     $directexamprojectid = $examprojectid;
     if ($directexamprojectid !== '' && isset($questionsusedinpriorexams[$questionid])) {
@@ -2198,23 +2210,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishcurrentques
         $store['questions'][$questionid] = $record;
         return $store;
     });
-    $nextpendingurl = $directreturnorigin
-        ? new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
-            'q' => $questionid,
-            'examproject' => $directexamprojectid !== '' ? $directexamprojectid : null,
+    $freshstore = block_myprogress_herbology_override_load();
+    $returnqueueexamid = $directexamprojectid !== ''
+        ? $directexamprojectid
+        : $findactiveexamprojectid($freshstore);
+    $nextpendingurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        array_filter([
+            'usage' => $returnqueueexamid !== '' ? 'exam_project_pending' : null,
+            'examproject' => $returnqueueexamid !== '' ? $returnqueueexamid : null,
             'lang' => $displaylang !== 'en' ? $displaylang : null,
-        ]))
-        : new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
-        'usage' => $directexamprojectid !== '' ? 'exam_project_pending' : 'exam2_review',
-        'examproject' => $directexamprojectid !== '' ? $directexamprojectid : null,
-        'lang' => $displaylang !== 'en' ? $displaylang : null,
-    ]));
-    $nextpendingurl->set_anchor($directreturnorigin ? 'question-' . $questionid : 'pending-questions');
+        ])
+    );
+    $nextpendingurl->set_anchor('pending-questions');
     redirect(
         $nextpendingurl,
-        $directreturnorigin
-            ? 'Question approved and published. You are viewing the question you just completed.'
-            : 'Question approved and published without automatic review. It was removed from pending questions.',
+        $returnqueueexamid !== ''
+            ? 'Question approved and published. Continue with the next pending exam question.'
+            : 'Question approved and published. It was removed from the publication screen.',
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -2353,32 +2366,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
         );
     }
 
-    $returnexamprojectid = $examprojectid !== ''
-        ? $examprojectid
-        : (string)($revisionstore['questions'][$questionid]['examProjectId'] ?? '');
-    if ($returnexamprojectid !== ''
-            && !is_array($revisionstore['examProjects'][$returnexamprojectid] ?? null)) {
-        $returnexamprojectid = '';
-    }
-    $returnexamprojectview = $examprojectid !== ''
-        ? $examprojectview
-        : (string)($revisionstore['questions'][$questionid]['examProjectView'] ?? 'candidates');
-    if (!in_array($returnexamprojectview, ['candidates', 'included'], true)) {
-        $returnexamprojectview = 'candidates';
-    }
     if ($returnorigin) {
-        $focusedurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
-            'q' => $questionid,
-            'lang' => $displaylang !== 'en' ? $displaylang : null,
-            'examproject' => $returnexamprojectid !== '' ? $returnexamprojectid : null,
-            'examview' => $returnexamprojectid !== '' && $returnexamprojectview !== 'candidates'
-                ? $returnexamprojectview
-                : null,
-        ]);
-        $focusedurl->set_anchor('question-' . $questionid);
+        $freshstore = block_myprogress_herbology_override_load();
+        $returnqueueexamid = $findactiveexamprojectid($freshstore);
+        $focusedurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter([
+                'usage' => $returnqueueexamid !== '' ? 'exam_project_pending' : null,
+                'examproject' => $returnqueueexamid !== '' ? $returnqueueexamid : null,
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ])
+        );
+        $focusedurl->set_anchor('pending-questions');
         redirect(
             $focusedurl,
-            'Question approved and published. You are viewing the question you just completed.',
+            $returnqueueexamid !== ''
+                ? 'Question approved and published. Continue with the next pending exam question.'
+                : 'Question approved and published. It was removed from the publication screen.',
             null,
             \core\output\notification::NOTIFY_SUCCESS
         );
