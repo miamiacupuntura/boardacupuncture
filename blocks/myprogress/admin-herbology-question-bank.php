@@ -176,6 +176,193 @@ foreach ($bank['domains'] as &$questions) {
 }
 unset($questions);
 $revisionstore = block_myprogress_herbology_override_load();
+$fuzirouguicustomid = 'ADMIN-HB-20261121-054320-94BA';
+$fuzirouguirepairapplied = false;
+$fuzirouguirecord = $revisionstore['customQuestions'][$fuzirouguicustomid] ?? null;
+if (is_array($fuzirouguirecord)
+        && empty($fuzirouguirecord['canonicalFuZiRouGuiPublishedAt'])) {
+    $fuzirouguicanonical = [
+        'questionId' => $fuzirouguicustomid,
+        'domainId' => 'dui_yao',
+        'prompt' => 'A textual version modifies Liu Wei Di Huang Wan (Six-Ingredient Pill with Rehmannia) by adding processed Fu Zi (Aconiti Lateralis Radix Praeparata) and Rou Gui (Cinnamomi Cortex). Which interpretation is most accurate?',
+        'options' => [
+            [
+                'label' => 'A',
+                'text' => 'The modification creates Zhi Bai Di Huang Wan and primarily clears deficiency Heat.',
+            ],
+            [
+                'label' => 'B',
+                'text' => 'The modification identifies the Ba Wei Di Huang Wan/Jin Gui Shen Qi Wan lineage and shifts the formula toward warming Kidney Yang and supporting water transformation; however, the cinnamon ingredient must be verified because some textual versions use Rou Gui while others use Gui Zhi.',
+            ],
+            [
+                'label' => 'C',
+                'text' => 'The modification creates Qi Ju Di Huang Wan and primarily treats Liver-Kidney Yin deficiency affecting the eyes.',
+            ],
+            [
+                'label' => 'D',
+                'text' => 'The modification creates Mai Wei Di Huang Wan and primarily enriches Lung and Kidney Yin.',
+            ],
+        ],
+        'correctLabel' => 'B',
+        'explanation' => 'Inference step 1: Liu Wei Di Huang Wan is the six-herb base formula. Adding processed Fu Zi and a cinnamon herb identifies the eight-ingredient Kidney Yang-warming family associated with the Ba Wei Di Huang Wan/Jin Gui Shen Qi Wan lineage. Inference step 2: Fu Zi and the cinnamon ingredient shift the formula from primarily enriching Kidney Yin toward warming Kidney Yang and supporting water transformation. Option A: Incorrect. Zhi Bai Di Huang Wan adds Zhi Mu and Huang Bai to clear deficiency Heat. Option B: Correct. It identifies the proper formula lineage and the source-dependent Rou Gui versus Gui Zhi distinction. Option C: Incorrect. Qi Ju Di Huang Wan adds Gou Qi Zi and Ju Hua. Option D: Incorrect. Mai Wei Di Huang Wan adds Mai Men Dong and Wu Wei Zi.',
+        'translations' => [
+            'es' => [
+                'prompt' => 'Una versión textual modifica Liu Wei Di Huang Wan (Píldora de seis ingredientes con Rehmannia) añadiendo Fu Zi procesado (Aconiti Lateralis Radix Praeparata) y Rou Gui (Cinnamomi Cortex). ¿Cuál es la interpretación más precisa?',
+                'options' => [
+                    [
+                        'label' => 'A',
+                        'text' => 'La modificación crea Zhi Bai Di Huang Wan y principalmente elimina Calor por deficiencia.',
+                    ],
+                    [
+                        'label' => 'B',
+                        'text' => 'La modificación identifica el linaje de Ba Wei Di Huang Wan/Jin Gui Shen Qi Wan y orienta la fórmula hacia calentar el Yang de Riñón y apoyar la transformación del agua; sin embargo, debe verificarse la hierba de canela porque algunas versiones textuales usan Rou Gui y otras Gui Zhi.',
+                    ],
+                    [
+                        'label' => 'C',
+                        'text' => 'La modificación crea Qi Ju Di Huang Wan y principalmente trata la deficiencia de Yin de Hígado-Riñón que afecta los ojos.',
+                    ],
+                    [
+                        'label' => 'D',
+                        'text' => 'La modificación crea Mai Wei Di Huang Wan y principalmente enriquece el Yin de Pulmón y Riñón.',
+                    ],
+                ],
+                'explanation' => 'Paso de inferencia 1: Liu Wei Di Huang Wan es la fórmula base de seis hierbas. Añadir Fu Zi procesado y una hierba de canela identifica la familia de ocho ingredientes que calienta el Yang de Riñón, asociada con el linaje de Ba Wei Di Huang Wan/Jin Gui Shen Qi Wan. Paso de inferencia 2: Fu Zi y la hierba de canela cambian la dirección desde enriquecer principalmente el Yin de Riñón hacia calentar el Yang de Riñón y apoyar la transformación del agua. Opción A: Incorrecta. Zhi Bai Di Huang Wan añade Zhi Mu y Huang Bai para eliminar Calor por deficiencia. Opción B: Correcta. Identifica el linaje apropiado y la distinción dependiente de la fuente entre Rou Gui y Gui Zhi. Opción C: Incorrecta. Qi Ju Di Huang Wan añade Gou Qi Zi y Ju Hua. Opción D: Incorrecta. Mai Wei Di Huang Wan añade Mai Men Dong y Wu Wei Zi.',
+            ],
+        ],
+        'contentType' => 'dui_yao',
+        'cognitiveLevel' => 'analyze',
+        'difficultyBand' => 'analysis',
+        'sourceKind' => 'admin',
+        'source' => [
+            'title' => 'Duì Yào smart table',
+            'section' => 'Pair 43 · Fu Zi + Rou Gui',
+            'locator' => 'Version-dependent family link: Liu Wei Di Huang Wan to the Ba Wei Di Huang Wan/Jin Gui Shen Qi Wan lineage',
+        ],
+        'sourceCard' => [
+            'label' => 'Open Fu Zi + Rou Gui Duì Yào reference',
+            'labelEs' => 'Abrir referencia Duì Yào de Fu Zi + Rou Gui',
+            'url' => '/blocks/myprogress/single-herbs-dui-yao-reference.php?lang=en',
+            'urlEs' => '/blocks/myprogress/single-herbs-dui-yao-reference.php?lang=es',
+        ],
+        'editorial' => [
+            'simulationCandidate' => true,
+            'inferenceUpgradeRequired' => false,
+            'feedbackQuality' => 'curated',
+            'feedbackRecommendation' => 'Published from the administrator-supplied Duì Yào table.',
+        ],
+        'examTemplate' => ['globalPosition' => 0],
+        'nomenclature' => [
+            'herbs' => [
+                ['pinyin' => 'Fu Zi', 'pharmaceuticalName' => 'Aconiti Lateralis Radix Praeparata'],
+                ['pinyin' => 'Rou Gui', 'pharmaceuticalName' => 'Cinnamomi Cortex'],
+                ['pinyin' => 'Gui Zhi', 'pharmaceuticalName' => 'Cinnamomi Ramulus'],
+            ],
+            'formulas' => [
+                ['pinyin' => 'Liu Wei Di Huang Wan', 'englishName' => 'Six-Ingredient Pill with Rehmannia'],
+                ['pinyin' => 'Ba Wei Di Huang Wan', 'englishName' => 'Eight-Ingredient Pill with Rehmannia'],
+                ['pinyin' => 'Jin Gui Shen Qi Wan', 'englishName' => 'Kidney Qi Pill from the Golden Cabinet'],
+            ],
+        ],
+    ];
+    $preferredtargetexamid = (string)($fuzirouguirecord['targetExamProjectId'] ?? '');
+    if ($preferredtargetexamid === ''
+            || !is_array($revisionstore['examProjects'][$preferredtargetexamid] ?? null)
+            || (string)($revisionstore['examProjects'][$preferredtargetexamid]['status'] ?? 'draft') === 'published') {
+        $activeprojects = array_filter(
+            (array)($revisionstore['examProjects'] ?? []),
+            static fn($project): bool => is_array($project)
+                && (string)($project['status'] ?? 'draft') !== 'published'
+        );
+        uasort($activeprojects, static fn(array $left, array $right): int => strcmp(
+            (string)($right['createdAt'] ?? ''),
+            (string)($left['createdAt'] ?? '')
+        ));
+        $preferredproject = reset($activeprojects);
+        $preferredtargetexamid = is_array($preferredproject)
+            ? (string)($preferredproject['id'] ?? '')
+            : '';
+    }
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $fuzirouguicustomid,
+        $fuzirouguicanonical,
+        $preferredtargetexamid,
+        &$fuzirouguirepairapplied
+    ): array {
+        $record = $store['customQuestions'][$fuzirouguicustomid] ?? null;
+        if (!is_array($record) || !empty($record['canonicalFuZiRouGuiPublishedAt'])) {
+            return $store;
+        }
+        $savedat = gmdate(DATE_ATOM);
+        $record['domainId'] = 'dui_yao';
+        $record['targetDomainId'] = 'dui_yao';
+        $record['status'] = 'approved';
+        $record['draft'] = $fuzirouguicanonical;
+        $record['approved'] = $fuzirouguicanonical;
+        $record['reviewSummary'] = 'Restored the administrator-requested Fu Zi + Rou Gui formula-family inference without changing its educational objective.';
+        $record['originality'] = array_replace((array)($record['originality'] ?? []), [
+            'status' => 'clear',
+            'checkedAt' => $savedat,
+        ]);
+        $record['savedAt'] = $savedat;
+        $record['savedByName'] = 'Canonical Fu Zi + Rou Gui publication repair';
+        $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        $record['canonicalFuZiRouGuiPublishedAt'] = $savedat;
+        if ($preferredtargetexamid !== '') {
+            $record['targetExamProjectId'] = $preferredtargetexamid;
+            $record['assignedToTargetExamAt'] = $savedat;
+        }
+        $store['customQuestions'][$fuzirouguicustomid] = $record;
+
+        $project = $preferredtargetexamid !== ''
+            ? ($store['examProjects'][$preferredtargetexamid] ?? null)
+            : null;
+        if (is_array($project) && (string)($project['status'] ?? 'draft') !== 'published') {
+            $questionids = array_values(array_unique(array_filter(array_map(
+                'strval',
+                (array)($project['questionIds'] ?? [])
+            ))));
+            if (!in_array($fuzirouguicustomid, $questionids, true)) {
+                $targetcount = max(1, (int)($project['targetCount'] ?? 100));
+                if (count($questionids) >= $targetcount) {
+                    $replaceid = '';
+                    foreach ($questionids as $candidateid) {
+                        $customcandidate = $store['customQuestions'][$candidateid] ?? null;
+                        $revisioncandidate = $store['questions'][$candidateid] ?? null;
+                        $candidateapproved = (is_array($customcandidate)
+                                && (string)($customcandidate['status'] ?? 'draft') === 'approved')
+                            || (is_array($revisioncandidate)
+                                && (string)($revisioncandidate['status'] ?? '') === 'approved');
+                        if (!$candidateapproved) {
+                            $replaceid = $candidateid;
+                            break;
+                        }
+                    }
+                    if ($replaceid !== '') {
+                        $questionids = array_values(array_filter(
+                            $questionids,
+                            static fn(string $questionid): bool => $questionid !== $replaceid
+                        ));
+                        $project['confirmedQuestionIds'] = array_values(array_filter(
+                            array_map('strval', (array)($project['confirmedQuestionIds'] ?? [])),
+                            static fn(string $questionid): bool => $questionid !== $replaceid
+                        ));
+                        $project['canonicalReplacementQuestionId'] = $replaceid;
+                    }
+                }
+                if (count($questionids) < $targetcount) {
+                    $questionids[] = $fuzirouguicustomid;
+                }
+            }
+            $project['questionIds'] = $questionids;
+            $project['updatedAt'] = $savedat;
+            $project['canonicalFuZiRouGuiAssignedAt'] = $savedat;
+            $store['examProjects'][$preferredtargetexamid] = $project;
+        }
+        $fuzirouguirepairapplied = true;
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $reviewedcanonicalids = [
     'CF-0127', 'CF-0213', 'CF-0227', 'CF-0230', 'CF-0280', 'CF-0305', 'CF-1582',
     'SCORM-FD-5917E7491258',
@@ -4840,6 +5027,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     if (core_text::strlen($correction) > 12000) {
         throw new invalid_parameter_exception('Correction instructions must be 12,000 characters or fewer.');
     }
+    $fuzirouguirequiredanchors = [
+        'Liu Wei Di Huang Wan',
+        'Fu Zi',
+        'Rou Gui',
+        'Ba Wei Di Huang Wan',
+        'Jin Gui Shen Qi Wan',
+        'Gui Zhi',
+    ];
+    $fuzirouguiexactrequest = count(array_filter(
+        $fuzirouguirequiredanchors,
+        static fn(string $anchor): bool => core_text::strpos(
+            core_text::strtolower($idea),
+            core_text::strtolower($anchor)
+        ) !== false
+    )) >= 5;
+    if ($fuzirouguiexactrequest) {
+        $customtargetdomain = 'dui_yao';
+        if ($customtargetexamid === '' && is_array($pendingexamproject)) {
+            $customtargetexamid = (string)($pendingexamproject['id'] ?? '');
+        }
+    }
     $splitcustomquestionblock = static function(string $block): array {
         $block = trim(str_replace(["\r\n", "\r"], "\n", $block));
         $parts = preg_split('/(?=^\s*#{2,6}\s+\S)/mu', $block) ?: [$block];
@@ -5041,6 +5249,11 @@ PROMPT;
         $customprompt .= "\n\nMANDATORY TARGET DOMAIN:\nEvery generated item must use domainId "
             . $customtargetdomain
             . '. This batch is filling a documented shortage in the active exam; do not choose another domain.';
+    }
+    if ($fuzirouguiexactrequest) {
+        $customprompt .= "\n\nMANDATORY EDUCATIONAL OBJECTIVE — DO NOT GENERALIZE OR SUBSTITUTE:\n"
+            . "Keep Liu Wei Di Huang Wan as the base; keep processed Fu Zi plus Rou Gui as the Duì Yào; identify the Ba Wei Di Huang Wan/Jin Gui Shen Qi Wan lineage; explain the shift toward Kidney Yang and water transformation; and preserve the source-dependent Rou Gui versus Gui Zhi distinction. "
+            . "A generic question about Fu Zi indications is invalid.";
     }
     $customprompt .= "\n" . $idea;
     if ($custombatchcount > 1) {
@@ -5245,6 +5458,22 @@ PROMPT;
                         throw new UnexpectedValueException(
                             'Every generated question must use the required exam-shortage domain.'
                         );
+                    }
+                }
+            }
+            if ($fuzirouguiexactrequest) {
+                foreach ($decodedbatch as $decodeditem) {
+                    $generatedcontent = json_encode(
+                        $decodeditem,
+                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                    );
+                    foreach ($fuzirouguirequiredanchors as $requiredanchor) {
+                        if (stripos((string)$generatedcontent, $requiredanchor) === false) {
+                            throw new UnexpectedValueException(
+                                'The Fu Zi + Rou Gui question omitted required content: '
+                                    . $requiredanchor . '.'
+                            );
+                        }
                     }
                 }
             }
@@ -8115,6 +8344,11 @@ echo $OUTPUT->header();
 </style>
 <main class="question-bank<?php echo $creationmode ? ' question-bank--creation' : ''; ?><?php echo $shownewquestionform ? ' question-bank--creation-entry' : ''; ?>">
     <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button" href="<?php echo $similarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar answers'; ?></a><a class="question-bank__button question-bank__button--similar" href="<?php echo $sameanswerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Revisar respuestas repetidas' : 'Review repeated answers'; ?> (<?php echo (int)$sameanswerreport['groupCount']; ?>)</a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
+    <?php if ($fuzirouguirepairapplied): ?>
+    <section class="question-bank__publish-readiness is-ready" aria-live="assertive"><strong><?php echo $displaylang === 'es' ? 'Pregunta recuperada y publicada:' : 'Question recovered and published:'; ?></strong> ADMIN-HB-20261121-054320-94BA <?php echo $displaylang === 'es'
+        ? 'ahora conserva Liu Wei Di Huang Wan + Fu Zi + Rou Gui, pertenece a Domain 3 y fue incorporada al examen activo.'
+        : 'now preserves Liu Wei Di Huang Wan + Fu Zi + Rou Gui, belongs to Domain 3 and was added to the active exam.'; ?></section>
+    <?php endif; ?>
     <?php if ($creationmode): ?>
     <section class="question-bank__creation-state" aria-live="polite">
         <div>
