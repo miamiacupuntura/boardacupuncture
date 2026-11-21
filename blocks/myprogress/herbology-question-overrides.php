@@ -134,6 +134,7 @@ function block_myprogress_herbology_apply_revision(
     }
     $status = (string)($revision['status'] ?? 'draft');
     $isexcluded = in_array($status, ['exclusion_candidate', 'study_archive', 'deleted'], true);
+    $hasbankplacement = (int)($revision['bankPosition'] ?? 0) > 0;
     $draft = null;
     if ($includepending && is_array($revision['draft'] ?? null)) {
         $draft = $revision['draft'];
@@ -142,7 +143,7 @@ function block_myprogress_herbology_apply_revision(
     } else if ($status === 'approved' && is_array($revision['draft'] ?? null)) {
         // Backward compatibility with revisions saved before the approved snapshot was introduced.
         $draft = $revision['draft'];
-    } else if (!$isexcluded) {
+    } else if (!$isexcluded && !$hasbankplacement) {
         return $question;
     }
     if (is_array($draft)) {
@@ -168,6 +169,10 @@ function block_myprogress_herbology_apply_revision(
         'archiveModule' => (string)($revision['archiveModule'] ?? ''),
         'mockCategory' => (string)($revision['mockCategory'] ?? ''),
         'mockPlacementStatus' => (string)($revision['mockPlacementStatus'] ?? ''),
+        'bankPosition' => (int)($revision['bankPosition'] ?? 0),
+        'bankMovedAt' => (string)($revision['bankMovedAt'] ?? ''),
+        'bankMovedByName' => (string)($revision['bankMovedByName'] ?? ''),
+        'bankDeferred' => !empty($revision['bankDeferred']),
     ];
     return $question;
 }

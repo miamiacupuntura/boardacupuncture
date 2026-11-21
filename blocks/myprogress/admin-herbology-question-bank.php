@@ -1561,6 +1561,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'updateexamquestion
         \core\output\notification::NOTIFY_SUCCESS
     );
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'movebankquestion') {
+    require_sesskey();
+    $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
+    $requestedposition = required_param('position', PARAM_INT);
+    $currentposition = max(1, optional_param('currentposition', 1, PARAM_INT));
+    $bankcount = max(1, min(100000, required_param('bankcount', PARAM_INT)));
+    $moveaction = optional_param('moveaction', 'position', PARAM_ALPHA);
+    if ($findquestion($basebank, $questionid) === null) {
+        throw new invalid_parameter_exception('Unknown Herbology question ID.');
+    }
+    if (!in_array($moveaction, ['position', 'end', 'restore'], true)) {
+        throw new invalid_parameter_exception('Unknown bank move action.');
+    }
+    if ($moveaction === 'end') {
+        $requestedposition = $bankcount;
+    }
+    if ($moveaction !== 'restore'
+            && ($requestedposition < 1 || $requestedposition > $bankcount)) {
+        throw new invalid_parameter_exception('The requested bank position is not available.');
+    }
+    $savedat = gmdate(DATE_ATOM);
+    $savedbyname = fullname($USER);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $questionid,
+        $requestedposition,
+        $currentposition,
+        $savedat,
+        $savedbyname,
+        $USER,
+        $moveaction
+    ): array {
+        $record = is_array($store['questions'][$questionid] ?? null)
+            ? $store['questions'][$questionid]
+            : [];
+        if (trim((string)($record['status'] ?? '')) === '') {
+            $record['status'] = 'original';
+        }
+        if ($moveaction === 'restore') {
+            unset(
+                $record['bankPosition'],
+                $record['bankMovedAt'],
+                $record['bankMovedById'],
+                $record['bankMovedByName'],
+                $record['bankDeferred']
+            );
+        } else {
+            $record['bankPosition'] = $requestedposition;
+            $record['bankMovedAt'] = $savedat;
+            $record['bankMovedById'] = (int)$USER->id;
+            $record['bankMovedByName'] = $savedbyname;
+            $record['bankDeferred'] = $requestedposition > $currentposition;
+        }
+        $store['questions'][$questionid] = $record;
+        return $store;
+    });
+    $bankpage = $moveaction === 'restore' ? 0 : (int)floor(($requestedposition - 1) / 50);
+    $moveredirect = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+        'page' => $bankpage > 0 ? $bankpage : null,
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ]));
+    $moveredirect->set_anchor('question-' . $questionid);
+    redirect(
+        $moveredirect,
+        $moveaction === 'restore'
+            ? ($displaylang === 'es'
+                ? 'Se restauró el orden normal de la pregunta.'
+                : 'The question returned to its normal bank order.')
+            : (($displaylang === 'es' ? 'Pregunta movida a la posición ' : 'Question moved to bank position ')
+                . $requestedposition
+                . ($displaylang === 'es' ? ' del banco.' : '.')),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'excludeexamcandidate') {
     require_sesskey();
     $submittedexamid = required_param('examproject', PARAM_ALPHANUMEXT);
@@ -3257,6 +3331,7 @@ if (is_array($currentexamproject)) {
         $cognitiverank = ['analysis' => 0, 'inference' => 1, 'application' => 2, 'recall' => 3];
         return [
             isset($projecttargetdraftlookup[$questionid]) ? 0 : 1,
+            !empty($question['_revision']['bankDeferred']) ? 1 : 0,
             isset($previouslyselectedids[$questionid]) ? 0 : 1,
             $isprocessedquestion($question) ? 0 : 1,
             $question['_ready'] ? 0 : 1,
@@ -8448,7 +8523,65 @@ usort($filteredquestions, static function(array $left, array $right) use (
         : strnatcasecmp((string)($left['questionId'] ?? ''), (string)($right['questionId'] ?? ''));
 });
 
+// Manual bank placement is deliberately separate from exam order. It is only
+// applied to the complete, unfiltered inventory so an administrator can move a
+// weak card lower, reveal other candidates, and later restore the normal order.
+$bankmanualorderactive = $query === ''
+    && $domainfilter === 'all'
+    && $readinessfilter === 'all'
+    && $usagefilter === 'all'
+    && $sourcefilter === 'all'
+    && $cognitivefilter === 'all'
+    && $contentfilter === 'all'
+    && $reviewfilter === 'all'
+    && $custompreviewids === [];
+if ($bankmanualorderactive) {
+    $manualbankmoves = [];
+    foreach ($filteredquestions as $bankquestion) {
+        $manualposition = (int)($bankquestion['_revision']['bankPosition'] ?? 0);
+        if ($manualposition < 1) {
+            continue;
+        }
+        $manualbankmoves[] = [
+            'questionId' => (string)$bankquestion['questionId'],
+            'position' => $manualposition,
+            'movedAt' => (string)($bankquestion['_revision']['bankMovedAt'] ?? ''),
+        ];
+    }
+    usort($manualbankmoves, static function(array $left, array $right): int {
+        $timecomparison = strcmp((string)$left['movedAt'], (string)$right['movedAt']);
+        return $timecomparison !== 0
+            ? $timecomparison
+            : strcmp((string)$left['questionId'], (string)$right['questionId']);
+    });
+    foreach ($manualbankmoves as $manualbankmove) {
+        $currentindex = null;
+        foreach ($filteredquestions as $candidateindex => $candidatequestion) {
+            if ((string)$candidatequestion['questionId'] === (string)$manualbankmove['questionId']) {
+                $currentindex = $candidateindex;
+                break;
+            }
+        }
+        if ($currentindex === null) {
+            continue;
+        }
+        $movedquestion = $filteredquestions[$currentindex];
+        array_splice($filteredquestions, $currentindex, 1);
+        $targetindex = min(
+            count($filteredquestions),
+            max(0, (int)$manualbankmove['position'] - 1)
+        );
+        array_splice($filteredquestions, $targetindex, 0, [$movedquestion]);
+    }
+}
+
 $resultcount = count($filteredquestions);
+$bankdisplaypositions = [];
+if ($bankmanualorderactive) {
+    foreach ($filteredquestions as $bankindex => $bankquestion) {
+        $bankdisplaypositions[(string)$bankquestion['questionId']] = $bankindex + 1;
+    }
+}
 $inventorysnapshot['resultCount'] = $resultcount;
 $inventorysnapshot['resultText'] = $displaylang === 'es'
     ? $resultcount . ' ' . ($resultcount === 1 ? 'resultado' : 'resultados')
@@ -9140,6 +9273,7 @@ echo $OUTPUT->header();
 .question-bank__inventory-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid #d7e2e7;background:#f8fbfb}.question-bank__inventory-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}.question-bank__inventory-title strong{color:#173448}.question-bank__inventory-status{color:#60758a;font-size:12px;font-weight:750}.question-bank__inventory-status.is-refreshing{color:#6d28d9}.question-bank__inventory-status.is-error{color:#b42318}.question-bank__inventory-refresh{min-height:32px;padding:5px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff;color:#24465b;font-size:12px;font-weight:850;cursor:pointer}.question-bank__inventory-refresh:hover{border-color:#0b8f87;background:#eef9f6}.question-bank__inventory-refresh:disabled{cursor:wait;opacity:.65}.question-bank__domains th[data-inventory-state="review"]{background:#f4f0ff;color:#4c1d95}.question-bank__domains th small{display:block;margin-top:2px;font-size:9px;line-height:1.2;text-transform:none}.question-bank__domains td[data-inventory-exam]{font-weight:800;color:#4c1d95}@media(max-width:700px){.question-bank__inventory-head{align-items:stretch;flex-direction:column}.question-bank__inventory-refresh{width:100%}}
 .question-bank__editor{margin-bottom:18px;padding:20px;border:2px solid #6d28d9;border-radius:12px;background:#faf8ff}.question-bank__editor-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px}.question-bank__editor-head h3{margin:0 0 4px;font-size:23px}.question-bank__editor-head p{margin:0;color:#66557e}.question-bank__editor-grid{display:grid;grid-template-columns:1fr;gap:14px}.question-bank__editor-panel{padding:15px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__editor-panel h4{margin:0 0 12px}.question-bank__editor-field{display:block;margin-bottom:11px}.question-bank__editor-field>span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__editor input[type=text],.question-bank__editor textarea,.question-bank__editor select{box-sizing:border-box;width:100%;padding:9px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff}.question-bank__editor textarea{min-height:92px;resize:vertical}.question-bank__editor-classification{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}.question-bank__editor-check{display:flex;align-items:flex-start;gap:9px;margin:15px 0;padding:13px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed}.question-bank__editor-check input{margin-top:4px}.question-bank__editor-actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button--primary{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__button--publish{border-color:#6d28d9;background:#6d28d9;color:#fff!important}.question-bank__button--exclude{border-color:#b42318;background:#fff1f0;color:#9f1d16!important}.question-bank__exclusion-note{margin:10px 0;padding:12px 14px;border-left:4px solid #b42318;border-radius:7px;background:#fff1f0;color:#7a271a}.question-bank__item--excluded{border-color:#f1a6a0;background:#fffafa}.question-bank__edit-link{margin-left:auto}@media(max-width:850px){.question-bank__editor-classification{grid-template-columns:1fr}.question-bank__editor-head{display:block}.question-bank__editor-head .question-bank__button{margin-top:10px}}
 .question-bank__meta form{margin:0}.question-bank__meta .question-bank__delete-form:first-of-type{margin-left:auto}.question-bank__edit-link+.question-bank__delete-form{margin-left:0!important}
+.question-bank__bank-move{margin:0}.question-bank__bank-move>summary{list-style:none;cursor:pointer}.question-bank__bank-move>summary::-webkit-details-marker{display:none}.question-bank__bank-move[open]{flex:1 0 100%}.question-bank__bank-move-panel{margin-top:8px;padding:12px;border:1px solid #cbb9ee;border-radius:8px;background:#faf8ff}.question-bank__bank-move-panel>strong{color:#4c1d95}.question-bank__bank-move-panel>p{margin:5px 0 10px;color:#66557e}.question-bank__bank-move-panel form{display:flex;align-items:end;flex-wrap:wrap;gap:8px}.question-bank__bank-move-panel label span{display:block;margin-bottom:4px;font-size:12px;font-weight:900}.question-bank__bank-move-panel input[type=number]{width:130px;min-height:40px;box-sizing:border-box;padding:7px 9px;border:1px solid #ad9bd2;border-radius:7px;background:#fff}@media(max-width:700px){.question-bank__bank-move-panel form{align-items:stretch;flex-direction:column}.question-bank__bank-move-panel input[type=number]{width:100%}}
 .question-bank__temporary-order{display:flex;align-items:center;gap:10px;margin:-17px -17px 14px;padding:11px 16px;border-radius:10px 10px 0 0;background:#4c1d95;color:#fff}.question-bank__temporary-order span{font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.question-bank__temporary-order strong{font-size:24px;line-height:1}.question-bank__temporary-order small{font-weight:800;opacity:.85}.question-bank__temporary-order--editor{margin:0 0 12px;border-radius:8px}.question-bank__review-progress{margin-bottom:16px;padding:14px 16px;border-left:5px solid #6d28d9;border-radius:9px;background:#f4f0ff;color:#4c1d95}.question-bank__review-progress strong{font-size:17px}.question-bank__review-progress p{margin:4px 0 0}
 .question-bank__ai-batch{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;padding:14px 16px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__ai-batch p{margin:0;color:#66557e;line-height:1.45}.question-bank__ai-batch form{flex:0 0 auto}.question-bank__ai-batch .question-bank__button:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__ai-draft-note{margin:10px 0;padding:10px 12px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;font-weight:800}@media(max-width:700px){.question-bank__ai-batch{align-items:stretch;flex-direction:column}}
 .question-bank__decision-panel{display:grid;gap:12px;margin-top:15px;padding:15px;border:1px solid #cbb9ee;border-radius:10px;background:#faf8ff}.question-bank__decision-panel label{display:block;color:#4c1d95;font-weight:900}.question-bank__decision-panel textarea{box-sizing:border-box;width:100%;min-height:105px;margin-top:7px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__decision-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.question-bank__button--approve{border-color:#08746f;background:#08746f;color:#fff!important}.question-bank__button--approve:hover{background:#075f5b}.question-bank__button--approve:disabled{border-color:#cbd5e1;background:#e2e8f0;color:#64748b!important;cursor:not-allowed}.question-bank__applied-summary{padding:10px 12px;border-left:4px solid #0b8f87;border-radius:7px;background:#eaf9f3;color:#075f50;line-height:1.45}
@@ -9967,6 +10101,8 @@ echo $OUTPUT->header();
         $questioninexamproject = $examprojectid !== ''
             && in_array((string)$question['questionId'], $currentexamquestionids, true);
         $questionusedinpriorexam = isset($questionsusedinpriorexams[(string)$question['questionId']]);
+        $bankcardposition = $bankdisplaypositions[(string)$question['questionId']] ?? 0;
+        $bankpositionwaschanged = (int)($question['_revision']['bankPosition'] ?? 0) > 0;
         $isapprovedreservecandidate = $usagefilter === 'exam_project_pending'
             && isset($examprojectpositions[(string)$question['questionId']])
             && $isprocessedquestion($question)
@@ -9999,6 +10135,7 @@ echo $OUTPUT->header();
             <?php if ($question['_exam2position'] > 0): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $isprocessedquestion($question) ? ($displaylang === 'es' ? 'Exam 2 publicada' : 'Exam 2 published') : ($displaylang === 'es' ? 'Revisión de Exam 2' : 'Exam 2 review'); ?> · <?php echo $displaylang === 'es' ? 'posición' : 'position'; ?> <?php echo (int)$question['_exam2position']; ?></span><?php endif; ?>
             <?php if (!empty($question['_deferredfromexam2'])): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Reservada para el próximo examen' : 'Reserved for the next exam'; ?></span><?php endif; ?>
             <span class="question-bank__badge">Complexity: <?php echo s(ucfirst((string)($question['difficultyBand'] ?? 'unclassified'))); ?></span>
+            <?php if (!empty($question['_revision']['bankDeferred'])): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Aplazada en la reserva' : 'Deferred in reserve'; ?></span><?php elseif ($bankpositionwaschanged): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo ($displaylang === 'es' ? 'Movida dentro del banco' : 'Moved within bank'); ?></span><?php endif; ?>
             <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php if ($custombatchtotal > 1): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Lote nuevo' : 'New batch'; ?> · <?php echo $custombatchposition; ?> / <?php echo $custombatchtotal; ?></span><?php endif; ?><?php elseif ($question['_sourcekind'] === 'admin'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>
             <?php if ($iscustomdraft): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta ahora?' : 'Approve and publish this question now?'; ?>');"<?php endif; ?>><?php echo $customcanpublish ? ($displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish') : s($custompublishblocker); ?></button></form><?php endif; ?>
             <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion</span><?php elseif ($revisionstatus === 'study_archive'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Solo Mock · no es pregunta board' : 'Mock only · not a board question'; ?></span><?php elseif ($revisionstatus === 'deleted'): ?><span class="question-bank__badge question-bank__badge--incomplete">Deleted · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Publicada' : 'Published'; ?></span><?php endif; ?>
@@ -10010,6 +10147,7 @@ echo $OUTPUT->header();
             <?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><span class="question-bank__badge question-bank__badge--exam">Proposal pending publishing review</span><?php endif; ?>
             <?php if ($pendingexamprojecturl !== null && ($usagefilter !== 'exam_project_pending' || $query !== '')): ?><a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo '← ' . s((string)$pendingexamproject['name']) . ($displaylang === 'es' ? ' · revisión pendiente' : ' pending review'); ?></a><?php endif; ?>
             <?php if ($query !== '' && !$inlineapproval && $pendingexamprojecturl === null): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
+            <?php if ($bankmanualorderactive && $bankcardposition > 0 && !$inlineapproval): ?><details class="question-bank__bank-move"><summary class="question-bank__button"><?php echo $displaylang === 'es' ? 'Mover / aplazar' : 'Move / defer'; ?></summary><div class="question-bank__bank-move-panel"><strong><?php echo ($displaylang === 'es' ? 'Posición actual en el banco: ' : 'Current bank position: ') . (int)$bankcardposition . ' / ' . (int)$resultcount; ?></strong><p><?php echo $displaylang === 'es' ? 'Cambie la posición o aplácela al final para mostrar otras candidatas primero. Esto no modifica ningún examen.' : 'Choose a position or defer it to the end so other candidates appear first. This does not change any exam.'; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="movebankquestion"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="currentposition" value="<?php echo (int)$bankcardposition; ?>"><input type="hidden" name="bankcount" value="<?php echo (int)$resultcount; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><label><span><?php echo $displaylang === 'es' ? 'Nueva posición' : 'New position'; ?></span><input type="number" name="position" min="1" max="<?php echo (int)$resultcount; ?>" value="<?php echo (int)$bankcardposition; ?>" required></label><button class="question-bank__button question-bank__button--primary" type="submit" name="moveaction" value="position"><?php echo $displaylang === 'es' ? 'Mover' : 'Move'; ?></button><button class="question-bank__button question-bank__button--publish" type="submit" name="moveaction" value="end"><?php echo $displaylang === 'es' ? 'Aplazar al final' : 'Defer to end'; ?></button><?php if ($bankpositionwaschanged): ?><button class="question-bank__button" type="submit" name="moveaction" value="restore"><?php echo $displaylang === 'es' ? 'Restaurar orden normal' : 'Restore normal order'; ?></button><?php endif; ?></form></div></details><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter !== 'exam_project_pending' && !$inlineapproval && !$question['_excluded'] && $question['_ready'] && ($questioninexamproject || !$questionusedinpriorexam)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
             <?php if ($isapprovedreservecandidate): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="add"><input type="hidden" name="returnexamview" value="candidates"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo ($displaylang === 'es' ? 'Publicar en ' : 'Publish to ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter === 'exam_project_pending' && isset($examprojectpositions[(string)$question['questionId']]) && (string)($currentexamproject['status'] ?? 'draft') !== 'published'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="excludeexamcandidate"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm(<?php echo s(json_encode($excludeexamconfirm, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); ?>);"><?php echo ($displaylang === 'es' ? 'Excluir de ' : 'Exclude from ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
