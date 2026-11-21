@@ -2721,6 +2721,41 @@ $customapprovedcount = count(array_filter(
     $customquestionrecords,
     static fn(array $record): bool => (string)($record['status'] ?? 'draft') === 'approved'
 ));
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $creationcomplete && $query !== '') {
+    $completedcustomrecord = $customquestionrecords[$query] ?? null;
+    if (is_array($completedcustomrecord)
+            && (string)($completedcustomrecord['status'] ?? 'draft') === 'approved') {
+        $completedreturnexamid = (string)($completedcustomrecord['targetExamProjectId'] ?? '');
+        if ($completedreturnexamid === ''
+                && $examprojectid !== ''
+                && is_array($currentexamproject)
+                && (string)($currentexamproject['status'] ?? 'draft') !== 'published') {
+            $completedreturnexamid = $examprojectid;
+        }
+        $completedreturnparams = $completedreturnexamid !== ''
+            ? [
+                'usage' => 'exam_project_pending',
+                'examproject' => $completedreturnexamid,
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ]
+            : [
+                'source' => 'admin',
+                'readiness' => 'incomplete',
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ];
+        $completedreturnurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter($completedreturnparams)
+        );
+        $completedreturnurl->set_anchor('pending-questions');
+        redirect(
+            $completedreturnurl,
+            'The question was already published and has been removed from the approval screen.',
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
+}
 $creationbatchid = '';
 $creationbatchrecords = [];
 $creationreferenceids = $custompreviewids;
@@ -5456,31 +5491,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         return $store;
     });
-    $customapprovalurl = new moodle_url(
-        '/blocks/myprogress/admin-herbology-question-bank.php',
-        array_filter([
-            'q' => $remainingcustombatchids === []
-                ? $customquestionid
-                : $remainingcustombatchids[0],
-            'creationpreview' => $remainingcustombatchids !== [] ? 1 : null,
-            'source' => 'admin',
-            'readiness' => $remainingcustombatchids !== [] ? 'incomplete' : null,
-            'examproject' => $customtargetexamid !== '' ? $customtargetexamid : null,
-            'creationcomplete' => $remainingcustombatchids === [] ? 1 : null,
-            'lang' => $displaylang !== 'en' ? $displaylang : null,
-        ])
-    );
-    $customapprovalurl->set_anchor(
-        $remainingcustombatchids !== []
-            ? 'question-' . $remainingcustombatchids[0]
-            : 'question-' . $customquestionid
-    );
+    $approvaladvancedtoqueue = false;
+    if ($remainingcustombatchids !== []) {
+        $customapprovalurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter([
+                'q' => $remainingcustombatchids[0],
+                'creationpreview' => 1,
+                'source' => 'admin',
+                'readiness' => 'incomplete',
+                'examproject' => $customtargetexamid !== '' ? $customtargetexamid : null,
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ])
+        );
+        $customapprovalurl->set_anchor('question-' . $remainingcustombatchids[0]);
+    } else {
+        $approvalreturnexamid = $customtargetexamid;
+        if ($approvalreturnexamid === ''
+                && $examprojectid !== ''
+                && is_array($currentexamproject)
+                && (string)($currentexamproject['status'] ?? 'draft') !== 'published') {
+            $approvalreturnexamid = $examprojectid;
+        }
+        if ($approvalreturnexamid !== '') {
+            $customapprovalurl = new moodle_url(
+                '/blocks/myprogress/admin-herbology-question-bank.php',
+                array_filter([
+                    'usage' => 'exam_project_pending',
+                    'examproject' => $approvalreturnexamid,
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                ])
+            );
+            $customapprovalurl->set_anchor('pending-questions');
+            $approvaladvancedtoqueue = true;
+        } else {
+            // Keep the published item in the bank, but remove it from the
+            // approval screen.  Show only other administrator drafts so the
+            // same approved card cannot appear to require publication again.
+            $customapprovalurl = new moodle_url(
+                '/blocks/myprogress/admin-herbology-question-bank.php',
+                array_filter([
+                    'source' => 'admin',
+                    'readiness' => 'incomplete',
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                ])
+            );
+            $customapprovalurl->set_anchor('pending-questions');
+        }
+    }
     redirect(
         $customapprovalurl,
         $customtargetexamid !== ''
             ? 'New question approved and assigned to the active exam.'
                 . ($remainingcustombatchids !== [] ? ' Continue with the remaining batch drafts.' : '')
-            : 'New question approved and added to the question bank.',
+            : 'New question approved and added to the question bank.'
+                . ($approvaladvancedtoqueue ? ' Continuing with the active exam queue.' : ''),
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -8220,6 +8285,19 @@ usort($filteredquestions, static function(array $left, array $right) use (
     if ($usagefilter === 'exam_project_pending') {
         return ($examprojectpositions[(string)$left['questionId']] ?? PHP_INT_MAX)
             <=> ($examprojectpositions[(string)$right['questionId']] ?? PHP_INT_MAX);
+    }
+    // Newly approved administrator questions used to sort before every CF/FD
+    // item because their IDs begin with ADMIN.  That made the card just
+    // published appear to be stuck on the screen after returning to the full
+    // inventory.  Keep drafts prominent, but place already published custom
+    // items after the ordinary bank inventory unless the administrator finds
+    // one explicitly by ID or text.
+    $leftpublishedcustom = ($left['_sourcekind'] ?? '') === 'admin'
+        && ($left['_revision']['status'] ?? '') === 'approved';
+    $rightpublishedcustom = ($right['_sourcekind'] ?? '') === 'admin'
+        && ($right['_revision']['status'] ?? '') === 'approved';
+    if ($leftpublishedcustom !== $rightpublishedcustom) {
+        return $leftpublishedcustom <=> $rightpublishedcustom;
     }
     $domaincomparison = $domains[$left['_domainid']]['number'] <=> $domains[$right['_domainid']]['number'];
     return $domaincomparison !== 0
