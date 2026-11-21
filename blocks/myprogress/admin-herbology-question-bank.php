@@ -514,6 +514,13 @@ foreach ($bank['domains'] as &$exam5domainquestions) {
         foreach (['prompt', 'options', 'correctLabel', 'explanation'] as $repairfield) {
             $exam5question[$repairfield] = $exam5repair[$repairfield];
         }
+        // The imported Spanish snapshot still belongs to the obsolete source
+        // item and may contain Both/None shortcuts even though the reviewed
+        // English card no longer does. Do not let hidden stale choices block
+        // publication; a fresh translation can be generated from this repair.
+        if (isset($exam5question['translations']['es'])) {
+            unset($exam5question['translations']['es']);
+        }
         $exam5question['feedbackStatus'] = 'practice-ready';
         $exam5question['contentType'] = 'comparison';
         $exam5question['cognitiveLevel'] = 'analyze';
