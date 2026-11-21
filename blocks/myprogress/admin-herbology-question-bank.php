@@ -80,12 +80,6 @@ if ($newquestiontargetdomain !== '' && !isset($domains[$newquestiontargetdomain]
     $newquestiontargetexam = '';
     $newquestionneededcount = 0;
 }
-if ($newquestionneededcount === 0) {
-    // A stale creation URL may still point at an exam after its shortage was
-    // filled. New questions then belong to the bank, not to the already-full
-    // exam, and the UI must not claim that zero questions are required.
-    $newquestiontargetexam = '';
-}
 if (!in_array($readinessfilter, ['all', 'ready', 'incomplete'], true)) {
     $readinessfilter = 'all';
 }
@@ -580,6 +574,91 @@ foreach ((array)($revisionstore['instructionTemplates'] ?? []) as $instructionte
         'createdAt' => (string)($instructiontemplate['createdAt'] ?? ''),
         'updatedAt' => (string)($instructiontemplate['updatedAt'] ?? ''),
     ];
+}
+$duiyaoclassificationrepairids = [];
+$duiyaoclassificationtargetexamid = '';
+$duiyaoclassificationtargetslots = 0;
+foreach ((array)($revisionstore['examProjects'] ?? []) as $classificationexamid => $classificationexam) {
+    if (!is_array($classificationexam)
+            || (string)($classificationexam['status'] ?? 'draft') === 'published') {
+        continue;
+    }
+    $classificationtargetcount = max(1, (int)($classificationexam['targetCount'] ?? 100));
+    $classificationquestionids = array_values(array_unique(array_filter(array_map(
+        'strval',
+        (array)($classificationexam['questionIds'] ?? [])
+    ))));
+    if (count($classificationquestionids) >= $classificationtargetcount) {
+        continue;
+    }
+    $duiyaoclassificationtargetexamid = (string)($classificationexam['id'] ?? $classificationexamid);
+    $duiyaoclassificationtargetslots = $classificationtargetcount - count($classificationquestionids);
+}
+foreach ((array)($revisionstore['customQuestions'] ?? []) as $classificationquestionid => $classificationrecord) {
+    if (!is_array($classificationrecord)
+            || !in_array((string)($classificationrecord['status'] ?? 'draft'), ['draft', 'approved'], true)) {
+        continue;
+    }
+    $createdfromduiyaoinstruction = (string)($classificationrecord['instructionTemplateId'] ?? '')
+            === $builtinstructiontemplateid
+        || (int)($classificationrecord['formulaDuiYaoPairNumber'] ?? 0) > 0;
+    if (!$createdfromduiyaoinstruction) {
+        continue;
+    }
+    $classificationdraft = is_array($classificationrecord['draft'] ?? null)
+        ? $classificationrecord['draft']
+        : [];
+    $classificationapproved = is_array($classificationrecord['approved'] ?? null)
+        ? $classificationrecord['approved']
+        : [];
+    $needsclassificationrepair = (string)($classificationrecord['domainId'] ?? '') !== 'dui_yao'
+        || (string)($classificationrecord['targetDomainId'] ?? '') !== 'dui_yao'
+        || ($classificationdraft !== [] && (string)($classificationdraft['domainId'] ?? '') !== 'dui_yao')
+        || ($classificationapproved !== [] && (string)($classificationapproved['domainId'] ?? '') !== 'dui_yao');
+    $needstargetrepair = (string)($classificationrecord['status'] ?? 'draft') === 'draft'
+        && (string)($classificationrecord['targetExamProjectId'] ?? '') === ''
+        && $duiyaoclassificationtargetexamid !== ''
+        && $duiyaoclassificationtargetslots > 0;
+    if ($needsclassificationrepair || $needstargetrepair) {
+        $duiyaoclassificationrepairids[(string)$classificationquestionid] = $needstargetrepair;
+        if ($needstargetrepair) {
+            $duiyaoclassificationtargetslots--;
+        }
+    }
+}
+if ($duiyaoclassificationrepairids !== []) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $duiyaoclassificationrepairids,
+        $duiyaoclassificationtargetexamid
+    ): array {
+        $savedat = gmdate(DATE_ATOM);
+        foreach ($duiyaoclassificationrepairids as $classificationquestionid => $assigntoactiveexam) {
+            $record = $store['customQuestions'][$classificationquestionid] ?? null;
+            if (!is_array($record)) {
+                continue;
+            }
+            $record['domainId'] = 'dui_yao';
+            $record['targetDomainId'] = 'dui_yao';
+            foreach (['draft', 'approved'] as $classificationsnapshotkey) {
+                if (!is_array($record[$classificationsnapshotkey] ?? null)) {
+                    continue;
+                }
+                $record[$classificationsnapshotkey]['domainId'] = 'dui_yao';
+                $record[$classificationsnapshotkey]['contentType'] = 'dui_yao';
+            }
+            if ($assigntoactiveexam && $duiyaoclassificationtargetexamid !== '') {
+                $record['targetExamProjectId'] = $duiyaoclassificationtargetexamid;
+                $record['classificationTargetExamRepairedAt'] = $savedat;
+            }
+            $record['duiYaoClassificationRepairedAt'] = $savedat;
+            $record['savedAt'] = $savedat;
+            $record['savedByName'] = 'Duì Yào classification repair';
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $store['customQuestions'][$classificationquestionid] = $record;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
 }
 if (!isset($generalinstructiontemplates[$selectedinstructiontemplateid])) {
     $selectedinstructiontemplateid = '';
@@ -8851,6 +8930,33 @@ foreach ($examprojects as $inventoryprojectid => $inventoryproject) {
             $inventoryprojectcounts[$inventoryprojectdomainid]++;
         }
     }
+    $inventoryprojecttargetcount = max(1, (int)($inventoryproject['targetCount'] ?? 100));
+    $inventoryprojecttargets = [];
+    $inventoryprojectfractions = [];
+    $inventoryprojectallocated = 0;
+    foreach ($requiredprojectdomaincounts as $inventorytargetdomainid => $inventorytargetweight) {
+        $inventorytargetexact = $inventoryprojecttargetcount * $inventorytargetweight / 100;
+        $inventoryprojecttargets[$inventorytargetdomainid] = (int)floor($inventorytargetexact);
+        $inventoryprojectfractions[$inventorytargetdomainid] = $inventorytargetexact
+            - floor($inventorytargetexact);
+        $inventoryprojectallocated += $inventoryprojecttargets[$inventorytargetdomainid];
+    }
+    arsort($inventoryprojectfractions);
+    foreach (array_keys($inventoryprojectfractions) as $inventorytargetdomainid) {
+        if ($inventoryprojectallocated >= $inventoryprojecttargetcount) {
+            break;
+        }
+        $inventoryprojecttargets[$inventorytargetdomainid]++;
+        $inventoryprojectallocated++;
+    }
+    $inventoryprojectremainingcounts = array_fill_keys(array_keys($domains), 0);
+    foreach (array_keys($domains) as $inventorytargetdomainid) {
+        $inventoryprojectremainingcounts[$inventorytargetdomainid] = max(
+            0,
+            (int)($inventoryprojecttargets[$inventorytargetdomainid] ?? 0)
+                - (int)($inventoryprojectcounts[$inventorytargetdomainid] ?? 0)
+        );
+    }
     $inventoryprojectnumber = 0;
     if (preg_match('/\bExam\s+(\d+)\b/i', (string)($inventoryproject['name'] ?? ''), $inventoryprojectmatch)) {
         $inventoryprojectnumber = (int)$inventoryprojectmatch[1];
@@ -8863,7 +8969,9 @@ foreach ($examprojects as $inventoryprojectid => $inventoryproject) {
         'state' => 'review',
         'stateLabel' => $displaylang === 'es' ? 'En revisión' : 'In review',
         'counts' => $inventoryprojectcounts,
+        'remainingCounts' => $inventoryprojectremainingcounts,
         'total' => array_sum($inventoryprojectcounts),
+        'remainingTotal' => array_sum($inventoryprojectremainingcounts),
         'target' => (int)($inventoryproject['targetCount'] ?? 0),
     ];
 }
@@ -9749,7 +9857,10 @@ $PAGE->requires->js_init_code(<<<'JS'
         snapshot.exams.forEach(function(exam) {
             var heading = appendCell(headRow, 'th', exam.label, {'data-inventory-state': exam.state});
             var detail = document.createElement('small');
-            detail.textContent = exam.stateLabel + ' · ' + exam.total;
+            detail.textContent = exam.state === 'review' && exam.remainingCounts
+                ? exam.total + (spanish ? ' aprobadas · ' : ' approved · ')
+                    + (exam.remainingTotal || 0) + (spanish ? ' pendientes' : ' pending')
+                : exam.stateLabel + ' · ' + exam.total;
             heading.appendChild(detail);
         });
         appendCell(headRow, 'th', snapshot.labels.reserve);
@@ -9768,9 +9879,16 @@ $PAGE->requires->js_init_code(<<<'JS'
             appendCell(row, 'td', domain.scorm);
             appendCell(row, 'td', domain.ready);
             snapshot.exams.forEach(function(exam) {
-                appendCell(row, 'td', (exam.counts && exam.counts[domain.id]) || 0, {
+                var approved = (exam.counts && exam.counts[domain.id]) || 0;
+                var examCell = appendCell(row, 'td', approved, {
                     'data-inventory-exam': exam.key
                 });
+                var remaining = (exam.remainingCounts && exam.remainingCounts[domain.id]) || 0;
+                if (exam.state === 'review' && exam.remainingCounts && remaining > 0) {
+                    var pending = document.createElement('small');
+                    pending.textContent = remaining + (spanish ? ' pendientes' : ' pending');
+                    examCell.appendChild(pending);
+                }
             });
             appendCell(row, 'td', domain.reserve);
             body.appendChild(row);
@@ -9858,6 +9976,7 @@ echo $OUTPUT->header();
 .question-bank{max-width:1380px;margin:0 auto 45px;color:#173448}.question-bank__hero{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px;padding:22px 24px;border-left:5px solid #0b8f87;border-radius:12px;background:linear-gradient(135deg,#eef9f6,#fff8ef)}.question-bank__hero h2{margin:0 0 5px;font-size:30px}.question-bank__hero p{max-width:850px;margin:0;color:#52677a;line-height:1.5}.question-bank__actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button{display:inline-flex;min-height:40px;align-items:center;justify-content:center;padding:8px 13px;border:1px solid #b8c8d2;border-radius:8px;background:#fff;color:#24465b!important;font-weight:850;text-decoration:none!important}.question-bank__button:hover{border-color:#0b8f87;background:#eef9f6}.question-bank__summary{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-bottom:12px}.question-bank__summary article{display:flex;min-height:42px;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border:1px solid #d5e0e6;border-radius:8px;background:#fff}.question-bank__summary-card{display:flex;min-height:42px;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border:1px solid #d5e0e6;border-radius:8px;background:#fff;color:#173448!important;text-decoration:none!important;transition:border-color .15s ease,background .15s ease,transform .15s ease}.question-bank__summary-card:hover,.question-bank__summary-card:focus{border-color:#0b8f87;background:#eef9f6;transform:translateY(-1px)}.question-bank__summary span{color:#64748b;font-size:11px;font-weight:800;line-height:1.2}.question-bank__summary span small{display:block;margin-top:2px;color:#7a8d9a;font-size:9px}.question-bank__summary strong{flex:0 0 auto;color:#08746f;font-size:19px;line-height:1}.question-bank__filters{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:10px;margin-bottom:16px;padding:15px;border:1px solid #d7e2e7;border-radius:11px;background:#fff}.question-bank__filters label span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__filters input,.question-bank__filters select{width:100%;min-height:42px;box-sizing:border-box;padding:8px 10px;border:1px solid #b9cbd4;border-radius:7px;background:#fff}.question-bank__filter-actions{display:flex;align-items:end;gap:7px}.question-bank__filter-actions button{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__domains{margin-bottom:16px;overflow-x:auto;border:1px solid #d7e2e7;border-radius:11px;background:#fff}.question-bank__domains table{width:100%;border-collapse:collapse}.question-bank__domains th,.question-bank__domains td{padding:10px 12px;border-top:1px solid #e1e8ec;text-align:left}.question-bank__domains th{background:#f3f8f8;font-size:11px;text-transform:uppercase}.question-bank__result-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px;padding:12px 15px;border-left:4px solid #0b8f87;border-radius:7px;background:#f3f8f8;font-weight:850}.question-bank__items{display:grid;gap:13px}.question-bank__item{padding:17px;border:1px solid #d5e0e6;border-radius:11px;background:#fff}.question-bank__meta{display:grid;gap:8px;margin-bottom:10px}.question-bank__identity-row{display:flex;flex-wrap:wrap;align-items:center;gap:7px}.question-bank__actions-row{display:flex;align-items:center;flex-wrap:nowrap;gap:7px;max-width:100%;overflow-x:auto;padding:1px 0 5px;scrollbar-width:thin}.question-bank__actions-row>*{flex:0 0 auto}.question-bank__actions-row form{margin:0}.question-bank__actions-row .question-bank__button{width:auto;box-sizing:border-box;white-space:nowrap}.question-bank__actions-row .question-bank__edit-link{margin-left:0}.question-bank__id{color:#102a43;font-size:16px;font-weight:950}.question-bank__badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#edf2f5;color:#455d6d;font-size:11px;font-weight:850}.question-bank__badge--ready{background:#ddf6ec;color:#076c55}.question-bank__badge--incomplete{background:#fff0dd;color:#a34d00}.question-bank__badge--exam{background:#eee8ff;color:#5630a8}.question-bank__badge--scorm{background:#e8f1ff;color:#1d4f91}.question-bank__item h3{margin:0 0 12px;font-size:18px;line-height:1.45}.question-bank__options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:0 0 12px;padding:0;list-style:none}.question-bank__options li{padding:9px 11px;border:1px solid #e0e7eb;border-radius:7px;background:#f8fafc}.question-bank__options li.is-correct{border-color:#7bcbb6;background:#eaf9f3;color:#075f50;font-weight:850}.question-bank__explanation{margin-top:10px;padding:12px 14px;border-left:4px solid #0b8f87;border-radius:7px;background:#effaf7;line-height:1.5}.question-bank__source{margin:10px 0 0;color:#60758a;font-size:12px}.question-bank__missing{margin-top:10px;padding:10px 12px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed;color:#9a3412;font-weight:750}.question-bank__pagination{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:18px}.question-bank__pagination a{display:inline-flex;min-width:36px;min-height:36px;align-items:center;justify-content:center;border:1px solid #c6d4dc;border-radius:7px;background:#fff;text-decoration:none}.question-bank__pagination a[aria-current="page"]{border-color:#0b8f87;background:#0b8f87;color:#fff}@media(max-width:1050px){.question-bank__summary{grid-template-columns:repeat(3,minmax(0,1fr))}.question-bank__filters{grid-template-columns:1fr 1fr}.question-bank__filter-actions{align-items:stretch}}@media(max-width:700px){.question-bank__hero{flex-direction:column}.question-bank__summary{grid-template-columns:repeat(2,minmax(0,1fr))}.question-bank__filters,.question-bank__options{grid-template-columns:1fr}.question-bank__filter-actions{flex-direction:column}.question-bank__button{width:100%;box-sizing:border-box}.question-bank__actions-row .question-bank__button{width:auto}}@media(max-width:480px){.question-bank__summary{grid-template-columns:1fr}}
 .question-bank__button--similar{border-color:#0b8f87;background:#eef9f6;color:#075f59!important}.question-bank__button--similar:hover,.question-bank__button--similar:focus{background:#dff5ef}
 .question-bank__inventory-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid #d7e2e7;background:#f8fbfb}.question-bank__inventory-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}.question-bank__inventory-title strong{color:#173448}.question-bank__inventory-status{color:#60758a;font-size:12px;font-weight:750}.question-bank__inventory-status.is-refreshing{color:#6d28d9}.question-bank__inventory-status.is-error{color:#b42318}.question-bank__inventory-refresh{min-height:32px;padding:5px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff;color:#24465b;font-size:12px;font-weight:850;cursor:pointer}.question-bank__inventory-refresh:hover{border-color:#0b8f87;background:#eef9f6}.question-bank__inventory-refresh:disabled{cursor:wait;opacity:.65}.question-bank__domains th[data-inventory-state="review"]{background:#f4f0ff;color:#4c1d95}.question-bank__domains th small{display:block;margin-top:2px;font-size:9px;line-height:1.2;text-transform:none}.question-bank__domains td[data-inventory-exam]{font-weight:800;color:#4c1d95}@media(max-width:700px){.question-bank__inventory-head{align-items:stretch;flex-direction:column}.question-bank__inventory-refresh{width:100%}}
+.question-bank__domains td[data-inventory-exam] small{display:block;margin-top:2px;color:#6d28d9;font-size:9px;line-height:1.15;font-weight:750}
 .question-bank__editor{margin-bottom:18px;padding:20px;border:2px solid #6d28d9;border-radius:12px;background:#faf8ff}.question-bank__editor-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px}.question-bank__editor-head h3{margin:0 0 4px;font-size:23px}.question-bank__editor-head p{margin:0;color:#66557e}.question-bank__editor-grid{display:grid;grid-template-columns:1fr;gap:14px}.question-bank__editor-panel{padding:15px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__editor-panel h4{margin:0 0 12px}.question-bank__editor-field{display:block;margin-bottom:11px}.question-bank__editor-field>span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__editor input[type=text],.question-bank__editor textarea,.question-bank__editor select{box-sizing:border-box;width:100%;padding:9px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff}.question-bank__editor textarea{min-height:92px;resize:vertical}.question-bank__editor-classification{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}.question-bank__editor-check{display:flex;align-items:flex-start;gap:9px;margin:15px 0;padding:13px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed}.question-bank__editor-check input{margin-top:4px}.question-bank__editor-actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button--primary{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__button--publish{border-color:#6d28d9;background:#6d28d9;color:#fff!important}.question-bank__button--exclude{border-color:#b42318;background:#fff1f0;color:#9f1d16!important}.question-bank__exclusion-note{margin:10px 0;padding:12px 14px;border-left:4px solid #b42318;border-radius:7px;background:#fff1f0;color:#7a271a}.question-bank__item--excluded{border-color:#f1a6a0;background:#fffafa}.question-bank__edit-link{margin-left:auto}@media(max-width:850px){.question-bank__editor-classification{grid-template-columns:1fr}.question-bank__editor-head{display:block}.question-bank__editor-head .question-bank__button{margin-top:10px}}
 .question-bank__meta form{margin:0}.question-bank__actions-row .question-bank__delete-form:first-of-type{margin-left:0}.question-bank__edit-link+.question-bank__delete-form{margin-left:0!important}
 .question-bank__decision-panel>.question-bank__decision-actions{flex-wrap:nowrap;max-width:100%;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}.question-bank__decision-panel>.question-bank__decision-actions>*{flex:0 0 auto}.question-bank__decision-panel>.question-bank__decision-actions .question-bank__button{width:auto;white-space:nowrap}
@@ -10625,7 +10744,7 @@ echo $OUTPUT->header();
                 <th><?php echo s((string)$inventorysnapshot['labels']['classified']); ?></th>
                 <th><?php echo s((string)$inventorysnapshot['labels']['scorm']); ?></th>
                 <th><?php echo s((string)$inventorysnapshot['labels']['ready']); ?></th>
-                <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): ?><th data-inventory-state="<?php echo s((string)$inventoryexamcolumn['state']); ?>"><?php echo s((string)$inventoryexamcolumn['label']); ?><small><?php echo s((string)$inventoryexamcolumn['stateLabel']); ?> · <?php echo (int)$inventoryexamcolumn['total']; ?></small></th><?php endforeach; ?>
+                <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): ?><th data-inventory-state="<?php echo s((string)$inventoryexamcolumn['state']); ?>"><?php echo s((string)$inventoryexamcolumn['label']); ?><small><?php if ((string)$inventoryexamcolumn['state'] === 'review' && isset($inventoryexamcolumn['remainingCounts'])): ?><?php echo (int)$inventoryexamcolumn['total']; ?> <?php echo $displaylang === 'es' ? 'aprobadas' : 'approved'; ?> · <?php echo (int)($inventoryexamcolumn['remainingTotal'] ?? 0); ?> <?php echo $displaylang === 'es' ? 'pendientes' : 'pending'; ?><?php else: ?><?php echo s((string)$inventoryexamcolumn['stateLabel']); ?> · <?php echo (int)$inventoryexamcolumn['total']; ?><?php endif; ?></small></th><?php endforeach; ?>
                 <th><?php echo s((string)$inventorysnapshot['labels']['reserve']); ?></th>
             </tr></thead>
             <tbody><?php foreach ($domains as $domainid => $domain): ?><tr>
@@ -10633,7 +10752,7 @@ echo $OUTPUT->header();
                 <td><?php echo (int)$inventorydomainstats[$domainid]['total']; ?></td>
                 <td><?php echo (int)$inventorydomainstats[$domainid]['scorm']; ?></td>
                 <td><?php echo (int)$inventorydomainstats[$domainid]['ready']; ?></td>
-                <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): ?><td data-inventory-exam="<?php echo s((string)$inventoryexamcolumn['key']); ?>"><?php echo (int)($inventoryexamcolumn['counts'][$domainid] ?? 0); ?></td><?php endforeach; ?>
+                <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): ?><td data-inventory-exam="<?php echo s((string)$inventoryexamcolumn['key']); ?>"><?php echo (int)($inventoryexamcolumn['counts'][$domainid] ?? 0); ?><?php $inventoryremainingcount = (int)($inventoryexamcolumn['remainingCounts'][$domainid] ?? 0); if ((string)$inventoryexamcolumn['state'] === 'review' && isset($inventoryexamcolumn['remainingCounts']) && $inventoryremainingcount > 0): ?><small><?php echo $inventoryremainingcount; ?> <?php echo $displaylang === 'es' ? 'pendientes' : 'pending'; ?></small><?php endif; ?></td><?php endforeach; ?>
                 <td><?php echo (int)$inventorydomainstats[$domainid]['reserve']; ?></td>
             </tr><?php endforeach; ?></tbody>
         </table>
@@ -10692,6 +10811,11 @@ echo $OUTPUT->header();
             ? $revisionstore['customQuestions'][$question['questionId']]
             : [];
         $customstatus = (string)($customrecord['status'] ?? '');
+        $customtargetexamprojectid = (string)($customrecord['targetExamProjectId'] ?? '');
+        $customtargetexamproject = $customtargetexamprojectid !== ''
+            && is_array($examprojects[$customtargetexamprojectid] ?? null)
+            ? $examprojects[$customtargetexamprojectid]
+            : null;
         $iscustomdraft = $question['_sourcekind'] === 'admin' && $customstatus === 'draft';
         $iscustomapproved = $question['_sourcekind'] === 'admin' && $customstatus === 'approved';
         $customhasapprovedversion = is_array($customrecord['approved'] ?? null);
@@ -10822,6 +10946,7 @@ echo $OUTPUT->header();
             <span class="question-bank__badge">Complexity: <?php echo s(ucfirst((string)($question['difficultyBand'] ?? 'unclassified'))); ?></span>
             <?php if (!empty($question['_revision']['bankDeferred'])): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Aplazada en la reserva' : 'Deferred in reserve'; ?></span><?php elseif ($bankpositionwaschanged): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo ($displaylang === 'es' ? 'Movida dentro del banco' : 'Moved within bank'); ?></span><?php endif; ?>
             <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php if ($custombatchtotal > 1): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Lote nuevo' : 'New batch'; ?> · <?php echo $custombatchposition; ?> / <?php echo $custombatchtotal; ?></span><?php endif; ?><?php elseif ($question['_sourcekind'] === 'admin'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>
+            <?php if (is_array($customtargetexamproject)): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Destino: ' : 'Target: '; ?><?php echo s((string)$customtargetexamproject['name']); ?></span><?php endif; ?>
             <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion</span><?php elseif ($revisionstatus === 'study_archive'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Solo Mock · no es pregunta board' : 'Mock only · not a board question'; ?></span><?php elseif ($revisionstatus === 'deleted'): ?><span class="question-bank__badge question-bank__badge--incomplete">Deleted · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Publicada' : 'Published'; ?></span><?php endif; ?>
             <?php if ($revisionstatus === 'study_archive'): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Ubicación Mock: ' : 'Mock placement: '; ?><?php echo s((string)$domain['name']); ?></span><?php endif; ?>
             <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--exam">AI-assisted mock review</span><?php endif; ?>
