@@ -51,6 +51,8 @@ $examprojectview = optional_param('examview', 'candidates', PARAM_ALPHA);
 $newquestiontargetdomain = optional_param('targetdomain', '', PARAM_ALPHANUMEXT);
 $newquestiontargetexam = optional_param('targetexamproject', '', PARAM_ALPHANUMEXT);
 $newquestionneededcount = max(0, min(10, optional_param('needed', 0, PARAM_INT)));
+$selectedinstructiontemplateid = optional_param('instructiontemplate', '', PARAM_ALPHANUMEXT);
+$editinstructiontemplateid = optional_param('editinstructiontemplate', '', PARAM_ALPHANUMEXT);
 $advancetonext = (bool)optional_param('advance', 0, PARAM_BOOL);
 $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
@@ -540,6 +542,46 @@ foreach ($bank['domains'] as &$exam5domainquestions) {
 }
 unset($exam5domainquestions);
 $revisionstore = block_myprogress_herbology_override_load();
+$builtinstructiontemplateid = 'builtin-formula-vs-dui-yao';
+$generalinstructiontemplates = [
+    $builtinstructiontemplateid => [
+        'id' => $builtinstructiontemplateid,
+        'name' => 'Complete formula versus Duì Yào',
+        'instruction' => "## When to choose a formula and when to choose a Duì Yào\n\n"
+            . "A Duì Yào may be a core, modification, or brief prescription for a narrow objective. "
+            . "By definition, it is neither a commercial patent formula nor an automatic equivalent of a classical formula.",
+        'domainId' => 'dui_yao',
+        'builtin' => true,
+    ],
+];
+foreach ((array)($revisionstore['instructionTemplates'] ?? []) as $instructiontemplateid => $instructiontemplate) {
+    if (!is_array($instructiontemplate)
+            || preg_match('/^[A-Za-z0-9_-]+$/', (string)$instructiontemplateid) !== 1) {
+        continue;
+    }
+    $instructiontemplatename = trim((string)($instructiontemplate['name'] ?? ''));
+    $instructiontemplatetext = trim((string)($instructiontemplate['instruction'] ?? ''));
+    $instructiontemplatedomain = (string)($instructiontemplate['domainId'] ?? '');
+    if ($instructiontemplatename === '' || $instructiontemplatetext === '') {
+        continue;
+    }
+    $generalinstructiontemplates[(string)$instructiontemplateid] = [
+        'id' => (string)$instructiontemplateid,
+        'name' => $instructiontemplatename,
+        'instruction' => $instructiontemplatetext,
+        'domainId' => isset($domains[$instructiontemplatedomain]) ? $instructiontemplatedomain : '',
+        'builtin' => false,
+        'createdAt' => (string)($instructiontemplate['createdAt'] ?? ''),
+        'updatedAt' => (string)($instructiontemplate['updatedAt'] ?? ''),
+    ];
+}
+if (!isset($generalinstructiontemplates[$selectedinstructiontemplateid])) {
+    $selectedinstructiontemplateid = '';
+}
+if (!isset($generalinstructiontemplates[$editinstructiontemplateid])
+        || !empty($generalinstructiontemplates[$editinstructiontemplateid]['builtin'])) {
+    $editinstructiontemplateid = '';
+}
 $formulavduiyaocanonical = [
     'domainId' => 'dui_yao',
     'prompt' => 'A patient has aversion to wind, spontaneous sweating, and a floating-moderate pulse. Gui Zhi Tang (Cinnamon Twig Decoction) matches the complete presentation, while its core Duì Yào, Gui Zhi (Cinnamomi Ramulus) + Bai Shao (Paeoniae Radix alba), harmonizes nutritive and protective Qi. Which prescribing decision best applies the boundary between a complete formula and a Duì Yào?',
@@ -1463,6 +1505,119 @@ $ensurechannelherbmappingfeedback = static function(
 };
 
 $formaction = optional_param('formaction', '', PARAM_ALPHANUMEXT);
+if ($_SERVER['REQUEST_METHOD'] === 'POST'
+        && in_array($formaction, ['saveinstructiontemplate', 'deleteinstructiontemplate'], true)) {
+    require_sesskey();
+    $instructiontemplatereturnparams = array_filter([
+        'newquestion' => 1,
+        'targetdomain' => $newquestiontargetdomain !== '' ? $newquestiontargetdomain : null,
+        'targetexamproject' => $newquestiontargetexam !== '' ? $newquestiontargetexam : null,
+        'needed' => $newquestionneededcount > 0 ? $newquestionneededcount : null,
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ]);
+    if ($formaction === 'saveinstructiontemplate') {
+        $instructiontemplateid = optional_param('templateid', '', PARAM_ALPHANUMEXT);
+        $instructiontemplatename = trim(required_param('templatename', PARAM_TEXT));
+        $instructiontemplatetext = trim(required_param('templateinstruction', PARAM_RAW));
+        $instructiontemplatedomain = optional_param('templatedomain', '', PARAM_ALPHANUMEXT);
+        if ($instructiontemplateid === $builtinstructiontemplateid) {
+            throw new invalid_parameter_exception('The built-in instruction template cannot be overwritten.');
+        }
+        if (core_text::strlen($instructiontemplatename) < 2
+                || core_text::strlen($instructiontemplatename) > 100) {
+            throw new invalid_parameter_exception(
+                'The instruction-template name must contain between 2 and 100 characters.'
+            );
+        }
+        if (core_text::strlen($instructiontemplatetext) < 20
+                || core_text::strlen($instructiontemplatetext) > 12000) {
+            throw new invalid_parameter_exception(
+                'The reusable instruction must contain between 20 and 12,000 characters.'
+            );
+        }
+        if ($instructiontemplatedomain !== '' && !isset($domains[$instructiontemplatedomain])) {
+            throw new invalid_parameter_exception('Unknown domain for the instruction template.');
+        }
+        if ($instructiontemplateid === '') {
+            $instructiontemplateid = 'instruction-' . gmdate('Ymd-His') . '-'
+                . strtolower(bin2hex(random_bytes(2)));
+        } else if (!isset($generalinstructiontemplates[$instructiontemplateid])
+                || !empty($generalinstructiontemplates[$instructiontemplateid]['builtin'])) {
+            throw new invalid_parameter_exception('Unknown editable instruction template.');
+        }
+        $savedat = gmdate(DATE_ATOM);
+        block_myprogress_herbology_override_update(static function(array $store) use (
+            $instructiontemplateid,
+            $instructiontemplatename,
+            $instructiontemplatetext,
+            $instructiontemplatedomain,
+            $savedat,
+            $USER
+        ): array {
+            $templates = is_array($store['instructionTemplates'] ?? null)
+                ? $store['instructionTemplates']
+                : [];
+            $previous = is_array($templates[$instructiontemplateid] ?? null)
+                ? $templates[$instructiontemplateid]
+                : [];
+            $templates[$instructiontemplateid] = [
+                'id' => $instructiontemplateid,
+                'name' => $instructiontemplatename,
+                'instruction' => $instructiontemplatetext,
+                'domainId' => $instructiontemplatedomain,
+                'createdAt' => (string)($previous['createdAt'] ?? $savedat),
+                'updatedAt' => $savedat,
+                'savedById' => (int)$USER->id,
+                'savedByName' => fullname($USER),
+            ];
+            $store['instructionTemplates'] = $templates;
+            return $store;
+        });
+        $instructiontemplatereturnparams['instructiontemplate'] = $instructiontemplateid;
+        $instructiontemplatereturnurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            $instructiontemplatereturnparams
+        );
+        $instructiontemplatereturnurl->set_anchor('new-question');
+        redirect(
+            $instructiontemplatereturnurl,
+            $displaylang === 'es'
+                ? 'Instrucción general guardada y cargada en el formulario.'
+                : 'General instruction saved and loaded into the form.',
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
+    $instructiontemplateid = required_param('templateid', PARAM_ALPHANUMEXT);
+    if ($instructiontemplateid === $builtinstructiontemplateid
+            || !isset($generalinstructiontemplates[$instructiontemplateid])
+            || !empty($generalinstructiontemplates[$instructiontemplateid]['builtin'])) {
+        throw new invalid_parameter_exception('The selected instruction template cannot be deleted.');
+    }
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $instructiontemplateid
+    ): array {
+        $templates = is_array($store['instructionTemplates'] ?? null)
+            ? $store['instructionTemplates']
+            : [];
+        unset($templates[$instructiontemplateid]);
+        $store['instructionTemplates'] = $templates;
+        return $store;
+    });
+    $instructiontemplatereturnurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        $instructiontemplatereturnparams
+    );
+    $instructiontemplatereturnurl->set_anchor('new-question');
+    redirect(
+        $instructiontemplatereturnurl,
+        $displaylang === 'es'
+            ? 'Instrucción general eliminada. Las preguntas creadas con ella no cambiaron.'
+            : 'General instruction deleted. Questions created from it were not changed.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'createexamproject') {
     require_sesskey();
     $examname = trim(required_param('examname', PARAM_TEXT));
@@ -5754,6 +5909,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $idea = $iscustomrewrite
         ? trim((string)($customrecord['idea'] ?? ''))
         : trim(required_param('idea', PARAM_RAW));
+    $usedinstructiontemplateid = $iscustomrewrite
+        ? (string)($customrecord['instructionTemplateId'] ?? '')
+        : optional_param('instructiontemplateid', '', PARAM_ALPHANUMEXT);
+    if (!isset($generalinstructiontemplates[$usedinstructiontemplateid])) {
+        $usedinstructiontemplateid = '';
+    }
     $correction = $iscustomrewrite ? trim(required_param('correction', PARAM_RAW)) : '';
     if ($idea === '' || core_text::strlen($idea) > 60000) {
         throw new invalid_parameter_exception(
@@ -6829,6 +6990,7 @@ PROMPT;
             'creationBatchCount' => $custombatchcount,
             'targetDomainId' => $customtargetdomain,
             'targetExamProjectId' => $customtargetexamid,
+            'instructionTemplateId' => $usedinstructiontemplateid,
             'corrections' => array_slice($corrections, -20),
             'reviewSummary' => $scopereviewsummary !== ''
                 ? $scopereviewsummary
@@ -9599,6 +9761,7 @@ echo $OUTPUT->header();
 .question-bank__advanced-review{margin-top:14px;border:1px solid #e5c27f;border-radius:9px;background:#fffaf0}.question-bank__advanced-review summary{padding:13px 14px;color:#8a4b08;font-weight:900;cursor:pointer}.question-bank__advanced-review>.question-bank__editor-check{margin:0;border-radius:0;border-left:0;border-top:1px solid #f0d5a1}.question-bank__advanced-review>.question-bank__editor-field{margin:0;padding:14px}.question-bank__advanced-review>.question-bank__editor-actions{padding:0 14px 14px}
 .question-bank__editor-panel--editing{border-color:#cbb9ee}.question-bank__panel-intro{margin:-6px 0 14px;color:#60758a;font-size:12px;line-height:1.45}.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:150px}.question-bank__editor-panel--editing .question-bank__editor-classification{grid-template-columns:1fr;margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__editor-panel--editing .question-bank__editor-classification h5{margin:0 0 2px}.question-bank__editor-panel--editing .question-bank__editor-classification .question-bank__panel-intro{margin:0 0 8px}.question-bank__editor-panel--editing .question-bank__editor-actions{margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__proposal-form{display:grid;gap:12px}.question-bank__proposal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-toolbar p{margin:0;color:#66557e}.question-bank__proposal-box{display:block;margin-top:14px;padding:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-box>span{display:block;margin-bottom:7px;color:#4c1d95;font-weight:900}.question-bank__proposal-box textarea{box-sizing:border-box;width:100%;min-height:150px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__proposal-saved{display:block;margin-top:7px;color:#66557e;font-size:12px}.question-bank__proposal-review{margin-top:14px;padding:14px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;white-space:pre-wrap}@media(max-width:850px){.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:120px}.question-bank__proposal-toolbar{align-items:stretch;flex-direction:column}}
 .question-bank__new-question{margin-bottom:18px;padding:20px;border:2px solid #0b8f87;border-radius:12px;background:#f2fbf9}.question-bank__new-question h3{margin:0 0 6px;font-size:24px}.question-bank__new-question p{margin:0 0 14px;color:#52677a}.question-bank__new-question textarea{box-sizing:border-box;width:100%;min-height:180px;padding:13px 14px;border:1px solid #9db8c3;border-radius:8px;background:#fff;resize:vertical}.question-bank__new-question .question-bank__editor-actions{margin-top:12px}
+.question-bank__instruction-form{display:grid;gap:11px;margin-top:12px}.question-bank__instruction-form label>span{display:block;margin-bottom:5px;color:#4c1d95;font-size:12px;font-weight:900}.question-bank__instruction-form input[type=text],.question-bank__instruction-form select{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #ad9bd2;border-radius:7px;background:#fff}.question-bank__new-question .question-bank__instruction-form textarea{min-height:120px}.question-bank__similarity-result.is-selected{border-color:#0b8f87;box-shadow:inset 4px 0 #0b8f87}
 .question-bank__filters label>small{display:block;margin-top:5px;color:#64748b;font-size:10px;line-height:1.3}
 .question-bank__result-context{display:flex;min-width:0;align-items:baseline;flex-wrap:wrap;gap:5px 9px}.question-bank__result-context strong{white-space:nowrap}.question-bank__result-context span{color:#52677a;font-weight:750;line-height:1.35}.question-bank__result-head>span:last-child{flex:0 0 auto;white-space:nowrap}@media(max-width:700px){.question-bank__result-head{align-items:flex-start;flex-direction:column}.question-bank__result-head>span:last-child{white-space:normal}}
 .question-bank__batch-preview{margin:16px 0;padding:16px 18px;border:2px solid #0b8f87;border-radius:12px;background:#eefaf8}.question-bank__batch-preview h3{margin:0 0 5px;color:#075e59}.question-bank__batch-preview p{margin:0 0 12px;color:#38566b}.question-bank__batch-preview nav{display:flex;flex-wrap:wrap;gap:8px}.question-bank__batch-preview a{display:inline-flex;align-items:center;gap:5px;padding:9px 12px;border:1px solid #0b8f87;border-radius:999px;background:#fff;color:#075e59;font-weight:850;text-decoration:none}.question-bank__batch-preview a:hover,.question-bank__batch-preview a:focus{background:#0b8f87;color:#fff}
@@ -10096,9 +10259,20 @@ echo $OUTPUT->header();
         <?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?>
     </section>
     <?php endif; ?>
-    <?php if ($shownewquestionform): $newquestionrecovery = is_array($SESSION->ncbahm_new_question_recovery ?? null)
-        ? $SESSION->ncbahm_new_question_recovery
-        : []; ?><section id="new-question" class="question-bank__new-question">
+    <?php if ($shownewquestionform):
+        $newquestionrecovery = is_array($SESSION->ncbahm_new_question_recovery ?? null)
+            ? $SESSION->ncbahm_new_question_recovery
+            : [];
+        $selectedinstructiontemplate = $selectedinstructiontemplateid !== ''
+            ? ($generalinstructiontemplates[$selectedinstructiontemplateid] ?? null)
+            : null;
+        $editinstructiontemplate = $editinstructiontemplateid !== ''
+            ? ($generalinstructiontemplates[$editinstructiontemplateid] ?? null)
+            : null;
+        $newquestionprefillidea = is_array($selectedinstructiontemplate)
+            ? (string)$selectedinstructiontemplate['instruction']
+            : (string)($newquestionrecovery['idea'] ?? '');
+    ?><section id="new-question" class="question-bank__new-question">
         <h3><?php echo $displaylang === 'es' ? 'Crear una o varias preguntas' : 'Create one or several questions'; ?></h3>
         <?php if ($newquestiontargetdomain !== '' && isset($domains[$newquestiontargetdomain])): ?>
             <div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Faltante del examen activo:' : 'Active-exam shortage:'; ?></strong>
@@ -10115,11 +10289,75 @@ echo $OUTPUT->header();
                 : 'A general formula-versus-Duì-Yào rule can produce up to 5 drafts per attempt. Every draft will use another verified herb pair and formula whenever the source table permits it.'; ?></div>
             <?php endif; ?>
         <?php endif; ?>
-        <?php if ($newquestionrecovery !== []): ?><div class="question-bank__publish-error" role="alert"><strong><?php echo $displaylang === 'es' ? 'La generación anterior no produjo un borrador válido.' : 'The previous generation did not produce a valid draft.'; ?></strong> <?php echo $displaylang === 'es' ? 'El texto completo se conservó abajo; puede corregirlo y volver a intentarlo.' : 'The complete text was preserved below; you can correct it and try again.'; ?><?php if (trim((string)($newquestionrecovery['error'] ?? '')) !== ''): ?> <small><?php echo s((string)$newquestionrecovery['error']); ?></small><?php endif; ?></div><?php endif; ?>
+        <?php if ($newquestionrecovery !== [] && !is_array($selectedinstructiontemplate)): ?><div class="question-bank__publish-error" role="alert"><strong><?php echo $displaylang === 'es' ? 'La generación anterior no produjo un borrador válido.' : 'The previous generation did not produce a valid draft.'; ?></strong> <?php echo $displaylang === 'es' ? 'El texto completo se conservó abajo; puede corregirlo y volver a intentarlo.' : 'The complete text was preserved below; you can correct it and try again.'; ?><?php if (trim((string)($newquestionrecovery['error'] ?? '')) !== ''): ?> <small><?php echo s((string)$newquestionrecovery['error']); ?></small><?php endif; ?></div><?php endif; ?>
+        <section class="question-bank__decision-panel" aria-label="<?php echo $displaylang === 'es' ? 'Banco de instrucciones generales' : 'General instruction bank'; ?>">
+            <h4><?php echo $displaylang === 'es' ? 'Banco de instrucciones generales' : 'General instruction bank'; ?></h4>
+            <p><?php echo $displaylang === 'es'
+                ? 'Guarde reglas reutilizables para crear familias de preguntas. Usar una instrucción solo la copia al formulario; no publica ni modifica preguntas existentes.'
+                : 'Save reusable rules for creating families of questions. Using an instruction only copies it into the form; it does not publish or change existing questions.'; ?></p>
+            <div class="question-bank__similarity-grid">
+                <?php foreach ($generalinstructiontemplates as $instructiontemplate):
+                    $instructiontemplateid = (string)$instructiontemplate['id'];
+                    $instructiontemplatedomain = (string)($instructiontemplate['domainId'] ?? '');
+                    $instructiontemplateuseurl = new moodle_url(
+                        '/blocks/myprogress/admin-herbology-question-bank.php',
+                        array_filter([
+                            'newquestion' => 1,
+                            'instructiontemplate' => $instructiontemplateid,
+                            'targetdomain' => $newquestiontargetdomain !== ''
+                                ? $newquestiontargetdomain
+                                : ($instructiontemplatedomain !== '' ? $instructiontemplatedomain : null),
+                            'targetexamproject' => $newquestiontargetexam !== '' ? $newquestiontargetexam : null,
+                            'needed' => $newquestionneededcount > 0 ? $newquestionneededcount : null,
+                            'lang' => $displaylang !== 'en' ? $displaylang : null,
+                        ])
+                    );
+                    $instructiontemplateuseurl->set_anchor('new-question');
+                    $instructiontemplateediturl = null;
+                    if (empty($instructiontemplate['builtin'])) {
+                        $instructiontemplateediturl = new moodle_url(
+                            '/blocks/myprogress/admin-herbology-question-bank.php',
+                            array_filter([
+                                'newquestion' => 1,
+                                'instructiontemplate' => $selectedinstructiontemplateid !== ''
+                                    ? $selectedinstructiontemplateid
+                                    : null,
+                                'editinstructiontemplate' => $instructiontemplateid,
+                                'targetdomain' => $newquestiontargetdomain !== '' ? $newquestiontargetdomain : null,
+                                'targetexamproject' => $newquestiontargetexam !== '' ? $newquestiontargetexam : null,
+                                'needed' => $newquestionneededcount > 0 ? $newquestionneededcount : null,
+                                'lang' => $displaylang !== 'en' ? $displaylang : null,
+                            ])
+                        );
+                        $instructiontemplateediturl->set_anchor('instruction-template-editor');
+                    }
+                ?>
+                <article class="question-bank__similarity-result<?php echo $selectedinstructiontemplateid === $instructiontemplateid ? ' is-selected' : ''; ?>">
+                    <header><strong><?php echo s((string)$instructiontemplate['name']); ?></strong><?php if (!empty($instructiontemplate['builtin'])): ?><span class="question-bank__duplicate-score"><?php echo $displaylang === 'es' ? 'Incluida' : 'Built in'; ?></span><?php endif; ?></header>
+                    <?php if ($instructiontemplatedomain !== '' && isset($domains[$instructiontemplatedomain])): ?><small>Domain <?php echo (int)$domains[$instructiontemplatedomain]['number']; ?> · <?php echo s((string)$domains[$instructiontemplatedomain]['name']); ?></small><?php endif; ?>
+                    <p><?php echo s(core_text::substr((string)$instructiontemplate['instruction'], 0, 320)); ?><?php echo core_text::strlen((string)$instructiontemplate['instruction']) > 320 ? '…' : ''; ?></p>
+                    <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--primary" href="<?php echo $instructiontemplateuseurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Usar instrucción' : 'Use instruction'; ?></a><?php if ($instructiontemplateediturl !== null): ?><a class="question-bank__button" href="<?php echo $instructiontemplateediturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Editar' : 'Edit'; ?></a><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" onsubmit="return confirm('<?php echo $displaylang === 'es' ? '¿Eliminar esta instrucción guardada? Las preguntas creadas no cambiarán.' : 'Delete this saved instruction? Created questions will not change.'; ?>');"><input type="hidden" name="formaction" value="deleteinstructiontemplate"><input type="hidden" name="templateid" value="<?php echo s($instructiontemplateid); ?>"><input type="hidden" name="targetdomain" value="<?php echo s($newquestiontargetdomain); ?>"><input type="hidden" name="targetexamproject" value="<?php echo s($newquestiontargetexam); ?>"><input type="hidden" name="needed" value="<?php echo (int)$newquestionneededcount; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit"><?php echo $displaylang === 'es' ? 'Eliminar' : 'Delete'; ?></button></form><?php endif; ?></div>
+                </article>
+                <?php endforeach; ?>
+            </div>
+            <details id="instruction-template-editor"<?php echo is_array($editinstructiontemplate) ? ' open' : ''; ?>>
+                <summary><?php echo is_array($editinstructiontemplate)
+                    ? ($displaylang === 'es' ? 'Editar instrucción guardada' : 'Edit saved instruction')
+                    : ($displaylang === 'es' ? '+ Guardar una nueva instrucción general' : '+ Save a new general instruction'); ?></summary>
+                <form class="question-bank__instruction-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+                    <label><span><?php echo $displaylang === 'es' ? 'Nombre' : 'Name'; ?></span><input type="text" name="templatename" maxlength="100" required value="<?php echo s((string)($editinstructiontemplate['name'] ?? '')); ?>" placeholder="<?php echo $displaylang === 'es' ? 'Ejemplo: Seguridad y preparación' : 'Example: Safety and preparation'; ?>"></label>
+                    <label><span><?php echo $displaylang === 'es' ? 'Dominio sugerido (opcional)' : 'Suggested domain (optional)'; ?></span><select name="templatedomain"><option value=""><?php echo $displaylang === 'es' ? 'Cualquier dominio' : 'Any domain'; ?></option><?php foreach ($domains as $instructiondomainid => $instructiondomain): ?><option value="<?php echo s($instructiondomainid); ?>"<?php echo (string)($editinstructiontemplate['domainId'] ?? '') === $instructiondomainid ? ' selected' : ''; ?>>Domain <?php echo (int)$instructiondomain['number']; ?> · <?php echo s((string)$instructiondomain['name']); ?></option><?php endforeach; ?></select></label>
+                    <label><span><?php echo $displaylang === 'es' ? 'Instrucción reutilizable' : 'Reusable instruction'; ?></span><textarea name="templateinstruction" maxlength="12000" required placeholder="<?php echo $displaylang === 'es' ? 'Escriba la regla general que debe aplicarse a futuras preguntas…' : 'Write the general rule to apply to future questions…'; ?>"><?php echo s((string)($editinstructiontemplate['instruction'] ?? '')); ?></textarea></label>
+                    <input type="hidden" name="formaction" value="saveinstructiontemplate"><input type="hidden" name="templateid" value="<?php echo s((string)($editinstructiontemplate['id'] ?? '')); ?>"><input type="hidden" name="targetdomain" value="<?php echo s($newquestiontargetdomain); ?>"><input type="hidden" name="targetexamproject" value="<?php echo s($newquestiontargetexam); ?>"><input type="hidden" name="needed" value="<?php echo (int)$newquestionneededcount; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo is_array($editinstructiontemplate) ? ($displaylang === 'es' ? 'Guardar cambios' : 'Save changes') : ($displaylang === 'es' ? 'Guardar instrucción' : 'Save instruction'); ?></button><?php if (is_array($editinstructiontemplate)): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter(['newquestion' => 1, 'targetdomain' => $newquestiontargetdomain !== '' ? $newquestiontargetdomain : null, 'targetexamproject' => $newquestiontargetexam !== '' ? $newquestiontargetexam : null, 'needed' => $newquestionneededcount > 0 ? $newquestionneededcount : null, 'lang' => $displaylang !== 'en' ? $displaylang : null])))->out(false); ?>#new-question"><?php echo $displaylang === 'es' ? 'Cancelar' : 'Cancel'; ?></a><?php endif; ?></div>
+                </form>
+            </details>
+        </section>
         <p>Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as <strong>### Question 1</strong> or <strong>### 2.</strong>, lines containing <strong>---</strong>, and repeated <strong>Correct answer:</strong> or <strong>Respuesta correcta:</strong> labels. It creates an independent draft for each question and immediately displays a visible index of the complete batch.</p>
         <form class="question-bank__creation-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
-            <textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."><?php echo s((string)($newquestionrecovery['idea'] ?? '')); ?></textarea>
+            <?php if (is_array($selectedinstructiontemplate)): ?><div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Instrucción cargada:' : 'Loaded instruction:'; ?></strong> <?php echo s((string)$selectedinstructiontemplate['name']); ?>. <?php echo $displaylang === 'es' ? 'Puede ajustarla antes de crear los borradores.' : 'You may adjust it before creating drafts.'; ?></div><?php endif; ?>
+            <textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."><?php echo s($newquestionprefillidea); ?></textarea>
             <input type="hidden" name="formaction" value="createnewquestion">
+            <input type="hidden" name="instructiontemplateid" value="<?php echo s($selectedinstructiontemplateid); ?>">
             <input type="hidden" name="targetdomain" value="<?php echo s($newquestiontargetdomain); ?>">
             <input type="hidden" name="targetexamproject" value="<?php echo s($newquestiontargetexam); ?>">
             <input type="hidden" name="needed" value="<?php echo (int)$newquestionneededcount; ?>">
