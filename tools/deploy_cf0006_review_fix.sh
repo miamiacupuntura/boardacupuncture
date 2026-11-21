@@ -92,7 +92,7 @@ php -l "$QUESTION_BANK_SOURCE" >/dev/null
 php -l "$OVERRIDES_SOURCE" >/dev/null
 php -l "$HERBOLOGY_BOARD_SOURCE" >/dev/null
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$SOURCE_DATA"
-grep -Fq "ncbahm-mock-editor-4.4" "$QUESTION_BANK_SOURCE"
+grep -Fq "ncbahm-mock-editor-4.5" "$QUESTION_BANK_SOURCE"
 grep -Fq "sourceFeedbackMissing" "$QUESTION_BANK_SOURCE"
 grep -Fq '$requestedvisibleherbcount' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Requested herbs missing · correction required' "$QUESTION_BANK_SOURCE"
@@ -178,6 +178,14 @@ foreach ($required as $id=>$correct) {
             || preg_match($prohibited, (string)$optiontext)
             || preg_match($negative, (string)($question["prompt"] ?? ""))) {
         fwrite(STDERR, "ERROR: $id todavía contiene distractores defectuosos o contenido incompleto.\n");
+        exit(1);
+    }
+    if ($id === "CF-1582"
+            && (!str_contains((string)$optiontext, "Gui Zhi Tang")
+                || !str_contains((string)$optiontext, "Cinnamomi Ramulus")
+                || count((array)($question["nomenclature"]["herbs"] ?? [])) < 4
+                || count((array)($question["nomenclature"]["formulas"] ?? [])) < 4)) {
+        fwrite(STDERR, "ERROR: CF-1582 no muestra fórmulas e ingredientes concretos.\n");
         exit(1);
     }
 }' "$SOURCE_DATA"
@@ -321,7 +329,7 @@ block_myprogress_herbology_override_update(static function(array $store) use (
     $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
     $record['savedAt'] = gmdate(DATE_ATOM);
     $record['savedByName'] = 'CF-0126 deployment migration';
-    $record['aiPromptVersion'] = 'ncbahm-mock-editor-4.4';
+    $record['aiPromptVersion'] = 'ncbahm-mock-editor-4.5';
     $record['cf0126MigratedAt'] = gmdate(DATE_ATOM);
     $store['questions']['CF-0126'] = $record;
     $changed = true;
@@ -390,6 +398,7 @@ echo "OK: la publicación queda bloqueada si un examen todavía contiene una pre
 echo "OK: FD-012 contiene versiones completas y separadas en inglés y español."
 echo "OK: CF-0127, CF-0213, CF-0227, CF-0230, CF-0280, CF-0305 y CF-1582 tienen cuatro opciones independientes, una sola respuesta defendible y feedback A-D."
 echo "OK: SCORM-FD-5917E7491258 usa la comparación corregida de Yue Ju Wan y Liang Fu Wan."
+echo "OK: CF-1582 ahora evalúa Gui Zhi Tang frente a tres fórmulas y muestra los ingredientes de cada opción."
 echo "OK: $CF0126_OVERRIDE_RESULT"
 echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"
 echo "OK: revisión instalada: $REVISION"

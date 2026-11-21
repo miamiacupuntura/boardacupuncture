@@ -52,7 +52,7 @@ $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-4.4';
+$aipromptversion = 'ncbahm-mock-editor-4.5';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
@@ -215,7 +215,14 @@ foreach ($reviewedcanonicalquestions as $questionid => $canonicalquestion) {
     }
     $repairkeys = [];
     foreach (['original', 'draft', 'approved'] as $snapshotkey) {
-        if ($reviewedsnapshotneedsrepair($storedrecord[$snapshotkey] ?? null)) {
+        $storedsnapshot = $storedrecord[$snapshotkey] ?? null;
+        $missingrequiredformula = $questionid === 'CF-1582'
+            && is_array($storedsnapshot)
+            && stripos((string)json_encode([
+                $storedsnapshot['prompt'] ?? '',
+                $storedsnapshot['options'] ?? [],
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), 'Gui Zhi Tang') === false;
+        if ($reviewedsnapshotneedsrepair($storedsnapshot) || $missingrequiredformula) {
             $repairkeys[] = $snapshotkey;
         }
     }

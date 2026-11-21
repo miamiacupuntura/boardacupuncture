@@ -53710,7 +53710,7 @@
         "objectiveId": "working-formula_differentiation",
         "difficultyBand": "analysis",
         "cognitiveLevel": "analyze",
-        "contentType": "comparison",
+        "contentType": "formula_selection",
         "language": "en",
         "source": {
           "title": "Complete Final.docx",
@@ -53720,56 +53720,81 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "A patient has aversion to wind, spontaneous sweating, a floating-moderate pulse, and no abdominal fullness or diarrhea. Which mechanism best accounts for this presentation?",
+        "prompt": "A patient has aversion to wind, spontaneous sweating, mild chills, and a floating-moderate pulse. Which formula and ingredient group is most appropriate?",
         "options": [
           {
             "label": "A",
-            "text": "Mistreatment causing Cold damage to the Spleen and progression into the Tai Yin stage"
+            "text": "Li Zhong Wan (Regulate the Middle Pill): Ren Shen (Ginseng Radix), Bai Zhu (Atractylodis macrocephalae Rhizoma), Gan Jiang (Zingiberis Rhizoma), and Zhi Gan Cao (Glycyrrhizae Radix et Rhizoma Praeparata cum Melle)"
           },
           {
             "label": "B",
-            "text": "Disharmony between Ying Qi and Wei Qi at the Tai Yang exterior level"
+            "text": "Gui Zhi Tang (Cinnamon Twig Decoction): Gui Zhi (Cinnamomi Ramulus), Bai Shao (Paeoniae Radix alba), Sheng Jiang (Zingiberis Rhizoma recens), Da Zao (Jujubae Fructus), and Zhi Gan Cao (Glycyrrhizae Radix et Rhizoma Praeparata cum Melle)"
           },
           {
             "label": "C",
-            "text": "Transmission from a three-Yang stage pattern into Tai Yin Spleen deficiency-Cold"
+            "text": "Ma Huang Tang (Ephedra Decoction): Ma Huang (Ephedrae Herba), Gui Zhi (Cinnamomi Ramulus), Xing Ren (Armeniacae Semen), and Zhi Gan Cao (Glycyrrhizae Radix et Rhizoma Praeparata cum Melle)"
           },
           {
             "label": "D",
-            "text": "Direct Cold strike to the Tai Yin stage with abdominal fullness and diarrhea"
+            "text": "Xiao Jian Zhong Tang (Minor Construct the Middle Decoction): Gui Zhi Tang ingredients with Yi Tang (Maltosum)"
           }
         ],
         "correctLabel": "B",
-        "explanation": "Inference step 1: Aversion to wind, spontaneous sweating, and a floating-moderate pulse identify an exterior Tai Yang presentation with failure of Ying and Wei to harmonize. Inference step 2: The absence of abdominal fullness and diarrhea argues against Tai Yin Spleen deficiency-Cold. Option A: Incorrect. Mistreatment may drive a disorder inward toward Tai Yin, but that would produce middle-burner deficiency-Cold signs. Option B: Correct. Ying-Wei disharmony explains the exterior signs and spontaneous sweating. Option C: Incorrect. Transmission into Tai Yin would be accompanied by abdominal and bowel manifestations. Option D: Incorrect. A direct Tai Yin strike likewise produces interior Spleen Cold signs rather than this exterior pulse and sweating pattern.",
+        "explanation": "Inference step 1: Aversion to wind, spontaneous sweating, mild chills, and a floating-moderate pulse indicate a Tai Yang exterior deficiency pattern with disharmony between Ying Qi and Wei Qi. Inference step 2: Gui Zhi Tang harmonizes Ying and Wei; Gui Zhi (Cinnamomi Ramulus) releases the exterior and warms Yang while Bai Shao (Paeoniae Radix alba) preserves Ying, supported by Sheng Jiang, Da Zao, and Zhi Gan Cao. Option A: Incorrect. Li Zhong Wan warms and tonifies the middle burner for Spleen-Stomach deficiency-Cold with abdominal and bowel signs. Option B: Correct. Gui Zhi Tang and its ingredient group match spontaneous sweating and a floating-moderate pulse. Option C: Incorrect. Ma Huang Tang treats exterior excess with absence of sweating and a floating-tight pulse. Option D: Incorrect. Xiao Jian Zhong Tang treats deficiency-Cold abdominal pain and does not primarily address this exterior Ying-Wei disharmony.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
           "reason": "Formula indication, pattern recognition or selection"
         },
         "sourceCard": {
-          "url": "/study-guide/comparisons/patterns.html",
-          "urlEs": "/study-guide/comparisons/patterns-es.html",
-          "label": "Source card: Six-stage pattern differentiation",
-          "labelEs": "Tarjeta fuente: diferenciación de patrones de las seis etapas"
+          "url": "/study-guide/comparisons/formula-navigator-02-gui-zhi-tang.html",
+          "urlEs": "/study-guide/comparisons/formula-navigator-02-gui-zhi-tang-es.html",
+          "label": "Source card: Gui Zhi Tang",
+          "labelEs": "Tarjeta fuente: Gui Zhi Tang"
         },
         "translations": {
           "es": {
-            "prompt": "Una paciente presenta aversión al viento, sudoración espontánea, pulso flotante-moderado y ausencia de plenitud abdominal o diarrea. ¿Qué mecanismo explica mejor esta presentación?",
+            "prompt": "Una paciente presenta aversión al viento, sudoración espontánea, escalofríos leves y pulso flotante-moderado. ¿Qué fórmula y grupo de ingredientes son los más apropiados?",
             "options": [
-              {"label": "A", "text": "Tratamiento incorrecto que causa daño por Frío al Bazo y progresión hacia la etapa Tai Yin"},
-              {"label": "B", "text": "Desarmonía entre Ying Qi y Wei Qi en el nivel exterior Tai Yang"},
-              {"label": "C", "text": "Transmisión desde un patrón de las tres etapas Yang hacia Frío por deficiencia del Bazo en Tai Yin"},
-              {"label": "D", "text": "Ataque directo de Frío a la etapa Tai Yin con plenitud abdominal y diarrea"}
+              {"label": "A", "text": "Li Zhong Wan (Píldora para regular el centro): Ren Shen (Ginseng Radix), Bai Zhu (Atractylodis macrocephalae Rhizoma), Gan Jiang (Zingiberis Rhizoma) y Zhi Gan Cao (Glycyrrhizae Radix et Rhizoma Praeparata cum Melle)"},
+              {"label": "B", "text": "Gui Zhi Tang (Decocción de rama de canela): Gui Zhi (Cinnamomi Ramulus), Bai Shao (Paeoniae Radix alba), Sheng Jiang (Zingiberis Rhizoma recens), Da Zao (Jujubae Fructus) y Zhi Gan Cao (Glycyrrhizae Radix et Rhizoma Praeparata cum Melle)"},
+              {"label": "C", "text": "Ma Huang Tang (Decocción de efedra): Ma Huang (Ephedrae Herba), Gui Zhi (Cinnamomi Ramulus), Xing Ren (Armeniacae Semen) y Zhi Gan Cao (Glycyrrhizae Radix et Rhizoma Praeparata cum Melle)"},
+              {"label": "D", "text": "Xiao Jian Zhong Tang (Decocción menor para construir el centro): ingredientes de Gui Zhi Tang con Yi Tang (Maltosum)"}
             ],
-            "explanation": "Paso de inferencia 1: La aversión al viento, la sudoración espontánea y el pulso flotante-moderado identifican una presentación exterior Tai Yang con falta de armonía entre Ying y Wei. Paso de inferencia 2: La ausencia de plenitud abdominal y diarrea se opone a Frío por deficiencia del Bazo en Tai Yin. Opción A: Incorrecta. Un tratamiento incorrecto puede llevar el trastorno hacia Tai Yin, pero produciría signos de Frío por deficiencia del calentador medio. Opción B: Correcta. La desarmonía Ying-Wei explica los signos exteriores y la sudoración espontánea. Opción C: Incorrecta. La transmisión a Tai Yin se acompañaría de manifestaciones abdominales e intestinales. Opción D: Incorrecta. Un ataque directo a Tai Yin también produce signos interiores de Frío de Bazo, no este patrón exterior de pulso y sudoración."
+            "explanation": "Paso de inferencia 1: La aversión al viento, la sudoración espontánea, los escalofríos leves y el pulso flotante-moderado indican un patrón de deficiencia exterior Tai Yang con desarmonía entre Ying Qi y Wei Qi. Paso de inferencia 2: Gui Zhi Tang armoniza Ying y Wei; Gui Zhi (Cinnamomi Ramulus) libera el exterior y calienta Yang, mientras Bai Shao (Paeoniae Radix alba) preserva Ying, con apoyo de Sheng Jiang, Da Zao y Zhi Gan Cao. Opción A: Incorrecta. Li Zhong Wan calienta y tonifica el calentador medio para Frío por deficiencia de Bazo-Estómago con signos abdominales e intestinales. Opción B: Correcta. Gui Zhi Tang y su grupo de ingredientes corresponden a la sudoración espontánea y el pulso flotante-moderado. Opción C: Incorrecta. Ma Huang Tang trata exceso exterior con ausencia de sudoración y pulso flotante-tenso. Opción D: Incorrecta. Xiao Jian Zhong Tang trata dolor abdominal por Frío y deficiencia y no aborda principalmente esta desarmonía exterior Ying-Wei."
           }
         },
         "nomenclature": {
-          "herbs": [],
-          "formulas": [],
+          "herbs": [
+            {"pinyin": "Ren Shen", "pharmaceuticalName": "Ginseng Radix"},
+            {"pinyin": "Bai Zhu", "pharmaceuticalName": "Atractylodis macrocephalae Rhizoma"},
+            {"pinyin": "Gan Jiang", "pharmaceuticalName": "Zingiberis Rhizoma"},
+            {"pinyin": "Zhi Gan Cao", "pharmaceuticalName": "Glycyrrhizae Radix et Rhizoma Praeparata cum Melle"},
+            {"pinyin": "Gui Zhi", "pharmaceuticalName": "Cinnamomi Ramulus"},
+            {"pinyin": "Bai Shao", "pharmaceuticalName": "Paeoniae Radix alba"},
+            {"pinyin": "Sheng Jiang", "pharmaceuticalName": "Zingiberis Rhizoma recens"},
+            {"pinyin": "Da Zao", "pharmaceuticalName": "Jujubae Fructus"},
+            {"pinyin": "Ma Huang", "pharmaceuticalName": "Ephedrae Herba"},
+            {"pinyin": "Xing Ren", "pharmaceuticalName": "Armeniacae Semen"},
+            {"pinyin": "Yi Tang", "pharmaceuticalName": "Maltosum"}
+          ],
+          "formulas": [
+            {"pinyin": "Li Zhong Wan", "englishName": "Regulate the Middle Pill"},
+            {"pinyin": "Gui Zhi Tang", "englishName": "Cinnamon Twig Decoction"},
+            {"pinyin": "Ma Huang Tang", "englishName": "Ephedra Decoction"},
+            {"pinyin": "Xiao Jian Zhong Tang", "englishName": "Minor Construct the Middle Decoction"}
+          ],
           "feedback": {
-            "herbs": [],
-            "formulas": []
+            "herbs": [
+              {"pinyin": "Gui Zhi", "pharmaceuticalName": "Cinnamomi Ramulus"},
+              {"pinyin": "Bai Shao", "pharmaceuticalName": "Paeoniae Radix alba"},
+              {"pinyin": "Sheng Jiang", "pharmaceuticalName": "Zingiberis Rhizoma recens"},
+              {"pinyin": "Da Zao", "pharmaceuticalName": "Jujubae Fructus"},
+              {"pinyin": "Zhi Gan Cao", "pharmaceuticalName": "Glycyrrhizae Radix et Rhizoma Praeparata cum Melle"}
+            ],
+            "formulas": [
+              {"pinyin": "Gui Zhi Tang", "englishName": "Cinnamon Twig Decoction"}
+            ]
           }
         }
       },
