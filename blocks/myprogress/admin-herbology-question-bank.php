@@ -136,6 +136,157 @@ if (is_readable($scormbankpath)) {
         }
     }
 }
+// The first four simulation exams exhaust the original one-direction Duì Yào
+// cards.  Supply a second, source-grounded direction for 18 pairs: the pair is
+// shown and the learner identifies its combined action.  These are new items,
+// not reused question IDs or cosmetic paraphrases of a prior exam.
+$duiyaosupplementpath = $CFG->dirroot . '/blocks/myprogress/dui-yao-smart-data.json';
+if (is_readable($duiyaosupplementpath)) {
+    $duiyaosmartdata = json_decode((string)file_get_contents($duiyaosupplementpath), true);
+    $duiyaosmartpairs = is_array($duiyaosmartdata['pairs'] ?? null)
+        ? array_values($duiyaosmartdata['pairs'])
+        : [];
+    if (count($duiyaosmartpairs) >= 32) {
+        $duiyaoherbnomenclature = [];
+        foreach ((array)($bank['domains']['dui_yao'] ?? []) as $duiyaosourcequestion) {
+            foreach ((array)($duiyaosourcequestion['nomenclature']['herbs'] ?? []) as $herbrecord) {
+                $herbkey = core_text::strtolower(trim((string)($herbrecord['pinyin'] ?? '')));
+                if ($herbkey !== '' && !isset($duiyaoherbnomenclature[$herbkey])) {
+                    $duiyaoherbnomenclature[$herbkey] = $herbrecord;
+                }
+            }
+        }
+        $duiyaosupplementoffsets = [7, 19, 31];
+        foreach (array_slice($duiyaosmartpairs, 0, 18) as $duiyaosupplementindex => $duiyaotargetpair) {
+            $duiyaotargetnumber = (int)($duiyaotargetpair['number'] ?? ($duiyaosupplementindex + 1));
+            $duiyaotargettitle = trim((string)($duiyaotargetpair['title'] ?? ''));
+            $duiyaotargetaction = trim((string)($duiyaotargetpair['action']['en'] ?? ''));
+            $duiyaotargetactiones = trim((string)($duiyaotargetpair['action']['es'] ?? ''));
+            $duiyaotargetslug = trim((string)($duiyaotargetpair['slug'] ?? ''));
+            if ($duiyaotargettitle === '' || $duiyaotargetaction === ''
+                    || $duiyaotargetactiones === '' || $duiyaotargetslug === '') {
+                continue;
+            }
+            $duiyaodistractorpairs = [];
+            foreach ($duiyaosupplementoffsets as $duiyaooffset) {
+                $duiyaodistractorpairs[] = $duiyaosmartpairs[
+                    ($duiyaosupplementindex + $duiyaooffset) % count($duiyaosmartpairs)
+                ];
+            }
+            $duiyaocorrectoptionindex = $duiyaosupplementindex % 4;
+            $duiyaooptions = [];
+            $duiyaooptionses = [];
+            $duiyaooptionpairs = [];
+            $duiyaodistractorindex = 0;
+            foreach (['A', 'B', 'C', 'D'] as $duiyaooptionindex => $duiyaolabel) {
+                $duiyaooptionpair = $duiyaooptionindex === $duiyaocorrectoptionindex
+                    ? $duiyaotargetpair
+                    : $duiyaodistractorpairs[$duiyaodistractorindex++];
+                $duiyaooptionpairs[$duiyaolabel] = $duiyaooptionpair;
+                $duiyaooptions[] = [
+                    'label' => $duiyaolabel,
+                    'text' => trim((string)($duiyaooptionpair['action']['en'] ?? '')),
+                ];
+                $duiyaooptionses[] = [
+                    'label' => $duiyaolabel,
+                    'text' => trim((string)($duiyaooptionpair['action']['es'] ?? '')),
+                ];
+            }
+            $duiyaocorrectlabel = ['A', 'B', 'C', 'D'][$duiyaocorrectoptionindex];
+            $duiyaofeedbackparts = [
+                'Inference step 1: Identify the therapeutic direction created by the two herbs acting together.',
+                'Inference step 2: ' . $duiyaotargettitle . ' performs the action stated in option '
+                    . $duiyaocorrectlabel . '.',
+            ];
+            $duiyaofeedbackpartses = [
+                'Paso de inferencia 1: Identifique la dirección terapéutica creada por las dos hierbas actuando juntas.',
+                'Paso de inferencia 2: ' . $duiyaotargettitle . ' realiza la acción indicada en la opción '
+                    . $duiyaocorrectlabel . '.',
+            ];
+            foreach ($duiyaooptionpairs as $duiyaolabel => $duiyaooptionpair) {
+                $duiyaooptiontitle = trim((string)($duiyaooptionpair['title'] ?? 'another official pair'));
+                if ($duiyaolabel === $duiyaocorrectlabel) {
+                    $duiyaofeedbackparts[] = 'Option ' . $duiyaolabel . ': Correct. This is the verified combined action of pair '
+                        . $duiyaotargetnumber . '.';
+                    $duiyaofeedbackpartses[] = 'Opción ' . $duiyaolabel . ': Correcta. Esta es la acción combinada verificada del par '
+                        . $duiyaotargetnumber . '.';
+                } else {
+                    $duiyaofeedbackparts[] = 'Option ' . $duiyaolabel . ': Incorrect. This action describes '
+                        . $duiyaooptiontitle . ', not ' . $duiyaotargettitle . '.';
+                    $duiyaofeedbackpartses[] = 'Opción ' . $duiyaolabel . ': Incorrecta. Esta acción describe '
+                        . $duiyaooptiontitle . ', no ' . $duiyaotargettitle . '.';
+                }
+            }
+            $duiyaotargetherbs = [];
+            foreach ((array)($duiyaotargetpair['herbs'] ?? []) as $duiyaoherbname) {
+                $duiyaoherbkey = core_text::strtolower(trim((string)$duiyaoherbname));
+                if (isset($duiyaoherbnomenclature[$duiyaoherbkey])) {
+                    $duiyaotargetherbs[] = $duiyaoherbnomenclature[$duiyaoherbkey];
+                }
+            }
+            $duiyaosupplementquestion = [
+                'questionId' => 'DY-REV-' . str_pad((string)$duiyaotargetnumber, 3, '0', STR_PAD_LEFT),
+                'questionTrack' => 'board',
+                'criteriaVersion' => '2026-reverse-action-v1',
+                'itemFormat' => 'multiple-choice',
+                'feedbackStatus' => 'practice-ready',
+                'examId' => 'chinese-herbal-medicine',
+                'outlineVersion' => '2026',
+                'domainId' => 'dui_yao',
+                'objectiveId' => 'dui-yao-pair-to-action',
+                'difficultyBand' => 'application',
+                'cognitiveLevel' => 'apply',
+                'contentType' => 'dui_yao',
+                'language' => 'en',
+                'source' => [
+                    'title' => 'Verified 51-pair Duì Yào study bank',
+                    'section' => 'Reverse action recognition',
+                    'locator' => 'Official pair ' . $duiyaotargetnumber . ' · ' . $duiyaotargettitle,
+                ],
+                'review' => [
+                    'status' => 'practice-ready',
+                    'notes' => 'New pair-to-action objective derived from the verified pair profile.',
+                ],
+                'prompt' => 'Which combined action is most characteristic of the Duì Yào pair '
+                    . $duiyaotargettitle . '?',
+                'options' => $duiyaooptions,
+                'correctLabel' => $duiyaocorrectlabel,
+                'explanation' => implode(' ', $duiyaofeedbackparts),
+                'classification' => [
+                    'method' => 'verified-dui-yao-reverse-v1',
+                    'confidence' => 'high',
+                    'reason' => 'Reverse-direction question derived from a verified official pair profile',
+                ],
+                'sourceCard' => [
+                    'url' => '/study-guide/comparisons/' . $duiyaotargetslug . '.html',
+                    'urlEs' => '/study-guide/comparisons/' . $duiyaotargetslug . '-es.html',
+                    'label' => 'Source card: ' . $duiyaotargettitle,
+                    'labelEs' => 'Tarjeta fuente: ' . $duiyaotargettitle,
+                ],
+                'translations' => [
+                    'es' => [
+                        'prompt' => '¿Qué acción combinada es más característica del par Duì Yào '
+                            . $duiyaotargettitle . '?',
+                        'options' => $duiyaooptionses,
+                        'explanation' => implode(' ', $duiyaofeedbackpartses),
+                    ],
+                ],
+                'nomenclature' => [
+                    'herbs' => $duiyaotargetherbs,
+                    'formulas' => [],
+                    'feedback' => ['herbs' => $duiyaotargetherbs, 'formulas' => []],
+                ],
+                'editorial' => [
+                    'simulationCandidate' => true,
+                    'inferenceUpgradeRequired' => false,
+                    'feedbackQuality' => 'curated',
+                ],
+                'examTemplate' => ['globalPosition' => 0],
+            ];
+            $bank['domains']['dui_yao'][] = $duiyaosupplementquestion;
+        }
+    }
+}
 // A small number of SCORM imports are exact copies of curated source items
 // whose answer shortcuts have since been repaired. Apply the reviewed wording
 // before loading editorial revisions so the pending exam never falls back to
@@ -9064,7 +9215,7 @@ echo $OUTPUT->header();
             <?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?>
         </form>
     </section><?php endif; ?>
-    <?php if ($customdraftcount > 0 && !$shownewquestionform): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
+    <?php if ($customdraftcount > 0 && !$shownewquestionform && $usagefilter !== 'exam_project_pending'): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
     <?php if ($reviewfilter === 'editing_drafts'): ?><section class="question-bank__review-progress"><strong>Saved editing drafts: <?php echo (int)$savededitingdraftcount; ?></strong><p>This view includes unfinished manual and automatic edits from earlier updates and review groups. The most recently saved drafts appear first. Continue the correction, approve the current version, edit manually or delete the question.</p></section><?php endif; ?>
     <?php if ($reviewfilter === 'study_archive'): ?><section class="question-bank__review-progress"><strong><?php echo $displaylang === 'es' ? 'Preguntas exclusivas de Mock' : 'Mock-only questions'; ?>: <?php echo (int)$studyarchivecount; ?></strong><p><?php echo $displaylang === 'es' ? 'Estas preguntas se conservan completas y se ubican automáticamente en el Mock correspondiente a su dominio. No pertenecen al banco board ni a los Simulation Exams. Puede restaurarlas al banco cuando quiera.' : 'These questions are preserved in full and automatically placed in the Mock category matching their domain. They do not belong to the board bank or Simulation Exams. You can restore them to the board bank at any time.'; ?></p></section><?php endif; ?>
     <?php if ($usagefilter === 'exam_project_pending' && $query !== '' && $resultcount === 1): $focusedquestionid = (string)$filteredquestions[0]['questionId']; ?><section class="question-bank__review-progress"><strong><?php echo s((string)$currentexamproject['name']); ?> — focused question ready</strong><p><a class="question-bank__button question-bank__button--publish" href="#question-<?php echo s($focusedquestionid); ?>"><?php echo $displaylang === 'es' ? 'Continuar, revisar y publicar esta pregunta' : 'Continue, review and publish this question'; ?></a><?php if ($pendingexamprojecturl !== null): ?> <a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Omitir y volver a las pendientes' : 'Skip and return to pending questions'; ?></a><?php endif; ?></p></section><?php endif; ?>
@@ -9073,6 +9224,23 @@ echo $OUTPUT->header();
         <?php echo count(array_unique($projectduplicatecandidateids)); ?> <?php echo $displaylang === 'es'
             ? 'candidata(s) repetida(s) no se mostrarán ni ocuparán otra posición del examen.'
             : 'repeated candidate(s) will not be shown or occupy another exam position.'; ?>
+    </section>
+    <?php endif; ?>
+    <?php if ($usagefilter === 'exam_project_pending'
+            && array_sum($projectremainingbydomain) > 0
+            && array_sum($projectshortagebydomain) === 0): ?>
+    <section class="question-bank__review-progress">
+        <strong><?php echo $displaylang === 'es'
+            ? 'Las preguntas necesarias para completar este examen están listas para revisión.'
+            : 'The questions needed to complete this exam are ready for review.'; ?></strong>
+        <?php foreach ($projectremainingbydomain as $readydomainid => $readycount): ?>
+            <?php if ($readycount <= 0): continue; endif; ?>
+            <p><strong><?php echo 'Domain ' . (int)$domains[$readydomainid]['number'] . ' · '
+                . s((string)$domains[$readydomainid]['name']); ?>:</strong>
+                <?php echo (int)$readycount; ?> <?php echo $displaylang === 'es' ? 'posición(es) pendiente(s),' : 'position(s) pending,'; ?>
+                <?php echo (int)$projectcandidatecountbydomain[$readydomainid]; ?> <?php echo $displaylang === 'es' ? 'candidata(s) disponible(s) y' : 'candidate(s) available and'; ?>
+                <strong>0 <?php echo $displaylang === 'es' ? 'preguntas nuevas requeridas' : 'new questions required'; ?>.</strong></p>
+        <?php endforeach; ?>
     </section>
     <?php endif; ?>
     <?php if ($usagefilter === 'exam_project_pending' && array_sum($projectshortagebydomain) > 0): ?>

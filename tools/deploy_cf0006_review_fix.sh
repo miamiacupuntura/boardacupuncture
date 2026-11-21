@@ -12,6 +12,7 @@ RELATIVE_FILES=(
     "blocks/myprogress/herbology-question-overrides.php"
     "blocks/menu/herbology-board.php"
     "blocks/menu/herbology-domain-candidates.json"
+    "blocks/myprogress/dui-yao-smart-data.json"
 )
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
@@ -88,14 +89,21 @@ QUESTION_BANK_SOURCE="$TEMP_DIR/${RELATIVE_FILES[0]}"
 OVERRIDES_SOURCE="$TEMP_DIR/${RELATIVE_FILES[1]}"
 HERBOLOGY_BOARD_SOURCE="$TEMP_DIR/${RELATIVE_FILES[2]}"
 SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[3]}"
+DUI_YAO_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[4]}"
 php -l "$QUESTION_BANK_SOURCE" >/dev/null
 php -l "$OVERRIDES_SOURCE" >/dev/null
 php -l "$HERBOLOGY_BOARD_SOURCE" >/dev/null
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$SOURCE_DATA"
+php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (count($data["pairs"] ?? []) < 32) { exit(1); }' "$DUI_YAO_SOURCE_DATA"
 grep -Fq "ncbahm-mock-editor-4.5" "$QUESTION_BANK_SOURCE"
 grep -Fq "sourceFeedbackMissing" "$QUESTION_BANK_SOURCE"
 grep -Fq '$exam5canonicalrepairs' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Exam 5 canonical comparison repair' "$QUESTION_BANK_SOURCE"
+grep -Fq '$duiyaosupplementpath' "$QUESTION_BANK_SOURCE"
+grep -Fq "'DY-REV-'" "$QUESTION_BANK_SOURCE"
+grep -Fq 'verified-dui-yao-reverse-v1' "$QUESTION_BANK_SOURCE"
+grep -Fq "\$usagefilter !== 'exam_project_pending'" "$QUESTION_BANK_SOURCE"
+grep -Fq '0 new questions required' "$QUESTION_BANK_SOURCE"
 for exam5_repair_id in \
     CF-0272 CF-0198 CF-1610 CF-0255 CF-0254 SCORM-FD-4789860650F9 \
     CF-0081 CF-0308 CF-0131 SCORM-FD-2D05A263601F CF-0180 CF-0265 \
@@ -270,10 +278,12 @@ cmp -s "$QUESTION_BANK_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[0]}"
 cmp -s "$OVERRIDES_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[1]}"
 cmp -s "$HERBOLOGY_BOARD_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[2]}"
 cmp -s "$SOURCE_DATA" "$MOODLE_ROOT/${RELATIVE_FILES[3]}"
+cmp -s "$DUI_YAO_SOURCE_DATA" "$MOODLE_ROOT/${RELATIVE_FILES[4]}"
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[0]}" >/dev/null
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[1]}" >/dev/null
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[2]}" >/dev/null
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$MOODLE_ROOT/${RELATIVE_FILES[3]}"
+php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (count($data["pairs"] ?? []) < 32) { exit(1); }' "$MOODLE_ROOT/${RELATIVE_FILES[4]}"
 
 CF0126_OVERRIDE_RESULT="No había una instalación Moodle disponible para revisar la copia guardada de CF-0126."
 if [[ -f "$MOODLE_ROOT/config.php" ]]; then
@@ -418,6 +428,9 @@ echo "OK: CF-0006 ya no contiene None of above ni su equivalente en español."
 echo "OK: CF-0006 incluye feedback completo para A, B, C y D en ambos idiomas."
 echo "OK: la revisión automática fuerza una segunda comprobación cuando falta feedback o existe una respuesta combinada prohibida."
 echo "OK: las 16 candidatas únicas reportadas de Exam 5 tienen cuatro opciones independientes, respuesta única y feedback completo."
+echo "OK: Exam 5 recibe 18 candidatas Duì Yào nuevas y verificadas, sin reutilizar preguntas publicadas en exámenes anteriores."
+echo "OK: la cola del examen muestra 18 posiciones pendientes, 18 candidatas disponibles y 0 preguntas nuevas requeridas."
+echo "OK: los borradores globales ajenos al examen activo no se mezclan con su cola de revisión."
 echo "OK: las preguntas originales listas muestran Aprobar y publicar también desde la búsqueda general."
 echo "OK: una solicitud de hierbas visibles bloquea la publicación hasta que aparezcan en el enunciado o las opciones."
 echo "OK: una pregunta similar puede excluirse solo del examen actual y se busca un reemplazo del mismo dominio."
