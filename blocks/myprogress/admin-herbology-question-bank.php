@@ -1588,6 +1588,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'movebankquestion')
     $currentposition = max(1, optional_param('currentposition', 1, PARAM_INT));
     $bankcount = max(1, min(100000, required_param('bankcount', PARAM_INT)));
     $moveaction = optional_param('moveaction', 'position', PARAM_ALPHA);
+    $returnusage = optional_param('returnusage', 'all', PARAM_ALPHANUMEXT);
+    $returnexamproject = optional_param('returnexamproject', '', PARAM_ALPHANUMEXT);
     if ($findquestion($basebank, $questionid) === null) {
         throw new invalid_parameter_exception('Unknown Herbology question ID.');
     }
@@ -1636,6 +1638,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'movebankquestion')
         $store['questions'][$questionid] = $record;
         return $store;
     });
+    $returntopendingexam = $returnusage === 'exam_project_pending'
+        && $returnexamproject !== ''
+        && is_array($revisionstore['examProjects'][$returnexamproject] ?? null)
+        && (string)($revisionstore['examProjects'][$returnexamproject]['status'] ?? 'draft') !== 'published';
+    if ($returntopendingexam) {
+        $moveredirect = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+            'usage' => 'exam_project_pending',
+            'examproject' => $returnexamproject,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ]));
+        $moveredirect->set_anchor('pending-questions');
+        redirect(
+            $moveredirect,
+            $moveaction === 'restore'
+                ? ($displaylang === 'es'
+                    ? 'Se restauró la prioridad normal y se recargó la cola del examen.'
+                    : 'Normal priority was restored and the exam queue was refreshed.')
+                : ($displaylang === 'es'
+                    ? 'Pregunta aplazada en el banco. Se recargó la cola para mostrar otra candidata.'
+                    : 'Question deferred in the bank. The queue was refreshed to show another candidate.'),
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
     $bankpage = $moveaction === 'restore' ? 0 : (int)floor(($requestedposition - 1) / 50);
     $moveredirect = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
         'page' => $bankpage > 0 ? $bankpage : null,
@@ -8534,9 +8560,9 @@ usort($filteredquestions, static function(array $left, array $right) use (
         : strnatcasecmp((string)($left['questionId'] ?? ''), (string)($right['questionId'] ?? ''));
 });
 
-// Manual bank placement is deliberately separate from exam order. It is only
-// applied to the complete, unfiltered inventory so an administrator can move a
-// weak card lower, reveal other candidates, and later restore the normal order.
+// Manual bank placement is deliberately separate from exam order. The global
+// position lookup is also available inside filtered and exam-review views so
+// the administrator can defer a weak candidate without leaving the queue.
 $bankmanualorderactive = $query === ''
     && $domainfilter === 'all'
     && $readinessfilter === 'all'
@@ -8546,9 +8572,9 @@ $bankmanualorderactive = $query === ''
     && $contentfilter === 'all'
     && $reviewfilter === 'all'
     && $custompreviewids === [];
-if ($bankmanualorderactive) {
+$applymanualbankmoves = static function(array $questions): array {
     $manualbankmoves = [];
-    foreach ($filteredquestions as $bankquestion) {
+    foreach ($questions as $bankquestion) {
         $manualposition = (int)($bankquestion['_revision']['bankPosition'] ?? 0);
         if ($manualposition < 1) {
             continue;
@@ -8567,7 +8593,7 @@ if ($bankmanualorderactive) {
     });
     foreach ($manualbankmoves as $manualbankmove) {
         $currentindex = null;
-        foreach ($filteredquestions as $candidateindex => $candidatequestion) {
+        foreach ($questions as $candidateindex => $candidatequestion) {
             if ((string)$candidatequestion['questionId'] === (string)$manualbankmove['questionId']) {
                 $currentindex = $candidateindex;
                 break;
@@ -8576,22 +8602,51 @@ if ($bankmanualorderactive) {
         if ($currentindex === null) {
             continue;
         }
-        $movedquestion = $filteredquestions[$currentindex];
-        array_splice($filteredquestions, $currentindex, 1);
+        $movedquestion = $questions[$currentindex];
+        array_splice($questions, $currentindex, 1);
         $targetindex = min(
-            count($filteredquestions),
+            count($questions),
             max(0, (int)$manualbankmove['position'] - 1)
         );
-        array_splice($filteredquestions, $targetindex, 0, [$movedquestion]);
+        array_splice($questions, $targetindex, 0, [$movedquestion]);
     }
+    return $questions;
+};
+if ($bankmanualorderactive) {
+    $filteredquestions = $applymanualbankmoves($filteredquestions);
 }
 
 $resultcount = count($filteredquestions);
+$bankinventoryquestions = $bankmanualorderactive
+    ? $filteredquestions
+    : array_values(array_filter($allquestions, static function(array $question): bool {
+        return !in_array(
+            (string)($question['_revision']['status'] ?? ''),
+            ['study_archive', 'deleted'],
+            true
+        );
+    }));
+if (!$bankmanualorderactive) {
+    usort($bankinventoryquestions, static function(array $left, array $right) use ($domains): int {
+        $leftpublishedcustom = ($left['_sourcekind'] ?? '') === 'admin'
+            && ($left['_revision']['status'] ?? '') === 'approved';
+        $rightpublishedcustom = ($right['_sourcekind'] ?? '') === 'admin'
+            && ($right['_revision']['status'] ?? '') === 'approved';
+        if ($leftpublishedcustom !== $rightpublishedcustom) {
+            return $leftpublishedcustom <=> $rightpublishedcustom;
+        }
+        $domaincomparison = $domains[$left['_domainid']]['number']
+            <=> $domains[$right['_domainid']]['number'];
+        return $domaincomparison !== 0
+            ? $domaincomparison
+            : strnatcasecmp((string)($left['questionId'] ?? ''), (string)($right['questionId'] ?? ''));
+    });
+    $bankinventoryquestions = $applymanualbankmoves($bankinventoryquestions);
+}
+$bankinventorycount = count($bankinventoryquestions);
 $bankdisplaypositions = [];
-if ($bankmanualorderactive) {
-    foreach ($filteredquestions as $bankindex => $bankquestion) {
-        $bankdisplaypositions[(string)$bankquestion['questionId']] = $bankindex + 1;
-    }
+foreach ($bankinventoryquestions as $bankindex => $bankquestion) {
+    $bankdisplaypositions[(string)$bankquestion['questionId']] = $bankindex + 1;
 }
 $inventorysnapshot['resultCount'] = $resultcount;
 $inventorysnapshot['resultText'] = $displaylang === 'es'
@@ -10164,7 +10219,7 @@ echo $OUTPUT->header();
             <?php if ($iscustomdraft): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta ahora?' : 'Approve and publish this question now?'; ?>');"<?php endif; ?>><?php echo $customcanpublish ? ($displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish') : s($custompublishblocker); ?></button></form><?php endif; ?>
             <?php if ($pendingexamprojecturl !== null && ($usagefilter !== 'exam_project_pending' || $query !== '')): ?><a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo '← ' . s((string)$pendingexamproject['name']) . ($displaylang === 'es' ? ' · revisión pendiente' : ' pending review'); ?></a><?php endif; ?>
             <?php if ($query !== '' && !$inlineapproval && $pendingexamprojecturl === null): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
-            <?php if ($bankmanualorderactive && $bankcardposition > 0 && !$inlineapproval): ?><details class="question-bank__bank-move"><summary class="question-bank__button"><?php echo $displaylang === 'es' ? 'Mover / aplazar' : 'Move / defer'; ?></summary><div class="question-bank__bank-move-panel"><strong><?php echo ($displaylang === 'es' ? 'Posición actual en el banco: ' : 'Current bank position: ') . (int)$bankcardposition . ' / ' . (int)$resultcount; ?></strong><p><?php echo $displaylang === 'es' ? 'Cambie la posición o aplácela al final para mostrar otras candidatas primero. Esto no modifica ningún examen.' : 'Choose a position or defer it to the end so other candidates appear first. This does not change any exam.'; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="movebankquestion"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="currentposition" value="<?php echo (int)$bankcardposition; ?>"><input type="hidden" name="bankcount" value="<?php echo (int)$resultcount; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><label><span><?php echo $displaylang === 'es' ? 'Nueva posición' : 'New position'; ?></span><input type="number" name="position" min="1" max="<?php echo (int)$resultcount; ?>" value="<?php echo (int)$bankcardposition; ?>" required></label><button class="question-bank__button question-bank__button--primary" type="submit" name="moveaction" value="position"><?php echo $displaylang === 'es' ? 'Mover' : 'Move'; ?></button><button class="question-bank__button question-bank__button--publish" type="submit" name="moveaction" value="end"><?php echo $displaylang === 'es' ? 'Aplazar al final' : 'Defer to end'; ?></button><?php if ($bankpositionwaschanged): ?><button class="question-bank__button" type="submit" name="moveaction" value="restore"><?php echo $displaylang === 'es' ? 'Restaurar orden normal' : 'Restore normal order'; ?></button><?php endif; ?></form></div></details><?php endif; ?>
+            <?php if ($bankcardposition > 0 && !$inlineapproval): ?><details class="question-bank__bank-move"><summary class="question-bank__button"><?php echo $displaylang === 'es' ? 'Mover / aplazar' : 'Move / defer'; ?></summary><div class="question-bank__bank-move-panel"><strong><?php echo ($displaylang === 'es' ? 'Posición actual en el banco: ' : 'Current bank position: ') . (int)$bankcardposition . ' / ' . (int)$bankinventorycount; ?></strong><p><?php echo $displaylang === 'es' ? 'Cambie la posición o aplácela al final para mostrar otras candidatas primero. Esto no modifica ningún examen.' : 'Choose a position or defer it to the end so other candidates appear first. This does not change any exam.'; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="movebankquestion"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="currentposition" value="<?php echo (int)$bankcardposition; ?>"><input type="hidden" name="bankcount" value="<?php echo (int)$bankinventorycount; ?>"><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnexamproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><label><span><?php echo $displaylang === 'es' ? 'Nueva posición' : 'New position'; ?></span><input type="number" name="position" min="1" max="<?php echo (int)$bankinventorycount; ?>" value="<?php echo (int)$bankcardposition; ?>" required></label><button class="question-bank__button question-bank__button--primary" type="submit" name="moveaction" value="position"><?php echo $displaylang === 'es' ? 'Mover' : 'Move'; ?></button><button class="question-bank__button question-bank__button--publish" type="submit" name="moveaction" value="end"><?php echo $displaylang === 'es' ? 'Aplazar al final' : 'Defer to end'; ?></button><?php if ($bankpositionwaschanged): ?><button class="question-bank__button" type="submit" name="moveaction" value="restore"><?php echo $displaylang === 'es' ? 'Restaurar orden normal' : 'Restore normal order'; ?></button><?php endif; ?></form></div></details><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter !== 'exam_project_pending' && !$inlineapproval && !$question['_excluded'] && $question['_ready'] && ($questioninexamproject || !$questionusedinpriorexam)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
             <?php if ($isapprovedreservecandidate): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="add"><input type="hidden" name="returnexamview" value="candidates"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo ($displaylang === 'es' ? 'Publicar en ' : 'Publish to ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter === 'exam_project_pending' && isset($examprojectpositions[(string)$question['questionId']]) && (string)($currentexamproject['status'] ?? 'draft') !== 'published'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="excludeexamcandidate"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm(<?php echo s(json_encode($excludeexamconfirm, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); ?>);"><?php echo ($displaylang === 'es' ? 'Excluir de ' : 'Exclude from ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
