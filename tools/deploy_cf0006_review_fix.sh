@@ -126,7 +126,7 @@ grep -Fq "\$usagefilter !== 'exam_project_pending'" "$QUESTION_BANK_SOURCE"
 grep -Fq 'new questions required' "$QUESTION_BANK_SOURCE"
 for exam5_repair_id in \
     CF-0272 CF-0198 CF-1610 CF-0255 CF-0254 SCORM-FD-4789860650F9 \
-    CF-0081 CF-0308 CF-0131 SCORM-FD-2D05A263601F CF-0180 CF-0265 \
+    CF-0081 CF-0308 CF-0131 CF-0217 SCORM-FD-2D05A263601F CF-0180 CF-0265 \
     SCORM-FD-994D5293B6F4 SCORM-FD-041FEA2DAAA7 CF-0202 CF-0034; do
     grep -Fq "'$exam5_repair_id' =>" "$QUESTION_BANK_SOURCE"
 done
@@ -248,7 +248,7 @@ if (!is_array($found) || trim((string)($found["explanation"] ?? "")) === ""
 php -r '
 $data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
 $required=[
-    "CF-0127"=>"D", "CF-0213"=>"C", "CF-0227"=>"D", "CF-0230"=>"C",
+    "CF-0127"=>"D", "CF-0213"=>"C", "CF-0217"=>"A", "CF-0227"=>"D", "CF-0230"=>"C",
     "CF-0280"=>"C", "CF-0305"=>"C", "CF-1582"=>"B",
 ];
 $found=[];
@@ -535,6 +535,8 @@ echo "OK: FD-012 contiene versiones completas y separadas en inglés y español.
 echo "OK: CF-0127, CF-0213, CF-0227, CF-0230, CF-0280, CF-0305 y CF-1582 tienen cuatro opciones independientes, una sola respuesta defendible y feedback A-D."
 echo "OK: SCORM-FD-5917E7491258 usa la comparación corregida de Yue Ju Wan y Liang Fu Wan."
 echo "OK: CF-1582 ahora evalúa Gui Zhi Tang frente a tres fórmulas y muestra los ingredientes de cada opción."
+echo "OK: CF-0217 usa cuatro fórmulas independientes, una sola respuesta correcta y explicación completa; Both/None desaparecen."
+echo "OK: las candidatas con respuestas combinadas prohibidas se omiten de la cola del examen hasta que sean corregidas."
 echo "OK: cada tarjeta del inventario completo muestra Mover / aplazar sin cambiar la posición de ningún examen."
 echo "OK: una pregunta puede moverse a una posición concreta, aplazarse al final o restaurar su orden normal."
 echo "OK: las preguntas aplazadas permanecen localizables y bajan de prioridad para que aparezcan mejores candidatas primero."

@@ -428,6 +428,29 @@ $exam5canonicalrepairs = [
         'correctLabel' => 'D',
         'explanation' => 'Inference step 1: Wheezing with Lung Heat and impaired descent favors Ma Xing Shi Gan Tang. Inference step 2: The four great signs of blazing Yang Ming Qi-level Heat favor Bai Hu Tang. Option A: Incorrect; it reverses the formulas. Option B: Incorrect; it assigns unrelated actions. Option C: Incorrect; a shared ingredient does not make the formulas interchangeable. Option D: Correct.',
     ],
+    'CF-0217' => [
+        'prompt' => 'A patient has high fever, intense thirst, profuse sweating, and a large, forceful pulse without predominant joint pain or stiffness. Which formula most directly matches this presentation?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Bai Hu Tang (White Tiger Decoction), for blazing Yang Ming Qi-level Heat.'],
+            ['label' => 'B', 'text' => 'Gui Zhi Shao Yao Zhi Mu Tang (Cinnamon Twig, Peony, and Anemarrhena Decoction), for chronic Wind-Cold-Damp painful obstruction with joint symptoms.'],
+            ['label' => 'C', 'text' => 'Ma Xing Shi Gan Tang (Ephedra, Apricot Kernel, Gypsum, and Licorice Decoction), for Lung Heat with wheezing and impaired Qi descent.'],
+            ['label' => 'D', 'text' => 'Qing Hao Bie Jia Tang (Sweet Wormwood and Soft-shelled Turtle Shell Decoction), for hidden deficiency Heat that worsens at night.'],
+        ],
+        'correctLabel' => 'A',
+        'explanation' => 'Inference step 1: High fever, intense thirst, profuse sweating, and a large, forceful pulse identify blazing Yang Ming Qi-level Heat. Inference step 2: The absence of a predominant joint disorder separates this presentation from painful-obstruction formulas. Option A: Correct. Bai Hu Tang directly clears blazing Qi-level Heat and generates fluids. Option B: Incorrect. Gui Zhi Shao Yao Zhi Mu Tang is selected for chronic painful obstruction with joint pain, swelling, stiffness, and a Wind-Cold-Damp mechanism rather than the four great signs alone. Option C: Incorrect. Ma Xing Shi Gan Tang targets Lung Heat with wheezing and impaired Lung Qi descent. Option D: Incorrect. Qing Hao Bie Jia Tang treats lingering hidden Heat from Yin and fluid injury, characteristically with fever that worsens at night.',
+        'translations' => [
+            'es' => [
+                'prompt' => 'Un paciente presenta fiebre alta, sed intensa, sudoración profusa y pulso grande y fuerte, sin predominio de dolor ni rigidez articular. ¿Qué fórmula corresponde más directamente a esta presentación?',
+                'options' => [
+                    ['label' => 'A', 'text' => 'Bai Hu Tang (Decocción del Tigre Blanco), para Calor intenso en el nivel Qi de Yang Ming.'],
+                    ['label' => 'B', 'text' => 'Gui Zhi Shao Yao Zhi Mu Tang (Decocción de Ramita de Canela, Peonía y Anemarrhena), para obstrucción dolorosa crónica por Viento-Frío-Humedad con síntomas articulares.'],
+                    ['label' => 'C', 'text' => 'Ma Xing Shi Gan Tang (Decocción de Efedra, Semilla de Albaricoque, Yeso y Regaliz), para Calor de Pulmón con sibilancias y descenso alterado del Qi.'],
+                    ['label' => 'D', 'text' => 'Qing Hao Bie Jia Tang (Decocción de Artemisia Dulce y Caparazón de Tortuga), para Calor oculto por deficiencia que empeora por la noche.'],
+                ],
+                'explanation' => 'Paso de inferencia 1: La fiebre alta, la sed intensa, la sudoración profusa y el pulso grande y fuerte identifican Calor intenso en el nivel Qi de Yang Ming. Paso de inferencia 2: La ausencia de un trastorno articular predominante separa esta presentación de las fórmulas para obstrucción dolorosa. Opción A: Correcta. Bai Hu Tang elimina directamente el Calor intenso del nivel Qi y genera líquidos. Opción B: Incorrecta. Gui Zhi Shao Yao Zhi Mu Tang se selecciona para obstrucción dolorosa crónica con dolor, hinchazón y rigidez articulares por un mecanismo de Viento-Frío-Humedad. Opción C: Incorrecta. Ma Xing Shi Gan Tang trata Calor de Pulmón con sibilancias y descenso alterado del Qi de Pulmón. Opción D: Incorrecta. Qing Hao Bie Jia Tang trata Calor oculto persistente por lesión de Yin y líquidos, característicamente con fiebre que empeora por la noche.',
+            ],
+        ],
+    ],
     'SCORM-FD-2D05A263601F' => [
         'prompt' => 'A 25-year-old patient has severe toothache, swollen painful gums aggravated by spicy food, intense thirst, foul breath, constipation, dark urine, a red tongue with yellow coating, and a slippery-rapid pulse. Which listed formula best matches the interior Heat with bowel accumulation?',
         'options' => [
@@ -518,9 +541,11 @@ foreach ($bank['domains'] as &$exam5domainquestions) {
         }
         // The imported Spanish snapshot still belongs to the obsolete source
         // item and may contain Both/None shortcuts even though the reviewed
-        // English card no longer does. Do not let hidden stale choices block
-        // publication; a fresh translation can be generated from this repair.
-        if (isset($exam5question['translations']['es'])) {
+        // English card no longer does. Keep only a translation supplied and
+        // reviewed together with the canonical repair.
+        if (is_array($exam5repair['translations']['es'] ?? null)) {
+            $exam5question['translations'] = $exam5repair['translations'];
+        } else if (isset($exam5question['translations']['es'])) {
             unset($exam5question['translations']['es']);
         }
         $exam5question['feedbackStatus'] = 'practice-ready';
@@ -1068,7 +1093,7 @@ if (is_array($fuzirouguirecord)
     $revisionstore = block_myprogress_herbology_override_load();
 }
 $reviewedcanonicalids = [
-    'CF-0127', 'CF-0213', 'CF-0227', 'CF-0230', 'CF-0280', 'CF-0305', 'CF-1582',
+    'CF-0127', 'CF-0213', 'CF-0217', 'CF-0227', 'CF-0230', 'CF-0280', 'CF-0305', 'CF-1582',
     'SCORM-FD-5917E7491258',
 ];
 $reviewedcanonicalquestions = [];
@@ -3695,7 +3720,16 @@ if (is_array($currentexamproject)) {
         $hasreviewablecontent = trim((string)($projectquestion['prompt'] ?? '')) !== ''
             && count((array)($projectquestion['options'] ?? [])) === 4
             && trim((string)($projectquestion['correctLabel'] ?? '')) !== '';
+        $projectprohibitedanswer = $findprohibitedanswerchoice(
+            (array)($projectquestion['options'] ?? [])
+        );
+        if ($projectprohibitedanswer === null) {
+            $projectprohibitedanswer = $findprohibitedanswerchoice(
+                (array)($projectquestion['translations']['es']['options'] ?? [])
+            );
+        }
         if (!$hasreviewablecontent
+                || $projectprohibitedanswer !== null
                 || $projectquestion['_excluded']
                 || isset($currentprojectapprovedlookup[$projectquestionid])
                 || isset($projectexcludedlookup[$projectquestionid])

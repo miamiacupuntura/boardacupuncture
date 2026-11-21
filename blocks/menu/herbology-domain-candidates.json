@@ -9771,7 +9771,7 @@
       {
         "questionId": "CF-0217",
         "questionTrack": "board",
-        "criteriaVersion": "1.0-draft",
+        "criteriaVersion": "2026-reviewed-independent-distractors-v1",
         "itemFormat": "multiple-choice",
         "feedbackStatus": "practice-ready",
         "examId": "chinese-herbal-medicine",
@@ -9790,27 +9790,27 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "Both Bai Hu Tang (White Tiger Decoction) and Gui Zhi Shao Yao Zhi Mu Tang (Cinnamon Twig, Peony, and Anemarrhena Decoction) have heat signs, what is the difference?",
+        "prompt": "A patient has high fever, intense thirst, profuse sweating, and a large, forceful pulse without predominant joint pain or stiffness. Which formula most directly matches this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Bai Hu Tang (White Tiger Decoction) is indicated for hot painful obstruction with symptoms of systemic heat, such as high fever, intensive thirst, etc."
+            "text": "Bai Hu Tang (White Tiger Decoction), for blazing Yang Ming Qi-level Heat."
           },
           {
             "label": "B",
-            "text": "Gui Zhi Shao Yao Zhi Mu Tang (Cinnamon Twig, Peony, and Anemarrhena Decoction) is indicated for damp painful obstruction that has transformed into systemic heat marked by only localized swollen joints that are warm to touch."
+            "text": "Gui Zhi Shao Yao Zhi Mu Tang (Cinnamon Twig, Peony, and Anemarrhena Decoction), for chronic Wind-Cold-Damp painful obstruction with joint symptoms."
           },
           {
             "label": "C",
-            "text": "Both of them"
+            "text": "Ma Xing Shi Gan Tang (Ephedra, Apricot Kernel, Gypsum, and Licorice Decoction), for Lung Heat with wheezing and impaired Qi descent."
           },
           {
             "label": "D",
-            "text": "None of them"
+            "text": "Qing Hao Bie Jia Tang (Sweet Wormwood and Soft-shelled Turtle Shell Decoction), for hidden deficiency Heat that worsens at night."
           }
         ],
-        "correctLabel": "C",
-        "explanation": "",
+        "correctLabel": "A",
+        "explanation": "Inference step 1: High fever, intense thirst, profuse sweating, and a large, forceful pulse identify blazing Yang Ming Qi-level Heat. Inference step 2: The absence of a predominant joint disorder separates this presentation from painful-obstruction formulas. Option A: Correct. Bai Hu Tang directly clears blazing Qi-level Heat and generates fluids. Option B: Incorrect. Gui Zhi Shao Yao Zhi Mu Tang is selected for chronic painful obstruction with joint pain, swelling, stiffness, and a Wind-Cold-Damp mechanism rather than the four great signs alone. Option C: Incorrect. Ma Xing Shi Gan Tang targets Lung Heat with wheezing and impaired Lung Qi descent. Option D: Incorrect. Qing Hao Bie Jia Tang treats lingering hidden Heat from Yin and fluid injury, characteristically with fever that worsens at night.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
@@ -9824,26 +9824,26 @@
         },
         "translations": {
           "es": {
-            "prompt": "Tanto Bai Hu Tang (White Tiger Decoction) como Gui Zhi Shao Yao Zhi Mu Tang (Cinnamon Twig, Peony, and Anemarrhena Decoction) tienen señales de calor. ¿Cuál es la diferencia?",
+            "prompt": "Un paciente presenta fiebre alta, sed intensa, sudoración profusa y pulso grande y fuerte, sin predominio de dolor ni rigidez articular. ¿Qué fórmula corresponde más directamente a esta presentación?",
             "options": [
               {
                 "label": "A",
-                "text": "Bai Hu Tang (White Tiger Decoction) se indica para la obstrucción dolorosa caliente con síntomas de calor sistémico, como fiebre alta, sed intensiva, etc."
+                "text": "Bai Hu Tang (Decocción del Tigre Blanco), para Calor intenso en el nivel Qi de Yang Ming."
               },
               {
                 "label": "B",
-                "text": "Gui Zhi Shao Yao Zhi Mu Tang (Cinnamon Twig, Peony, and Anemarrhena Decoction) se indica para la obstrucción dolorosa húmedo que se ha transformado en calor sistémico marcado por sólo articulaciones hinchadas localizadas que son calientes para tocar."
+                "text": "Gui Zhi Shao Yao Zhi Mu Tang (Decocción de Ramita de Canela, Peonía y Anemarrhena), para obstrucción dolorosa crónica por Viento-Frío-Humedad con síntomas articulares."
               },
               {
                 "label": "C",
-                "text": "Ambos."
+                "text": "Ma Xing Shi Gan Tang (Decocción de Efedra, Semilla de Albaricoque, Yeso y Regaliz), para Calor de Pulmón con sibilancias y descenso alterado del Qi."
               },
               {
                 "label": "D",
-                "text": "Ninguno de ellos"
+                "text": "Qing Hao Bie Jia Tang (Decocción de Artemisia Dulce y Caparazón de Tortuga), para Calor oculto por deficiencia que empeora por la noche."
               }
             ],
-            "explanation": ""
+            "explanation": "Paso de inferencia 1: La fiebre alta, la sed intensa, la sudoración profusa y el pulso grande y fuerte identifican Calor intenso en el nivel Qi de Yang Ming. Paso de inferencia 2: La ausencia de un trastorno articular predominante separa esta presentación de las fórmulas para obstrucción dolorosa. Opción A: Correcta. Bai Hu Tang elimina directamente el Calor intenso del nivel Qi y genera líquidos. Opción B: Incorrecta. Gui Zhi Shao Yao Zhi Mu Tang se selecciona para obstrucción dolorosa crónica con dolor, hinchazón y rigidez articulares por un mecanismo de Viento-Frío-Humedad. Opción C: Incorrecta. Ma Xing Shi Gan Tang trata Calor de Pulmón con sibilancias y descenso alterado del Qi de Pulmón. Opción D: Incorrecta. Qing Hao Bie Jia Tang trata Calor oculto persistente por lesión de Yin y líquidos, característicamente con fiebre que empeora por la noche."
           }
         },
         "nomenclature": {
@@ -9856,6 +9856,14 @@
             {
               "pinyin": "Gui Zhi Shao Yao Zhi Mu Tang",
               "englishName": "Cinnamon Twig, Peony, and Anemarrhena Decoction"
+            },
+            {
+              "pinyin": "Ma Xing Shi Gan Tang",
+              "englishName": "Ephedra, Apricot Kernel, Gypsum, and Licorice Decoction"
+            },
+            {
+              "pinyin": "Qing Hao Bie Jia Tang",
+              "englishName": "Sweet Wormwood and Soft-shelled Turtle Shell Decoction"
             }
           ],
           "feedback": {
@@ -9868,6 +9876,14 @@
               {
                 "pinyin": "Gui Zhi Shao Yao Zhi Mu Tang",
                 "englishName": "Cinnamon Twig, Peony, and Anemarrhena Decoction"
+              },
+              {
+                "pinyin": "Ma Xing Shi Gan Tang",
+                "englishName": "Ephedra, Apricot Kernel, Gypsum, and Licorice Decoction"
+              },
+              {
+                "pinyin": "Qing Hao Bie Jia Tang",
+                "englishName": "Sweet Wormwood and Soft-shelled Turtle Shell Decoction"
               }
             ]
           }
