@@ -80,6 +80,12 @@ if ($newquestiontargetdomain !== '' && !isset($domains[$newquestiontargetdomain]
     $newquestiontargetexam = '';
     $newquestionneededcount = 0;
 }
+if ($newquestionneededcount === 0) {
+    // A stale creation URL may still point at an exam after its shortage was
+    // filled. New questions then belong to the bank, not to the already-full
+    // exam, and the UI must not claim that zero questions are required.
+    $newquestiontargetexam = '';
+}
 if (!in_array($readinessfilter, ['all', 'ready', 'incomplete'], true)) {
     $readinessfilter = 'all';
 }
@@ -723,7 +729,7 @@ $scopequestionformatrepairids = [];
 foreach ((array)($revisionstore['customQuestions'] ?? []) as $scopequestionid => $scopequestionrecord) {
     if (!is_array($scopequestionrecord)
             || (string)($scopequestionrecord['status'] ?? 'draft') !== 'draft'
-            || !empty($scopequestionrecord['scopeQuestionFormatRepairedAt'])
+            || !empty($scopequestionrecord['scopeQuestionFormatRepairedV2At'])
             || !is_array($scopequestionrecord['draft'] ?? null)) {
         continue;
     }
@@ -736,7 +742,9 @@ foreach ((array)($revisionstore['customQuestions'] ?? []) as $scopequestionid =>
             && core_text::strpos($scopedrafttext, 'zi wan') !== false
             && core_text::strpos($scopedrafttext, 'kuan dong hua') !== false);
     $hasanswerreasoning = core_text::strpos($scopedrafttext, 'source-supported modification') !== false
-        || core_text::strpos($scopedrafttext, 'modificacion respaldada') !== false;
+        || core_text::strpos($scopedrafttext, 'modificacion respaldada') !== false
+        || core_text::strpos($scopedrafttext, 'for both the complete presentation') !== false
+        || core_text::strpos($scopedrafttext, 'tanto para la presentacion completa') !== false;
     if ($isziwankuandonghua && $hasanswerreasoning) {
         $scopequestionformatrepairids[] = (string)$scopequestionid;
     }
@@ -761,8 +769,8 @@ if ($scopequestionformatrepairids !== []) {
             $draft['options'] = [
                 ['label' => 'A', 'text' => 'Shè Gān Má Huáng Tāng for the complete presentation; Zǐ Wǎn + Kuǎn Dōng Huā for the focused objective.'],
                 ['label' => 'B', 'text' => 'Zǐ Wǎn + Kuǎn Dōng Huā for the complete presentation; Shè Gān Má Huáng Tāng for the focused objective.'],
-                ['label' => 'C', 'text' => 'Zǐ Wǎn + Kuǎn Dōng Huā for both the complete presentation and the focused objective.'],
-                ['label' => 'D', 'text' => 'Shè Gān Má Huáng Tāng for both the complete presentation and the focused objective.'],
+                ['label' => 'C', 'text' => 'Treat Zǐ Wǎn + Kuǎn Dōng Huā as a commercial patent equivalent of Shè Gān Má Huáng Tāng.'],
+                ['label' => 'D', 'text' => 'Replace Shè Gān Má Huáng Tāng automatically whenever Zǐ Wǎn + Kuǎn Dōng Huā appears.'],
             ];
             $draft['correctLabel'] = 'A';
             $draft['explanation'] = 'Inference step 1: Shè Gān Má Huáng Tāng represents the complete formula-level strategy, while Zǐ Wǎn + Kuǎn Dōng Huā provides the focused compatibility action of moistening the Lung, descending Qi, transforming Phlegm, and stopping cough. Inference step 2: The full presentation calls for the complete formula; the focused objective may use the pair as a core pair, supported modification, or brief prescription, but not as an automatic equivalent of the formula. Option A: Correct. It assigns each intervention to its supported therapeutic level. Option B: Incorrect. It reverses the complete and focused levels. Option C: Incorrect. The pair does not reproduce the complete formula architecture. Option D: Incorrect. The formula is not automatically required when only the pair’s focused objective is intended.';
@@ -771,8 +779,8 @@ if ($scopequestionformatrepairids !== []) {
                 'options' => [
                     ['label' => 'A', 'text' => 'Shè Gān Má Huáng Tāng para la presentación completa; Zǐ Wǎn + Kuǎn Dōng Huā para el objetivo focal.'],
                     ['label' => 'B', 'text' => 'Zǐ Wǎn + Kuǎn Dōng Huā para la presentación completa; Shè Gān Má Huáng Tāng para el objetivo focal.'],
-                    ['label' => 'C', 'text' => 'Zǐ Wǎn + Kuǎn Dōng Huā tanto para la presentación completa como para el objetivo focal.'],
-                    ['label' => 'D', 'text' => 'Shè Gān Má Huáng Tāng tanto para la presentación completa como para el objetivo focal.'],
+                    ['label' => 'C', 'text' => 'Tratar Zǐ Wǎn + Kuǎn Dōng Huā como equivalente patente comercial de Shè Gān Má Huáng Tāng.'],
+                    ['label' => 'D', 'text' => 'Sustituir automáticamente Shè Gān Má Huáng Tāng siempre que aparezca Zǐ Wǎn + Kuǎn Dōng Huā.'],
                 ],
                 'explanation' => 'Paso de inferencia 1: Shè Gān Má Huáng Tāng representa la estrategia completa de la fórmula, mientras que Zǐ Wǎn + Kuǎn Dōng Huā aporta la acción focal de compatibilidad de humedecer el Pulmón, hacer descender el Qi, transformar la Flema y detener la tos. Paso de inferencia 2: La presentación completa requiere la fórmula; el objetivo focal puede usar la pareja como núcleo, modificación respaldada o prescripción breve, pero no como equivalente automático de la fórmula. Opción A: Correcta. Asigna cada intervención a su nivel terapéutico respaldado. Opción B: Incorrecta. Invierte los niveles completo y focal. Opción C: Incorrecta. La pareja no reproduce la arquitectura completa de la fórmula. Opción D: Incorrecta. La fórmula no es obligatoria automáticamente cuando solo se busca el objetivo focal de la pareja.',
             ];
@@ -783,6 +791,7 @@ if ($scopequestionformatrepairids !== []) {
                 'checkedAt' => $savedat,
             ]);
             $record['scopeQuestionFormatRepairedAt'] = $savedat;
+            $record['scopeQuestionFormatRepairedV2At'] = $savedat;
             $record['savedAt'] = $savedat;
             $record['savedByName'] = 'Formula-versus-Duì-Yào question-format repair';
             $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
@@ -6258,11 +6267,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 'feedbackEn' => 'Incorrect. This reverses the therapeutic levels: the pair has the focused action, while the formula supplies the complete coordinated strategy.',
                 'feedbackEs' => 'Incorrecta. Invierte los niveles terapéuticos: la pareja tiene la acción focal y la fórmula aporta la estrategia coordinada completa.',
             ],
-            'pairall' => [
-                'en' => $pairplain . ' for both the complete presentation and the focused objective.',
-                'es' => $pairplain . ' tanto para la presentación completa como para el objetivo focal.',
-                'feedbackEn' => 'Incorrect. The pair is not an automatic equivalent of the complete classical formula.',
-                'feedbackEs' => 'Incorrecta. La pareja no es un equivalente automático de la fórmula clásica completa.',
+            'patent' => [
+                'en' => 'Treat ' . $pairplain . ' as a commercial patent equivalent of ' . $formulaen . '.',
+                'es' => 'Tratar ' . $pairplain . ' como equivalente patente comercial de ' . $formulaes . '.',
+                'feedbackEn' => 'Incorrect. A two-herb compatibility relationship does not become a commercial patent formula.',
+                'feedbackEs' => 'Incorrecta. Una relación de compatibilidad de dos hierbas no se convierte en fórmula patente comercial.',
             ],
             'correct' => [
                 'en' => $formulaen . ' for the complete presentation; ' . $pairplain . ' for the focused objective.',
@@ -6270,14 +6279,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 'feedbackEn' => 'Correct. It selects the complete formula for the full therapeutic architecture while limiting the pair to its documented narrow objective and supported uses.',
                 'feedbackEs' => 'Correcta. Selecciona la fórmula completa para la arquitectura terapéutica total y limita la pareja a su objetivo estrecho documentado y sus usos respaldados.',
             ],
-            'formulaall' => [
-                'en' => $formulaen . ' for both the complete presentation and the focused objective.',
-                'es' => $formulaes . ' tanto para la presentación completa como para el objetivo focal.',
-                'feedbackEn' => 'Incorrect. This ignores the pair’s documented narrow role as a core pair, supported modification, or brief prescription.',
-                'feedbackEs' => 'Incorrecta. Omite el papel estrecho documentado de la pareja como núcleo, modificación respaldada o prescripción breve.',
+            'automatic' => [
+                'en' => 'Replace ' . $formulaen . ' automatically whenever ' . $pairplain . ' appears.',
+                'es' => 'Sustituir automáticamente ' . $formulaes . ' siempre que aparezca ' . $pairplain . '.',
+                'feedbackEn' => 'Incorrect. Shared ingredients do not establish therapeutic equivalence, and the remaining formula architecture stays decisive.',
+                'feedbackEs' => 'Incorrecta. Compartir ingredientes no establece equivalencia terapéutica y la arquitectura restante de la fórmula sigue siendo decisiva.',
             ],
         ];
-        $order = ['reverse', 'pairall', 'formulaall'];
+        $order = ['reverse', 'patent', 'automatic'];
         $correctindex = $pairnumber % 4;
         array_splice($order, $correctindex, 0, [$correctkey]);
         $labels = ['A', 'B', 'C', 'D'];
@@ -10378,7 +10387,9 @@ echo $OUTPUT->header();
             : (string)($newquestionrecovery['idea'] ?? '');
     ?><section id="new-question" class="question-bank__new-question">
         <h3><?php echo $displaylang === 'es' ? 'Crear una o varias preguntas' : 'Create one or several questions'; ?></h3>
-        <?php if ($newquestiontargetdomain !== '' && isset($domains[$newquestiontargetdomain])): ?>
+        <?php if ($newquestiontargetdomain !== ''
+                && isset($domains[$newquestiontargetdomain])
+                && $newquestionneededcount > 0): ?>
             <div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Faltante del examen activo:' : 'Active-exam shortage:'; ?></strong>
                 <?php echo s((string)($currentexamproject['name'] ?? '')); ?> <?php echo $displaylang === 'es' ? 'necesita' : 'needs'; ?>
                 <?php echo (int)$newquestionneededcount; ?> <?php echo $displaylang === 'es' ? 'pregunta(s) nueva(s) de' : 'new question(s) from'; ?>
