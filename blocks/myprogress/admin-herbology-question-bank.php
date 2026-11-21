@@ -1265,6 +1265,145 @@ foreach ((array)($revisionstore['publishedExams'] ?? []) as $publishedexamrecord
         }
     }
 }
+$latestunassignedrecoveryexamid = '';
+$latestunassignedrecoveryproject = null;
+foreach ((array)($revisionstore['examProjects'] ?? []) as $recoveryexamid => $recoveryproject) {
+    if (!is_array($recoveryproject)
+            || (string)($recoveryproject['status'] ?? 'draft') === 'published'
+            || !empty($recoveryproject['latestUnassignedCustomRecoveryV1At'])) {
+        continue;
+    }
+    $recoverytargetcount = max(1, (int)($recoveryproject['targetCount'] ?? 100));
+    $recoveryquestionids = array_values(array_unique(array_filter(array_map(
+        'strval',
+        (array)($recoveryproject['questionIds'] ?? [])
+    ))));
+    if (count($recoveryquestionids) >= $recoverytargetcount) {
+        continue;
+    }
+    $latestunassignedrecoveryexamid = (string)($recoveryproject['id'] ?? $recoveryexamid);
+    $latestunassignedrecoveryproject = $recoveryproject;
+}
+if ($latestunassignedrecoveryexamid !== '' && is_array($latestunassignedrecoveryproject)) {
+    $recoverydomainbyquestionid = [];
+    foreach ((array)($bank['domains'] ?? []) as $recoverydomainid => $recoveryquestions) {
+        foreach ((array)$recoveryquestions as $recoveryquestion) {
+            $recoveryquestionid = (string)($recoveryquestion['questionId'] ?? '');
+            if ($recoveryquestionid !== '') {
+                $recoverydomainbyquestionid[$recoveryquestionid] = (string)$recoverydomainid;
+            }
+        }
+    }
+    foreach ((array)($revisionstore['customQuestions'] ?? []) as $recoveryquestionid => $recoveryrecord) {
+        if (is_array($recoveryrecord)) {
+            $recoverydomainbyquestionid[(string)$recoveryquestionid] = (string)($recoveryrecord['domainId'] ?? '');
+        }
+    }
+    $recoveryusedquestionids = $publishedquestionlookup;
+    foreach ((array)($revisionstore['examProjects'] ?? []) as $recoveryprojectid => $recoveryproject) {
+        foreach ((array)($recoveryproject['questionIds'] ?? []) as $recoveryquestionid) {
+            $recoveryusedquestionids[(string)$recoveryquestionid] = true;
+        }
+    }
+    $recoverytargetcount = max(1, (int)($latestunassignedrecoveryproject['targetCount'] ?? 100));
+    $recoveryweights = [
+        'formula_differentiation' => 28,
+        'single_herb' => 24,
+        'dui_yao' => 18,
+        'safety_dispensing' => 15,
+        'formula_composition' => 10,
+        'scope_aliases' => 5,
+    ];
+    $recoverydomaintargets = [];
+    $recoveryfractions = [];
+    $recoveryallocated = 0;
+    foreach ($recoveryweights as $recoverydomainid => $recoveryweight) {
+        $recoveryexact = $recoverytargetcount * $recoveryweight / 100;
+        $recoverydomaintargets[$recoverydomainid] = (int)floor($recoveryexact);
+        $recoveryfractions[$recoverydomainid] = $recoveryexact - floor($recoveryexact);
+        $recoveryallocated += $recoverydomaintargets[$recoverydomainid];
+    }
+    arsort($recoveryfractions);
+    foreach (array_keys($recoveryfractions) as $recoverydomainid) {
+        if ($recoveryallocated >= $recoverytargetcount) {
+            break;
+        }
+        $recoverydomaintargets[$recoverydomainid]++;
+        $recoveryallocated++;
+    }
+    $recoverydomaincounts = array_fill_keys(array_keys($recoveryweights), 0);
+    foreach ((array)($latestunassignedrecoveryproject['questionIds'] ?? []) as $recoveryquestionid) {
+        $recoverydomainid = (string)($recoverydomainbyquestionid[(string)$recoveryquestionid] ?? '');
+        if (isset($recoverydomaincounts[$recoverydomainid])) {
+            $recoverydomaincounts[$recoverydomainid]++;
+        }
+    }
+    $recoveryprojectcreatedat = (string)($latestunassignedrecoveryproject['createdAt'] ?? '');
+    $recoverycandidates = [];
+    foreach ((array)($revisionstore['customQuestions'] ?? []) as $recoveryquestionid => $recoveryrecord) {
+        if (!is_array($recoveryrecord)
+                || (string)($recoveryrecord['status'] ?? '') !== 'approved'
+                || !is_array($recoveryrecord['approved'] ?? null)
+                || (string)($recoveryrecord['targetExamProjectId'] ?? '') !== ''
+                || isset($recoveryusedquestionids[(string)$recoveryquestionid])) {
+            continue;
+        }
+        $recoverysavedat = (string)($recoveryrecord['savedAt'] ?? '');
+        if ($recoveryprojectcreatedat !== '' && $recoverysavedat < $recoveryprojectcreatedat) {
+            continue;
+        }
+        $recoverydomainid = (string)($recoveryrecord['domainId'] ?? '');
+        if (!isset($recoverydomaintargets[$recoverydomainid])
+                || (int)$recoverydomaincounts[$recoverydomainid]
+                    >= (int)$recoverydomaintargets[$recoverydomainid]) {
+            continue;
+        }
+        $recoverycandidates[(string)$recoveryquestionid] = [
+            'savedAt' => $recoverysavedat,
+            'domainId' => $recoverydomainid,
+        ];
+    }
+    uasort($recoverycandidates, static fn(array $left, array $right): int => strcmp(
+        (string)$right['savedAt'],
+        (string)$left['savedAt']
+    ));
+    $latestunassignedrecoveryquestionids = [];
+    foreach ($recoverycandidates as $recoveryquestionid => $recoverycandidate) {
+        if (count($latestunassignedrecoveryquestionids) >= 5) {
+            break;
+        }
+        $recoverydomainid = (string)$recoverycandidate['domainId'];
+        if ((int)$recoverydomaincounts[$recoverydomainid]
+                >= (int)$recoverydomaintargets[$recoverydomainid]) {
+            continue;
+        }
+        $latestunassignedrecoveryquestionids[] = (string)$recoveryquestionid;
+        $recoverydomaincounts[$recoverydomainid]++;
+    }
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $latestunassignedrecoveryexamid,
+        $latestunassignedrecoveryquestionids
+    ): array {
+        $savedat = gmdate(DATE_ATOM);
+        $project = $store['examProjects'][$latestunassignedrecoveryexamid] ?? null;
+        if (!is_array($project)) {
+            return $store;
+        }
+        $project['latestUnassignedCustomRecoveryV1At'] = $savedat;
+        $project['latestUnassignedCustomRecoveryQuestionIds'] = $latestunassignedrecoveryquestionids;
+        $store['examProjects'][$latestunassignedrecoveryexamid] = $project;
+        foreach ($latestunassignedrecoveryquestionids as $latestunassignedrecoveryquestionid) {
+            if (!is_array($store['customQuestions'][$latestunassignedrecoveryquestionid] ?? null)) {
+                continue;
+            }
+            $store['customQuestions'][$latestunassignedrecoveryquestionid]['targetExamProjectId'] =
+                $latestunassignedrecoveryexamid;
+            $store['customQuestions'][$latestunassignedrecoveryquestionid]['targetExamRecoveredAt'] = $savedat;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $targetedapprovedrecords = [];
 foreach ((array)($revisionstore['customQuestions'] ?? []) as $customquestionid => $customrecord) {
     $targetexamid = is_array($customrecord)
@@ -5919,6 +6058,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         );
     }
     $customtargetexamid = (string)($customrecord['targetExamProjectId'] ?? '');
+    if ($customtargetexamid === '' && is_array($pendingexamproject)) {
+        $customdraftdomainid = (string)($customdraft['domainId'] ?? $customrecord['domainId'] ?? '');
+        $pendingtargetcount = max(1, (int)($pendingexamproject['targetCount'] ?? 100));
+        $pendingweights = $requiredprojectdomaincounts;
+        $pendingdomaintargets = [];
+        $pendingfractions = [];
+        $pendingallocated = 0;
+        foreach ($pendingweights as $pendingdomainid => $pendingweight) {
+            $pendingexact = $pendingtargetcount * $pendingweight / 100;
+            $pendingdomaintargets[$pendingdomainid] = (int)floor($pendingexact);
+            $pendingfractions[$pendingdomainid] = $pendingexact - floor($pendingexact);
+            $pendingallocated += $pendingdomaintargets[$pendingdomainid];
+        }
+        arsort($pendingfractions);
+        foreach (array_keys($pendingfractions) as $pendingdomainid) {
+            if ($pendingallocated >= $pendingtargetcount) {
+                break;
+            }
+            $pendingdomaintargets[$pendingdomainid]++;
+            $pendingallocated++;
+        }
+        $pendingapproveddomaincount = 0;
+        $pendingapprovedlookup = array_fill_keys(
+            array_map('strval', (array)($pendingexamproject['approvedQuestionIds'] ?? [])),
+            true
+        );
+        foreach ($allquestions as $pendingquestion) {
+            if (isset($pendingapprovedlookup[(string)($pendingquestion['questionId'] ?? '')])
+                    && (string)($pendingquestion['_domainid'] ?? '') === $customdraftdomainid) {
+                $pendingapproveddomaincount++;
+            }
+        }
+        if (isset($pendingdomaintargets[$customdraftdomainid])
+                && $pendingapproveddomaincount < (int)$pendingdomaintargets[$customdraftdomainid]
+                && (int)($pendingexamproject['currentCount'] ?? 0) < $pendingtargetcount) {
+            $customtargetexamid = (string)($pendingexamproject['id'] ?? '');
+        }
+    }
     $customcreationbatchid = (string)($customrecord['creationBatchId'] ?? '');
     $remainingcustombatchids = [];
     if ($customcreationbatchid !== '') {
@@ -5976,6 +6153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $record['savedByName'] = $savedbyname;
         $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
         if ($customtargetexamid !== '') {
+            $record['targetExamProjectId'] = $customtargetexamid;
             $record['assignedToTargetExamAt'] = $savedat;
         }
         $store['customQuestions'][$customquestionid] = $record;
