@@ -1973,7 +1973,10 @@ if (is_array($currentexamproject)) {
     $projecteligiblebydomain = array_fill_keys(array_keys($domains), []);
     foreach ($allquestions as $projectquestion) {
         $projectquestionid = (string)$projectquestion['questionId'];
-        if (!$projectquestion['_ready']
+        $hasreviewablecontent = trim((string)($projectquestion['prompt'] ?? '')) !== ''
+            && count((array)($projectquestion['options'] ?? [])) === 4
+            && trim((string)($projectquestion['correctLabel'] ?? '')) !== '';
+        if (!$hasreviewablecontent
                 || $projectquestion['_excluded']
                 || $projectquestion['_examposition'] > 0
                 || $projectquestion['_exam2position'] > 0
@@ -1989,6 +1992,7 @@ if (is_array($currentexamproject)) {
         $cognitiverank = ['analysis' => 0, 'inference' => 1, 'application' => 2, 'recall' => 3];
         return [
             isset($previouslyselectedids[$questionid]) ? 0 : 1,
+            $question['_ready'] ? 0 : 1,
             $question['_simulationcandidate'] ? 0 : 1,
             $cognitiverank[$question['_cognitive']] ?? 4,
             in_array($question['_feedbackquality'], ['detailed', 'curated'], true) ? 0 : 1,
