@@ -5024,27 +5024,27 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "What is the difference between Xie Xin Tang (Drain the Epigastrium Decoction) and Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity)?",
+        "prompt": "A formula comparison focuses on the ingredient that adds purgative, downward-draining action to one prescription, while the other clears fire toxicity through the three Jiao without that purgative herb. Which statement identifies the distinction accurately?",
         "options": [
           {
             "label": "A",
-            "text": "Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity), which contains Zhi Zi (Gardeniae Fructus), is on draining heat from the three Jiao."
+            "text": "Xie Xin Tang (Drain the Epigastrium Decoction) is distinguished by Zhi Zi (Gardeniae Fructus) clearing fire through the three Jiao, whereas Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity) uses Da Huang (Rhei Radix et Rhizoma) to purge downward."
           },
           {
             "label": "B",
-            "text": "Xie Xin Tang (Drain the Epigastrium Decoction), on the other hand, which contains Da Huang (Rhei Radix et Rhizoma), has purgative and heat draining actions that are used to guide excess tire downward."
+            "text": "Xie Xin Tang (Drain the Epigastrium Decoction) uses Da Huang (Rhei Radix et Rhizoma) chiefly to secure leakage, whereas Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity) uses Zhi Zi (Gardeniae Fructus) to warm the Middle Jiao."
           },
           {
             "label": "C",
-            "text": "All options are incorrects"
+            "text": "Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity) uses Zhi Zi (Gardeniae Fructus) for bowel purgation, whereas Xie Xin Tang (Drain the Epigastrium Decoction) uses Da Huang (Rhei Radix et Rhizoma) primarily to nourish Yin."
           },
           {
             "label": "D",
-            "text": "Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity), which contains Zhi Zi (Gardeniae Fructus), is on draining heat from the three Jiao. and Xie Xin Tang (Drain the Epigastrium Decoction), on the other hand, which contains Da Huang (Rhei Radix et Rhizoma), has purgative and heat draining actions that are used to guide excess tire downward."
+            "text": "Xie Xin Tang (Drain the Epigastrium Decoction) contains Da Huang (Rhei Radix et Rhizoma), which adds purgative downward drainage, whereas Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity) contains Zhi Zi (Gardeniae Fructus) and clears fire toxicity through the three Jiao."
           }
         ],
         "correctLabel": "D",
-        "explanation": "",
+        "explanation": "Inference step 1: Da Huang (Rhei Radix et Rhizoma) provides a purgative, downward-draining action, while Zhi Zi (Gardeniae Fructus) clears heat and fire through the three Jiao. Inference step 2: Xie Xin Tang (Drain the Epigastrium Decoction) contains Da Huang, whereas Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity) contains Zhi Zi; this ingredient-action contrast identifies option D. Option A: Incorrect. It reverses the two distinguishing ingredients. Option B: Incorrect. Da Huang does not secure leakage, and Zhi Zi does not warm the Middle Jiao. Option C: Incorrect. It assigns bowel purgation to Zhi Zi and Yin nourishment to Da Huang, reversing their relevant actions. Option D: Correct. It accurately links Da Huang's downward-draining action to Xie Xin Tang and Zhi Zi's three-Jiao heat-clearing role to Huang Lian Jie Du Tang.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
@@ -5058,26 +5058,26 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Cuál es la diferencia entre Xie Xin Tang (Drain the Epigastrium Decoction) y Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity)?",
+            "prompt": "Una comparación de fórmulas se centra en el ingrediente que aporta una acción purgante y descendente a una prescripción, mientras la otra elimina la toxicidad de Fuego a través de los tres Jiao sin esa hierba purgante. ¿Qué afirmación identifica correctamente la diferencia?",
             "options": [
               {
                 "label": "A",
-                "text": "Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity), que contiene Zhi Zi (Gardeniae Fructus), está en el calor drenante de los tres Jiao."
+                "text": "Xie Xin Tang (Drain the Epigastrium Decoction) se distingue por Zhi Zi (Gardeniae Fructus), que elimina el Fuego de los tres Jiao, mientras Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity) usa Da Huang (Rhei Radix et Rhizoma) para purgar hacia abajo."
               },
               {
                 "label": "B",
-                "text": "Xie Xin Tang (Drain the Epigastrium Decoction), por otro lado, que contiene Da Huang (Rhei Radix et Rhizoma), tiene acciones purgativo y desagüe de calor que se utilizan para guiar el exceso de neumático hacia abajo."
+                "text": "Xie Xin Tang (Drain the Epigastrium Decoction) usa Da Huang (Rhei Radix et Rhizoma) principalmente para contener las fugas, mientras Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity) usa Zhi Zi (Gardeniae Fructus) para calentar el Jiao Medio."
               },
               {
                 "label": "C",
-                "text": "Todas las opciones son incorrectas"
+                "text": "Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity) usa Zhi Zi (Gardeniae Fructus) para purgar el intestino, mientras Xie Xin Tang (Drain the Epigastrium Decoction) usa Da Huang (Rhei Radix et Rhizoma) principalmente para nutrir el Yin."
               },
               {
                 "label": "D",
-                "text": "Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity), que contiene Zhi Zi (Gardeniae Fructus), está en el calor drenante de los tres Jiao, y Xie Xin Tang (Drain the Epigastrium Decoction), por otro lado, que contiene Da Huang (Rhei Radix et Rhizoma), tiene acciones purificador y drenaje térmico que se utilizan para guiar el exceso de neumático hacia abajo."
+                "text": "Xie Xin Tang (Drain the Epigastrium Decoction) contiene Da Huang (Rhei Radix et Rhizoma), que aporta purgación y drenaje descendente, mientras Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity) contiene Zhi Zi (Gardeniae Fructus) y elimina la toxicidad de Fuego a través de los tres Jiao."
               }
             ],
-            "explanation": ""
+            "explanation": "Paso de inferencia 1: Da Huang (Rhei Radix et Rhizoma) aporta una acción purgante y descendente, mientras Zhi Zi (Gardeniae Fructus) elimina Calor y Fuego a través de los tres Jiao. Paso de inferencia 2: Xie Xin Tang (Drain the Epigastrium Decoction) contiene Da Huang, mientras Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity) contiene Zhi Zi; este contraste entre ingrediente y acción identifica la opción D. Opción A: Incorrecta. Invierte los dos ingredientes distintivos. Opción B: Incorrecta. La función principal de Da Huang no es contener pérdidas y Zhi Zi no calienta el Jiao Medio. Opción C: Incorrecta. Atribuye la purgación intestinal a Zhi Zi y la nutrición del Yin a Da Huang, invirtiendo sus acciones pertinentes. Opción D: Correcta. Relaciona correctamente la acción descendente de Da Huang con Xie Xin Tang y la función de Zhi Zi de eliminar Calor en los tres Jiao con Huang Lian Jie Du Tang."
           }
         },
         "nomenclature": {

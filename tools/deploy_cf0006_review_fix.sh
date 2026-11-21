@@ -80,7 +80,7 @@ php -l "$QUESTION_BANK_SOURCE" >/dev/null
 php -l "$OVERRIDES_SOURCE" >/dev/null
 php -l "$HERBOLOGY_BOARD_SOURCE" >/dev/null
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$SOURCE_DATA"
-grep -Fq "ncbahm-mock-editor-4.2" "$QUESTION_BANK_SOURCE"
+grep -Fq "ncbahm-mock-editor-4.3" "$QUESTION_BANK_SOURCE"
 grep -Fq "sourceFeedbackMissing" "$QUESTION_BANK_SOURCE"
 grep -Fq '$requestedvisibleherbcount' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Requested herbs missing · correction required' "$QUESTION_BANK_SOURCE"
@@ -104,6 +104,14 @@ grep -Fq 'Which statement correctly differentiates Gui Zhi Tang' "$SOURCE_DATA"
 grep -Fq 'Option D: Incorrect. It reverses the formulas' "$SOURCE_DATA"
 if grep -A 90 -F '"questionId": "CF-0006"' "$SOURCE_DATA" | grep -Eq 'None of above|None of the above|Ninguna de las anteriores'; then
     echo "ERROR: CF-0006 todavía contiene una respuesta combinada prohibida." >&2
+    exit 1
+fi
+grep -Fq '"questionId": "CF-0126"' "$SOURCE_DATA"
+grep -Fq 'A formula comparison focuses on the ingredient that adds purgative' "$SOURCE_DATA"
+grep -Fq "Option D: Correct. It accurately links Da Huang's downward-draining action" "$SOURCE_DATA"
+if grep -A 120 -F '"questionId": "CF-0126"' "$SOURCE_DATA" \
+        | grep -Eq 'All options are incorrect|Todas las opciones son incorrectas|excess tire|exceso de neumático'; then
+    echo "ERROR: CF-0126 todavía contiene la versión combinada defectuosa." >&2
     exit 1
 fi
 
@@ -173,6 +181,8 @@ echo "OK: una pregunta similar puede excluirse solo del examen actual y se busca
 echo "OK: las preguntas no-board pueden enviarse a su categoría Mock, quedan fuera de Simulation Exams y pueden restaurarse."
 echo "OK: Exam builder muestra candidatas SCORM revisables cuando se agota la reserva ya completada."
 echo "OK: All options are incorrect y sus equivalentes quedan bloqueados y deben reescribirse."
+echo "OK: CF-0126 contiene cuatro comparaciones independientes y feedback completo en ambos idiomas."
+echo "OK: una opción que concatena otras dos también queda bloqueada como respuesta combinada."
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256 DATOS: $INSTALLED_SHA256"
 if [[ "${#WEB_RUNTIME_RELOADED[@]}" -gt 0 ]]; then
