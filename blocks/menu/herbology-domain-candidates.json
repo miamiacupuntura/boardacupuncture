@@ -5147,27 +5147,27 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "What is the difference between Qing Wen Bai Du Yin (Clear epidemics and overcome toxin decoction) and Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity)?",
+        "prompt": "Which statement most accurately differentiates Qing Wen Bai Du Yin (Clear Epidemics and Overcome Toxicity Drink) from Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity)?",
         "options": [
           {
             "label": "A",
-            "text": "Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity), which contains Zhi Zi (Gardernae Fructus), is on draining heat from the three Jiao."
+            "text": "Qing Wen Bai Du Yin is a mild formula for isolated deficiency Heat, whereas Huang Lian Jie Du Tang primarily nourishes Yin and Blood."
           },
           {
             "label": "B",
-            "text": "Qing Wen Bai Du Yin (Clear epidemics and overcome toxin decoction) includes Huang Lian Jie Du Tang (Coptis Decoction to Relieve Toxicity)."
+            "text": "Huang Lian Jie Du Tang contains the complete Qing Wen Bai Du Yin formula and therefore treats deeper epidemic toxin at the Qi and Blood levels."
           },
           {
             "label": "C",
-            "text": "Qing Wen Bai Du Yin (Clear epidemics and overcome toxin decoction) uses for epidemic toxin warm pathogen disorder."
+            "text": "The formulas are clinically interchangeable for every high-fever presentation because each has the same ingredients and depth of action."
           },
           {
             "label": "D",
-            "text": "All of them"
+            "text": "Qing Wen Bai Du Yin treats severe epidemic toxin blazing at the Qi and Blood levels with a broad heat-clearing combination; Huang Lian Jie Du Tang is a smaller formula that drains excess Fire-Toxin from the three burners."
           }
         ],
         "correctLabel": "D",
-        "explanation": "",
+        "explanation": "Inference step 1: Epidemic toxin simultaneously blazing in the Qi and Blood levels requires broader cooling of Qi, Blood, and toxicity than a compact three-burner Fire-Toxin formula provides. Inference step 2: Qing Wen Bai Du Yin combines a broad group of heat-clearing strategies for severe epidemic toxin, while Huang Lian Jie Du Tang uses Huang Lian, Huang Qin, Huang Bai, and Zhi Zi to drain excess Fire-Toxin from the three burners. Option A: Incorrect. These formulas clear excess pathogenic Heat; they are not Yin- and Blood-nourishing deficiency-Heat formulas. Option B: Incorrect. The inclusion relationship is reversed. Option C: Incorrect. Their composition and treatment depth differ. Option D: Correct. It states the decisive difference in breadth and level of Heat involvement.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
@@ -5181,26 +5181,26 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Cuál es la diferencia entre la Qing Wen Bai Du Yin (Clear Epidemics and Overcome Toxicity Drink) y la Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity)?",
+            "prompt": "¿Qué afirmación diferencia con mayor precisión Qing Wen Bai Du Yin (Bebida para limpiar epidemias y vencer la toxicidad) de Huang Lian Jie Du Tang (Decocción de Coptis para resolver la toxicidad)?",
             "options": [
               {
                 "label": "A",
-                "text": "Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity), que contiene Zhi Zi (Gardeniae Fructus), está en el drenaje del calor de los tres Jiao."
+                "text": "Qing Wen Bai Du Yin es una fórmula suave para Calor por deficiencia aislado, mientras que Huang Lian Jie Du Tang nutre principalmente Yin y Sangre."
               },
               {
                 "label": "B",
-                "text": "Qing Wen Bai Du Yin (Clear Epidemics and Overcome Toxicity Drink) incluye Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity)."
+                "text": "Huang Lian Jie Du Tang contiene la fórmula completa Qing Wen Bai Du Yin y, por ello, trata toxina epidémica más profunda en los niveles Qi y Sangre."
               },
               {
                 "label": "C",
-                "text": "Qing Wen Bai Du Yin (Clear Epidemics and Overcome Toxicity Drink) utiliza para el trastorno patógeno cálido de toxina epidémica."
+                "text": "Las fórmulas son clínicamente intercambiables para toda presentación de fiebre alta porque tienen los mismos ingredientes y la misma profundidad de acción."
               },
               {
                 "label": "D",
-                "text": "Todos ellos"
+                "text": "Qing Wen Bai Du Yin trata toxina epidémica grave que abrasa los niveles Qi y Sangre mediante una combinación amplia para aclarar Calor; Huang Lian Jie Du Tang es una fórmula más pequeña que drena Fuego-Toxina de exceso de los tres calentadores."
               }
             ],
-            "explanation": ""
+            "explanation": "Paso de inferencia 1: La toxina epidémica que abrasa simultáneamente los niveles Qi y Sangre requiere enfriar Qi, Sangre y toxicidad con mayor amplitud que una fórmula compacta para Fuego-Toxina de los tres calentadores. Paso de inferencia 2: Qing Wen Bai Du Yin combina estrategias amplias para aclarar Calor en toxina epidémica grave, mientras que Huang Lian Jie Du Tang utiliza Huang Lian, Huang Qin, Huang Bai y Zhi Zi para drenar Fuego-Toxina de exceso de los tres calentadores. Opción A: Incorrecta. Estas fórmulas eliminan Calor patógeno de exceso; no son fórmulas nutritivas para Calor por deficiencia. Opción B: Incorrecta. Invierte la relación de inclusión. Opción C: Incorrecta. Su composición y profundidad terapéutica son diferentes. Opción D: Correcta. Expresa la diferencia decisiva en amplitud y nivel de afectación por Calor."
           }
         },
         "nomenclature": {
@@ -9540,31 +9540,49 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "What is the difference between Fang Ji Huan Qi Tang (Stephania and astragalus decoction) and Ma Huang (Ephedrae Herba) Jia Zu Tang (Ephedra Decoction plus Atractylodes)?",
+        "prompt": "Which statement correctly differentiates Fang Ji Huang Qi Tang (Stephania and Astragalus Decoction) from Ma Huang Jia Zhu Tang (Ephedra Decoction plus Atractylodes)?",
         "options": [
           {
             "label": "A",
-            "text": "Ma Huang (Ephedrae Herba) Ja Zhu Tang is indicated for cold-dampness in the exterior, characterized by edema, aversion to cold, and an absence of sweating."
+            "text": "Fang Ji Huang Qi Tang treats an exterior excess Cold-Damp pattern with pronounced chills and absence of sweating."
           },
           {
             "label": "B",
-            "text": "Fang Ji Huang Qi Tang (Stephania and Astragalus Decoction) treats wind-dampness in the exterior with Qi deficiency characterized by superficial edema, aversion to wind, and the presence of sweating."
+            "text": "Ma Huang Jia Zhu Tang treats Wind-Damp with Qi deficiency, spontaneous sweating, aversion to wind, and superficial edema."
           },
           {
             "label": "C",
-            "text": "Both of them"
+            "text": "Fang Ji Huang Qi Tang treats Wind-Damp with Qi deficiency, aversion to wind, sweating, and superficial edema; Ma Huang Jia Zhu Tang treats exterior Cold-Damp excess with aversion to cold, body aches or edema, and absence of sweating."
           },
           {
             "label": "D",
-            "text": "None of them"
+            "text": "The formulas are interchangeable whenever edema accompanies an exterior disorder, regardless of sweating or deficiency signs."
           }
         ],
         "correctLabel": "C",
-        "explanation": "",
+        "explanation": "Inference step 1: Sweating with aversion to wind and superficial edema indicates deficient exterior Qi with Wind-Damp, whereas absence of sweating with stronger aversion to cold indicates an exterior Cold-Damp excess. Inference step 2: Fang Ji Huang Qi Tang supports Qi while treating Wind-Damp; Ma Huang Jia Zhu Tang releases the exterior and dispels Cold-Damp. Option A: Incorrect. It assigns the exterior excess presentation to Fang Ji Huang Qi Tang. Option B: Incorrect. It assigns the deficient, sweating presentation to Ma Huang Jia Zhu Tang. Option C: Correct. It accurately distinguishes the deficiency-with-sweating pattern from the excess-without-sweating pattern. Option D: Incorrect. Sweating and deficiency signs are decisive and prevent interchangeable use.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
           "reason": "Formula indication, pattern recognition or selection"
+        },
+        "sourceCard": {
+          "url": "/study-guide/comparisons/formulas.html",
+          "urlEs": "/study-guide/comparisons/formulas-es.html",
+          "label": "Source card: Fang Ji Huang Qi Tang and Ma Huang Jia Zhu Tang",
+          "labelEs": "Tarjeta fuente: Fang Ji Huang Qi Tang y Ma Huang Jia Zhu Tang"
+        },
+        "translations": {
+          "es": {
+            "prompt": "¿Qué afirmación diferencia correctamente Fang Ji Huang Qi Tang (Decocción de Stephania y astrágalo) de Ma Huang Jia Zhu Tang (Decocción de efedra con Atractylodes)?",
+            "options": [
+              {"label": "A", "text": "Fang Ji Huang Qi Tang trata un patrón de exceso exterior de Frío-Humedad con escalofríos pronunciados y ausencia de sudoración."},
+              {"label": "B", "text": "Ma Huang Jia Zhu Tang trata Viento-Humedad con deficiencia de Qi, sudoración espontánea, aversión al viento y edema superficial."},
+              {"label": "C", "text": "Fang Ji Huang Qi Tang trata Viento-Humedad con deficiencia de Qi, aversión al viento, sudoración y edema superficial; Ma Huang Jia Zhu Tang trata exceso exterior de Frío-Humedad con aversión al frío, dolores corporales o edema y ausencia de sudoración."},
+              {"label": "D", "text": "Las fórmulas son intercambiables siempre que el edema acompañe un trastorno exterior, sin importar la sudoración ni los signos de deficiencia."}
+            ],
+            "explanation": "Paso de inferencia 1: La sudoración con aversión al viento y edema superficial indica Qi exterior deficiente con Viento-Humedad, mientras que la ausencia de sudoración con mayor aversión al frío indica exceso exterior de Frío-Humedad. Paso de inferencia 2: Fang Ji Huang Qi Tang apoya el Qi mientras trata Viento-Humedad; Ma Huang Jia Zhu Tang libera el exterior y disipa Frío-Humedad. Opción A: Incorrecta. Asigna la presentación de exceso exterior a Fang Ji Huang Qi Tang. Opción B: Incorrecta. Asigna la presentación deficiente con sudoración a Ma Huang Jia Zhu Tang. Opción C: Correcta. Distingue el patrón deficiente con sudoración del patrón de exceso sin sudoración. Opción D: Incorrecta. La sudoración y los signos de deficiencia son decisivos e impiden usarlas como intercambiables."
+          }
         },
         "nomenclature": {
           "herbs": [
@@ -10654,31 +10672,49 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "Both Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) and Xing Su San (Apricot kernel and perilla leaf powder) are light formulas that treat externally-contracted dryness. What is their main difference?",
+        "prompt": "Which statement correctly differentiates Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) from Xing Su San (Apricot Kernel and Perilla Leaf Powder) in externally contracted Dryness?",
         "options": [
           {
             "label": "A",
-            "text": "Sang Xing Tang (Mulberry Leaf and Apricot Kernel Decoction) treats cool-dryness where The fluids are constrained but have not been damaged. Thus, one employs acrid and warming herbs to disperse the exterior and the spreading of the fluids."
+            "text": "Sang Xing Tang treats Cool-Dryness with chills, no sweating, and watery sputum by using acrid-warm exterior-releasing herbs."
           },
           {
             "label": "B",
-            "text": "Xing Su San (Apricot Kernel and Perilla Leaf Powder) treats warm-dryness, where The fluids have already been damaged. Thus, one employs sweet, moistening herbs in addition to acrid, cooling herbs that disperse the exterior."
+            "text": "Xing Su San treats Warm-Dryness with thirst, a dry cough, and a rapid pulse by using acrid-cool and sweet-moistening herbs."
           },
           {
             "label": "C",
-            "text": "Both of them"
+            "text": "Sang Xing Tang is reserved for chronic Lung-Kidney Yin deficiency, while Xing Su San treats severe warm-Dryness that has entered the Blood level."
           },
           {
             "label": "D",
-            "text": "None of them"
+            "text": "Sang Xing Tang treats Warm-Dryness with greater Heat and fluid injury using acrid-cool, sweet-moistening herbs; Xing Su San treats Cool-Dryness with exterior Cold signs using acrid-warm dispersing herbs."
           }
         ],
         "correctLabel": "D",
-        "explanation": "",
+        "explanation": "Inference step 1: Warm-Dryness produces more Heat and fluid injury, whereas Cool-Dryness retains exterior Cold signs such as chills, absence of sweating, and watery sputum. Inference step 2: Sang Xing Tang uses an acrid-cool, sweet-moistening strategy for Warm-Dryness; Xing Su San uses an acrid-warm dispersing strategy for Cool-Dryness. Option A: Incorrect. It reverses Sang Xing Tang's thermal presentation. Option B: Incorrect. It reverses Xing Su San's thermal presentation. Option C: Incorrect. These are neither the primary indications nor the relevant disease levels. Option D: Correct. It accurately assigns Warm-Dryness to Sang Xing Tang and Cool-Dryness to Xing Su San.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
           "reason": "Formula indication, pattern recognition or selection"
+        },
+        "sourceCard": {
+          "url": "/study-guide/comparisons/cough-patterns.html",
+          "urlEs": "/study-guide/comparisons/cough-patterns-es.html",
+          "label": "Source card: Warm-Dryness and Cool-Dryness formulas",
+          "labelEs": "Tarjeta fuente: fórmulas para Sequedad-Calor y Sequedad-Frío"
+        },
+        "translations": {
+          "es": {
+            "prompt": "¿Qué afirmación diferencia correctamente Sang Xing Tang (Decocción de hoja de morera y semilla de albaricoque) de Xing Su San (Polvo de semilla de albaricoque y hoja de perilla) en Sequedad contraída externamente?",
+            "options": [
+              {"label": "A", "text": "Sang Xing Tang trata Sequedad-Frío con escalofríos, ausencia de sudoración y esputo acuoso mediante hierbas picantes y tibias que liberan el exterior."},
+              {"label": "B", "text": "Xing Su San trata Sequedad-Calor con sed, tos seca y pulso rápido mediante hierbas picantes y frescas y hierbas dulces que humectan."},
+              {"label": "C", "text": "Sang Xing Tang se reserva para deficiencia crónica de Yin de Pulmón-Riñón, mientras Xing Su San trata Sequedad-Calor grave que ha entrado en el nivel Sangre."},
+              {"label": "D", "text": "Sang Xing Tang trata Sequedad-Calor con mayor Calor y lesión de líquidos mediante hierbas picantes-frescas y dulces-humectantes; Xing Su San trata Sequedad-Frío con signos exteriores de Frío mediante hierbas picantes-tibias dispersantes."}
+            ],
+            "explanation": "Paso de inferencia 1: Sequedad-Calor produce más Calor y lesión de líquidos, mientras Sequedad-Frío conserva signos exteriores de Frío como escalofríos, ausencia de sudoración y esputo acuoso. Paso de inferencia 2: Sang Xing Tang emplea una estrategia picante-fresca y dulce-humectante para Sequedad-Calor; Xing Su San emplea una estrategia picante-tibia dispersante para Sequedad-Frío. Opción A: Incorrecta. Invierte la presentación térmica de Sang Xing Tang. Opción B: Incorrecta. Invierte la presentación térmica de Xing Su San. Opción C: Incorrecta. Esas no son sus indicaciones principales ni los niveles relevantes. Opción D: Correcta. Asigna correctamente Sequedad-Calor a Sang Xing Tang y Sequedad-Frío a Xing Su San."
+          }
         },
         "nomenclature": {
           "herbs": [],
@@ -10922,31 +10958,49 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "Both Qing Zao Jiu Fei Tang (Eliminate Dryness and Rescue The Lungs Decoction) and Bai He Gu Jin Tang (lily metal-consolidating decoction) moisten and nourish the Lung Yin. What is their difference?",
+        "prompt": "Which statement correctly differentiates Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction) from Bai He Gu Jin Tang (Lily Bulb Decoction to Preserve the Metal)?",
         "options": [
           {
             "label": "A",
-            "text": "Bai He Gu Jin Tang (Lily Bulb Decoction to Preserve the Metal) only nourishes the Lung and Kidney Yin and treats fire from deficiency. Throat pain is one of its main symptoms."
+            "text": "Qing Zao Jiu Fei Tang primarily treats chronic Lung-Kidney Yin deficiency with deficiency Fire, night sweats, and blood-streaked sputum."
           },
           {
             "label": "B",
-            "text": "Qing Zao Jiu Fei Tang (Clear Dryness and Rescue the Lungs Decoction) augments The Qi and has a slight, exterior-releasing action, also addresses injury to the Qi and Yin. However, its main action is in clearing excess heat from the Qi aspect."
+            "text": "Bai He Gu Jin Tang primarily treats an acute externally contracted Warm-Dryness pattern with headache, thirst, and a dry cough."
           },
           {
             "label": "C",
-            "text": "Both of them"
+            "text": "Qing Zao Jiu Fei Tang treats Warm-Dryness injuring Lung Qi and Yin, with residual exterior signs and excess Heat; Bai He Gu Jin Tang treats chronic Lung-Kidney Yin deficiency with deficiency Fire, dry sore throat, and possible blood-streaked sputum."
           },
           {
             "label": "D",
-            "text": "None of them"
+            "text": "The formulas are interchangeable for any dry cough because their treatment level and deficiency-excess emphasis are identical."
           }
         ],
         "correctLabel": "C",
-        "explanation": "",
+        "explanation": "Inference step 1: Acute or post-exterior Warm-Dryness with Heat and injury to Lung Qi and Yin differs from a chronic Lung-Kidney Yin deficiency presentation with deficiency Fire. Inference step 2: Qing Zao Jiu Fei Tang clears Warm-Dryness, moistens the Lung, and augments Qi; Bai He Gu Jin Tang nourishes Lung and Kidney Yin and clears deficiency Heat. Option A: Incorrect. It assigns the chronic deficiency presentation to Qing Zao Jiu Fei Tang. Option B: Incorrect. It assigns the acute Warm-Dryness presentation to Bai He Gu Jin Tang. Option C: Correct. It accurately distinguishes the excess-Heat and Qi-Yin injury emphasis from chronic Yin deficiency with deficiency Fire. Option D: Incorrect. The formulas differ in disease stage and deficiency-excess emphasis.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
           "reason": "Formula indication, pattern recognition or selection"
+        },
+        "sourceCard": {
+          "url": "/study-guide/comparisons/bai-he-gu-jin-tang-important-formula.html",
+          "urlEs": "/study-guide/comparisons/bai-he-gu-jin-tang-important-formula-es.html",
+          "label": "Source card: Bai He Gu Jin Tang",
+          "labelEs": "Tarjeta fuente: Bai He Gu Jin Tang"
+        },
+        "translations": {
+          "es": {
+            "prompt": "¿Qué afirmación diferencia correctamente Qing Zao Jiu Fei Tang (Decocción para aclarar Sequedad y rescatar Pulmón) de Bai He Gu Jin Tang (Decocción de bulbo de lirio para preservar el Metal)?",
+            "options": [
+              {"label": "A", "text": "Qing Zao Jiu Fei Tang trata principalmente deficiencia crónica de Yin de Pulmón-Riñón con Fuego por deficiencia, sudoración nocturna y esputo con vetas de sangre."},
+              {"label": "B", "text": "Bai He Gu Jin Tang trata principalmente un patrón agudo de Sequedad-Calor contraída externamente con cefalea, sed y tos seca."},
+              {"label": "C", "text": "Qing Zao Jiu Fei Tang trata Sequedad-Calor que lesiona Qi y Yin de Pulmón, con signos exteriores residuales y Calor de exceso; Bai He Gu Jin Tang trata deficiencia crónica de Yin de Pulmón-Riñón con Fuego por deficiencia, garganta seca y dolorosa y posible esputo con vetas de sangre."},
+              {"label": "D", "text": "Las fórmulas son intercambiables para cualquier tos seca porque su nivel terapéutico y su énfasis de deficiencia-exceso son idénticos."}
+            ],
+            "explanation": "Paso de inferencia 1: Sequedad-Calor aguda o posterior a una afección exterior, con Calor y lesión de Qi y Yin de Pulmón, difiere de una presentación crónica de deficiencia de Yin de Pulmón-Riñón con Fuego por deficiencia. Paso de inferencia 2: Qing Zao Jiu Fei Tang aclara Sequedad-Calor, humecta Pulmón y aumenta Qi; Bai He Gu Jin Tang nutre Yin de Pulmón y Riñón y aclara Calor por deficiencia. Opción A: Incorrecta. Asigna la presentación crónica deficiente a Qing Zao Jiu Fei Tang. Opción B: Incorrecta. Asigna la presentación aguda de Sequedad-Calor a Bai He Gu Jin Tang. Opción C: Correcta. Distingue el énfasis en Calor de exceso y lesión de Qi-Yin del patrón crónico de deficiencia de Yin con Fuego por deficiencia. Opción D: Incorrecta. Las fórmulas difieren en etapa y énfasis de deficiencia-exceso."
+          }
         },
         "nomenclature": {
           "herbs": [],
@@ -14037,31 +14091,49 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "Both Da Bu Yin Wan (Great Tonify the Yin Pill) and Zhi Bai Di Huang Wan (Anemarrhena Phellodendron and Rehmannia Pill) treat patterns where Yin deficiency is accompanied by vigorous fire manifesting with symptoms such as night sweats, a dry mouth and tongue, and a large pulse only in the rear position. Both formulas also use the combination of Zhi Mu (Anemarrhenae Radix) and Huang Bai (Phellodendri Cortex) to control hyperactive Yang and drain excess fire, as well as Shu Di Huang (Rehmanniae Radix preparata) to tonify the Kidney Yin. What is their difference?",
+        "prompt": "Which statement most accurately differentiates Da Bu Yin Wan (Great Tonify the Yin Pill) from Zhi Bai Di Huang Wan (Anemarrhena, Phellodendron, and Rehmannia Pill) when deficiency Fire accompanies Liver and Kidney Yin deficiency?",
         "options": [
           {
             "label": "A",
-            "text": "Da Bu Yin Wan (Great Tonify the Yin Pill), using a heavy substance such as Gui Ban (Testudinis Plastrum), is able to control The Yang more successfully. Furthermore, as an animal substance, Gui Ban (Testudinis Plastrum) tonifies the essence and is frequently associated in the literature with deficiency of the Conception vessel."
+            "text": "Zhi Bai Di Huang Wan is the stronger choice for severe Essence deficiency because it contains Gui Ban (Testudinis Plastrum) to anchor Yang."
           },
           {
             "label": "B",
-            "text": "Zhi Bai Di Huang Wan (Anemarrhena, Phellodendron, and Rehmannia Pill), which is built on Liu Wei Di Huang Wan (Six-Ingredient Pill with Rehmannia), focuses more strongly on supplementing The Yin. Liu Wei Di Huang Wan (Six-Ingredient Pill with Rehmannia), on the other hand, regulates the water metabolism as well as Tonifying the Yin of the Kidneys, Liver, and Spleen."
+            "text": "Da Bu Yin Wan is based on Liu Wei Di Huang Wan and therefore emphasizes the balanced nourishment of Liver and Kidney Yin more than Zhi Bai Di Huang Wan."
           },
           {
             "label": "C",
-            "text": "Both of them"
+            "text": "Da Bu Yin Wan uses Gui Ban (Testudinis Plastrum) and more strongly enriches Yin, nourishes Essence, and anchors Yang in severe deficiency Fire; Zhi Bai Di Huang Wan adds Zhi Mu (Anemarrhenae Radix) and Huang Bai (Phellodendri Cortex) to the Liu Wei Di Huang Wan base for a broader Liver-Kidney Yin deficiency pattern with Empty Heat."
           },
           {
             "label": "D",
-            "text": "None of them"
+            "text": "The formulas are interchangeable because their ingredient structure, strength, and treatment emphasis are identical."
           }
         ],
         "correctLabel": "C",
-        "explanation": "",
+        "explanation": "Inference step 1: Severe Yin and Essence deficiency with blazing deficiency Fire calls for a formula that enriches and anchors more strongly, whereas a Liu Wei Di Huang Wan base indicates broader Liver-Kidney Yin nourishment with added deficiency-Heat clearing. Inference step 2: Da Bu Yin Wan contains Gui Ban (Testudinis Plastrum) with Shu Di Huang (Rehmanniae Radix preparata), Zhi Mu (Anemarrhenae Radix), and Huang Bai (Phellodendri Cortex), while Zhi Bai Di Huang Wan adds Zhi Mu and Huang Bai to Liu Wei Di Huang Wan. Option A: Incorrect. Gui Ban belongs to Da Bu Yin Wan, not Zhi Bai Di Huang Wan. Option B: Incorrect. The Liu Wei Di Huang Wan base belongs to Zhi Bai Di Huang Wan, not Da Bu Yin Wan. Option C: Correct. It accurately distinguishes the stronger Yin-Essence-enriching and Yang-anchoring emphasis of Da Bu Yin Wan from the broader Liu Wei Di Huang Wan-based strategy of Zhi Bai Di Huang Wan. Option D: Incorrect. Their structures and clinical emphasis are not identical.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
           "reason": "Formula indication, pattern recognition or selection"
+        },
+        "sourceCard": {
+          "url": "/study-guide/comparisons/da-bu-yin-wan-important-formula.html",
+          "urlEs": "/study-guide/comparisons/da-bu-yin-wan-important-formula-es.html",
+          "label": "Source card: Da Bu Yin Wan",
+          "labelEs": "Tarjeta fuente: Da Bu Yin Wan"
+        },
+        "translations": {
+          "es": {
+            "prompt": "¿Qué afirmación diferencia con mayor precisión Da Bu Yin Wan (Gran píldora para tonificar el Yin) de Zhi Bai Di Huang Wan (Píldora de Anemarrhena, Phellodendron y Rehmannia) cuando el Fuego por deficiencia acompaña una deficiencia de Yin de Hígado y Riñón?",
+            "options": [
+              {"label": "A", "text": "Zhi Bai Di Huang Wan es la opción más fuerte para una deficiencia grave de Esencia porque contiene Gui Ban (Testudinis Plastrum) para anclar el Yang."},
+              {"label": "B", "text": "Da Bu Yin Wan se basa en Liu Wei Di Huang Wan y, por ello, enfatiza la nutrición equilibrada del Yin de Hígado y Riñón más que Zhi Bai Di Huang Wan."},
+              {"label": "C", "text": "Da Bu Yin Wan utiliza Gui Ban (Testudinis Plastrum) y enriquece con mayor fuerza el Yin, nutre la Esencia y ancla el Yang en Fuego por deficiencia grave; Zhi Bai Di Huang Wan añade Zhi Mu (Anemarrhenae Radix) y Huang Bai (Phellodendri Cortex) a la base de Liu Wei Di Huang Wan para un patrón más amplio de deficiencia de Yin de Hígado-Riñón con Calor Vacío."},
+              {"label": "D", "text": "Las fórmulas son intercambiables porque su estructura de ingredientes, potencia y énfasis terapéutico son idénticos."}
+            ],
+            "explanation": "Paso de inferencia 1: Una deficiencia grave de Yin y Esencia con Fuego por deficiencia intenso requiere una fórmula que enriquezca y ancle con mayor fuerza, mientras que una base de Liu Wei Di Huang Wan indica una nutrición más amplia del Yin de Hígado-Riñón con eliminación añadida de Calor por deficiencia. Paso de inferencia 2: Da Bu Yin Wan contiene Gui Ban (Testudinis Plastrum) con Shu Di Huang (Rehmanniae Radix preparata), Zhi Mu (Anemarrhenae Radix) y Huang Bai (Phellodendri Cortex), mientras que Zhi Bai Di Huang Wan añade Zhi Mu y Huang Bai a Liu Wei Di Huang Wan. Opción A: Incorrecta. Gui Ban pertenece a Da Bu Yin Wan, no a Zhi Bai Di Huang Wan. Opción B: Incorrecta. La base de Liu Wei Di Huang Wan pertenece a Zhi Bai Di Huang Wan, no a Da Bu Yin Wan. Opción C: Correcta. Distingue correctamente el énfasis más fuerte de Da Bu Yin Wan en enriquecer Yin y Esencia y anclar Yang, frente a la estrategia más amplia de Zhi Bai Di Huang Wan basada en Liu Wei Di Huang Wan. Opción D: Incorrecta. Sus estructuras y énfasis clínicos no son idénticos."
+          }
         },
         "nomenclature": {
           "herbs": [
@@ -15564,27 +15636,27 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "What is the main difference between Yue Ju Wan (Escape Restraint Pill) and Liang Fu Wan (Galangal and Cyperus Pill)?",
+        "prompt": "Which statement correctly differentiates Yue Ju Wan (Escape Restraint Pill) from Liang Fu Wan (Galangal and Cyperus Pill)?",
         "options": [
           {
             "label": "A",
-            "text": "Yue Ju Wan (Escape Restraint Pill) focuses on promoting the movement of Qi and relieving constraint"
+            "text": "Liang Fu Wan treats multiple forms of constraint involving Qi, Blood, Phlegm, Fire, Dampness, and food, whereas Yue Ju Wan treats only Stomach Cold."
           },
           {
             "label": "B",
-            "text": "Liang Fu Wan (Galangal and Cyperus Pill) focuses more on Warming the middle Jiao and dispelling cold."
+            "text": "Yue Ju Wan is a warming formula for epigastric pain from Cold with a white tongue coating, whereas Liang Fu Wan clears constraint Fire."
           },
           {
             "label": "C",
-            "text": "Both of them"
+            "text": "Yue Ju Wan broadly moves Qi to relieve several interrelated constraints; Liang Fu Wan warms the middle and moves Qi for epigastric pain caused by Cold with Qi stagnation."
           },
           {
             "label": "D",
-            "text": "None of them"
+            "text": "The formulas are interchangeable for epigastric discomfort because temperature and the type of constraint do not affect selection."
           }
         ],
         "correctLabel": "C",
-        "explanation": "",
+        "explanation": "Inference step 1: A broad constraint formula must address Qi movement as the common mechanism behind several accumulations, whereas focal epigastric pain improved by warmth indicates Cold with Qi stagnation in the middle burner. Inference step 2: Yue Ju Wan relieves multiple constraints by moving Qi; Liang Fu Wan combines warming and Qi movement for Cold epigastric pain. Option A: Incorrect. It reverses the formulas. Option B: Incorrect. It also reverses their thermal and constraint emphasis. Option C: Correct. It accurately states the broad-constraint role of Yue Ju Wan and the Cold epigastric-pain role of Liang Fu Wan. Option D: Incorrect. Temperature and the type of constraint are decisive.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
@@ -15598,26 +15670,26 @@
         },
         "translations": {
           "es": {
-            "prompt": "¿Cuál es la diferencia principal entre Yue Ju Wan (Escape Restraint Pill) y Liang Fu Wan (Galangal and Cyperus Pill)?",
+            "prompt": "¿Qué afirmación diferencia correctamente Yue Ju Wan (Píldora para liberar la restricción) de Liang Fu Wan (Píldora de galanga y Cyperus)?",
             "options": [
               {
                 "label": "A",
-                "text": "Yue Ju Wan (Escape Restraint Pill) se centra en promover el movimiento de Qi y aliviar la restricción"
+                "text": "Liang Fu Wan trata múltiples formas de restricción que involucran Qi, Sangre, Flema, Fuego, Humedad y alimentos, mientras Yue Ju Wan trata únicamente Frío de Estómago."
               },
               {
                 "label": "B",
-                "text": "Liang Fu Wan (Galangal and Cyperus Pill) se centra más en Warming el Jiao Medio y disipelling frío."
+                "text": "Yue Ju Wan es una fórmula tibia para dolor epigástrico por Frío con capa lingual blanca, mientras Liang Fu Wan aclara Fuego por restricción."
               },
               {
                 "label": "C",
-                "text": "Ambos."
+                "text": "Yue Ju Wan mueve ampliamente el Qi para aliviar varias restricciones interrelacionadas; Liang Fu Wan calienta el centro y mueve Qi para dolor epigástrico causado por Frío con estancamiento de Qi."
               },
               {
                 "label": "D",
-                "text": "Ninguno de ellos"
+                "text": "Las fórmulas son intercambiables para molestia epigástrica porque la temperatura y el tipo de restricción no afectan la selección."
               }
             ],
-            "explanation": ""
+            "explanation": "Paso de inferencia 1: Una fórmula amplia para restricción debe abordar el movimiento de Qi como mecanismo común de varias acumulaciones, mientras que dolor epigástrico focal que mejora con calor indica Frío con estancamiento de Qi en el calentador medio. Paso de inferencia 2: Yue Ju Wan alivia múltiples restricciones al mover Qi; Liang Fu Wan combina calentamiento y movimiento de Qi para dolor epigástrico por Frío. Opción A: Incorrecta. Invierte las fórmulas. Opción B: Incorrecta. También invierte su énfasis térmico y de restricción. Opción C: Correcta. Expresa correctamente el papel amplio de Yue Ju Wan y el papel de Liang Fu Wan en dolor epigástrico por Frío. Opción D: Incorrecta. La temperatura y el tipo de restricción son decisivos."
           }
         },
         "nomenclature": {
@@ -53648,31 +53720,49 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "All of the following can cause Tai Yin (greater Yin) stage disease except?",
+        "prompt": "A patient has aversion to wind, spontaneous sweating, a floating-moderate pulse, and no abdominal fullness or diarrhea. Which mechanism best accounts for this presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Mistreatment"
+            "text": "Mistreatment causing Cold damage to the Spleen and progression into the Tai Yin stage"
           },
           {
             "label": "B",
-            "text": "Disharmony of Ying and Wei Qi"
+            "text": "Disharmony between Ying Qi and Wei Qi at the Tai Yang exterior level"
           },
           {
             "label": "C",
-            "text": "Transmuted from the three Yang stage patterns"
+            "text": "Transmission from a three-Yang stage pattern into Tai Yin Spleen deficiency-Cold"
           },
           {
             "label": "D",
-            "text": "Direct strike"
+            "text": "Direct Cold strike to the Tai Yin stage with abdominal fullness and diarrhea"
           }
         ],
         "correctLabel": "B",
-        "explanation": "",
+        "explanation": "Inference step 1: Aversion to wind, spontaneous sweating, and a floating-moderate pulse identify an exterior Tai Yang presentation with failure of Ying and Wei to harmonize. Inference step 2: The absence of abdominal fullness and diarrhea argues against Tai Yin Spleen deficiency-Cold. Option A: Incorrect. Mistreatment may drive a disorder inward toward Tai Yin, but that would produce middle-burner deficiency-Cold signs. Option B: Correct. Ying-Wei disharmony explains the exterior signs and spontaneous sweating. Option C: Incorrect. Transmission into Tai Yin would be accompanied by abdominal and bowel manifestations. Option D: Incorrect. A direct Tai Yin strike likewise produces interior Spleen Cold signs rather than this exterior pulse and sweating pattern.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
           "reason": "Formula indication, pattern recognition or selection"
+        },
+        "sourceCard": {
+          "url": "/study-guide/comparisons/patterns.html",
+          "urlEs": "/study-guide/comparisons/patterns-es.html",
+          "label": "Source card: Six-stage pattern differentiation",
+          "labelEs": "Tarjeta fuente: diferenciación de patrones de las seis etapas"
+        },
+        "translations": {
+          "es": {
+            "prompt": "Una paciente presenta aversión al viento, sudoración espontánea, pulso flotante-moderado y ausencia de plenitud abdominal o diarrea. ¿Qué mecanismo explica mejor esta presentación?",
+            "options": [
+              {"label": "A", "text": "Tratamiento incorrecto que causa daño por Frío al Bazo y progresión hacia la etapa Tai Yin"},
+              {"label": "B", "text": "Desarmonía entre Ying Qi y Wei Qi en el nivel exterior Tai Yang"},
+              {"label": "C", "text": "Transmisión desde un patrón de las tres etapas Yang hacia Frío por deficiencia del Bazo en Tai Yin"},
+              {"label": "D", "text": "Ataque directo de Frío a la etapa Tai Yin con plenitud abdominal y diarrea"}
+            ],
+            "explanation": "Paso de inferencia 1: La aversión al viento, la sudoración espontánea y el pulso flotante-moderado identifican una presentación exterior Tai Yang con falta de armonía entre Ying y Wei. Paso de inferencia 2: La ausencia de plenitud abdominal y diarrea se opone a Frío por deficiencia del Bazo en Tai Yin. Opción A: Incorrecta. Un tratamiento incorrecto puede llevar el trastorno hacia Tai Yin, pero produciría signos de Frío por deficiencia del calentador medio. Opción B: Correcta. La desarmonía Ying-Wei explica los signos exteriores y la sudoración espontánea. Opción C: Incorrecta. La transmisión a Tai Yin se acompañaría de manifestaciones abdominales e intestinales. Opción D: Incorrecta. Un ataque directo a Tai Yin también produce signos interiores de Frío de Bazo, no este patrón exterior de pulso y sudoración."
+          }
         },
         "nomenclature": {
           "herbs": [],

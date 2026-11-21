@@ -52,7 +52,7 @@ $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
-$aipromptversion = 'ncbahm-mock-editor-4.3';
+$aipromptversion = 'ncbahm-mock-editor-4.4';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
@@ -132,6 +132,7 @@ if (is_readable($scormbankpath)) {
 // the obsolete Both/None version.
 $reviewedsourcealiases = [
     'SCORM-FD-E4D38EA9FCBA' => 'CF-0056',
+    'SCORM-FD-5917E7491258' => 'CF-0305',
 ];
 $reviewedsourcequestions = [];
 foreach (($bank['domains'] ?? []) as $questions) {
@@ -165,6 +166,94 @@ foreach ($bank['domains'] as &$questions) {
 }
 unset($questions);
 $revisionstore = block_myprogress_herbology_override_load();
+$reviewedcanonicalids = [
+    'CF-0127', 'CF-0213', 'CF-0227', 'CF-0230', 'CF-0280', 'CF-0305', 'CF-1582',
+    'SCORM-FD-5917E7491258',
+];
+$reviewedcanonicalquestions = [];
+foreach (($bank['domains'] ?? []) as $questions) {
+    foreach ((array)$questions as $question) {
+        $questionid = (string)($question['questionId'] ?? '');
+        if (in_array($questionid, $reviewedcanonicalids, true)) {
+            $reviewedcanonicalquestions[$questionid] = $question;
+        }
+    }
+}
+$reviewedlegacyrecords = [];
+$reviewedsnapshotneedsrepair = static function($snapshot): bool {
+    if (!is_array($snapshot)) {
+        return false;
+    }
+    $prompt = (string)($snapshot['prompt'] ?? '');
+    if (preg_match(
+        '/\b(?:except|incorrect|not\s+correct|false|least\s+appropriate)\b|'
+            . '\b(?:excepto|incorrect[oa]s?|fals[oa]s?|menos\s+apropiad[oa])\b/iu',
+        $prompt
+    )) {
+        return true;
+    }
+    foreach (array_merge(
+        (array)($snapshot['options'] ?? []),
+        (array)($snapshot['translations']['es']['options'] ?? [])
+    ) as $option) {
+        if (preg_match(
+            '/\b(?:both|all\s+of\s+them|all\s+of\s+the\s+above|none\s+of\s+them|none\s+of\s+the\s+above|'
+                . 'ambos|ambas|todos\s+ellos|todas\s+ellas|ninguno\s+de\s+ellos|ninguna\s+de\s+ellas)\b/iu',
+            (string)($option['text'] ?? '')
+        )) {
+            return true;
+        }
+    }
+    return trim((string)($snapshot['explanation'] ?? '')) === ''
+        || trim((string)($snapshot['translations']['es']['explanation'] ?? '')) === ''
+        || count((array)($snapshot['translations']['es']['options'] ?? [])) !== 4;
+};
+foreach ($reviewedcanonicalquestions as $questionid => $canonicalquestion) {
+    $storedrecord = $revisionstore['questions'][$questionid] ?? null;
+    if (!is_array($storedrecord)) {
+        continue;
+    }
+    $repairkeys = [];
+    foreach (['original', 'draft', 'approved'] as $snapshotkey) {
+        if ($reviewedsnapshotneedsrepair($storedrecord[$snapshotkey] ?? null)) {
+            $repairkeys[] = $snapshotkey;
+        }
+    }
+    if ($repairkeys !== []) {
+        $reviewedlegacyrecords[$questionid] = [
+            'keys' => $repairkeys,
+            'replacement' => array_intersect_key($canonicalquestion, array_flip([
+                'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+                'contentType', 'cognitiveLevel', 'difficultyBand', 'source', 'sourceCard', 'nomenclature',
+            ])),
+        ];
+    }
+}
+if ($reviewedlegacyrecords !== []) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $reviewedlegacyrecords,
+        $aipromptversion
+    ): array {
+        foreach ($reviewedlegacyrecords as $questionid => $repair) {
+            $record = $store['questions'][$questionid] ?? null;
+            if (!is_array($record)) {
+                continue;
+            }
+            foreach ((array)$repair['keys'] as $snapshotkey) {
+                if (is_array($record[$snapshotkey] ?? null)) {
+                    $record[$snapshotkey] = array_replace($record[$snapshotkey], $repair['replacement']);
+                }
+            }
+            $record['reviewedDistractorsRepairAt'] = gmdate(DATE_ATOM);
+            $record['aiPromptVersion'] = $aipromptversion;
+            $record['savedAt'] = gmdate(DATE_ATOM);
+            $record['savedByName'] = 'Reviewed distractor repair';
+            $store['questions'][$questionid] = $record;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $fd012canonical = null;
 foreach (($bank['domains'] ?? []) as $questions) {
     foreach ((array)$questions as $question) {
@@ -4615,7 +4704,7 @@ You are a senior NCBAHM Chinese Herbology mock-exam author. Convert the administ
 Requirements:
 1. Determine the best fixed domain from these exact IDs: formula_differentiation, single_herb, dui_yao, safety_dispensing, formula_composition, scope_aliases.
 2. Write a concise, positively worded board-style inference or analysis question with one defensible answer and exactly four parallel A-D choices. Never ask for what is NOT correct, incorrect, false, EXCEPT, or least appropriate. Apply the same rule in Spanish.
-3. Never use the word “Both” in an answer choice, including comparative statements such as “Both are acrid and warm.” Never use “All of them,” “All of the above,” “All options are incorrect,” “All answers are correct,” “None of these,” “None of the above,” “No option is correct,” or any equivalent combined-answer shortcut. Do not create a disguised combined answer by copying or joining two other options into one choice. Each choice must name one specific, independently assessable property, herb, formula, channel set or clinical conclusion. Apply the same prohibition to Spanish choices, including “Todos ellos,” “Todas ellas,” “Todas las opciones son incorrectas,” “Ninguna opción es correcta,” “Ninguno de estos,” “Ninguna de estas,” “Ambos,” and “Ambas.”
+3. Never use the word “Both” in an answer choice, including comparative statements such as “Both are acrid and warm.” Never use “All of them,” “All of the above,” “All options are incorrect,” “All answers are correct,” “None of these,” “None of the above,” “No option is correct,” or any equivalent combined-answer shortcut. Do not create a disguised combined answer by copying or joining two other options into one choice. If a source keyed a combined answer because two source statements were true, do not leave those statements as two true distractors. Rewrite all four choices: place one self-contained, source-supported comparison at the original keyed letter and make the other three independently false but plausible. Each choice must name one specific, independently assessable property, herb, formula, channel set or clinical conclusion. Apply the same prohibition to Spanish choices, including “Todos ellos,” “Todas ellas,” “Todas las opciones son incorrectas,” “Ninguna opción es correcta,” “Ninguno de estos,” “Ninguna de estas,” “Ambos,” and “Ambas.”
 4. Use NCBAHM guideline terminology. Herb names must use “Pinyin (Pharmaceutical Latin)” when herbs appear in the choices or explanation. Use standard formula names consistently.
 5. Do not state the diagnosis, tested action, formula, herb, hierarchy role, preparation rule, or other decisive answer in the stem when observable findings can support an inference instead.
 6. For clinical cases, use concise, memorable didactic settings when useful. Rotate real cities and countries across the United States, China, Spain and elsewhere. Real hospitals, universities or acupuncture schools may be neutral geographic or educational references only; never claim that they treated the fictional patient, hosted the fictional event, endorsed the item or supplied the answer. Every patient, student, clinician and active instructor must be fictional. Never attribute invented speech, teaching, care or affiliation to a real living professor or clinician. A historical scholar or published teaching may be named only when the administrator's idea supplies a verifiable source for it.
@@ -5872,7 +5961,7 @@ Apply the same inference-feedback standard even when the administrator supplied 
 
 Strong feedback is mandatory during every automatic review, even without an administrator comment. The explanation must contain a specific analysis of A, B, C and D. For ingredient-combination choices, identify the source-supported formula or therapeutic strategy represented by each combination, name at least one distinctive ingredient from that option, state its relevant action, and explain why that action fits or fails the case. A sentence such as “Option B targets phlegm” or “Option D is for food stagnation” is too vague and is not compliant. Do not invent a canonical formula name when the source does not support one; in that case name the precise therapeutic strategy and still analyze a distinctive ingredient.
 
-When sourceFeedbackMissing is true, the source item has no usable explanation. Require a newly written explanation with both inference steps and distinct analysis of A, B, C and D in English and Spanish. When prohibitedSourceAnswerChoice is nonempty, inspect the final choices directly and set compliant to false if that shortcut or any equivalent remains. “All of them,” “None of the above,” “All options are incorrect,” “No option is correct,” “Both,” combined-letter answers, a choice formed by concatenating two other choices, and their Spanish equivalents must be replaced by one specific, independently assessable statement.
+When sourceFeedbackMissing is true, the source item has no usable explanation. Require a newly written explanation with both inference steps and distinct analysis of A, B, C and D in English and Spanish. When prohibitedSourceAnswerChoice is nonempty, inspect the final choices directly and set compliant to false if that shortcut or any equivalent remains. “All of them,” “None of the above,” “All options are incorrect,” “No option is correct,” “Both,” combined-letter answers, a choice formed by concatenating two other choices, and their Spanish equivalents must be replaced by one specific, independently assessable statement. If two original source choices were true only because the prohibited combined answer was keyed, reject the draft when either original true statement remains a true distractor. The reviewer must rebuild all four choices so exactly one answer is defensible.
 
 When sourceFeedbackRequiresRebuild is true, the source contains mnemonic or icon-led notes rather than final educational feedback. Set compliant to false if the draft copies “Mnemonic,” “Memory Tip,” “Quick Match,” initial-equals-keyword lists, emoji, decorative arrows or icon bullets. The final explanation must instead convert the supported facts into two inference steps and separate clinical analysis of A, B, C and D.
 
@@ -6231,7 +6320,7 @@ Editorial rules:
 1B. Use answerRepetition to reduce redundant questions. When activeQuestionCount is at least 3, use preferredFocus as a rotation target only if sourceFeedback, sourceCardEvidence or herbProfileEvidence explicitly states the needed fact. Formula-answer groups rotate through clinical differentiation, hierarchy or ingredient role, ingredient function, composition or modification, and preparation or processing. Individual-herb groups rotate through clinical differentiation, distinctive dosage, preparation or processing, safety or contraindication, and channel or function differentiation. Preserve the correct LETTER by placing the new source-supported correct fact at that letter and rebuild all distractors in parallel form. Never infer hierarchy from ingredient order, never assign deputy/assistant/envoy roles when the source only names a chief, never invent or approximate a dose, and never invent a preparation or processing method. If preferredFocus is unsupported or conflicts with the fixed domain, retain the original objective and improve its differentiation instead. Do not transform every repeated answer: clinical occurrences remain clinical, while supported hierarchy, dosage, processing, safety and composition occurrences diversify the set.
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
 2A. For channel-combination questions, do not invent a patient vignette, tongue, pulse or diagnosis when the source supplies only herb actions and channel relationships. Build the two-step inference directly from the supplied actions: first map each action to its organ system or burner, then select the channel set that covers those targets. Preserve standard channel abbreviations such as SP, ST and LU and the keyed answer LETTER. When channelCombinationRequiresHerbMapping is true, every Option A-D paragraph in both languages must explicitly name the source-supported herb represented by that exact channel set, using relevantGuidelineNames when available, and explain the distinguishing channel or action. When requiredChannelHerbMappings is nonempty, copy each exact mapped herb name into the matching option paragraph in both languages. Do not merely say that a distractor lacks or adds a channel. For the warm-Yang comparison, SP/ST/LU maps to Gan Jiang, HT/KI/SP maps to Fu Zi, HT/KI/LV/SP maps to Rou Gui, and SP/ST/KI/LV maps to Xiao Hui Xiang. Treat the keyed set as the best source-supported combination being tested rather than claiming it is an exhaustive monograph when the source does not establish exhaustiveness.
-3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use the word "Both" in an answer choice, including comparative statements such as "Both are acrid and warm," and never use "All of them," "All of the above," "All options are incorrect," "All answers are correct," "None of these," "None of the above," "No option is correct," "A and B are correct," or any equivalent combined-answer shortcut. Do not disguise a combined answer by copying, concatenating or joining two other choices into the keyed option. Apply the same prohibition to Spanish choices, including "Todos ellos," "Todas ellas," "Todas las opciones son incorrectas," "Ninguna opción es correcta," "Ninguno de estos," "Ninguna de estas," "Ambos," and "Ambas." When prohibitedSourceAnswerChoice is nonempty, that exact source choice must be replaced. Preserve its LETTER and underlying tested fact, but write one self-contained, unambiguous answer statement that assesses a single specific property, herb, formula, channel set or clinical conclusion. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
+3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use the word "Both" in an answer choice, including comparative statements such as "Both are acrid and warm," and never use "All of them," "All of the above," "All options are incorrect," "All answers are correct," "None of these," "None of the above," "No option is correct," "A and B are correct," or any equivalent combined-answer shortcut. Do not disguise a combined answer by copying, concatenating or joining two other choices into the keyed option. Apply the same prohibition to Spanish choices, including "Todos ellos," "Todas ellas," "Todas las opciones son incorrectas," "Ninguna opción es correcta," "Ninguno de estos," "Ninguna de estas," "Ambos," and "Ambas." When prohibitedSourceAnswerChoice is nonempty, that exact source choice must be replaced. Preserve its LETTER and underlying tested fact, but write one self-contained, unambiguous answer statement that assesses a single specific property, herb, formula, channel set or clinical conclusion. If the prohibited source key combined two true source statements, rewrite those statements too: do not leave either one as a true distractor. Rebuild A-D so the preserved keyed letter is the only defensible answer. Standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when the guideline term is available.
 3A. Every final question must be positively worded. Always remove NOT-correct, incorrect, inaccurate, false, error, EXCEPT and least-appropriate framing from the stem, even when the administrator did not explicitly request this change. Reconstruct the item rather than lightly editing it: preserve the source-supported educational objective and keyed LETTER, rewrite the keyed option into a true source-supported statement, and rebuild the other three choices as plausible false or weaker statements. Apply the same rule to the Spanish stem. The final explanation must be educational feedback, never the administrator's instruction.
 3B. When administratorInstructionHistory or latestAdministratorInstruction asks to add, include, place or name herbs in the distractors, choices, stem or question, the final visible stem or choices must contain concrete source-supported herbs rather than only pattern or diagnosis labels. Standardize each as Pinyin (Pharmaceutical Latin). If the request uses the plural “herbs” or “hierbas,” include at least two distinct herbs. Herbs mentioned only in the explanation or reviewSummary do not implement the instruction.
 4. Write mock-exam feedback in this explicit teaching sequence: "Inference step 1:", "Inference step 2:", "Option A:", "Option B:", "Option C:", and "Option D:". Step 1 must state what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence. Step 2 must explain why that conclusion selects the keyed answer. Identify which findings are decisive and which details are contextual distractors. Analyze the keyed choice and every distractor separately; never omit an option or use one generic sentence for several options. The Spanish explanation must use the parallel headings "Paso de inferencia 1:", "Paso de inferencia 2:", "Opción A:", "Opción B:", "Opción C:", and "Opción D:". Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.

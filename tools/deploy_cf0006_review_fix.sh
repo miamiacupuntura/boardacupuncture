@@ -92,7 +92,7 @@ php -l "$QUESTION_BANK_SOURCE" >/dev/null
 php -l "$OVERRIDES_SOURCE" >/dev/null
 php -l "$HERBOLOGY_BOARD_SOURCE" >/dev/null
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$SOURCE_DATA"
-grep -Fq "ncbahm-mock-editor-4.3" "$QUESTION_BANK_SOURCE"
+grep -Fq "ncbahm-mock-editor-4.4" "$QUESTION_BANK_SOURCE"
 grep -Fq "sourceFeedbackMissing" "$QUESTION_BANK_SOURCE"
 grep -Fq '$requestedvisibleherbcount' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Requested herbs missing · correction required' "$QUESTION_BANK_SOURCE"
@@ -106,6 +106,8 @@ grep -Fq '$hasreviewablecontent' "$QUESTION_BANK_SOURCE"
 grep -Fq 'All options are incorrect' "$QUESTION_BANK_SOURCE"
 grep -Fq 'opci[oó]n(?:es)?' "$QUESTION_BANK_SOURCE"
 grep -Fq "'SCORM-FD-E4D38EA9FCBA' => 'CF-0056'" "$QUESTION_BANK_SOURCE"
+grep -Fq "'SCORM-FD-5917E7491258' => 'CF-0305'" "$QUESTION_BANK_SOURCE"
+grep -Fq 'reviewedDistractorsRepairAt' "$QUESTION_BANK_SOURCE"
 grep -Fq '$questionsusedinpriorexams' "$QUESTION_BANK_SOURCE"
 grep -Fq 'priorExamQuestionIdsSkipped' "$QUESTION_BANK_SOURCE"
 grep -Fq "'prior_exam'" "$QUESTION_BANK_SOURCE"
@@ -147,6 +149,37 @@ if (!is_array($found) || trim((string)($found["explanation"] ?? "")) === ""
         || preg_match("/Both of them|None of them|Ambos\\.|Ninguno de ellos/u", (string)$text)) {
     fwrite(STDERR, "ERROR: CF-0056 todavía contiene la comparación combinada defectuosa.\n");
     exit(1);
+}' "$SOURCE_DATA"
+php -r '
+$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+$required=[
+    "CF-0127"=>"D", "CF-0213"=>"C", "CF-0227"=>"D", "CF-0230"=>"C",
+    "CF-0280"=>"C", "CF-0305"=>"C", "CF-1582"=>"B",
+];
+$found=[];
+foreach (($data["domains"] ?? []) as $questions) {
+    foreach ($questions as $question) {
+        $id=(string)($question["questionId"] ?? "");
+        if (isset($required[$id])) { $found[$id]=$question; }
+    }
+}
+$prohibited="/(?:\\bboth\\b|all\\s+of\\s+them|none\\s+of\\s+them|todos\\s+ellos|ninguno\\s+de\\s+ellos|\\bambos\\b)/iu";
+$negative="/\\b(?:except|incorrect|not\\s+correct|false|least\\s+appropriate)\\b|\\b(?:excepto|incorrect[oa]s?|fals[oa]s?)\\b/iu";
+foreach ($required as $id=>$correct) {
+    $question=$found[$id] ?? null;
+    $options=(array)($question["options"] ?? []);
+    $esoptions=(array)($question["translations"]["es"]["options"] ?? []);
+    $optiontext=json_encode(array_merge($options, $esoptions), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if (!is_array($question) || ($question["correctLabel"] ?? "") !== $correct
+            || count($options) !== 4 || count($esoptions) !== 4
+            || trim((string)($question["explanation"] ?? "")) === ""
+            || trim((string)($question["translations"]["es"]["explanation"] ?? "")) === ""
+            || trim((string)($question["sourceCard"]["url"] ?? "")) === ""
+            || preg_match($prohibited, (string)$optiontext)
+            || preg_match($negative, (string)($question["prompt"] ?? ""))) {
+        fwrite(STDERR, "ERROR: $id todavía contiene distractores defectuosos o contenido incompleto.\n");
+        exit(1);
+    }
 }' "$SOURCE_DATA"
 php -r '
 $data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
@@ -288,7 +321,7 @@ block_myprogress_herbology_override_update(static function(array $store) use (
     $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
     $record['savedAt'] = gmdate(DATE_ATOM);
     $record['savedByName'] = 'CF-0126 deployment migration';
-    $record['aiPromptVersion'] = 'ncbahm-mock-editor-4.3';
+    $record['aiPromptVersion'] = 'ncbahm-mock-editor-4.4';
     $record['cf0126MigratedAt'] = gmdate(DATE_ATOM);
     $store['questions']['CF-0126'] = $record;
     $changed = true;
@@ -355,6 +388,8 @@ echo "OK: SCORM-FD-E4D38EA9FCBA usa la comparación corregida de Yu Ping Feng Sa
 echo "OK: las preguntas ya publicadas en otro examen se omiten de los exámenes nuevos y se reemplazan por preguntas del mismo dominio."
 echo "OK: la publicación queda bloqueada si un examen todavía contiene una pregunta usada anteriormente."
 echo "OK: FD-012 contiene versiones completas y separadas en inglés y español."
+echo "OK: CF-0127, CF-0213, CF-0227, CF-0230, CF-0280, CF-0305 y CF-1582 tienen cuatro opciones independientes, una sola respuesta defendible y feedback A-D."
+echo "OK: SCORM-FD-5917E7491258 usa la comparación corregida de Yue Ju Wan y Liang Fu Wan."
 echo "OK: $CF0126_OVERRIDE_RESULT"
 echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"
 echo "OK: revisión instalada: $REVISION"
