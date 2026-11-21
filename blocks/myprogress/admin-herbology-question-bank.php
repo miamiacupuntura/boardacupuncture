@@ -25,6 +25,8 @@ $custompreviewids = array_slice(array_values(array_unique(array_filter(
     static fn(string $questionid): bool => preg_match('/^[A-Za-z0-9_-]+$/', $questionid) === 1
 ))), 0, 5);
 $custompreview = implode(',', $custompreviewids);
+$creationcomplete = (bool)optional_param('creationcomplete', 0, PARAM_BOOL);
+$creationpreview = (bool)optional_param('creationpreview', 0, PARAM_BOOL);
 $editquestionid = optional_param('edit', '', PARAM_ALPHANUMEXT);
 $shownewquestionform = (bool)optional_param('newquestion', 0, PARAM_BOOL);
 $showaiassistant = (bool)optional_param('aiassistant', 0, PARAM_BOOL);
@@ -1949,6 +1951,48 @@ $customapprovedcount = count(array_filter(
     $customquestionrecords,
     static fn(array $record): bool => (string)($record['status'] ?? 'draft') === 'approved'
 ));
+$creationbatchid = '';
+$creationbatchrecords = [];
+$creationreferenceids = $custompreviewids;
+if ($creationreferenceids === [] && ($creationpreview || $creationcomplete) && $query !== '') {
+    $creationreferenceids[] = $query;
+}
+foreach ($creationreferenceids as $creationreferenceid) {
+    $creationrecord = $customquestionrecords[$creationreferenceid] ?? null;
+    if (is_array($creationrecord)
+            && trim((string)($creationrecord['creationBatchId'] ?? '')) !== '') {
+        $creationbatchid = (string)$creationrecord['creationBatchId'];
+        break;
+    }
+}
+if ($creationbatchid !== '') {
+    foreach ($customquestionrecords as $creationquestionid => $creationrecord) {
+        if ((string)($creationrecord['creationBatchId'] ?? '') === $creationbatchid) {
+            $creationbatchrecords[(string)$creationquestionid] = $creationrecord;
+        }
+    }
+    uasort($creationbatchrecords, static function(array $left, array $right): int {
+        return (int)($left['creationBatchPosition'] ?? 0)
+            <=> (int)($right['creationBatchPosition'] ?? 0);
+    });
+}
+$creationbatchtotal = count($creationbatchrecords);
+$creationbatchpublished = count(array_filter(
+    $creationbatchrecords,
+    static fn(array $record): bool => (string)($record['status'] ?? '') === 'approved'
+));
+$creationbatchpending = count(array_filter(
+    $creationbatchrecords,
+    static fn(array $record): bool => (string)($record['status'] ?? 'draft') === 'draft'
+));
+$creationtargetexamid = $newquestiontargetexam;
+if ($creationtargetexamid === '' && $creationbatchrecords !== []) {
+    $firstcreationrecord = reset($creationbatchrecords);
+    $creationtargetexamid = is_array($firstcreationrecord)
+        ? (string)($firstcreationrecord['targetExamProjectId'] ?? '')
+        : '';
+}
+$creationmode = $shownewquestionform || $creationpreview || $custompreviewids !== [] || $creationcomplete;
 
 $cognitivebucket = static function(array $question): string {
     $value = strtolower(trim((string)($question['cognitiveLevel'] ?? '')));
@@ -4586,6 +4630,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             'source' => 'admin',
             'readiness' => $remainingcustombatchids !== [] ? 'incomplete' : null,
             'examproject' => $customtargetexamid !== '' ? $customtargetexamid : null,
+            'creationcomplete' => $remainingcustombatchids === [] ? 1 : null,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
         ])
     );
     $customapprovalurl->set_anchor(
@@ -5282,6 +5328,7 @@ PROMPT;
         '/blocks/myprogress/admin-herbology-question-bank.php',
         array_filter([
             'q' => $custombatchcount === 1 ? $createdcustomquestionids[0] : null,
+            'creationpreview' => $custombatchcount === 1 ? 1 : null,
             'custompreview' => $custombatchcount > 1
                 ? implode(',', $createdcustomquestionids)
                 : null,
@@ -7708,6 +7755,33 @@ document.querySelectorAll('.question-bank__automatic-review-form').forEach(funct
 });
 JS);
 $PAGE->requires->js_init_code(<<<'JS'
+document.querySelectorAll('.question-bank__creation-form').forEach(function(form) {
+    form.addEventListener('submit', function() {
+        var button = form.querySelector('button[type="submit"]');
+        var spanish = new URLSearchParams(window.location.search).get('lang') === 'es';
+        if (button) {
+            button.disabled = true;
+            button.textContent = spanish ? 'Creando y verificando…' : 'Creating and checking…';
+        }
+        if (document.getElementById('question-bank-creation-progress')) {
+            return;
+        }
+        var overlay = document.createElement('div');
+        overlay.id = 'question-bank-creation-progress';
+        overlay.className = 'question-bank__review-progress-overlay';
+        overlay.setAttribute('role', 'status');
+        overlay.setAttribute('aria-live', 'assertive');
+        overlay.innerHTML = '<span class="question-bank__review-spinner" aria-hidden="true"></span><strong>'
+            + (spanish ? 'Creando el lote actual' : 'Creating the current batch') + '</strong><small>'
+            + (spanish
+                ? 'La IA está redactando, validando y comprobando duplicados. No vuelva a pulsar el botón; la vista previa aparecerá automáticamente.'
+                : 'AI is drafting, validating and checking duplicates. Do not press the button again; the preview will appear automatically.')
+            + '</small>';
+        document.body.appendChild(overlay);
+    });
+});
+JS);
+$PAGE->requires->js_init_code(<<<'JS'
 (function() {
     var root = document.querySelector('[data-question-bank-inventory]');
     if (!root) {
@@ -7880,9 +7954,41 @@ echo $OUTPUT->header();
 .question-bank__same-answer-audit{margin:0 0 16px;padding:16px;border:1px solid #6d28d9;border-left:5px solid #6d28d9;border-radius:11px;background:#faf8ff}.question-bank__same-answer-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.question-bank__same-answer-head h3{margin:0 0 5px;color:#3b167d;font-size:21px}.question-bank__same-answer-head p{max-width:900px;margin:0;color:#66557e}.question-bank__same-answer-stats{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.question-bank__same-answer-stats span{padding:6px 9px;border-radius:999px;background:#ede9fe;color:#4c1d95;font-weight:850}.question-bank__same-answer-form{display:grid;grid-template-columns:minmax(280px,1fr) auto auto;align-items:end;gap:9px;margin:12px 0}.question-bank__same-answer-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:900}.question-bank__same-answer-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #ad9bd2;border-radius:7px;background:#fff}.question-bank__same-answer-list{display:grid;gap:12px;margin-top:12px}.question-bank__same-answer-group{padding:13px;border:1px solid #d8ccef;border-radius:9px;background:#fff}.question-bank__same-answer-group>header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.question-bank__same-answer-group h4{margin:0;color:#3b167d;font-size:18px}.question-bank__same-answer-group header small{display:block;margin-top:4px;color:#66557e}.question-bank__same-answer-count{flex:0 0 auto;padding:5px 8px;border-radius:999px;background:#ede9fe;color:#4c1d95;font-weight:900}.question-bank__same-answer-warning{margin:9px 0 0;padding:8px 10px;border-radius:7px;background:#fff3e6;color:#8a3c00;font-weight:800}.question-bank__same-answer-questions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.question-bank__same-answer-question{padding:10px;border:1px solid #e1e8ec;border-radius:7px;background:#f8fafc}.question-bank__same-answer-question>header{display:flex;align-items:center;justify-content:space-between;gap:8px}.question-bank__same-answer-question p{margin:7px 0;color:#334e60;line-height:1.4}.question-bank__same-answer-question small{display:block;margin-bottom:8px;color:#60758a}.question-bank__same-answer-group>.question-bank__editor-actions{margin-top:10px;padding-top:10px;border-top:1px solid #e1e8ec}@media(max-width:800px){.question-bank__same-answer-head{flex-direction:column}.question-bank__same-answer-form,.question-bank__same-answer-questions{grid-template-columns:1fr}}
 .question-bank__similarity-finder{margin:0 0 16px;padding:16px;border:1px solid #0b8f87;border-left:5px solid #0b8f87;border-radius:11px;background:#f5fbfa}.question-bank__similarity-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.question-bank__similarity-head h3{margin:0 0 5px;color:#075f59;font-size:21px}.question-bank__similarity-head p{max-width:900px;margin:0;color:#52677a}.question-bank__similarity-form{display:grid;grid-template-columns:minmax(280px,1fr) auto;align-items:end;gap:10px;margin:14px 0 8px}.question-bank__similarity-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:900}.question-bank__similarity-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #9bbdc0;border-radius:7px;background:#fff}.question-bank__similarity-note{margin:7px 0 12px;color:#52677a;font-size:13px}.question-bank__similarity-target{padding:12px;border:2px solid #6d28d9;border-radius:8px;background:#fff}.question-bank__similarity-target>span{display:block;color:#6d28d9;font-size:11px;font-weight:900;text-transform:uppercase}.question-bank__similarity-target>strong{display:block;margin:3px 0 5px;font-size:17px}.question-bank__similarity-target p{margin:0 0 7px}.question-bank__similarity-summary{margin:12px 0 8px;color:#52677a}.question-bank__similarity-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.question-bank__similarity-result{padding:12px;border:1px solid #c9dadd;border-radius:8px;background:#fff}.question-bank__similarity-result>header{display:flex;align-items:center;justify-content:space-between;gap:9px}.question-bank__similarity-result>p{margin:9px 0;color:#334e60;line-height:1.45}.question-bank__similarity-answer{margin:8px 0;padding:8px 10px;border-radius:6px;background:#eef9f6;color:#075f59}.question-bank__similarity-result>small{display:block;margin-bottom:9px;color:#66557e}.question-bank__merge-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;padding-top:9px;border-top:1px solid #e1eaed}.question-bank__merge-actions form{margin:0}@media(max-width:800px){.question-bank__similarity-results,.question-bank__similarity-form{grid-template-columns:1fr}.question-bank__similarity-head{flex-direction:column}}
 .question-bank__similarity-form{grid-template-columns:minmax(210px,.55fr) minmax(280px,1fr) auto}.question-bank__similarity-form select{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #9bbdc0;border-radius:7px;background:#fff}@media(max-width:800px){.question-bank__similarity-form{grid-template-columns:1fr}}
+.question-bank__creation-state{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:0 0 16px;padding:16px 18px;border:2px solid #0b8f87;border-radius:11px;background:#f2fbf9}.question-bank__creation-state h3{margin:0 0 5px;color:#075f59;font-size:22px}.question-bank__creation-state p{margin:0;color:#52677a;line-height:1.45}.question-bank__creation-steps{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.question-bank__creation-step{padding:5px 9px;border-radius:999px;background:#e2ecef;color:#52677a;font-size:12px;font-weight:850}.question-bank__creation-step.is-current{background:#6d28d9;color:#fff}.question-bank__creation-step.is-complete{background:#dff5ef;color:#075f59}.question-bank--creation .question-bank__hero .question-bank__actions,.question-bank--creation>nav[aria-label="Mock-only questions"],.question-bank--creation>.question-bank__language-state,.question-bank--creation>.question-bank__exam-builder,.question-bank--creation>.question-bank__technical-exports,.question-bank--creation>.question-bank__assistant,.question-bank--creation>.question-bank__similarity-finder,.question-bank--creation>.question-bank__same-answer-audit,.question-bank--creation>.question-bank__summary,.question-bank--creation>.question-bank__filters,.question-bank--creation>.question-bank__active-filters,.question-bank--creation>.question-bank__domains,.question-bank--creation>.question-bank__review-progress,.question-bank--creation>.question-bank__ai-batch,.question-bank--creation>.question-bank__editor,.question-bank--creation .question-bank__item .question-bank__meta form,.question-bank--creation .question-bank__item .question-bank__meta a.question-bank__button{display:none}.question-bank--creation-entry>.question-bank__result-head,.question-bank--creation-entry>.question-bank__items,.question-bank--creation-entry>.question-bank__pagination{display:none}@media(max-width:700px){.question-bank__creation-state{flex-direction:column}.question-bank__creation-state .question-bank__button{width:100%}}
 </style>
-<main class="question-bank">
+<main class="question-bank<?php echo $creationmode ? ' question-bank--creation' : ''; ?><?php echo $shownewquestionform ? ' question-bank--creation-entry' : ''; ?>">
     <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button" href="<?php echo $similarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar answers'; ?></a><a class="question-bank__button question-bank__button--similar" href="<?php echo $sameanswerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Revisar respuestas repetidas' : 'Review repeated answers'; ?> (<?php echo (int)$sameanswerreport['groupCount']; ?>)</a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
+    <?php if ($creationmode): ?>
+    <section class="question-bank__creation-state" aria-live="polite">
+        <div>
+            <h3><?php echo $shownewquestionform
+                ? ($displaylang === 'es' ? 'Crear preguntas nuevas' : 'Create new questions')
+                : ($creationcomplete
+                    ? ($displaylang === 'es' ? 'Pregunta publicada correctamente ✓' : 'Question published successfully ✓')
+                    : ($displaylang === 'es' ? 'Revisar solamente el lote nuevo' : 'Review only the new batch')); ?></h3>
+            <p><?php if ($shownewquestionform): ?><?php echo $displaylang === 'es'
+                    ? 'Pegue una o varias preguntas. No se mostrarán preguntas antiguas ni borradores guardados de otros trabajos.'
+                    : 'Paste one or several questions. Older questions and saved drafts from other work will not be shown.'; ?>
+                <?php elseif ($creationcomplete): ?><?php echo $displaylang === 'es'
+                    ? 'La pregunta visible quedó publicada'
+                        . ($creationtargetexamid !== '' && is_array($currentexamproject)
+                            ? ' y añadida a ' . (string)$currentexamproject['name']
+                            : '')
+                        . '. No hay otra versión oculta ni una aprobación pendiente.'
+                    : 'The visible question is published'
+                        . ($creationtargetexamid !== '' && is_array($currentexamproject)
+                            ? ' and added to ' . (string)$currentexamproject['name']
+                            : '')
+                        . '. There is no hidden version or pending approval.'; ?>
+                <?php else: ?><?php echo ($displaylang === 'es' ? 'Lote actual: ' : 'Current batch: ')
+                    . (int)$creationbatchtotal . ($displaylang === 'es' ? ' creadas · ' : ' created · ')
+                    . (int)$creationbatchpublished . ($displaylang === 'es' ? ' publicadas · ' : ' published · ')
+                    . (int)$creationbatchpending . ($displaylang === 'es' ? ' pendientes.' : ' pending.'); ?><?php endif; ?></p>
+            <div class="question-bank__creation-steps"><span class="question-bank__creation-step<?php echo $shownewquestionform ? ' is-current' : ' is-complete'; ?>">1 · <?php echo $displaylang === 'es' ? 'Crear' : 'Create'; ?></span><span class="question-bank__creation-step<?php echo !$shownewquestionform && !$creationcomplete ? ' is-current' : ($creationcomplete ? ' is-complete' : ''); ?>">2 · <?php echo $displaylang === 'es' ? 'Revisar' : 'Review'; ?></span><span class="question-bank__creation-step<?php echo $creationcomplete ? ' is-complete' : ''; ?>">3 · <?php echo $displaylang === 'es' ? 'Publicar' : 'Publish'; ?></span></div>
+        </div>
+        <a class="question-bank__button" href="<?php echo ($creationtargetexamid !== '' && $pendingexamprojecturl !== null ? $pendingexamprojecturl : $clearurl)->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cerrar creación' : 'Close creation'; ?></a>
+    </section>
+    <?php endif; ?>
     <?php if ($studyarchivecount > 0): ?><nav class="question-bank__actions" aria-label="Mock-only questions"><a class="question-bank__button question-bank__button--similar" href="<?php echo $studyarchiveurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Preguntas enviadas a Mock' : 'Mock-only questions'; ?> (<?php echo (int)$studyarchivecount; ?>)</a></nav><?php endif; ?>
     <?php if ($displaylang === 'es'): ?><section class="question-bank__language-state"><strong>Vista en español activa</strong>Los controles principales y las traducciones disponibles se muestran en español. Cuando una pregunta todavía no tiene traducción guardada, se identifica claramente y se conserva el original inglés para evitar una traducción clínica no verificada.</section><?php endif; ?>
     <?php if (is_array($mergecomposer)):
@@ -8309,7 +8415,7 @@ echo $OUTPUT->header();
             </div>
         <?php endif; ?>
         <p>Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as <strong>### Question 1</strong> or <strong>### 2.</strong>, lines containing <strong>---</strong>, and repeated <strong>Correct answer:</strong> or <strong>Respuesta correcta:</strong> labels. It creates an independent draft for each question and immediately displays a visible index of the complete batch.</p>
-        <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+        <form class="question-bank__creation-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
             <textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."></textarea>
             <input type="hidden" name="formaction" value="createnewquestion">
             <input type="hidden" name="targetdomain" value="<?php echo s($newquestiontargetdomain); ?>">
@@ -8452,9 +8558,9 @@ echo $OUTPUT->header();
     </section>
     <?php if ($custompreviewids !== []): ?>
     <section id="new-question-batch-preview" class="question-bank__batch-preview" aria-label="<?php echo $displaylang === 'es' ? 'Índice del lote recién creado' : 'Newly created batch index'; ?>">
-        <h3><?php echo count($custompreviewids); ?> <?php echo $displaylang === 'es' ? (count($custompreviewids) === 1 ? 'pregunta creada' : 'preguntas creadas') : (count($custompreviewids) === 1 ? 'question created' : 'questions created'); ?></h3>
-        <p><?php echo $displaylang === 'es' ? 'Todas están debajo como borradores completos. Use estos botones para abrir cada pregunta y revisar su enunciado, opciones, respuesta y explicación.' : 'Every item appears below as a complete draft. Use these buttons to open each question and review its stem, choices, answer and explanation.'; ?></p>
-        <nav><?php foreach ($custompreviewids as $custompreviewindex => $custompreviewid): ?><a href="#question-<?php echo s($custompreviewid); ?>"><?php echo $displaylang === 'es' ? 'Pregunta' : 'Question'; ?> <?php echo $custompreviewindex + 1; ?> <small><?php echo s($custompreviewid); ?></small></a><?php endforeach; ?></nav>
+        <h3><?php echo $displaylang === 'es' ? 'Lote actual' : 'Current batch'; ?> · <?php echo (int)$creationbatchtotal; ?> <?php echo $displaylang === 'es' ? 'preguntas' : 'questions'; ?></h3>
+        <p><?php echo (int)$creationbatchpublished; ?> <?php echo $displaylang === 'es' ? 'publicadas y' : 'published and'; ?> <?php echo (int)$creationbatchpending; ?> <?php echo $displaylang === 'es' ? 'pendientes. Debajo aparecen únicamente las pendientes de este lote.' : 'pending. Only pending questions from this batch appear below.'; ?></p>
+        <nav><?php foreach ($custompreviewids as $custompreviewindex => $custompreviewid): $custompreviewposition = (int)($customquestionrecords[$custompreviewid]['creationBatchPosition'] ?? ($custompreviewindex + 1)); ?><a href="#question-<?php echo s($custompreviewid); ?>"><?php echo $displaylang === 'es' ? 'Pregunta' : 'Question'; ?> <?php echo $custompreviewposition; ?> <small><?php echo s($custompreviewid); ?></small></a><?php endforeach; ?></nav>
     </section>
     <?php endif; ?>
     <div id="pending-questions" class="question-bank__result-head"><div class="question-bank__result-context" data-result-filter-context><strong><?php echo $displaylang === 'es' ? 'Preguntas mostradas:' : 'Questions shown:'; ?></strong><span><?php echo s(implode(' · ', $resultfiltercontext)); ?></span></div><span data-inventory-result-count><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
