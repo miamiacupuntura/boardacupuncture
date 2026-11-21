@@ -166,9 +166,28 @@ foreach ($bank['domains'] as &$questions) {
 unset($questions);
 $revisionstore = block_myprogress_herbology_override_load();
 $publishedprojectrepairs = [];
+$questionsusedinpriorexams = [];
+foreach (($bank['domains'] ?? []) as $questions) {
+    foreach ((array)$questions as $question) {
+        if ((int)($question['examTemplate']['globalPosition'] ?? 0) > 0) {
+            $questionid = (string)($question['questionId'] ?? '');
+            if ($questionid !== '') {
+                $questionsusedinpriorexams[$questionid] = true;
+            }
+        }
+    }
+}
 foreach ((array)($revisionstore['publishedExams'] ?? []) as $publishedexamrecord) {
     if (!is_array($publishedexamrecord)) {
         continue;
+    }
+    foreach ((array)($publishedexamrecord['questions'] ?? []) as $publishedquestion) {
+        $publishedquestionid = is_array($publishedquestion)
+            ? (string)($publishedquestion['questionId'] ?? '')
+            : '';
+        if ($publishedquestionid !== '') {
+            $questionsusedinpriorexams[$publishedquestionid] = true;
+        }
     }
     $publishedprojectid = (string)($publishedexamrecord['projectId'] ?? '');
     $publishedproject = $revisionstore['examProjects'][$publishedprojectid] ?? null;
@@ -195,9 +214,32 @@ foreach ((array)($revisionstore['publishedExams'] ?? []) as $publishedexamrecord
         $publishedprojectrepairs[$publishedprojectid] = $publishedsnapshotids;
     }
 }
-if ($publishedprojectrepairs !== []) {
+$draftprojectreuserepairs = [];
+foreach ((array)($revisionstore['examProjects'] ?? []) as $draftprojectid => $draftproject) {
+    if (!is_array($draftproject) || (string)($draftproject['status'] ?? 'draft') === 'published') {
+        continue;
+    }
+    $draftprojectid = (string)($draftproject['id'] ?? $draftprojectid);
+    $storedquestionids = array_values(array_unique(array_filter(array_map(
+        'strval',
+        (array)($draftproject['questionIds'] ?? [])
+    ))));
+    $retainedquestionids = array_values(array_filter(
+        $storedquestionids,
+        static fn(string $questionid): bool => !isset($questionsusedinpriorexams[$questionid])
+    ));
+    if (count($retainedquestionids) === count($storedquestionids)) {
+        continue;
+    }
+    $draftprojectreuserepairs[$draftprojectid] = [
+        'questionIds' => $retainedquestionids,
+        'removedQuestionIds' => array_values(array_diff($storedquestionids, $retainedquestionids)),
+    ];
+}
+if ($publishedprojectrepairs !== [] || $draftprojectreuserepairs !== []) {
     block_myprogress_herbology_override_update(static function(array $store) use (
-        $publishedprojectrepairs
+        $publishedprojectrepairs,
+        $draftprojectreuserepairs
     ): array {
         foreach ($publishedprojectrepairs as $publishedprojectid => $publishedsnapshotids) {
             if (!is_array($store['examProjects'][$publishedprojectid] ?? null)) {
@@ -205,6 +247,36 @@ if ($publishedprojectrepairs !== []) {
             }
             $store['examProjects'][$publishedprojectid]['questionIds'] = $publishedsnapshotids;
             $store['examProjects'][$publishedprojectid]['membershipRepairedAt'] = gmdate(DATE_ATOM);
+        }
+        foreach ($draftprojectreuserepairs as $draftprojectid => $repair) {
+            if (!is_array($store['examProjects'][$draftprojectid] ?? null)) {
+                continue;
+            }
+            $removedlookup = array_fill_keys((array)$repair['removedQuestionIds'], true);
+            $store['examProjects'][$draftprojectid]['questionIds'] = $repair['questionIds'];
+            $store['examProjects'][$draftprojectid]['confirmedQuestionIds'] = array_values(array_filter(
+                array_map(
+                    'strval',
+                    (array)($store['examProjects'][$draftprojectid]['confirmedQuestionIds'] ?? [])
+                ),
+                static fn(string $questionid): bool => !isset($removedlookup[$questionid])
+            ));
+            $previouslyskipped = array_map(
+                'strval',
+                (array)($store['examProjects'][$draftprojectid]['priorExamQuestionIdsSkipped'] ?? [])
+            );
+            $store['examProjects'][$draftprojectid]['priorExamQuestionIdsSkipped'] = array_values(array_unique(
+                array_merge($previouslyskipped, (array)$repair['removedQuestionIds'])
+            ));
+            $store['examProjects'][$draftprojectid]['priorExamMembershipRepairedAt'] = gmdate(DATE_ATOM);
+            foreach ((array)$repair['removedQuestionIds'] as $removedquestionid) {
+                if (is_array($store['questions'][$removedquestionid] ?? null)
+                        && (string)($store['questions'][$removedquestionid]['examProjectId'] ?? '')
+                            === $draftprojectid) {
+                    unset($store['questions'][$removedquestionid]['examProjectId']);
+                    $store['questions'][$removedquestionid]['removedFromExamProjectAt'] = gmdate(DATE_ATOM);
+                }
+            }
         }
         return $store;
     });
@@ -487,6 +559,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'updateexamquestion
     if ($findquestion($basebank, $questionid) === null) {
         throw new invalid_parameter_exception('Unknown Herbology question ID.');
     }
+    if ($examaction === 'add' && isset($questionsusedinpriorexams[$questionid])) {
+        throw new invalid_parameter_exception(
+            'This question already belongs to a published exam and cannot be added to another exam.'
+        );
+    }
     $savedat = gmdate(DATE_ATOM);
     block_myprogress_herbology_override_update(static function(array $store) use (
         $submittedexamid,
@@ -511,6 +588,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'updateexamquestion
         } else if ($examaction === 'remove' && $isincluded) {
             $questionids = array_values(array_filter(
                 $questionids,
+                static fn(string $id): bool => $id !== $questionid
+            ));
+            $project['confirmedQuestionIds'] = array_values(array_filter(
+                array_map('strval', (array)($project['confirmedQuestionIds'] ?? [])),
                 static fn(string $id): bool => $id !== $questionid
             ));
         }
@@ -988,6 +1069,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishcurrentques
     $directreturnorigin = (bool)optional_param('returnorigin', 0, PARAM_BOOL);
     $directpinforexam2 = (bool)optional_param('pinforexam2', 0, PARAM_BOOL);
     $directexamprojectid = $examprojectid;
+    if ($directexamprojectid !== '' && isset($questionsusedinpriorexams[$questionid])) {
+        $directexamprojectid = '';
+    }
     if ($directexamprojectid !== ''
             && !is_array($revisionstore['examProjects'][$directexamprojectid] ?? null)) {
         throw new invalid_parameter_exception('Unknown exam project.');
@@ -1128,6 +1212,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
     $approvalexamprojectid = $examprojectid !== ''
         ? $examprojectid
         : (string)($revisionstore['questions'][$questionid]['examProjectId'] ?? '');
+    if ($approvalexamprojectid !== '' && isset($questionsusedinpriorexams[$questionid])) {
+        $approvalexamprojectid = '';
+    }
     if ($approvalexamprojectid !== ''
             && !is_array($revisionstore['examProjects'][$approvalexamprojectid] ?? null)) {
         $approvalexamprojectid = '';
@@ -1386,6 +1473,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
     ];
     $requestreclassification = (bool)optional_param('requestreclassification', 0, PARAM_BOOL);
     $editexamprojectid = optional_param('examproject', '', PARAM_ALPHANUMEXT);
+    if ($editexamprojectid !== '' && isset($questionsusedinpriorexams[$questionid])) {
+        $editexamprojectid = '';
+    }
     if ($editexamprojectid !== ''
             && !is_array($revisionstore['examProjects'][$editexamprojectid] ?? null)) {
         $editexamprojectid = '';
@@ -1963,15 +2053,31 @@ $exam2quality = static function(array $question): array {
         hash('sha256', 'ncbahm-simulation-exam-2|' . (string)($question['questionId'] ?? '')),
     ];
 };
+$publishedexam2 = is_array($revisionstore['publishedExams']['simulation_exam_2'] ?? null)
+    ? $revisionstore['publishedExams']['simulation_exam_2']
+    : null;
 $exam2positions = [];
-foreach ($domains as $domainid => $unused) {
-    usort($exam2eligiblebydomain[$domainid], static function(array $left, array $right) use ($exam2quality): int {
-        return $exam2quality($left) <=> $exam2quality($right);
-    });
-    $slots = $exam2slotsbydomain[$domainid];
-    $selected = array_slice($exam2eligiblebydomain[$domainid], 0, count($slots));
-    foreach ($selected as $index => $question) {
-        $exam2positions[(string)$question['questionId']] = (int)$slots[$index];
+if ($publishedexam2 !== null) {
+    foreach (array_values((array)($publishedexam2['questions'] ?? [])) as $index => $publishedquestion) {
+        if (!is_array($publishedquestion)) {
+            continue;
+        }
+        $publishedquestionid = (string)($publishedquestion['questionId'] ?? '');
+        $publishedposition = (int)($publishedquestion['examTemplate']['globalPosition'] ?? ($index + 1));
+        if ($publishedquestionid !== '' && $publishedposition > 0) {
+            $exam2positions[$publishedquestionid] = $publishedposition;
+        }
+    }
+} else {
+    foreach ($domains as $domainid => $unused) {
+        usort($exam2eligiblebydomain[$domainid], static function(array $left, array $right) use ($exam2quality): int {
+            return $exam2quality($left) <=> $exam2quality($right);
+        });
+        $slots = $exam2slotsbydomain[$domainid];
+        $selected = array_slice($exam2eligiblebydomain[$domainid], 0, count($slots));
+        foreach ($selected as $index => $question) {
+            $exam2positions[(string)$question['questionId']] = (int)$slots[$index];
+        }
     }
 }
 $exam2reviewedcount = 0;
@@ -1987,9 +2093,6 @@ foreach ($allquestions as &$question) {
 }
 unset($question);
 $exam2candidatecount = count($exam2positions);
-$publishedexam2 = is_array($revisionstore['publishedExams']['simulation_exam_2'] ?? null)
-    ? $revisionstore['publishedExams']['simulation_exam_2']
-    : null;
 if ($usagefilter === 'exam2_review' && $publishedexam2 !== null) {
     $usagefilter = 'all';
 }
@@ -2033,7 +2136,9 @@ if (is_array($currentexamproject)) {
             $approvedbydomain[$projectquestion['_domainid']]++;
         }
     }
-    $usedbyotherprojects = [];
+    // Never offer a question that students have already seen in any published
+    // exam, even if an old project record is missing or has been repaired.
+    $usedbyotherprojects = $questionsusedinpriorexams;
     foreach ($examprojects as $otherprojectid => $otherproject) {
         if ($otherprojectid === $examprojectid) {
             continue;
@@ -2302,6 +2407,41 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamprojec
             $displaylang === 'es'
                 ? 'El examen no se publicó: debe contener exactamente 100 preguntas aprobadas y cero pendientes.'
                 : 'The exam was not published: it must contain exactly 100 approved questions and zero pending questions.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $otherexamquestionids = [];
+    foreach ($allquestions as $publishingquestion) {
+        if ((int)($publishingquestion['_examposition'] ?? 0) > 0) {
+            $otherexamquestionids[(string)$publishingquestion['questionId']] = true;
+        }
+    }
+    foreach ((array)($revisionstore['publishedExams'] ?? []) as $publishedexamrecord) {
+        if (!is_array($publishedexamrecord)
+                || (string)($publishedexamrecord['projectId'] ?? '') === $publishingprojectid) {
+            continue;
+        }
+        foreach ((array)($publishedexamrecord['questions'] ?? []) as $publishedquestion) {
+            $publishedquestionid = is_array($publishedquestion)
+                ? (string)($publishedquestion['questionId'] ?? '')
+                : '';
+            if ($publishedquestionid !== '') {
+                $otherexamquestionids[$publishedquestionid] = true;
+            }
+        }
+    }
+    $reusedpublishingids = array_values(array_filter(
+        $publishingids,
+        static fn(string $questionid): bool => isset($otherexamquestionids[$questionid])
+    ));
+    if ($reusedpublishingids !== []) {
+        redirect(
+            $publisherrorurl('prior_exam', implode(', ', array_slice($reusedpublishingids, 0, 10))),
+            ($displaylang === 'es'
+                ? 'El examen no se publicó porque contiene preguntas usadas en otro examen: '
+                : 'The exam was not published because it contains questions used in another exam: ')
+                . implode(', ', array_slice($reusedpublishingids, 0, 10)),
             null,
             \core\output\notification::NOTIFY_ERROR
         );
@@ -7663,6 +7803,10 @@ echo $OUTPUT->header();
                 $projectispublished = (string)($project['status'] ?? '') === 'published'
                     && (int)($project['publishedExamNumber'] ?? 0) >= 3;
                 $projectexamnumber = (int)($project['publishedExamNumber'] ?? 0);
+                $projectpriorskippedcount = count(array_unique(array_filter(array_map(
+                    'strval',
+                    (array)($project['priorExamQuestionIdsSkipped'] ?? [])
+                ))));
                 $projectpercent = $projecttarget > 0 ? min(100, (int)round($projectcount * 100 / $projecttarget)) : 0;
                 $projectpublisherrormessage = '';
                 if ($examprojectid === $projectid && $publishexamerror !== '') {
@@ -7680,6 +7824,11 @@ echo $OUTPUT->header();
                             ? 'No se publicó: las proporciones actuales son '
                             : 'Not published: the current domain counts are ')
                             . $publishexamdetail . ' (required: 28/24/18/15/10/5).';
+                    } else if ($publishexamerror === 'prior_exam') {
+                        $projectpublisherrormessage = ($displaylang === 'es'
+                            ? 'No se publicó: estas preguntas ya pertenecen a otro examen: '
+                            : 'Not published: these questions already belong to another exam: ')
+                            . $publishexamdetail;
                     } else {
                         $projectpublisherrormessage = $displaylang === 'es'
                             ? 'No se publicó porque el proyecto ya no está disponible.'
@@ -7720,6 +7869,9 @@ echo $OUTPUT->header();
                 <div class="question-bank__exam-numbers"><span><?php echo $displaylang === 'es' ? 'Aprobadas:' : 'Approved:'; ?> <strong><?php echo $projectcount; ?> / <?php echo $projecttarget; ?></strong></span><span><?php echo $displaylang === 'es' ? 'Pendientes:' : 'Pending:'; ?> <strong><?php echo $projectmissing; ?></strong></span></div>
                 <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="<?php echo $projecttarget; ?>" aria-valuenow="<?php echo $projectcount; ?>"><span style="width:<?php echo $projectpercent; ?>%"></span></div>
                 <div class="question-bank__publish-readiness<?php echo $projectisreadytopublish ? ' is-ready' : ''; ?>"><?php echo $projectisreadytopublish ? ($displaylang === 'es' ? 'Listo para publicar: 100 de 100 aprobadas y proporciones correctas.' : 'Ready to publish: 100 of 100 approved with the correct domain proportions.') : ($projectneedsrebalance ? (($displaylang === 'es' ? 'Necesita rebalanceo: proporciones actuales ' : 'Needs rebalancing: current domain counts ') . $projectdomaincountlabel . ' (required: 28/24/18/15/10/5).') : ($displaylang === 'es' ? 'Aún no se puede publicar: faltan ' . $projectmissing . ' preguntas por aprobar.' : 'Not ready to publish: ' . $projectmissing . ' questions still need approval.')); ?></div>
+                <?php if ($projectpriorskippedcount > 0): ?><div class="question-bank__publish-readiness is-ready"><?php echo $displaylang === 'es'
+                    ? $projectpriorskippedcount . ' pregunta(s) ya usada(s) en otro examen se omitieron automáticamente y se sustituyeron en la revisión.'
+                    : $projectpriorskippedcount . ' question(s) already used in another exam were automatically skipped and replaced in the review queue.'; ?></div><?php endif; ?>
                 <?php if ($projectpublisherrormessage !== ''): ?><div class="question-bank__publish-error" role="alert"><?php echo s($projectpublisherrormessage); ?></div><?php endif; ?>
                 <?php if ($projectneedsrebalance): ?><div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectrebalanceurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Corregir proporciones' : 'Fix domain proportions'; ?></a><small><?php echo $displaylang === 'es' ? 'Las preguntas excedentes permanecen aprobadas en el banco; solo se sustituyen dentro de este examen.' : 'Surplus questions remain approved in the bank; only their exam membership is replaced.'; ?></small></div><?php endif; ?>
                 <?php if ($projectispublished): ?><div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$project['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)($project['publishedVersion'] ?? 1); ?></span></div><?php endif; ?>
@@ -8079,6 +8231,7 @@ echo $OUTPUT->header();
         $questionsimilarityurl->set_anchor('similarity-finder');
         $questioninexamproject = $examprojectid !== ''
             && in_array((string)$question['questionId'], $currentexamquestionids, true);
+        $questionusedinpriorexam = isset($questionsusedinpriorexams[(string)$question['questionId']]);
         $currentexamprojectfull = is_array($currentexamproject)
             && (int)$currentexamproject['currentCount'] >= (int)$currentexamproject['targetCount'];
         $excludeexamconfirm = is_array($currentexamproject)
@@ -8118,7 +8271,7 @@ echo $OUTPUT->header();
             <?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><span class="question-bank__badge question-bank__badge--exam">Proposal pending publishing review</span><?php endif; ?>
             <?php if ($pendingexamprojecturl !== null && ($usagefilter !== 'exam_project_pending' || $query !== '')): ?><a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo '← ' . s((string)$pendingexamproject['name']) . ($displaylang === 'es' ? ' · revisión pendiente' : ' pending review'); ?></a><?php endif; ?>
             <?php if ($query !== '' && !$inlineapproval && $pendingexamprojecturl === null): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
-            <?php if (is_array($currentexamproject) && $usagefilter !== 'exam_project_pending' && !$inlineapproval && !$question['_excluded'] && $question['_ready']): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
+            <?php if (is_array($currentexamproject) && $usagefilter !== 'exam_project_pending' && !$inlineapproval && !$question['_excluded'] && $question['_ready'] && ($questioninexamproject || !$questionusedinpriorexam)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter === 'exam_project_pending' && isset($examprojectpositions[(string)$question['questionId']]) && (string)($currentexamproject['status'] ?? 'draft') !== 'published'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="excludeexamcandidate"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm(<?php echo s(json_encode($excludeexamconfirm, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); ?>);"><?php echo ($displaylang === 'es' ? 'Excluir de ' : 'Exclude from ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
             <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$iscustomdraft): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $question['_ready'] && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><?php if (!in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><input type="hidden" name="returnorigin" value="1"><?php endif; ?><?php if ($question['_exam2position'] > 0): ?><input type="hidden" name="pinforexam2" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta lista?' : 'Approve and publish this ready question?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
