@@ -121,6 +121,53 @@ $bank = json_decode((string)file_get_contents($bankpath), true);
 if (!is_array($bank) || !isset($bank['domains']) || !is_array($bank['domains'])) {
     throw new coding_exception('The NCBAHM Herbology question bank is invalid.');
 }
+$guidelineherbpath = $CFG->dirroot . '/blocks/myprogress/single-herb-card-index.json';
+$guidelineformulapath = $CFG->dirroot . '/blocks/myprogress/formula-board-roster-2026.json';
+$guidelineherbroster = is_readable($guidelineherbpath)
+    ? json_decode((string)file_get_contents($guidelineherbpath), true)
+    : null;
+$guidelineformularoster = is_readable($guidelineformulapath)
+    ? json_decode((string)file_get_contents($guidelineformulapath), true)
+    : null;
+if (!is_array($guidelineherbroster)
+        || (int)($guidelineherbroster['total'] ?? 0) !== 304
+        || count((array)($guidelineherbroster['herbs'] ?? [])) !== 304) {
+    throw new coding_exception('The official 2026 NCBAHM Appendix A herb roster is unavailable.');
+}
+if (!is_array($guidelineformularoster)
+        || (int)($guidelineformularoster['total'] ?? 0) !== 181
+        || count((array)($guidelineformularoster['formulas'] ?? [])) !== 181) {
+    throw new coding_exception('The official 2026 NCBAHM Appendix C formula roster is unavailable.');
+}
+$normalizeguidelinename = static function(string $name): string {
+    $name = core_text::strtolower(core_text::specialtoascii(trim($name)));
+    $normalized = preg_replace('/[^a-z0-9]+/', ' ', $name);
+    return trim(is_string($normalized) ? $normalized : $name);
+};
+$guidelineherbnames = [];
+$guidelineherblatin = [];
+foreach ((array)$guidelineherbroster['herbs'] as $guidelineherb) {
+    $herbname = $normalizeguidelinename((string)($guidelineherb['name'] ?? ''));
+    $herblatin = $normalizeguidelinename((string)($guidelineherb['latin'] ?? ''));
+    if ($herbname !== '') {
+        $guidelineherbnames[$herbname] = (string)($guidelineherb['name'] ?? '');
+    }
+    if ($herblatin !== '') {
+        $guidelineherblatin[$herblatin] = (string)($guidelineherb['name'] ?? '');
+    }
+}
+$guidelineformulanames = [];
+$guidelineformulaenglish = [];
+foreach ((array)$guidelineformularoster['formulas'] as $guidelineformula) {
+    $formulaname = $normalizeguidelinename((string)($guidelineformula['name'] ?? ''));
+    $formulaenglish = $normalizeguidelinename((string)($guidelineformula['englishName'] ?? ''));
+    if ($formulaname !== '') {
+        $guidelineformulanames[$formulaname] = (string)($guidelineformula['name'] ?? '');
+    }
+    if ($formulaenglish !== '') {
+        $guidelineformulaenglish[$formulaenglish] = (string)($guidelineformula['name'] ?? '');
+    }
+}
 $scormbankpath = $CFG->dataroot . '/board-domain-banks/herbology-scorm-question-bank.json';
 $scormquestioncount = 0;
 if (is_readable($scormbankpath)) {
@@ -571,9 +618,9 @@ $builtinstructiontemplateid = 'builtin-formula-vs-dui-yao';
 $generalinstructiontemplates = [
     $builtinstructiontemplateid => [
         'id' => $builtinstructiontemplateid,
-        'name' => 'Complete formula versus Duì Yào',
-        'instruction' => "## When to choose a formula and when to choose a Duì Yào\n\n"
-            . "A Duì Yào may be a core, modification, or brief prescription for a narrow objective. "
+        'name' => 'Complete formula versus Dui Yao',
+        'instruction' => "## When to choose a formula and when to choose a Dui Yao\n\n"
+            . "A Dui Yao may be a core, modification, or brief prescription for a narrow objective. "
             . "By definition, it is neither a commercial patent formula nor an automatic equivalent of a classical formula.",
         'domainId' => 'dui_yao',
         'builtin' => true,
@@ -1829,6 +1876,294 @@ if ($publishedprojectrepairs !== [] || $draftprojectreuserepairs !== []) {
                     $store['questions'][$removedquestionid]['removedFromExamProjectAt'] = gmdate(DATE_ATOM);
                 }
             }
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
+$pinyintonemap = [
+    'ā' => 'a', 'á' => 'a', 'ǎ' => 'a', 'à' => 'a',
+    'ē' => 'e', 'é' => 'e', 'ě' => 'e', 'è' => 'e',
+    'ī' => 'i', 'í' => 'i', 'ǐ' => 'i', 'ì' => 'i',
+    'ō' => 'o', 'ó' => 'o', 'ǒ' => 'o', 'ò' => 'o',
+    'ū' => 'u', 'ú' => 'u', 'ǔ' => 'u', 'ù' => 'u',
+    'ǖ' => 'ü', 'ǘ' => 'ü', 'ǚ' => 'ü', 'ǜ' => 'ü',
+    'ǹ' => 'n', 'ń' => 'n', 'ň' => 'n', 'ḿ' => 'm',
+    'Ā' => 'A', 'Á' => 'A', 'Ǎ' => 'A', 'À' => 'A',
+    'Ē' => 'E', 'É' => 'E', 'Ě' => 'E', 'È' => 'E',
+    'Ī' => 'I', 'Í' => 'I', 'Ǐ' => 'I', 'Ì' => 'I',
+    'Ō' => 'O', 'Ó' => 'O', 'Ǒ' => 'O', 'Ò' => 'O',
+    'Ū' => 'U', 'Ú' => 'U', 'Ǔ' => 'U', 'Ù' => 'U',
+    'Ǖ' => 'Ü', 'Ǘ' => 'Ü', 'Ǚ' => 'Ü', 'Ǜ' => 'Ü',
+    'Ǹ' => 'N', 'Ń' => 'N', 'Ň' => 'N', 'Ḿ' => 'M',
+];
+$findpinyintonereplacements = static function($value) use ($pinyintonemap): array {
+    $replacements = [];
+    $scan = static function($candidate) use (&$scan, &$replacements, $pinyintonemap): void {
+        if (is_array($candidate)) {
+            foreach ($candidate as $nestedvalue) {
+                $scan($nestedvalue);
+            }
+            return;
+        }
+        if (!is_string($candidate) || $candidate === '') {
+            return;
+        }
+        preg_match_all('/[\p{L}\p{M}\x{2019}\x{0027}-]+/u', $candidate, $matches);
+        foreach ((array)($matches[0] ?? []) as $token) {
+            $normalizedtoken = strtr((string)$token, $pinyintonemap);
+            if ($normalizedtoken !== (string)$token) {
+                $replacements[(string)$token] = $normalizedtoken;
+            }
+        }
+    };
+    $scan($value);
+    return $replacements;
+};
+$replacepinyintones = static function($value, array $replacements) use (&$replacepinyintones) {
+    if (is_array($value)) {
+        foreach ($value as $key => $nestedvalue) {
+            $value[$key] = $replacepinyintones($nestedvalue, $replacements);
+        }
+        return $value;
+    }
+    return is_string($value) && $replacements !== [] ? strtr($value, $replacements) : $value;
+};
+$normalizecreatedquestionpinyin = static function(array $question) use (
+    $findpinyintonereplacements,
+    $replacepinyintones
+): array {
+    $englishfields = [];
+    foreach (['prompt', 'options', 'explanation', 'reviewSummary', 'source', 'nomenclature'] as $field) {
+        if (array_key_exists($field, $question)) {
+            $englishfields[$field] = $question[$field];
+        }
+    }
+    if (is_array($question['sourceCard'] ?? null)) {
+        $englishfields['sourceCardLabel'] = (string)($question['sourceCard']['label'] ?? '');
+    }
+    $replacements = $findpinyintonereplacements($englishfields);
+    if ($replacements === []) {
+        return $question;
+    }
+    foreach (array_keys($englishfields) as $field) {
+        if ($field === 'sourceCardLabel') {
+            $question['sourceCard']['label'] = $replacepinyintones(
+                (string)($question['sourceCard']['label'] ?? ''),
+                $replacements
+            );
+            continue;
+        }
+        $question[$field] = $replacepinyintones($question[$field], $replacements);
+    }
+    if (is_array($question['translations']['es'] ?? null)) {
+        $question['translations']['es'] = $replacepinyintones(
+            $question['translations']['es'],
+            $replacements
+        );
+    }
+    if (is_array($question['sourceCard'] ?? null)) {
+        $question['sourceCard']['labelEs'] = $replacepinyintones(
+            (string)($question['sourceCard']['labelEs'] ?? ''),
+            $replacements
+        );
+    }
+    return $question;
+};
+$findcreatedquestionguidelineviolations = static function(array $question) use (
+    $normalizeguidelinename,
+    $guidelineherbnames,
+    $guidelineherblatin,
+    $guidelineformulanames,
+    $guidelineformulaenglish
+): array {
+    $violations = [];
+    $formulaaliases = [
+        'jin gui shen qi wan' => 'shen qi wan',
+    ];
+    foreach ((array)($question['nomenclature']['herbs'] ?? []) as $herbrecord) {
+        $herbname = trim((string)($herbrecord['pinyin'] ?? ''));
+        $herblatin = trim((string)($herbrecord['pharmaceuticalName'] ?? ''));
+        $normalizedherb = $normalizeguidelinename($herbname);
+        $normalizedlatin = $normalizeguidelinename($herblatin);
+        if ($normalizedlatin !== '' && isset($guidelineherblatin[$normalizedlatin])) {
+            $expectedherb = $normalizeguidelinename($guidelineherblatin[$normalizedlatin]);
+            if ($normalizedherb !== $expectedherb) {
+                $violations['herb-mismatch:' . $normalizedherb] = 'Herb name does not match Appendix A: '
+                    . $herbname . ' (' . $herblatin . ')';
+            }
+        } else if ($normalizedherb !== '' && !isset($guidelineherbnames[$normalizedherb])) {
+            $violations['herb:' . $normalizedherb] = 'Herb outside Appendix A: ' . $herbname;
+        }
+    }
+    foreach ((array)($question['nomenclature']['formulas'] ?? []) as $formularecord) {
+        $formulaname = trim((string)($formularecord['pinyin'] ?? ''));
+        $formulaenglish = trim((string)($formularecord['englishName'] ?? ''));
+        $normalizedformula = $normalizeguidelinename($formulaname);
+        $normalizedformula = $formulaaliases[$normalizedformula] ?? $normalizedformula;
+        $normalizedenglish = $normalizeguidelinename($formulaenglish);
+        if ($normalizedenglish !== '' && isset($guidelineformulaenglish[$normalizedenglish])) {
+            $expectedformula = $normalizeguidelinename($guidelineformulaenglish[$normalizedenglish]);
+            $expectedformula = $formulaaliases[$expectedformula] ?? $expectedformula;
+            if ($normalizedformula !== $expectedformula) {
+                $violations['formula-mismatch:' . $normalizedformula] = 'Formula name does not match Appendix C: '
+                    . $formulaname . ' (' . $formulaenglish . ')';
+            }
+        } else if ($normalizedformula !== '' && !isset($guidelineformulanames[$normalizedformula])) {
+            $violations['formula:' . $normalizedformula] = 'Formula outside Appendix C: ' . $formulaname;
+        }
+    }
+    $visibletext = trim(implode("\n", array_filter([
+        (string)($question['prompt'] ?? ''),
+        implode("\n", array_map(
+            static fn(array $option): string => (string)($option['text'] ?? ''),
+            (array)($question['options'] ?? [])
+        )),
+        (string)($question['explanation'] ?? ''),
+    ])));
+    preg_match_all(
+        '/\b((?:\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*)(?:\s+\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*){0,6})\s*\(([^()]+)\)/u',
+        $visibletext,
+        $namedmatches,
+        PREG_SET_ORDER
+    );
+    foreach ((array)$namedmatches as $namedmatch) {
+        $displayname = trim((string)($namedmatch[1] ?? ''));
+        $parenthetical = trim((string)($namedmatch[2] ?? ''));
+        $normalizeddisplay = $normalizeguidelinename($displayname);
+        $normalizedparenthetical = $normalizeguidelinename($parenthetical);
+        $normalizedformula = $formulaaliases[$normalizeddisplay] ?? $normalizeddisplay;
+        if (isset($guidelineherblatin[$normalizedparenthetical])) {
+            $expectedherb = $normalizeguidelinename($guidelineherblatin[$normalizedparenthetical]);
+            if (!str_ends_with($normalizeddisplay, $expectedherb)) {
+                $violations['herb-mismatch:' . $normalizeddisplay] = 'Herb name does not match Appendix A: '
+                    . $displayname . ' (' . $parenthetical . ')';
+            }
+            continue;
+        }
+        if (isset($guidelineformulaenglish[$normalizedparenthetical])) {
+            $expectedformula = $normalizeguidelinename(
+                $guidelineformulaenglish[$normalizedparenthetical]
+            );
+            $expectedformula = $formulaaliases[$expectedformula] ?? $expectedformula;
+            if (!str_ends_with($normalizedformula, $expectedformula)) {
+                $violations['formula-mismatch:' . $normalizeddisplay] = 'Formula name does not match Appendix C: '
+                    . $displayname . ' (' . $parenthetical . ')';
+            }
+            continue;
+        }
+        if (isset($guidelineherbnames[$normalizeddisplay])
+                || isset($guidelineformulanames[$normalizedformula])) {
+            continue;
+        }
+        if (preg_match(
+            '/\b(?:radix|rhizoma|herba|flos|fructus|semen|cortex|folium|ramulus|bulbus|tuber|resina|carapax|concha|cornu|calculus|spora|stigma|pericarpium|caulis)\b/i',
+            $parenthetical
+        ) === 1) {
+            $violations['herb:' . $normalizeddisplay] = 'Herb outside Appendix A: '
+                . $displayname . ' (' . $parenthetical . ')';
+        } else if (preg_match(
+            '/\b(?:decoction|pill|powder|drink|formula|granule|ointment|tablet)\b/i',
+            $parenthetical
+        ) === 1) {
+            $violations['formula:' . $normalizeddisplay] = 'Formula outside Appendix C: '
+                . $displayname . ' (' . $parenthetical . ')';
+        }
+    }
+    preg_match_all(
+        '/\b((?:[A-Z][A-Za-z]*\s+){1,7}(?:Tang|Wan|San))\b/u',
+        $visibletext,
+        $formulamatches
+    );
+    foreach ((array)($formulamatches[1] ?? []) as $displayformula) {
+        $normalizedformula = $normalizeguidelinename((string)$displayformula);
+        $normalizedformula = $formulaaliases[$normalizedformula] ?? $normalizedformula;
+        if (!isset($guidelineformulanames[$normalizedformula])) {
+            $violations['formula:' . $normalizedformula] = 'Formula outside Appendix C: '
+                . trim((string)$displayformula);
+        }
+    }
+    return array_values($violations);
+};
+$createdquestionpinyinrepairids = [];
+foreach ((array)($revisionstore['customQuestions'] ?? []) as $pinyinquestionid => $pinyinrecord) {
+    if (!is_array($pinyinrecord) || !empty($pinyinrecord['pinyinTonesRemovedAt'])) {
+        continue;
+    }
+    $normalizedsnapshots = [];
+    $snapshotchanged = false;
+    foreach (['draft', 'approved'] as $snapshotkey) {
+        if (!is_array($pinyinrecord[$snapshotkey] ?? null)) {
+            continue;
+        }
+        $normalizedsnapshots[$snapshotkey] = $normalizecreatedquestionpinyin($pinyinrecord[$snapshotkey]);
+        $snapshotchanged = $snapshotchanged
+            || $normalizedsnapshots[$snapshotkey] !== $pinyinrecord[$snapshotkey];
+    }
+    if ($snapshotchanged) {
+        $createdquestionpinyinrepairids[(string)$pinyinquestionid] = $normalizedsnapshots;
+    }
+}
+if ($createdquestionpinyinrepairids !== []) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $createdquestionpinyinrepairids
+    ): array {
+        $savedat = gmdate(DATE_ATOM);
+        foreach ($createdquestionpinyinrepairids as $pinyinquestionid => $snapshots) {
+            $record = $store['customQuestions'][$pinyinquestionid] ?? null;
+            if (!is_array($record) || !empty($record['pinyinTonesRemovedAt'])) {
+                continue;
+            }
+            foreach ($snapshots as $snapshotkey => $snapshot) {
+                $record[$snapshotkey] = $snapshot;
+            }
+            $record['pinyinTonesRemovedAt'] = $savedat;
+            $record['savedAt'] = $savedat;
+            $record['savedByName'] = 'Tone-free Pinyin normalization';
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $store['customQuestions'][$pinyinquestionid] = $record;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
+$guidelinevalidationversion = 'ncbahm-2026-appendix-a-c-v1';
+$createdquestionguidelineaudits = [];
+foreach ((array)($revisionstore['customQuestions'] ?? []) as $guidelinequestionid => $guidelinerecord) {
+    if (!is_array($guidelinerecord)
+            || (string)($guidelinerecord['guidelineValidation']['version'] ?? '')
+                === $guidelinevalidationversion) {
+        continue;
+    }
+    $guidelinequestion = is_array($guidelinerecord['draft'] ?? null)
+        ? $guidelinerecord['draft']
+        : (is_array($guidelinerecord['approved'] ?? null) ? $guidelinerecord['approved'] : null);
+    if (!is_array($guidelinequestion)) {
+        continue;
+    }
+    $guidelineviolations = $findcreatedquestionguidelineviolations($guidelinequestion);
+    $createdquestionguidelineaudits[(string)$guidelinequestionid] = [
+        'version' => $guidelinevalidationversion,
+        'status' => $guidelineviolations === [] ? 'verified' : 'blocked',
+        'violations' => $guidelineviolations,
+    ];
+}
+if ($createdquestionguidelineaudits !== []) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $createdquestionguidelineaudits
+    ): array {
+        $checkedat = gmdate(DATE_ATOM);
+        foreach ($createdquestionguidelineaudits as $guidelinequestionid => $validation) {
+            $record = $store['customQuestions'][$guidelinequestionid] ?? null;
+            if (!is_array($record)) {
+                continue;
+            }
+            $validation['checkedAt'] = $checkedat;
+            $validation['herbRoster'] = 'NCBAHM 2026 Appendix A · 304 herbs';
+            $validation['formulaRoster'] = 'NCBAHM 2026 Appendix C · 181 formulas';
+            $record['guidelineValidation'] = $validation;
+            $record['guidelineRosterValidatedAt'] = $checkedat;
+            $store['customQuestions'][$guidelinequestionid] = $record;
         }
         return $store;
     });
@@ -6260,6 +6595,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             'Complete the question, four answer choices, answer key and explanation before publishing.'
         );
     }
+    $customdraft = $normalizecreatedquestionpinyin($customdraft);
+    $approvalguidelineviolations = $findcreatedquestionguidelineviolations($customdraft);
+    if ($approvalguidelineviolations !== []) {
+        throw new invalid_parameter_exception(
+            'Publication blocked because a named item is outside the current guideline: '
+                . implode(' | ', $approvalguidelineviolations)
+        );
+    }
     $prohibitedanswerchoice = $findprohibitedanswerchoice(
         (array)($customdraft['options'] ?? [])
     );
@@ -6358,6 +6701,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     block_myprogress_herbology_override_update(static function(array $store) use (
         $customquestionid,
         $customtargetexamid,
+        $customdraft,
+        $guidelinevalidationversion,
         $savedat,
         $savedbyname,
         $USER
@@ -6371,6 +6716,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 'Run Revise draft once so this question passes the originality check before approval.'
             );
         }
+        $record['draft'] = $customdraft;
+        $record['guidelineValidation'] = [
+            'version' => $guidelinevalidationversion,
+            'status' => 'verified',
+            'violations' => [],
+            'checkedAt' => $savedat,
+            'herbRoster' => 'NCBAHM 2026 Appendix A · 304 herbs',
+            'formulaRoster' => 'NCBAHM 2026 Appendix C · 181 formulas',
+        ];
+        $record['guidelineRosterValidatedAt'] = $savedat;
+        $record['pinyinTonesRemovedAt'] = $savedat;
         $record['status'] = 'approved';
         $record['approved'] = $record['draft'];
         $record['savedAt'] = $savedat;
@@ -6771,7 +7127,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             }
             $primaryformula = rtrim(explode(';', $formulaenglish)[0], ". \t\n\r\0\x0B");
             $normalizedformula = $normalizescopetext($primaryformula);
+            $guidelineformula = $normalizeguidelinename($primaryformula);
+            $guidelineformula = $guidelineformula === 'jin gui shen qi wan'
+                ? 'shen qi wan'
+                : $guidelineformula;
+            if (!isset($guidelineformulanames[$guidelineformula])) {
+                continue;
+            }
             $scopeherbs = array_values((array)($scopepair['herbs'] ?? []));
+            $scopeherbsinguideline = count(array_filter(
+                $scopeherbs,
+                static fn($herb): bool => isset(
+                    $guidelineherbnames[$normalizeguidelinename((string)$herb)]
+                )
+            )) === count($scopeherbs);
+            if (!$scopeherbsinguideline) {
+                continue;
+            }
             $candidateherbusage = array_sum(array_map(
                 static fn($herb): int => (int)($scopeherbusage[$normalizescopetext((string)$herb)] ?? 0),
                 $scopeherbs
@@ -7083,7 +7455,7 @@ Requirements:
 1A. Distinguish therapeutic scope from shared ingredients. Choose a complete formula when the item tests a complete pattern architecture and its coordinated therapeutic strategy. A Duì Yào may be a core pair, a source-supported modification, or a brief prescription for a narrow objective. It is neither a commercial patent formula nor an automatic equivalent of a classical formula. Never convert an idea about this distinction into a generic single-herb indication question.
 2. Write a concise, positively worded board-style inference or analysis question with one defensible answer and exactly four parallel A-D choices. Never ask for what is NOT correct, incorrect, false, EXCEPT, or least appropriate. Apply the same rule in Spanish.
 3. Never use the word “Both” in an answer choice, including comparative statements such as “Both are acrid and warm.” Never use “All of them,” “All of the above,” “All options are incorrect,” “All answers are correct,” “None of these,” “None of the above,” “No option is correct,” or any equivalent combined-answer shortcut. Do not create a disguised combined answer by copying or joining two other options into one choice. If a source keyed a combined answer because two source statements were true, do not leave those statements as two true distractors. Rewrite all four choices: place one self-contained, source-supported comparison at the original keyed letter and make the other three independently false but plausible. Each choice must name one specific, independently assessable property, herb, formula, channel set or clinical conclusion. Apply the same prohibition to Spanish choices, including “Todos ellos,” “Todas ellas,” “Todas las opciones son incorrectas,” “Ninguna opción es correcta,” “Ninguno de estos,” “Ninguna de estas,” “Ambos,” and “Ambas.”
-4. Use NCBAHM guideline terminology. Herb names must use “Pinyin (Pharmaceutical Latin)” when herbs appear in the choices or explanation. Use standard formula names consistently.
+4. Use NCBAHM guideline terminology. Write all Pinyin without tone marks in English and Spanish (for example, Ma Huang, Gui Zhi, Zhi Zi Chi Tang and Dui Yao). Herb names must use “tone-free Pinyin (Pharmaceutical Latin)” when herbs appear in the choices or explanation. Use only herbs from the current 304-item Appendix A and formulas from the current 181-item Appendix C; never substitute a historical, supplemental or similarly named item outside those rosters. Use standard formula names consistently.
 5. Do not state the diagnosis, tested action, formula, herb, hierarchy role, preparation rule, or other decisive answer in the stem when observable findings can support an inference instead.
 6. For clinical cases, use concise, memorable didactic settings when useful. Rotate real cities and countries across the United States, China, Spain and elsewhere. Real hospitals, universities or acupuncture schools may be neutral geographic or educational references only; never claim that they treated the fictional patient, hosted the fictional event, endorsed the item or supplied the answer. Every patient, student, clinician and active instructor must be fictional. Never attribute invented speech, teaching, care or affiliation to a real living professor or clinician. A historical scholar or published teaching may be named only when the administrator's idea supplies a verifiable source for it.
 7. The explanation must identify both inference steps, explain the decisive clues, justify the correct answer, and explain why every distractor is weaker. Do not introduce unrelated facts.
@@ -7127,7 +7499,7 @@ PROMPT;
     }
     if ($preserveexactquestion) {
         $customprompt .= "\n\nEXACT IMPORT MODE — ENGLISH CONTENT IS IMMUTABLE:\n"
-            . "The administrator supplied a finished question. Preserve its English stem, A-D choices, correct answer, and explanation exactly. Use the model only to classify it and provide its faithful Spanish translation. Do not rewrite, improve, rotate, replace, or reinterpret the English educational objective.";
+            . "The administrator supplied a finished question. Preserve its English stem, A-D choices, correct answer, and explanation exactly except that Pinyin tone marks must be removed consistently. Use the model only to classify it and provide its faithful Spanish translation. Do not rewrite, improve, rotate, replace, or reinterpret the English educational objective.";
     }
     $customprompt .= "\n" . $idea;
     if ($custombatchcount > 1) {
@@ -7348,6 +7720,17 @@ PROMPT;
                         'Imported the completed English question exactly as supplied; only classification and Spanish translation were added.';
                 }
             }
+            foreach ($decodedbatch as $normalizedindex => $decodeditem) {
+                $decodeditem = $normalizecreatedquestionpinyin($decodeditem);
+                $guidelineviolations = $findcreatedquestionguidelineviolations($decodeditem);
+                if ($guidelineviolations !== []) {
+                    throw new UnexpectedValueException(
+                        'Every named herb and formula must belong to the current NCBAHM guideline. '
+                            . implode(' | ', $guidelineviolations)
+                    );
+                }
+                $decodedbatch[$normalizedindex] = $decodeditem;
+            }
             if ($customtargetdomain !== '') {
                 foreach ($decodedbatch as $decodeditem) {
                     if ((string)($decodeditem['domainId'] ?? '') !== $customtargetdomain) {
@@ -7567,6 +7950,11 @@ PROMPT;
                 $mahuangthreelevelscanonical,
                 JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
             ));
+            $mahuangfallback = $normalizecreatedquestionpinyin($mahuangfallback);
+            $mahuangguidelineviolations = $findcreatedquestionguidelineviolations($mahuangfallback);
+            if ($mahuangguidelineviolations !== []) {
+                throw new UnexpectedValueException(implode(' | ', $mahuangguidelineviolations));
+            }
             $decodedbatch = [$mahuangfallback];
             $originalitybatch = [$findnearestquestion($mahuangfallback)];
             $lastgenerationerror = null;
@@ -7587,6 +7975,11 @@ PROMPT;
                     $buildformulavduiyaoscopefallback($scopefallbackevidence),
                     JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
                 ));
+                $scopefallback = $normalizecreatedquestionpinyin($scopefallback);
+                $scopeguidelineviolations = $findcreatedquestionguidelineviolations($scopefallback);
+                if ($scopeguidelineviolations !== []) {
+                    throw new UnexpectedValueException(implode(' | ', $scopeguidelineviolations));
+                }
                 $scopefallbackoriginality = $findnearestquestion($scopefallback);
                 if (!empty($scopefallbackoriginality['isDuplicate'])) {
                     $lastduplicate = $scopefallbackoriginality;
@@ -7800,6 +8193,16 @@ PROMPT;
                 ? trim((string)($scopeselection['formulaContext']['en'] ?? ''))
                 : trim((string)($previous['formulaDuiYaoFormulaContext'] ?? '')),
             'originality' => $originalityrecord,
+            'guidelineValidation' => [
+                'version' => $guidelinevalidationversion,
+                'status' => 'verified',
+                'violations' => [],
+                'checkedAt' => $savedat,
+                'herbRoster' => 'NCBAHM 2026 Appendix A · 304 herbs',
+                'formulaRoster' => 'NCBAHM 2026 Appendix C · 181 formulas',
+            ],
+            'guidelineRosterValidatedAt' => $savedat,
+            'pinyinTonesRemovedAt' => $savedat,
             'draft' => $question,
             'approved' => is_array($previous['approved'] ?? null) ? $previous['approved'] : null,
             'revisionNumber' => (int)($previous['revisionNumber'] ?? 0) + 1,
@@ -11432,6 +11835,14 @@ echo $OUTPUT->header();
             ? $customrecord['originality']
             : [];
         $customoriginalityclear = (string)($customoriginality['status'] ?? '') === 'clear';
+        $customguidelinevalidation = is_array($customrecord['guidelineValidation'] ?? null)
+            ? $customrecord['guidelineValidation']
+            : [];
+        $customguidelineverified = (string)($customguidelinevalidation['status'] ?? '') === 'verified';
+        $customguidelineviolations = array_values(array_filter(array_map(
+            'strval',
+            (array)($customguidelinevalidation['violations'] ?? [])
+        )));
         $customdraftsnapshot = is_array($customrecord['draft'] ?? null)
             ? $customrecord['draft']
             : [];
@@ -11442,17 +11853,21 @@ echo $OUTPUT->header();
         $customcanpublish = $iscustomdraft
             && $customdraftcomplete
             && $customoriginalityclear
+            && $customguidelineverified
             && $prohibitedanswerchoice === null
             && !$prohibitednegativewording;
         $custompublishblocker = !$customdraftcomplete
             ? ($displaylang === 'es' ? 'Completar pregunta antes de publicar' : 'Complete question before publishing')
             : (!$customoriginalityclear
                 ? ($displaylang === 'es' ? 'Comprobar originalidad primero' : 'Run originality check first')
-                : ($prohibitedanswerchoice !== null
-                    ? ($displaylang === 'es' ? 'Corregir respuesta prohibida' : 'Replace prohibited answer first')
-                    : ($prohibitednegativewording
-                        ? ($displaylang === 'es' ? 'Redactar la pregunta en positivo' : 'Rewrite as a positive question')
-                        : '')));
+                : (!$customguidelineverified
+                    ? (($displaylang === 'es' ? 'Fuera del guideline: ' : 'Outside current guideline: ')
+                        . implode(' | ', $customguidelineviolations))
+                    : ($prohibitedanswerchoice !== null
+                        ? ($displaylang === 'es' ? 'Corregir respuesta prohibida' : 'Replace prohibited answer first')
+                        : ($prohibitednegativewording
+                            ? ($displaylang === 'es' ? 'Redactar la pregunta en positivo' : 'Rewrite as a positive question')
+                            : ''))));
         $revision = $question['_revision'];
         $revisionstatus = (string)($revision['status'] ?? '');
         $fullrevision = $questionrevisionrecord;
@@ -11637,7 +12052,7 @@ echo $OUTPUT->header();
         if ($sourcecardurl !== ''):
         ?> · <a href="<?php echo s($sourcecardurl); ?>" target="_blank" rel="noopener"><?php echo s($sourcecardlabel); ?></a><?php endif; ?></p><?php if (!$question['_ready']): ?><div class="question-bank__missing">Missing for practice readiness: <?php echo s(implode(', ', $question['_missing'])); ?>.</div><?php endif; ?>
         <?php if ($iscustomapproved): ?><section class="question-bank__decision-panel" aria-label="Continue after approving <?php echo s($question['questionId']); ?>"><div class="question-bank__applied-summary"><strong>Question approved and active.</strong> You can edit it, create another question, or return to the complete question bank.</div><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="button" disabled>Approved and published ✓</button><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="reopencustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit">Edit this question</button></form><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create another question</a><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Return to all questions</a></div></section><?php endif; ?>
-        <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('Approve and publish this question?');"<?php endif; ?>><?php echo $customcanpublish ? 'Approve and publish' : s($custompublishblocker); ?></button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
+        <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><?php if ($customguidelineverified): ?><div class="question-bank__applied-summary"><strong>Guideline check:</strong> all named herbs and formulas were verified against the current 2026 Appendix A and Appendix C rosters; Pinyin is shown without tone marks.</div><?php else: ?><div class="question-bank__publish-error"><strong>Guideline check blocked publication:</strong> <?php echo s(implode(' | ', $customguidelineviolations)); ?></div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('Approve and publish this question?');"<?php endif; ?>><?php echo $customcanpublish ? 'Approve and publish' : s($custompublishblocker); ?></button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
         <?php if ($inlineapproval): ?>
         <details class="question-bank__correction-request">
             <summary><?php echo $displaylang === 'es' ? 'Solicitar otro cambio' : 'Request another change'; ?></summary>
