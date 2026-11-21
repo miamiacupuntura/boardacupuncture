@@ -853,6 +853,89 @@ $mahuangthreelevelscanonical = [
     ],
     'reviewSummary' => 'Preserved the requested three-level comparison: Mǎ Huáng alone, Mǎ Huáng + Guì Zhī as the focused Duì Yào, and Mǎ Huáng Tāng as the complete formula.',
 ];
+$mahuangsingleherbcanonical = [
+    'domainId' => 'dui_yao',
+    'prompt' => 'During follow-up, a patient’s only remaining complaint is mild intermittent wheezing. Which choice is most proportionate to this narrow therapeutic objective?',
+    'options' => [
+        ['label' => 'A', 'text' => 'Mǎ Huáng (Ephedrae Herba)'],
+        ['label' => 'B', 'text' => 'Mǎ Huáng (Ephedrae Herba) + Guì Zhī (Cinnamomi Ramulus)'],
+        ['label' => 'C', 'text' => 'Mǎ Huáng Tāng (Ephedra Decoction)'],
+        ['label' => 'D', 'text' => 'Guì Zhī Tāng (Cinnamon Twig Decoction)'],
+    ],
+    'correctLabel' => 'A',
+    'explanation' => 'Inference step 1: Mild intermittent wheezing is a single, limited therapeutic objective rather than a complete exterior pattern requiring a coordinated formula. Inference step 2: Mǎ Huáng (Ephedrae Herba) facilitates Lung Qi descent and relieves wheezing, so it is the most proportionate choice at the individual-herb level. Option A is correct because it directly addresses the isolated symptom. Option B is incorrect because the Mǎ Huáng–Guì Zhī Duì Yào provides a stronger exterior-releasing strategy than this narrow presentation requires. Option C is incorrect because Mǎ Huáng Tāng is a complete formula for an exterior Wind-Cold excess pattern. Option D is incorrect because Guì Zhī Tāng treats a complete exterior-deficiency presentation rather than isolated mild wheezing.',
+    'translations' => [
+        'es' => [
+            'prompt' => 'Durante el seguimiento, la única molestia restante de un paciente es una sibilancia leve e intermitente. ¿Qué opción es más proporcional a este objetivo terapéutico estrecho?',
+            'options' => [
+                ['label' => 'A', 'text' => 'Mǎ Huáng (Ephedrae Herba)'],
+                ['label' => 'B', 'text' => 'Mǎ Huáng (Ephedrae Herba) + Guì Zhī (Cinnamomi Ramulus)'],
+                ['label' => 'C', 'text' => 'Mǎ Huáng Tāng (Decocción de efedra)'],
+                ['label' => 'D', 'text' => 'Guì Zhī Tāng (Decocción de ramita de canela)'],
+            ],
+            'explanation' => 'Paso de inferencia 1: La sibilancia leve e intermitente constituye un objetivo terapéutico único y limitado, no un patrón exterior completo que requiera una fórmula coordinada. Paso de inferencia 2: Mǎ Huáng (Ephedrae Herba) facilita el descenso del Qi de Pulmón y alivia la sibilancia, por lo que es la opción más proporcional al nivel de hierba individual. La opción A es correcta porque aborda directamente el síntoma aislado. La opción B es incorrecta porque el Duì Yào Mǎ Huáng–Guì Zhī proporciona una estrategia de liberación del Exterior más fuerte de lo que requiere esta presentación estrecha. La opción C es incorrecta porque Mǎ Huáng Tāng es una fórmula completa para un patrón exterior de Viento-Frío por exceso. La opción D es incorrecta porque Guì Zhī Tāng trata una presentación completa de deficiencia exterior, no una sibilancia leve aislada.',
+        ],
+    ],
+    'contentType' => 'dui_yao',
+    'cognitiveLevel' => 'analyze',
+    'difficultyBand' => 'analysis',
+    'sourceKind' => 'admin',
+    'source' => [
+        'title' => 'Mǎ Huáng + Guì Zhī Duì Yào study card',
+        'section' => 'Individual herb, Duì Yào, or complete formula?',
+        'locator' => 'Narrow single-symptom objective: mild intermittent wheezing',
+    ],
+    'sourceCard' => [
+        'label' => 'Open Mǎ Huáng + Guì Zhī Duì Yào reference',
+        'labelEs' => 'Abrir referencia Duì Yào de Mǎ Huáng + Guì Zhī',
+        'url' => '/study-guide/comparisons/ma-huang-gui-zhi-dui-yao.html',
+        'urlEs' => '/study-guide/comparisons/ma-huang-gui-zhi-dui-yao-es.html',
+    ],
+    'editorial' => [
+        'simulationCandidate' => true,
+        'inferenceUpgradeRequired' => false,
+        'feedbackQuality' => 'curated',
+        'feedbackRecommendation' => 'Administrator approval required before use.',
+    ],
+    'examTemplate' => ['globalPosition' => 0],
+    'reviewSummary' => 'Preserved the new narrow single-symptom question with Mǎ Huáng as the keyed individual-herb answer.',
+];
+$mahuangsingleherbid = 'ADMIN-HB-20261121-191027-3A3B';
+$mahuangsingleherbrecord = $revisionstore['customQuestions'][$mahuangsingleherbid] ?? null;
+if (is_array($mahuangsingleherbrecord)
+        && (string)($mahuangsingleherbrecord['status'] ?? 'draft') === 'draft'
+        && empty($mahuangsingleherbrecord['maHuangSingleHerbRepairedAt'])) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $mahuangsingleherbid,
+        $mahuangsingleherbcanonical
+    ): array {
+        $record = $store['customQuestions'][$mahuangsingleherbid] ?? null;
+        if (!is_array($record) || (string)($record['status'] ?? 'draft') !== 'draft') {
+            return $store;
+        }
+        $savedat = gmdate(DATE_ATOM);
+        $correcteddraft = $mahuangsingleherbcanonical;
+        $correcteddraft['questionId'] = $mahuangsingleherbid;
+        $record['domainId'] = 'dui_yao';
+        $record['targetDomainId'] = 'dui_yao';
+        $record['draft'] = $correcteddraft;
+        $record['reviewSummary'] = (string)$mahuangsingleherbcanonical['reviewSummary'];
+        $record['formulaDuiYaoPairNumber'] = 1;
+        $record['formulaDuiYaoPair'] = 'Mǎ Huáng + Guì Zhī';
+        $record['formulaDuiYaoFormulaContext'] = 'Mǎ Huáng Tāng';
+        $record['originality'] = array_replace((array)($record['originality'] ?? []), [
+            'status' => 'clear',
+            'checkedAt' => $savedat,
+        ]);
+        $record['maHuangSingleHerbRepairedAt'] = $savedat;
+        $record['savedAt'] = $savedat;
+        $record['savedByName'] = 'Mǎ Huáng single-herb objective repair';
+        $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        $store['customQuestions'][$mahuangsingleherbid] = $record;
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $mahuangthreelevelsrepairids = [];
 foreach ((array)($revisionstore['customQuestions'] ?? []) as $mahuangquestionid => $mahuangrecord) {
     if (!is_array($mahuangrecord)
@@ -866,7 +949,11 @@ foreach ((array)($revisionstore['customQuestions'] ?? []) as $mahuangquestionid 
     $mahuangexplicitrequest = core_text::strpos($mahuangidea, 'ma huang tang') !== false
         && core_text::strpos($mahuangidea, 'gui zhi') !== false
         && preg_match('/(?:dui\s*yao|pair|pareja)/u', $mahuangidea) === 1
-        && preg_match('/(?:alone|individual\s+herb|herb\s+alone|sola|hierba\s+sola)/u', $mahuangidea) === 1;
+        && (
+            core_text::strpos($mahuangidea, 'three prescribing levels') !== false
+            || core_text::strpos($mahuangidea, 'tres niveles') !== false
+            || preg_match('/(?:demonstrate|demostrar).{0,160}(?:herb\s+alone|hierba\s+sola)/u', $mahuangidea) === 1
+        );
     if ($mahuangexplicitrequest) {
         $mahuangthreelevelsrepairids[] = (string)$mahuangquestionid;
     }
@@ -6420,8 +6507,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $idea = $iscustomrewrite
         ? trim((string)($customrecord['idea'] ?? ''))
         : trim(required_param('idea', PARAM_RAW));
+    $completequestionoptioncount = preg_match_all(
+        '/^\s*\d+\.\s*\*{0,2}[A-D]\.\s*\*{0,2}/imu',
+        $idea
+    );
+    $completequestioninput = $completequestionoptioncount === 4
+        && preg_match(
+            '/^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\s*:/imu',
+            $idea
+        ) === 1
+        && preg_match(
+            '/^\s*\*{0,2}(?:Explanation|Explicaci[oó]n)\s*:/imu',
+            $idea
+        ) === 1;
     $preserveexactquestion = !$iscustomrewrite
-        && (bool)optional_param('preserveexactquestion', 0, PARAM_BOOL);
+        && ((bool)optional_param('preserveexactquestion', 0, PARAM_BOOL) || $completequestioninput);
     $usedinstructiontemplateid = $iscustomrewrite
         ? (string)($customrecord['instructionTemplateId'] ?? '')
         : optional_param('instructiontemplateid', '', PARAM_ALPHANUMEXT);
@@ -6462,10 +6562,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $mahuangthreelevelsrequest = core_text::strpos($normalizedexactidea, 'ma huang tang') !== false
         && core_text::strpos($normalizedexactidea, 'gui zhi') !== false
         && preg_match('/(?:dui\s*yao|pair|pareja)/u', $normalizedexactidea) === 1
-        && preg_match(
-            '/(?:alone|individual\s+herb|herb\s+alone|sola|hierba\s+sola)/u',
-            $normalizedexactidea
-        ) === 1;
+        && (
+            core_text::strpos($normalizedexactidea, 'three prescribing levels') !== false
+            || core_text::strpos($normalizedexactidea, 'tres niveles') !== false
+            || preg_match(
+                '/(?:demonstrate|demostrar).{0,160}(?:herb\s+alone|hierba\s+sola)/u',
+                $normalizedexactidea
+            ) === 1
+        );
     if ($mahuangthreelevelsrequest) {
         $customtargetdomain = 'dui_yao';
         if ($customtargetexamid === '' && is_array($pendingexamproject)) {
@@ -11097,8 +11201,8 @@ echo $OUTPUT->header();
             <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
             <div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Crear y revisar borradores' : 'Create and preview drafts'; ?></button><button class="question-bank__button question-bank__button--approve" type="submit" name="preserveexactquestion" value="1"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Usar la pregunta exactamente como está escrita' : 'Use the question exactly as written'; ?></button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cancelar' : 'Cancel'; ?></a></div>
             <small class="question-bank__proposal-saved"><?php echo $displaylang === 'es'
-                ? 'La opción exacta importa el enunciado, A-D, la respuesta y la explicación sin reescribirlos; solo agrega clasificación y traducción al español antes de mostrarlos para edición.'
-                : 'Exact mode imports the stem, A-D choices, answer and explanation without rewriting them; it only adds classification and a Spanish translation before opening the editable draft.'; ?></small>
+                ? 'Una pregunta completa con cuatro opciones, respuesta y explicación se detecta automáticamente y se importa sin reescribirla. El botón exacto permite exigir ese mismo comportamiento.'
+                : 'A complete question with four choices, an answer and an explanation is detected automatically and imported without rewriting it. The exact button explicitly requires the same behavior.'; ?></small>
             <?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?>
         </form>
     </section><?php endif; ?>
