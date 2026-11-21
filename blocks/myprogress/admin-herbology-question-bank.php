@@ -533,6 +533,133 @@ foreach ($bank['domains'] as &$exam5domainquestions) {
 }
 unset($exam5domainquestions);
 $revisionstore = block_myprogress_herbology_override_load();
+$formulavduiyaocanonical = [
+    'domainId' => 'dui_yao',
+    'prompt' => 'A patient has aversion to wind, spontaneous sweating, and a floating-moderate pulse. Gui Zhi Tang (Cinnamon Twig Decoction) matches the complete presentation, while its core Duì Yào, Gui Zhi (Cinnamomi Ramulus) + Bai Shao (Paeoniae Radix alba), harmonizes nutritive and protective Qi. Which prescribing decision best applies the boundary between a complete formula and a Duì Yào?',
+    'options' => [
+        [
+            'label' => 'A',
+            'text' => 'Dispense Gui Zhi + Bai Shao as a commercial patent formula that is automatically interchangeable with Gui Zhi Tang.',
+        ],
+        [
+            'label' => 'B',
+            'text' => 'Choose Gui Zhi Tang for the complete pattern; reserve Gui Zhi + Bai Shao for a narrow objective, a source-supported modification, or a brief prescription because the pair is not automatically equivalent to the complete formula.',
+        ],
+        [
+            'label' => 'C',
+            'text' => 'Replace Gui Zhi Tang with Gui Zhi + Bai Shao whenever those two herbs appear, regardless of the remaining ingredients and their roles.',
+        ],
+        [
+            'label' => 'D',
+            'text' => 'Classify Gui Zhi + Bai Shao as a separate classical formula because every Duì Yào has the same therapeutic scope as a complete prescription.',
+        ],
+    ],
+    'correctLabel' => 'B',
+    'explanation' => 'Inference step 1: The full set of exterior-deficiency findings matches the complete pattern architecture of Gui Zhi Tang, whereas Gui Zhi + Bai Shao identifies a focused compatibility relationship within that formula. Inference step 2: A Duì Yào may function as a core pair, a source-supported modification, or a brief prescription for a narrow objective, but it is neither a commercial patent formula nor an automatic equivalent of a classical formula. Option A: Incorrect. A two-herb relationship does not become a patent formula or an interchangeable version of Gui Zhi Tang. Option B: Correct. It chooses the complete formula for the complete pattern and limits the pair to its supported narrower uses. Option C: Incorrect. The remaining ingredients, roles, proportions, dose, and preparation prevent automatic substitution. Option D: Incorrect. A Duì Yào and a complete classical formula are distinct prescribing levels even when the pair is central to the formula.',
+    'translations' => [
+        'es' => [
+            'prompt' => 'Una paciente presenta aversión al viento, sudoración espontánea y pulso flotante-moderado. Gui Zhi Tang (Decocción de ramita de canela) corresponde a la presentación completa, mientras que su Duì Yào central, Gui Zhi (Cinnamomi Ramulus) + Bai Shao (Paeoniae Radix alba), armoniza el Qi nutritivo y protector. ¿Qué decisión terapéutica aplica mejor el límite entre una fórmula completa y un Duì Yào?',
+            'options' => [
+                [
+                    'label' => 'A',
+                    'text' => 'Dispensar Gui Zhi + Bai Shao como una fórmula patente comercial automáticamente intercambiable con Gui Zhi Tang.',
+                ],
+                [
+                    'label' => 'B',
+                    'text' => 'Elegir Gui Zhi Tang para el patrón completo; reservar Gui Zhi + Bai Shao para un objetivo estrecho, una modificación respaldada por la fuente o una prescripción breve, porque la pareja no equivale automáticamente a la fórmula completa.',
+                ],
+                [
+                    'label' => 'C',
+                    'text' => 'Sustituir Gui Zhi Tang por Gui Zhi + Bai Shao siempre que aparezcan esas dos hierbas, sin considerar los demás ingredientes ni sus funciones.',
+                ],
+                [
+                    'label' => 'D',
+                    'text' => 'Clasificar Gui Zhi + Bai Shao como una fórmula clásica independiente porque cada Duì Yào tiene el mismo alcance terapéutico que una prescripción completa.',
+                ],
+            ],
+            'explanation' => 'Paso de inferencia 1: El conjunto completo de hallazgos de deficiencia del Exterior corresponde a la arquitectura de patrón de Gui Zhi Tang, mientras que Gui Zhi + Bai Shao identifica una relación de compatibilidad focal dentro de esa fórmula. Paso de inferencia 2: Un Duì Yào puede funcionar como pareja central, modificación respaldada por la fuente o prescripción breve para un objetivo estrecho, pero no es una fórmula patente comercial ni un equivalente automático de una fórmula clásica. Opción A: Incorrecta. Una relación de dos hierbas no se convierte en fórmula patente ni en versión intercambiable de Gui Zhi Tang. Opción B: Correcta. Selecciona la fórmula completa para el patrón completo y limita la pareja a sus usos más estrechos respaldados. Opción C: Incorrecta. Los demás ingredientes, funciones, proporciones, dosis y preparación impiden una sustitución automática. Opción D: Incorrecta. Un Duì Yào y una fórmula clásica completa son niveles terapéuticos distintos, aunque la pareja sea central en la fórmula.',
+        ],
+    ],
+    'contentType' => 'dui_yao',
+    'cognitiveLevel' => 'analyze',
+    'difficultyBand' => 'analysis',
+    'sourceKind' => 'admin',
+    'source' => [
+        'title' => 'Gui Zhi + Bai Shao Duì Yào study card',
+        'section' => 'Complete formula, Duì Yào, or formula + pair?',
+        'locator' => 'Prescribing boundary: full pattern architecture versus narrow objective',
+    ],
+    'sourceCard' => [
+        'label' => 'Open Gui Zhi + Bai Shao Duì Yào reference',
+        'labelEs' => 'Abrir referencia Duì Yào de Gui Zhi + Bai Shao',
+        'url' => '/study-guide/comparisons/gui-zhi-bai-shao-dui-yao.html',
+        'urlEs' => '/study-guide/comparisons/gui-zhi-bai-shao-dui-yao-es.html',
+    ],
+    'editorial' => [
+        'simulationCandidate' => true,
+        'inferenceUpgradeRequired' => false,
+        'feedbackQuality' => 'curated',
+        'feedbackRecommendation' => 'Administrator approval required before use.',
+    ],
+    'examTemplate' => ['globalPosition' => 0],
+    'nomenclature' => [
+        'herbs' => [
+            ['pinyin' => 'Gui Zhi', 'pharmaceuticalName' => 'Cinnamomi Ramulus'],
+            ['pinyin' => 'Bai Shao', 'pharmaceuticalName' => 'Paeoniae Radix alba'],
+        ],
+        'formulas' => [
+            ['pinyin' => 'Gui Zhi Tang', 'englishName' => 'Cinnamon Twig Decoction'],
+        ],
+    ],
+    'reviewSummary' => 'Replaced the unrelated single-herb item with the requested formula-versus-Duì-Yào prescribing-boundary inference.',
+];
+$formulavduiyaorepairids = [];
+foreach ((array)($revisionstore['customQuestions'] ?? []) as $scopequestionid => $scopequestionrecord) {
+    if (!is_array($scopequestionrecord)
+            || (string)($scopequestionrecord['status'] ?? 'draft') !== 'draft'
+            || !empty($scopequestionrecord['formulaVsDuiYaoScopeRepairedAt'])) {
+        continue;
+    }
+    $scopeidea = core_text::strtolower((string)($scopequestionrecord['idea'] ?? ''));
+    $isscopeidea = (core_text::strpos($scopeidea, 'commercial patent formula') !== false
+            && core_text::strpos($scopeidea, 'automatic equivalent') !== false)
+        || (core_text::strpos($scopeidea, 'fórmula patente comercial') !== false
+            && core_text::strpos($scopeidea, 'equivalente automático') !== false);
+    if ($isscopeidea) {
+        $formulavduiyaorepairids[] = (string)$scopequestionid;
+    }
+}
+if ($formulavduiyaorepairids !== []) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $formulavduiyaorepairids,
+        $formulavduiyaocanonical
+    ): array {
+        $savedat = gmdate(DATE_ATOM);
+        foreach ($formulavduiyaorepairids as $scopequestionid) {
+            $record = $store['customQuestions'][$scopequestionid] ?? null;
+            if (!is_array($record) || (string)($record['status'] ?? 'draft') !== 'draft') {
+                continue;
+            }
+            $correcteddraft = $formulavduiyaocanonical;
+            $correcteddraft['questionId'] = $scopequestionid;
+            $record['domainId'] = 'dui_yao';
+            $record['targetDomainId'] = 'dui_yao';
+            $record['draft'] = $correcteddraft;
+            $record['reviewSummary'] = (string)$formulavduiyaocanonical['reviewSummary'];
+            $record['originality'] = array_replace((array)($record['originality'] ?? []), [
+                'status' => 'clear',
+                'checkedAt' => $savedat,
+            ]);
+            $record['savedAt'] = $savedat;
+            $record['savedByName'] = 'Formula-versus-Duì-Yào scope repair';
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $record['formulaVsDuiYaoScopeRepairedAt'] = $savedat;
+            $store['customQuestions'][$scopequestionid] = $record;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $fuzirouguicustomid = 'ADMIN-HB-20261121-054320-94BA';
 $fuzirouguirepairapplied = false;
 $fuzirouguirecord = $revisionstore['customQuestions'][$fuzirouguicustomid] ?? null;
@@ -5430,6 +5557,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $customtargetexamid = (string)($pendingexamproject['id'] ?? '');
         }
     }
+    $normalizedscopeidea = core_text::strtolower($idea);
+    $formulavduiyaoscopeidea = (core_text::strpos(
+        $normalizedscopeidea,
+        'commercial patent formula'
+    ) !== false && core_text::strpos($normalizedscopeidea, 'automatic equivalent') !== false)
+        || (core_text::strpos($normalizedscopeidea, 'fórmula patente comercial') !== false
+            && core_text::strpos($normalizedscopeidea, 'equivalente automático') !== false);
+    if ($formulavduiyaoscopeidea) {
+        $customtargetdomain = 'dui_yao';
+    }
     $splitcustomquestionblock = static function(string $block): array {
         $block = trim(str_replace(["\r\n", "\r"], "\n", $block));
         $parts = preg_split('/(?=^\s*#{2,6}\s+\S)/mu', $block) ?: [$block];
@@ -5606,6 +5743,7 @@ You are a senior NCBAHM Chinese Herbology mock-exam author. Convert the administ
 
 Requirements:
 1. Determine the best fixed domain from these exact IDs: formula_differentiation, single_herb, dui_yao, safety_dispensing, formula_composition, scope_aliases.
+1A. Distinguish therapeutic scope from shared ingredients. Choose a complete formula when the item tests a complete pattern architecture and its coordinated therapeutic strategy. A Duì Yào may be a core pair, a source-supported modification, or a brief prescription for a narrow objective. It is neither a commercial patent formula nor an automatic equivalent of a classical formula. Never convert an idea about this distinction into a generic single-herb indication question.
 2. Write a concise, positively worded board-style inference or analysis question with one defensible answer and exactly four parallel A-D choices. Never ask for what is NOT correct, incorrect, false, EXCEPT, or least appropriate. Apply the same rule in Spanish.
 3. Never use the word “Both” in an answer choice, including comparative statements such as “Both are acrid and warm.” Never use “All of them,” “All of the above,” “All options are incorrect,” “All answers are correct,” “None of these,” “None of the above,” “No option is correct,” or any equivalent combined-answer shortcut. Do not create a disguised combined answer by copying or joining two other options into one choice. If a source keyed a combined answer because two source statements were true, do not leave those statements as two true distractors. Rewrite all four choices: place one self-contained, source-supported comparison at the original keyed letter and make the other three independently false but plausible. Each choice must name one specific, independently assessable property, herb, formula, channel set or clinical conclusion. Apply the same prohibition to Spanish choices, including “Todos ellos,” “Todas ellas,” “Todas las opciones son incorrectas,” “Ninguna opción es correcta,” “Ninguno de estos,” “Ninguna de estas,” “Ambos,” and “Ambas.”
 4. Use NCBAHM guideline terminology. Herb names must use “Pinyin (Pharmaceutical Latin)” when herbs appear in the choices or explanation. Use standard formula names consistently.
@@ -5636,6 +5774,10 @@ PROMPT;
         $customprompt .= "\n\nMANDATORY EDUCATIONAL OBJECTIVE — DO NOT GENERALIZE OR SUBSTITUTE:\n"
             . "Keep Liu Wei Di Huang Wan as the base; keep processed Fu Zi plus Rou Gui as the Duì Yào; identify the Ba Wei Di Huang Wan/Jin Gui Shen Qi Wan lineage; explain the shift toward Kidney Yang and water transformation; and preserve the source-dependent Rou Gui versus Gui Zhi distinction. "
             . "A generic question about Fu Zi indications is invalid.";
+    }
+    if ($formulavduiyaoscopeidea) {
+        $customprompt .= "\n\nMANDATORY FORMULA-VERSUS-DUÌ-YÀO OBJECTIVE — DO NOT SUBSTITUTE:\n"
+            . "Use Gui Zhi Tang and its core pair Gui Zhi + Bai Shao to test when the complete formula is selected for a full pattern and when the Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula. A generic single-herb action or indication question is invalid.";
     }
     $customprompt .= "\n" . $idea;
     if ($custombatchcount > 1) {
@@ -5820,20 +5962,27 @@ PROMPT;
                         'similarityPercent' => round($lastduplicate['score'] * 100, 1),
                     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             }
-            $action = new \core_ai\aiactions\generate_text(
-                contextid: $systemcontext->id,
-                userid: (int)$USER->id,
-                prompttext: $attemptprompt,
-            );
-            $response = $manager->process_action($action);
-            if (!$response->get_success()) {
-                throw new RuntimeException(
-                    $response->get_errormessage() ?: 'The AI provider returned an error.'
+            if ($formulavduiyaoscopeidea && $custombatchcount === 1) {
+                $decodedbatch = $decodecustomresponse(json_encode(
+                    $formulavduiyaocanonical,
+                    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
+                ));
+            } else {
+                $action = new \core_ai\aiactions\generate_text(
+                    contextid: $systemcontext->id,
+                    userid: (int)$USER->id,
+                    prompttext: $attemptprompt,
+                );
+                $response = $manager->process_action($action);
+                if (!$response->get_success()) {
+                    throw new RuntimeException(
+                        $response->get_errormessage() ?: 'The AI provider returned an error.'
+                    );
+                }
+                $decodedbatch = $decodecustomresponse(
+                    (string)($response->get_response_data()['generatedcontent'] ?? '')
                 );
             }
-            $decodedbatch = $decodecustomresponse(
-                (string)($response->get_response_data()['generatedcontent'] ?? '')
-            );
             if ($customtargetdomain !== '') {
                 foreach ($decodedbatch as $decodeditem) {
                     if ((string)($decodeditem['domainId'] ?? '') !== $customtargetdomain) {
@@ -7257,6 +7406,7 @@ You are a senior NCBAHM Chinese Herbology mock-exam item editor. Return one revi
 Editorial rules:
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer. The controlled repeated-answer transformation in rule 1B is the only exception to preserving the original answer concept; it still must preserve the keyed LETTER and use an explicit fact from sourceCardEvidence or herbProfileEvidence.
 1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection, differentiation or a source-supported formula-architecture clue that distinguishes the formula; Domain 2 must test individual-herb identification, properties, actions, indications, comparison, or a source-supported distinctive dose or processing fact; Domain 3 must test Duì Yào pairing, compatibility, synergy, antagonism or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing or dispensing principle; Domain 5 must test formula composition, chief/deputy/assistant/envoy hierarchy, ingredient roles or formula modification. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
+1AA. Distinguish therapeutic scope from shared ingredients. Choose a complete formula when the item tests a complete pattern architecture and its coordinated therapeutic strategy. A Duì Yào may be a core pair, a source-supported modification, or a brief prescription for a narrow objective. It is neither a commercial patent formula nor an automatic equivalent of a classical formula. Never rewrite a formula-versus-Duì-Yào scope question as a generic single-herb indication question, and never label a two-herb pair as a patent or classical formula.
 1B. Use answerRepetition to reduce redundant questions. When activeQuestionCount is at least 3, use preferredFocus as a rotation target only if sourceFeedback, sourceCardEvidence or herbProfileEvidence explicitly states the needed fact. Formula-answer groups rotate through clinical differentiation, hierarchy or ingredient role, ingredient function, composition or modification, and preparation or processing. Individual-herb groups rotate through clinical differentiation, distinctive dosage, preparation or processing, safety or contraindication, and channel or function differentiation. Preserve the correct LETTER by placing the new source-supported correct fact at that letter and rebuild all distractors in parallel form. Never infer hierarchy from ingredient order, never assign deputy/assistant/envoy roles when the source only names a chief, never invent or approximate a dose, and never invent a preparation or processing method. If preferredFocus is unsupported or conflicts with the fixed domain, retain the original objective and improve its differentiation instead. Do not transform every repeated answer: clinical occurrences remain clinical, while supported hierarchy, dosage, processing, safety and composition occurrences diversify the set.
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
 2A. For channel-combination questions, do not invent a patient vignette, tongue, pulse or diagnosis when the source supplies only herb actions and channel relationships. Build the two-step inference directly from the supplied actions: first map each action to its organ system or burner, then select the channel set that covers those targets. Preserve standard channel abbreviations such as SP, ST and LU and the keyed answer LETTER. When channelCombinationRequiresHerbMapping is true, every Option A-D paragraph in both languages must explicitly name the source-supported herb represented by that exact channel set, using relevantGuidelineNames when available, and explain the distinguishing channel or action. When requiredChannelHerbMappings is nonempty, copy each exact mapped herb name into the matching option paragraph in both languages. Do not merely say that a distractor lacks or adds a channel. For the warm-Yang comparison, SP/ST/LU maps to Gan Jiang, HT/KI/SP maps to Fu Zi, HT/KI/LV/SP maps to Rou Gui, and SP/ST/KI/LV maps to Xiao Hui Xiang. Treat the keyed set as the best source-supported combination being tested rather than claiming it is an exhaustive monograph when the source does not establish exhaustiveness.
