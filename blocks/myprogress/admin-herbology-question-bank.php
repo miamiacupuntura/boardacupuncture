@@ -6869,19 +6869,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $idea = $iscustomrewrite
         ? trim((string)($customrecord['idea'] ?? ''))
         : trim(required_param('idea', PARAM_RAW));
+    // Text copied from rendered Markdown can contain a literal backslash at
+    // the end of every visual line (or before the heading). Remove only those
+    // presentation escapes before deciding whether this is a finished item.
+    $completequestioncandidate = preg_replace('/\\\\[ \t]*$/mu', '', $idea) ?? $idea;
+    $completequestioncandidate = preg_replace(
+        '/^\s*\\\\(?=(?:#{1,6}\s+|(?:Question|Pregunta)\s+\d+\b))/imu',
+        '',
+        $completequestioncandidate
+    ) ?? $completequestioncandidate;
+    $completequestioncandidate = trim($completequestioncandidate);
     $completequestionoptioncount = preg_match_all(
-        '/^\s*\d+\.\s*\*{0,2}[A-D]\.\s*\*{0,2}/imu',
-        $idea
+        '/^\s*(?:\d+\.\s*)?\*{0,2}[A-D]\.\s*\*{0,2}/imu',
+        $completequestioncandidate
     );
     $completequestioninput = $completequestionoptioncount === 4
         && preg_match(
             '/^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\s*:/imu',
-            $idea
+            $completequestioncandidate
         ) === 1
         && preg_match(
             '/^\s*\*{0,2}(?:Explanation|Explicaci[oó]n)\s*:/imu',
-            $idea
+            $completequestioncandidate
         ) === 1;
+    if ($completequestioninput) {
+        $idea = $completequestioncandidate;
+    }
     $preserveexactquestion = !$iscustomrewrite
         && ((bool)optional_param('preserveexactquestion', 0, PARAM_BOOL) || $completequestioninput);
     $usedinstructiontemplateid = $iscustomrewrite
@@ -6979,10 +6992,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     };
     $parsepreservedquestion = static function(string $block): array {
         $block = trim(str_replace(["\r\n", "\r"], "\n", $block));
-        $optionpattern = '/^\s*\d+\.\s*\*{0,2}([A-D])\.\s*\*{0,2}\s*(.+?)(?=^\s*\d+\.\s*\*{0,2}[A-D]\.\s*\*{0,2}|^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\s*:\s*\*{0,2})/imsu';
+        $optionprefix = '(?:\d+\.\s*)?\*{0,2}';
+        $optionpattern = '/^\s*' . $optionprefix . '([A-D])\.\s*\*{0,2}\s*(.+?)'
+            . '(?=^\s*' . $optionprefix . '[A-D]\.\s*\*{0,2}'
+            . '|^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\s*:\s*\*{0,2})/imsu';
         if (preg_match_all($optionpattern, $block, $optionmatches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE) !== 4) {
             throw new invalid_parameter_exception(
-                'Exact import requires one complete question with four numbered A-D choices.'
+                'Exact import requires one complete question with four A-D choices.'
             );
         }
         if (preg_match(
