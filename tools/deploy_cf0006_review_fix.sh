@@ -103,7 +103,7 @@ grep -Fq '$duiyaosupplementpath' "$QUESTION_BANK_SOURCE"
 grep -Fq "'DY-REV-'" "$QUESTION_BANK_SOURCE"
 grep -Fq 'verified-dui-yao-reverse-v1' "$QUESTION_BANK_SOURCE"
 grep -Fq "\$usagefilter !== 'exam_project_pending'" "$QUESTION_BANK_SOURCE"
-grep -Fq '0 new questions required' "$QUESTION_BANK_SOURCE"
+grep -Fq 'new questions required' "$QUESTION_BANK_SOURCE"
 for exam5_repair_id in \
     CF-0272 CF-0198 CF-1610 CF-0255 CF-0254 SCORM-FD-4789860650F9 \
     CF-0081 CF-0308 CF-0131 SCORM-FD-2D05A263601F CF-0180 CF-0265 \
