@@ -9,6 +9,7 @@ MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 RELATIVE_FILES=(
     "blocks/myprogress/admin-herbology-question-bank.php"
+    "blocks/myprogress/herbology-question-overrides.php"
     "blocks/menu/herbology-domain-candidates.json"
 )
 
@@ -71,8 +72,10 @@ for relative_file in "${RELATIVE_FILES[@]}"; do
 done
 
 QUESTION_BANK_SOURCE="$TEMP_DIR/${RELATIVE_FILES[0]}"
-SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[1]}"
+OVERRIDES_SOURCE="$TEMP_DIR/${RELATIVE_FILES[1]}"
+SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[2]}"
 php -l "$QUESTION_BANK_SOURCE" >/dev/null
+php -l "$OVERRIDES_SOURCE" >/dev/null
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$SOURCE_DATA"
 grep -Fq "ncbahm-mock-editor-4.2" "$QUESTION_BANK_SOURCE"
 grep -Fq "sourceFeedbackMissing" "$QUESTION_BANK_SOURCE"
@@ -81,6 +84,10 @@ grep -Fq 'Requested herbs missing · correction required' "$QUESTION_BANK_SOURCE
 grep -Fq "formaction === 'excludeexamcandidate'" "$QUESTION_BANK_SOURCE"
 grep -Fq 'excludedQuestionIds' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Exclude from ' "$QUESTION_BANK_SOURCE"
+grep -Fq "['archivequestion', 'restorearchivedquestion']" "$QUESTION_BANK_SOURCE"
+grep -Fq 'Archive for study/reference' "$QUESTION_BANK_SOURCE"
+grep -Fq 'Archived study questions' "$QUESTION_BANK_SOURCE"
+grep -Fq "'study_archive'" "$OVERRIDES_SOURCE"
 grep -Fq '$directreturnorigin' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Approve and publish this ready question?' "$QUESTION_BANK_SOURCE"
 grep -Fq '"questionId": "CF-0006"' "$SOURCE_DATA"
@@ -113,9 +120,11 @@ for relative_file in "${RELATIVE_FILES[@]}"; do
 done
 
 cmp -s "$QUESTION_BANK_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[0]}"
-cmp -s "$SOURCE_DATA" "$MOODLE_ROOT/${RELATIVE_FILES[1]}"
+cmp -s "$OVERRIDES_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[1]}"
+cmp -s "$SOURCE_DATA" "$MOODLE_ROOT/${RELATIVE_FILES[2]}"
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[0]}" >/dev/null
-php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$MOODLE_ROOT/${RELATIVE_FILES[1]}"
+php -l "$MOODLE_ROOT/${RELATIVE_FILES[1]}" >/dev/null
+php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$MOODLE_ROOT/${RELATIVE_FILES[2]}"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -143,13 +152,14 @@ if command -v systemctl >/dev/null 2>&1; then
     done
 fi
 
-INSTALLED_SHA256="$(sha256sum "$MOODLE_ROOT/${RELATIVE_FILES[1]}" | awk '{print $1}')"
+INSTALLED_SHA256="$(sha256sum "$MOODLE_ROOT/${RELATIVE_FILES[2]}" | awk '{print $1}')"
 echo "OK: CF-0006 ya no contiene None of above ni su equivalente en español."
 echo "OK: CF-0006 incluye feedback completo para A, B, C y D en ambos idiomas."
 echo "OK: la revisión automática fuerza una segunda comprobación cuando falta feedback o existe una respuesta combinada prohibida."
 echo "OK: las preguntas originales listas muestran Aprobar y publicar también desde la búsqueda general."
 echo "OK: una solicitud de hierbas visibles bloquea la publicación hasta que aparezcan en el enunciado o las opciones."
 echo "OK: una pregunta similar puede excluirse solo del examen actual y se busca un reemplazo del mismo dominio."
+echo "OK: las preguntas no-board pueden archivarse para estudio/referencia, quedan fuera de exámenes y pueden restaurarse."
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256 DATOS: $INSTALLED_SHA256"
 if [[ "${#WEB_RUNTIME_RELOADED[@]}" -gt 0 ]]; then

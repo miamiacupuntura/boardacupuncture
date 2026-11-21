@@ -92,6 +92,7 @@ if (!in_array($reviewfilter, [
         'all', 'needs_inference', 'needs_feedback', 'simulation_candidate',
         'reclassification_requested', 'possible_exclusion', 'proposals_pending', 'ai_drafts',
         'editing_drafts',
+        'study_archive',
         'deleted',
     ], true)) {
     $reviewfilter = 'all';
@@ -672,6 +673,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $restorestatus = (string)($previous['statusBeforeDeletion'] ?? 'original');
         if (!in_array($restorestatus, [
                 'original', 'draft', 'approved', 'pending_reclassification', 'exclusion_candidate',
+                'study_archive',
             ], true)) {
             $restorestatus = 'original';
         }
@@ -736,7 +738,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             'all', 'needs_inference', 'needs_feedback', 'simulation_candidate',
             'reclassification_requested', 'possible_exclusion', 'proposals_pending', 'ai_drafts',
             'editing_drafts',
-            'deleted',
+            'study_archive', 'deleted',
         ], true) && $returnreview !== 'all') {
         $redirectparams['review'] = $returnreview;
     }
@@ -754,6 +756,132 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $isrestore
             ? 'Question restored to its previous state.'
             : 'Question deleted from the active bank. It can be restored from Deleted questions.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST'
+        && in_array($formaction, ['archivequestion', 'restorearchivedquestion'], true)) {
+    require_sesskey();
+    $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
+    $baseentry = $findquestion($basebank, $questionid);
+    if ($baseentry === null) {
+        throw new invalid_parameter_exception('Unknown Herbology question ID.');
+    }
+    $isarchiverestore = $formaction === 'restorearchivedquestion';
+    $savedat = gmdate(DATE_ATOM);
+    $savedbyname = fullname($USER);
+    $basequestion = $baseentry['question'];
+    $original = array_intersect_key($basequestion, array_flip([
+        'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
+        'translations', 'contentType', 'cognitiveLevel', 'difficultyBand', 'source',
+        'sourceCard', 'examTemplate',
+    ]));
+    $basesnapshot = array_intersect_key($basequestion, array_flip([
+        'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+        'contentType', 'cognitiveLevel', 'difficultyBand', 'source', 'sourceCard',
+    ]));
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $questionid,
+        $baseentry,
+        $original,
+        $basesnapshot,
+        $isarchiverestore,
+        $savedat,
+        $savedbyname,
+        $USER
+    ): array {
+        $previous = is_array($store['questions'][$questionid] ?? null)
+            ? $store['questions'][$questionid]
+            : [];
+        $previousstatus = (string)($previous['status'] ?? 'original');
+        if ($isarchiverestore && $previousstatus !== 'study_archive') {
+            throw new invalid_parameter_exception('Only an archived study question can be restored.');
+        }
+        if (!$isarchiverestore && $previousstatus === 'study_archive') {
+            throw new invalid_parameter_exception('This question is already in the study archive.');
+        }
+        $history = is_array($previous['history'] ?? null) ? $previous['history'] : [];
+        if ($previous !== []) {
+            $history[] = array_diff_key($previous, ['history' => true, 'original' => true]);
+            $history = array_slice($history, -20);
+        }
+        $snapshot = is_array($previous['draft'] ?? null)
+            ? $previous['draft']
+            : (is_array($previous['approved'] ?? null) ? $previous['approved'] : $basesnapshot);
+        $record = $previous + [
+            'questionId' => $questionid,
+            'domainId' => (string)$baseentry['domainId'],
+            'requestReclassification' => false,
+            'revisionNumber' => 0,
+            'savedAt' => '',
+            'savedById' => 0,
+            'savedByName' => '',
+            'original' => $original,
+            'approved' => null,
+            'draft' => $snapshot,
+            'history' => [],
+            'reviewProposal' => '',
+            'proposalStatus' => '',
+            'proposalHistory' => [],
+        ];
+        $record['status'] = $isarchiverestore
+            ? (string)($previous['statusBeforeStudyArchive'] ?? 'draft')
+            : 'study_archive';
+        if (!in_array($record['status'], [
+                'original', 'draft', 'approved', 'pending_reclassification', 'exclusion_candidate',
+                'study_archive',
+            ], true)) {
+            $record['status'] = 'draft';
+        }
+        $record['draft'] = $snapshot;
+        $record['approved'] = is_array($previous['approved'] ?? null)
+            ? $previous['approved']
+            : $snapshot;
+        $record['requestReclassification'] = false;
+        $record['exclusionReason'] = $isarchiverestore
+            ? ''
+            : 'Preserved for study and reference; not suitable as a board-style question.';
+        $record['archiveModule'] = $isarchiverestore ? '' : 'study_reference';
+        $record['statusBeforeStudyArchive'] = $isarchiverestore ? '' : $previousstatus;
+        $record['archivedAt'] = $isarchiverestore ? '' : $savedat;
+        $record['archivedById'] = $isarchiverestore ? 0 : (int)$USER->id;
+        $record['archivedByName'] = $isarchiverestore ? '' : $savedbyname;
+        $record['revisionNumber'] = (int)($previous['revisionNumber'] ?? 0) + 1;
+        $record['savedAt'] = $savedat;
+        $record['savedById'] = (int)$USER->id;
+        $record['savedByName'] = $savedbyname;
+        $record['history'] = $history;
+        if (!$isarchiverestore) {
+            unset($record['examProjectId']);
+            $record['exam2Pinned'] = false;
+            $record['deferredFromExam2'] = false;
+            foreach ((array)($store['examProjects'] ?? []) as $projectid => $project) {
+                if (!is_array($project)) {
+                    continue;
+                }
+                $project['questionIds'] = array_values(array_filter(
+                    array_map('strval', (array)($project['questionIds'] ?? [])),
+                    static fn(string $id): bool => $id !== $questionid
+                ));
+                $project['updatedAt'] = $savedat;
+                $store['examProjects'][$projectid] = $project;
+            }
+        }
+        $store['questions'][$questionid] = $record;
+        return $store;
+    });
+    $archiveurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
+        'review' => $isarchiverestore ? 'all' : 'study_archive',
+        'q' => $questionid,
+        'lang' => $displaylang,
+    ]);
+    $archiveurl->set_anchor('question-' . $questionid);
+    redirect(
+        $archiveurl,
+        $isarchiverestore
+            ? 'Question restored from the study archive to its previous editorial state.'
+            : 'Question preserved in Study & Reference Archive and removed from board exams.',
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -1438,6 +1566,10 @@ $possibleexclusioncount = count(array_filter(
     $revisionstore['questions'] ?? [],
     static fn(array $revision): bool => ($revision['status'] ?? '') === 'exclusion_candidate'
 ));
+$studyarchivecount = count(array_filter(
+    $revisionstore['questions'] ?? [],
+    static fn(array $revision): bool => ($revision['status'] ?? '') === 'study_archive'
+));
 $deletedquestioncount = count(array_filter(
     $revisionstore['questions'] ?? [],
     static fn(array $revision): bool => ($revision['status'] ?? '') === 'deleted'
@@ -1485,9 +1617,10 @@ $missingfields = static function(array $question): array {
     $missing = [];
     if ((string)($question['_customStatus'] ?? 'approved') !== 'approved') $missing[] = 'administrator approval';
     if (!empty($question['_excludedFromUse'])) {
-        $missing[] = (string)($question['_editorialRevision']['status'] ?? '') === 'deleted'
+        $excludedstatus = (string)($question['_editorialRevision']['status'] ?? '');
+        $missing[] = $excludedstatus === 'deleted'
             ? 'deleted question'
-            : 'possible exclusion review';
+            : ($excludedstatus === 'study_archive' ? 'study/reference archive' : 'possible exclusion review');
     }
     if (trim((string)($question['prompt'] ?? '')) === '') $missing[] = 'prompt';
     if (count($question['options'] ?? []) !== 4) $missing[] = 'four options';
@@ -1511,7 +1644,11 @@ foreach ($domains as $domainid => $domain) {
     foreach (($bank['domains'][$domainid] ?? []) as $question) {
         $ready = $isready($question);
         $isexcluded = !empty($question['_excludedFromUse']);
-        $isdeleted = (string)($question['_editorialRevision']['status'] ?? '') === 'deleted';
+        $isdeleted = in_array(
+            (string)($question['_editorialRevision']['status'] ?? ''),
+            ['study_archive', 'deleted'],
+            true
+        );
         $configuredexamposition = (int)($question['examTemplate']['globalPosition'] ?? 0);
         $examposition = $isexcluded ? 0 : $configuredexamposition;
         if (!$isdeleted) {
@@ -1617,7 +1754,11 @@ $currentexamquestionids = is_array($currentexamproject)
 $activequestionidlookup = [];
 $approvedquestionidlookup = [];
 foreach ($allquestions as $candidatequestion) {
-    if (($candidatequestion['_revision']['status'] ?? '') !== 'deleted') {
+    if (!in_array(
+            (string)($candidatequestion['_revision']['status'] ?? ''),
+            ['study_archive', 'deleted'],
+            true
+        )) {
         $candidatequestionid = (string)$candidatequestion['questionId'];
         $activequestionidlookup[$candidatequestionid] = true;
         if ((string)($candidatequestion['_revision']['status'] ?? '') === 'approved'
@@ -6104,7 +6245,11 @@ if ($advancetonext && $usagefilter === 'exam2_review') {
 
 $activequestions = array_values(array_filter(
     $allquestions,
-    static fn(array $question): bool => ($question['_revision']['status'] ?? '') !== 'deleted'
+    static fn(array $question): bool => !in_array(
+        ($question['_revision']['status'] ?? ''),
+        ['study_archive', 'deleted'],
+        true
+    )
 ));
 $totals = [
     'total' => count($activequestions),
@@ -6412,6 +6557,8 @@ $filteredquestions = array_values(array_filter(
             );
         if ($reviewfilter !== 'deleted'
                 && ($question['_revision']['status'] ?? '') === 'deleted') return false;
+        if ($reviewfilter !== 'study_archive'
+                && ($question['_revision']['status'] ?? '') === 'study_archive') return false;
         if ($domainfilter !== 'all' && $question['_domainid'] !== $domainfilter) return false;
         if ($readinessfilter === 'ready' && !$question['_ready']) return false;
         if ($readinessfilter === 'incomplete' && $question['_ready']) return false;
@@ -6435,6 +6582,8 @@ $filteredquestions = array_values(array_filter(
                 && ($question['_revision']['status'] ?? '') !== 'pending_reclassification') return false;
         if ($reviewfilter === 'possible_exclusion'
                 && ($question['_revision']['status'] ?? '') !== 'exclusion_candidate') return false;
+        if ($reviewfilter === 'study_archive'
+                && ($question['_revision']['status'] ?? '') !== 'study_archive') return false;
         if ($reviewfilter === 'deleted'
                 && ($question['_revision']['status'] ?? '') !== 'deleted') return false;
         if ($reviewfilter === 'proposals_pending'
@@ -6611,6 +6760,7 @@ $filtervalues = $displaylang === 'es' ? [
     'proposals_pending' => 'Propuestas para publicar', 'needs_inference' => 'Necesita más inferencia',
     'needs_feedback' => 'Necesita mejor feedback', 'simulation_candidate' => 'Candidata para simulación',
     'reclassification_requested' => 'Reclasificación solicitada', 'possible_exclusion' => 'Posible exclusión',
+    'study_archive' => 'Archivo de estudio y referencia',
     'deleted' => 'Preguntas eliminadas',
 ] : [
     'ready' => 'Ready for practice', 'incomplete' => 'Needs completion',
@@ -6630,6 +6780,7 @@ $filtervalues = $displaylang === 'es' ? [
     'proposals_pending' => 'Publishing proposals', 'needs_inference' => 'Needs more inference',
     'needs_feedback' => 'Needs stronger feedback', 'simulation_candidate' => 'Simulation candidate',
     'reclassification_requested' => 'Reclassification requested', 'possible_exclusion' => 'Possible exclusions',
+    'study_archive' => 'Study & Reference Archive',
     'deleted' => 'Deleted questions',
 ];
 $activefilters = [];
@@ -6699,6 +6850,7 @@ $summaryurls = [
 ];
 $queueurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['download' => 'review_queue']);
 $exclusionurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'possible_exclusion']);
+$studyarchiveurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'study_archive']);
 $deletedurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'deleted']);
 $exclusionqueueurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['download' => 'exclusion_queue']);
 $exam2url = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
@@ -7167,6 +7319,7 @@ echo $OUTPUT->header();
 </style>
 <main class="question-bank">
     <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button" href="<?php echo $similarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar answers'; ?></a><a class="question-bank__button question-bank__button--similar" href="<?php echo $sameanswerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Revisar respuestas repetidas' : 'Review repeated answers'; ?> (<?php echo (int)$sameanswerreport['groupCount']; ?>)</a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
+    <?php if ($studyarchivecount > 0): ?><nav class="question-bank__actions" aria-label="Study archive"><a class="question-bank__button question-bank__button--similar" href="<?php echo $studyarchiveurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Preguntas de estudio archivadas' : 'Archived study questions'; ?> (<?php echo (int)$studyarchivecount; ?>)</a></nav><?php endif; ?>
     <?php if ($displaylang === 'es'): ?><section class="question-bank__language-state"><strong>Vista en español activa</strong>Los controles principales y las traducciones disponibles se muestran en español. Cuando una pregunta todavía no tiene traducción guardada, se identifica claramente y se conserva el original inglés para evitar una traducción clínica no verificada.</section><?php endif; ?>
     <?php if (is_array($mergecomposer)):
         $mergeleft = $mergecomposer['left'];
@@ -7570,6 +7723,7 @@ echo $OUTPUT->header();
     <?php if ($shownewquestionform): ?><section id="new-question" class="question-bank__new-question"><h3>Create one or several questions</h3><p>Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as <strong>### Question 1</strong> or <strong>### 2.</strong>, lines containing <strong>---</strong>, and repeated <strong>Correct answer:</strong> or <strong>Respuesta correcta:</strong> labels. It creates an independent draft for each question and immediately displays a visible index of the complete batch.</p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."></textarea><input type="hidden" name="formaction" value="createnewquestion"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Create and preview drafts</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Cancel</a></div><?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?></form></section><?php endif; ?>
     <?php if ($customdraftcount > 0 && !$shownewquestionform): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
     <?php if ($reviewfilter === 'editing_drafts'): ?><section class="question-bank__review-progress"><strong>Saved editing drafts: <?php echo (int)$savededitingdraftcount; ?></strong><p>This view includes unfinished manual and automatic edits from earlier updates and review groups. The most recently saved drafts appear first. Continue the correction, approve the current version, edit manually or delete the question.</p></section><?php endif; ?>
+    <?php if ($reviewfilter === 'study_archive'): ?><section class="question-bank__review-progress"><strong><?php echo $displaylang === 'es' ? 'Archivo de estudio y referencia' : 'Study & Reference Archive'; ?>: <?php echo (int)$studyarchivecount; ?></strong><p><?php echo $displaylang === 'es' ? 'Estas preguntas se conservan completas para enseñanza o consulta, pero están fuera del banco board, de los mock exams y de las simulaciones. Puede restaurarlas al banco cuando quiera.' : 'These questions are preserved in full for teaching or reference, but are excluded from the board bank, mock exams and simulations. You can restore them to the bank at any time.'; ?></p></section><?php endif; ?>
     <?php if ($usagefilter === 'exam_project_pending' && $query !== '' && $resultcount === 1): $focusedquestionid = (string)$filteredquestions[0]['questionId']; ?><section class="question-bank__review-progress"><strong><?php echo s((string)$currentexamproject['name']); ?> — focused question ready</strong><p><a class="question-bank__button question-bank__button--publish" href="#question-<?php echo s($focusedquestionid); ?>"><?php echo $displaylang === 'es' ? 'Continuar, revisar y publicar esta pregunta' : 'Continue, review and publish this question'; ?></a><?php if ($pendingexamprojecturl !== null): ?> <a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Omitir y volver a las pendientes' : 'Skip and return to pending questions'; ?></a><?php endif; ?></p></section><?php endif; ?>
     <?php if (in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, explicit concept-to-choice mappings, distractor analysis, feedback and classification. Repeated formula or herb answers are rotated, when their source cards support it, into ingredient hierarchy, distinctive dosage, preparation, processing, composition or modification questions. Unsupported facts are never invented. It also updates the oldest pending drafts created with an earlier reviewer while preserving their accumulated instructions. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><?php if ($usagefilter === 'exam_project_pending' && $examprojectid !== ''): ?><input type="hidden" name="usage" value="exam_project_pending"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Update or review next 5 questions</button></form></section><?php endif; ?>
     <?php if ($editquestion !== null && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts')):
@@ -7632,7 +7786,7 @@ echo $OUTPUT->header();
         <label><span>Source</span><select name="source" onchange="if(this.value==='admin'&&this.form.elements.usage){this.form.elements.usage.value='all';}"><option value="all">All sources</option><option value="curated"<?php echo $sourcefilter === 'curated' ? ' selected' : ''; ?>>Curated bank</option><option value="scorm"<?php echo $sourcefilter === 'scorm' ? ' selected' : ''; ?>>SCORM modules</option><option value="admin"<?php echo $sourcefilter === 'admin' ? ' selected' : ''; ?>><?php echo $displaylang === 'es' ? 'Preguntas creadas' : 'Created questions'; ?> — <?php echo (int)$customquestiontotalcount; ?> <?php echo $displaylang === 'es' ? 'total' : 'total'; ?> · <?php echo (int)$customdraftcount; ?> <?php echo $displaylang === 'es' ? 'borradores' : 'drafts'; ?> · <?php echo (int)$customapprovedcount; ?> <?php echo $displaylang === 'es' ? 'aprobadas' : 'approved'; ?></option></select><small><?php echo $displaylang === 'es' ? 'Al elegir Preguntas creadas, Uso en examen cambia a Todos los usos. Use Preparación para separar borradores y aprobadas.' : 'Selecting Created questions changes Exam use to All uses. Use Readiness to separate drafts from approved questions.'; ?></small></label>
         <label><span>Cognitive level</span><select name="cognitive"><option value="all">All cognitive levels</option><option value="recall"<?php echo $cognitivefilter === 'recall' ? ' selected' : ''; ?>>Recall / direct</option><option value="application"<?php echo $cognitivefilter === 'application' ? ' selected' : ''; ?>>Application</option><option value="inference"<?php echo $cognitivefilter === 'inference' ? ' selected' : ''; ?>>Inference</option><option value="analysis"<?php echo $cognitivefilter === 'analysis' ? ' selected' : ''; ?>>Analysis / differential</option></select></label>
         <label><span>Content focus</span><select name="content"><option value="all">All content</option><option value="herb_properties"<?php echo $contentfilter === 'herb_properties' ? ' selected' : ''; ?>>Herb properties</option><option value="formula_hierarchy"<?php echo $contentfilter === 'formula_hierarchy' ? ' selected' : ''; ?>>Formula hierarchy</option><option value="herb_processing"<?php echo $contentfilter === 'herb_processing' ? ' selected' : ''; ?>>Herb processing</option><option value="clinical_case"<?php echo $contentfilter === 'clinical_case' ? ' selected' : ''; ?>>Clinical cases</option><option value="other"<?php echo $contentfilter === 'other' ? ' selected' : ''; ?>>Other content</option></select></label>
-        <label><span>Editorial review</span><select name="review"><option value="all">All review states</option><option value="editing_drafts"<?php echo $reviewfilter === 'editing_drafts' ? ' selected' : ''; ?>>Saved editing drafts</option><option value="ai_drafts"<?php echo $reviewfilter === 'ai_drafts' ? ' selected' : ''; ?>>Current AI review group</option><option value="proposals_pending"<?php echo $reviewfilter === 'proposals_pending' ? ' selected' : ''; ?>>Publishing proposals</option><option value="needs_inference"<?php echo $reviewfilter === 'needs_inference' ? ' selected' : ''; ?>>Needs more inference</option><option value="needs_feedback"<?php echo $reviewfilter === 'needs_feedback' ? ' selected' : ''; ?>>Needs stronger feedback</option><option value="simulation_candidate"<?php echo $reviewfilter === 'simulation_candidate' ? ' selected' : ''; ?>>Simulation candidate</option><option value="reclassification_requested"<?php echo $reviewfilter === 'reclassification_requested' ? ' selected' : ''; ?>>Reclassification requested</option><option value="possible_exclusion"<?php echo $reviewfilter === 'possible_exclusion' ? ' selected' : ''; ?>>Possible exclusions</option><option value="deleted"<?php echo $reviewfilter === 'deleted' ? ' selected' : ''; ?>>Deleted questions (recycle bin)</option></select></label>
+        <label><span>Editorial review</span><select name="review"><option value="all">All review states</option><option value="editing_drafts"<?php echo $reviewfilter === 'editing_drafts' ? ' selected' : ''; ?>>Saved editing drafts</option><option value="ai_drafts"<?php echo $reviewfilter === 'ai_drafts' ? ' selected' : ''; ?>>Current AI review group</option><option value="proposals_pending"<?php echo $reviewfilter === 'proposals_pending' ? ' selected' : ''; ?>>Publishing proposals</option><option value="needs_inference"<?php echo $reviewfilter === 'needs_inference' ? ' selected' : ''; ?>>Needs more inference</option><option value="needs_feedback"<?php echo $reviewfilter === 'needs_feedback' ? ' selected' : ''; ?>>Needs stronger feedback</option><option value="simulation_candidate"<?php echo $reviewfilter === 'simulation_candidate' ? ' selected' : ''; ?>>Simulation candidate</option><option value="reclassification_requested"<?php echo $reviewfilter === 'reclassification_requested' ? ' selected' : ''; ?>>Reclassification requested</option><option value="possible_exclusion"<?php echo $reviewfilter === 'possible_exclusion' ? ' selected' : ''; ?>>Possible exclusions</option><option value="study_archive"<?php echo $reviewfilter === 'study_archive' ? ' selected' : ''; ?>>Study &amp; Reference Archive</option><option value="deleted"<?php echo $reviewfilter === 'deleted' ? ' selected' : ''; ?>>Deleted questions (recycle bin)</option></select></label>
         <?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="examview" value="<?php echo s($examprojectview); ?>"><?php endif; ?>
         <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
         <div class="question-bank__filter-actions"><button class="question-bank__button" type="submit">Apply</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Clear</a></div>
@@ -7855,7 +8009,7 @@ echo $OUTPUT->header();
             <span class="question-bank__badge">Complexity: <?php echo s(ucfirst((string)($question['difficultyBand'] ?? 'unclassified'))); ?></span>
             <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php if ($custombatchtotal > 1): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Lote nuevo' : 'New batch'; ?> · <?php echo $custombatchposition; ?> / <?php echo $custombatchtotal; ?></span><?php endif; ?><?php elseif ($question['_sourcekind'] === 'admin'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>
             <?php if ($iscustomdraft): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta ahora?' : 'Approve and publish this question now?'; ?>');"<?php endif; ?>><?php echo $customcanpublish ? ($displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish') : s($custompublishblocker); ?></button></form><?php endif; ?>
-            <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion</span><?php elseif ($revisionstatus === 'deleted'): ?><span class="question-bank__badge question-bank__badge--incomplete">Deleted · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Publicada' : 'Published'; ?></span><?php endif; ?>
+            <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion</span><?php elseif ($revisionstatus === 'study_archive'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Archivo de estudio · no es pregunta board' : 'Study archive · not a board question'; ?></span><?php elseif ($revisionstatus === 'deleted'): ?><span class="question-bank__badge question-bank__badge--incomplete">Deleted · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Publicada' : 'Published'; ?></span><?php endif; ?>
             <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--exam">AI-assisted mock review</span><?php endif; ?>
             <?php if ($prohibitedanswerchoice !== null): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $displaylang === 'es' ? 'Respuesta combinada prohibida · requiere corrección' : 'Prohibited combined answer · correction required'; ?></span><?php endif; ?>
             <?php if ($prohibitednegativewording): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $displaylang === 'es' ? 'Pregunta negativa prohibida · requiere corrección' : 'Prohibited negative stem · correction required'; ?></span><?php endif; ?>
@@ -7869,7 +8023,8 @@ echo $OUTPUT->header();
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $question['_ready'] && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><?php if (!in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><input type="hidden" name="returnorigin" value="1"><?php endif; ?><?php if ($question['_exam2position'] > 0): ?><input type="hidden" name="pinforexam2" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta lista?' : 'Approve and publish this ready question?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && !$visibleherbplacementmissing && in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible version now? It will be removed from pending questions.');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && !$visibleherbplacementmissing && !in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta versión ahora?' : 'Approve and publish this version now?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
-            <?php if ($question['_sourcekind'] !== 'admin' && $revisionstatus !== 'deleted' && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a><?php endif; ?>
+            <?php if ($question['_sourcekind'] !== 'admin' && !in_array($revisionstatus, ['study_archive', 'deleted'], true) && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a><?php endif; ?>
+            <?php if (!$iscustomdraft && $revisionstatus !== 'deleted'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'study_archive' ? 'restorearchivedquestion' : 'archivequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'study_archive' ? 'question-bank__button--primary' : 'question-bank__button--similar'; ?>" type="submit"<?php if ($revisionstatus !== 'study_archive'): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Archivar esta pregunta para estudio y referencia? Se conservará completa, pero saldrá del banco board y de todos los exámenes.' : 'Archive this question for study and reference? It will be preserved in full, but removed from the board bank and all exams.'; ?>');"<?php endif; ?>><?php echo $revisionstatus === 'study_archive' ? ($displaylang === 'es' ? 'Restaurar al banco board' : 'Restore to board bank') : ($displaylang === 'es' ? 'Archivar para estudio/referencia' : 'Archive for study/reference'); ?></button></form><?php endif; ?>
             <?php if (!$iscustomdraft): ?><form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'deleted' ? 'restoredeletedquestion' : 'deletequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'deleted' ? 'question-bank__button--primary' : 'question-bank__button--exclude'; ?>" type="submit"<?php if ($revisionstatus !== 'deleted'): ?> onclick="return confirm('Delete this question from the active bank and exams? You can restore it later from Deleted questions.');"<?php endif; ?>><?php echo $revisionstatus === 'deleted' ? 'Restore question' : 'Delete question'; ?></button></form><?php endif; ?>
             <?php endif; ?>
             <?php if (!$question['_excluded']): ?><a class="question-bank__button question-bank__button--similar" href="<?php echo $questionsimilarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar preguntas similares' : 'Find similar questions'; ?></a><?php endif; ?>
@@ -7893,6 +8048,13 @@ echo $OUTPUT->header();
             <?php if ($inlineapproval && $cardisoutdated && $prohibitedanswerchoice === null && !$prohibitednegativewording && !$visibleherbplacementmissing): ?><form method="post" action="<?php echo $pageurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish the visible version without running another correction?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php // Keep recoverable deletion available while an AI correction is awaiting approval. ?>
             <?php if ($inlineapproval && !$iscustomdraft): ?>
+            <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+                <input type="hidden" name="formaction" value="archivequestion">
+                <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
+                <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
+                <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                <button class="question-bank__button question-bank__button--similar" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Archivar esta pregunta para estudio y referencia? Se conservará completa, pero saldrá del banco board y de todos los exámenes.' : 'Archive this question for study and reference? It will be preserved in full, but removed from the board bank and all exams.'; ?>');"><?php echo $displaylang === 'es' ? 'Archivar para estudio/referencia' : 'Archive for study/reference'; ?></button>
+            </form>
             <form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
                 <input type="hidden" name="formaction" value="deletequestion">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
@@ -7908,7 +8070,7 @@ echo $OUTPUT->header();
             <a class="question-bank__button" href="<?php echo $exam2url->out(false); ?>"><?php echo $displaylang === 'es' ? '← Preguntas pendientes' : '← Pending questions'; ?></a>
         </div>
         <?php endif; ?>
-        <?php if ($question['_excluded']): ?><div class="question-bank__exclusion-note"><strong><?php echo $revisionstatus === 'deleted' ? 'Deleted question:' : 'Possible error / exclusion note:'; ?></strong> <?php echo s($revision['exclusionReason'] ?? 'No reason recorded.'); ?> This question is preserved but unavailable to students and exams.</div><?php endif; ?>
+        <?php if ($question['_excluded']): ?><div class="question-bank__exclusion-note"><strong><?php echo $revisionstatus === 'deleted' ? ($displaylang === 'es' ? 'Pregunta eliminada:' : 'Deleted question:') : ($revisionstatus === 'study_archive' ? ($displaylang === 'es' ? 'Archivo de estudio/referencia:' : 'Study/reference archive:') : ($displaylang === 'es' ? 'Nota de posible error o exclusión:' : 'Possible error / exclusion note:')); ?></strong> <?php echo s($revision['exclusionReason'] ?? ($displaylang === 'es' ? 'No se registró una razón.' : 'No reason recorded.')); ?> <?php echo $revisionstatus === 'study_archive' ? ($displaylang === 'es' ? 'La pregunta se conserva completa para enseñanza o consulta, pero no aparece en prácticas board, mock exams ni simulaciones.' : 'The question is preserved in full for teaching or reference, but does not appear in board practice, mock exams or simulations.') : ($displaylang === 'es' ? 'Esta pregunta se conserva, pero no está disponible para estudiantes ni exámenes.' : 'This question is preserved but unavailable to students and exams.'); ?></div><?php endif; ?>
         <?php if ($usagefilter !== 'exam2_review' && ($question['_proposal']['status'] ?? '') === 'pending_review'): ?><div class="question-bank__proposal-review"><strong>Proposal awaiting publishing review:</strong><br><?php echo s($question['_proposal']['text'] ?? ''); ?></div><?php endif; ?>
         <h3><?php echo s($prompt); ?></h3>
         <ol class="question-bank__options"><?php foreach ($options as $option): $optionlabel = (string)($option['label'] ?? ''); ?><li class="<?php echo $optionlabel === $correctlabel ? 'is-correct' : ''; ?>"><strong><?php echo s($optionlabel); ?>.</strong> <?php echo s($option['text'] ?? ''); ?></li><?php endforeach; ?></ol>

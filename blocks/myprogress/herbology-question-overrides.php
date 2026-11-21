@@ -133,7 +133,7 @@ function block_myprogress_herbology_apply_revision(
         return $question;
     }
     $status = (string)($revision['status'] ?? 'draft');
-    $isexcluded = in_array($status, ['exclusion_candidate', 'deleted'], true);
+    $isexcluded = in_array($status, ['exclusion_candidate', 'study_archive', 'deleted'], true);
     $draft = null;
     if ($includepending && is_array($revision['draft'] ?? null)) {
         $draft = $revision['draft'];
