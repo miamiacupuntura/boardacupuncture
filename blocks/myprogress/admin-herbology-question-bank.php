@@ -8248,7 +8248,7 @@ PROMPT;
             : ($custombatchcount . ' new-question draft'
                 . ($custombatchcount === 1 ? '' : 's')
                 . ' created. Review every question before approving it.'),
-        null,
+        0,
         \core\output\notification::NOTIFY_SUCCESS
     );
 }
