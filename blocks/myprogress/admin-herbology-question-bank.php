@@ -175,6 +175,212 @@ foreach ($bank['domains'] as &$questions) {
     unset($question);
 }
 unset($questions);
+$exam5canonicalrepairs = [
+    'CF-0272' => [
+        'prompt' => 'Two patients present with palpitations. One has an irregular or knotted pulse with deficiency of Qi, Blood, and Yin; the other has fatigue, poor appetite, insomnia, and signs of Spleen Qi and Heart Blood deficiency. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Gui Pi Tang is selected for the irregular pulse, while Zhi Gan Cao Tang is selected primarily for Spleen failure to contain Blood.'],
+            ['label' => 'B', 'text' => 'Zhi Gan Cao Tang and Gui Pi Tang are interchangeable whenever palpitations occur with deficiency.'],
+            ['label' => 'C', 'text' => 'Zhi Gan Cao Tang is selected for the irregular pulse with Qi-Blood-Yin deficiency, while Gui Pi Tang is selected for Spleen Qi and Heart Blood deficiency with poor appetite, insomnia, or bleeding.'],
+            ['label' => 'D', 'text' => 'Zhi Gan Cao Tang primarily drains Heart Fire, while Gui Pi Tang primarily disperses constrained Liver Qi.'],
+        ],
+        'correctLabel' => 'C',
+        'explanation' => 'Inference step 1: An irregular or knotted pulse with palpitations and combined Qi, Blood, and Yin deficiency points to Zhi Gan Cao Tang. Inference step 2: Fatigue, poor appetite, insomnia, and bleeding from failure of Spleen Qi to contain Blood point to Gui Pi Tang. Option A: Incorrect; it reverses the formulas. Option B: Incorrect; their deficiency mechanisms are distinct. Option C: Correct; it matches each formula to its characteristic presentation. Option D: Incorrect; neither description states the principal strategy of these formulas.',
+    ],
+    'CF-0198' => [
+        'prompt' => 'A patient has cold fingers from constrained Yang Qi with Liver-Spleen disharmony, while another has pronounced distending pain along the Liver channel from Liver Qi stagnation. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Chai Hu Shu Gan San treats constrained Yang with cold extremities, while Si Ni San is reserved for fixed Blood stasis pain.'],
+            ['label' => 'B', 'text' => 'Si Ni San treats constrained Yang failing to reach the extremities, while Chai Hu Shu Gan San more directly courses Liver Qi and relieves distending channel pain.'],
+            ['label' => 'C', 'text' => 'Si Ni San primarily warms devastated Kidney Yang, while Chai Hu Shu Gan San primarily nourishes Liver Blood.'],
+            ['label' => 'D', 'text' => 'The formulas are clinically interchangeable because each contains Chai Hu.'],
+        ],
+        'correctLabel' => 'B',
+        'explanation' => 'Inference step 1: Cold extremities caused by constrained Yang rather than true Yang collapse characterize the Si Ni San mechanism. Inference step 2: Distending pain along the Liver channel from Qi stagnation favors Chai Hu Shu Gan San. Option A: Incorrect; it reverses the central indications. Option B: Correct. Option C: Incorrect; these are not their primary actions. Option D: Incorrect; a shared ingredient does not make two formulas interchangeable.',
+    ],
+    'CF-1610' => [
+        'prompt' => 'A Six-Stage disorder progresses inward from the immediately preceding Yin stage into a Jue Yin presentation. Which transition is being described?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Tai Yin transmitting directly to Yang Ming.'],
+            ['label' => 'B', 'text' => 'Shao Yang transmitting directly to Tai Yang.'],
+            ['label' => 'C', 'text' => 'Shao Yin transmitting into Jue Yin.'],
+            ['label' => 'D', 'text' => 'Yang Ming transmitting into Tai Yin.'],
+        ],
+        'correctLabel' => 'C',
+        'explanation' => 'Inference step 1: The question specifies progression from the immediately preceding Yin stage. Inference step 2: In Six-Stage order, Shao Yin precedes Jue Yin. Option A: Incorrect; it moves from Yin to a Yang stage and skips the requested relationship. Option B: Incorrect; it reverses the Yang-stage sequence. Option C: Correct. Option D: Incorrect; it does not describe entry into Jue Yin.',
+    ],
+    'CF-0255' => [
+        'prompt' => 'One deficient patient has intermittent low-grade fever with abdominal pain that improves with warmth and pressure; another develops low-grade fever and marked fatigue after exertion with sinking Middle Qi. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Bu Zhong Yi Qi Tang is selected for spasmodic abdominal pain relieved by pressure, while Xiao Jian Zhong Tang treats sinking Qi with organ prolapse.'],
+            ['label' => 'B', 'text' => 'Xiao Jian Zhong Tang warms and harmonizes the Middle for deficiency abdominal pain, while Bu Zhong Yi Qi Tang raises sinking Middle Qi in fever aggravated by exertion.'],
+            ['label' => 'C', 'text' => 'Xiao Jian Zhong Tang clears blazing Qi-level Heat, while Bu Zhong Yi Qi Tang drains constrained Fire downward.'],
+            ['label' => 'D', 'text' => 'The formulas are interchangeable whenever a deficient patient has low-grade fever.'],
+        ],
+        'correctLabel' => 'B',
+        'explanation' => 'Inference step 1: Deficiency abdominal pain relieved by warmth and pressure is the Xiao Jian Zhong Tang pattern. Inference step 2: Fever and fatigue aggravated by exertion with sinking Qi favor Bu Zhong Yi Qi Tang. Option A: Incorrect; it reverses the assignments. Option B: Correct. Option C: Incorrect; neither formula treats blazing excess Heat as its main strategy. Option D: Incorrect; the associated mechanisms distinguish them.',
+    ],
+    'CF-0254' => [
+        'prompt' => 'Two patients have Middle Jiao Qi deficiency. One has uncomplicated fatigue, pallor, poor appetite, and loose stools; the other also has sinking Qi with prolapse or persistent low-grade fever after exertion. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Bu Zhong Yi Qi Tang treats uncomplicated Spleen Qi deficiency, while Si Jun Zi Tang raises prolapsed organs.'],
+            ['label' => 'B', 'text' => 'Si Jun Zi Tang primarily moves stagnant Liver Qi, while Bu Zhong Yi Qi Tang nourishes Kidney Yin.'],
+            ['label' => 'C', 'text' => 'Si Jun Zi Tang and Bu Zhong Yi Qi Tang are interchangeable for every presentation of fatigue and loose stools.'],
+            ['label' => 'D', 'text' => 'Si Jun Zi Tang treats basic Spleen-Stomach Qi deficiency, while Bu Zhong Yi Qi Tang adds a strong Qi-raising strategy for sinking Middle Qi.'],
+        ],
+        'correctLabel' => 'D',
+        'explanation' => 'Inference step 1: Basic Spleen-Stomach Qi deficiency without sinking is treated by Si Jun Zi Tang. Inference step 2: Prolapse or exertion-aggravated low-grade fever indicates sinking Middle Qi and favors Bu Zhong Yi Qi Tang. Option A: Incorrect; it reverses the formulas. Option B: Incorrect; those are not their principal strategies. Option C: Incorrect; sinking Qi requires a different emphasis. Option D: Correct.',
+    ],
+    'SCORM-FD-4789860650F9' => [
+        'prompt' => 'A patient with Yin deficiency Fire has pronounced steaming-bone disorder and weakness of the lower back and knees. Another has a broader Liu Wei Di Huang Wan pattern with deficiency Heat. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Zhi Bai Di Huang Wan is selected when the heavy anchoring action of Gui Ban is required, while Da Bu Yin Wan is the broader Liu Wei Di Huang Wan modification.'],
+            ['label' => 'B', 'text' => 'Da Bu Yin Wan more strongly anchors vigorous deficiency Fire with Gui Ban, while Zhi Bai Di Huang Wan adds Zhi Mu and Huang Bai to the Liu Wei Di Huang Wan base.'],
+            ['label' => 'C', 'text' => 'Da Bu Yin Wan primarily tonifies Spleen Qi, while Zhi Bai Di Huang Wan primarily releases Wind-Heat.'],
+            ['label' => 'D', 'text' => 'The formulas are interchangeable whenever Zhi Mu and Huang Bai appear in the prescription.'],
+        ],
+        'correctLabel' => 'B',
+        'explanation' => 'Inference step 1: Pronounced steaming-bone disorder requiring a heavy anchoring and essence-nourishing substance favors Da Bu Yin Wan and its use of Gui Ban. Inference step 2: A broader Liu Wei Di Huang Wan presentation with deficiency Heat favors Zhi Bai Di Huang Wan. Option A: Incorrect; it reverses the distinguishing structures. Option B: Correct. Option C: Incorrect; those actions are unrelated. Option D: Incorrect; shared ingredients do not erase the formulas’ structural differences.',
+    ],
+    'CF-0081' => [
+        'prompt' => 'One patient has irritability and insomnia from deficient Liver Blood failing to nourish the Heart. Another has intense agitation from Heart Fire with Kidney Yin deficiency and difficulty lying quietly in bed. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Huang Lian E Jiao Tang treats deficient Liver Blood, while Suan Zao Ren Tang drains blazing Heart Fire.'],
+            ['label' => 'B', 'text' => 'Suan Zao Ren Tang primarily purges Phlegm-Fire, while Huang Lian E Jiao Tang releases exterior Wind-Heat.'],
+            ['label' => 'C', 'text' => 'Suan Zao Ren Tang nourishes Liver Blood and calms the spirit, while Huang Lian E Jiao Tang drains Heart Fire and enriches Yin.'],
+            ['label' => 'D', 'text' => 'The formulas are interchangeable whenever insomnia occurs with irritability.'],
+        ],
+        'correctLabel' => 'C',
+        'explanation' => 'Inference step 1: Deficient Liver Blood failing to nourish the Heart favors Suan Zao Ren Tang. Inference step 2: Heart Fire with Kidney Yin deficiency and marked agitation favors Huang Lian E Jiao Tang. Option A: Incorrect; it reverses the formulas. Option B: Incorrect; neither description gives the principal strategy. Option C: Correct. Option D: Incorrect; the Heat and deficiency mechanisms differ.',
+    ],
+    'CF-0308' => [
+        'prompt' => 'One patient has Liver Fire attacking the Stomach with sour regurgitation and vomiting. Another has constrained Liver Qi generating Heat and Blood stasis with fixed epigastric or flank pain. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Zuo Jin Wan treats Liver Fire attacking the Stomach, while Jin Ling Zi San moves constrained Qi and Blood stasis to relieve pain.'],
+            ['label' => 'B', 'text' => 'Jin Ling Zi San treats sour vomiting from Liver Fire attacking the Stomach, while Zuo Jin Wan treats traumatic Blood stasis.'],
+            ['label' => 'C', 'text' => 'Zuo Jin Wan primarily warms the Middle, while Jin Ling Zi San primarily tonifies Spleen Qi.'],
+            ['label' => 'D', 'text' => 'The formulas are interchangeable for any pain attributed to Liver constraint.'],
+        ],
+        'correctLabel' => 'A',
+        'explanation' => 'Inference step 1: Sour regurgitation and vomiting from Liver Fire attacking the Stomach identify Zuo Jin Wan. Inference step 2: Pain from constrained Qi, Heat, and secondary Blood stasis identifies Jin Ling Zi San. Option A: Correct. Option B: Incorrect; it reverses the formulas. Option C: Incorrect; those are not their principal actions. Option D: Incorrect; their target mechanisms differ.',
+    ],
+    'CF-0131' => [
+        'prompt' => 'One patient has wheezing, thirst, fever, and sweating from Lung Heat with constrained Lung Qi. Another has the four great signs of blazing Yang Ming Qi-level Heat. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Bai Hu Tang treats Lung Heat with wheezing, while Ma Xing Shi Gan Tang treats generalized Yang Ming Qi-level Heat.'],
+            ['label' => 'B', 'text' => 'Ma Xing Shi Gan Tang primarily purges Yang Ming organ accumulation, while Bai Hu Tang releases exterior Wind-Cold.'],
+            ['label' => 'C', 'text' => 'The formulas are interchangeable whenever Shi Gao is present.'],
+            ['label' => 'D', 'text' => 'Ma Xing Shi Gan Tang clears Lung Heat and restores Lung Qi descent, while Bai Hu Tang clears blazing Yang Ming Qi-level Heat.'],
+        ],
+        'correctLabel' => 'D',
+        'explanation' => 'Inference step 1: Wheezing with Lung Heat and impaired descent favors Ma Xing Shi Gan Tang. Inference step 2: The four great signs of blazing Yang Ming Qi-level Heat favor Bai Hu Tang. Option A: Incorrect; it reverses the formulas. Option B: Incorrect; it assigns unrelated actions. Option C: Incorrect; a shared ingredient does not make the formulas interchangeable. Option D: Correct.',
+    ],
+    'SCORM-FD-2D05A263601F' => [
+        'prompt' => 'A 25-year-old patient has severe toothache, swollen painful gums aggravated by spicy food, intense thirst, foul breath, constipation, dark urine, a red tongue with yellow coating, and a slippery-rapid pulse. Which listed formula best matches the interior Heat with bowel accumulation?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Tiao Wei Cheng Qi Tang (Regulate the Stomach and Order the Qi Decoction).'],
+            ['label' => 'B', 'text' => 'Xiao Yao San (Rambling Powder).'],
+            ['label' => 'C', 'text' => 'Xiao Chai Hu Tang (Minor Bupleurum Decoction).'],
+            ['label' => 'D', 'text' => 'Si Ni San (Frigid Extremities Powder).'],
+        ],
+        'correctLabel' => 'A',
+        'explanation' => 'Inference step 1: Thirst, red tongue, yellow coating, foul breath, and a slippery-rapid pulse indicate strong interior Heat. Inference step 2: Constipation and dark urine show bowel accumulation; among the listed choices, Tiao Wei Cheng Qi Tang best addresses Heat binding in the Yang Ming organs. Option A: Correct. Option B: Incorrect; Xiao Yao San treats Liver constraint with deficiency. Option C: Incorrect; Xiao Chai Hu Tang treats a Shao Yang pattern. Option D: Incorrect; Si Ni San treats constrained Yang with cold extremities.',
+    ],
+    'CF-0180' => [
+        'prompt' => 'One patient has chronic dry constipation from intestinal dryness with a relatively deficient constitution. Another has Yang Ming organ Heat with stronger Qi stagnation and stool clumping. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Xiao Cheng Qi Tang moistens chronic intestinal dryness, while Ma Zi Ren Wan strongly breaks acute stool clumping.'],
+            ['label' => 'B', 'text' => 'Ma Zi Ren Wan moistens the intestines for chronic dryness, while Xiao Cheng Qi Tang purges Heat and moves Qi in a stronger Yang Ming organ excess pattern.'],
+            ['label' => 'C', 'text' => 'Ma Zi Ren Wan primarily warms Cold constipation, while Xiao Cheng Qi Tang tonifies Spleen Qi.'],
+            ['label' => 'D', 'text' => 'The formulas are interchangeable for every presentation of constipation with a dry stool.'],
+        ],
+        'correctLabel' => 'B',
+        'explanation' => 'Inference step 1: Chronic intestinal dryness in a relatively deficient patient favors the moistening action of Ma Zi Ren Wan. Inference step 2: Stronger Yang Ming organ excess with Qi stagnation and clumping favors Xiao Cheng Qi Tang. Option A: Incorrect; it reverses the formulas. Option B: Correct. Option C: Incorrect; those are not their actions. Option D: Incorrect; severity and mechanism distinguish them.',
+    ],
+    'CF-0265' => [
+        'prompt' => 'A patient with Qi and Blood deficiency also has pronounced coldness and weakness requiring stronger warming and augmentation. Which statement correctly distinguishes Shi Quan Da Bu Tang from its Ba Zhen Tang base?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Ba Zhen Tang adds Huang Qi and Rou Gui to Shi Quan Da Bu Tang to create a cooler formula.'],
+            ['label' => 'B', 'text' => 'Shi Quan Da Bu Tang removes the Blood-tonifying ingredients of Ba Zhen Tang and focuses only on Qi.'],
+            ['label' => 'C', 'text' => 'Shi Quan Da Bu Tang builds on Ba Zhen Tang by adding Huang Qi and Rou Gui, strengthening Qi augmentation and warming for a colder, weaker presentation.'],
+            ['label' => 'D', 'text' => 'Shi Quan Da Bu Tang replaces the entire Ba Zhen Tang structure with a Kidney Yin-tonifying strategy.'],
+        ],
+        'correctLabel' => 'C',
+        'explanation' => 'Inference step 1: Ba Zhen Tang is the combined Qi-and-Blood-tonifying base. Inference step 2: Adding Huang Qi and Rou Gui creates Shi Quan Da Bu Tang and adds stronger Qi augmentation and warming. Option A: Incorrect; it reverses the derivation and temperature. Option B: Incorrect; the Ba Zhen Tang structure remains. Option C: Correct. Option D: Incorrect; the modification does not become a Kidney Yin formula.',
+    ],
+    'SCORM-FD-994D5293B6F4' => [
+        'prompt' => 'One patient has an externally contracted cool-dryness pattern with cough and thin sputum. Another has a lingering Wind-Cold cough in which coughing predominates after the stronger exterior signs have eased. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Zhi Sou San treats cool-dryness with the stronger exterior presentation, while Xing Su San treats only lingering cough.'],
+            ['label' => 'B', 'text' => 'Xing Su San treats externally contracted cool-dryness, while Zhi Sou San gently disperses Wind and restores Lung Qi movement for a lingering cough.'],
+            ['label' => 'C', 'text' => 'Xing Su San primarily clears blazing Lung Heat, while Zhi Sou San strongly purges Phlegm-Fire.'],
+            ['label' => 'D', 'text' => 'The formulas are interchangeable whenever cough follows an exterior pathogen.'],
+        ],
+        'correctLabel' => 'B',
+        'explanation' => 'Inference step 1: Cool-dryness with a clearer exterior component favors Xing Su San. Inference step 2: A lingering Wind-Cold cough with cough predominating favors the gentle Lung Qi-regulating action of Zhi Sou San. Option A: Incorrect; it reverses the formulas. Option B: Correct. Option C: Incorrect; neither is defined by those excess-Heat strategies. Option D: Incorrect; the stage and dryness distinguish them.',
+    ],
+    'SCORM-FD-041FEA2DAAA7' => [
+        'prompt' => 'A patient has persistent mild abdominal pain with Blood deficiency, Dampness, slight edema, and disharmony between the Liver and Spleen. Which formula most directly matches this presentation?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Si Ni San (Frigid Extremities Powder), for constrained Yang with pronounced Qi stagnation and cold extremities.'],
+            ['label' => 'B', 'text' => 'Xiao Yao San (Rambling Powder), for Liver constraint with Qi and Blood deficiency but without a primary water-accumulation presentation.'],
+            ['label' => 'C', 'text' => 'Shao Yao Gan Cao Tang (Peony and Licorice Decoction), for painful muscle spasm from disharmony of the sinews.'],
+            ['label' => 'D', 'text' => 'Dang Gui Shao Yao San (Tangkuei and Peony Powder), for Blood deficiency with Dampness and mild persistent abdominal pain with edema.'],
+        ],
+        'correctLabel' => 'D',
+        'explanation' => 'Inference step 1: Persistent mild abdominal pain with Blood deficiency and Liver-Spleen disharmony narrows the comparison. Inference step 2: Dampness and slight edema specifically favor Dang Gui Shao Yao San. Option A: Incorrect; Si Ni San emphasizes constrained Yang and Qi stagnation. Option B: Incorrect; Xiao Yao San emphasizes constraint and deficiency without the same water accumulation. Option C: Incorrect; Shao Yao Gan Cao Tang targets painful spasm. Option D: Correct.',
+    ],
+    'CF-0202' => [
+        'prompt' => 'One patient has internal Dampness obstructing the Middle Jiao with fullness, poor appetite, and a greasy coating. Another has the same Middle Jiao Dampness plus an externally contracted disorder with nausea and vomiting. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Ping Wei San treats internal Dampness obstructing the Middle, while Huo Xiang Zheng Qi San addresses Middle Jiao Dampness complicated by an exterior disorder.'],
+            ['label' => 'B', 'text' => 'Huo Xiang Zheng Qi San treats uncomplicated internal Dampness, while Ping Wei San is selected when exterior signs predominate.'],
+            ['label' => 'C', 'text' => 'Ping Wei San primarily nourishes Spleen Yin, while Huo Xiang Zheng Qi San primarily clears blazing Stomach Fire.'],
+            ['label' => 'D', 'text' => 'The formulas are interchangeable whenever nausea occurs with a greasy tongue coating.'],
+        ],
+        'correctLabel' => 'A',
+        'explanation' => 'Inference step 1: Internal Dampness obstructing the Middle without an exterior component favors Ping Wei San. Inference step 2: Exterior contraction superimposed on Middle Jiao Dampness favors Huo Xiang Zheng Qi San. Option A: Correct. Option B: Incorrect; it reverses the formulas. Option C: Incorrect; those are not their principal strategies. Option D: Incorrect; the exterior component is decisive.',
+    ],
+    'CF-0034' => [
+        'prompt' => 'One patient has fixed lower-abdominal Blood stasis with a relatively stable mass and concurrent fluid accumulation. Another has a hotter, more acute Yang Ming Blood-stasis pattern with thirst, agitation, and stool binding. Which formula assignment is most accurate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Tao He Cheng Qi Tang treats the stable mass with fluid accumulation, while Gui Zhi Fu Ling Wan treats acute Yang Ming Heat and stool binding.'],
+            ['label' => 'B', 'text' => 'Gui Zhi Fu Ling Wan primarily purges the bowels, while Tao He Cheng Qi Tang gently nourishes Blood deficiency.'],
+            ['label' => 'C', 'text' => 'Gui Zhi Fu Ling Wan treats the more stable lower-abdominal Blood stasis with fluid accumulation, while Tao He Cheng Qi Tang treats the hotter, more acute excess pattern with bowel binding.'],
+            ['label' => 'D', 'text' => 'The formulas are interchangeable whenever lower-abdominal tenderness is present.'],
+        ],
+        'correctLabel' => 'C',
+        'explanation' => 'Inference step 1: A stable fixed lower-abdominal mass with fluid accumulation favors Gui Zhi Fu Ling Wan. Inference step 2: A hotter acute excess pattern with agitation, thirst, and stool binding favors Tao He Cheng Qi Tang. Option A: Incorrect; it reverses the assignments. Option B: Incorrect; it misstates both strategies. Option C: Correct. Option D: Incorrect; Heat and bowel-binding signs distinguish the formulas.',
+    ],
+];
+foreach ($bank['domains'] as &$exam5domainquestions) {
+    foreach ($exam5domainquestions as &$exam5question) {
+        $exam5questionid = (string)($exam5question['questionId'] ?? '');
+        $exam5repair = $exam5canonicalrepairs[$exam5questionid] ?? null;
+        if (!is_array($exam5repair)) {
+            continue;
+        }
+        foreach (['prompt', 'options', 'correctLabel', 'explanation'] as $repairfield) {
+            $exam5question[$repairfield] = $exam5repair[$repairfield];
+        }
+        $exam5question['feedbackStatus'] = 'practice-ready';
+        $exam5question['contentType'] = 'comparison';
+        $exam5question['cognitiveLevel'] = 'analyze';
+        $exam5question['difficultyBand'] = 'analysis';
+        $exam5question['review']['status'] = 'practice-ready';
+        $exam5question['review']['notes'] = 'Exam 5 canonical comparison repair with independent choices and complete distractor feedback.';
+        if (trim((string)($exam5question['sourceCard']['url'] ?? '')) === '') {
+            $exam5question['sourceCard'] = [
+                'url' => '/blocks/myprogress/formulas-study-guide.php?lang=en',
+                'urlEs' => '/blocks/myprogress/formulas-study-guide.php?lang=es',
+                'label' => 'Open supporting formula study guide',
+                'labelEs' => 'Abrir guía de fórmulas de apoyo',
+            ];
+        }
+    }
+    unset($exam5question);
+}
+unset($exam5domainquestions);
 $revisionstore = block_myprogress_herbology_override_load();
 $fuzirouguicustomid = 'ADMIN-HB-20261121-054320-94BA';
 $fuzirouguirepairapplied = false;
@@ -2630,6 +2836,7 @@ $projectcreatedapprovedbydomain = array_fill_keys(array_keys($domains), 0);
 $projectcreateddraftbydomain = array_fill_keys(array_keys($domains), 0);
 $projecttargetdraftidsbydomain = array_fill_keys(array_keys($domains), []);
 $projecttargetdraftlookup = [];
+$projectduplicatecandidateids = [];
 if (is_array($currentexamproject)) {
     $projecttarget = (int)$currentexamproject['targetCount'];
     $projectweights = $requiredprojectdomaincounts;
@@ -2651,9 +2858,18 @@ if (is_array($currentexamproject)) {
         $projectallocated++;
     }
     $approvedbydomain = array_fill_keys(array_keys($domains), 0);
+    $projectpromptsignature = static function(array $question): string {
+        $prompt = core_text::strtolower(trim((string)($question['prompt'] ?? '')));
+        return trim((string)preg_replace('/[^\p{L}\p{N}]+/u', ' ', $prompt));
+    };
+    $selectedprojectpromptsignatures = [];
     foreach ($allquestions as $projectquestion) {
         if (in_array((string)$projectquestion['questionId'], $currentexamquestionids, true)) {
             $approvedbydomain[$projectquestion['_domainid']]++;
+            $approvedsignature = $projectpromptsignature($projectquestion);
+            if ($approvedsignature !== '') {
+                $selectedprojectpromptsignatures[$approvedsignature] = true;
+            }
         }
     }
     // Never offer a question that students have already seen in any published
@@ -2734,6 +2950,7 @@ if (is_array($currentexamproject)) {
             $question['_simulationcandidate'] ? 0 : 1,
             $cognitiverank[$question['_cognitive']] ?? 4,
             in_array($question['_feedbackquality'], ['detailed', 'curated'], true) ? 0 : 1,
+            $question['_sourcekind'] === 'curated' ? 0 : 1,
             hash('sha256', $examprojectid . '|' . $questionid),
         ];
     };
@@ -2745,11 +2962,22 @@ if (is_array($currentexamproject)) {
         );
         $projectneed = max(0, (int)$projecttargets[$projectdomainid] - (int)$approvedbydomain[$projectdomainid]);
         $projectremainingbydomain[$projectdomainid] = $projectneed;
-        $selectedprojectquestions = array_slice(
-            $projecteligiblebydomain[$projectdomainid],
-            0,
-            $projectneed
-        );
+        $selectedprojectquestions = [];
+        foreach ($projecteligiblebydomain[$projectdomainid] as $eligibleprojectquestion) {
+            if (count($selectedprojectquestions) >= $projectneed) {
+                break;
+            }
+            $eligiblesignature = $projectpromptsignature($eligibleprojectquestion);
+            if ($eligiblesignature !== ''
+                    && isset($selectedprojectpromptsignatures[$eligiblesignature])) {
+                $projectduplicatecandidateids[] = (string)$eligibleprojectquestion['questionId'];
+                continue;
+            }
+            $selectedprojectquestions[] = $eligibleprojectquestion;
+            if ($eligiblesignature !== '') {
+                $selectedprojectpromptsignatures[$eligiblesignature] = true;
+            }
+        }
         $projectcandidatecountbydomain[$projectdomainid] = count($selectedprojectquestions);
         $projectshortagebydomain[$projectdomainid] = max(
             0,
@@ -2763,6 +2991,9 @@ if (is_array($currentexamproject)) {
         }
     }
     $examprojects[$examprojectid]['pendingCandidateCount'] = count($currentexamcandidateids);
+    $examprojects[$examprojectid]['duplicateCandidateIdsSkipped'] = array_values(array_unique(
+        $projectduplicatecandidateids
+    ));
     $currentexamproject = $examprojects[$examprojectid];
 }
 
@@ -8837,6 +9068,13 @@ echo $OUTPUT->header();
     <?php if ($reviewfilter === 'editing_drafts'): ?><section class="question-bank__review-progress"><strong>Saved editing drafts: <?php echo (int)$savededitingdraftcount; ?></strong><p>This view includes unfinished manual and automatic edits from earlier updates and review groups. The most recently saved drafts appear first. Continue the correction, approve the current version, edit manually or delete the question.</p></section><?php endif; ?>
     <?php if ($reviewfilter === 'study_archive'): ?><section class="question-bank__review-progress"><strong><?php echo $displaylang === 'es' ? 'Preguntas exclusivas de Mock' : 'Mock-only questions'; ?>: <?php echo (int)$studyarchivecount; ?></strong><p><?php echo $displaylang === 'es' ? 'Estas preguntas se conservan completas y se ubican automáticamente en el Mock correspondiente a su dominio. No pertenecen al banco board ni a los Simulation Exams. Puede restaurarlas al banco cuando quiera.' : 'These questions are preserved in full and automatically placed in the Mock category matching their domain. They do not belong to the board bank or Simulation Exams. You can restore them to the board bank at any time.'; ?></p></section><?php endif; ?>
     <?php if ($usagefilter === 'exam_project_pending' && $query !== '' && $resultcount === 1): $focusedquestionid = (string)$filteredquestions[0]['questionId']; ?><section class="question-bank__review-progress"><strong><?php echo s((string)$currentexamproject['name']); ?> — focused question ready</strong><p><a class="question-bank__button question-bank__button--publish" href="#question-<?php echo s($focusedquestionid); ?>"><?php echo $displaylang === 'es' ? 'Continuar, revisar y publicar esta pregunta' : 'Continue, review and publish this question'; ?></a><?php if ($pendingexamprojecturl !== null): ?> <a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Omitir y volver a las pendientes' : 'Skip and return to pending questions'; ?></a><?php endif; ?></p></section><?php endif; ?>
+    <?php if ($usagefilter === 'exam_project_pending' && $projectduplicatecandidateids !== []): ?>
+    <section class="question-bank__publish-readiness is-ready"><strong><?php echo $displaylang === 'es' ? 'Duplicados retirados de la cola:' : 'Duplicates removed from the queue:'; ?></strong>
+        <?php echo count(array_unique($projectduplicatecandidateids)); ?> <?php echo $displaylang === 'es'
+            ? 'candidata(s) repetida(s) no se mostrarán ni ocuparán otra posición del examen.'
+            : 'repeated candidate(s) will not be shown or occupy another exam position.'; ?>
+    </section>
+    <?php endif; ?>
     <?php if ($usagefilter === 'exam_project_pending' && array_sum($projectshortagebydomain) > 0): ?>
     <section class="question-bank__review-progress">
         <strong><?php echo $displaylang === 'es' ? 'El banco no tiene suficientes preguntas únicas para completar este examen.' : 'The bank does not have enough unique questions to complete this exam.'; ?></strong>

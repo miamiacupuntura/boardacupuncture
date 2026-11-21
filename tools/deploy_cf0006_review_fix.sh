@@ -94,6 +94,14 @@ php -l "$HERBOLOGY_BOARD_SOURCE" >/dev/null
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$SOURCE_DATA"
 grep -Fq "ncbahm-mock-editor-4.5" "$QUESTION_BANK_SOURCE"
 grep -Fq "sourceFeedbackMissing" "$QUESTION_BANK_SOURCE"
+grep -Fq '$exam5canonicalrepairs' "$QUESTION_BANK_SOURCE"
+grep -Fq 'Exam 5 canonical comparison repair' "$QUESTION_BANK_SOURCE"
+for exam5_repair_id in \
+    CF-0272 CF-0198 CF-1610 CF-0255 CF-0254 SCORM-FD-4789860650F9 \
+    CF-0081 CF-0308 CF-0131 SCORM-FD-2D05A263601F CF-0180 CF-0265 \
+    SCORM-FD-994D5293B6F4 SCORM-FD-041FEA2DAAA7 CF-0202 CF-0034; do
+    grep -Fq "'$exam5_repair_id' =>" "$QUESTION_BANK_SOURCE"
+done
 grep -Fq '$requestedvisibleherbcount' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Requested herbs missing · correction required' "$QUESTION_BANK_SOURCE"
 grep -Fq "formaction === 'excludeexamcandidate'" "$QUESTION_BANK_SOURCE"
@@ -114,6 +122,9 @@ grep -Fq '$projectshortagebydomain' "$QUESTION_BANK_SOURCE"
 grep -Fq '$currentprojectapprovedlookup' "$QUESTION_BANK_SOURCE"
 grep -Fq '$projecttargetdraftlookup' "$QUESTION_BANK_SOURCE"
 grep -Fq '$projectcreatedapprovedbydomain' "$QUESTION_BANK_SOURCE"
+grep -Fq '$projectpromptsignature' "$QUESTION_BANK_SOURCE"
+grep -Fq 'duplicateCandidateIdsSkipped' "$QUESTION_BANK_SOURCE"
+grep -Fq 'Duplicates removed from the queue:' "$QUESTION_BANK_SOURCE"
 grep -Fq 'targetedQuestionAssignmentRepairedAt' "$QUESTION_BANK_SOURCE"
 grep -Fq 'assignedToTargetExamAt' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Assignment repaired:' "$QUESTION_BANK_SOURCE"
@@ -406,6 +417,7 @@ INSTALLED_SHA256="$(sha256sum "$MOODLE_ROOT/${RELATIVE_FILES[3]}" | awk '{print 
 echo "OK: CF-0006 ya no contiene None of above ni su equivalente en español."
 echo "OK: CF-0006 incluye feedback completo para A, B, C y D en ambos idiomas."
 echo "OK: la revisión automática fuerza una segunda comprobación cuando falta feedback o existe una respuesta combinada prohibida."
+echo "OK: las 16 candidatas únicas reportadas de Exam 5 tienen cuatro opciones independientes, respuesta única y feedback completo."
 echo "OK: las preguntas originales listas muestran Aprobar y publicar también desde la búsqueda general."
 echo "OK: una solicitud de hierbas visibles bloquea la publicación hasta que aparezcan en el enunciado o las opciones."
 echo "OK: una pregunta similar puede excluirse solo del examen actual y se busca un reemplazo del mismo dominio."
@@ -416,6 +428,7 @@ echo "OK: CF-0126 contiene cuatro comparaciones independientes y feedback comple
 echo "OK: una opción que concatena otras dos también queda bloqueada como respuesta combinada."
 echo "OK: SCORM-FD-E4D38EA9FCBA usa la comparación corregida de Yu Ping Feng San y Mu Li San."
 echo "OK: las preguntas ya publicadas en otro examen se omiten de los exámenes nuevos y se reemplazan por preguntas del mismo dominio."
+echo "OK: dos candidatas con el mismo enunciado no pueden ocupar posiciones separadas dentro del mismo examen."
 echo "OK: la publicación queda bloqueada si un examen todavía contiene una pregunta usada anteriormente."
 echo "OK: una pregunta aprobada muestra Publicar en el examen activo y desaparece de la cola al incorporarse."
 echo "OK: si un dominio se queda sin candidatas únicas, la pantalla muestra el déficit y abre la creación por lotes para ese dominio."
