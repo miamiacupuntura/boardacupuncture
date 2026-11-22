@@ -296,6 +296,9 @@ grep -Fq 'Bensky content inventory' "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq '.herb-board__student-content-inventory' "$MENU_STYLES_SOURCE"
 grep -Fq 'board-herbology-student-content-inventory.json' "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq 'student-bensky-inventory-v2' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq 'View Exam 1–5 coverage' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq 'Go to Formula Quiz' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq '.herb-board__coverage-navigation' "$MENU_STYLES_SOURCE"
 if grep -Fq 'Warm and tonify Yang · priority coverage' "$HERBOLOGY_BOARD_SOURCE"; then
     echo 'ERROR: the removed student Yang-priority row is still present.' >&2
     exit 1
@@ -755,6 +758,7 @@ echo "OK: después de publicar, la búsqueda de la pregunta terminada se cierra 
 echo "OK: si no existe un examen activo, la publicación vuelve al banco general sin mostrar otra vez la misma tarjeta."
 echo "OK: las preguntas creadas y aprobadas pueden abrirse en Editar manualmente; al publicarlas se elimina la nomenclatura oculta de versiones anteriores y se valida de nuevo Appendix A/C."
 echo "OK: la selección estudiantil de Exam 1–5 muestra la cobertura Bensky real de los cinco exámenes, sin la fila prioritaria de Yang ni columnas administrativas."
+echo "OK: Formula Quiz y la cobertura por capítulo tienen enlaces recíprocos con apertura y desplazamiento directos."
 echo "OK: $CF0126_OVERRIDE_RESULT"
 echo "OK: $EXAM5_OVERRIDE_RESULT"
 echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"

@@ -1954,7 +1954,8 @@ a.herb-board__domain:focus {
 
 .herb-board__student-content-inventory > header {
     display: flex;
-    align-items: baseline;
+    align-items: center;
+    justify-content: space-between;
     gap: 14px;
     padding: 12px 14px;
     border-bottom: 1px solid #d8e2e7;
@@ -1962,10 +1963,50 @@ a.herb-board__domain:focus {
     color: #17324d;
 }
 
+.herb-board__student-content-inventory > header div,
 .herb-board__student-content-inventory > header span {
+    display: block;
+}
+
+.herb-board__student-content-inventory > header span {
+    margin-top: 2px;
     color: #64778a;
     font-size: .72rem;
     font-weight: 650;
+}
+
+.herb-board__student-content-inventory > header a,
+.herb-board__coverage-navigation > a {
+    flex: 0 0 auto;
+    padding: 8px 11px;
+    border: 1px solid #9fb8c7;
+    border-radius: 7px;
+    background: #fff;
+    color: #075f50;
+    font-size: .75rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.herb-board__student-content-inventory > header a:hover,
+.herb-board__student-content-inventory > header a:focus,
+.herb-board__coverage-navigation > a:hover,
+.herb-board__coverage-navigation > a:focus {
+    border-color: #087c69;
+    background: #edf9f5;
+    color: #075f50;
+    text-decoration: none;
+}
+
+.herb-board__coverage-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.herb-board__coverage-navigation .herb-board__subheading {
+    margin-right: auto;
 }
 
 .herb-board__student-content-section {
@@ -2062,6 +2103,12 @@ a.herb-board__domain:focus {
         align-items: flex-start;
         flex-direction: column;
         gap: 3px;
+    }
+
+    .herb-board__coverage-navigation {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
     }
 
 }

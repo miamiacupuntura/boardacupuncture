@@ -18,6 +18,10 @@ $mocksize = max(1, min(100, optional_param('mocksize', 10, PARAM_INT)));
 $mockherbchapter = max(0, optional_param('mockherbchapter', 0, PARAM_INT));
 $mockinventoryrequest = optional_param('inventory', 0, PARAM_BOOL);
 $quizsection = optional_param('quizsection', 'all', PARAM_ALPHA);
+$coverageview = optional_param('coverage', '', PARAM_ALPHA);
+if (!in_array($coverageview, ['', 'formulas', 'herbs'], true)) {
+    $coverageview = '';
+}
 if ($track !== 'quiz' || !in_array($quizsection, ['all', 'herbs', 'formulas', 'clinical'], true)) {
     $quizsection = 'all';
 }
@@ -88,6 +92,9 @@ if ($domainpage > 0) {
 if ($clinicalexamkey !== '') {
     $pageparams['caseexam'] = $clinicalexamkey;
 }
+if (in_array($track, ['exams', 'simulation'], true) && $coverageview !== '') {
+    $pageparams['coverage'] = $coverageview;
+}
 if ($track === 'mock' && $mockcategory !== '') {
     $pageparams['mockcategory'] = $mockcategory;
     $pageparams['mocksize'] = $mocksize;
@@ -115,6 +122,16 @@ $languagecontext = ($fromlibrary ? ['from' => 'library'] : []) + ($ises ? ['lang
 $singleherbsurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'herbs'] + $languagecontext);
 $formulasurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'formulas'] + $languagecontext);
 $quizurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'quiz'] + $languagecontext);
+$formulaquizoverviewurl = new moodle_url(
+    '/blocks/menu/herbology-board.php',
+    ['track' => 'quiz', 'quizsection' => 'formulas'] + $languagecontext,
+    'quiz-formula-categories'
+);
+$formulacoverageurl = new moodle_url(
+    '/blocks/menu/herbology-board.php',
+    ['track' => 'simulation', 'coverage' => 'formulas'] + $languagecontext,
+    'student-formula-coverage'
+);
 $clinicalquizoverviewurl = new moodle_url('/blocks/menu/herbology-board.php', [
     'track' => 'quiz',
     'quizsection' => 'clinical',
@@ -1194,20 +1211,28 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
             }
         }
     }
-    $renderstudentcontentinventory = static function() use ($studentcontentinventory, $ises): void {
+    $renderstudentcontentinventory = static function() use (
+        $studentcontentinventory,
+        $ises,
+        $coverageview,
+        $formulaquizoverviewurl
+    ): void {
         ?>
         <section class="herb-board__student-content-inventory" aria-labelledby="student-content-inventory-title">
             <header>
-                <strong id="student-content-inventory-title"><?php echo $ises ? 'Inventario de contenido Bensky' : 'Bensky content inventory'; ?></strong>
-                <span><?php echo $ises
-                    ? 'Cuenta preguntas publicadas; una comparación puede cubrir más de una categoría.'
-                    : 'Counts published questions; a comparison may cover more than one category.'; ?></span>
+                <div>
+                    <strong id="student-content-inventory-title"><?php echo $ises ? 'Inventario de contenido Bensky' : 'Bensky content inventory'; ?></strong>
+                    <span><?php echo $ises
+                        ? 'Cuenta preguntas publicadas; una comparación puede cubrir más de una categoría.'
+                        : 'Counts published questions; a comparison may cover more than one category.'; ?></span>
+                </div>
+                <a href="<?php echo $formulaquizoverviewurl->out(false); ?>"><?php echo $ises ? '← Ir al Quiz de fórmulas' : '← Go to Formula Quiz'; ?></a>
             </header>
             <?php foreach ([
                 ['key' => 'formulaChapters', 'label' => $ises ? 'Cobertura por capítulo de fórmulas' : 'Coverage by formula chapter'],
                 ['key' => 'herbCategories', 'label' => $ises ? 'Cobertura por categoría de hierbas' : 'Coverage by herb category'],
             ] as $studentcontentsection): ?>
-                <details class="herb-board__student-content-section">
+                <details class="herb-board__student-content-section" id="student-<?php echo $studentcontentsection['key'] === 'formulaChapters' ? 'formula' : 'herb'; ?>-coverage"<?php echo ($coverageview === 'formulas' && $studentcontentsection['key'] === 'formulaChapters') || ($coverageview === 'herbs' && $studentcontentsection['key'] === 'herbCategories') ? ' open' : ''; ?>>
                     <summary><?php echo s($studentcontentsection['label']); ?></summary>
                     <div>
                         <table>
@@ -3353,11 +3378,16 @@ echo $OUTPUT->header();
 
             <?php if (in_array($quizsection, ['all', 'formulas'], true)) { ?>
                 <section aria-labelledby="quiz-formula-categories">
-                    <h4 class="herb-board__subheading<?php echo $quizsection === 'all'
-                        ? ' herb-board__subheading--spaced'
-                        : ''; ?>" id="quiz-formula-categories"><?php echo $ises
-                        ? 'Quiz de fórmulas por categoría'
-                        : 'Formula Quiz by category'; ?></h4>
+                    <div class="herb-board__coverage-navigation">
+                        <h4 class="herb-board__subheading<?php echo $quizsection === 'all'
+                            ? ' herb-board__subheading--spaced'
+                            : ''; ?>" id="quiz-formula-categories"><?php echo $ises
+                            ? 'Quiz de fórmulas por categoría'
+                            : 'Formula Quiz by category'; ?></h4>
+                        <a href="<?php echo $formulacoverageurl->out(false); ?>"><?php echo $ises
+                            ? 'Ver cobertura de Exam 1–5 →'
+                            : 'View Exam 1–5 coverage →'; ?></a>
+                    </div>
                     <div class="herb-board__topics">
                         <?php foreach ($formulacategories as $category) {
                             $categoryurl = new moodle_url($formulapracticepath, [
