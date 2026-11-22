@@ -188,6 +188,32 @@ foreach ((array)$guidelineformularoster['formulas'] as $guidelineformula) {
         ];
     }
 }
+// Keep every Bensky formula chapter visible even when the current Appendix C
+// roster has no formula in that chapter. Missing chapters are important
+// coverage information and must remain selectable as zero-result filters.
+$guidelineformulachapterlabels += [
+    1 => ['en' => 'Formulas that Release the Exterior', 'es' => 'Fórmulas que liberan el Exterior'],
+    2 => ['en' => 'Formulas that Drain Downward', 'es' => 'Fórmulas que drenan hacia abajo'],
+    3 => ['en' => 'Formulas that Harmonize', 'es' => 'Fórmulas que armonizan'],
+    4 => ['en' => 'Formulas that Clear Heat', 'es' => 'Fórmulas que eliminan el Calor'],
+    5 => ['en' => 'Formulas that Dispel Summerheat', 'es' => 'Fórmulas que eliminan el Calor de Verano'],
+    6 => ['en' => 'Formulas that Warm Interior Cold', 'es' => 'Fórmulas que calientan el Frío Interior'],
+    7 => ['en' => 'Formulas that Treat Exterior and Interior Excess', 'es' => 'Fórmulas que tratan exceso Exterior e Interior'],
+    8 => ['en' => 'Formulas that Tonify', 'es' => 'Fórmulas que tonifican'],
+    9 => ['en' => 'Formulas that Stabilize and Bind', 'es' => 'Fórmulas que estabilizan y contienen'],
+    10 => ['en' => 'Formulas that Calm the Spirit', 'es' => 'Fórmulas que calman el Espíritu'],
+    11 => ['en' => 'Formulas that Open the Orifices', 'es' => 'Fórmulas que abren los orificios'],
+    12 => ['en' => 'Formulas that Regulate the Qi', 'es' => 'Fórmulas que regulan el Qi'],
+    13 => ['en' => 'Formulas that Regulate the Blood', 'es' => 'Fórmulas que regulan la Sangre'],
+    14 => ['en' => 'Formulas that Expel Wind', 'es' => 'Fórmulas que expulsan el Viento'],
+    15 => ['en' => 'Formulas that Treat Dryness', 'es' => 'Fórmulas que tratan la Sequedad'],
+    16 => ['en' => 'Formulas that Expel Dampness', 'es' => 'Fórmulas que expulsan la Humedad'],
+    17 => ['en' => 'Formulas that Dispel Phlegm', 'es' => 'Fórmulas que eliminan la Flema'],
+    18 => ['en' => 'Formulas that Reduce Food Stagnation', 'es' => 'Fórmulas que reducen el estancamiento de alimentos'],
+    19 => ['en' => 'Formulas that Expel Parasites', 'es' => 'Fórmulas que expulsan parásitos'],
+    20 => ['en' => 'Formulas that Treat Abscesses and Sores', 'es' => 'Fórmulas que tratan abscesos y llagas'],
+];
+ksort($guidelineformulachapterlabels, SORT_NUMERIC);
 $guidelineherbcategorybyname = [];
 $guidelineherbcategorylabels = [];
 foreach ((array)$guidelineherbroster['herbs'] as $guidelineherb) {
@@ -227,6 +253,59 @@ foreach (array_keys($guidelineherbcategorylabels) as $herbcategorycode) {
 if (!isset($allowedherbcategoryfilters[$herbcategoryfilter])) {
     $herbcategoryfilter = 'all';
 }
+$questionbankreturnfilterparams = static function(string $publishedquestionid = '') use (
+    $query,
+    $domainfilter,
+    $readinessfilter,
+    $usagefilter,
+    $sourcefilter,
+    $cognitivefilter,
+    $contentfilter,
+    $formulacategoryfilter,
+    $herbcategoryfilter,
+    $detailfilter,
+    $reviewfilter,
+    $aibatchfilter,
+    $examprojectid,
+    $examprojectview,
+    $displaylang,
+    $page
+): array {
+    $returnquery = $query;
+    if ($publishedquestionid !== '' && strcasecmp($returnquery, $publishedquestionid) === 0) {
+        $returnquery = '';
+    }
+    return array_filter([
+        'q' => $returnquery !== '' ? $returnquery : null,
+        'domain' => $domainfilter !== 'all' ? $domainfilter : null,
+        'readiness' => $readinessfilter !== 'all' ? $readinessfilter : null,
+        'usage' => $usagefilter !== 'all' ? $usagefilter : null,
+        'source' => $sourcefilter !== 'all' ? $sourcefilter : null,
+        'cognitive' => $cognitivefilter !== 'all' ? $cognitivefilter : null,
+        'content' => $contentfilter !== 'all' ? $contentfilter : null,
+        'formulacategory' => $formulacategoryfilter !== 'all' ? $formulacategoryfilter : null,
+        'herbcategory' => $herbcategoryfilter !== 'all' ? $herbcategoryfilter : null,
+        'detail' => $detailfilter !== 'all' ? $detailfilter : null,
+        'review' => $reviewfilter !== 'all' ? $reviewfilter : null,
+        'aibatch' => $aibatchfilter !== '' ? $aibatchfilter : null,
+        'examproject' => $examprojectid !== '' ? $examprojectid : null,
+        'examview' => $examprojectid !== '' && $examprojectview !== 'candidates' ? $examprojectview : null,
+        'page' => $page > 0 ? $page : null,
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ], static fn($value): bool => $value !== null && $value !== '');
+};
+$hasquestionbankselectionfilters = static function(array $params): bool {
+    foreach ([
+        'q', 'domain', 'readiness', 'usage', 'source', 'cognitive', 'content',
+        'formulacategory', 'herbcategory', 'detail',
+    ] as $filterkey) {
+        if (array_key_exists($filterkey, $params)) {
+            return true;
+        }
+    }
+    return isset($params['review'])
+        && !in_array((string)$params['review'], ['ai_drafts', 'editing_drafts'], true);
+};
 $scormbankpath = $CFG->dataroot . '/board-domain-banks/herbology-scorm-question-bank.json';
 $scormquestioncount = 0;
 if (is_readable($scormbankpath)) {
@@ -3823,20 +3902,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishcurrentques
     $returnqueueexamid = $directexamprojectid !== ''
         ? $directexamprojectid
         : $findactiveexamprojectid($freshstore);
+    $directreturnfilters = $questionbankreturnfilterparams($questionid);
+    $directreturnstofilters = $hasquestionbankselectionfilters($directreturnfilters);
     $nextpendingurl = new moodle_url(
         '/blocks/myprogress/admin-herbology-question-bank.php',
-        array_filter([
-            'usage' => $returnqueueexamid !== '' ? 'exam_project_pending' : null,
-            'examproject' => $returnqueueexamid !== '' ? $returnqueueexamid : null,
-            'lang' => $displaylang !== 'en' ? $displaylang : null,
-        ])
+        $directreturnstofilters
+            ? $directreturnfilters
+            : array_filter([
+                'usage' => $returnqueueexamid !== '' ? 'exam_project_pending' : null,
+                'examproject' => $returnqueueexamid !== '' ? $returnqueueexamid : null,
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ])
     );
     $nextpendingurl->set_anchor('pending-questions');
     redirect(
         $nextpendingurl,
-        $returnqueueexamid !== ''
+        $directreturnstofilters
+            ? 'Question approved and published. Your question-bank filters remain active.'
+            : ($returnqueueexamid !== ''
             ? 'Question approved and published. Continue with the next pending exam question.'
-            : 'Question approved and published. It was removed from the publication screen.',
+            : 'Question approved and published. It was removed from the publication screen.'),
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -3971,6 +4056,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
         $store['questions'][$questionid] = $previous;
         return $store;
     });
+
+    $approvalreturnfilters = $questionbankreturnfilterparams($questionid);
+    if ($hasquestionbankselectionfilters($approvalreturnfilters)) {
+        $approvalfilteredurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            $approvalreturnfilters
+        );
+        $approvalfilteredurl->set_anchor('pending-questions');
+        redirect(
+            $approvalfilteredurl,
+            'Question approved and published. Your question-bank filters remain active.',
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
 
     if ($approvalexamprojectid !== '') {
         $projectpendingurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
@@ -4338,6 +4438,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
             $redirectanchor = 'question-editor';
             $message = 'Changes saved. This question is still awaiting your final approval.';
         }
+    }
+    $editreturnfilters = $questionbankreturnfilterparams($questionid);
+    if ($status === 'approved' && $hasquestionbankselectionfilters($editreturnfilters)) {
+        $redirectparams = $editreturnfilters;
+        $redirectanchor = 'pending-questions';
+        $message = 'Approved revision published. Your question-bank filters remain active.';
     }
     if ($displaylang !== 'en') {
         $redirectparams['lang'] = $displaylang;
@@ -7613,6 +7719,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         return $store;
     });
+    $customreturnfilters = $questionbankreturnfilterparams($customquestionid);
+    if ($customcreationbatchid === '' && $hasquestionbankselectionfilters($customreturnfilters)) {
+        $customfilteredurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            $customreturnfilters
+        );
+        $customfilteredurl->set_anchor('pending-questions');
+        redirect(
+            $customfilteredurl,
+            'New question approved and added to the question bank. Your filters remain active.',
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
     $approvaladvancedtoqueue = false;
     if ($remainingcustombatchids !== []) {
         $customapprovalurl = new moodle_url(
@@ -11486,6 +11606,14 @@ if ($editquestionid !== '') {
     }
 }
 $pageurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', $baseparams);
+$filteractionparams = $baseparams;
+if ($page > 0) {
+    $filteractionparams['page'] = $page;
+}
+$filteractionurl = new moodle_url(
+    '/blocks/myprogress/admin-herbology-question-bank.php',
+    $filteractionparams
+);
 $reporturl = new moodle_url('/blocks/myprogress/admin-ncbahm-evaluations.php');
 $clearurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'examproject' => $examprojectid !== '' ? $examprojectid : null,
@@ -12878,7 +13006,7 @@ echo $OUTPUT->header();
         ][$editorstatus] ?? 'Current bank version';
         $editordomain = $domains[$editquestion['_domainid']];
     ?>
-    <form id="question-editor" class="question-bank__editor" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+    <form id="question-editor" class="question-bank__editor" method="post" action="<?php echo $filteractionurl->out(false); ?>">
         <?php if ($editquestion['_exam2position'] > 0): ?><div class="question-bank__temporary-order question-bank__temporary-order--editor"><span>Temporary review order</span><strong>Proposed Exam 2 Question <?php echo str_pad((string)$editquestion['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
         <div class="question-bank__editor-head"><div><h3><?php echo $editorisaidraft ? 'Final review ' : 'Edit '; ?><?php echo s($editquestion['questionId']); ?></h3><p><?php echo s($editorstatuslabel); ?> · Domain <?php echo (int)$editordomain['number']; ?> remains fixed to protect the exam blueprint.</p></div><a class="question-bank__button" href="<?php echo $pageurl->out(false); ?>">Return to questions</a></div>
         <?php if ($editorisoutdatedaidraft): ?><div class="question-bank__rewrite-ready question-bank__rewrite-ready--outdated"><strong>Earlier automatic-review version.</strong>If the current question is already correct, you may approve it without running another review. Use the updated automatic review only when the question still needs changes.<br><button class="question-bank__button question-bank__button--publish" type="submit" form="question-rewrite-form"<?php echo $textaienabled ? '' : ' disabled'; ?>>Run updated automatic review</button></div><?php elseif ($editorisaidraft): ?><div class="question-bank__rewrite-ready"><strong>Automatic editorial review completed.</strong>The edited version below is the proposed final question. Verify it and select <strong>Approve and continue</strong>. Edit a field only when necessary, or request another rewrite if the proposal still needs substantial changes.<?php if ($editorreviewsummary !== ''): ?><span class="question-bank__rewrite-summary"><strong>Applied changes:</strong> <?php echo s($editorreviewsummary); ?></span><?php endif; ?></div><?php endif; ?>
@@ -12975,7 +13103,7 @@ echo $OUTPUT->header();
                     : 'Counts unique questions; a comparison may cover more than one category.'; ?></span>
             </div>
         </header>
-        <details open class="question-bank__content-section question-bank__content-section--yang">
+        <details class="question-bank__content-section question-bank__content-section--yang">
             <summary><?php echo $displaylang === 'es'
                 ? 'Calentar y tonificar Yang · inventario prioritario'
                 : 'Warm and tonify Yang · priority inventory'; ?></summary>
@@ -13001,7 +13129,7 @@ echo $OUTPUT->header();
                 </tbody>
             </table>
         </details>
-        <details open class="question-bank__content-section">
+        <details class="question-bank__content-section">
             <summary><?php echo $displaylang === 'es' ? 'Cobertura por capítulo de fórmulas' : 'Coverage by formula chapter'; ?></summary>
             <table>
                 <thead><tr>
@@ -13288,7 +13416,7 @@ echo $OUTPUT->header();
             <div class="question-bank__actions-row" aria-label="<?php echo $displaylang === 'es' ? 'Acciones de la pregunta' : 'Question actions'; ?>">
             <?php if ($hasspanishtranslation): ?><a class="question-bank__button question-bank__button--language" href="<?php echo $questionlanguageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Ver en español'; ?></a><?php else: ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="translatequestion"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--language" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Crear traducción al español</button></form><?php if ($displaylang === 'es'): ?><a class="question-bank__button" href="<?php echo $questionlanguageurl->out(false); ?>">← English</a><?php endif; ?><?php endif; ?>
             <?php if (!$inlineapproval): ?>
-            <?php if ($iscustomdraft): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta ahora?' : 'Approve and publish this question now?'; ?>');"<?php endif; ?>><?php echo $customcanpublish ? ($displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish') : s($custompublishblocker); ?></button></form><?php endif; ?>
+            <?php if ($iscustomdraft): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta ahora?' : 'Approve and publish this question now?'; ?>');"<?php endif; ?>><?php echo $customcanpublish ? ($displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish') : s($custompublishblocker); ?></button></form><?php endif; ?>
             <?php if ($pendingexamprojecturl !== null && ($usagefilter !== 'exam_project_pending' || $query !== '')): ?><a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo '← ' . s((string)$pendingexamproject['name']) . ($displaylang === 'es' ? ' · revisión pendiente' : ' pending review'); ?></a><?php endif; ?>
             <?php if ($query !== '' && !$inlineapproval && $pendingexamprojecturl === null): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
             <?php if ($bankcardposition > 0 && !$inlineapproval): ?><details class="question-bank__bank-move"><summary class="question-bank__button"><?php echo $displaylang === 'es' ? 'Mover / aplazar' : 'Move / defer'; ?></summary><div class="question-bank__bank-move-panel"><strong><?php echo ($displaylang === 'es' ? 'Posición actual en el banco: ' : 'Current bank position: ') . (int)$bankcardposition . ' / ' . (int)$bankinventorycount; ?></strong><p><?php echo $displaylang === 'es' ? 'Cambie la posición o aplácela al final para mostrar otras candidatas primero. Esto no modifica ningún examen.' : 'Choose a position or defer it to the end so other candidates appear first. This does not change any exam.'; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="movebankquestion"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="currentposition" value="<?php echo (int)$bankcardposition; ?>"><input type="hidden" name="bankcount" value="<?php echo (int)$bankinventorycount; ?>"><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnexamproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><label><span><?php echo $displaylang === 'es' ? 'Nueva posición' : 'New position'; ?></span><input type="number" name="position" min="1" max="<?php echo (int)$bankinventorycount; ?>" value="<?php echo (int)$bankcardposition; ?>" required></label><button class="question-bank__button question-bank__button--primary" type="submit" name="moveaction" value="position"><?php echo $displaylang === 'es' ? 'Mover' : 'Move'; ?></button><button class="question-bank__button question-bank__button--publish" type="submit" name="moveaction" value="end"><?php echo $displaylang === 'es' ? 'Aplazar al final' : 'Defer to end'; ?></button><?php if ($bankpositionwaschanged): ?><button class="question-bank__button" type="submit" name="moveaction" value="restore"><?php echo $displaylang === 'es' ? 'Restaurar orden normal' : 'Restore normal order'; ?></button><?php endif; ?></form></div></details><?php endif; ?>
@@ -13296,9 +13424,9 @@ echo $OUTPUT->header();
             <?php if ($isapprovedreservecandidate && $cardguidelineverified): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="add"><input type="hidden" name="returnexamview" value="candidates"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo ($displaylang === 'es' ? 'Publicar en ' : 'Publish to ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter === 'exam_project_pending' && isset($examprojectpositions[(string)$question['questionId']]) && (string)($currentexamproject['status'] ?? 'draft') !== 'published'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="excludeexamcandidate"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm(<?php echo s(json_encode($excludeexamconfirm, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); ?>);"><?php echo ($displaylang === 'es' ? 'Excluir de ' : 'Exclude from ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
             <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$iscustomdraft && !$isapprovedreservecandidate): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
-            <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && $question['_ready'] && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><?php if (!in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><input type="hidden" name="returnorigin" value="1"><?php endif; ?><?php if ($question['_exam2position'] > 0): ?><input type="hidden" name="pinforexam2" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta lista?' : 'Approve and publish this ready question?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
-            <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing && in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible version now? It will be removed from pending questions.');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
-            <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing && !in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta versión ahora?' : 'Approve and publish this version now?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+            <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && $question['_ready'] && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><?php if (!in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><input type="hidden" name="returnorigin" value="1"><?php endif; ?><?php if ($question['_exam2position'] > 0): ?><input type="hidden" name="pinforexam2" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta lista?' : 'Approve and publish this ready question?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+            <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing && in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible version now? It will be removed from pending questions.');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+            <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing && !in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta versión ahora?' : 'Approve and publish this version now?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if ($question['_sourcekind'] !== 'admin' && !in_array($revisionstatus, ['study_archive', 'deleted'], true) && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a><?php endif; ?>
             <?php if (!$iscustomdraft && $revisionstatus !== 'deleted'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'study_archive' ? 'restoremockquestion' : 'sendtomock'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'study_archive' ? 'question-bank__button--primary' : 'question-bank__button--similar'; ?>" type="submit"<?php if ($revisionstatus !== 'study_archive'): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Enviar esta pregunta al Mock correspondiente? Se conservará completa, saldrá del banco board y se clasificará según su dominio.' : 'Send this question to the matching Mock category? It will be preserved in full, removed from the board bank and classified by its domain.'; ?>');"<?php endif; ?>><?php echo $revisionstatus === 'study_archive' ? ($displaylang === 'es' ? 'Quitar de Mock y restaurar al board' : 'Remove from Mock and restore to board') : ($displaylang === 'es' ? 'Enviar a Mock' : 'Send to Mock'); ?></button></form><?php endif; ?>
             <?php if (!$iscustomdraft): ?><form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'deleted' ? 'restoredeletedquestion' : 'deletequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'deleted' ? 'question-bank__button--primary' : 'question-bank__button--exclude'; ?>" type="submit"<?php if ($revisionstatus !== 'deleted'): ?> onclick="return confirm('Delete this question from the active bank and exams? You can restore it later from Deleted questions.');"<?php endif; ?>><?php echo $revisionstatus === 'deleted' ? 'Restore question' : 'Delete question'; ?></button></form><?php endif; ?>
@@ -13322,8 +13450,8 @@ echo $OUTPUT->header();
                     : ($instructionverified
                         ? ($displaylang === 'es' ? 'La IA comprobó la corrección. Solo necesitas aprobarla.' : 'The correction was checked automatically. You only need to approve it.')
                         : ($displaylang === 'es' ? 'Apruébala si está correcta o solicita otro cambio.' : 'Approve it if correct or request another change.')))); ?></span>
-            <?php if ($inlineapproval && $cardisoutdated): ?><form class="question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Completar corrección' : 'Complete correction'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></form><?php elseif ($inlineapproval && $prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
-            <?php if ($inlineapproval && $cardisoutdated && $prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing): ?><form method="post" action="<?php echo $pageurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish the visible version without running another correction?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+            <?php if ($inlineapproval && $cardisoutdated): ?><form class="question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Completar corrección' : 'Complete correction'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></form><?php elseif ($inlineapproval && $prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+            <?php if ($inlineapproval && $cardisoutdated && $prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish the visible version without running another correction?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php // Keep recoverable deletion available while an AI correction is awaiting approval. ?>
             <?php if ($inlineapproval && !$iscustomdraft): ?>
             <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
@@ -13361,7 +13489,7 @@ echo $OUTPUT->header();
         if ($sourcecardurl !== ''):
         ?> · <a href="<?php echo s($sourcecardurl); ?>" target="_blank" rel="noopener"><?php echo s($sourcecardlabel); ?></a><?php endif; ?></p><?php if (!$question['_ready']): ?><div class="question-bank__missing">Missing for practice readiness: <?php echo s(implode(', ', $question['_missing'])); ?>.</div><?php endif; ?>
         <?php if ($iscustomapproved): ?><section class="question-bank__decision-panel" aria-label="Continue after approving <?php echo s($question['questionId']); ?>"><div class="question-bank__applied-summary"><strong>Question approved and active.</strong> You can edit it, create another question, or return to the complete question bank.</div><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="button" disabled>Approved and published ✓</button><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="reopencustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit">Edit this question</button></form><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create another question</a><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Return to all questions</a></div></section><?php endif; ?>
-        <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><?php if ($customguidelineverified): ?><div class="question-bank__applied-summary"><strong>Guideline check:</strong> all named herbs and formulas were verified against the current 2026 Appendix A and Appendix C rosters; Pinyin is shown without tone marks.</div><?php else: ?><div class="question-bank__publish-error"><strong>Guideline check blocked publication:</strong> <?php echo s(implode(' | ', $customguidelineviolations)); ?></div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('Approve and publish this question?');"<?php endif; ?>><?php echo $customcanpublish ? 'Approve and publish' : s($custompublishblocker); ?></button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
+        <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><?php if ($customguidelineverified): ?><div class="question-bank__applied-summary"><strong>Guideline check:</strong> all named herbs and formulas were verified against the current 2026 Appendix A and Appendix C rosters; Pinyin is shown without tone marks.</div><?php else: ?><div class="question-bank__publish-error"><strong>Guideline check blocked publication:</strong> <?php echo s(implode(' | ', $customguidelineviolations)); ?></div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('Approve and publish this question?');"<?php endif; ?>><?php echo $customcanpublish ? 'Approve and publish' : s($custompublishblocker); ?></button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
         <?php if ($inlineapproval): ?>
         <details class="question-bank__correction-request">
             <summary><?php echo $displaylang === 'es' ? 'Solicitar otro cambio' : 'Request another change'; ?></summary>

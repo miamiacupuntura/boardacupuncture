@@ -227,6 +227,14 @@ grep -Fq '$questioncontentcoverage' "$QUESTION_BANK_SOURCE"
 grep -Fq '$formulacategoryfilter' "$QUESTION_BANK_SOURCE"
 grep -Fq '$herbcategoryfilter' "$QUESTION_BANK_SOURCE"
 grep -Fq '$detailfilter' "$QUESTION_BANK_SOURCE"
+grep -Fq '$questionbankreturnfilterparams' "$QUESTION_BANK_SOURCE"
+grep -Fq '$filteractionurl' "$QUESTION_BANK_SOURCE"
+grep -Fq 'Formulas that Open the Orifices' "$QUESTION_BANK_SOURCE"
+grep -Fq 'Formulas that Expel Parasites' "$QUESTION_BANK_SOURCE"
+if grep -Fq '<details open class="question-bank__content-section' "$QUESTION_BANK_SOURCE"; then
+    echo 'ERROR: Bensky content inventory panels must be collapsed by default.' >&2
+    exit 1
+fi
 grep -Fq "'detailTopics'" "$QUESTION_BANK_SOURCE"
 grep -Fq 'question-bank__badge--classification' "$QUESTION_BANK_SOURCE"
 grep -Fq '$yangtonifyinginventorystat' "$QUESTION_BANK_SOURCE"
