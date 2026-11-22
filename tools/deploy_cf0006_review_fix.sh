@@ -237,7 +237,7 @@ grep -Fq 'Every named herb and formula must belong to the current NCBAHM guideli
 grep -Fq 'all named herbs and formulas were verified against the current 2026 Appendix A and Appendix C rosters' "$QUESTION_BANK_SOURCE"
 grep -Fq 'ADMIN-HB-20261121-191027-3A3B' "$QUESTION_BANK_SOURCE"
 grep -Fq 'maHuangSingleHerbRepairedAt' "$QUESTION_BANK_SOURCE"
-grep -Fq 'A complete question with four choices, an answer and an explanation is detected automatically' "$QUESTION_BANK_SOURCE"
+grep -Fq 'Finished questions with four choices, an answer and an explanation are split and imported locally' "$QUESTION_BANK_SOURCE"
 grep -Fq 'preserveexactquestion' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Import finished questions' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Imported locally and exactly as supplied; no AI generation or rewriting was used.' "$QUESTION_BANK_SOURCE"
