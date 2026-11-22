@@ -16,6 +16,7 @@ RELATIVE_FILES=(
     "blocks/myprogress/single-herb-card-index.json"
     "blocks/myprogress/formula-board-roster-2026.json"
 )
+STATE_REPAIR_RELATIVE="tools/repair_exam5_guideline_state.php"
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
     echo "Uso: sudo bash /tmp/deploy_cf0006_review_fix.sh COMMIT_DE_40_CARACTERES" >&2
@@ -77,6 +78,14 @@ on_error() {
 trap 'on_error $LINENO' ERR
 trap cleanup EXIT
 
+STATE_REPAIR_SOURCE="$TEMP_DIR/$STATE_REPAIR_RELATIVE"
+mkdir -p "$(dirname "$STATE_REPAIR_SOURCE")"
+curl -fsSL \
+    -H 'Cache-Control: no-cache' \
+    -H 'Pragma: no-cache' \
+    "$REPOSITORY/$REVISION/$STATE_REPAIR_RELATIVE?revision=$REVISION" \
+    -o "$STATE_REPAIR_SOURCE"
+
 for relative_file in "${RELATIVE_FILES[@]}"; do
     source_file="$TEMP_DIR/$relative_file"
     mkdir -p "$(dirname "$source_file")"
@@ -97,6 +106,7 @@ APPENDIX_C_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[6]}"
 php -l "$QUESTION_BANK_SOURCE" >/dev/null
 php -l "$OVERRIDES_SOURCE" >/dev/null
 php -l "$HERBOLOGY_BOARD_SOURCE" >/dev/null
+php -l "$STATE_REPAIR_SOURCE" >/dev/null
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (!is_array($data)) { exit(1); }' "$SOURCE_DATA"
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (count($data["pairs"] ?? []) < 32) { exit(1); }' "$DUI_YAO_SOURCE_DATA"
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (($data["total"] ?? 0) !== 304 || count($data["herbs"] ?? []) !== 304) { exit(1); }' "$APPENDIX_A_SOURCE_DATA"
@@ -259,7 +269,7 @@ grep -Fq '$resolveguidelineherbname' "$QUESTION_BANK_SOURCE"
 grep -Fq 'ncbahm-2026-appendix-a-c-v2-processing-prefixes' "$QUESTION_BANK_SOURCE"
 grep -Fq 'honey\s+frying' "$QUESTION_BANK_SOURCE"
 grep -Fq 'ADMIN-HB-20261121-175513-4D36' "$QUESTION_BANK_SOURCE"
-grep -Fq 'appendix-c-distractor-names-v2-tone-safe' "$QUESTION_BANK_SOURCE"
+grep -Fq 'appendix-c-distractor-names-v3-content-verified' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Liu Wei Di Huang Wan with Mu Li added' "$QUESTION_BANK_SOURCE"
 grep -Fq 'ADMIN-HB-20261121-180348-75A9' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Zhi Bai Di Huang Wan with Mu Li added' "$QUESTION_BANK_SOURCE"
@@ -268,6 +278,9 @@ grep -Fq 'ADMIN-HB-20261121-191902-1328' "$QUESTION_BANK_SOURCE"
 grep -Fq 'ADMIN-HB-20261121-192438-9A16' "$QUESTION_BANK_SOURCE"
 grep -Fq 'exam5-guideline-publication-recovery-v1' "$QUESTION_BANK_SOURCE"
 grep -Fq 'guidelinePublicationRecoveryAt' "$QUESTION_BANK_SOURCE"
+grep -Fq 'Exam 5 state repair verification failed' "$STATE_REPAIR_SOURCE"
+grep -Fq 'ADMIN-HB-20261121-175513-4D36' "$STATE_REPAIR_SOURCE"
+grep -Fq 'ADMIN-HB-20261121-180348-75A9' "$STATE_REPAIR_SOURCE"
 grep -Fq "'CF-0051'" "$QUESTION_BANK_SOURCE"
 grep -Fq "'CF-0290'" "$QUESTION_BANK_SOURCE"
 grep -Fq 'Shen Qi Wan gently warms and tonifies Kidney Yang' "$QUESTION_BANK_SOURCE"
@@ -490,6 +503,7 @@ php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (count($data["pairs"] ?? []) < 32) { exit(1); }' "$MOODLE_ROOT/${RELATIVE_FILES[4]}"
 
 CF0126_OVERRIDE_RESULT="No había una instalación Moodle disponible para revisar la copia guardada de CF-0126."
+EXAM5_OVERRIDE_RESULT="No había una instalación Moodle disponible para reparar el estado de Exam 5."
 if [[ -f "$MOODLE_ROOT/config.php" ]]; then
     MOODLE_DATAROOT="$(php -r 'define("CLI_SCRIPT", true); require $argv[1]; global $CFG; echo $CFG->dataroot;' "$MOODLE_ROOT/config.php")"
     OVERRIDE_STORE_PATH="$MOODLE_DATAROOT/board-domain-banks/herbology-question-overrides.json"
@@ -587,6 +601,7 @@ echo $changed
     : 'CF-0126 no tenía una copia guardada defectuosa.';
 PHP
 )"
+    EXAM5_OVERRIDE_RESULT="$(php "$STATE_REPAIR_SOURCE" "$MOODLE_ROOT")"
     if [[ -f "$OVERRIDE_STORE_PATH" ]]; then
         chown "$OVERRIDE_STORE_OWNER_GROUP" "$OVERRIDE_STORE_PATH"
         chmod 0660 "$OVERRIDE_STORE_PATH"
@@ -719,6 +734,7 @@ echo "OK: las comparaciones excedentes permanecen en reserva y son sustituidas p
 echo "OK: después de publicar, la búsqueda de la pregunta terminada se cierra y la pantalla avanza a la cola activa."
 echo "OK: si no existe un examen activo, la publicación vuelve al banco general sin mostrar otra vez la misma tarjeta."
 echo "OK: $CF0126_OVERRIDE_RESULT"
+echo "OK: $EXAM5_OVERRIDE_RESULT"
 echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"
 echo "OK: revisión instalada: $REVISION"
 echo "SHA256 DATOS: $INSTALLED_SHA256"

@@ -2522,13 +2522,35 @@ $formuladistractorguidelinerepairs = [
         'Mu Li Zhi Bai Di Huang Wan' => 'Zhi Bai Di Huang Wan with Mu Li added',
     ],
 ];
-$formuladistractorguidelinerepairversion = 'appendix-c-distractor-names-v2-tone-safe';
+$formuladistractorguidelinerepairversion = 'appendix-c-distractor-names-v3-content-verified';
 $formuladistractorguidelinerepairids = [];
-foreach ($formuladistractorguidelinerepairs as $repairquestionid => $unusedreplacements) {
+foreach ($formuladistractorguidelinerepairs as $repairquestionid => $repairreplacements) {
     foreach (['customQuestions', 'questions'] as $repaircollectionkey) {
         $repairrecord = $revisionstore[$repaircollectionkey][$repairquestionid] ?? null;
-        if (is_array($repairrecord)
-                && (string)($repairrecord['formulaDistractorGuidelineRepairVersion'] ?? '')
+        if (!is_array($repairrecord)) {
+            continue;
+        }
+        $repaircontentstillinvalid = false;
+        foreach (['original', 'draft', 'approved'] as $repairsnapshotkey) {
+            if (!is_array($repairrecord[$repairsnapshotkey] ?? null)) {
+                continue;
+            }
+            $repairsnapshot = block_myprogress_herbology_remove_pinyin_tones_from_question(
+                $repairrecord[$repairsnapshotkey]
+            );
+            $repairsnapshottext = json_encode(
+                $repairsnapshot,
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            );
+            foreach (array_keys($repairreplacements) as $invalidformulaname) {
+                if (stripos((string)$repairsnapshottext, $invalidformulaname) !== false) {
+                    $repaircontentstillinvalid = true;
+                    break 2;
+                }
+            }
+        }
+        if ($repaircontentstillinvalid
+                || (string)($repairrecord['formulaDistractorGuidelineRepairVersion'] ?? '')
                     !== $formuladistractorguidelinerepairversion) {
             $formuladistractorguidelinerepairids[] = $repairquestionid;
             break;
@@ -2562,9 +2584,7 @@ if ($formuladistractorguidelinerepairids !== []) {
             };
             foreach (['customQuestions', 'questions'] as $repaircollectionkey) {
                 $record = $store[$repaircollectionkey][$repairquestionid] ?? null;
-                if (!is_array($record)
-                        || (string)($record['formulaDistractorGuidelineRepairVersion'] ?? '')
-                            === $formuladistractorguidelinerepairversion) {
+                if (!is_array($record)) {
                     continue;
                 }
                 foreach (['original', 'draft', 'approved'] as $snapshotkey) {
