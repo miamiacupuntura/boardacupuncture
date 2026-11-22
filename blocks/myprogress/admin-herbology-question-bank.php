@@ -2482,8 +2482,9 @@ $normalizecreatedquestionpinyin = static function(array $question): array {
 };
 $stripguidelineinstructionprefixes = static function(string $normalizedname): string {
     $stripped = preg_replace(
-        '/^(?:add|choose|select|use|replace|include|introduce|remove|increase|decrease|while|both|'
-            . 'decoction|powder)\s+/i',
+        '/^(?:(?:add|choose|select|use|replace|include|introduce|remove|increase|decrease|while|both|'
+            . 'decoction|powder|raw|prepared|processed|honey\s+fried|honey\s+frying|'
+            . 'honey\s+prepared|wine\s+fried|vinegar\s+fried|salt\s+fried|ginger\s+prepared)\s+)+/i',
         '',
         trim($normalizedname)
     );
@@ -2510,6 +2511,92 @@ $resolveguidelineherbname = static function(string $name) use (
     }
     return $normalizedherb;
 };
+$formuladistractorguidelinerepairs = [
+    'ADMIN-HB-20261121-175513-4D36' => [
+        'Mu Li Liu Wei Di Huang Wan' => 'Liu Wei Di Huang Wan with Mu Li added',
+        'Ju Hua Liu Wei Di Huang Wan' => 'Liu Wei Di Huang Wan with Ju Hua added',
+        'Huang Bai Si Wu Tang' => 'Si Wu Tang with Huang Bai added',
+        'Hong Hua Qi Ju Di Huang Wan' => 'Qi Ju Di Huang Wan with Hong Hua added',
+    ],
+    'ADMIN-HB-20261121-180348-75A9' => [
+        'Mu Li Zhi Bai Di Huang Wan' => 'Zhi Bai Di Huang Wan with Mu Li added',
+    ],
+];
+$formuladistractorguidelinerepairids = [];
+foreach ($formuladistractorguidelinerepairs as $repairquestionid => $unusedreplacements) {
+    $repairrecord = $revisionstore['customQuestions'][$repairquestionid] ?? null;
+    if (is_array($repairrecord) && empty($repairrecord['formulaDistractorGuidelineRepairAt'])) {
+        $formuladistractorguidelinerepairids[] = $repairquestionid;
+    }
+}
+if ($formuladistractorguidelinerepairids !== []) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $formuladistractorguidelinerepairs,
+        $formuladistractorguidelinerepairids,
+        $normalizeguidelinename
+    ): array {
+        $savedat = gmdate(DATE_ATOM);
+        foreach ($formuladistractorguidelinerepairids as $repairquestionid) {
+            $record = $store['customQuestions'][$repairquestionid] ?? null;
+            if (!is_array($record) || !empty($record['formulaDistractorGuidelineRepairAt'])) {
+                continue;
+            }
+            $replacements = $formuladistractorguidelinerepairs[$repairquestionid];
+            $invalidformulas = array_fill_keys(array_map(
+                $normalizeguidelinename,
+                array_keys($replacements)
+            ), true);
+            $replacevalue = static function($value) use (&$replacevalue, $replacements) {
+                if (is_array($value)) {
+                    foreach ($value as $key => $nestedvalue) {
+                        $value[$key] = $replacevalue($nestedvalue);
+                    }
+                    return $value;
+                }
+                return is_string($value)
+                    ? str_ireplace(array_keys($replacements), array_values($replacements), $value)
+                    : $value;
+            };
+            foreach (['draft', 'approved'] as $snapshotkey) {
+                if (!is_array($record[$snapshotkey] ?? null)) {
+                    continue;
+                }
+                $snapshot = $record[$snapshotkey];
+                foreach ([['nomenclature', 'formulas'], ['nomenclature', 'feedback', 'formulas']]
+                        as $formulapath) {
+                    $formularecords = &$snapshot;
+                    foreach ($formulapath as $formulapathkey) {
+                        if (!is_array($formularecords[$formulapathkey] ?? null)) {
+                            unset($formularecords);
+                            continue 2;
+                        }
+                        $formularecords = &$formularecords[$formulapathkey];
+                    }
+                    $formularecords = array_values(array_filter(
+                        $formularecords,
+                        static fn($formularecord): bool => !is_array($formularecord)
+                            || !isset($invalidformulas[$normalizeguidelinename(
+                                (string)($formularecord['pinyin'] ?? '')
+                            )])
+                    ));
+                    unset($formularecords);
+                }
+                $snapshot = $replacevalue($snapshot);
+                $record[$snapshotkey] = $snapshot;
+            }
+            $record['idea'] = $replacevalue((string)($record['idea'] ?? ''));
+            $record['reviewSummary'] = $replacevalue((string)($record['reviewSummary'] ?? ''));
+            unset($record['guidelineValidation']);
+            $record['formulaDistractorGuidelineRepairAt'] = $savedat;
+            $record['savedAt'] = $savedat;
+            $record['savedByName'] = 'Appendix C distractor-name correction';
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $store['customQuestions'][$repairquestionid] = $record;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $findcreatedquestionguidelineviolations = static function(array $question) use (
     $normalizeguidelinename,
     $guidelineherbnames,
@@ -2597,7 +2684,8 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
             }
             continue;
         }
-        if (isset($guidelineherbnames[$normalizedcandidate])
+        $resolvedvisibleherb = $resolveguidelineherbname($displayname);
+        if (isset($guidelineherbnames[$resolvedvisibleherb])
                 || isset($guidelineformulanames[$normalizedformula])) {
             continue;
         }
@@ -2725,7 +2813,7 @@ if ((string)($revisionstore['pinyinNormalizationVersion'] ?? '') !== $allbankpin
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
-$guidelinevalidationversion = 'ncbahm-2026-appendix-a-c-v1';
+$guidelinevalidationversion = 'ncbahm-2026-appendix-a-c-v2-processing-prefixes';
 $createdquestionguidelineaudits = [];
 foreach ((array)($revisionstore['customQuestions'] ?? []) as $guidelinequestionid => $guidelinerecord) {
     if (!is_array($guidelinerecord)
@@ -2762,6 +2850,101 @@ if ($createdquestionguidelineaudits !== []) {
             $record['guidelineValidation'] = $validation;
             $record['guidelineRosterValidatedAt'] = $checkedat;
             $store['customQuestions'][$guidelinequestionid] = $record;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
+$exam5guidelinepublicationrepairversion = 'exam5-guideline-publication-recovery-v1';
+$exam5guidelinepublicationrepairids = [
+    'ADMIN-HB-20261119-234904-A21A',
+    'ADMIN-HB-20261121-175513-4D36',
+    'ADMIN-HB-20261121-180348-75A9',
+    'ADMIN-HB-20261121-191902-1328',
+    'ADMIN-HB-20261121-192438-9A16',
+];
+$exam5guidelinepublicationrecoveries = [];
+foreach ($exam5guidelinepublicationrepairids as $recoveryquestionid) {
+    $recoveryrecord = $revisionstore['customQuestions'][$recoveryquestionid] ?? null;
+    if (!is_array($recoveryrecord)
+            || (string)($recoveryrecord['status'] ?? '') !== 'approved'
+            || (string)($recoveryrecord['guidelineValidation']['status'] ?? '') !== 'verified'
+            || (string)($recoveryrecord['examPublicationRecoveryVersion'] ?? '')
+                === $exam5guidelinepublicationrepairversion) {
+        continue;
+    }
+    $recoveryprojectid = (string)($recoveryrecord['targetExamProjectId'] ?? '');
+    if ($recoveryprojectid === ''
+            || !is_array($revisionstore['examProjects'][$recoveryprojectid] ?? null)) {
+        foreach ((array)($revisionstore['examProjects'] ?? []) as $candidateprojectid => $candidateproject) {
+            if (!is_array($candidateproject)
+                    || !in_array(
+                        $recoveryquestionid,
+                        array_map('strval', (array)($candidateproject['excludedQuestionIds'] ?? [])),
+                        true
+                    )) {
+                continue;
+            }
+            $recoveryprojectid = (string)$candidateprojectid;
+            break;
+        }
+    }
+    $exam5guidelinepublicationrecoveries[$recoveryquestionid] = $recoveryprojectid;
+}
+if ($exam5guidelinepublicationrecoveries !== []) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $exam5guidelinepublicationrecoveries,
+        $exam5guidelinepublicationrepairversion
+    ): array {
+        $recoveredat = gmdate(DATE_ATOM);
+        foreach ($exam5guidelinepublicationrecoveries as $recoveryquestionid => $recoveryprojectid) {
+            $record = $store['customQuestions'][$recoveryquestionid] ?? null;
+            if (!is_array($record)
+                    || (string)($record['status'] ?? '') !== 'approved'
+                    || (string)($record['guidelineValidation']['status'] ?? '') !== 'verified') {
+                continue;
+            }
+            if ($recoveryprojectid !== ''
+                    && is_array($store['examProjects'][$recoveryprojectid] ?? null)
+                    && (string)($store['examProjects'][$recoveryprojectid]['status'] ?? 'draft')
+                        !== 'published') {
+                $project = $store['examProjects'][$recoveryprojectid];
+                $projectquestionids = array_values(array_unique(array_filter(array_map(
+                    'strval',
+                    (array)($project['questionIds'] ?? [])
+                ))));
+                $projecttarget = max(1, (int)($project['targetCount'] ?? 100));
+                if (!in_array($recoveryquestionid, $projectquestionids, true)
+                        && count($projectquestionids) < $projecttarget) {
+                    $projectquestionids[] = $recoveryquestionid;
+                }
+                $project['questionIds'] = $projectquestionids;
+                $project['excludedQuestionIds'] = array_values(array_filter(
+                    array_map('strval', (array)($project['excludedQuestionIds'] ?? [])),
+                    static fn(string $questionid): bool => $questionid !== $recoveryquestionid
+                ));
+                if (in_array($recoveryquestionid, $projectquestionids, true)) {
+                    $project['confirmedQuestionIds'] = array_values(array_unique(array_merge(
+                        array_map('strval', (array)($project['confirmedQuestionIds'] ?? [])),
+                        [$recoveryquestionid]
+                    )));
+                    if (is_array($store['questions'][$recoveryquestionid] ?? null)) {
+                        $store['questions'][$recoveryquestionid]['examProjectId'] = $recoveryprojectid;
+                        $store['questions'][$recoveryquestionid]['restoredToExamProjectAt'] = $recoveredat;
+                    }
+                }
+                $project['currentCount'] = count($projectquestionids);
+                $project['missingCount'] = max(0, $projecttarget - count($projectquestionids));
+                $project['guidelinePublicationRecoveryAt'] = $recoveredat;
+                $project['updatedAt'] = $recoveredat;
+                $store['examProjects'][$recoveryprojectid] = $project;
+            }
+            if ($recoveryprojectid !== '') {
+                $record['targetExamProjectId'] = $recoveryprojectid;
+            }
+            $record['examPublicationRecoveryVersion'] = $exam5guidelinepublicationrepairversion;
+            $record['examPublicationRecoveredAt'] = $recoveredat;
+            $store['customQuestions'][$recoveryquestionid] = $record;
         }
         return $store;
     });
