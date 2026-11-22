@@ -979,7 +979,7 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
     $studentinventorycachepath = $CFG->dataroot
         . '/cache/board-herbology-student-content-inventory.json';
     $studentinventorysignature = hash('sha256', (string)json_encode([
-        'version' => 'student-bensky-inventory-v1',
+        'version' => 'student-bensky-inventory-v2',
         'coverageMtime' => is_file($studentcoveragecachepath) ? filemtime($studentcoveragecachepath) : 0,
         'coverageSize' => is_file($studentcoveragecachepath) ? filesize($studentcoveragecachepath) : 0,
         'examQuestionIds' => array_map('array_keys', $studentexamquestionids),
@@ -1019,7 +1019,6 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
         : [];
     $studentformulachapterbyname = [];
     $studentformulachapterlabels = [];
-    $studentformuladisplaynames = [];
     foreach ((array)($studentformularoster['formulas'] ?? []) as $studentformula) {
         $studentformulaname = $studentnormalizecontentname((string)($studentformula['name'] ?? ''));
         $studentformulachapter = (int)($studentformula['benskyCategory']['chapter'] ?? 0);
@@ -1027,7 +1026,6 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
             continue;
         }
         $studentformulachapterbyname[$studentformulaname] = $studentformulachapter;
-        $studentformuladisplaynames[$studentformulaname] = (string)$studentformula['name'];
         $studentformulachapterlabels[$studentformulachapter] = (string)(
             $studentformula['benskyCategory'][$ises ? 'es' : 'en'] ?? ''
         );
@@ -1053,6 +1051,19 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
         'shen mai san' => 'sheng mai san',
         'ling jiao gou teng tang' => 'ling jiao gou teng yin',
     ];
+    $studentformulamatchnames = array_values(array_unique(array_merge(
+        array_keys($studentformulachapterbyname),
+        array_keys($studentformulaaliases)
+    )));
+    usort(
+        $studentformulamatchnames,
+        static fn(string $left, string $right): int => strlen($right) <=> strlen($left)
+    );
+    $studentherbmatchnames = array_keys($studentherbcategorybyname);
+    usort(
+        $studentherbmatchnames,
+        static fn(string $left, string $right): int => strlen($right) <=> strlen($left)
+    );
     $studentemptyexamcounts = array_fill_keys($studentexamnumbers, 0);
     $studentformulachapterstats = [];
     foreach ($studentformulachapterlabels as $studentchapter => $studentchapterlabel) {
@@ -1068,92 +1079,96 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
             'exams' => $studentemptyexamcounts,
         ];
     }
-    $studentyangstats = [
-        'all' => [
-            'label' => $ises
-                ? 'Fórmulas oficiales que calientan o tonifican Yang'
-                : 'Official formulas that warm or tonify Yang',
-            'exams' => $studentemptyexamcounts,
-        ],
-    ];
-    foreach (['shen qi wan', 'you gui wan', 'you gui yin'] as $studentyangformula) {
-        $studentyangstats[$studentyangformula] = [
-            'label' => (string)($studentformuladisplaynames[$studentyangformula]
-                ?? ucwords($studentyangformula)),
-            'exams' => $studentemptyexamcounts,
-        ];
-    }
     foreach ($studentexamquestionids as $studentexamnumber => $studentquestionids) {
         foreach (array_keys($studentquestionids) as $studentquestionid) {
             $studentcoverage = is_array($studentcoveragerecords[$studentquestionid]['coverage'] ?? null)
                 ? $studentcoveragerecords[$studentquestionid]['coverage']
                 : [];
-            if ($studentcoverage === []) {
-                $studentquestion = (array)($studentexamquestions[$studentexamnumber][$studentquestionid] ?? []);
-                $studentformulanames = [];
-                $studentherbnames = [];
-                foreach (array_merge(
-                    (array)($studentquestion['nomenclature']['formulas'] ?? []),
-                    (array)($studentquestion['nomenclature']['feedback']['formulas'] ?? [])
-                ) as $studentformularecord) {
-                    $studentformulaname = $studentnormalizecontentname((string)($studentformularecord['pinyin'] ?? ''));
-                    $studentformulaname = $studentformulaaliases[$studentformulaname] ?? $studentformulaname;
-                    if (isset($studentformulachapterbyname[$studentformulaname])) {
-                        $studentformulanames[$studentformulaname] = true;
-                    }
+            $studentquestion = (array)($studentexamquestions[$studentexamnumber][$studentquestionid] ?? []);
+            $studentformulanames = array_fill_keys(
+                array_map('strval', (array)($studentcoverage['formulaNames'] ?? [])),
+                true
+            );
+            $studentherbnames = [];
+            $studentformulachapters = array_fill_keys(
+                array_map('intval', (array)($studentcoverage['formulaChapters'] ?? [])),
+                true
+            );
+            $studentherbcategories = array_fill_keys(
+                array_map('strval', (array)($studentcoverage['herbCategories'] ?? [])),
+                true
+            );
+            foreach (array_merge(
+                (array)($studentquestion['nomenclature']['formulas'] ?? []),
+                (array)($studentquestion['nomenclature']['feedback']['formulas'] ?? [])
+            ) as $studentformularecord) {
+                $studentformulaname = $studentnormalizecontentname((string)($studentformularecord['pinyin'] ?? ''));
+                $studentformulaname = $studentformulaaliases[$studentformulaname] ?? $studentformulaname;
+                if (isset($studentformulachapterbyname[$studentformulaname])) {
+                    $studentformulanames[$studentformulaname] = true;
                 }
-                foreach (array_merge(
-                    (array)($studentquestion['nomenclature']['herbs'] ?? []),
-                    (array)($studentquestion['nomenclature']['feedback']['herbs'] ?? [])
-                ) as $studentherbrecord) {
-                    $studentherbname = $studentnormalizecontentname((string)($studentherbrecord['pinyin'] ?? ''));
-                    if (isset($studentherbcategorybyname[$studentherbname])) {
-                        $studentherbnames[$studentherbname] = true;
-                    }
-                }
-                $studentcoverage = [
-                    'formulaNames' => array_keys($studentformulanames),
-                    'formulaChapters' => array_values(array_unique(array_map(
-                        static fn(string $studentformulaname): int => $studentformulachapterbyname[$studentformulaname],
-                        array_keys($studentformulanames)
-                    ))),
-                    'herbCategories' => array_values(array_unique(array_map(
-                        static fn(string $studentherbname): string => $studentherbcategorybyname[$studentherbname],
-                        array_keys($studentherbnames)
-                    ))),
-                    'yangTonifyingFormula' => count(array_intersect(
-                        array_keys($studentformulanames),
-                        ['shen qi wan', 'you gui wan', 'you gui yin']
-                    )) > 0,
-                ];
             }
-            foreach (array_unique(array_map('intval', (array)($studentcoverage['formulaChapters'] ?? []))) as $studentchapter) {
+            foreach (array_merge(
+                (array)($studentquestion['nomenclature']['herbs'] ?? []),
+                (array)($studentquestion['nomenclature']['feedback']['herbs'] ?? [])
+            ) as $studentherbrecord) {
+                $studentherbname = $studentnormalizecontentname((string)($studentherbrecord['pinyin'] ?? ''));
+                if (isset($studentherbcategorybyname[$studentherbname])) {
+                    $studentherbnames[$studentherbname] = true;
+                }
+            }
+            $studentvisibletext = $studentnormalizecontentname(implode(' ', array_filter([
+                (string)($studentquestion['prompt'] ?? ''),
+                implode(' ', array_map(
+                    static fn($studentoption): string => is_array($studentoption)
+                        ? (string)($studentoption['text'] ?? '')
+                        : (string)$studentoption,
+                    (array)($studentquestion['options'] ?? [])
+                )),
+                (string)($studentquestion['explanation'] ?? ''),
+            ])));
+            $studentvisibletext = ' ' . $studentvisibletext . ' ';
+            foreach ($studentformulamatchnames as $studentmatchedformula) {
+                if (strpos($studentvisibletext, ' ' . $studentmatchedformula . ' ') === false) {
+                    continue;
+                }
+                $studentcanonicalformula = $studentformulaaliases[$studentmatchedformula]
+                    ?? $studentmatchedformula;
+                if (isset($studentformulachapterbyname[$studentcanonicalformula])) {
+                    $studentformulanames[$studentcanonicalformula] = true;
+                }
+            }
+            foreach ($studentherbmatchnames as $studentmatchedherb) {
+                if (strpos($studentvisibletext, ' ' . $studentmatchedherb . ' ') !== false) {
+                    $studentherbnames[$studentmatchedherb] = true;
+                }
+            }
+            foreach (array_keys($studentformulanames) as $studentformulaname) {
+                $studentformulachapter = (int)($studentformulachapterbyname[$studentformulaname] ?? 0);
+                if ($studentformulachapter > 0) {
+                    $studentformulachapters[$studentformulachapter] = true;
+                }
+            }
+            foreach (array_keys($studentherbnames) as $studentherbname) {
+                $studentherbcategory = (string)($studentherbcategorybyname[$studentherbname] ?? '');
+                if ($studentherbcategory !== '') {
+                    $studentherbcategories[$studentherbcategory] = true;
+                }
+            }
+            foreach (array_keys($studentformulachapters) as $studentchapter) {
                 if (isset($studentformulachapterstats[$studentchapter])) {
                     $studentformulachapterstats[$studentchapter]['exams'][$studentexamnumber]++;
                 }
             }
-            foreach (array_unique(array_map('strval', (array)($studentcoverage['herbCategories'] ?? []))) as $studentcategory) {
+            foreach (array_keys($studentherbcategories) as $studentcategory) {
                 if (isset($studentherbcategorystats[$studentcategory])) {
                     $studentherbcategorystats[$studentcategory]['exams'][$studentexamnumber]++;
-                }
-            }
-            $studentquestionformulas = array_fill_keys(
-                array_map('strval', (array)($studentcoverage['formulaNames'] ?? [])),
-                true
-            );
-            if (!empty($studentcoverage['yangTonifyingFormula'])) {
-                $studentyangstats['all']['exams'][$studentexamnumber]++;
-            }
-            foreach (['shen qi wan', 'you gui wan', 'you gui yin'] as $studentyangformula) {
-                if (isset($studentquestionformulas[$studentyangformula])) {
-                    $studentyangstats[$studentyangformula]['exams'][$studentexamnumber]++;
                 }
             }
         }
     }
     $studentcontentinventory = [
         'examNumbers' => $studentexamnumbers,
-        'yang' => $studentyangstats,
         'formulaChapters' => $studentformulachapterstats,
         'herbCategories' => $studentherbcategorystats,
     ];
@@ -1189,20 +1204,17 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
                     : 'Counts published questions; a comparison may cover more than one category.'; ?></span>
             </header>
             <?php foreach ([
-                ['key' => 'yang', 'label' => $ises ? 'Calentar y tonificar Yang · cobertura prioritaria' : 'Warm and tonify Yang · priority coverage', 'priority' => true],
-                ['key' => 'formulaChapters', 'label' => $ises ? 'Cobertura por capítulo de fórmulas' : 'Coverage by formula chapter', 'priority' => false],
-                ['key' => 'herbCategories', 'label' => $ises ? 'Cobertura por categoría de hierbas' : 'Coverage by herb category', 'priority' => false],
+                ['key' => 'formulaChapters', 'label' => $ises ? 'Cobertura por capítulo de fórmulas' : 'Coverage by formula chapter'],
+                ['key' => 'herbCategories', 'label' => $ises ? 'Cobertura por categoría de hierbas' : 'Coverage by herb category'],
             ] as $studentcontentsection): ?>
-                <details class="herb-board__student-content-section<?php echo $studentcontentsection['priority'] ? ' herb-board__student-content-section--priority' : ''; ?>">
+                <details class="herb-board__student-content-section">
                     <summary><?php echo s($studentcontentsection['label']); ?></summary>
                     <div>
                         <table>
                             <thead><tr>
-                                <th><?php echo $studentcontentsection['key'] === 'yang'
-                                    ? ($ises ? 'Familia o fórmula' : 'Family or formula')
-                                    : ($studentcontentsection['key'] === 'formulaChapters'
-                                        ? ($ises ? 'Capítulo Bensky' : 'Bensky chapter')
-                                        : ($ises ? 'Categoría Bensky' : 'Bensky category')); ?></th>
+                                <th><?php echo $studentcontentsection['key'] === 'formulaChapters'
+                                    ? ($ises ? 'Capítulo Bensky' : 'Bensky chapter')
+                                    : ($ises ? 'Categoría Bensky' : 'Bensky category'); ?></th>
                                 <?php foreach ($studentcontentinventory['examNumbers'] as $studentexamnumber): ?><th>Exam <?php echo (int)$studentexamnumber; ?></th><?php endforeach; ?>
                             </tr></thead>
                             <tbody>

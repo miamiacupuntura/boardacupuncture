@@ -295,6 +295,11 @@ grep -Fq '.herb-board__exam-overview-table' "$MENU_STYLES_SOURCE"
 grep -Fq 'Bensky content inventory' "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq '.herb-board__student-content-inventory' "$MENU_STYLES_SOURCE"
 grep -Fq 'board-herbology-student-content-inventory.json' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq 'student-bensky-inventory-v2' "$HERBOLOGY_BOARD_SOURCE"
+if grep -Fq 'Warm and tonify Yang · priority coverage' "$HERBOLOGY_BOARD_SOURCE"; then
+    echo 'ERROR: the removed student Yang-priority row is still present.' >&2
+    exit 1
+fi
 grep -Fq "'CF-0051'" "$QUESTION_BANK_SOURCE"
 grep -Fq "'CF-0290'" "$QUESTION_BANK_SOURCE"
 grep -Fq 'Shen Qi Wan gently warms and tonifies Kidney Yang' "$QUESTION_BANK_SOURCE"
@@ -749,7 +754,7 @@ echo "OK: las comparaciones excedentes permanecen en reserva y son sustituidas p
 echo "OK: después de publicar, la búsqueda de la pregunta terminada se cierra y la pantalla avanza a la cola activa."
 echo "OK: si no existe un examen activo, la publicación vuelve al banco general sin mostrar otra vez la misma tarjeta."
 echo "OK: las preguntas creadas y aprobadas pueden abrirse en Editar manualmente; al publicarlas se elimina la nomenclatura oculta de versiones anteriores y se valida de nuevo Appendix A/C."
-echo "OK: la selección estudiantil de Exam 1–5 muestra una vista general plegada sin columnas administrativas y, debajo, la cobertura Bensky por examen."
+echo "OK: la selección estudiantil de Exam 1–5 muestra la cobertura Bensky real de los cinco exámenes, sin la fila prioritaria de Yang ni columnas administrativas."
 echo "OK: $CF0126_OVERRIDE_RESULT"
 echo "OK: $EXAM5_OVERRIDE_RESULT"
 echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"

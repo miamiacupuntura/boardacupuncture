@@ -2003,11 +2003,6 @@ a.herb-board__domain:focus {
     transform: rotate(90deg);
 }
 
-.herb-board__student-content-section--priority > summary {
-    background: #fff3d5;
-    color: #935000;
-}
-
 .herb-board__student-content-section > div {
     overflow-x: auto;
 }
