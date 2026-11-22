@@ -2772,13 +2772,17 @@ $bank['domains'] = block_myprogress_herbology_merge_custom_questions(
     $revisionstore,
     true
 );
-$bank['domains'] = block_myprogress_herbology_remove_pinyin_tones_from_domains($bank['domains']);
 $basebank = $bank;
-$findquestion = static function(array $questionbank, string $questionid): ?array {
+$findquestion = static function(array $questionbank, string $questionid) use (
+    $normalizecreatedquestionpinyin
+): ?array {
     foreach (($questionbank['domains'] ?? []) as $domainid => $questions) {
         foreach ($questions as $question) {
             if ((string)($question['questionId'] ?? '') === $questionid) {
-                return ['domainId' => $domainid, 'question' => $question];
+                return [
+                    'domainId' => $domainid,
+                    'question' => $normalizecreatedquestionpinyin($question),
+                ];
             }
         }
     }
@@ -4517,7 +4521,6 @@ $bank['domains'] = block_myprogress_herbology_apply_revisions_to_domains(
     $revisionstore,
     true
 );
-$bank['domains'] = block_myprogress_herbology_remove_pinyin_tones_from_domains($bank['domains']);
 $pendingreclassificationcount = count(array_filter(
     $revisionstore['questions'] ?? [],
     static fn(array $revision): bool => ($revision['status'] ?? '') === 'pending_reclassification'
@@ -4908,11 +4911,97 @@ $questioncontentfamily = static function(array $question): string {
     }
     return $domainid !== '' ? 'domain-' . $domainid : 'uncategorized';
 };
+$contentcoveragecacheversion = 'bensky-content-coverage-v2';
+$contentcoveragecachepath = $CFG->dataroot
+    . '/cache/board-herbology-question-content-coverage.json';
+$contentcoveragecacherecords = [];
+if (is_readable($contentcoveragecachepath)) {
+    $contentcoveragecache = json_decode((string)file_get_contents($contentcoveragecachepath), true);
+    if (is_array($contentcoveragecache)
+            && (string)($contentcoveragecache['version'] ?? '') === $contentcoveragecacheversion
+            && is_array($contentcoveragecache['questions'] ?? null)) {
+        $contentcoveragecacherecords = $contentcoveragecache['questions'];
+    }
+}
+$updatedcontentcoveragecacherecords = [];
+$contentcoveragecachechanged = false;
 foreach ($allquestions as &$contentcoveragequestion) {
-    $contentcoveragequestion['_contentCoverage'] = $questioncontentcoverage($contentcoveragequestion);
+    $contentcoveragequestionid = (string)($contentcoveragequestion['questionId'] ?? '');
+    $contentcoveragefingerprintpayload = [
+        'domainId' => (string)($contentcoveragequestion['_domainid']
+            ?? $contentcoveragequestion['domainId']
+            ?? ''),
+        'prompt' => (string)($contentcoveragequestion['prompt'] ?? ''),
+        'options' => array_map(
+            static fn($option): string => is_array($option)
+                ? (string)($option['text'] ?? '')
+                : (string)$option,
+            (array)($contentcoveragequestion['options'] ?? [])
+        ),
+        'explanation' => (string)($contentcoveragequestion['explanation'] ?? ''),
+        'contentType' => (string)($contentcoveragequestion['contentType'] ?? ''),
+        'nomenclature' => (array)($contentcoveragequestion['nomenclature'] ?? []),
+    ];
+    $contentcoveragefingerprint = hash(
+        'sha256',
+        (string)json_encode(
+            $contentcoveragefingerprintpayload,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        )
+    );
+    $cachedcontentcoveragerecord = $contentcoveragequestionid !== ''
+        && is_array($contentcoveragecacherecords[$contentcoveragequestionid] ?? null)
+        ? $contentcoveragecacherecords[$contentcoveragequestionid]
+        : null;
+    if (is_array($cachedcontentcoveragerecord)
+            && hash_equals(
+                (string)($cachedcontentcoveragerecord['fingerprint'] ?? ''),
+                $contentcoveragefingerprint
+            )
+            && is_array($cachedcontentcoveragerecord['coverage'] ?? null)) {
+        $contentcoveragequestion['_contentCoverage'] = $cachedcontentcoveragerecord['coverage'];
+    } else {
+        $contentcoveragequestion['_contentCoverage'] = $questioncontentcoverage(
+            $contentcoveragequestion
+        );
+        $contentcoveragecachechanged = true;
+    }
     $contentcoveragequestion['_contentFamily'] = $questioncontentfamily($contentcoveragequestion);
+    if ($contentcoveragequestionid !== '') {
+        $updatedcontentcoveragecacherecords[$contentcoveragequestionid] = [
+            'fingerprint' => $contentcoveragefingerprint,
+            'coverage' => $contentcoveragequestion['_contentCoverage'],
+        ];
+    }
 }
 unset($contentcoveragequestion);
+if (count($contentcoveragecacherecords) !== count($updatedcontentcoveragecacherecords)) {
+    $contentcoveragecachechanged = true;
+}
+if ($contentcoveragecachechanged) {
+    $contentcoveragecachedirectory = dirname($contentcoveragecachepath);
+    if (make_writable_directory($contentcoveragecachedirectory)) {
+        $encodedcontentcoveragecache = json_encode([
+            'version' => $contentcoveragecacheversion,
+            'updatedAt' => gmdate(DATE_ATOM),
+            'questions' => $updatedcontentcoveragecacherecords,
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $temporarycontentcoveragecache = tempnam(
+            $contentcoveragecachedirectory,
+            '.board-herbology-content-coverage-'
+        );
+        if (is_string($encodedcontentcoveragecache)
+                && $temporarycontentcoveragecache !== false
+                && file_put_contents($temporarycontentcoveragecache, $encodedcontentcoveragecache, LOCK_EX) !== false) {
+            @chmod($temporarycontentcoveragecache, 0660);
+            if (!@rename($temporarycontentcoveragecache, $contentcoveragecachepath)) {
+                @unlink($temporarycontentcoveragecache);
+            }
+        } else if ($temporarycontentcoveragecache !== false) {
+            @unlink($temporarycontentcoveragecache);
+        }
+    }
+}
 
 $examprojects = [];
 foreach (($revisionstore['examProjects'] ?? []) as $storedexamid => $storedexam) {
@@ -5675,6 +5764,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamprojec
             $publishingissues[] = $publishingquestionid;
             continue;
         }
+        $publishingquestion = $normalizecreatedquestionpinyin($publishingquestion);
         $publishingguidelineviolations = $findcreatedquestionguidelineviolations($publishingquestion);
         if ($publishingguidelineviolations !== []) {
             $publishingissueids[] = $publishingquestionid;
@@ -11591,7 +11681,10 @@ if ($usagefilter === 'exam_project_pending'
 }
 $totalpages = max(1, (int)ceil($resultcount / $perpage));
 $page = min($page, $totalpages - 1);
-$pagequestions = array_slice($filteredquestions, $page * $perpage, $perpage);
+$pagequestions = array_map(
+    $normalizecreatedquestionpinyin,
+    array_slice($filteredquestions, $page * $perpage, $perpage)
+);
 $baseparams = array_filter([
     'domain' => $domainfilter !== 'all' ? $domainfilter : null,
     'q' => $query !== '' ? $query : null,
@@ -11614,7 +11707,7 @@ $editquestion = null;
 if ($editquestionid !== '') {
     foreach ($allquestions as $candidatequestion) {
         if ((string)($candidatequestion['questionId'] ?? '') === $editquestionid) {
-            $editquestion = $candidatequestion;
+            $editquestion = $normalizecreatedquestionpinyin($candidatequestion);
             break;
         }
     }
@@ -11937,7 +12030,9 @@ $sameanswerurl = new moodle_url('/blocks/myprogress/admin-herbology-question-ban
 ]));
 $sameanswerurl->set_anchor('same-answer-audit');
 $showsameansweraudit = $showsameansweraudit || $sameanswersearch !== '';
-$sameanswerreport = $buildsameansweraudit($allquestions, $domains, $sameanswersearch);
+$sameanswerreport = $showsameansweraudit
+    ? $buildsameansweraudit($allquestions, $domains, $sameanswersearch)
+    : ['groups' => [], 'groupCount' => 0, 'questionCount' => 0, 'search' => ''];
 $sameanswerperpage = 20;
 $sameanswertotalpages = max(1, (int)ceil((int)$sameanswerreport['groupCount'] / $sameanswerperpage));
 $sameanswerpage = min($sameanswerpage, $sameanswertotalpages - 1);
@@ -12288,12 +12383,12 @@ $PAGE->requires->js_init_code(<<<'JS'
                 });
             }
             var updated = snapshot.generatedAt ? new Date(snapshot.generatedAt) : new Date();
-            showStatus((spanish ? 'Actualizado automáticamente: ' : 'Automatically updated: ')
+            showStatus((spanish ? 'Inventario actualizado: ' : 'Inventory updated: ')
                 + updated.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'}));
         }).catch(function() {
             showStatus(spanish
-                ? 'No se pudo actualizar. Se intentará nuevamente en 30 segundos.'
-                : 'Could not update. It will try again in 30 seconds.', 'is-error');
+                ? 'No se pudo actualizar. Pulse Actualizar ahora para intentarlo nuevamente.'
+                : 'Could not update. Select Refresh now to try again.', 'is-error');
         }).finally(function() {
             refreshing = false;
             if (refreshButton) {
@@ -12305,14 +12400,6 @@ $PAGE->requires->js_init_code(<<<'JS'
     if (refreshButton) {
         refreshButton.addEventListener('click', refreshInventory);
     }
-    window.setTimeout(refreshInventory, 1000);
-    window.setInterval(refreshInventory, 30000);
-    window.addEventListener('focus', refreshInventory);
-    document.addEventListener('visibilitychange', function() {
-        if (!document.hidden) {
-            refreshInventory();
-        }
-    });
 })();
 JS);
 
@@ -12359,7 +12446,7 @@ echo $OUTPUT->header();
 .question-bank__creation-state{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:0 0 16px;padding:16px 18px;border:2px solid #0b8f87;border-radius:11px;background:#f2fbf9}.question-bank__creation-state>div{flex:1 1 auto}.question-bank__creation-state h3{margin:0 0 5px;color:#075f59;font-size:22px}.question-bank__creation-state p{margin:0;color:#52677a;line-height:1.45}.question-bank__creation-steps{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.question-bank__creation-step{padding:5px 9px;border-radius:999px;background:#e2ecef;color:#52677a;font-size:12px;font-weight:850}.question-bank__creation-step.is-current{background:#6d28d9;color:#fff}.question-bank__creation-step.is-complete{background:#dff5ef;color:#075f59}.question-bank__creation-exam-progress{max-width:620px;margin-top:13px;padding:11px 12px;border:1px solid #82cfc7;border-radius:8px;background:#fff}.question-bank__creation-exam-progress header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px;color:#075f59}.question-bank__creation-exam-progress header strong:last-child{font-size:20px}.question-bank__creation-exam-progress small{display:block;margin-top:6px;color:#52677a;font-weight:750}.question-bank--creation .question-bank__hero .question-bank__actions,.question-bank--creation>nav[aria-label="Mock-only questions"],.question-bank--creation>.question-bank__language-state,.question-bank--creation>.question-bank__exam-builder,.question-bank--creation>.question-bank__technical-exports,.question-bank--creation>.question-bank__assistant,.question-bank--creation>.question-bank__similarity-finder,.question-bank--creation>.question-bank__same-answer-audit,.question-bank--creation>.question-bank__summary,.question-bank--creation>.question-bank__filters,.question-bank--creation>.question-bank__active-filters,.question-bank--creation>.question-bank__domains,.question-bank--creation>.question-bank__review-progress,.question-bank--creation>.question-bank__ai-batch,.question-bank--creation>.question-bank__editor,.question-bank--creation .question-bank__item .question-bank__meta form,.question-bank--creation .question-bank__item .question-bank__meta a.question-bank__button{display:none}.question-bank--creation-entry>.question-bank__result-head,.question-bank--creation-entry>.question-bank__items,.question-bank--creation-entry>.question-bank__pagination{display:none}@media(max-width:700px){.question-bank__creation-state{flex-direction:column}.question-bank__creation-state .question-bank__button{width:100%}}
 </style>
 <main class="question-bank<?php echo $creationmode ? ' question-bank--creation' : ''; ?><?php echo $shownewquestionform ? ' question-bank--creation-entry' : ''; ?>">
-    <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button" href="<?php echo $similarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar answers'; ?></a><a class="question-bank__button question-bank__button--similar" href="<?php echo $sameanswerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Revisar respuestas repetidas' : 'Review repeated answers'; ?> (<?php echo (int)$sameanswerreport['groupCount']; ?>)</a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
+    <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button" href="<?php echo $similarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar answers'; ?></a><a class="question-bank__button question-bank__button--similar" href="<?php echo $sameanswerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Revisar respuestas repetidas' : 'Review repeated answers'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
     <?php if ($fuzirouguirepairapplied): ?>
     <section class="question-bank__publish-readiness is-ready" aria-live="assertive"><strong><?php echo $displaylang === 'es' ? 'Pregunta recuperada y publicada:' : 'Question recovered and published:'; ?></strong> ADMIN-HB-20261121-054320-94BA <?php echo $displaylang === 'es'
         ? 'ahora conserva Liu Wei Di Huang Wan + Fu Zi + Rou Gui, pertenece a Domain 3 y fue incorporada al examen activo.'
@@ -13088,7 +13175,7 @@ echo $OUTPUT->header();
         <header class="question-bank__inventory-head">
             <div class="question-bank__inventory-title">
                 <strong><?php echo $displaylang === 'es' ? 'Inventario dinámico por dominio' : 'Live inventory by domain'; ?></strong>
-                <span class="question-bank__inventory-status" data-inventory-status aria-live="polite"><?php echo $displaylang === 'es' ? 'Se actualiza automáticamente cada 30 segundos.' : 'Updates automatically every 30 seconds.'; ?></span>
+                <span class="question-bank__inventory-status" data-inventory-status aria-live="polite"><?php echo $displaylang === 'es' ? 'Calculado al cargar. Actualice solo cuando lo necesite.' : 'Calculated on page load. Refresh only when needed.'; ?></span>
             </div>
             <button class="question-bank__inventory-refresh" type="button" data-inventory-refresh><?php echo $displaylang === 'es' ? 'Actualizar ahora' : 'Refresh now'; ?></button>
         </header>

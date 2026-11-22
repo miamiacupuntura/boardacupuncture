@@ -241,11 +241,18 @@ grep -Fq "(?:\\d+\\.\\s*)?\\*{0,2}[A-D]" "$QUESTION_BANK_SOURCE"
 grep -Fq '$normalizecreatedquestionpinyin' "$QUESTION_BANK_SOURCE"
 grep -Fq 'pinyinTonesRemovedAt' "$QUESTION_BANK_SOURCE"
 grep -Fq 'tone-free-official-case-pinyin-all-question-snapshots-v3' "$QUESTION_BANK_SOURCE"
-grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_domains' "$QUESTION_BANK_SOURCE"
 grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_question' "$OVERRIDES_SOURCE"
 grep -Fq 'block_myprogress_herbology_canonicalize_pinyin_case_in_question' "$OVERRIDES_SOURCE"
 grep -Fq 'block_myprogress_herbology_official_pinyin_case_data' "$OVERRIDES_SOURCE"
 grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_domains' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq 'bensky-content-coverage-v2' "$QUESTION_BANK_SOURCE"
+grep -Fq '$contentcoveragecachepath' "$QUESTION_BANK_SOURCE"
+grep -Fq '? $buildsameansweraudit($allquestions, $domains, $sameanswersearch)' "$QUESTION_BANK_SOURCE"
+grep -Fq 'Calculated on page load. Refresh only when needed.' "$QUESTION_BANK_SOURCE"
+if grep -Fq 'window.setInterval(refreshInventory' "$QUESTION_BANK_SOURCE"; then
+    echo 'ERROR: el inventario no debe iniciar consultas completas cada 30 segundos.' >&2
+    exit 1
+fi
 grep -Fq '$findcreatedquestionguidelineviolations' "$QUESTION_BANK_SOURCE"
 grep -Fq '$stripguidelineinstructionprefixes' "$QUESTION_BANK_SOURCE"
 grep -Fq '$resolveguidelineherbname' "$QUESTION_BANK_SOURCE"
