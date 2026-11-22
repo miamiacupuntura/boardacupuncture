@@ -1976,7 +1976,8 @@ a.herb-board__domain:focus {
 }
 
 .herb-board__student-content-inventory > header a,
-.herb-board__coverage-navigation > a {
+.herb-board__coverage-navigation > a,
+.herb-board__inventory-section-navigation > a {
     flex: 0 0 auto;
     padding: 8px 11px;
     border: 1px solid #9fb8c7;
@@ -1991,11 +1992,21 @@ a.herb-board__domain:focus {
 .herb-board__student-content-inventory > header a:hover,
 .herb-board__student-content-inventory > header a:focus,
 .herb-board__coverage-navigation > a:hover,
-.herb-board__coverage-navigation > a:focus {
+.herb-board__coverage-navigation > a:focus,
+.herb-board__inventory-section-navigation > a:hover,
+.herb-board__inventory-section-navigation > a:focus {
     border-color: #087c69;
     background: #edf9f5;
     color: #075f50;
     text-decoration: none;
+}
+
+.herb-board__inventory-section-navigation {
+    display: flex;
+    justify-content: flex-end;
+    padding: 9px 12px;
+    border-top: 1px solid #dfe7eb;
+    background: #f8fbfb;
 }
 
 .herb-board__coverage-navigation {

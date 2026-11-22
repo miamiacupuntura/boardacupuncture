@@ -19,7 +19,7 @@ $mockherbchapter = max(0, optional_param('mockherbchapter', 0, PARAM_INT));
 $mockinventoryrequest = optional_param('inventory', 0, PARAM_BOOL);
 $quizsection = optional_param('quizsection', 'all', PARAM_ALPHA);
 $coverageview = optional_param('coverage', '', PARAM_ALPHA);
-if (!in_array($coverageview, ['', 'formulas', 'herbs'], true)) {
+if (!in_array($coverageview, ['', 'formulas', 'herbs', 'duiyao'], true)) {
     $coverageview = '';
 }
 if ($track !== 'quiz' || !in_array($quizsection, ['all', 'herbs', 'formulas', 'clinical'], true)) {
@@ -127,10 +127,28 @@ $formulaquizoverviewurl = new moodle_url(
     ['track' => 'quiz', 'quizsection' => 'formulas'] + $languagecontext,
     'quiz-formula-categories'
 );
+$singleherbquizoverviewurl = new moodle_url(
+    '/blocks/menu/herbology-board.php',
+    ['track' => 'quiz', 'quizsection' => 'herbs'] + $languagecontext,
+    'quiz-herb-categories'
+);
+$duiyaostudyurl = new moodle_url(
+    $ises ? '/study-guide/comparisons/dui-yao-es.html' : '/study-guide/comparisons/dui-yao.html'
+);
 $formulacoverageurl = new moodle_url(
     '/blocks/menu/herbology-board.php',
     ['track' => 'simulation', 'coverage' => 'formulas'] + $languagecontext,
     'student-formula-coverage'
+);
+$herbcoverageurl = new moodle_url(
+    '/blocks/menu/herbology-board.php',
+    ['track' => 'simulation', 'coverage' => 'herbs'] + $languagecontext,
+    'student-herb-coverage'
+);
+$duiyaocoverageurl = new moodle_url(
+    '/blocks/menu/herbology-board.php',
+    ['track' => 'simulation', 'coverage' => 'duiyao'] + $languagecontext,
+    'student-duiyao-coverage'
 );
 $clinicalquizoverviewurl = new moodle_url('/blocks/menu/herbology-board.php', [
     'track' => 'quiz',
@@ -996,7 +1014,7 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
     $studentinventorycachepath = $CFG->dataroot
         . '/cache/board-herbology-student-content-inventory.json';
     $studentinventorysignature = hash('sha256', (string)json_encode([
-        'version' => 'student-bensky-inventory-v2',
+        'version' => 'student-bensky-inventory-v3-dui-yao',
         'coverageMtime' => is_file($studentcoveragecachepath) ? filemtime($studentcoveragecachepath) : 0,
         'coverageSize' => is_file($studentcoveragecachepath) ? filesize($studentcoveragecachepath) : 0,
         'examQuestionIds' => array_map('array_keys', $studentexamquestionids),
@@ -1096,6 +1114,32 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
             'exams' => $studentemptyexamcounts,
         ];
     }
+    $studentduiyaostats = [];
+    $studentduiyaoslugtonumber = [];
+    $studentduiyaodatapath = $CFG->dirroot . '/blocks/myprogress/dui-yao-smart-data.json';
+    $studentduiyaodata = is_readable($studentduiyaodatapath)
+        ? json_decode((string)file_get_contents($studentduiyaodatapath), true)
+        : [];
+    foreach ((array)($studentduiyaodata['pairs'] ?? []) as $studentduiyaopair) {
+        $studentduiyaonumber = (int)($studentduiyaopair['number'] ?? 0);
+        $studentduiyaotitle = trim((string)($studentduiyaopair['title'] ?? ''));
+        $studentduiyaoslug = trim((string)($studentduiyaopair['slug'] ?? ''));
+        if ($studentduiyaonumber < 1 || $studentduiyaonumber > 51 || $studentduiyaotitle === '') {
+            continue;
+        }
+        $studentduiyaocleanquestion = block_myprogress_herbology_remove_pinyin_tones_from_question([
+            'prompt' => $studentduiyaotitle,
+        ]);
+        $studentduiyaostats[$studentduiyaonumber] = [
+            'label' => ($ises ? 'Pareja ' : 'Pair ') . $studentduiyaonumber . ' · '
+                . (string)($studentduiyaocleanquestion['prompt'] ?? $studentduiyaotitle),
+            'exams' => $studentemptyexamcounts,
+        ];
+        if ($studentduiyaoslug !== '') {
+            $studentduiyaoslugtonumber[$studentduiyaoslug] = $studentduiyaonumber;
+        }
+    }
+    ksort($studentduiyaostats, SORT_NUMERIC);
     foreach ($studentexamquestionids as $studentexamnumber => $studentquestionids) {
         foreach (array_keys($studentquestionids) as $studentquestionid) {
             $studentcoverage = is_array($studentcoveragerecords[$studentquestionid]['coverage'] ?? null)
@@ -1182,12 +1226,39 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
                     $studentherbcategorystats[$studentcategory]['exams'][$studentexamnumber]++;
                 }
             }
+            if ((string)($studentquestion['domainId'] ?? '') === 'dui_yao') {
+                $studentduiyaonumber = 0;
+                if (preg_match('/^DY-(?:REV-)?(\d{3})$/', $studentquestionid, $studentduiyaomatch) === 1) {
+                    $studentduiyaonumber = (int)$studentduiyaomatch[1];
+                }
+                if (($studentduiyaonumber < 1 || $studentduiyaonumber > 51)
+                        && preg_match(
+                            '/Official pair\s+(\d+)/i',
+                            (string)($studentquestion['source']['locator'] ?? ''),
+                            $studentduiyaomatch
+                        ) === 1) {
+                    $studentduiyaonumber = (int)$studentduiyaomatch[1];
+                }
+                if ($studentduiyaonumber < 1 || $studentduiyaonumber > 51) {
+                    $studentduiyaocardurl = (string)($studentquestion['sourceCard']['url'] ?? '');
+                    foreach ($studentduiyaoslugtonumber as $studentduiyaoslug => $studentduiyaocandidatenumber) {
+                        if (strpos($studentduiyaocardurl, '/' . $studentduiyaoslug . '.html') !== false) {
+                            $studentduiyaonumber = $studentduiyaocandidatenumber;
+                            break;
+                        }
+                    }
+                }
+                if (isset($studentduiyaostats[$studentduiyaonumber])) {
+                    $studentduiyaostats[$studentduiyaonumber]['exams'][$studentexamnumber]++;
+                }
+            }
         }
     }
     $studentcontentinventory = [
         'examNumbers' => $studentexamnumbers,
         'formulaChapters' => $studentformulachapterstats,
         'herbCategories' => $studentherbcategorystats,
+        'duiYaoPairs' => $studentduiyaostats,
     ];
         $studentinventorycachedirectory = dirname($studentinventorycachepath);
         if (make_writable_directory($studentinventorycachedirectory)) {
@@ -1215,31 +1286,49 @@ if (in_array($track, ['exams', 'simulation'], true) && !$mixdomains) {
         $studentcontentinventory,
         $ises,
         $coverageview,
-        $formulaquizoverviewurl
+        $formulaquizoverviewurl,
+        $singleherbquizoverviewurl,
+        $duiyaostudyurl
     ): void {
         ?>
         <section class="herb-board__student-content-inventory" aria-labelledby="student-content-inventory-title">
             <header>
                 <div>
-                    <strong id="student-content-inventory-title"><?php echo $ises ? 'Inventario de contenido Bensky' : 'Bensky content inventory'; ?></strong>
+                    <strong id="student-content-inventory-title"><?php echo $ises ? 'Inventario Bensky y Duì Yào' : 'Bensky and Duì Yào inventory'; ?></strong>
                     <span><?php echo $ises
                         ? 'Cuenta preguntas publicadas; una comparación puede cubrir más de una categoría.'
                         : 'Counts published questions; a comparison may cover more than one category.'; ?></span>
                 </div>
-                <a href="<?php echo $formulaquizoverviewurl->out(false); ?>"><?php echo $ises ? '← Ir al Quiz de fórmulas' : '← Go to Formula Quiz'; ?></a>
             </header>
             <?php foreach ([
                 ['key' => 'formulaChapters', 'label' => $ises ? 'Cobertura por capítulo de fórmulas' : 'Coverage by formula chapter'],
                 ['key' => 'herbCategories', 'label' => $ises ? 'Cobertura por categoría de hierbas' : 'Coverage by herb category'],
+                ['key' => 'duiYaoPairs', 'label' => $ises ? 'Inventario por pareja Duì Yào' : 'Inventory by Duì Yào pair'],
             ] as $studentcontentsection): ?>
-                <details class="herb-board__student-content-section" id="student-<?php echo $studentcontentsection['key'] === 'formulaChapters' ? 'formula' : 'herb'; ?>-coverage"<?php echo ($coverageview === 'formulas' && $studentcontentsection['key'] === 'formulaChapters') || ($coverageview === 'herbs' && $studentcontentsection['key'] === 'herbCategories') ? ' open' : ''; ?>>
+                <?php
+                $studentcontentsectiontype = $studentcontentsection['key'] === 'formulaChapters'
+                    ? 'formula'
+                    : ($studentcontentsection['key'] === 'herbCategories' ? 'herb' : 'duiyao');
+                $studentcontentreturnurl = $studentcontentsectiontype === 'formula'
+                    ? $formulaquizoverviewurl
+                    : ($studentcontentsectiontype === 'herb' ? $singleherbquizoverviewurl : $duiyaostudyurl);
+                $studentcontentreturnlabel = $studentcontentsectiontype === 'formula'
+                    ? ($ises ? '← Ir al Quiz de fórmulas' : '← Go to Formula Quiz')
+                    : ($studentcontentsectiontype === 'herb'
+                        ? ($ises ? '← Ir al Quiz de hierbas' : '← Go to Single Herbs Quiz')
+                        : ($ises ? '← Ir a Duì Yào' : '← Go to Duì Yào'));
+                ?>
+                <details class="herb-board__student-content-section" id="student-<?php echo $studentcontentsectiontype; ?>-coverage"<?php echo $coverageview === ($studentcontentsectiontype === 'formula' ? 'formulas' : ($studentcontentsectiontype === 'herb' ? 'herbs' : 'duiyao')) ? ' open' : ''; ?>>
                     <summary><?php echo s($studentcontentsection['label']); ?></summary>
                     <div>
+                        <nav class="herb-board__inventory-section-navigation"><a href="<?php echo $studentcontentreturnurl->out(false); ?>"><?php echo s($studentcontentreturnlabel); ?></a></nav>
                         <table>
                             <thead><tr>
                                 <th><?php echo $studentcontentsection['key'] === 'formulaChapters'
                                     ? ($ises ? 'Capítulo Bensky' : 'Bensky chapter')
-                                    : ($ises ? 'Categoría Bensky' : 'Bensky category'); ?></th>
+                                    : ($studentcontentsection['key'] === 'herbCategories'
+                                        ? ($ises ? 'Categoría Bensky' : 'Bensky category')
+                                        : ($ises ? 'Pareja oficial' : 'Official pair')); ?></th>
                                 <?php foreach ($studentcontentinventory['examNumbers'] as $studentexamnumber): ?><th>Exam <?php echo (int)$studentexamnumber; ?></th><?php endforeach; ?>
                             </tr></thead>
                             <tbody>
@@ -3355,9 +3444,14 @@ echo $OUTPUT->header();
 
             <?php if (in_array($quizsection, ['all', 'herbs'], true)) { ?>
                 <section aria-labelledby="quiz-herb-categories">
-                    <h4 class="herb-board__subheading" id="quiz-herb-categories"><?php echo $ises
-                        ? 'Quiz de hierbas individuales por categoría de Yang, autor del libro'
-                        : 'Single Herbs Quiz by category from Yang, the book author'; ?></h4>
+                    <div class="herb-board__coverage-navigation">
+                        <h4 class="herb-board__subheading" id="quiz-herb-categories"><?php echo $ises
+                            ? 'Quiz de hierbas individuales por categoría de Yang, autor del libro'
+                            : 'Single Herbs Quiz by category from Yang, the book author'; ?></h4>
+                        <a href="<?php echo $herbcoverageurl->out(false); ?>"><?php echo $ises
+                            ? 'Ver cobertura de Exam 1–5 →'
+                            : 'View Exam 1–5 coverage →'; ?></a>
+                    </div>
                     <div class="herb-board__topics">
                         <?php foreach ($herbcategories as $category) {
                             if ($category['number'] === 1) {

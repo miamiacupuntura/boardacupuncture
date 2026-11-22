@@ -16,6 +16,8 @@ RELATIVE_FILES=(
     "blocks/myprogress/single-herb-card-index.json"
     "blocks/myprogress/formula-board-roster-2026.json"
     "blocks/menu/styles.css"
+    "study-guide/comparisons/dui-yao.html"
+    "study-guide/comparisons/dui-yao-es.html"
 )
 STATE_REPAIR_RELATIVE="tools/repair_exam5_guideline_state.php"
 
@@ -105,6 +107,8 @@ DUI_YAO_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[4]}"
 APPENDIX_A_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[5]}"
 APPENDIX_C_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[6]}"
 MENU_STYLES_SOURCE="$TEMP_DIR/${RELATIVE_FILES[7]}"
+DUI_YAO_GUIDE_SOURCE="$TEMP_DIR/${RELATIVE_FILES[8]}"
+DUI_YAO_GUIDE_ES_SOURCE="$TEMP_DIR/${RELATIVE_FILES[9]}"
 php -l "$QUESTION_BANK_SOURCE" >/dev/null
 php -l "$OVERRIDES_SOURCE" >/dev/null
 php -l "$HERBOLOGY_BOARD_SOURCE" >/dev/null
@@ -292,12 +296,16 @@ grep -Fq 'Each column represents a different question set' "$HERBOLOGY_BOARD_SOU
 grep -Fq '.herb-board__exam-choice-banner' "$MENU_STYLES_SOURCE"
 grep -Fq '.herb-board__exam-characteristics' "$MENU_STYLES_SOURCE"
 grep -Fq '.herb-board__exam-overview-table' "$MENU_STYLES_SOURCE"
-grep -Fq 'Bensky content inventory' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq 'Bensky and Duì Yào inventory' "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq '.herb-board__student-content-inventory' "$MENU_STYLES_SOURCE"
 grep -Fq 'board-herbology-student-content-inventory.json' "$HERBOLOGY_BOARD_SOURCE"
-grep -Fq 'student-bensky-inventory-v2' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq 'student-bensky-inventory-v3-dui-yao' "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq 'View Exam 1–5 coverage' "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq 'Go to Formula Quiz' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq 'Go to Single Herbs Quiz' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq 'Inventory by Duì Yào pair' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq 'Exam 1–5 coverage' "$DUI_YAO_GUIDE_SOURCE"
+grep -Fq 'Cobertura Exam 1–5' "$DUI_YAO_GUIDE_ES_SOURCE"
 grep -Fq '.herb-board__coverage-navigation' "$MENU_STYLES_SOURCE"
 if grep -Fq 'Warm and tonify Yang · priority coverage' "$HERBOLOGY_BOARD_SOURCE"; then
     echo 'ERROR: the removed student Yang-priority row is still present.' >&2
@@ -759,6 +767,7 @@ echo "OK: si no existe un examen activo, la publicación vuelve al banco general
 echo "OK: las preguntas creadas y aprobadas pueden abrirse en Editar manualmente; al publicarlas se elimina la nomenclatura oculta de versiones anteriores y se valida de nuevo Appendix A/C."
 echo "OK: la selección estudiantil de Exam 1–5 muestra la cobertura Bensky real de los cinco exámenes, sin la fila prioritaria de Yang ni columnas administrativas."
 echo "OK: Formula Quiz y la cobertura por capítulo tienen enlaces recíprocos con apertura y desplazamiento directos."
+echo "OK: Single Herbs Quiz, Formula Quiz y Duì Yào tienen navegación de ida y vuelta con sus inventarios Exam 1–5."
 echo "OK: $CF0126_OVERRIDE_RESULT"
 echo "OK: $EXAM5_OVERRIDE_RESULT"
 echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"
