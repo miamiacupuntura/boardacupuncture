@@ -1944,6 +1944,110 @@ a.herb-board__domain:focus {
     color: #075f50;
 }
 
+.herb-board__student-content-inventory {
+    margin: 0 0 16px;
+    overflow: hidden;
+    border: 1px solid #d8e2e7;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.herb-board__student-content-inventory > header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #d8e2e7;
+    background: #f5f9fa;
+    color: #17324d;
+}
+
+.herb-board__student-content-inventory > header span {
+    color: #64778a;
+    font-size: .72rem;
+    font-weight: 650;
+}
+
+.herb-board__student-content-section {
+    border-bottom: 1px solid #d8e2e7;
+}
+
+.herb-board__student-content-section:last-child {
+    border-bottom: 0;
+}
+
+.herb-board__student-content-section > summary {
+    padding: 13px 15px;
+    background: #f8fbfb;
+    color: #17324d;
+    cursor: pointer;
+    font-size: .84rem;
+    font-weight: 800;
+    list-style: none;
+}
+
+.herb-board__student-content-section > summary::-webkit-details-marker {
+    display: none;
+}
+
+.herb-board__student-content-section > summary::before {
+    content: "▶";
+    display: inline-block;
+    margin-right: 8px;
+    font-size: .65rem;
+    transform-origin: center;
+    transition: transform .15s ease;
+}
+
+.herb-board__student-content-section[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+.herb-board__student-content-section--priority > summary {
+    background: #fff3d5;
+    color: #935000;
+}
+
+.herb-board__student-content-section > div {
+    overflow-x: auto;
+}
+
+.herb-board__student-content-section table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+}
+
+.herb-board__student-content-section th,
+.herb-board__student-content-section td {
+    padding: 10px 12px;
+    border-top: 1px solid #dfe7eb;
+    text-align: center;
+}
+
+.herb-board__student-content-section th {
+    background: #f3f8f8;
+    color: #17324d;
+    font-size: .7rem;
+    text-transform: uppercase;
+}
+
+.herb-board__student-content-section th:first-child,
+.herb-board__student-content-section td:first-child {
+    width: 43%;
+    text-align: left;
+}
+
+.herb-board__student-content-section td:not(:first-child) {
+    color: #5b36ae;
+    font-weight: 800;
+}
+
+.herb-board__student-content-section td.is-content-gap {
+    background: #fff1f0;
+    color: #b42318;
+}
+
 @media (max-width: 850px) {
     .herb-board__exam-choice-banner {
         align-items: stretch;
@@ -1957,6 +2061,12 @@ a.herb-board__domain:focus {
     .herb-board__exam-choice-banner li {
         width: auto;
         flex: 1 1 0;
+    }
+
+    .herb-board__student-content-inventory > header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 3px;
     }
 
 }
