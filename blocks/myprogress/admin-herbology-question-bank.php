@@ -61,7 +61,7 @@ $download = optional_param('download', '', PARAM_ALPHANUMEXT);
 $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
-$perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 50;
+$perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 20;
 $aipromptversion = 'ncbahm-mock-editor-4.5';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
@@ -234,6 +234,31 @@ $guidelineformulaaliases = [
     'shen mai san' => 'sheng mai san',
     'ling jiao gou teng tang' => 'ling jiao gou teng yin',
 ];
+$guidelineformulamatchnames = array_values(array_unique(array_merge(
+    array_keys($guidelineformulachapterbyname),
+    array_keys($guidelineformulaaliases)
+)));
+usort(
+    $guidelineformulamatchnames,
+    static fn(string $left, string $right): int => strlen($right) <=> strlen($left)
+);
+$guidelineformulamatchpattern = '/(?=(?<![a-z0-9])((?:'
+    . implode('|', array_map(
+        static fn(string $name): string => preg_quote($name, '/'),
+        $guidelineformulamatchnames
+    ))
+    . '))(?![a-z0-9]))/';
+$guidelineherbmatchnames = array_keys($guidelineherbcategorybyname);
+usort(
+    $guidelineherbmatchnames,
+    static fn(string $left, string $right): int => strlen($right) <=> strlen($left)
+);
+$guidelineherbmatchpattern = '/(?=(?<![a-z0-9])((?:'
+    . implode('|', array_map(
+        static fn(string $name): string => preg_quote($name, '/'),
+        $guidelineherbmatchnames
+    ))
+    . '))(?![a-z0-9]))/';
 $yangtonifyingformulanames = array_fill_keys([
     'shen qi wan',
     'you gui wan',
@@ -4713,7 +4738,9 @@ foreach ($domains as $domainid => $domain) {
 $questioncontentcoverage = static function(array $question) use (
     $normalizeguidelinename,
     $guidelineformulaaliases,
+    $guidelineformulamatchpattern,
     $guidelineformulachapterbyname,
+    $guidelineherbmatchpattern,
     $guidelineherbcategorybyname,
     $yangtonifyingformulanames
 ): array {
@@ -4771,37 +4798,27 @@ $questioncontentcoverage = static function(array $question) use (
         (string)($question['explanation'] ?? ''),
     ]));
     $visibletext = $normalizeguidelinename($rawvisibletext);
-    $paddedvisibletext = ' ' . $visibletext . ' ';
     if ($visibletext !== '') {
-        foreach ($guidelineformulachapterbyname as $formulaname => $formulachapter) {
-            if (!str_contains($paddedvisibletext, ' ' . $formulaname . ' ')) {
+        preg_match_all($guidelineformulamatchpattern, $visibletext, $visibleformulamatches);
+        foreach (array_unique((array)($visibleformulamatches[1] ?? [])) as $formulaname) {
+            $formulaname = $guidelineformulaaliases[(string)$formulaname] ?? (string)$formulaname;
+            $formulachapter = (int)($guidelineformulachapterbyname[$formulaname] ?? 0);
+            if ($formulachapter < 1) {
                 continue;
             }
             $formulanames[$formulaname] = true;
-            $formulachapters[(int)$formulachapter] = true;
-            if ($primaryformulachapter < 1) {
-                $primaryformulachapter = (int)$formulachapter;
-            }
-        }
-        foreach ($guidelineformulaaliases as $formulaalias => $canonicalformula) {
-            if (!str_contains($paddedvisibletext, ' ' . $formulaalias . ' ')
-                    || !isset($guidelineformulachapterbyname[$canonicalformula])) {
-                continue;
-            }
-            $formulanames[$canonicalformula] = true;
-            $formulachapter = (int)$guidelineformulachapterbyname[$canonicalformula];
             $formulachapters[$formulachapter] = true;
             if ($primaryformulachapter < 1) {
                 $primaryformulachapter = $formulachapter;
             }
         }
-    }
-    if ($visibletext !== '') {
-        foreach ($guidelineherbcategorybyname as $herbname => $herbcategory) {
-            if (!str_contains($paddedvisibletext, ' ' . $herbname . ' ')) {
+        preg_match_all($guidelineherbmatchpattern, $visibletext, $visibleherbmatches);
+        foreach (array_unique((array)($visibleherbmatches[1] ?? [])) as $herbname) {
+            $herbcategory = (string)($guidelineherbcategorybyname[(string)$herbname] ?? '');
+            if ($herbcategory === '') {
                 continue;
             }
-            $herbnames[$herbname] = true;
+            $herbnames[(string)$herbname] = true;
             $herbcategories[$herbcategory] = true;
             if ($primaryherbcategory === '') {
                 $primaryherbcategory = $herbcategory;
