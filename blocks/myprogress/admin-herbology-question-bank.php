@@ -679,6 +679,50 @@ $exam5canonicalrepairs = [
             ],
         ],
     ],
+    'SCORM-SD-11C81E9FD13A' => [
+        'prompt' => 'A patient has Summerheat-Damp diarrhea with mild Heat-related bleeding. Which herb clears Summerheat, raises the Spleen clear Yang, and stops bleeding, but should be avoided when bleeding is caused by Cold or deficiency?',
+        'options' => [
+            ['label' => 'A', 'text' => 'He Ye (Nelumbinis Folium)'],
+            ['label' => 'B', 'text' => 'She Gan (Belamcandae Rhizoma)'],
+            ['label' => 'C', 'text' => 'Shan Dou Gen (Sophorae tonkinensis Radix)'],
+            ['label' => 'D', 'text' => 'Ma Bo (Lasiosphaera/Calvatia)'],
+        ],
+        'correctLabel' => 'A',
+        'explanation' => 'Inference step 1: Summerheat-Damp diarrhea requires an herb that clears Summerheat and raises the Spleen clear Yang. Inference step 2: The additional ability to stop Heat-related bleeding, together with the contraindication for bleeding from Cold or deficiency, identifies He Ye. Option A: Correct. He Ye clears Summerheat, raises clear Yang, and stops bleeding. Option B: Incorrect. She Gan clears Heat, resolves toxicity, benefits the throat, and transforms Phlegm but does not match the complete action and safety profile. Option C: Incorrect. Shan Dou Gen clears Heat, resolves toxicity, and benefits a swollen painful throat but does not raise Spleen clear Yang. Option D: Incorrect. Ma Bo clears Lung Heat, benefits the throat, and can stop bleeding, but it does not provide the Summerheat-resolving and clear-Yang-raising combination.',
+        'translations' => [
+            'es' => [
+                'prompt' => 'Un paciente presenta diarrea por Humedad-Calor de Verano con sangrado leve relacionado con Calor. ¿Qué hierba elimina el Calor de Verano, eleva el Yang claro del Bazo y detiene el sangrado, pero debe evitarse cuando el sangrado se debe a Frío o deficiencia?',
+                'options' => [
+                    ['label' => 'A', 'text' => 'He Ye (Nelumbinis Folium)'],
+                    ['label' => 'B', 'text' => 'She Gan (Belamcandae Rhizoma)'],
+                    ['label' => 'C', 'text' => 'Shan Dou Gen (Sophorae tonkinensis Radix)'],
+                    ['label' => 'D', 'text' => 'Ma Bo (Lasiosphaera/Calvatia)'],
+                ],
+                'explanation' => 'Paso de inferencia 1: La diarrea por Humedad-Calor de Verano requiere una hierba que elimine el Calor de Verano y eleve el Yang claro del Bazo. Paso de inferencia 2: La capacidad adicional de detener el sangrado relacionado con Calor, junto con la contraindicación para sangrado por Frío o deficiencia, identifica He Ye. Opción A: Correcta. He Ye elimina el Calor de Verano, eleva el Yang claro y detiene el sangrado. Opción B: Incorrecta. She Gan elimina Calor, resuelve toxicidad, beneficia la garganta y transforma Flema, pero no corresponde al perfil completo de acciones y seguridad. Opción C: Incorrecta. Shan Dou Gen elimina Calor, resuelve toxicidad y beneficia la garganta hinchada y dolorosa, pero no eleva el Yang claro del Bazo. Opción D: Incorrecta. Ma Bo elimina Calor del Pulmón, beneficia la garganta y puede detener el sangrado, pero no aporta la combinación de resolver Calor de Verano y elevar el Yang claro.',
+            ],
+        ],
+        'contentType' => 'safety_dispensing',
+        'cognitiveLevel' => 'infer',
+        'difficultyBand' => 'inference',
+        'nomenclature' => [
+            'herbs' => [
+                ['pinyin' => 'He Ye', 'pharmaceuticalName' => 'Nelumbinis Folium'],
+                ['pinyin' => 'She Gan', 'pharmaceuticalName' => 'Belamcandae Rhizoma'],
+                ['pinyin' => 'Shan Dou Gen', 'pharmaceuticalName' => 'Sophorae tonkinensis Radix'],
+                ['pinyin' => 'Ma Bo', 'pharmaceuticalName' => 'Lasiosphaera/Calvatia'],
+            ],
+            'formulas' => [],
+            'feedback' => [
+                'herbs' => [
+                    ['pinyin' => 'He Ye', 'pharmaceuticalName' => 'Nelumbinis Folium'],
+                    ['pinyin' => 'She Gan', 'pharmaceuticalName' => 'Belamcandae Rhizoma'],
+                    ['pinyin' => 'Shan Dou Gen', 'pharmaceuticalName' => 'Sophorae tonkinensis Radix'],
+                    ['pinyin' => 'Ma Bo', 'pharmaceuticalName' => 'Lasiosphaera/Calvatia'],
+                ],
+                'formulas' => [],
+            ],
+        ],
+    ],
 ];
 foreach ($bank['domains'] as &$exam5domainquestions) {
     foreach ($exam5domainquestions as &$exam5question) {
@@ -801,6 +845,47 @@ if (is_array($roudoukoucanonical)
         $record['savedByName'] = 'Rou Dou Kou Appendix correction';
         $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
         $store['questions'][$roudoukourepairid] = $record;
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
+$heyerepairid = 'SCORM-SD-11C81E9FD13A';
+$heyecanonical = null;
+foreach ((array)($bank['domains'] ?? []) as $heyequestions) {
+    foreach ((array)$heyequestions as $heyequestion) {
+        if ((string)($heyequestion['questionId'] ?? '') === $heyerepairid) {
+            $heyecanonical = $heyequestion;
+            break 2;
+        }
+    }
+}
+$heyestored = $revisionstore['questions'][$heyerepairid] ?? null;
+if (is_array($heyecanonical)
+        && is_array($heyestored)
+        && empty($heyestored['heYeGuidelineRepairAt'])) {
+    $heyereplacement = array_intersect_key($heyecanonical, array_flip([
+        'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+        'contentType', 'cognitiveLevel', 'difficultyBand', 'nomenclature',
+    ]));
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $heyerepairid,
+        $heyereplacement
+    ): array {
+        $record = $store['questions'][$heyerepairid] ?? null;
+        if (!is_array($record) || !empty($record['heYeGuidelineRepairAt'])) {
+            return $store;
+        }
+        foreach (['original', 'draft', 'approved'] as $snapshotkey) {
+            if (is_array($record[$snapshotkey] ?? null)) {
+                $record[$snapshotkey] = array_replace($record[$snapshotkey], $heyereplacement);
+            }
+        }
+        $savedat = gmdate(DATE_ATOM);
+        $record['heYeGuidelineRepairAt'] = $savedat;
+        $record['savedAt'] = $savedat;
+        $record['savedByName'] = 'He Ye Appendix correction';
+        $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        $store['questions'][$heyerepairid] = $record;
         return $store;
     });
     $revisionstore = block_myprogress_herbology_override_load();
@@ -2176,11 +2261,20 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
         }
     }
     preg_match_all(
-        '/\b((?:[A-Z][A-Za-z]*\s+){1,7}(?:Tang|Wan|San))\b/u',
+        '/\b((?:(?:[A-Z][A-Za-z]*\s+){1,7}(?:Tang|Wan|San)|(?:[A-Z][A-Za-z]*\s+){2,7}(?:Yin(?:\s+Zi)?|Jian|Dan|Fang)))\b/u',
         $visibletext,
         $formulamatches
     );
     foreach ((array)($formulamatches[1] ?? []) as $displayformula) {
+        if (preg_match('/\bYin(?:\s+Zi)?$/', (string)$displayformula) === 1
+                && preg_match(
+                    '/\b(?:Liver|Kidney|Heart|Lung|Spleen|Stomach|Blood|Qi|Yang|Deficiency|Heat)\b/',
+                    (string)$displayformula
+                ) === 1) {
+            // Do not mistake title-cased pattern terminology such as
+            // "Liver Kidney Yin" for a formula ending in Yin.
+            continue;
+        }
         $normalizedformula = $normalizeguidelinename((string)$displayformula);
         $normalizedformula = $formulaaliases[$normalizedformula] ?? $normalizedformula;
         if (!isset($guidelineformulanames[$normalizedformula])) {
