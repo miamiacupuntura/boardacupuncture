@@ -2245,21 +2245,35 @@ if ($publishedprojectrepairs !== [] || $draftprojectreuserepairs !== []) {
 $normalizecreatedquestionpinyin = static function(array $question): array {
     return block_myprogress_herbology_remove_pinyin_tones_from_question($question);
 };
+$stripguidelineinstructionprefixes = static function(string $normalizedname): string {
+    $stripped = preg_replace(
+        '/^(?:add|choose|select|use|replace|include|introduce|remove|increase|decrease|while|'
+            . 'decoction|powder|ht|ki|lv|lu|sp|st|ub|gb|li|si|pc|sj)\s+/i',
+        '',
+        trim($normalizedname)
+    );
+    return trim(is_string($stripped) ? $stripped : $normalizedname);
+};
 $findcreatedquestionguidelineviolations = static function(array $question) use (
     $normalizeguidelinename,
     $guidelineherbnames,
     $guidelineherblatin,
     $guidelineformulanames,
-    $guidelineformulaenglish
+    $guidelineformulaenglish,
+    $stripguidelineinstructionprefixes
 ): array {
     $violations = [];
     $formulaaliases = [
         'jin gui shen qi wan' => 'shen qi wan',
+        'shen mai san' => 'sheng mai san',
+        'ling jiao gou teng tang' => 'ling jiao gou teng yin',
     ];
     foreach ((array)($question['nomenclature']['herbs'] ?? []) as $herbrecord) {
         $herbname = trim((string)($herbrecord['pinyin'] ?? ''));
         $herblatin = trim((string)($herbrecord['pharmaceuticalName'] ?? ''));
-        $normalizedherb = $normalizeguidelinename($herbname);
+        $normalizedherb = $stripguidelineinstructionprefixes(
+            $normalizeguidelinename($herbname)
+        );
         $normalizedlatin = $normalizeguidelinename($herblatin);
         if ($normalizedlatin !== '' && isset($guidelineherblatin[$normalizedlatin])) {
             $expectedherb = $normalizeguidelinename($guidelineherblatin[$normalizedlatin]);
@@ -2274,7 +2288,9 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
     foreach ((array)($question['nomenclature']['formulas'] ?? []) as $formularecord) {
         $formulaname = trim((string)($formularecord['pinyin'] ?? ''));
         $formulaenglish = trim((string)($formularecord['englishName'] ?? ''));
-        $normalizedformula = $normalizeguidelinename($formulaname);
+        $normalizedformula = $stripguidelineinstructionprefixes(
+            $normalizeguidelinename($formulaname)
+        );
         $normalizedformula = $formulaaliases[$normalizedformula] ?? $normalizedformula;
         $normalizedenglish = $normalizeguidelinename($formulaenglish);
         if ($normalizedenglish !== '' && isset($guidelineformulaenglish[$normalizedenglish])) {
@@ -2306,11 +2322,12 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
         $displayname = trim((string)($namedmatch[1] ?? ''));
         $parenthetical = trim((string)($namedmatch[2] ?? ''));
         $normalizeddisplay = $normalizeguidelinename($displayname);
+        $normalizedcandidate = $stripguidelineinstructionprefixes($normalizeddisplay);
         $normalizedparenthetical = $normalizeguidelinename($parenthetical);
-        $normalizedformula = $formulaaliases[$normalizeddisplay] ?? $normalizeddisplay;
+        $normalizedformula = $formulaaliases[$normalizedcandidate] ?? $normalizedcandidate;
         if (isset($guidelineherblatin[$normalizedparenthetical])) {
             $expectedherb = $normalizeguidelinename($guidelineherblatin[$normalizedparenthetical]);
-            if (!str_ends_with($normalizeddisplay, $expectedherb)) {
+            if ($normalizedcandidate !== $expectedherb) {
                 $violations['herb-mismatch:' . $normalizeddisplay] = 'Herb name does not match Appendix A: '
                     . $displayname . ' (' . $parenthetical . ')';
             }
@@ -2321,13 +2338,13 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
                 $guidelineformulaenglish[$normalizedparenthetical]
             );
             $expectedformula = $formulaaliases[$expectedformula] ?? $expectedformula;
-            if (!str_ends_with($normalizedformula, $expectedformula)) {
+            if ($normalizedformula !== $expectedformula) {
                 $violations['formula-mismatch:' . $normalizeddisplay] = 'Formula name does not match Appendix C: '
                     . $displayname . ' (' . $parenthetical . ')';
             }
             continue;
         }
-        if (isset($guidelineherbnames[$normalizeddisplay])
+        if (isset($guidelineherbnames[$normalizedcandidate])
                 || isset($guidelineformulanames[$normalizedformula])) {
             continue;
         }
@@ -2346,7 +2363,8 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
         }
     }
     preg_match_all(
-        '/\b((?:(?:[A-Z][A-Za-z]*\s+){1,7}(?:Tang|Wan|San)|(?:[A-Z][A-Za-z]*\s+){2,7}(?:Yin(?:\s+Zi)?|Jian|Dan|Fang)))\b/u',
+        '/\b((?:(?:[A-Z][A-Za-z]*\s+){1,7}(?:Tang|Wan|San)|(?:[A-Z][A-Za-z]*\s+){2,7}'
+            . '(?:Yin(?:\s+Zi)?|Jian|Dan|Fang)))(?!\s+[A-Z])\b/u',
         $visibletext,
         $formulamatches
     );
@@ -2360,7 +2378,9 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
             // "Liver Kidney Yin" for a formula ending in Yin.
             continue;
         }
-        $normalizedformula = $normalizeguidelinename((string)$displayformula);
+        $normalizedformula = $stripguidelineinstructionprefixes(
+            $normalizeguidelinename((string)$displayformula)
+        );
         $normalizedformula = $formulaaliases[$normalizedformula] ?? $normalizedformula;
         if (!isset($guidelineformulanames[$normalizedformula])) {
             $violations['formula:' . $normalizedformula] = 'Formula outside Appendix C: '
