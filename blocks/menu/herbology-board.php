@@ -2711,6 +2711,29 @@ echo $OUTPUT->header();
     <?php } else if ($track === 'simulation') { ?>
         <section class="herb-board__panel herb-board__simulation" aria-labelledby="herb-board-simulation-title">
             <?php if (!$mixdomains) { ?>
+                <?php
+                $availablesimulationexamnumbers = array_values(array_unique(array_merge(
+                    [1],
+                    array_map('intval', array_keys($publishedsimulationexams))
+                )));
+                sort($availablesimulationexamnumbers, SORT_NUMERIC);
+                ?>
+                <section class="herb-board__exam-choice-banner" aria-labelledby="simulation-choice-title">
+                    <div>
+                        <span><?php echo $ises ? 'ANTES DE COMENZAR' : 'BEFORE YOU BEGIN'; ?></span>
+                        <h3 id="simulation-choice-title"><?php echo $ises
+                            ? 'Elige la modalidad de examen para comenzar'
+                            : 'Choose an exam mode to begin'; ?></h3>
+                        <p><?php echo $ises
+                            ? 'Selecciona Exam 1–5 y después elige simulación lineal o adaptativa. El reloj comienza únicamente cuando abres una modalidad.'
+                            : 'Select Exam 1–5 and then choose Linear or Adaptive simulation. The timer starts only after you open a mode.'; ?></p>
+                    </div>
+                    <ol aria-label="<?php echo $ises ? 'Pasos para comenzar' : 'Steps to begin'; ?>">
+                        <li><strong>1</strong><span><?php echo $ises ? 'Selecciona Exam 1–5' : 'Select Exam 1–5'; ?></span></li>
+                        <li><strong>2</strong><span><?php echo $ises ? 'Elige la modalidad' : 'Choose the mode'; ?></span></li>
+                        <li><strong>3</strong><span><?php echo $ises ? 'Inicia el reloj' : 'Start the timer'; ?></span></li>
+                    </ol>
+                </section>
                 <div class="herb-board__simulation-intro">
                     <span><?php echo $ises ? 'SIMULACIÓN CRONOMETRADA' : 'TIMED SIMULATION'; ?></span>
                     <h3 id="herb-board-simulation-title">Exam <?php echo (int)$simulationexamnumber; ?></h3>
@@ -2730,29 +2753,43 @@ echo $OUTPUT->header();
                     <?php foreach (array_keys($publishedsimulationexams) as $publishedexamnumber): ?><a<?php echo $simulationexamnumber === $publishedexamnumber ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => $publishedexamnumber] + $languagecontext))->out(false); ?>">Exam <?php echo (int)$publishedexamnumber; ?></a><?php endforeach; ?>
                 </nav>
 
-                <section class="herb-board__simulation-blueprint" aria-labelledby="simulation-blueprint-title">
-                    <header>
-                        <div>
-                            <span><?php echo $ises ? 'COMPOSICIÓN DEL EXAMEN' : 'EXAM BLUEPRINT'; ?></span>
-                            <h4 id="simulation-blueprint-title"><?php echo $ises
-                                ? 'Peso exacto por dominio'
-                                : 'Exact domain weighting'; ?></h4>
+                <details class="herb-board__exam-characteristics">
+                    <summary>
+                        <span><strong><?php echo $ises ? 'Características y composición de Exam 1–5' : 'Exam 1–5 characteristics and composition'; ?></strong><small><?php echo $ises ? 'Comparar preguntas y ponderación por dominio' : 'Compare questions and weighting by domain'; ?></small></span>
+                        <b><?php echo $ises ? 'Ver detalles' : 'View details'; ?></b>
+                    </summary>
+                    <div class="herb-board__exam-characteristics-body">
+                        <p><?php echo $ises
+                            ? 'Cada examen contiene 100 preguntas, dura 150 minutos y mantiene la ponderación oficial de seis dominios. No se muestran columnas administrativas ni trabajo pendiente.'
+                            : 'Each exam contains 100 questions, lasts 150 minutes, and preserves the official six-domain weighting. Administrative and unfinished-work columns are not shown.'; ?></p>
+                        <div class="herb-board__exam-characteristics-table-wrap">
+                            <table>
+                                <thead><tr>
+                                    <th><?php echo $ises ? 'Dominio' : 'Domain'; ?></th>
+                                    <?php foreach ($availablesimulationexamnumbers as $availablesimulationexamnumber): ?><th>Exam <?php echo (int)$availablesimulationexamnumber; ?><small><?php echo $ises ? '100 preguntas' : '100 questions'; ?></small></th><?php endforeach; ?>
+                                </tr></thead>
+                                <tbody>
+                                    <?php foreach ($domainblueprint as $domain): ?><tr>
+                                        <td><strong><?php echo $ises ? 'Dominio ' : 'Domain '; ?><?php echo (int)$domain['number']; ?></strong><span><?php echo s((string)$domain['name']); ?></span></td>
+                                        <?php foreach ($availablesimulationexamnumbers as $availablesimulationexamnumber):
+                                            $simulationexamdomaincount = (int)$domain['weight'];
+                                            if ($availablesimulationexamnumber > 1
+                                                    && isset($publishedsimulationexams[$availablesimulationexamnumber]['domainCounts'][(string)$domain['id']])) {
+                                                $simulationexamdomaincount = (int)$publishedsimulationexams[$availablesimulationexamnumber]['domainCounts'][(string)$domain['id']];
+                                            }
+                                        ?><td><strong><?php echo $simulationexamdomaincount; ?></strong><small><?php echo $simulationexamdomaincount; ?>%</small></td><?php endforeach; ?>
+                                    </tr><?php endforeach; ?>
+                                </tbody>
+                                <tfoot><tr><th><?php echo $ises ? 'Total' : 'Total'; ?></th><?php foreach ($availablesimulationexamnumbers as $availablesimulationexamnumber): ?><td><strong>100</strong></td><?php endforeach; ?></tr></tfoot>
+                            </table>
                         </div>
-                        <strong>100%</strong>
-                    </header>
-                    <div class="herb-board__simulation-weights">
-                        <?php foreach ($domainblueprint as $domain) { ?>
-                            <article>
-                                <span><?php echo $ises ? 'Dominio' : 'Domain'; ?> <?php echo (int)$domain['number']; ?></span>
-                                <h5><?php echo s($domain['name']); ?></h5>
-                                <div aria-label="<?php echo (int)$domain['weight']; ?>%">
-                                    <i style="width: <?php echo (int)$domain['weight']; ?>%"></i>
-                                </div>
-                                <strong><?php echo (int)$domain['weight']; ?> <?php echo $ises ? 'preguntas' : 'questions'; ?> · <?php echo (int)$domain['weight']; ?>%</strong>
-                            </article>
-                        <?php } ?>
+                        <div class="herb-board__exam-characteristics-notes">
+                            <span><strong><?php echo $ises ? 'Duración:' : 'Duration:'; ?></strong> 150 <?php echo $ises ? 'minutos.' : 'minutes.'; ?></span>
+                            <span><strong><?php echo $ises ? 'Durante el intento:' : 'During the attempt:'; ?></strong> <?php echo $ises ? 'respuestas y feedback ocultos.' : 'answers and feedback remain hidden.'; ?></span>
+                            <span><strong><?php echo $ises ? 'Al finalizar:' : 'After finishing:'; ?></strong> <?php echo $ises ? 'resultado y revisión disponibles.' : 'results and review become available.'; ?></span>
+                        </div>
                     </div>
-                </section>
+                </details>
 
                 <?php
                 $simulationlinearurl = new moodle_url('/blocks/menu/herbology-board.php', [
@@ -3616,20 +3653,33 @@ echo $OUTPUT->header();
                 ? 'aria-label="' . ($ises ? 'Examen de Herbología' : 'Herbology exam') . '"'
                 : 'aria-labelledby="herb-board-workspace-title"'; ?>>
             <?php if ($track === 'domains' || !$mixdomains) { ?>
+            <?php if ($track === 'exams') { ?>
+            <section class="herb-board__exam-choice-banner" aria-labelledby="herb-board-workspace-title">
+                <div>
+                    <span><?php echo $ises ? 'ANTES DE COMENZAR' : 'BEFORE YOU BEGIN'; ?></span>
+                    <h3 id="herb-board-workspace-title"><?php echo $ises
+                        ? 'Elige la modalidad de examen para comenzar'
+                        : 'Choose an exam mode to begin'; ?></h3>
+                    <p><?php echo $ises
+                        ? 'Primero selecciona Exam 1–5. Después elige examen lineal, adaptativo o Clinical Cases según la experiencia que deseas practicar.'
+                        : 'First select Exam 1–5. Then choose Linear, Adaptive, or Clinical Cases according to the experience you want to practice.'; ?></p>
+                </div>
+                <ol aria-label="<?php echo $ises ? 'Pasos para comenzar' : 'Steps to begin'; ?>">
+                    <li><strong>1</strong><span><?php echo $ises ? 'Selecciona el examen' : 'Select the exam'; ?></span></li>
+                    <li><strong>2</strong><span><?php echo $ises ? 'Elige la modalidad' : 'Choose the mode'; ?></span></li>
+                    <li><strong>3</strong><span><?php echo $ises ? 'Comienza el intento' : 'Begin the attempt'; ?></span></li>
+                </ol>
+            </section>
+            <?php } else { ?>
             <div class="herb-board__panel-heading">
                 <div>
-                    <h3 id="herb-board-workspace-title"><?php echo $track === 'exams'
-                        ? ($ises ? 'Elige una modalidad' : 'Choose an exam mode')
-                        : ($ises ? 'Estudiar por dominio' : 'Study by Domain'); ?></h3>
-                    <p><?php echo $track === 'exams'
-                        ? ($ises
-                            ? 'Elige el examen lineal, adaptativo o de casos clínicos y revisa tu historial.'
-                            : 'Choose the linear, adaptive, or Clinical Cases exam and review your history.')
-                        : ($ises
-                            ? 'Repasa preguntas, respuestas y explicaciones visibles dentro de cada dominio.'
-                            : 'Review visible questions, answers, and explanations within each Domain.'); ?></p>
+                    <h3 id="herb-board-workspace-title"><?php echo $ises ? 'Estudiar por dominio' : 'Study by Domain'; ?></h3>
+                    <p><?php echo $ises
+                        ? 'Repasa preguntas, respuestas y explicaciones visibles dentro de cada dominio.'
+                        : 'Review visible questions, answers, and explanations within each Domain.'; ?></p>
                 </div>
             </div>
+            <?php } ?>
             <div class="herb-board__domain-summary" aria-label="Domain blueprint summary">
                 <?php if ($track === 'exams') { ?>
                     <span><strong>3</strong> <?php echo $ises ? 'modalidades de examen' : 'exam modes'; ?></span>
@@ -3652,10 +3702,54 @@ echo $OUTPUT->header();
             ] + $languagecontext);
             ?>
             <?php if ($track === 'exams' && !$mixdomains) { ?>
+                <?php
+                $availablepracticeexamnumbers = array_values(array_unique(array_merge(
+                    [1],
+                    array_map('intval', array_keys($publishedsimulationexams))
+                )));
+                sort($availablepracticeexamnumbers, SORT_NUMERIC);
+                ?>
                 <nav class="herb-board__simulation-exam-switch" aria-label="<?php echo $ises ? 'Seleccionar examen con feedback' : 'Select an exam with feedback'; ?>">
                     <a<?php echo $practiceexamnumber === 1 ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams'] + $languagecontext))->out(false); ?>">Exam 1</a>
                     <?php foreach (array_keys($publishedsimulationexams) as $publishedexamnumber): ?><a<?php echo $practiceexamnumber === $publishedexamnumber ? ' aria-current="page"' : ''; ?> href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'examset' => $publishedexamnumber] + $languagecontext))->out(false); ?>">Exam <?php echo (int)$publishedexamnumber; ?></a><?php endforeach; ?>
                 </nav>
+                <details class="herb-board__exam-characteristics">
+                    <summary>
+                        <span><strong><?php echo $ises ? 'Características y composición de Exam 1–5' : 'Exam 1–5 characteristics and composition'; ?></strong><small><?php echo $ises ? 'Abrir para comparar la distribución por dominio' : 'Open to compare domain distribution'; ?></small></span>
+                        <b><?php echo $ises ? 'Ver detalles' : 'View details'; ?></b>
+                    </summary>
+                    <div class="herb-board__exam-characteristics-body">
+                        <p><?php echo $ises
+                            ? 'Los exámenes lineal y adaptativo usan 100 preguntas y la misma ponderación oficial. Esta vista omite deliberadamente las columnas administrativas de inventario y trabajo pendiente.'
+                            : 'Linear and Adaptive exams use 100 questions and the same official weighting. This view intentionally omits administrative inventory and unfinished-work columns.'; ?></p>
+                        <div class="herb-board__exam-characteristics-table-wrap">
+                            <table>
+                                <thead><tr>
+                                    <th><?php echo $ises ? 'Dominio' : 'Domain'; ?></th>
+                                    <?php foreach ($availablepracticeexamnumbers as $availableexamnumber): ?><th>Exam <?php echo (int)$availableexamnumber; ?><small><?php echo $ises ? '100 preguntas' : '100 questions'; ?></small></th><?php endforeach; ?>
+                                </tr></thead>
+                                <tbody>
+                                    <?php foreach ($domainblueprint as $domain): ?><tr>
+                                        <td><strong><?php echo $ises ? 'Dominio ' : 'Domain '; ?><?php echo (int)$domain['number']; ?></strong><span><?php echo s((string)$domain['name']); ?></span></td>
+                                        <?php foreach ($availablepracticeexamnumbers as $availableexamnumber):
+                                            $availableexamdomaincount = (int)$domain['weight'];
+                                            if ($availableexamnumber > 1
+                                                    && isset($publishedsimulationexams[$availableexamnumber]['domainCounts'][(string)$domain['id']])) {
+                                                $availableexamdomaincount = (int)$publishedsimulationexams[$availableexamnumber]['domainCounts'][(string)$domain['id']];
+                                            }
+                                        ?><td><strong><?php echo $availableexamdomaincount; ?></strong><small><?php echo $availableexamdomaincount; ?>%</small></td><?php endforeach; ?>
+                                    </tr><?php endforeach; ?>
+                                </tbody>
+                                <tfoot><tr><th><?php echo $ises ? 'Total' : 'Total'; ?></th><?php foreach ($availablepracticeexamnumbers as $availableexamnumber): ?><td><strong>100</strong></td><?php endforeach; ?></tr></tfoot>
+                            </table>
+                        </div>
+                        <div class="herb-board__exam-characteristics-notes">
+                            <span><strong><?php echo $ises ? 'Lineal:' : 'Linear:'; ?></strong> <?php echo $ises ? 'secuencia fija y feedback después de responder.' : 'fixed sequence with feedback after answering.'; ?></span>
+                            <span><strong><?php echo $ises ? 'Adaptativo:' : 'Adaptive:'; ?></strong> <?php echo $ises ? 'ajusta orden y dificultad después de cada respuesta.' : 'adjusts order and difficulty after every answer.'; ?></span>
+                            <span><strong>Clinical Cases:</strong> <?php echo $ises ? '63 casos con feedback inmediato.' : '63 cases with immediate feedback.'; ?></span>
+                        </div>
+                    </div>
+                </details>
                 <p class="herb-board__exam-minimum"><strong>Exam <?php echo (int)$practiceexamnumber; ?>:</strong> <?php echo $ises
                     ? 'muestra la respuesta correcta y el feedback tipo mock después de cada respuesta.'
                     : 'shows the correct answer and mock-style feedback after every response.'; ?></p>

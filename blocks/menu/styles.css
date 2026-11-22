@@ -1758,6 +1758,253 @@ a.herb-board__domain:focus {
     font-size: .82rem;
 }
 
+.herb-board__exam-choice-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin: 0 0 18px;
+    padding: 22px 24px;
+    border: 1px solid #b8d8cf;
+    border-left: 6px solid #087c69;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #edf9f5 0%, #f8f5ff 100%);
+}
+
+.herb-board__exam-choice-banner > div {
+    max-width: 760px;
+}
+
+.herb-board__exam-choice-banner > div > span {
+    color: #087c69;
+    font-size: .69rem;
+    font-weight: 950;
+    letter-spacing: .09em;
+}
+
+.herb-board__exam-choice-banner h3 {
+    margin: 4px 0 6px;
+    color: #102f49;
+    font-size: clamp(1.35rem, 2.5vw, 2rem);
+}
+
+.herb-board__exam-choice-banner p {
+    margin: 0;
+    color: #52677a;
+    line-height: 1.55;
+}
+
+.herb-board__exam-choice-banner ol {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.herb-board__exam-choice-banner li {
+    display: grid;
+    width: 90px;
+    place-items: center;
+    padding: 10px 8px;
+    border: 1px solid #d6e2e7;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, .88);
+    color: #52677a;
+    text-align: center;
+}
+
+.herb-board__exam-choice-banner li strong {
+    display: grid;
+    width: 27px;
+    height: 27px;
+    place-items: center;
+    margin-bottom: 5px;
+    border-radius: 50%;
+    background: #087c69;
+    color: #fff;
+}
+
+.herb-board__exam-choice-banner li span {
+    font-size: .7rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.herb-board__exam-characteristics {
+    margin: 14px 0 16px;
+    overflow: hidden;
+    border: 1px solid #cfc3ef;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.herb-board__exam-characteristics > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 16px;
+    background: #f7f4ff;
+    color: #3f2a78;
+    cursor: pointer;
+    list-style: none;
+}
+
+.herb-board__exam-characteristics > summary::-webkit-details-marker {
+    display: none;
+}
+
+.herb-board__exam-characteristics > summary span,
+.herb-board__exam-characteristics > summary small {
+    display: block;
+}
+
+.herb-board__exam-characteristics > summary small {
+    margin-top: 3px;
+    color: #6b5c83;
+    font-weight: 650;
+}
+
+.herb-board__exam-characteristics > summary b {
+    white-space: nowrap;
+    font-size: .76rem;
+}
+
+.herb-board__exam-characteristics > summary b::after {
+    content: " +";
+}
+
+.herb-board__exam-characteristics[open] > summary b::after {
+    content: " −";
+}
+
+.herb-board__exam-characteristics-body {
+    padding: 16px;
+}
+
+.herb-board__exam-characteristics-body > p {
+    margin: 0 0 12px;
+    color: #52677a;
+    font-size: .84rem;
+    line-height: 1.5;
+}
+
+.herb-board__exam-characteristics-table-wrap {
+    overflow-x: auto;
+}
+
+.herb-board__exam-characteristics table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+}
+
+.herb-board__exam-characteristics th,
+.herb-board__exam-characteristics td {
+    padding: 10px 12px;
+    border: 1px solid #dfe7eb;
+    text-align: center;
+}
+
+.herb-board__exam-characteristics th {
+    background: #f3f8f8;
+    color: #17324d;
+}
+
+.herb-board__exam-characteristics th small,
+.herb-board__exam-characteristics td small,
+.herb-board__exam-characteristics td span {
+    display: block;
+    margin-top: 2px;
+    color: #64778a;
+    font-size: .68rem;
+    font-weight: 650;
+}
+
+.herb-board__exam-characteristics tbody td:first-child,
+.herb-board__exam-characteristics thead th:first-child,
+.herb-board__exam-characteristics tfoot th:first-child {
+    min-width: 245px;
+    text-align: left;
+}
+
+.herb-board__exam-characteristics tbody td:not(:first-child) strong {
+    color: #5b36ae;
+    font-size: 1rem;
+}
+
+.herb-board__exam-characteristics tfoot th,
+.herb-board__exam-characteristics tfoot td {
+    background: #edf9f5;
+    color: #075f50;
+}
+
+.herb-board__exam-characteristics-notes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.herb-board__exam-characteristics-notes span {
+    padding: 9px 10px;
+    border-radius: 7px;
+    background: #f7f9fa;
+    color: #52677a;
+    font-size: .76rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 850px) {
+    .herb-board__exam-choice-banner {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .herb-board__exam-choice-banner ol {
+        width: 100%;
+    }
+
+    .herb-board__exam-choice-banner li {
+        width: auto;
+        flex: 1 1 0;
+    }
+
+    .herb-board__exam-characteristics-notes {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .herb-board__exam-choice-banner {
+        padding: 17px;
+    }
+
+    .herb-board__exam-choice-banner ol {
+        flex-direction: column;
+    }
+
+    .herb-board__exam-choice-banner li {
+        display: flex;
+        width: auto;
+        justify-content: flex-start;
+        gap: 9px;
+        text-align: left;
+    }
+
+    .herb-board__exam-choice-banner li strong {
+        flex: 0 0 auto;
+        margin: 0;
+    }
+
+    .herb-board__exam-characteristics > summary {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
 .herb-board__exam-models {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

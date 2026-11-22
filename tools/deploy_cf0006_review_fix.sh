@@ -15,6 +15,7 @@ RELATIVE_FILES=(
     "blocks/myprogress/dui-yao-smart-data.json"
     "blocks/myprogress/single-herb-card-index.json"
     "blocks/myprogress/formula-board-roster-2026.json"
+    "blocks/menu/styles.css"
 )
 STATE_REPAIR_RELATIVE="tools/repair_exam5_guideline_state.php"
 
@@ -103,6 +104,7 @@ SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[3]}"
 DUI_YAO_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[4]}"
 APPENDIX_A_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[5]}"
 APPENDIX_C_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[6]}"
+MENU_STYLES_SOURCE="$TEMP_DIR/${RELATIVE_FILES[7]}"
 php -l "$QUESTION_BANK_SOURCE" >/dev/null
 php -l "$OVERRIDES_SOURCE" >/dev/null
 php -l "$HERBOLOGY_BOARD_SOURCE" >/dev/null
@@ -284,6 +286,10 @@ grep -Fq 'ADMIN-HB-20261121-180348-75A9' "$STATE_REPAIR_SOURCE"
 grep -Fq '$manualcustomrecord' "$QUESTION_BANK_SOURCE"
 grep -Fq 'Hidden nomenclature was rebuilt from the corrected visible text.' "$QUESTION_BANK_SOURCE"
 grep -Fq "'Editar manualmente'" "$QUESTION_BANK_SOURCE"
+grep -Fq 'Choose an exam mode to begin' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq 'Exam 1–5 characteristics and composition' "$HERBOLOGY_BOARD_SOURCE"
+grep -Fq '.herb-board__exam-choice-banner' "$MENU_STYLES_SOURCE"
+grep -Fq '.herb-board__exam-characteristics' "$MENU_STYLES_SOURCE"
 grep -Fq "'CF-0051'" "$QUESTION_BANK_SOURCE"
 grep -Fq "'CF-0290'" "$QUESTION_BANK_SOURCE"
 grep -Fq 'Shen Qi Wan gently warms and tonifies Kidney Yang' "$QUESTION_BANK_SOURCE"
@@ -499,6 +505,7 @@ cmp -s "$OVERRIDES_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[1]}"
 cmp -s "$HERBOLOGY_BOARD_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[2]}"
 cmp -s "$SOURCE_DATA" "$MOODLE_ROOT/${RELATIVE_FILES[3]}"
 cmp -s "$DUI_YAO_SOURCE_DATA" "$MOODLE_ROOT/${RELATIVE_FILES[4]}"
+cmp -s "$MENU_STYLES_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[7]}"
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[0]}" >/dev/null
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[1]}" >/dev/null
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[2]}" >/dev/null
@@ -737,6 +744,7 @@ echo "OK: las comparaciones excedentes permanecen en reserva y son sustituidas p
 echo "OK: después de publicar, la búsqueda de la pregunta terminada se cierra y la pantalla avanza a la cola activa."
 echo "OK: si no existe un examen activo, la publicación vuelve al banco general sin mostrar otra vez la misma tarjeta."
 echo "OK: las preguntas creadas y aprobadas pueden abrirse en Editar manualmente; al publicarlas se elimina la nomenclatura oculta de versiones anteriores y se valida de nuevo Appendix A/C."
+echo "OK: la selección estudiantil de Exam 1–5 muestra un banner de inicio y una comparación plegada sin columnas administrativas."
 echo "OK: $CF0126_OVERRIDE_RESULT"
 echo "OK: $EXAM5_OVERRIDE_RESULT"
 echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"
