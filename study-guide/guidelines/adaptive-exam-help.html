@@ -34,9 +34,52 @@
   </div>
 
   <section class="guide-section">
-    <p class="guide-eyebrow">Short answer</p>
-    <h2>Adaptation should select better questions, not endlessly add questions</h2>
-    <p>The scored exam remains a 100-question test with the exact domain counts below. A related follow-up uses an unfilled position from the same parent domain. It must not take a position from another domain or increase the scored denominator.</p>
+    <p class="guide-eyebrow">Two different systems</p>
+    <h2>What AcupunctureTests does and what happens on the real exam</h2>
+    <div class="guide-flow">
+      <article class="guide-flow__item">
+        <span class="guide-status">OUR SITE</span>
+        <h3>Simulation for study and practice</h3>
+        <p><strong>Linear simulation:</strong> presents the selected practice exam's 100 questions for 150 minutes, permits returning, flagging and reviewing, and displays results after submission.</p>
+        <p><strong>Adaptive simulation:</strong> uses those same 100 questions. After each response, it looks among the remaining questions for a higher difficulty after a correct answer or a lower difficulty after an incorrect answer. Moving forward locks the response and prevents returning.</p>
+        <p>AcupunctureTests does not create extra questions during the attempt, calculate an official psychometric ability estimate or produce the NCBAHM scaled score. Its six 28/24/18/15/10/5 domains are our own instructional organization.</p>
+      </article>
+      <article class="guide-flow__item">
+        <span class="guide-status">REAL EXAM</span>
+        <h3>Official CAT administered by NCBAHM</h3>
+        <p>The English Chinese Herbology exam contains 100 multiple-choice questions and lasts 2.5 hours. Each candidate receives an adaptive path: questions are selected according to the official content-outline percentages and, within each domain, to match estimated candidate ability.</p>
+        <p>A correct answer leads to a more difficult item and an incorrect answer to an easier item. After moving forward, the candidate cannot return or change the answer. Results use a scaled score; 70 is the passing score and does not mean 70% correct.</p>
+        <p>The official exam does not use AcupunctureTests' six internal domains, and NCBAHM does not publish the complete algorithm, item parameters or a maximum number of consecutive questions for one microtopic.</p>
+      </article>
+    </div>
+    <div class="guide-alert guide-alert--warning">
+      <strong>Answer to the Duì Yào example:</strong> on the real exam, missing an item can cause the next selected item to be easier, but the public documentation does not guarantee that it will also test Duì Yào. Duì Yào belongs to official Domain I, and the system must continue to honor that domain's overall weight. No public topic-specific follow-up count exists for one pair or any other microtopic.
+    </div>
+    <h3>Official Chinese Herbology outline effective September 1, 2026</h3>
+    <div class="guide-table-wrap">
+      <table class="guide-table">
+        <thead><tr><th>Official NCBAHM domain</th><th>Weight</th><th>Expected questions out of 100</th></tr></thead>
+        <tbody>
+          <tr><th>I · Chinese herbs, herbal combinations and formulas</th><td>22%</td><td>Approximately 22</td></tr>
+          <tr><th>II · Safety and quality control</th><td>24%</td><td>Approximately 24</td></tr>
+          <tr><th>III · Treatment planning and administration</th><td>30%</td><td>Approximately 30</td></tr>
+          <tr><th>IV · Treatment evaluation and modification</th><td>24%</td><td>Approximately 24</td></tr>
+        </tbody>
+        <tfoot><tr><th>Total</th><td>100%</td><td>100</td></tr></tfoot>
+      </table>
+    </div>
+    <p><strong>Important:</strong> “approximately” avoids claiming a technical allocation that NCBAHM does not publicly describe as rigid per-candidate counts. The official specifications are the content-outline percentages.</p>
+    <div class="guide-actions guide-actions--section">
+      <a class="guide-button guide-button--outline" href="https://www.ncbahm.org/certification/exam-administration/" target="_blank" rel="noopener">Official exam administration ↗</a>
+      <a class="guide-button guide-button--outline" href="https://www.ncbahm.org/wp-content/uploads/pdf/NCBAHM_CH_Exam_Content_Outline-w-Bibliography_Jan_2026.pdf" target="_blank" rel="noopener">Official 2026 outline ↗</a>
+      <a class="guide-button guide-button--outline" href="https://ncbahm.org/wp-content/uploads/pdf/CH_Candidate_Preparation_Handbook_2022.pdf" target="_blank" rel="noopener">Official candidate handbook ↗</a>
+    </div>
+  </section>
+
+  <section class="guide-section">
+    <p class="guide-eyebrow">AcupunctureTests internal blueprint</p>
+    <h2>On our site, adaptation reorders the existing set</h2>
+    <p>The simulation preserves its 100 questions and the exact internal-domain counts below. It does not add questions during the attempt or increase the scored denominator.</p>
     <div class="guide-alert"><strong>Scope boundary:</strong> 28% / 24% / 18% / 15% / 10% / 5% is the AcupunctureTests practice blueprint used to balance these simulations. It is not presented as a set of NCBAHM-published subdomain weights.</div>
     <div class="guide-alert guide-alert--warning">
       <strong>Current system status:</strong> the current adaptive simulation reorders the fixed set of 100 questions according to difficulty. It does not add scored questions or change domain percentages. Content-aware follow-up by category, pair, dosage, contraindication or ingredient hierarchy is the recommended next stage described on this page; it is not yet the current selection behavior.
@@ -85,13 +128,13 @@
         </tbody>
       </table>
     </div>
-    <p><strong>Additional guardrail:</strong> do not show more than two consecutive scored questions from the same microtopic. Insert other blueprint questions before returning to the probe, so short-term cueing is not confused with mastery.</p>
+    <p><strong>Recommended policy for a future AcupunctureTests version:</strong> do not show more than two consecutive scored questions from the same microtopic. Insert other blueprint questions before returning to the probe, so short-term cueing is not confused with mastery. This recommendation is not a published rule of the official exam.</p>
   </section>
 
   <section class="guide-section guide-section--dui-bridge">
     <p class="guide-eyebrow">Example · Domain 3</p>
     <h2>If the learner misses a Duì Yào question</h2>
-    <p>Domain 3 may still contain no more than 18 scored questions. If the missed item concerns one pair, the exam may use up to three additional questions related to that pair or objective—four total including the original—but all four consume positions inside the 18-question Domain 3 quota.</p>
+    <p><strong>This is a recommended design for a future version of our site, not an NCBAHM rule:</strong> internal Domain 3 would still contain no more than 18 scored questions. If the missed item concerns one pair, practice could use up to three additional questions related to that pair or objective—four total including the original—but all four would consume positions inside the 18-question Domain 3 quota.</p>
     <ul>
       <li>First probe: same relationship, different clinical presentation.</li>
       <li>Second probe if needed: contribution of each herb or a more foundational distinction.</li>
