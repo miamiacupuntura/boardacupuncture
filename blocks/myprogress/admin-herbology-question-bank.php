@@ -7773,26 +7773,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         return '';
     };
     $similarityindex = [];
-    foreach ($allquestions as $existingquestion) {
-        $existingid = (string)($existingquestion['questionId'] ?? '');
-        if ($existingid === '' || $existingid === $customquestionid) {
-            continue;
+    if (!$preserveexactquestion) {
+        foreach ($allquestions as $existingquestion) {
+            $existingid = (string)($existingquestion['questionId'] ?? '');
+            if ($existingid === '' || $existingid === $customquestionid) {
+                continue;
+            }
+            $existingprompt = trim((string)($existingquestion['prompt'] ?? ''));
+            $existingoptions = implode(' ', array_map(
+                static fn(array $option): string => (string)($option['text'] ?? ''),
+                is_array($existingquestion['options'] ?? null) ? $existingquestion['options'] : []
+            ));
+            $existinganswer = $correctoptiontext($existingquestion);
+            $similarityindex[] = [
+                'questionId' => $existingid,
+                'domainId' => (string)($existingquestion['_domainid'] ?? $existingquestion['domainId'] ?? ''),
+                'prompt' => $existingprompt,
+                'answer' => $existinganswer,
+                'promptTokens' => $similaritytokens($existingprompt),
+                'fullTokens' => $similaritytokens($existingprompt . ' ' . $existingoptions),
+                'answerTokens' => $similaritytokens($existinganswer),
+            ];
         }
-        $existingprompt = trim((string)($existingquestion['prompt'] ?? ''));
-        $existingoptions = implode(' ', array_map(
-            static fn(array $option): string => (string)($option['text'] ?? ''),
-            is_array($existingquestion['options'] ?? null) ? $existingquestion['options'] : []
-        ));
-        $existinganswer = $correctoptiontext($existingquestion);
-        $similarityindex[] = [
-            'questionId' => $existingid,
-            'domainId' => (string)($existingquestion['_domainid'] ?? $existingquestion['domainId'] ?? ''),
-            'prompt' => $existingprompt,
-            'answer' => $existinganswer,
-            'promptTokens' => $similaritytokens($existingprompt),
-            'fullTokens' => $similaritytokens($existingprompt . ' ' . $existingoptions),
-            'answerTokens' => $similaritytokens($existinganswer),
-        ];
     }
     $findnearestquestion = static function(array $candidate) use (
         $similarityindex,
@@ -7843,19 +7845,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         return $nearest;
     };
-    $ideatokens = $similaritytokens($idea . ' ' . $correction);
     $relatedquestions = [];
-    foreach ($similarityindex as $existing) {
-        $score = $jaccardsimilarity($ideatokens, $existing['fullTokens']);
-        if ($score > 0.0) {
-            $relatedquestions[] = $existing + ['ideaScore' => $score];
+    if (!$preserveexactquestion) {
+        $ideatokens = $similaritytokens($idea . ' ' . $correction);
+        foreach ($similarityindex as $existing) {
+            $score = $jaccardsimilarity($ideatokens, $existing['fullTokens']);
+            if ($score > 0.0) {
+                $relatedquestions[] = $existing + ['ideaScore' => $score];
+            }
         }
+        usort(
+            $relatedquestions,
+            static fn(array $left, array $right): int => $right['ideaScore'] <=> $left['ideaScore']
+        );
+        $relatedquestions = array_slice($relatedquestions, 0, 12);
     }
-    usort(
-        $relatedquestions,
-        static fn(array $left, array $right): int => $right['ideaScore'] <=> $left['ideaScore']
-    );
-    $relatedquestions = array_slice($relatedquestions, 0, 12);
     $customprompt = <<<'PROMPT'
 You are a senior NCBAHM Chinese Herbology mock-exam author. Convert the administrator's input into the requested original English question or questions and return strict JSON only.
 
@@ -8140,7 +8144,17 @@ PROMPT;
                 );
             }
             $decodedbatch[] = $decodeditem;
-            $originalitybatch[] = $findnearestquestion($decodeditem);
+            $originalitybatch[] = [
+                'questionId' => '',
+                'prompt' => '',
+                'score' => 0.0,
+                'promptScore' => 0.0,
+                'answerScore' => 0.0,
+                'fullScore' => 0.0,
+                'isDuplicate' => false,
+                'comparedCount' => 0,
+                'deferred' => true,
+            ];
         }
     } else {
         $manager = \core\di::get(\core_ai\manager::class);
