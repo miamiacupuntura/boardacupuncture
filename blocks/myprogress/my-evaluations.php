@@ -148,10 +148,12 @@ $assessmentname = static function(string $examtype) use (&$quiznames, $text): st
     if (preg_match('/^bqh_(\d+)$/', $base, $matches)) {
         return $text('Single Herbs Quiz · Chapter ', 'Quiz de hierbas individuales · Capítulo ') . $matches[1];
     }
-    if (preg_match('/^simulation(\d+)(linear|adaptive)$/', $base, $matches)) {
-        $mode = $matches[2] === 'adaptive'
-            ? $text('Adaptive', 'Adaptativo')
-            : $text('Linear', 'Lineal');
+    if (preg_match('/^simulation(\d+)(linear|adaptive|officialadaptive)$/', $base, $matches)) {
+        $mode = $matches[2] === 'officialadaptive'
+            ? $text('NCBAHM 2026 blueprint', 'Blueprint NCBAHM 2026')
+            : ($matches[2] === 'adaptive'
+                ? $text('Current adaptive', 'Adaptativo actual')
+                : $text('Linear', 'Lineal'));
         return 'Exam ' . (int)$matches[1] . ' · ' . $mode;
     }
     if (preg_match('/^(?:exam|e)(\d+)(linear|adaptive)$/', $base, $matches)) {
@@ -206,13 +208,16 @@ if ($DB->get_manager()->table_exists($attempttable)) {
             ? round(((float)$attempt->score / (float)$attempt->total) * 100, 1)
             : 0.0;
         $incomplete = str_ends_with((string)$attempt->examtype, 'incomplete');
+        $isofficialblueprint = str_ends_with((string)$attempt->examtype, 'officialadaptive');
         $ncbahmrows[] = [
             'kind' => $assessmentkind((string)$attempt->examtype),
             'name' => $assessmentname((string)$attempt->examtype),
             'score' => $percentage,
             'duration' => (int)$attempt->duration,
             'lastactivity' => (int)$attempt->timecompleted,
-            'status' => $incomplete ? 'incomplete' : ($percentage >= 70 ? 'passed' : 'review'),
+            'status' => $incomplete
+                ? 'incomplete'
+                : ($isofficialblueprint ? 'practice' : ($percentage >= 70 ? 'passed' : 'review')),
         ];
     }
 }
@@ -239,6 +244,7 @@ $statuslabel = static function(string $status) use ($text): string {
     return [
         'passed' => $text('Passed', 'Aprobada'),
         'review' => $text('Needs review', 'Requiere repaso'),
+        'practice' => $text('Practice result', 'Resultado de práctica'),
         'incomplete' => $text('Incomplete', 'Incompleta'),
     ][$status] ?? $status;
 };
@@ -247,6 +253,7 @@ echo $OUTPUT->header();
 ?>
 <style>
 .my-evaluations{max-width:1240px;margin:0 auto 42px;color:#173448}.my-evaluations__hero{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:18px;padding:22px 24px;border-left:5px solid #0b8f87;border-radius:12px;background:linear-gradient(135deg,#eef9f6,#fff8ef)}.my-evaluations__hero h2{margin:0 0 5px;font-size:30px}.my-evaluations__hero p{margin:0;color:#52677a}.my-evaluations__actions{display:flex;flex-wrap:wrap;gap:8px}.my-evaluations__button{display:inline-flex;min-height:40px;align-items:center;justify-content:center;padding:8px 13px;border:1px solid #0b8f87;border-radius:8px;background:#fff;color:#11635f;font-weight:850;text-decoration:none}.my-evaluations__button:hover{background:#0b8f87;color:#fff;text-decoration:none}.my-evaluations__program{margin-bottom:20px;overflow:hidden;border:1px solid #d7e2e7;border-radius:12px;background:#fff}.my-evaluations__program-header{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 19px;background:#f3f8f8}.my-evaluations__program-header h3{margin:0;font-size:21px}.my-evaluations__summary{display:flex;gap:18px}.my-evaluations__summary span{display:block;color:#64748b;font-size:11px;font-weight:800;text-transform:uppercase}.my-evaluations__summary strong{display:block;margin-top:2px;color:#08746f;font-size:20px}.my-evaluations__table-wrap{overflow-x:auto}.my-evaluations table{width:100%;border-collapse:collapse}.my-evaluations th,.my-evaluations td{padding:11px 13px;border-top:1px solid #e1e8ec;text-align:left;vertical-align:middle}.my-evaluations th{background:#fbfcfd;color:#365469;font-size:11px;text-transform:uppercase}.my-evaluations__score{color:#08746f;font-size:17px;font-weight:900}.my-evaluations__status{display:inline-block;padding:5px 8px;border-radius:999px;font-size:12px;font-weight:850}.my-evaluations__status--passed{background:#ddf6ec;color:#076c55}.my-evaluations__status--review{background:#fff0dd;color:#a34d00}.my-evaluations__status--incomplete{background:#edf1f4;color:#596b78}.my-evaluations__empty{padding:28px!important;color:#64748b;text-align:center!important}@media(max-width:700px){.my-evaluations__hero,.my-evaluations__program-header{align-items:stretch;flex-direction:column}.my-evaluations__actions,.my-evaluations__summary{width:100%}.my-evaluations__button{flex:1}.my-evaluations th,.my-evaluations td{padding:9px 8px}}
+.my-evaluations__status--practice{background:#f1e8ff;color:#6528a8}
 </style>
 <main class="my-evaluations">
     <header class="my-evaluations__hero">

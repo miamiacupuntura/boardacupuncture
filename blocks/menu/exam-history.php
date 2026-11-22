@@ -426,8 +426,13 @@ $assessmentstarturls['simulationadaptive'] = (new moodle_url('/blocks/menu/herbo
     'track' => 'simulation',
     'exam' => 'adaptive',
 ] + $languageparams))->out(false);
+$assessmentstarturls['simulationofficialadaptive'] = (new moodle_url('/blocks/menu/herbology-board.php', [
+    'track' => 'simulation',
+    'exam' => 'officialadaptive',
+] + $languageparams))->out(false);
 $assessmentstarturls['simulation1linear'] = $assessmentstarturls['simulationlinear'];
 $assessmentstarturls['simulation1adaptive'] = $assessmentstarturls['simulationadaptive'];
+$assessmentstarturls['simulation1officialadaptive'] = $assessmentstarturls['simulationofficialadaptive'];
 $assessmentstarturls['exam2linear'] = (new moodle_url('/blocks/menu/herbology-board.php', [
     'track' => 'exams',
     'exam' => 'linear',
@@ -463,7 +468,7 @@ if (preg_match('/^exam(\d+)(linear|adaptive)$/', $assessmentstartkey, $dynamicst
         'exam' => $dynamicstartmatch[2],
         'examset' => (int)$dynamicstartmatch[1],
     ] + $languageparams))->out(false);
-} else if (preg_match('/^simulation(\d+)(linear|adaptive)$/', $assessmentstartkey, $dynamicstartmatch)) {
+} else if (preg_match('/^simulation(\d+)(linear|adaptive|officialadaptive)$/', $assessmentstartkey, $dynamicstartmatch)) {
     $assessmentstarturls[$assessmentstartkey] = (new moodle_url('/blocks/menu/herbology-board.php', [
         'track' => 'simulation',
         'exam' => $dynamicstartmatch[2],
@@ -653,11 +658,13 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             $examname = $ises ? 'Exam 1 · Adaptativo' : 'Exam 1 · Adaptive';
         } else if (in_array($examtype, ['simulationlinear', 'simulation1linear'], true)) {
             $examname = $ises ? 'Exam 1 · Lineal' : 'Exam 1 · Linear';
-        } else if (preg_match('/^simulation(\d+)(linear|adaptive)$/', $examtype, $dynamicattemptmatch)) {
-            $examname = 'Exam ' . (int)$dynamicattemptmatch[1] . ' · '
-                . ($dynamicattemptmatch[2] === 'adaptive'
-                    ? ($ises ? 'Adaptativo' : 'Adaptive')
+        } else if (preg_match('/^simulation(\d+)(linear|adaptive|officialadaptive)$/', $examtype, $dynamicattemptmatch)) {
+            $simulationmodelabel = $dynamicattemptmatch[2] === 'officialadaptive'
+                ? ($ises ? 'Blueprint NCBAHM 2026' : 'NCBAHM 2026 blueprint')
+                : ($dynamicattemptmatch[2] === 'adaptive'
+                    ? ($ises ? 'Adaptativo actual' : 'Current adaptive')
                     : ($ises ? 'Lineal' : 'Linear'));
+            $examname = 'Exam ' . (int)$dynamicattemptmatch[1] . ' · ' . $simulationmodelabel;
         } else if (preg_match('/^(?:exam|e)(\d+)(linear|adaptive)(?:incomplete)?$/', $examtype, $dynamicattemptmatch)) {
             $examname = 'Exam ' . (int)$dynamicattemptmatch[1] . ' · '
                 . ($dynamicattemptmatch[2] === 'adaptive'
@@ -672,11 +679,14 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
         } else {
             $examname = ucwords(str_replace(['_', '-'], ' ', $examtype));
         }
+        $isofficialblueprintattempt = str_ends_with($examtype, 'officialadaptive');
         $status = $isincomplete
             ? ($ises ? 'No completado' : 'Not completed')
-            : ($percentage >= 70
-                ? ($ises ? 'Aprobado' : 'Passed')
-                : ($ises ? 'No aprobado' : 'Not passed'));
+            : ($isofficialblueprintattempt
+                ? ($ises ? 'Resultado de práctica' : 'Practice result')
+                : ($percentage >= 70
+                    ? ($ises ? 'Aprobado' : 'Passed')
+                    : ($ises ? 'No aprobado' : 'Not passed')));
         $restartkey = [
             'linearincomplete' => 'linear',
             'adaptiveincomplete' => 'adaptive',
@@ -701,7 +711,9 @@ if (($historytype === 'all' || $historytype === 'board') && $DB->get_manager()->
             'total' => board_exam_history_number((float) $attempt->total),
             'percentage' => $percentage,
             'status' => $status,
-            'statusclass' => $isincomplete ? 'is-incomplete' : ($percentage >= 70 ? 'is-passed' : 'is-failed'),
+            'statusclass' => $isincomplete
+                ? 'is-incomplete'
+                : ($isofficialblueprintattempt ? 'is-practice' : ($percentage >= 70 ? 'is-passed' : 'is-failed')),
             'duration' => board_exam_history_duration((int) $attempt->duration, $ises),
             'durationseconds' => (int) $attempt->duration,
             'resumeurl' => $assessmentstarturls[$restartkey] ?? '',
@@ -881,6 +893,7 @@ echo $OUTPUT->header();
 .exam-history__resume:hover,.exam-history__resume:focus{background:#1749bc;color:#fff!important;text-decoration:none}
 .exam-history__attempt.is-passed .exam-history__status{color:#087c3b}
 .exam-history__attempt.is-failed .exam-history__status{color:#b45309}
+.exam-history__attempt.is-practice .exam-history__status{color:#6d28d9}
 .exam-history__attempt.is-incomplete .exam-history__status{color:#765b20}
 .exam-history__empty{margin:0;padding:28px;border:1px dashed #8fb9b1;border-radius:10px;background:#fff;color:#526b84;text-align:center;font-weight:700}
 .exam-history__pagination{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}

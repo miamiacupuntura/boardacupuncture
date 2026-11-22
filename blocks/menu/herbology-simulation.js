@@ -9,6 +9,8 @@
 
         const questions = [...exam.querySelectorAll('.herb-board__simulation-question')];
         const mode = exam.dataset.mode || 'linear';
+        const isAdaptiveMode = mode === 'adaptive' || mode === 'officialadaptive';
+        const usesOfficialBlueprint = mode === 'officialadaptive';
         const examNumber = String(Math.max(1, Math.min(99, Number.parseInt(exam.dataset.examNumber || '1', 10) || 1)));
         const clockButton = exam.querySelector('[data-simulation-clock]');
         const timeOutput = exam.querySelector('[data-simulation-time]');
@@ -96,7 +98,7 @@
         };
 
         const updateFlag = () => {
-            if (!flagButton || mode === 'adaptive' || !current) {
+            if (!flagButton || isAdaptiveMode || !current) {
                 return;
             }
             const flagged = current.dataset.flagged === '1';
@@ -129,11 +131,55 @@
             if (adaptiveRemaining.length === 0) {
                 return null;
             }
-            if (!current || !isAnswered(current)) {
+            if (!usesOfficialBlueprint && (!current || !isAnswered(current))) {
                 return adaptiveRemaining.shift();
             }
-            const currentRank = difficultyRank[current.dataset.difficulty] ?? 1;
-            const target = isCorrect(current) ? Math.min(2, currentRank + 1) : Math.max(0, currentRank - 1);
+            const currentRank = current ? (difficultyRank[current.dataset.difficulty] ?? 1) : 1;
+            const target = current && isAnswered(current)
+                ? (isCorrect(current) ? Math.min(2, currentRank + 1) : Math.max(0, currentRank - 1))
+                : 1;
+            if (usesOfficialBlueprint) {
+                const domainTotals = new Map();
+                const domainUsed = new Map();
+                questions.forEach(question => {
+                    const domain = question.dataset.officialDomain;
+                    domainTotals.set(domain, (domainTotals.get(domain) || 0) + 1);
+                });
+                adaptiveHistory.forEach(question => {
+                    const domain = question.dataset.officialDomain;
+                    domainUsed.set(domain, (domainUsed.get(domain) || 0) + 1);
+                });
+                const nextPosition = adaptiveHistory.length + 1;
+                const availableDomains = [...new Set(adaptiveRemaining.map(question =>
+                    question.dataset.officialDomain
+                ))];
+                availableDomains.sort((left, right) => {
+                    const leftDeficit = (nextPosition * (domainTotals.get(left) || 0) / questions.length)
+                        - (domainUsed.get(left) || 0);
+                    const rightDeficit = (nextPosition * (domainTotals.get(right) || 0) / questions.length)
+                        - (domainUsed.get(right) || 0);
+                    return rightDeficit - leftDeficit;
+                });
+                const targetDomain = availableDomains[0];
+                let index = adaptiveRemaining.findIndex(question =>
+                    question.dataset.officialDomain === targetDomain
+                    && (difficultyRank[question.dataset.difficulty] ?? 1) === target
+                );
+                if (index < 0) {
+                    let closestDistance = Number.POSITIVE_INFINITY;
+                    adaptiveRemaining.forEach((question, questionIndex) => {
+                        if (question.dataset.officialDomain !== targetDomain) {
+                            return;
+                        }
+                        const distance = Math.abs((difficultyRank[question.dataset.difficulty] ?? 1) - target);
+                        if (distance < closestDistance) {
+                            closestDistance = distance;
+                            index = questionIndex;
+                        }
+                    });
+                }
+                return adaptiveRemaining.splice(index >= 0 ? index : 0, 1)[0];
+            }
             let index = adaptiveRemaining.findIndex(question =>
                 (difficultyRank[question.dataset.difficulty] ?? 1) === target
             );
@@ -207,11 +253,17 @@
                 : `${answered} ${exam.dataset.ofWord} ${questions.length} ${exam.dataset.answeredWord.toLowerCase()}.`;
             const domains = new Map();
             questions.forEach(question => {
-                const id = question.dataset.domain;
+                const id = usesOfficialBlueprint
+                    ? question.dataset.officialDomain
+                    : question.dataset.domain;
                 if (!domains.has(id)) {
                     domains.set(id, {
-                        number: Number(question.dataset.domainNumber),
-                        name: question.dataset.domainName,
+                        number: Number(usesOfficialBlueprint
+                            ? question.dataset.officialDomainNumber
+                            : question.dataset.domainNumber),
+                        name: usesOfficialBlueprint
+                            ? question.dataset.officialDomainName
+                            : question.dataset.domainName,
                         total: 0,
                         correct: 0,
                     });
@@ -266,7 +318,13 @@
                 showQuestion(current || questions[0]);
                 return;
             }
-            if (mode === 'adaptive') {
+            if (usesOfficialBlueprint && current && !isAnswered(current)) {
+                // eslint-disable-next-line no-alert
+                window.alert(exam.dataset.answerRequired);
+                current.querySelector('input[type="radio"]')?.focus();
+                return;
+            }
+            if (isAdaptiveMode) {
                 if (current) {
                     lockAdaptiveQuestion(current);
                 }
@@ -296,7 +354,7 @@
 
         exam.addEventListener('submit', event => event.preventDefault());
 
-        if (mode === 'adaptive') {
+        if (isAdaptiveMode) {
             const first = takeAdaptiveQuestion();
             first.dataset.displayPosition = '1';
             adaptiveHistory.push(first);

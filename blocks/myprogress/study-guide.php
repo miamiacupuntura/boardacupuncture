@@ -707,11 +707,13 @@ $boardlinearexamurls = [];
 $boardadaptiveexamurls = [];
 $boardlinearsimulationurls = [];
 $boardadaptivesimulationurls = [];
+$boardofficialadaptivesimulationurls = [];
 foreach ($publishedexamnumbers as $publishedexamnumber) {
     $boardlinearexamurls[$publishedexamnumber] = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'linear'] + ($publishedexamnumber > 1 ? ['examset' => $publishedexamnumber] : []) + $boardlanguagecontext);
     $boardadaptiveexamurls[$publishedexamnumber] = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'exams', 'exam' => 'adaptive'] + ($publishedexamnumber > 1 ? ['examset' => $publishedexamnumber] : []) + $boardlanguagecontext);
     $boardlinearsimulationurls[$publishedexamnumber] = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'linear'] + ($publishedexamnumber > 1 ? ['simulation' => $publishedexamnumber] : []) + $boardlanguagecontext);
     $boardadaptivesimulationurls[$publishedexamnumber] = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'adaptive'] + ($publishedexamnumber > 1 ? ['simulation' => $publishedexamnumber] : []) + $boardlanguagecontext);
+    $boardofficialadaptivesimulationurls[$publishedexamnumber] = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'exam' => 'officialadaptive'] + ($publishedexamnumber > 1 ? ['simulation' => $publishedexamnumber] : []) + $boardlanguagecontext);
 }
 $boardsimulationurl = new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation'] + $boardlanguagecontext);
 if ($showconstruction) {
@@ -1148,9 +1150,15 @@ echo $OUTPUT->header();
                                     </div>
                                 </details>
                                 <details class="subject-study-library__journey-choice">
-                                    <summary><span><?php echo s($ises ? 'Simulación adaptativa' : 'Adaptive simulation'); ?><small><?php echo s($ises ? 'Elegir un examen publicado · 150 minutos' : 'Choose a published exam · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></summary>
+                                    <summary><span><?php echo s($ises ? 'Adaptativa actual' : 'Current adaptive'); ?><small><?php echo s($ises ? 'Versión existente de seis dominios · 150 minutos' : 'Existing six-domain version · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></summary>
                                     <div class="subject-study-library__journey-choice-links">
-                                        <?php foreach ($boardadaptivesimulationurls as $publishedexamnumber => $publishedexamurl): ?><a href="<?php echo $publishedexamurl->out(false); ?>"><strong>Exam <?php echo (int)$publishedexamnumber; ?></strong><small><?php echo s($ises ? 'Adaptativo · feedback al terminar' : 'Adaptive · feedback after finishing'); ?></small></a><?php endforeach; ?>
+                                        <?php foreach ($boardadaptivesimulationurls as $publishedexamnumber => $publishedexamurl): ?><a href="<?php echo $publishedexamurl->out(false); ?>"><strong>Exam <?php echo (int)$publishedexamnumber; ?></strong><small><?php echo s($ises ? 'Adaptativo actual · feedback al terminar' : 'Current adaptive · feedback after finishing'); ?></small></a><?php endforeach; ?>
+                                    </div>
+                                </details>
+                                <details class="subject-study-library__journey-choice">
+                                    <summary><span><?php echo s($ises ? 'Blueprint NCBAHM 2026' : 'NCBAHM 2026 blueprint'); ?><small><?php echo s($ises ? 'Nueva versión 22/24/30/24 · 150 minutos' : 'New 22/24/30/24 version · 150 minutes'); ?></small></span><span aria-hidden="true">›</span></summary>
+                                    <div class="subject-study-library__journey-choice-links">
+                                        <?php foreach ($boardofficialadaptivesimulationurls as $publishedexamnumber => $publishedexamurl): ?><a href="<?php echo $publishedexamurl->out(false); ?>"><strong>Exam <?php echo (int)$publishedexamnumber; ?></strong><small><?php echo s($ises ? 'Balance oficial · feedback al terminar' : 'Official balance · feedback after finishing'); ?></small></a><?php endforeach; ?>
                                     </div>
                                 </details>
                                 <a class="subject-study-library__journey-option subject-study-library__journey-option--primary" href="<?php echo $boardsimulationurl->out(false); ?>">

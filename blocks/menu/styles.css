@@ -2631,6 +2631,11 @@ a.herb-board__domain:focus {
     color: #087c69;
 }
 
+.herb-board__exam-history--combined .herb-board__exam-history-list article.is-practice div:nth-child(3) strong,
+.herb-board__exam-history--combined .herb-board__exam-history-list article.is-practice div:nth-child(4) strong {
+    color: #6d28d9;
+}
+
 .herb-board__exam-history--combined .herb-board__exam-history-list article.is-incomplete div:nth-child(3) strong,
 .herb-board__exam-history--combined .herb-board__exam-history-list article.is-incomplete div:nth-child(4) strong {
     color: #6a5a32;
@@ -2789,7 +2794,7 @@ a.herb-board__domain:focus {
 
 .herb-board__simulation-modes {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     margin-top: 18px;
 }
@@ -2842,6 +2847,19 @@ a.herb-board__domain:focus {
     color: #087c69;
     font-size: .8rem;
     white-space: nowrap;
+}
+
+.herb-board__simulation-modes > .herb-board__simulation-mode--official {
+    border-color: #7c3aed;
+    background: #faf7ff;
+}
+
+.herb-board__simulation-modes > .herb-board__simulation-mode--official > span {
+    background: #6d28d9;
+}
+
+.herb-board__simulation-modes > .herb-board__simulation-mode--official b {
+    color: #5b21b6;
 }
 
 .herb-board__simulation-note {

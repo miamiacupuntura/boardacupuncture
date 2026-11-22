@@ -31,8 +31,11 @@ $clinicalexamkey = optional_param('caseexam', '', PARAM_ALPHANUMEXT);
 $simulationexamnumber = max(1, min(99, optional_param('simulation', 1, PARAM_INT)));
 $practiceexamnumber = max(1, min(99, optional_param('examset', 1, PARAM_INT)));
 $exammode = optional_param('exam', '', PARAM_ALPHA);
-if (!in_array($exammode, ['linear', 'adaptive'], true)) {
+if (!in_array($exammode, ['linear', 'adaptive', 'officialadaptive'], true)) {
     $exammode = optional_param('mix', 0, PARAM_BOOL) ? 'linear' : '';
+}
+if ($exammode === 'officialadaptive' && $track !== 'simulation') {
+    $exammode = '';
 }
 if ($track === 'domains' && $exammode !== '') {
     // Keep previously shared exam URLs working while moving exams to their own section.
@@ -194,19 +197,11 @@ if (($track === 'exams' && !$mixdomains) || ($track === 'simulation' && !$mixdom
             $simulationhistory = array_values($DB->get_records_select(
                 'block_menu_exam_attempts',
                 'userid = :userid AND courseid = :courseid '
-                    . 'AND examtype IN (:legacylinear, :legacyadaptive, :exam1linear, :exam1adaptive, '
-                    . ':exam2linear, :exam2adaptive, :exam3linear, :exam3adaptive)',
+                    . 'AND examtype LIKE :simulationtype',
                 [
                     'userid' => $USER->id,
                     'courseid' => $membershipcourseid,
-                    'legacylinear' => 'simulationlinear',
-                    'legacyadaptive' => 'simulationadaptive',
-                    'exam1linear' => 'simulation1linear',
-                    'exam1adaptive' => 'simulation1adaptive',
-                    'exam2linear' => 'simulation2linear',
-                    'exam2adaptive' => 'simulation2adaptive',
-                    'exam3linear' => 'simulation3linear',
-                    'exam3adaptive' => 'simulation3adaptive',
+                    'simulationtype' => 'simulation%',
                 ],
                 'timecompleted DESC, id DESC',
                 '*',
@@ -304,6 +299,93 @@ $domainblueprint = [
         'focus_es' => 'Variantes de nombres, límites del listado oficial y alternativas obsoletas o históricas.',
     ],
 ];
+
+// The public 2026 NCBAHM Chinese Herbology outline uses four domains. These
+// labels and weights are kept separate from the six instructional domains so
+// the existing exams remain unchanged while the official-blueprint simulation
+// can draw a new 100-item form from published questions.
+$officialdomainblueprint = [
+    'official_1' => [
+        'number' => 1,
+        'name' => 'Chinese herbs, herbal combinations and formulas',
+        'name_es' => 'Hierbas, combinaciones y fórmulas chinas',
+        'weight' => 22,
+    ],
+    'official_2' => [
+        'number' => 2,
+        'name' => 'Safety and quality control',
+        'name_es' => 'Seguridad y control de calidad',
+        'weight' => 24,
+    ],
+    'official_3' => [
+        'number' => 3,
+        'name' => 'Treatment planning and administration',
+        'name_es' => 'Planificación y administración del tratamiento',
+        'weight' => 30,
+    ],
+    'official_4' => [
+        'number' => 4,
+        'name' => 'Treatment evaluation and modification',
+        'name_es' => 'Evaluación y modificación del tratamiento',
+        'weight' => 24,
+    ],
+];
+if ($ises) {
+    foreach ($officialdomainblueprint as &$officialdomaintranslation) {
+        $officialdomaintranslation['name'] = $officialdomaintranslation['name_es'];
+    }
+    unset($officialdomaintranslation);
+}
+
+// This deterministic crosswalk is intentionally transparent. It is not an
+// NCBAHM item-bank classification: it maps the site's existing editorial tags
+// into the four public content-outline domains for practice delivery.
+$classifyofficialdomain = static function(array $question): string {
+    $internaldomain = (string)($question['domainId'] ?? '');
+    $questionid = (string)($question['questionId'] ?? '');
+    $classificationtext = implode(' ', [
+        (string)($question['prompt'] ?? ''),
+        (string)($question['classification']['reason'] ?? ''),
+        (string)($question['review']['notes'] ?? ''),
+        (string)($question['objectiveId'] ?? ''),
+    ]);
+    $classificationtext = core_text::strtolower($classificationtext);
+    $treatmentevaluationquestion = str_starts_with($questionid, 'FM-MOD-') || preg_match(
+        '/(?:\bmodify\b|\bmodification\b|\bmodified\b|\bmodif\w*|\bajust\w*|\bafter \w+ days?\b|\bdays? later\b|\bweek later\b|\bfollow[- ]?up\b|\breassess\w*|\bresponse to\b|\bresponds? to\b|\bimproved\b|\bstill (?:has|presents)\b|\badverse effect\b)/u',
+        $classificationtext
+    ) === 1;
+
+    if ($internaldomain === 'single_herb' || $internaldomain === 'dui_yao') {
+        return 'official_1';
+    }
+    if ($internaldomain === 'scope_aliases') {
+        if (str_starts_with($questionid, 'RA-SAFE-')) {
+            return 'official_2';
+        }
+        return preg_match(
+            '/substitut|sustituci[oó]n|replace|reemplaz|alternative|alternativa/u',
+            $classificationtext
+        ) === 1 ? 'official_3' : 'official_2';
+    }
+    if ($internaldomain === 'safety_dispensing') {
+        $administrationquestion = preg_match(
+            '/(?:\bdose\b|\bdosage\b|\bdosis\b|\bdecoct\w*|\bcocci[oó]n\w*|\bprepar\w*|\badminist\w*|\bdispens\w*|\bfrequency\b|\bfrecuencia\b|\btiming\b|\bhorario\b|\bform of\b|\bforma de\b)/u',
+            $classificationtext
+        ) === 1;
+        $safetyquestion = preg_match(
+            '/(?:\btoxic\w*|\btoxici\w*|\bcontraindicat\w*|\bcontraindica\w*|\bcaution\w*|\bprecauci\w*|\bpregnan\w*|\bembaraz\w*|\binteraction\w*|\binteracci\w*|\badverse\w*|\badvers\w*|\ballerg\w*|\bcontamin\w*|\bobsolete\w*|\bobsolet\w*|\bendanger\w*|\billegal\w*|\bfda\b|\bcgmp\b|\bstorage\b|\balmacen\w*)/u',
+            $classificationtext
+        ) === 1;
+        return $administrationquestion && !$safetyquestion ? 'official_3' : 'official_2';
+    }
+    if ($internaldomain === 'formula_composition') {
+        return $treatmentevaluationquestion ? 'official_4' : 'official_1';
+    }
+    if ($internaldomain === 'formula_differentiation') {
+        return $treatmentevaluationquestion ? 'official_4' : 'official_3';
+    }
+    return 'official_3';
+};
 
 $clinicalcasesbankpath = $CFG->dataroot . '/board-domain-banks/herbology-clinical-cases.json';
 $clinicalcasesbank = ['exams' => []];
@@ -797,6 +879,143 @@ if (in_array($track, ['exams', 'simulation'], true) && $mixdomains) {
             ((int)($left['examTemplate']['globalPosition'] ?? PHP_INT_MAX))
             <=> ((int)($right['examTemplate']['globalPosition'] ?? PHP_INT_MAX))
         );
+    }
+}
+
+if ($track === 'simulation' && $exammode === 'officialadaptive' && !$domainshortages) {
+    $preferredofficialids = [];
+    foreach ($mixedquestions as $preferredofficialquestion) {
+        $preferredofficialid = (string)($preferredofficialquestion['questionId'] ?? '');
+        if ($preferredofficialid !== '') {
+            $preferredofficialids[$preferredofficialid] = true;
+        }
+    }
+
+    // The current selected exam is preferred, then the other published exams
+    // supply only the positions needed to reach the 22/24/30/24 blueprint.
+    $officialsourcequestions = $mixedquestions;
+    foreach ($domainblueprint as $officialsourcedomain) {
+        foreach ($officialsourcedomain['questions'] as $officialsourcequestion) {
+            if (!empty($officialsourcequestion['examTemplate']['globalPosition'])) {
+                $officialsourcequestions[] = $officialsourcequestion;
+            }
+        }
+    }
+    foreach ($publishedsimulationexams as $officialsourceexam) {
+        foreach ((array)($officialsourceexam['questions'] ?? []) as $officialsourcequestion) {
+            if ($ises) {
+                $officialtranslation = $officialsourcequestion['translations']['es'] ?? null;
+                if (is_array($officialtranslation)
+                        && !empty($officialtranslation['prompt'])
+                        && count($officialtranslation['options'] ?? []) === 4
+                        && !empty($officialtranslation['explanation'])) {
+                    $officialsourcequestion['prompt'] = $officialtranslation['prompt'];
+                    $officialsourcequestion['options'] = $officialtranslation['options'];
+                    $officialsourcequestion['explanation'] = $officialtranslation['explanation'];
+                }
+            }
+            if ($questionisready($officialsourcequestion)) {
+                $officialsourcequestions[] = $officialsourcequestion;
+            }
+        }
+    }
+
+    $officialquestionpool = array_fill_keys(array_keys($officialdomainblueprint), []);
+    $seenofficialquestions = [];
+    foreach ($officialsourcequestions as $officialsourcequestion) {
+        $officialsourceid = (string)($officialsourcequestion['questionId'] ?? '');
+        $officialsourcekey = $officialsourceid !== ''
+            ? $officialsourceid
+            : hash('sha256', (string)($officialsourcequestion['prompt'] ?? ''));
+        if ($officialsourcekey === '' || isset($seenofficialquestions[$officialsourcekey])) {
+            continue;
+        }
+        $seenofficialquestions[$officialsourcekey] = true;
+        $officialdomainid = $classifyofficialdomain($officialsourcequestion);
+        if (!isset($officialdomainblueprint[$officialdomainid])) {
+            continue;
+        }
+        $officialsourcequestion['_officialDomainId'] = $officialdomainid;
+        $officialsourcequestion['_officialDomainNumber'] = $officialdomainblueprint[$officialdomainid]['number'];
+        $officialsourcequestion['_officialDomainName'] = $officialdomainblueprint[$officialdomainid]['name'];
+        $officialsourcequestion['_officialPreferred'] = isset($preferredofficialids[$officialsourceid]);
+        $officialquestionpool[$officialdomainid][] = $officialsourcequestion;
+    }
+
+    $mixedquestions = [];
+    foreach ($officialdomainblueprint as $officialdomainid => $officialdomain) {
+        $difficultybuckets = [
+            'foundation' => ['preferred' => [], 'reserve' => []],
+            'application' => ['preferred' => [], 'reserve' => []],
+            'analysis' => ['preferred' => [], 'reserve' => []],
+        ];
+        foreach ($officialquestionpool[$officialdomainid] as $officialcandidate) {
+            $officialdifficulty = (string)($officialcandidate['difficultyBand'] ?? 'application');
+            if (!isset($difficultybuckets[$officialdifficulty])) {
+                $officialdifficulty = 'application';
+            }
+            $officialpriority = !empty($officialcandidate['_officialPreferred']) ? 'preferred' : 'reserve';
+            $difficultybuckets[$officialdifficulty][$officialpriority][] = $officialcandidate;
+        }
+        foreach ($difficultybuckets as &$difficultybucket) {
+            shuffle($difficultybucket['preferred']);
+            shuffle($difficultybucket['reserve']);
+        }
+        unset($difficultybucket);
+
+        $officialweight = (int)$officialdomain['weight'];
+        $difficultytargets = [
+            'foundation' => (int)floor($officialweight * .25),
+            'analysis' => (int)floor($officialweight * .25),
+        ];
+        $difficultytargets['application'] = $officialweight
+            - $difficultytargets['foundation']
+            - $difficultytargets['analysis'];
+        $officialselection = [];
+        foreach (['foundation', 'application', 'analysis'] as $officialdifficulty) {
+            $officialcandidates = array_merge(
+                $difficultybuckets[$officialdifficulty]['preferred'],
+                $difficultybuckets[$officialdifficulty]['reserve']
+            );
+            $officialselection = array_merge(
+                $officialselection,
+                array_slice($officialcandidates, 0, $difficultytargets[$officialdifficulty])
+            );
+        }
+        if (count($officialselection) < $officialweight) {
+            $selectedofficialids = [];
+            foreach ($officialselection as $selectedofficialquestion) {
+                $selectedofficialids[(string)($selectedofficialquestion['questionId'] ?? '')] = true;
+            }
+            $officialfallbacks = array_values(array_filter(
+                $officialquestionpool[$officialdomainid],
+                static fn(array $question): bool => !isset(
+                    $selectedofficialids[(string)($question['questionId'] ?? '')]
+                )
+            ));
+            usort($officialfallbacks, static fn(array $left, array $right): int =>
+                ((int)empty($left['_officialPreferred'])) <=> ((int)empty($right['_officialPreferred']))
+            );
+            $officialselection = array_merge(
+                $officialselection,
+                array_slice($officialfallbacks, 0, $officialweight - count($officialselection))
+            );
+        }
+        if (count($officialselection) !== $officialweight) {
+            $domainshortages[] = [
+                'name' => $officialdomain['name'],
+                'required' => $officialweight,
+                'available' => count($officialselection),
+                'missing' => max(0, $officialweight - count($officialselection)),
+            ];
+            continue;
+        }
+        $mixedquestions = array_merge($mixedquestions, $officialselection);
+    }
+    if ($domainshortages) {
+        $mixedquestions = [];
+    } else {
+        shuffle($mixedquestions);
     }
 }
 
@@ -3133,8 +3352,8 @@ echo $OUTPUT->header();
                             ? 'Elige la modalidad de examen para comenzar'
                             : 'Choose an exam mode to begin'; ?></h3>
                         <p><?php echo $ises
-                            ? 'Selecciona Exam 1–5 y después elige simulación lineal o adaptativa. El reloj comienza únicamente cuando abres una modalidad.'
-                            : 'Select Exam 1–5 and then choose Linear or Adaptive simulation. The timer starts only after you open a mode.'; ?></p>
+                            ? 'Selecciona Exam 1–5 y después elige lineal, adaptativa actual o la nueva versión con blueprint NCBAHM 2026. El reloj comienza únicamente cuando abres una modalidad.'
+                            : 'Select Exam 1–5 and then choose Linear, current Adaptive, or the new NCBAHM 2026 blueprint version. The timer starts only after you open a mode.'; ?></p>
                     </div>
                     <ol aria-label="<?php echo $ises ? 'Pasos para comenzar' : 'Steps to begin'; ?>">
                         <li><strong>1</strong><span><?php echo $ises ? 'Selecciona Exam 1–5' : 'Select Exam 1–5'; ?></span></li>
@@ -3149,8 +3368,8 @@ echo $OUTPUT->header();
                     </summary>
                     <div class="herb-board__exam-characteristics-body">
                         <p><?php echo $ises
-                            ? 'Todos los exámenes de simulación usan la misma estructura de 100 preguntas y 150 minutos. Cada columna representa un conjunto diferente de preguntas, no una ponderación diferente.'
-                            : 'All Simulation Exams use the same 100-question, 150-minute structure. Each column represents a different question set, not a different weighting.'; ?></p>
+                            ? 'Esta tabla corresponde a la modalidad lineal y a la Adaptativa actual: ambas usan los seis dominios internos y 100 preguntas en 150 minutos. La nueva composición NCBAHM 2026 aparece por separado debajo de las modalidades.'
+                            : 'This table applies to Linear and Current adaptive: both use the six internal domains and 100 questions in 150 minutes. The new NCBAHM 2026 composition appears separately below the mode choices.'; ?></p>
                         <div class="herb-board__exam-overview-table-wrap">
                             <table class="herb-board__exam-overview-table">
                                 <thead><tr>
@@ -3193,6 +3412,11 @@ echo $OUTPUT->header();
                     'exam' => 'adaptive',
                     'simulation' => $simulationexamnumber,
                 ] + $languagecontext);
+                $simulationofficialadaptiveurl = new moodle_url('/blocks/menu/herbology-board.php', [
+                    'track' => 'simulation',
+                    'exam' => 'officialadaptive',
+                    'simulation' => $simulationexamnumber,
+                ] + $languagecontext);
                 ?>
                 <div class="herb-board__simulation-modes" aria-label="<?php echo $ises ? 'Modalidades de simulación' : 'Simulation modes'; ?>">
                     <a href="<?php echo $simulationlinearurl->out(false); ?>">
@@ -3208,17 +3432,51 @@ echo $OUTPUT->header();
                     <a href="<?php echo $simulationadaptiveurl->out(false); ?>">
                         <span>02</span>
                         <div>
-                            <strong><?php echo $ises ? 'Simulación adaptativa' : 'Adaptive simulation'; ?></strong>
+                            <strong><?php echo $ises ? 'Adaptativa actual' : 'Current adaptive'; ?></strong>
                             <p><?php echo $ises
-                                ? 'La dificultad se ajusta a tus respuestas. Al avanzar, la respuesta queda bloqueada y no se puede regresar.'
-                                : 'Difficulty responds to your answers. Moving forward locks the answer and prevents returning.'; ?></p>
+                                ? 'Conserva la versión existente de seis dominios. Ajusta la dificultad, bloquea la respuesta y no permite regresar.'
+                                : 'Keeps the existing six-domain version. It adjusts difficulty, locks each answer, and prevents returning.'; ?></p>
+                        </div>
+                        <b><?php echo $ises ? 'Comenzar →' : 'Begin →'; ?></b>
+                    </a>
+                    <a class="herb-board__simulation-mode--official" href="<?php echo $simulationofficialadaptiveurl->out(false); ?>">
+                        <span>03</span>
+                        <div>
+                            <strong><?php echo $ises ? 'Blueprint NCBAHM 2026' : 'NCBAHM 2026 blueprint'; ?></strong>
+                            <p><?php echo $ises
+                                ? 'Nueva versión: 100 preguntas con los cuatro dominios 22/24/30/24, dificultad adaptativa y respuestas bloqueadas.'
+                                : 'New version: 100 questions across the four 22/24/30/24 domains, adaptive difficulty, and locked answers.'; ?></p>
                         </div>
                         <b><?php echo $ises ? 'Comenzar →' : 'Begin →'; ?></b>
                     </a>
                 </div>
+                <details class="herb-board__exam-characteristics herb-board__exam-characteristics--official">
+                    <summary>
+                        <span><strong><?php echo $ises ? 'Composición de la nueva versión NCBAHM 2026' : 'New NCBAHM 2026 version composition'; ?></strong><small><?php echo $ises ? 'Cuatro dominios oficiales · separado de la versión actual' : 'Four official domains · separate from the current version'; ?></small></span>
+                        <b><?php echo $ises ? 'Ver 22/24/30/24' : 'View 22/24/30/24'; ?></b>
+                    </summary>
+                    <div class="herb-board__exam-characteristics-body">
+                        <p><?php echo $ises
+                            ? 'Esta modalidad reclasifica preguntas ya publicadas mediante una correspondencia editorial transparente. No modifica ni elimina las modalidades existentes.'
+                            : 'This mode reclassifies already-published questions through a transparent editorial crosswalk. It does not modify or remove the existing modes.'; ?></p>
+                        <div class="herb-board__exam-overview-table-wrap">
+                            <table class="herb-board__exam-overview-table">
+                                <thead><tr><th><?php echo $ises ? 'Dominio oficial' : 'Official domain'; ?></th><th><?php echo $ises ? 'Preguntas' : 'Questions'; ?></th><th><?php echo $ises ? 'Peso' : 'Weight'; ?></th></tr></thead>
+                                <tbody>
+                                    <?php foreach ($officialdomainblueprint as $officialdomain): ?><tr>
+                                        <td><strong><?php echo $ises ? 'Dominio ' : 'Domain '; ?><?php echo (int)$officialdomain['number']; ?></strong><span><?php echo s($officialdomain['name']); ?></span></td>
+                                        <td><strong><?php echo (int)$officialdomain['weight']; ?></strong></td>
+                                        <td><strong><?php echo (int)$officialdomain['weight']; ?>%</strong></td>
+                                    </tr><?php endforeach; ?>
+                                </tbody>
+                                <tfoot><tr><th><?php echo $ises ? 'Total' : 'Total'; ?></th><td><strong>100</strong></td><td><strong>100%</strong></td></tr></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </details>
                 <p class="herb-board__simulation-note"><?php echo $ises
-                    ? 'El reloj comienza al abrir una modalidad. A los 5 minutos restantes cambia a amarillo y, al llegar a cero, el intento se entrega automáticamente.'
-                    : 'The clock begins when you open a mode. It turns yellow with 5 minutes remaining and submits automatically at zero.'; ?></p>
+                    ? 'La versión NCBAHM utiliza únicamente preguntas ya publicadas y puede completar el conjunto seleccionado con preguntas de los otros exámenes publicados para conservar 22/24/30/24. Es una simulación con balance de contenido, no la puntuación psicométrica oficial.'
+                    : 'The NCBAHM version uses only published questions and may complete the selected set with questions from other published exams to preserve 22/24/30/24. It is a content-balanced simulation, not the official psychometric score.'; ?></p>
                 <section class="herb-board__exam-history herb-board__exam-history--combined"
                     id="herb-board-simulation-history" aria-labelledby="herb-board-simulation-history-title">
                     <header>
@@ -3248,19 +3506,31 @@ echo $OUTPUT->header();
                                     ? $attemptminutes . ' min ' . $attemptseconds . ' s'
                                     : $attemptseconds . ' s';
                                 $attemptexamnumber = preg_match(
-                                    '/^simulation(\d+)(?:linear|adaptive)$/',
+                                    '/^simulation(\d+)(?:linear|adaptive|officialadaptive)$/',
                                     (string)$attempt->examtype,
                                     $simulationattemptmatch
                                 ) ? (int)$simulationattemptmatch[1] : 1;
-                                $attemptmode = str_ends_with((string)$attempt->examtype, 'adaptive')
-                                    ? ($ises ? 'Adaptativo' : 'Adaptive')
-                                    : ($ises ? 'Lineal' : 'Linear');
+                                if (str_ends_with((string)$attempt->examtype, 'officialadaptive')) {
+                                    $attemptmode = $ises ? 'Blueprint NCBAHM 2026' : 'NCBAHM 2026 blueprint';
+                                } else if (str_ends_with((string)$attempt->examtype, 'adaptive')) {
+                                    $attemptmode = $ises ? 'Adaptativo actual' : 'Current adaptive';
+                                } else {
+                                    $attemptmode = $ises ? 'Lineal' : 'Linear';
+                                }
                                 $attempttype = 'Exam ' . $attemptexamnumber . ' · ' . $attemptmode;
+                                $isofficialblueprintattempt = str_ends_with(
+                                    (string)$attempt->examtype,
+                                    'officialadaptive'
+                                );
                                 $attemptpassed = $attemptpercentage >= 70;
-                                $attemptstatus = $attemptpassed
-                                    ? ($ises ? 'Aprobado' : 'Passed')
-                                    : ($ises ? 'No aprobado' : 'Not passed');
-                                $attemptclass = $attemptpassed ? 'is-passed' : 'is-failed';
+                                $attemptstatus = $isofficialblueprintattempt
+                                    ? ($ises ? 'Resultado de práctica' : 'Practice result')
+                                    : ($attemptpassed
+                                        ? ($ises ? 'Aprobado' : 'Passed')
+                                        : ($ises ? 'No aprobado' : 'Not passed'));
+                                $attemptclass = $isofficialblueprintattempt
+                                    ? 'is-practice'
+                                    : ($attemptpassed ? 'is-passed' : 'is-failed');
                             ?>
                                 <article role="listitem" class="<?php echo s($attemptclass); ?>">
                                     <div>
@@ -3292,8 +3562,24 @@ echo $OUTPUT->header();
                 <div class="herb-board__mix-result herb-board__mix-result--shortage">
                     <h3 id="herb-board-simulation-title"><?php echo $ises ? 'La simulación se está preparando' : 'The simulation is being prepared'; ?></h3>
                     <p><?php echo $ises ? 'Faltan preguntas para conservar el peso exacto de los dominios.' : 'More questions are needed to preserve the exact domain weighting.'; ?></p>
+                    <?php if ($exammode === 'officialadaptive') { ?>
+                        <ul>
+                            <?php foreach ($domainshortages as $domainshortage) { ?>
+                                <li><?php echo s((string)$domainshortage['name']); ?>:
+                                    <?php echo (int)$domainshortage['available']; ?>/<?php echo (int)$domainshortage['required']; ?></li>
+                            <?php } ?>
+                        </ul>
+                    <?php } ?>
                 </div>
             <?php } else { ?>
+                <?php
+                $simulationmodelabel = $exammode === 'officialadaptive'
+                    ? ($ises ? 'Blueprint NCBAHM 2026' : 'NCBAHM 2026 blueprint')
+                    : ($exammode === 'adaptive'
+                        ? ($ises ? 'Adaptativo actual' : 'Current adaptive')
+                        : ($ises ? 'Lineal' : 'Linear'));
+                $simulationisadaptive = in_array($exammode, ['adaptive', 'officialadaptive'], true);
+                ?>
                 <form id="herbology-simulation-exam" class="herb-board__simulation-player"
                     data-simulation-exam
                     data-history-url="<?php echo s((new moodle_url('/blocks/menu/herbology-exam-history.php'))->out(false)); ?>"
@@ -3307,14 +3593,13 @@ echo $OUTPUT->header();
                     data-unanswered-word="<?php echo $ises ? 'Sin responder' : 'Unanswered'; ?>"
                     data-answered-word="<?php echo $ises ? 'Respondida' : 'Answered'; ?>"
                     data-flagged-word="<?php echo $ises ? 'Marcada' : 'Flagged'; ?>"
+                    data-answer-required="<?php echo $ises ? 'Selecciona una respuesta antes de avanzar.' : 'Select an answer before moving forward.'; ?>"
                     data-submit-confirm="<?php echo $ises ? '¿Deseas entregar el examen ahora? Las preguntas sin responder se contarán como incorrectas.' : 'Submit the exam now? Unanswered questions will be counted as incorrect.'; ?>"
                     data-time-expired="<?php echo $ises ? 'El tiempo terminó. El examen se entregó automáticamente.' : 'Time expired. The exam was submitted automatically.'; ?>">
                     <header class="herb-board__simulation-bar">
                         <div>
                             <span>EXAM <?php echo (int)$simulationexamnumber; ?></span>
-                            <strong><?php echo $ises ? 'Herbología China' : 'Chinese Herbology'; ?> · <?php echo $exammode === 'adaptive'
-                                ? ($ises ? 'Adaptativo' : 'Adaptive')
-                                : ($ises ? 'Lineal' : 'Linear'); ?></strong>
+                            <strong><?php echo $ises ? 'Herbología China' : 'Chinese Herbology'; ?> · <?php echo s($simulationmodelabel); ?></strong>
                         </div>
                         <div class="herb-board__simulation-status">
                             <button type="button" class="herb-board__simulation-clock" data-simulation-clock
@@ -3329,14 +3614,20 @@ echo $OUTPUT->header();
                         </div>
                     </header>
                     <div class="herb-board__simulation-toolbar">
-                        <button type="button" data-simulation-review <?php echo $exammode === 'adaptive' ? 'hidden' : ''; ?>>
+                        <button type="button" data-simulation-review <?php echo $simulationisadaptive ? 'hidden' : ''; ?>>
                             <?php echo $ises ? 'Pantalla de revisión' : 'Review Screen'; ?>
                         </button>
-                        <button type="button" data-simulation-flag <?php echo $exammode === 'adaptive' ? 'hidden' : ''; ?>>
+                        <button type="button" data-simulation-flag <?php echo $simulationisadaptive ? 'hidden' : ''; ?>>
                             ⚑ <?php echo $ises ? 'Marcar para revisar' : 'Flag for Review'; ?>
                         </button>
-                        <?php if ($exammode === 'adaptive') { ?>
-                            <span><?php echo $ises ? 'Las respuestas se bloquean al avanzar.' : 'Answers lock when you move forward.'; ?></span>
+                        <?php if ($simulationisadaptive) { ?>
+                            <span><?php echo $exammode === 'officialadaptive'
+                                ? ($ises
+                                    ? 'Blueprint oficial 22/24/30/24. Las respuestas se bloquean al avanzar.'
+                                    : 'Official 22/24/30/24 blueprint. Answers lock when you move forward.')
+                                : ($ises
+                                    ? 'Versión actual de seis dominios. Las respuestas se bloquean al avanzar.'
+                                    : 'Current six-domain version. Answers lock when you move forward.'); ?></span>
                         <?php } ?>
                     </div>
 
@@ -3349,13 +3640,21 @@ echo $OUTPUT->header();
                                     $domainname = (string)$domain['name'];
                                     break;
                                 }
-                            } ?>
+                            }
+                            $questionofficialdomainid = (string)($question['_officialDomainId']
+                                ?? $classifyofficialdomain($question));
+                            $questionofficialdomain = $officialdomainblueprint[$questionofficialdomainid]
+                                ?? $officialdomainblueprint['official_3'];
+                            ?>
                             <fieldset class="herb-board__simulation-question" hidden
                                 data-question-index="<?php echo $questionnumber; ?>"
                                 data-correct="<?php echo s($question['correctLabel']); ?>"
                                 data-domain="<?php echo s($question['domainId'] ?? ''); ?>"
                                 data-domain-number="<?php echo $domainnumber; ?>"
                                 data-domain-name="<?php echo s($domainname); ?>"
+                                data-official-domain="<?php echo s($questionofficialdomainid); ?>"
+                                data-official-domain-number="<?php echo (int)$questionofficialdomain['number']; ?>"
+                                data-official-domain-name="<?php echo s($questionofficialdomain['name']); ?>"
                                 data-difficulty="<?php echo s($question['difficultyBand'] ?? 'application'); ?>">
                                 <legend>
                                     <span><?php echo $ises ? 'Pregunta' : 'Question'; ?> <b data-simulation-number><?php echo $questionnumber + 1; ?></b></span>
@@ -3387,6 +3686,11 @@ echo $OUTPUT->header();
                         <h3><?php echo $ises ? 'Resultado del intento' : 'Attempt result'; ?></h3>
                         <strong data-simulation-score></strong>
                         <p data-simulation-result-message></p>
+                        <?php if ($exammode === 'officialadaptive') { ?>
+                            <p><?php echo $ises
+                                ? 'Resultado bruto de práctica. No es una puntuación escalada oficial de NCBAHM.'
+                                : 'Raw practice result. This is not an official NCBAHM scaled score.'; ?></p>
+                        <?php } ?>
                         <div data-simulation-domain-results></div>
                         <a href="<?php echo $simulationurl->out(false); ?>"><?php echo $ises ? 'Configurar otra simulación' : 'Set up another simulation'; ?></a>
                         <a href="<?php echo s($simulationhistoryurl); ?>"><?php echo $ises ? 'Ver historial de simulaciones' : 'View Simulation History'; ?></a>
@@ -3395,7 +3699,7 @@ echo $OUTPUT->header();
                     <footer class="herb-board__simulation-controls" data-simulation-controls>
                         <button type="button" class="herb-board__simulation-end" data-simulation-end><?php echo $ises ? 'Finalizar examen' : 'End Exam'; ?></button>
                         <div>
-                            <button type="button" data-simulation-previous <?php echo $exammode === 'adaptive' ? 'hidden' : ''; ?>><?php echo $ises ? 'Anterior' : 'Previous'; ?></button>
+                            <button type="button" data-simulation-previous <?php echo $simulationisadaptive ? 'hidden' : ''; ?>><?php echo $ises ? 'Anterior' : 'Previous'; ?></button>
                             <button type="button" class="herb-board__simulation-next" data-simulation-next><?php echo $ises ? 'Siguiente' : 'Next'; ?></button>
                         </div>
                     </footer>

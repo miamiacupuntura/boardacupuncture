@@ -37,7 +37,7 @@ $isdynamicincompleteexam = preg_match(
     $examtype
 ) === 1;
 $isdynamicsimulation = preg_match(
-    '/^simulation(?:[1-9]|[1-9]\d)(?:linear|adaptive)$/',
+    '/^simulation(?:[1-9]|[1-9]\d)(?:linear|adaptive|officialadaptive)$/',
     $examtype
 ) === 1;
 $validexamtype = $isboardquizattempt
@@ -116,6 +116,7 @@ $attemptseconds = (int) $existingattempt->duration % 60;
 $attemptduration = $attemptminutes > 0
     ? $attemptminutes . ' min ' . $attemptseconds . ' s'
     : $attemptseconds . ' s';
+$isofficialblueprintattempt = str_ends_with((string)$existingattempt->examtype, 'officialadaptive');
 
 echo json_encode([
     'success' => true,
@@ -125,7 +126,8 @@ echo json_encode([
         'total' => (int) $existingattempt->total,
         'percentage' => $attemptpercentage,
         'completed' => !$isincompleteattempt,
-        'passed' => !$isincompleteattempt && $attemptpercentage >= 70,
+        'passed' => !$isincompleteattempt && !$isofficialblueprintattempt && $attemptpercentage >= 70,
+        'practice' => $isofficialblueprintattempt,
         'duration' => $attemptduration,
         'timecompleted' => (int) $existingattempt->timecompleted,
         'completedlabel' => userdate(
