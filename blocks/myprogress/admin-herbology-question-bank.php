@@ -451,6 +451,14 @@ foreach ($bank['domains'] as &$questions) {
 }
 unset($questions);
 $exam5canonicalrepairs = [
+    'CF-0051' => [
+        // The reviewed wording is already stored in the editorial override.
+        // Keep the canonical card connected to the formula guide so the
+        // approved correction can satisfy practice-readiness requirements.
+        'contentType' => 'case',
+        'cognitiveLevel' => 'apply',
+        'difficultyBand' => 'application',
+    ],
     'CF-0272' => [
         'prompt' => 'Two patients present with palpitations. One has an irregular or knotted pulse with deficiency of Qi, Blood, and Yin; the other has fatigue, poor appetite, insomnia, and signs of Spleen Qi and Heart Blood deficiency. Which formula assignment is most accurate?',
         'options' => [
@@ -2307,11 +2315,32 @@ $normalizecreatedquestionpinyin = static function(array $question): array {
 $stripguidelineinstructionprefixes = static function(string $normalizedname): string {
     $stripped = preg_replace(
         '/^(?:add|choose|select|use|replace|include|introduce|remove|increase|decrease|while|'
-            . 'decoction|powder|ht|ki|lv|lu|sp|st|ub|gb|li|si|pc|sj)\s+/i',
+            . 'decoction|powder)\s+/i',
         '',
         trim($normalizedname)
     );
     return trim(is_string($stripped) ? $stripped : $normalizedname);
+};
+$resolveguidelineherbname = static function(string $name) use (
+    $normalizeguidelinename,
+    $guidelineherbnames,
+    $stripguidelineinstructionprefixes
+): string {
+    $normalizedherb = $stripguidelineinstructionprefixes(
+        $normalizeguidelinename($name)
+    );
+    if ($normalizedherb === '' || isset($guidelineherbnames[$normalizedherb])) {
+        return $normalizedherb;
+    }
+    // Some imported choices prefix the herb with a channel abbreviation
+    // (for example, "SP Fu Zi"). Remove it only when the remainder is an
+    // official herb. A blanket removal corrupts valid formula names such as
+    // Si Shen Wan, Si Wu Tang and Li Zhong Wan.
+    if (preg_match('/^(?:ht|ki|lv|lu|sp|st|ub|gb|li|si|pc|sj)\s+(.+)$/', $normalizedherb, $match) === 1
+            && isset($guidelineherbnames[(string)$match[1]])) {
+        return (string)$match[1];
+    }
+    return $normalizedherb;
 };
 $findcreatedquestionguidelineviolations = static function(array $question) use (
     $normalizeguidelinename,
@@ -2320,16 +2349,15 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
     $guidelineformulanames,
     $guidelineformulaenglish,
     $guidelineformulaaliases,
-    $stripguidelineinstructionprefixes
+    $stripguidelineinstructionprefixes,
+    $resolveguidelineherbname
 ): array {
     $violations = [];
     $formulaaliases = $guidelineformulaaliases;
     foreach ((array)($question['nomenclature']['herbs'] ?? []) as $herbrecord) {
         $herbname = trim((string)($herbrecord['pinyin'] ?? ''));
         $herblatin = trim((string)($herbrecord['pharmaceuticalName'] ?? ''));
-        $normalizedherb = $stripguidelineinstructionprefixes(
-            $normalizeguidelinename($herbname)
-        );
+        $normalizedherb = $resolveguidelineherbname($herbname);
         $normalizedlatin = $normalizeguidelinename($herblatin);
         if ($normalizedlatin !== '' && isset($guidelineherblatin[$normalizedlatin])) {
             $expectedherb = $normalizeguidelinename($guidelineherblatin[$normalizedlatin]);
@@ -2383,7 +2411,8 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
         $normalizedformula = $formulaaliases[$normalizedcandidate] ?? $normalizedcandidate;
         if (isset($guidelineherblatin[$normalizedparenthetical])) {
             $expectedherb = $normalizeguidelinename($guidelineherblatin[$normalizedparenthetical]);
-            if ($normalizedcandidate !== $expectedherb) {
+            $normalizedherbcandidate = $resolveguidelineherbname($displayname);
+            if ($normalizedherbcandidate !== $expectedherb) {
                 $violations['herb-mismatch:' . $normalizeddisplay] = 'Herb name does not match Appendix A: '
                     . $displayname . ' (' . $parenthetical . ')';
             }

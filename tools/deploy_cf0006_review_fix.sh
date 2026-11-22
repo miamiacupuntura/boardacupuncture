@@ -219,6 +219,8 @@ grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_question' "$OVERRI
 grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_domains' "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq '$findcreatedquestionguidelineviolations' "$QUESTION_BANK_SOURCE"
 grep -Fq '$stripguidelineinstructionprefixes' "$QUESTION_BANK_SOURCE"
+grep -Fq '$resolveguidelineherbname' "$QUESTION_BANK_SOURCE"
+grep -Fq "'CF-0051'" "$QUESTION_BANK_SOURCE"
 grep -Fq '$questioncontentcoverage' "$QUESTION_BANK_SOURCE"
 grep -Fq '$formulacategoryfilter' "$QUESTION_BANK_SOURCE"
 grep -Fq '$herbcategoryfilter' "$QUESTION_BANK_SOURCE"
