@@ -86,7 +86,7 @@ grep -Fq 'boardofficialadaptivesimulationurls' "$TEMP_DIR/blocks/myprogress/stud
 grep -Fq "'practice' =>" "$TEMP_DIR/blocks/myprogress/my-evaluations.php"
 grep -Fq 'NCBAHM 2026 blueprint' "$TEMP_DIR/blocks/myprogress/admin-ncbahm-evaluations.php"
 grep -Fq 'Current adaptive preserves its fixed set' "$TEMP_DIR/study-guide/guidelines/adaptive-exam-help.html"
-grep -Fq 'La Adaptativa actual conserva el conjunto fijo' "$TEMP_DIR/study-guide/guidelines/adaptive-exam-help-es.html"
+grep -Fq 'la Adaptativa actual conserva el conjunto fijo' "$TEMP_DIR/study-guide/guidelines/adaptive-exam-help-es.html"
 
 candidate_roots=(
     "$PRIMARY_STUDY_GUIDE_ROOT"
