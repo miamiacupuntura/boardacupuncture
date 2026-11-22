@@ -153,12 +153,20 @@
         panel.className = 'board-guidelines-dashboard-panel';
         panel.setAttribute('aria-label', 'NCBAHM Board Guidelines');
         const text = document.createElement('div');
-        text.innerHTML = '<strong>NCBAHM Board Guidelines</strong><span>Current study scope, official-list boundaries and a separate guideline for each Board.</span>';
+        text.innerHTML = '<strong>NCBAHM Board Guidelines</strong><span>Current study scope, official-list boundaries and help understanding adaptive exams.</span>';
+        const actions = document.createElement('nav');
+        actions.className = 'board-guidelines-dashboard-actions';
+        actions.setAttribute('aria-label', 'Board guidelines and exam help');
         const link = document.createElement('a');
         link.className = 'board-guidelines-dashboard-link';
         link.href = '/study-guide/board-guidelines.html';
         link.textContent = 'Open Board Guidelines';
-        panel.append(text, link);
+        const helpLink = document.createElement('a');
+        helpLink.className = 'board-guidelines-dashboard-link board-guidelines-dashboard-link--help';
+        helpLink.href = '/study-guide/guidelines/adaptive-exam-help.html';
+        helpLink.textContent = 'Adaptive Exam Help';
+        actions.append(link, helpLink);
+        panel.append(text, actions);
 
         const description = heading.nextElementSibling;
         (description || heading).insertAdjacentElement('afterend', panel);
@@ -340,6 +348,13 @@
         .board-guidelines-dashboard-panel strong,
         .board-guidelines-dashboard-panel span { display: block; }
         .board-guidelines-dashboard-panel span { margin-top: 3px; color: #526c69; font-size: .9rem; }
+        .board-guidelines-dashboard-actions {
+            display: flex;
+            flex: 0 0 auto;
+            gap: 9px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
         .board-guidelines-dashboard-link {
             display: inline-flex;
             box-sizing: border-box;
@@ -357,6 +372,16 @@
         .board-guidelines-dashboard-link:hover,
         .board-guidelines-dashboard-link:focus { background: #055e56; }
         .board-guidelines-dashboard-link:focus-visible { outline: 3px solid #185cca; outline-offset: 2px; }
+        .board-guidelines-dashboard-link--help {
+            border: 1px solid #08756a;
+            background: #fff;
+            color: #05665c !important;
+        }
+        .board-guidelines-dashboard-link--help:hover,
+        .board-guidelines-dashboard-link--help:focus {
+            background: #dff3ef;
+            color: #044d47 !important;
+        }
         .tips-tricks-dashboard-panel {
             display: flex;
             align-items: center;
@@ -456,6 +481,7 @@
             .board-guidelines-dashboard-link,
             .tips-tricks-dashboard-link,
             .module-school-dashboard-link { width: 100%; }
+            .board-guidelines-dashboard-actions { width: 100%; flex-direction: column; }
         }
     `;
     document.head.append(style);

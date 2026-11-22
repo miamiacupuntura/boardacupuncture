@@ -485,6 +485,7 @@ class block_menu extends block_base {
                 $complementarycoursebuttons .= $this->complementary_course_button($coursename);
             }
             $boardguidelinesurl = (new moodle_url('/study-guide/board-guidelines.html'))->out(false);
+            $adaptiveexamhelpurl = (new moodle_url('/study-guide/guidelines/adaptive-exam-help.html'))->out(false);
             $schoollevelurl = (new moodle_url('/my/', ['level' => 'school']))->out(false);
             $boardlevelurl = (new moodle_url('/my/', ['level' => 'board']))->out(false);
             $schoolactive = $levelview === 'school' ? ' is-active' : '';
@@ -515,9 +516,12 @@ HTML;
   <aside class="board-guidelines-dashboard-panel" aria-label="NCBAHM Board Guidelines">
     <div>
       <strong>NCBAHM Board Guidelines</strong>
-      <span>Current study scope, official-list boundaries and a separate guideline for each Board.</span>
+      <span>Current study scope, official-list boundaries and help understanding adaptive exams.</span>
     </div>
-    <a class="board-guidelines-dashboard-link" href="{$boardguidelinesurl}">Open Board Guidelines</a>
+    <nav class="board-guidelines-dashboard-actions" aria-label="Board guidelines and exam help">
+      <a class="board-guidelines-dashboard-link" href="{$boardguidelinesurl}">Open Board Guidelines</a>
+      <a class="board-guidelines-dashboard-link board-guidelines-dashboard-link--help" href="{$adaptiveexamhelpurl}">Adaptive Exam Help</a>
+    </nav>
   </aside>
   <div class="board-hub__grid board-hub__grid--board-level" aria-label="NCBAHM Comprehensive Review modules">{$boardlevelcards}</div>
 HTML;
