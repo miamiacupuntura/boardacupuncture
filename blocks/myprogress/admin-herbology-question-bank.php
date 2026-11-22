@@ -2709,17 +2709,21 @@ $bank['domains'] = block_myprogress_herbology_merge_custom_questions(
     true
 );
 $bank['domains'] = block_myprogress_herbology_remove_pinyin_tones_from_domains($bank['domains']);
+foreach ($bank['domains'] as &$guidelinerepairquestions) {
+    foreach ($guidelinerepairquestions as &$guidelinerepairquestion) {
+        if (is_array($guidelinerepairquestion)) {
+            $guidelinerepairquestion = $repairquestionguidelineherbnames($guidelinerepairquestion);
+        }
+    }
+    unset($guidelinerepairquestion);
+}
+unset($guidelinerepairquestions);
 $basebank = $bank;
-$findquestion = static function(array $questionbank, string $questionid) use (
-    $repairquestionguidelineherbnames
-): ?array {
+$findquestion = static function(array $questionbank, string $questionid): ?array {
     foreach (($questionbank['domains'] ?? []) as $domainid => $questions) {
         foreach ($questions as $question) {
             if ((string)($question['questionId'] ?? '') === $questionid) {
-                return [
-                    'domainId' => $domainid,
-                    'question' => $repairquestionguidelineherbnames($question),
-                ];
+                return ['domainId' => $domainid, 'question' => $question];
             }
         }
     }
@@ -12386,7 +12390,6 @@ echo $OUTPUT->header();
     <div id="pending-questions" class="question-bank__result-head"><div class="question-bank__result-context" data-result-filter-context><strong><?php echo $displaylang === 'es' ? 'Preguntas mostradas:' : 'Questions shown:'; ?></strong><span><?php echo s(implode(' · ', $resultfiltercontext)); ?></span></div><span data-inventory-result-count><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
     <?php if ($pagequestions === []): ?><div class="question-bank__item"><?php echo $displaylang === 'es' ? 'Ninguna pregunta coincide con estos filtros.' : 'No questions match these filters.'; ?></div><?php else: ?>
     <section class="question-bank__items"><?php foreach ($pagequestions as $question):
-        $question = $repairquestionguidelineherbnames($question);
         $questionrevisionrecord = is_array($revisionstore['questions'][$question['questionId']] ?? null)
             ? $revisionstore['questions'][$question['questionId']]
             : [];
