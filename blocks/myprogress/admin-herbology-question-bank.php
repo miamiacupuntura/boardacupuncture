@@ -723,6 +723,50 @@ $exam5canonicalrepairs = [
             ],
         ],
     ],
+    'SCORM-SD-2FD5E01DF69F' => [
+        'prompt' => 'A patient has night sweats, dizziness, tinnitus, and signs of Yin deficiency with Yang rising. The practitioner is considering a heavy animal-derived medicinal, but the patient also has Stomach Cold-Damp and loose stools. Which option correctly identifies the medicinal and the necessary preparation and safety decision?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Han Lian Cao (Ecliptae Herba): use it to anchor Yang and pre-decoct it for 30 minutes because its heaviness protects the Stomach.'],
+            ['label' => 'B', 'text' => 'Nu Zhen Zi (Ligustri lucidi Fructus): pre-decoct it for 30 minutes and use it freely because loose stools do not affect its selection.'],
+            ['label' => 'C', 'text' => 'Hei Zhi Ma (Sesami Semen nigrum): treat it as an animal-derived shell and pre-decoct it to prevent injury from Cold.'],
+            ['label' => 'D', 'text' => 'Gui Ban (Testudinis Plastrum): crush and pre-decoct it for about 30 minutes; because it is heavy and cloying, reconsider or avoid it with Stomach Cold-Damp, Yang deficiency, or diarrhea.'],
+        ],
+        'correctLabel' => 'D',
+        'explanation' => 'Inference step 1: Yin deficiency with Yang rising points toward Gui Ban because it nourishes Liver-Kidney Yin and anchors Yang. Inference step 2: Gui Ban is a heavy animal-derived substance that must be crushed and pre-decocted; Stomach Cold-Damp, Yang deficiency, and diarrhea are reasons to avoid or carefully reconsider it rather than automatic indications. Option A: Incorrect. Han Lian Cao nourishes Yin and cools Blood but does not have Gui Ban’s heavy Yang-anchoring preparation requirement. Option B: Incorrect. Nu Zhen Zi is a gentler Liver-Kidney Yin tonic, does not require this pre-decoction, and should be used cautiously with diarrhea or Spleen deficiency Cold. Option C: Incorrect. Hei Zhi Ma is a seed that nourishes Yin and Blood and moistens the Intestines; it is not an animal-derived shell and is unsuitable when loose stools predominate. Option D: Correct. It identifies Gui Ban, its required preparation, and the safety conflict in the presentation.',
+        'translations' => [
+            'es' => [
+                'prompt' => 'Un paciente presenta sudoración nocturna, mareo, tinnitus y signos de deficiencia de Yin con ascenso de Yang. El profesional considera una sustancia medicinal pesada de origen animal, pero el paciente también tiene Frío-Humedad del Estómago y heces sueltas. ¿Qué opción identifica correctamente la sustancia medicinal y la decisión necesaria de preparación y seguridad?',
+                'options' => [
+                    ['label' => 'A', 'text' => 'Han Lian Cao (Ecliptae Herba): usarla para anclar Yang y predecoctarla durante 30 minutos porque su pesadez protege el Estómago.'],
+                    ['label' => 'B', 'text' => 'Nu Zhen Zi (Ligustri lucidi Fructus): predecoctarla durante 30 minutos y usarla libremente porque las heces sueltas no afectan su selección.'],
+                    ['label' => 'C', 'text' => 'Hei Zhi Ma (Sesami Semen nigrum): tratarla como un caparazón de origen animal y predecoctarla para evitar lesión por Frío.'],
+                    ['label' => 'D', 'text' => 'Gui Ban (Testudinis Plastrum): triturarla y predecoctarla unos 30 minutos; por ser pesada y empalagosa, reconsiderarla o evitarla ante Frío-Humedad del Estómago, deficiencia de Yang o diarrea.'],
+                ],
+                'explanation' => 'Paso de inferencia 1: La deficiencia de Yin con ascenso de Yang orienta hacia Gui Ban porque nutre Yin de Hígado-Riñón y ancla Yang. Paso de inferencia 2: Gui Ban es una sustancia pesada de origen animal que debe triturarse y predecoctarse; Frío-Humedad del Estómago, deficiencia de Yang y diarrea son motivos para evitarla o reconsiderarla cuidadosamente, no indicaciones automáticas. Opción A: Incorrecta. Han Lian Cao nutre Yin y enfría Sangre, pero no tiene el requisito de preparación pesada y anclaje de Yang de Gui Ban. Opción B: Incorrecta. Nu Zhen Zi es una tónica más suave de Yin de Hígado-Riñón, no requiere esta predecocción y debe usarse con cautela ante diarrea o Frío por deficiencia de Bazo. Opción C: Incorrecta. Hei Zhi Ma es una semilla que nutre Yin y Sangre y humedece los Intestinos; no es un caparazón de origen animal y no conviene cuando predominan las heces sueltas. Opción D: Correcta. Identifica Gui Ban, su preparación requerida y el conflicto de seguridad de la presentación.',
+            ],
+        ],
+        'contentType' => 'safety_dispensing',
+        'cognitiveLevel' => 'infer',
+        'difficultyBand' => 'inference',
+        'nomenclature' => [
+            'herbs' => [
+                ['pinyin' => 'Han Lian Cao', 'pharmaceuticalName' => 'Ecliptae Herba'],
+                ['pinyin' => 'Nu Zhen Zi', 'pharmaceuticalName' => 'Ligustri lucidi Fructus'],
+                ['pinyin' => 'Hei Zhi Ma', 'pharmaceuticalName' => 'Sesami Semen nigrum'],
+                ['pinyin' => 'Gui Ban', 'pharmaceuticalName' => 'Testudinis Plastrum'],
+            ],
+            'formulas' => [],
+            'feedback' => [
+                'herbs' => [
+                    ['pinyin' => 'Han Lian Cao', 'pharmaceuticalName' => 'Ecliptae Herba'],
+                    ['pinyin' => 'Nu Zhen Zi', 'pharmaceuticalName' => 'Ligustri lucidi Fructus'],
+                    ['pinyin' => 'Hei Zhi Ma', 'pharmaceuticalName' => 'Sesami Semen nigrum'],
+                    ['pinyin' => 'Gui Ban', 'pharmaceuticalName' => 'Testudinis Plastrum'],
+                ],
+                'formulas' => [],
+            ],
+        ],
+    ],
 ];
 foreach ($bank['domains'] as &$exam5domainquestions) {
     foreach ($exam5domainquestions as &$exam5question) {
@@ -886,6 +930,47 @@ if (is_array($heyecanonical)
         $record['savedByName'] = 'He Ye Appendix correction';
         $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
         $store['questions'][$heyerepairid] = $record;
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
+$guibanrepairid = 'SCORM-SD-2FD5E01DF69F';
+$guibancanonical = null;
+foreach ((array)($bank['domains'] ?? []) as $guibanquestions) {
+    foreach ((array)$guibanquestions as $guibanquestion) {
+        if ((string)($guibanquestion['questionId'] ?? '') === $guibanrepairid) {
+            $guibancanonical = $guibanquestion;
+            break 2;
+        }
+    }
+}
+$guibanstored = $revisionstore['questions'][$guibanrepairid] ?? null;
+if (is_array($guibancanonical)
+        && is_array($guibanstored)
+        && empty($guibanstored['guiBanGuidelineRepairAt'])) {
+    $guibanreplacement = array_intersect_key($guibancanonical, array_flip([
+        'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+        'contentType', 'cognitiveLevel', 'difficultyBand', 'nomenclature',
+    ]));
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $guibanrepairid,
+        $guibanreplacement
+    ): array {
+        $record = $store['questions'][$guibanrepairid] ?? null;
+        if (!is_array($record) || !empty($record['guiBanGuidelineRepairAt'])) {
+            return $store;
+        }
+        foreach (['original', 'draft', 'approved'] as $snapshotkey) {
+            if (is_array($record[$snapshotkey] ?? null)) {
+                $record[$snapshotkey] = array_replace($record[$snapshotkey], $guibanreplacement);
+            }
+        }
+        $savedat = gmdate(DATE_ATOM);
+        $record['guiBanGuidelineRepairAt'] = $savedat;
+        $record['savedAt'] = $savedat;
+        $record['savedByName'] = 'Gui Ban safety-question correction';
+        $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        $store['questions'][$guibanrepairid] = $record;
         return $store;
     });
     $revisionstore = block_myprogress_herbology_override_load();
