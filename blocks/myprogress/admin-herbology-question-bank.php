@@ -591,6 +591,50 @@ $exam5canonicalrepairs = [
         'correctLabel' => 'C',
         'explanation' => 'Inference step 1: A stable fixed lower-abdominal mass with fluid accumulation favors Gui Zhi Fu Ling Wan. Inference step 2: A hotter acute excess pattern with agitation, thirst, and stool binding favors Tao He Cheng Qi Tang. Option A: Incorrect; it reverses the assignments. Option B: Incorrect; it misstates both strategies. Option C: Correct. Option D: Incorrect; Heat and bowel-binding signs distinguish the formulas.',
     ],
+    'SCORM-SD-D247916CA323' => [
+        'prompt' => 'A patient has marked pathogenic fluid accumulation in the chest and flanks with labored breathing and thick sputum. Which herb attacks water accumulation and is specifically prohibited in combination with Gan Cao (Glycyrrhizae Radix)?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Gan Sui (Kansui Radix)'],
+            ['label' => 'B', 'text' => 'Ting Li Zi (Lepidii/Descurainiae Semen)'],
+            ['label' => 'C', 'text' => 'Ze Xie (Alismatis Rhizoma)'],
+            ['label' => 'D', 'text' => 'Fu Ling (Poria)'],
+        ],
+        'correctLabel' => 'A',
+        'explanation' => 'Inference step 1: Marked fluid accumulation in the chest and flanks requires an herb that forcefully attacks and drives out water. Inference step 2: Gan Sui performs that action and is one of the herbs specifically prohibited with Gan Cao. Option A: Correct. Gan Sui attacks water accumulation and must not be combined with Gan Cao. Option B: Incorrect. Ting Li Zi drains Lung water and relieves wheezing, but it is not the herb identified by this incompatibility. Option C: Incorrect. Ze Xie promotes urination and drains Dampness more moderately. Option D: Incorrect. Fu Ling leaches Dampness while supporting the Spleen and does not match the forceful action or stated incompatibility.',
+        'translations' => [
+            'es' => [
+                'prompt' => 'Un paciente presenta una marcada acumulación de líquidos patógenos en el pecho y los flancos, con respiración trabajosa y esputo espeso. ¿Qué hierba ataca la acumulación de agua y está específicamente prohibida en combinación con Gan Cao (Glycyrrhizae Radix)?',
+                'options' => [
+                    ['label' => 'A', 'text' => 'Gan Sui (Kansui Radix)'],
+                    ['label' => 'B', 'text' => 'Ting Li Zi (Lepidii/Descurainiae Semen)'],
+                    ['label' => 'C', 'text' => 'Ze Xie (Alismatis Rhizoma)'],
+                    ['label' => 'D', 'text' => 'Fu Ling (Poria)'],
+                ],
+                'explanation' => 'Paso de inferencia 1: La acumulación marcada de líquidos en el pecho y los flancos requiere una hierba que ataque y expulse el agua con fuerza. Paso de inferencia 2: Gan Sui realiza esa acción y es una de las hierbas específicamente prohibidas con Gan Cao. Opción A: Correcta. Gan Sui ataca la acumulación de agua y no debe combinarse con Gan Cao. Opción B: Incorrecta. Ting Li Zi drena el agua del Pulmón y alivia las sibilancias, pero no es la hierba identificada por esta incompatibilidad. Opción C: Incorrecta. Ze Xie promueve la micción y drena la Humedad de forma más moderada. Opción D: Incorrecta. Fu Ling filtra la Humedad mientras apoya al Bazo y no corresponde a la acción fuerte ni a la incompatibilidad indicadas.',
+            ],
+        ],
+        'contentType' => 'safety_dispensing',
+        'cognitiveLevel' => 'infer',
+        'difficultyBand' => 'inference',
+        'nomenclature' => [
+            'herbs' => [
+                ['pinyin' => 'Gan Sui', 'pharmaceuticalName' => 'Kansui Radix'],
+                ['pinyin' => 'Ting Li Zi', 'pharmaceuticalName' => 'Lepidii/Descurainiae Semen'],
+                ['pinyin' => 'Ze Xie', 'pharmaceuticalName' => 'Alismatis Rhizoma'],
+                ['pinyin' => 'Fu Ling', 'pharmaceuticalName' => 'Poria'],
+            ],
+            'formulas' => [],
+            'feedback' => [
+                'herbs' => [
+                    ['pinyin' => 'Gan Sui', 'pharmaceuticalName' => 'Kansui Radix'],
+                    ['pinyin' => 'Ting Li Zi', 'pharmaceuticalName' => 'Lepidii/Descurainiae Semen'],
+                    ['pinyin' => 'Ze Xie', 'pharmaceuticalName' => 'Alismatis Rhizoma'],
+                    ['pinyin' => 'Fu Ling', 'pharmaceuticalName' => 'Poria'],
+                ],
+                'formulas' => [],
+            ],
+        ],
+    ],
 ];
 foreach ($bank['domains'] as &$exam5domainquestions) {
     foreach ($exam5domainquestions as &$exam5question) {
@@ -599,8 +643,10 @@ foreach ($bank['domains'] as &$exam5domainquestions) {
         if (!is_array($exam5repair)) {
             continue;
         }
-        foreach (['prompt', 'options', 'correctLabel', 'explanation'] as $repairfield) {
-            $exam5question[$repairfield] = $exam5repair[$repairfield];
+        foreach (['prompt', 'options', 'correctLabel', 'explanation', 'nomenclature'] as $repairfield) {
+            if (array_key_exists($repairfield, $exam5repair)) {
+                $exam5question[$repairfield] = $exam5repair[$repairfield];
+            }
         }
         // The imported Spanish snapshot still belongs to the obsolete source
         // item and may contain Both/None shortcuts even though the reviewed
@@ -612,9 +658,9 @@ foreach ($bank['domains'] as &$exam5domainquestions) {
             unset($exam5question['translations']['es']);
         }
         $exam5question['feedbackStatus'] = 'practice-ready';
-        $exam5question['contentType'] = 'comparison';
-        $exam5question['cognitiveLevel'] = 'analyze';
-        $exam5question['difficultyBand'] = 'analysis';
+        $exam5question['contentType'] = (string)($exam5repair['contentType'] ?? 'comparison');
+        $exam5question['cognitiveLevel'] = (string)($exam5repair['cognitiveLevel'] ?? 'analyze');
+        $exam5question['difficultyBand'] = (string)($exam5repair['difficultyBand'] ?? 'analysis');
         $exam5question['review']['status'] = 'practice-ready';
         $exam5question['review']['notes'] = 'Exam 5 canonical comparison repair with independent choices and complete distractor feedback.';
         if (trim((string)($exam5question['sourceCard']['url'] ?? '')) === '') {
@@ -630,6 +676,50 @@ foreach ($bank['domains'] as &$exam5domainquestions) {
 }
 unset($exam5domainquestions);
 $revisionstore = block_myprogress_herbology_override_load();
+$guidelinesafetyrepairid = 'SCORM-SD-D247916CA323';
+$guidelinesafetycanonical = null;
+foreach ((array)($bank['domains'] ?? []) as $guidelinesafetyquestions) {
+    foreach ((array)$guidelinesafetyquestions as $guidelinesafetyquestion) {
+        if ((string)($guidelinesafetyquestion['questionId'] ?? '') === $guidelinesafetyrepairid) {
+            $guidelinesafetycanonical = $guidelinesafetyquestion;
+            break 2;
+        }
+    }
+}
+$guidelinesafetystored = $revisionstore['questions'][$guidelinesafetyrepairid] ?? null;
+if (is_array($guidelinesafetycanonical)
+        && is_array($guidelinesafetystored)
+        && empty($guidelinesafetystored['appendixGuidelineSafetyRepairAt'])) {
+    $guidelinesafetyreplacement = array_intersect_key($guidelinesafetycanonical, array_flip([
+        'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+        'contentType', 'cognitiveLevel', 'difficultyBand', 'nomenclature',
+    ]));
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $guidelinesafetyrepairid,
+        $guidelinesafetyreplacement
+    ): array {
+        $record = $store['questions'][$guidelinesafetyrepairid] ?? null;
+        if (!is_array($record) || !empty($record['appendixGuidelineSafetyRepairAt'])) {
+            return $store;
+        }
+        foreach (['original', 'draft', 'approved'] as $snapshotkey) {
+            if (is_array($record[$snapshotkey] ?? null)) {
+                $record[$snapshotkey] = array_replace(
+                    $record[$snapshotkey],
+                    $guidelinesafetyreplacement
+                );
+            }
+        }
+        $savedat = gmdate(DATE_ATOM);
+        $record['appendixGuidelineSafetyRepairAt'] = $savedat;
+        $record['savedAt'] = $savedat;
+        $record['savedByName'] = 'Appendix A safety-question correction';
+        $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        $store['questions'][$guidelinesafetyrepairid] = $record;
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $builtinstructiontemplateid = 'builtin-formula-vs-dui-yao';
 $generalinstructiontemplates = [
     $builtinstructiontemplateid => [
