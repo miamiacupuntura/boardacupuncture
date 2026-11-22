@@ -2242,158 +2242,8 @@ if ($publishedprojectrepairs !== [] || $draftprojectreuserepairs !== []) {
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
-$repairquestionguidelineherbnames = static function(array $question) use (
-    $normalizeguidelinename,
-    $guidelineherblatin
-): array {
-    $replacements = [];
-    $registerreplacement = static function(string $displayname, string $latinname) use (
-        &$replacements,
-        $normalizeguidelinename,
-        $guidelineherblatin
-    ): void {
-        $displayname = trim($displayname);
-        $normalizedlatin = $normalizeguidelinename($latinname);
-        if ($displayname === '' || $normalizedlatin === ''
-                || !isset($guidelineherblatin[$normalizedlatin])) {
-            return;
-        }
-        $officialname = trim((string)$guidelineherblatin[$normalizedlatin]);
-        if ($officialname === ''
-                || $normalizeguidelinename($displayname) === $normalizeguidelinename($officialname)) {
-            return;
-        }
-        $replacements[$displayname] = $officialname;
-    };
-    foreach (['herbs'] as $herbgroup) {
-        foreach ((array)($question['nomenclature'][$herbgroup] ?? []) as $herbrecord) {
-            if (is_array($herbrecord)) {
-                $registerreplacement(
-                    (string)($herbrecord['pinyin'] ?? ''),
-                    (string)($herbrecord['pharmaceuticalName'] ?? '')
-                );
-            }
-        }
-        foreach ((array)($question['nomenclature']['feedback'][$herbgroup] ?? []) as $herbrecord) {
-            if (is_array($herbrecord)) {
-                $registerreplacement(
-                    (string)($herbrecord['pinyin'] ?? ''),
-                    (string)($herbrecord['pharmaceuticalName'] ?? '')
-                );
-            }
-        }
-    }
-    $visibleparts = [
-        (string)($question['prompt'] ?? ''),
-        (string)($question['explanation'] ?? ''),
-        (string)($question['translations']['es']['prompt'] ?? ''),
-        (string)($question['translations']['es']['explanation'] ?? ''),
-    ];
-    foreach ((array)($question['options'] ?? []) as $option) {
-        $visibleparts[] = is_array($option) ? (string)($option['text'] ?? '') : '';
-    }
-    foreach ((array)($question['translations']['es']['options'] ?? []) as $option) {
-        $visibleparts[] = is_array($option) ? (string)($option['text'] ?? '') : '';
-    }
-    $visibletext = implode("\n", array_filter($visibleparts, static fn(string $part): bool => $part !== ''));
-    if ($visibletext !== '') {
-        preg_match_all(
-            '/\b((?:\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*)(?:\s+\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*){0,6})\s*\(([^()]+)\)/u',
-            $visibletext,
-            $namedmatches,
-            PREG_SET_ORDER
-        );
-        foreach ((array)$namedmatches as $namedmatch) {
-            $displayname = trim((string)($namedmatch[1] ?? ''));
-            $latinname = trim((string)($namedmatch[2] ?? ''));
-            $normalizedlatin = $normalizeguidelinename($latinname);
-            if ($displayname === '' || !isset($guidelineherblatin[$normalizedlatin])) {
-                continue;
-            }
-            $officialname = trim((string)$guidelineherblatin[$normalizedlatin]);
-            $officialwordcount = count(array_filter(preg_split('/\s+/u', $officialname) ?: []));
-            $displaywords = array_values(array_filter(preg_split('/\s+/u', $displayname) ?: []));
-            if ($officialwordcount > 0 && count($displaywords) >= $officialwordcount) {
-                $displayname = implode(' ', array_slice($displaywords, -$officialwordcount));
-            }
-            $registerreplacement($displayname, $latinname);
-        }
-    }
-    if ($replacements === []) {
-        return $question;
-    }
-    uksort($replacements, static fn(string $left, string $right): int => strlen($right) <=> strlen($left));
-    $repairtext = static function(string $text) use ($replacements): string {
-        foreach ($replacements as $oldname => $officialname) {
-            $pattern = '/(?<![\p{L}\p{M}])' . preg_quote($oldname, '/') . '(?![\p{L}\p{M}])/u';
-            $repaired = preg_replace($pattern, $officialname, $text);
-            if (is_string($repaired)) {
-                $text = $repaired;
-            }
-        }
-        return $text;
-    };
-    foreach (['prompt', 'explanation'] as $textfield) {
-        if (isset($question[$textfield])) {
-            $question[$textfield] = $repairtext((string)$question[$textfield]);
-        }
-        if (isset($question['translations']['es'][$textfield])) {
-            $question['translations']['es'][$textfield] = $repairtext(
-                (string)$question['translations']['es'][$textfield]
-            );
-        }
-    }
-    foreach (['options'] as $optionfield) {
-        foreach ((array)($question[$optionfield] ?? []) as $optionindex => $option) {
-            if (is_array($option)) {
-                $question[$optionfield][$optionindex]['text'] = $repairtext((string)($option['text'] ?? ''));
-            }
-        }
-        foreach ((array)($question['translations']['es'][$optionfield] ?? []) as $optionindex => $option) {
-            if (is_array($option)) {
-                $question['translations']['es'][$optionfield][$optionindex]['text'] = $repairtext(
-                    (string)($option['text'] ?? '')
-                );
-            }
-        }
-    }
-    foreach (['herbs'] as $herbgroup) {
-        foreach ((array)($question['nomenclature'][$herbgroup] ?? []) as $herbindex => $herbrecord) {
-            if (!is_array($herbrecord)) {
-                continue;
-            }
-            $normalizedlatin = $normalizeguidelinename((string)($herbrecord['pharmaceuticalName'] ?? ''));
-            if (isset($guidelineherblatin[$normalizedlatin])) {
-                $question['nomenclature'][$herbgroup][$herbindex]['pinyin'] =
-                    (string)$guidelineherblatin[$normalizedlatin];
-            }
-        }
-        foreach ((array)($question['nomenclature']['feedback'][$herbgroup] ?? []) as $herbindex => $herbrecord) {
-            if (!is_array($herbrecord)) {
-                continue;
-            }
-            $normalizedlatin = $normalizeguidelinename((string)($herbrecord['pharmaceuticalName'] ?? ''));
-            if (isset($guidelineherblatin[$normalizedlatin])) {
-                $question['nomenclature']['feedback'][$herbgroup][$herbindex]['pinyin'] =
-                    (string)$guidelineherblatin[$normalizedlatin];
-            }
-        }
-    }
-    $question['guidelineHerbNameRepairs'] = array_map(
-        static fn(string $oldname, string $officialname): array => [
-            'from' => $oldname,
-            'to' => $officialname,
-        ],
-        array_keys($replacements),
-        array_values($replacements)
-    );
-    return $question;
-};
-$normalizecreatedquestionpinyin = static function(array $question) use (
-    $repairquestionguidelineherbnames
-): array {
-    $question = block_myprogress_herbology_remove_pinyin_tones_from_question($question);
-    return $repairquestionguidelineherbnames($question);
+$normalizecreatedquestionpinyin = static function(array $question): array {
+    return block_myprogress_herbology_remove_pinyin_tones_from_question($question);
 };
 $findcreatedquestionguidelineviolations = static function(array $question) use (
     $normalizeguidelinename,
@@ -2519,65 +2369,6 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
     }
     return array_values($violations);
 };
-$guidelineherbnamerepairversion = 'appendix-a-pharmaceutical-name-canonicalization-v1';
-if ((string)($revisionstore['guidelineHerbNameRepairVersion'] ?? '')
-        !== $guidelineherbnamerepairversion) {
-    block_myprogress_herbology_override_update(static function(array $store) use (
-        $guidelineherbnamerepairversion,
-        $normalizecreatedquestionpinyin
-    ): array {
-        $repairedat = gmdate(DATE_ATOM);
-        foreach (['questions', 'customQuestions'] as $collectionkey) {
-            foreach ((array)($store[$collectionkey] ?? []) as $questionid => $record) {
-                if (!is_array($record)) {
-                    continue;
-                }
-                $changed = false;
-                foreach (['original', 'draft', 'approved'] as $snapshotkey) {
-                    if (!is_array($record[$snapshotkey] ?? null)) {
-                        continue;
-                    }
-                    $repairedsnapshot = $normalizecreatedquestionpinyin($record[$snapshotkey]);
-                    if ($repairedsnapshot !== $record[$snapshotkey]) {
-                        $record[$snapshotkey] = $repairedsnapshot;
-                        $changed = true;
-                    }
-                }
-                if ($changed) {
-                    $record['guidelineHerbNamesRepairedAt'] = $repairedat;
-                    $record['savedAt'] = $repairedat;
-                    $record['savedByName'] = 'Automatic Appendix A name correction';
-                    $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
-                    $store[$collectionkey][$questionid] = $record;
-                }
-            }
-        }
-        foreach ((array)($store['publishedExams'] ?? []) as $examkey => $publishedexam) {
-            if (!is_array($publishedexam) || !is_array($publishedexam['questions'] ?? null)) {
-                continue;
-            }
-            $examchanged = false;
-            foreach ($publishedexam['questions'] as $questionindex => $publishedquestion) {
-                if (!is_array($publishedquestion)) {
-                    continue;
-                }
-                $repairedquestion = $normalizecreatedquestionpinyin($publishedquestion);
-                if ($repairedquestion !== $publishedquestion) {
-                    $publishedexam['questions'][$questionindex] = $repairedquestion;
-                    $examchanged = true;
-                }
-            }
-            if ($examchanged) {
-                $publishedexam['guidelineHerbNamesRepairedAt'] = $repairedat;
-                $store['publishedExams'][$examkey] = $publishedexam;
-            }
-        }
-        $store['guidelineHerbNameRepairVersion'] = $guidelineherbnamerepairversion;
-        $store['guidelineHerbNamesRepairedAt'] = $repairedat;
-        return $store;
-    });
-    $revisionstore = block_myprogress_herbology_override_load();
-}
 $createdquestionpinyinrepairids = [];
 foreach ((array)($revisionstore['customQuestions'] ?? []) as $pinyinquestionid => $pinyinrecord) {
     if (!is_array($pinyinrecord) || !empty($pinyinrecord['pinyinTonesRemovedAt'])) {
@@ -2709,15 +2500,6 @@ $bank['domains'] = block_myprogress_herbology_merge_custom_questions(
     true
 );
 $bank['domains'] = block_myprogress_herbology_remove_pinyin_tones_from_domains($bank['domains']);
-foreach ($bank['domains'] as &$guidelinerepairquestions) {
-    foreach ($guidelinerepairquestions as &$guidelinerepairquestion) {
-        if (is_array($guidelinerepairquestion)) {
-            $guidelinerepairquestion = $repairquestionguidelineherbnames($guidelinerepairquestion);
-        }
-    }
-    unset($guidelinerepairquestion);
-}
-unset($guidelinerepairquestions);
 $basebank = $bank;
 $findquestion = static function(array $questionbank, string $questionid): ?array {
     foreach (($questionbank['domains'] ?? []) as $domainid => $questions) {
@@ -12622,7 +12404,6 @@ echo $OUTPUT->header();
         </div>
         <?php if ($displaylang === 'es' && !$hasspanishtranslation): ?><div class="question-bank__translation-missing"><strong>Esta pregunta todavía no tiene traducción guardada.</strong> Se muestra el original inglés. Use <strong>Crear traducción al español</strong> para traducir solamente el texto, las respuestas y la explicación sin cambiar el contenido clínico.</div><?php endif; ?>
         <?php if (!$cardguidelineverified): ?><div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'Publicación bloqueada por el guideline:' : 'Publishing blocked by the guideline:'; ?></strong> <?php echo s(implode(' | ', $cardguidelineviolations)); ?></div><?php endif; ?>
-        <?php if (!empty($question['guidelineHerbNameRepairs'])): ?><div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Nombre corregido automáticamente según Appendix A:' : 'Name corrected automatically from Appendix A:'; ?></strong> <?php echo s(implode(' · ', array_map(static function(array $repair): string { return (string)($repair['from'] ?? '') . ' → ' . (string)($repair['to'] ?? ''); }, (array)$question['guidelineHerbNameRepairs']))); ?></div><?php endif; ?>
         <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft' && !$inlineapproval): ?><div class="question-bank__ai-draft-note"><?php echo $cardisoutdated ? 'Earlier automatic-review version. If the question is already correct, approve the current version; run the updated review only when changes are still needed.' : ($cardiscorrected ? 'Corrected version — awaiting your approval. Review the current question below; the earlier version is not shown.' : 'Current proposed version — not published. Review it below, then accept it or request a correction.'); ?></div><?php endif; ?>
         <?php if (($inlineorigin && $cardbatchid !== '') || $inlineapproval): ?>
         <div class="question-bank__review-location">
