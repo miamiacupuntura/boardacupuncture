@@ -2522,29 +2522,32 @@ $formuladistractorguidelinerepairs = [
         'Mu Li Zhi Bai Di Huang Wan' => 'Zhi Bai Di Huang Wan with Mu Li added',
     ],
 ];
+$formuladistractorguidelinerepairversion = 'appendix-c-distractor-names-v2-tone-safe';
 $formuladistractorguidelinerepairids = [];
 foreach ($formuladistractorguidelinerepairs as $repairquestionid => $unusedreplacements) {
-    $repairrecord = $revisionstore['customQuestions'][$repairquestionid] ?? null;
-    if (is_array($repairrecord) && empty($repairrecord['formulaDistractorGuidelineRepairAt'])) {
-        $formuladistractorguidelinerepairids[] = $repairquestionid;
+    foreach (['customQuestions', 'questions'] as $repaircollectionkey) {
+        $repairrecord = $revisionstore[$repaircollectionkey][$repairquestionid] ?? null;
+        if (is_array($repairrecord)
+                && (string)($repairrecord['formulaDistractorGuidelineRepairVersion'] ?? '')
+                    !== $formuladistractorguidelinerepairversion) {
+            $formuladistractorguidelinerepairids[] = $repairquestionid;
+            break;
+        }
     }
 }
 if ($formuladistractorguidelinerepairids !== []) {
     block_myprogress_herbology_override_update(static function(array $store) use (
         $formuladistractorguidelinerepairs,
         $formuladistractorguidelinerepairids,
+        $formuladistractorguidelinerepairversion,
         $normalizeguidelinename
     ): array {
         $savedat = gmdate(DATE_ATOM);
         foreach ($formuladistractorguidelinerepairids as $repairquestionid) {
-            $record = $store['customQuestions'][$repairquestionid] ?? null;
-            if (!is_array($record) || !empty($record['formulaDistractorGuidelineRepairAt'])) {
-                continue;
-            }
             $replacements = $formuladistractorguidelinerepairs[$repairquestionid];
             $invalidformulas = array_fill_keys(array_map(
                 $normalizeguidelinename,
-                array_keys($replacements)
+                array_merge(array_keys($replacements), array_values($replacements))
             ), true);
             $replacevalue = static function($value) use (&$replacevalue, $replacements) {
                 if (is_array($value)) {
@@ -2557,41 +2560,53 @@ if ($formuladistractorguidelinerepairids !== []) {
                     ? str_ireplace(array_keys($replacements), array_values($replacements), $value)
                     : $value;
             };
-            foreach (['draft', 'approved'] as $snapshotkey) {
-                if (!is_array($record[$snapshotkey] ?? null)) {
+            foreach (['customQuestions', 'questions'] as $repaircollectionkey) {
+                $record = $store[$repaircollectionkey][$repairquestionid] ?? null;
+                if (!is_array($record)
+                        || (string)($record['formulaDistractorGuidelineRepairVersion'] ?? '')
+                            === $formuladistractorguidelinerepairversion) {
                     continue;
                 }
-                $snapshot = $record[$snapshotkey];
-                foreach ([['nomenclature', 'formulas'], ['nomenclature', 'feedback', 'formulas']]
-                        as $formulapath) {
-                    $formularecords = &$snapshot;
-                    foreach ($formulapath as $formulapathkey) {
-                        if (!is_array($formularecords[$formulapathkey] ?? null)) {
-                            unset($formularecords);
-                            continue 2;
-                        }
-                        $formularecords = &$formularecords[$formulapathkey];
+                foreach (['original', 'draft', 'approved'] as $snapshotkey) {
+                    if (!is_array($record[$snapshotkey] ?? null)) {
+                        continue;
                     }
-                    $formularecords = array_values(array_filter(
-                        $formularecords,
-                        static fn($formularecord): bool => !is_array($formularecord)
-                            || !isset($invalidformulas[$normalizeguidelinename(
-                                (string)($formularecord['pinyin'] ?? '')
-                            )])
-                    ));
-                    unset($formularecords);
+                    $snapshot = block_myprogress_herbology_remove_pinyin_tones_from_question(
+                        $record[$snapshotkey]
+                    );
+                    foreach ([['nomenclature', 'formulas'], ['nomenclature', 'feedback', 'formulas']]
+                            as $formulapath) {
+                        $formularecords = &$snapshot;
+                        foreach ($formulapath as $formulapathkey) {
+                            if (!is_array($formularecords[$formulapathkey] ?? null)) {
+                                unset($formularecords);
+                                continue 2;
+                            }
+                            $formularecords = &$formularecords[$formulapathkey];
+                        }
+                        $formularecords = array_values(array_filter(
+                            $formularecords,
+                            static fn($formularecord): bool => !is_array($formularecord)
+                                || !isset($invalidformulas[$normalizeguidelinename(
+                                    (string)($formularecord['pinyin'] ?? '')
+                                )])
+                        ));
+                        unset($formularecords);
+                    }
+                    $snapshot = $replacevalue($snapshot);
+                    $record[$snapshotkey] = $snapshot;
                 }
-                $snapshot = $replacevalue($snapshot);
-                $record[$snapshotkey] = $snapshot;
+                $record['idea'] = $replacevalue((string)($record['idea'] ?? ''));
+                $record['reviewSummary'] = $replacevalue((string)($record['reviewSummary'] ?? ''));
+                unset($record['guidelineValidation']);
+                $record['formulaDistractorGuidelineRepairAt'] = $savedat;
+                $record['formulaDistractorGuidelineRepairVersion'] =
+                    $formuladistractorguidelinerepairversion;
+                $record['savedAt'] = $savedat;
+                $record['savedByName'] = 'Appendix C distractor-name correction';
+                $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+                $store[$repaircollectionkey][$repairquestionid] = $record;
             }
-            $record['idea'] = $replacevalue((string)($record['idea'] ?? ''));
-            $record['reviewSummary'] = $replacevalue((string)($record['reviewSummary'] ?? ''));
-            unset($record['guidelineValidation']);
-            $record['formulaDistractorGuidelineRepairAt'] = $savedat;
-            $record['savedAt'] = $savedat;
-            $record['savedByName'] = 'Appendix C distractor-name correction';
-            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
-            $store['customQuestions'][$repairquestionid] = $record;
         }
         return $store;
     });
