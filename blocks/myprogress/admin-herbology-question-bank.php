@@ -5140,16 +5140,19 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamprojec
     $publisheddomaincounts = array_fill_keys(array_keys($domains), 0);
     $publishedquestions = [];
     $publishingissues = [];
+    $publishingissueids = [];
     foreach ($publishingids as $publishingindex => $publishingquestionid) {
         $publishingquestion = $questionsbyid[$publishingquestionid] ?? null;
         if (!is_array($publishingquestion)
                 || !$isprocessedquestion($publishingquestion)
                 || $publishingquestion['_excluded']) {
+            $publishingissueids[] = $publishingquestionid;
             $publishingissues[] = $publishingquestionid;
             continue;
         }
         $publishingguidelineviolations = $findcreatedquestionguidelineviolations($publishingquestion);
         if ($publishingguidelineviolations !== []) {
+            $publishingissueids[] = $publishingquestionid;
             $publishingissues[] = $publishingquestionid . ' (guideline: '
                 . implode(' | ', $publishingguidelineviolations) . ')';
             continue;
@@ -5162,11 +5165,73 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishexamprojec
         $publisheddomaincounts[(string)$publishingquestion['_domainid']]++;
     }
     if ($publishingissues !== []) {
+        $publishingissueids = array_values(array_unique(array_filter(array_map(
+            'strval',
+            $publishingissueids
+        ))));
+        $publishvalidationat = gmdate(DATE_ATOM);
+        $publishvalidationbyname = fullname($USER);
+        block_myprogress_herbology_override_update(static function(array $store) use (
+            $publishingprojectid,
+            $publishingissueids,
+            $publishingissues,
+            $publishvalidationat,
+            $publishvalidationbyname,
+            $USER
+        ): array {
+            $project = $store['examProjects'][$publishingprojectid] ?? null;
+            if (!is_array($project)
+                    || (string)($project['status'] ?? 'draft') === 'published') {
+                return $store;
+            }
+            $issueidlookup = array_fill_keys($publishingissueids, true);
+            $project['questionIds'] = array_values(array_filter(
+                array_map('strval', (array)($project['questionIds'] ?? [])),
+                static fn(string $questionid): bool => !isset($issueidlookup[$questionid])
+            ));
+            $project['confirmedQuestionIds'] = array_values(array_filter(
+                array_map('strval', (array)($project['confirmedQuestionIds'] ?? [])),
+                static fn(string $questionid): bool => !isset($issueidlookup[$questionid])
+            ));
+            $project['excludedQuestionIds'] = array_values(array_unique(array_merge(
+                array_filter(array_map('strval', (array)($project['excludedQuestionIds'] ?? []))),
+                $publishingissueids
+            )));
+            $project['currentCount'] = count($project['questionIds']);
+            $project['missingCount'] = max(
+                0,
+                (int)($project['targetCount'] ?? 100) - $project['currentCount']
+            );
+            $history = is_array($project['publicationValidationHistory'] ?? null)
+                ? $project['publicationValidationHistory']
+                : [];
+            $history[] = [
+                'removedQuestionIds' => $publishingissueids,
+                'issues' => $publishingissues,
+                'savedAt' => $publishvalidationat,
+                'savedById' => (int)$USER->id,
+                'savedByName' => $publishvalidationbyname,
+            ];
+            $project['publicationValidationHistory'] = array_slice($history, -20);
+            $project['publicationValidationRepairedAt'] = $publishvalidationat;
+            $project['updatedAt'] = $publishvalidationat;
+            $store['examProjects'][$publishingprojectid] = $project;
+            foreach ($publishingissueids as $publishingissueid) {
+                if (is_array($store['questions'][$publishingissueid] ?? null)
+                        && (string)($store['questions'][$publishingissueid]['examProjectId'] ?? '')
+                            === $publishingprojectid) {
+                    unset($store['questions'][$publishingissueid]['examProjectId']);
+                    $store['questions'][$publishingissueid]['removedFromExamProjectAt'] =
+                        $publishvalidationat;
+                }
+            }
+            return $store;
+        });
         redirect(
             $publisherrorurl('questions', implode(', ', array_slice($publishingissues, 0, 10))),
             ($displaylang === 'es'
-                ? 'El examen no se publicó. Estas preguntas necesitan volver a aprobarse o completarse: '
-                : 'The exam was not published. These questions must be approved or completed again: ')
+                ? 'El examen no se publicó. Se retiraron estas preguntas inválidas; reemplácelas antes de publicar: '
+                : 'The exam was not published. These invalid questions were removed; replace them before publishing: ')
                 . implode(', ', array_slice($publishingissues, 0, 10)),
             null,
             \core\output\notification::NOTIFY_ERROR
@@ -11833,8 +11898,8 @@ echo $OUTPUT->header();
                             : 'Not published: the project must contain exactly 100 approved questions.';
                     } else if ($publishexamerror === 'questions') {
                         $projectpublisherrormessage = ($displaylang === 'es'
-                            ? 'No se publicó: estas preguntas ya no están aprobadas o activas: '
-                            : 'Not published: these questions are no longer approved or active: ')
+                            ? 'No se publicó: se retiraron del examen estas preguntas inválidas; deben reemplazarse: '
+                            : 'Not published: these invalid questions were removed from the exam and must be replaced: ')
                             . $publishexamdetail;
                     } else if ($publishexamerror === 'blueprint') {
                         $projectpublisherrormessage = ($displaylang === 'es'
