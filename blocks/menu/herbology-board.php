@@ -2755,38 +2755,32 @@ echo $OUTPUT->header();
 
                 <details class="herb-board__exam-characteristics">
                     <summary>
-                        <span><strong><?php echo $ises ? 'Características y composición de Exam 1–5' : 'Exam 1–5 characteristics and composition'; ?></strong><small><?php echo $ises ? 'Comparar preguntas y ponderación por dominio' : 'Compare questions and weighting by domain'; ?></small></span>
+                        <span><strong><?php echo $ises ? 'Formato común de Exam 1–5' : 'Common format for Exam 1–5'; ?></strong><small><?php echo $ises ? 'Misma composición, diferentes conjuntos de preguntas' : 'Same blueprint, different question sets'; ?></small></span>
                         <b><?php echo $ises ? 'Ver detalles' : 'View details'; ?></b>
                     </summary>
                     <div class="herb-board__exam-characteristics-body">
                         <p><?php echo $ises
-                            ? 'Cada examen contiene 100 preguntas, dura 150 minutos y mantiene la ponderación oficial de seis dominios. No se muestran columnas administrativas ni trabajo pendiente.'
-                            : 'Each exam contains 100 questions, lasts 150 minutes, and preserves the official six-domain weighting. Administrative and unfinished-work columns are not shown.'; ?></p>
-                        <div class="herb-board__exam-characteristics-table-wrap">
-                            <table>
-                                <thead><tr>
-                                    <th><?php echo $ises ? 'Dominio' : 'Domain'; ?></th>
-                                    <?php foreach ($availablesimulationexamnumbers as $availablesimulationexamnumber): ?><th>Exam <?php echo (int)$availablesimulationexamnumber; ?><small><?php echo $ises ? '100 preguntas' : '100 questions'; ?></small></th><?php endforeach; ?>
-                                </tr></thead>
-                                <tbody>
-                                    <?php foreach ($domainblueprint as $domain): ?><tr>
-                                        <td><strong><?php echo $ises ? 'Dominio ' : 'Domain '; ?><?php echo (int)$domain['number']; ?></strong><span><?php echo s((string)$domain['name']); ?></span></td>
-                                        <?php foreach ($availablesimulationexamnumbers as $availablesimulationexamnumber):
-                                            $simulationexamdomaincount = (int)$domain['weight'];
-                                            if ($availablesimulationexamnumber > 1
-                                                    && isset($publishedsimulationexams[$availablesimulationexamnumber]['domainCounts'][(string)$domain['id']])) {
-                                                $simulationexamdomaincount = (int)$publishedsimulationexams[$availablesimulationexamnumber]['domainCounts'][(string)$domain['id']];
-                                            }
-                                        ?><td><strong><?php echo $simulationexamdomaincount; ?></strong><small><?php echo $simulationexamdomaincount; ?>%</small></td><?php endforeach; ?>
-                                    </tr><?php endforeach; ?>
-                                </tbody>
-                                <tfoot><tr><th><?php echo $ises ? 'Total' : 'Total'; ?></th><?php foreach ($availablesimulationexamnumbers as $availablesimulationexamnumber): ?><td><strong>100</strong></td><?php endforeach; ?></tr></tfoot>
-                            </table>
+                            ? 'Exam 1–5 son cinco conjuntos distintos de preguntas. Todos contienen 100 preguntas y utilizan exactamente la misma ponderación oficial de seis dominios.'
+                            : 'Exam 1–5 are five separate question sets. Every exam contains 100 questions and uses exactly the same official six-domain weighting.'; ?></p>
+                        <div class="herb-board__exam-common-facts">
+                            <span><strong>100</strong><?php echo $ises ? 'preguntas por examen' : 'questions per exam'; ?></span>
+                            <span><strong>150</strong><?php echo $ises ? 'minutos' : 'minutes'; ?></span>
+                            <span><strong><?php echo count($availablesimulationexamnumbers); ?></strong><?php echo $ises ? 'conjuntos diferentes' : 'different question sets'; ?></span>
+                            <span><strong>6</strong><?php echo $ises ? 'dominios ponderados' : 'weighted domains'; ?></span>
+                        </div>
+                        <div class="herb-board__exam-shared-blueprint" aria-label="<?php echo $ises ? 'Distribución común por dominio' : 'Shared domain weighting'; ?>">
+                            <?php foreach ($domainblueprint as $domain): ?>
+                                <article>
+                                    <header><strong><?php echo $ises ? 'Dominio ' : 'Domain '; ?><?php echo (int)$domain['number']; ?></strong><b><?php echo (int)$domain['weight']; ?>%</b></header>
+                                    <span><?php echo s((string)$domain['name']); ?></span>
+                                    <div aria-hidden="true"><i style="width: <?php echo (int)$domain['weight']; ?>%"></i></div>
+                                </article>
+                            <?php endforeach; ?>
                         </div>
                         <div class="herb-board__exam-characteristics-notes">
-                            <span><strong><?php echo $ises ? 'Duración:' : 'Duration:'; ?></strong> 150 <?php echo $ises ? 'minutos.' : 'minutes.'; ?></span>
                             <span><strong><?php echo $ises ? 'Durante el intento:' : 'During the attempt:'; ?></strong> <?php echo $ises ? 'respuestas y feedback ocultos.' : 'answers and feedback remain hidden.'; ?></span>
                             <span><strong><?php echo $ises ? 'Al finalizar:' : 'After finishing:'; ?></strong> <?php echo $ises ? 'resultado y revisión disponibles.' : 'results and review become available.'; ?></span>
+                            <span><strong><?php echo $ises ? 'La diferencia:' : 'What changes:'; ?></strong> <?php echo $ises ? 'las preguntas, no la distribución.' : 'the questions, not the weighting.'; ?></span>
                         </div>
                     </div>
                 </details>
@@ -3715,38 +3709,32 @@ echo $OUTPUT->header();
                 </nav>
                 <details class="herb-board__exam-characteristics">
                     <summary>
-                        <span><strong><?php echo $ises ? 'Características y composición de Exam 1–5' : 'Exam 1–5 characteristics and composition'; ?></strong><small><?php echo $ises ? 'Abrir para comparar la distribución por dominio' : 'Open to compare domain distribution'; ?></small></span>
+                        <span><strong><?php echo $ises ? 'Formato común de Exam 1–5' : 'Common format for Exam 1–5'; ?></strong><small><?php echo $ises ? 'Misma composición, diferentes conjuntos de preguntas' : 'Same blueprint, different question sets'; ?></small></span>
                         <b><?php echo $ises ? 'Ver detalles' : 'View details'; ?></b>
                     </summary>
                     <div class="herb-board__exam-characteristics-body">
                         <p><?php echo $ises
-                            ? 'Los exámenes lineal y adaptativo usan 100 preguntas y la misma ponderación oficial. Esta vista omite deliberadamente las columnas administrativas de inventario y trabajo pendiente.'
-                            : 'Linear and Adaptive exams use 100 questions and the same official weighting. This view intentionally omits administrative inventory and unfinished-work columns.'; ?></p>
-                        <div class="herb-board__exam-characteristics-table-wrap">
-                            <table>
-                                <thead><tr>
-                                    <th><?php echo $ises ? 'Dominio' : 'Domain'; ?></th>
-                                    <?php foreach ($availablepracticeexamnumbers as $availableexamnumber): ?><th>Exam <?php echo (int)$availableexamnumber; ?><small><?php echo $ises ? '100 preguntas' : '100 questions'; ?></small></th><?php endforeach; ?>
-                                </tr></thead>
-                                <tbody>
-                                    <?php foreach ($domainblueprint as $domain): ?><tr>
-                                        <td><strong><?php echo $ises ? 'Dominio ' : 'Domain '; ?><?php echo (int)$domain['number']; ?></strong><span><?php echo s((string)$domain['name']); ?></span></td>
-                                        <?php foreach ($availablepracticeexamnumbers as $availableexamnumber):
-                                            $availableexamdomaincount = (int)$domain['weight'];
-                                            if ($availableexamnumber > 1
-                                                    && isset($publishedsimulationexams[$availableexamnumber]['domainCounts'][(string)$domain['id']])) {
-                                                $availableexamdomaincount = (int)$publishedsimulationexams[$availableexamnumber]['domainCounts'][(string)$domain['id']];
-                                            }
-                                        ?><td><strong><?php echo $availableexamdomaincount; ?></strong><small><?php echo $availableexamdomaincount; ?>%</small></td><?php endforeach; ?>
-                                    </tr><?php endforeach; ?>
-                                </tbody>
-                                <tfoot><tr><th><?php echo $ises ? 'Total' : 'Total'; ?></th><?php foreach ($availablepracticeexamnumbers as $availableexamnumber): ?><td><strong>100</strong></td><?php endforeach; ?></tr></tfoot>
-                            </table>
+                            ? 'Exam 1–5 son cinco conjuntos distintos de preguntas. Todos contienen 100 preguntas y utilizan exactamente la misma ponderación oficial de seis dominios.'
+                            : 'Exam 1–5 are five separate question sets. Every exam contains 100 questions and uses exactly the same official six-domain weighting.'; ?></p>
+                        <div class="herb-board__exam-common-facts">
+                            <span><strong>100</strong><?php echo $ises ? 'preguntas por examen' : 'questions per exam'; ?></span>
+                            <span><strong>150</strong><?php echo $ises ? 'minutos' : 'minutes'; ?></span>
+                            <span><strong><?php echo count($availablepracticeexamnumbers); ?></strong><?php echo $ises ? 'conjuntos diferentes' : 'different question sets'; ?></span>
+                            <span><strong>6</strong><?php echo $ises ? 'dominios ponderados' : 'weighted domains'; ?></span>
+                        </div>
+                        <div class="herb-board__exam-shared-blueprint" aria-label="<?php echo $ises ? 'Distribución común por dominio' : 'Shared domain weighting'; ?>">
+                            <?php foreach ($domainblueprint as $domain): ?>
+                                <article>
+                                    <header><strong><?php echo $ises ? 'Dominio ' : 'Domain '; ?><?php echo (int)$domain['number']; ?></strong><b><?php echo (int)$domain['weight']; ?>%</b></header>
+                                    <span><?php echo s((string)$domain['name']); ?></span>
+                                    <div aria-hidden="true"><i style="width: <?php echo (int)$domain['weight']; ?>%"></i></div>
+                                </article>
+                            <?php endforeach; ?>
                         </div>
                         <div class="herb-board__exam-characteristics-notes">
                             <span><strong><?php echo $ises ? 'Lineal:' : 'Linear:'; ?></strong> <?php echo $ises ? 'secuencia fija y feedback después de responder.' : 'fixed sequence with feedback after answering.'; ?></span>
                             <span><strong><?php echo $ises ? 'Adaptativo:' : 'Adaptive:'; ?></strong> <?php echo $ises ? 'ajusta orden y dificultad después de cada respuesta.' : 'adjusts order and difficulty after every answer.'; ?></span>
-                            <span><strong>Clinical Cases:</strong> <?php echo $ises ? '63 casos con feedback inmediato.' : '63 cases with immediate feedback.'; ?></span>
+                            <span><strong><?php echo $ises ? 'La diferencia:' : 'What changes:'; ?></strong> <?php echo $ises ? 'las preguntas, no la distribución.' : 'the questions, not the weighting.'; ?></span>
                         </div>
                     </div>
                 </details>

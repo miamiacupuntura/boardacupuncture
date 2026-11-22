@@ -1891,54 +1891,84 @@ a.herb-board__domain:focus {
     line-height: 1.5;
 }
 
-.herb-board__exam-characteristics-table-wrap {
-    overflow-x: auto;
+.herb-board__exam-common-facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 9px;
+    margin-bottom: 12px;
 }
 
-.herb-board__exam-characteristics table {
-    width: 100%;
-    min-width: 720px;
-    border-collapse: collapse;
-}
-
-.herb-board__exam-characteristics th,
-.herb-board__exam-characteristics td {
-    padding: 10px 12px;
+.herb-board__exam-common-facts span {
+    display: flex;
+    min-height: 68px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 9px;
     border: 1px solid #dfe7eb;
+    border-radius: 8px;
+    background: #f7fafb;
+    color: #52677a;
+    font-size: .72rem;
+    font-weight: 700;
     text-align: center;
 }
 
-.herb-board__exam-characteristics th {
-    background: #f3f8f8;
-    color: #17324d;
+.herb-board__exam-common-facts strong {
+    color: #075f50;
+    font-size: 1.15rem;
 }
 
-.herb-board__exam-characteristics th small,
-.herb-board__exam-characteristics td small,
-.herb-board__exam-characteristics td span {
+.herb-board__exam-shared-blueprint {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.herb-board__exam-shared-blueprint article {
+    padding: 11px;
+    border: 1px solid #dfe7eb;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.herb-board__exam-shared-blueprint header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: #17324d;
+    font-size: .78rem;
+}
+
+.herb-board__exam-shared-blueprint header b {
+    color: #5b36ae;
+    font-size: .9rem;
+}
+
+.herb-board__exam-shared-blueprint article > span {
     display: block;
-    margin-top: 2px;
+    min-height: 32px;
+    margin-top: 3px;
     color: #64778a;
     font-size: .68rem;
     font-weight: 650;
+    line-height: 1.25;
 }
 
-.herb-board__exam-characteristics tbody td:first-child,
-.herb-board__exam-characteristics thead th:first-child,
-.herb-board__exam-characteristics tfoot th:first-child {
-    min-width: 245px;
-    text-align: left;
+.herb-board__exam-shared-blueprint article > div {
+    height: 5px;
+    margin-top: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e5edef;
 }
 
-.herb-board__exam-characteristics tbody td:not(:first-child) strong {
-    color: #5b36ae;
-    font-size: 1rem;
-}
-
-.herb-board__exam-characteristics tfoot th,
-.herb-board__exam-characteristics tfoot td {
-    background: #edf9f5;
-    color: #075f50;
+.herb-board__exam-shared-blueprint article > div i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #087c69;
 }
 
 .herb-board__exam-characteristics-notes {
@@ -1975,6 +2005,10 @@ a.herb-board__domain:focus {
     .herb-board__exam-characteristics-notes {
         grid-template-columns: 1fr;
     }
+
+    .herb-board__exam-shared-blueprint {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 560px) {
@@ -2002,6 +2036,11 @@ a.herb-board__domain:focus {
     .herb-board__exam-characteristics > summary {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .herb-board__exam-common-facts,
+    .herb-board__exam-shared-blueprint {
+        grid-template-columns: 1fr;
     }
 }
 
