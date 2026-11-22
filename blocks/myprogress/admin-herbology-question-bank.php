@@ -158,6 +158,8 @@ foreach ((array)$guidelineherbroster['herbs'] as $guidelineherb) {
 }
 $guidelineformulanames = [];
 $guidelineformulaenglish = [];
+$guidelineformulachapterbyname = [];
+$guidelineformulachapterlabels = [];
 foreach ((array)$guidelineformularoster['formulas'] as $guidelineformula) {
     $formulaname = $normalizeguidelinename((string)($guidelineformula['name'] ?? ''));
     $formulaenglish = $normalizeguidelinename((string)($guidelineformula['englishName'] ?? ''));
@@ -167,7 +169,40 @@ foreach ((array)$guidelineformularoster['formulas'] as $guidelineformula) {
     if ($formulaenglish !== '') {
         $guidelineformulaenglish[$formulaenglish] = (string)($guidelineformula['name'] ?? '');
     }
+    $formulachapter = (int)($guidelineformula['benskyCategory']['chapter'] ?? 0);
+    if ($formulaname !== '' && $formulachapter > 0) {
+        $guidelineformulachapterbyname[$formulaname] = $formulachapter;
+        $guidelineformulachapterlabels[$formulachapter] = [
+            'en' => trim((string)($guidelineformula['benskyCategory']['en'] ?? '')),
+            'es' => trim((string)($guidelineformula['benskyCategory']['es'] ?? '')),
+        ];
+    }
 }
+$guidelineherbcategorybyname = [];
+$guidelineherbcategorylabels = [];
+foreach ((array)$guidelineherbroster['herbs'] as $guidelineherb) {
+    $herbname = $normalizeguidelinename((string)($guidelineherb['name'] ?? ''));
+    $herbcategorycode = trim((string)($guidelineherb['benskyCategory']['code'] ?? ''));
+    if ($herbname === '' || $herbcategorycode === '') {
+        continue;
+    }
+    $guidelineherbcategorybyname[$herbname] = $herbcategorycode;
+    $guidelineherbcategorylabels[$herbcategorycode] = [
+        'en' => trim((string)($guidelineherb['benskyCategory']['en'] ?? '')),
+        'es' => trim((string)($guidelineherb['benskyCategory']['es'] ?? '')),
+    ];
+}
+$guidelineformulaaliases = [
+    'jin gui shen qi wan' => 'shen qi wan',
+    'ba wei di huang wan' => 'shen qi wan',
+    'shen mai san' => 'sheng mai san',
+    'ling jiao gou teng tang' => 'ling jiao gou teng yin',
+];
+$yangtonifyingformulanames = array_fill_keys([
+    'shen qi wan',
+    'you gui wan',
+    'you gui yin',
+], true);
 $scormbankpath = $CFG->dataroot . '/board-domain-banks/herbology-scorm-question-bank.json';
 $scormquestioncount = 0;
 if (is_readable($scormbankpath)) {
@@ -2260,14 +2295,11 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
     $guidelineherblatin,
     $guidelineformulanames,
     $guidelineformulaenglish,
+    $guidelineformulaaliases,
     $stripguidelineinstructionprefixes
 ): array {
     $violations = [];
-    $formulaaliases = [
-        'jin gui shen qi wan' => 'shen qi wan',
-        'shen mai san' => 'sheng mai san',
-        'ling jiao gou teng tang' => 'ling jiao gou teng yin',
-    ];
+    $formulaaliases = $guidelineformulaaliases;
     foreach ((array)($question['nomenclature']['herbs'] ?? []) as $herbrecord) {
         $herbname = trim((string)($herbrecord['pinyin'] ?? ''));
         $herblatin = trim((string)($herbrecord['pharmaceuticalName'] ?? ''));
@@ -4455,6 +4487,143 @@ foreach ($domains as $domainid => $domain) {
     }
 }
 
+$questioncontentcoverage = static function(array $question) use (
+    $normalizeguidelinename,
+    $guidelineformulaaliases,
+    $guidelineformulachapterbyname,
+    $guidelineherbcategorybyname,
+    $yangtonifyingformulanames
+): array {
+    $formulanames = [];
+    $herbnames = [];
+    $formulachapters = [];
+    $herbcategories = [];
+    $primaryformulachapter = 0;
+    $primaryherbcategory = '';
+    $formularecords = array_merge(
+        (array)($question['nomenclature']['formulas'] ?? []),
+        (array)($question['nomenclature']['feedback']['formulas'] ?? [])
+    );
+    foreach ($formularecords as $formularecord) {
+        if (!is_array($formularecord)) {
+            continue;
+        }
+        $formulaname = $normalizeguidelinename((string)($formularecord['pinyin'] ?? ''));
+        $formulaname = $guidelineformulaaliases[$formulaname] ?? $formulaname;
+        $formulachapter = (int)($guidelineformulachapterbyname[$formulaname] ?? 0);
+        if ($formulaname === '' || $formulachapter < 1) {
+            continue;
+        }
+        $formulanames[$formulaname] = true;
+        $formulachapters[$formulachapter] = true;
+        if ($primaryformulachapter < 1) {
+            $primaryformulachapter = $formulachapter;
+        }
+    }
+    $herbrecords = array_merge(
+        (array)($question['nomenclature']['herbs'] ?? []),
+        (array)($question['nomenclature']['feedback']['herbs'] ?? [])
+    );
+    foreach ($herbrecords as $herbrecord) {
+        if (!is_array($herbrecord)) {
+            continue;
+        }
+        $herbname = $normalizeguidelinename((string)($herbrecord['pinyin'] ?? ''));
+        $herbcategory = (string)($guidelineherbcategorybyname[$herbname] ?? '');
+        if ($herbname === '' || $herbcategory === '') {
+            continue;
+        }
+        $herbnames[$herbname] = true;
+        $herbcategories[$herbcategory] = true;
+        if ($primaryherbcategory === '') {
+            $primaryherbcategory = $herbcategory;
+        }
+    }
+    $visibletext = $normalizeguidelinename(implode(' ', array_filter([
+        (string)($question['prompt'] ?? ''),
+        implode(' ', array_map(
+            static fn(array $option): string => (string)($option['text'] ?? ''),
+            (array)($question['options'] ?? [])
+        )),
+        (string)($question['explanation'] ?? ''),
+    ])));
+    $paddedvisibletext = ' ' . $visibletext . ' ';
+    if ($formulanames === [] && $visibletext !== '') {
+        foreach ($guidelineformulachapterbyname as $formulaname => $formulachapter) {
+            if (!str_contains($paddedvisibletext, ' ' . $formulaname . ' ')) {
+                continue;
+            }
+            $formulanames[$formulaname] = true;
+            $formulachapters[(int)$formulachapter] = true;
+            if ($primaryformulachapter < 1) {
+                $primaryformulachapter = (int)$formulachapter;
+            }
+        }
+        foreach ($guidelineformulaaliases as $formulaalias => $canonicalformula) {
+            if (!str_contains($paddedvisibletext, ' ' . $formulaalias . ' ')
+                    || !isset($guidelineformulachapterbyname[$canonicalformula])) {
+                continue;
+            }
+            $formulanames[$canonicalformula] = true;
+            $formulachapter = (int)$guidelineformulachapterbyname[$canonicalformula];
+            $formulachapters[$formulachapter] = true;
+            if ($primaryformulachapter < 1) {
+                $primaryformulachapter = $formulachapter;
+            }
+        }
+    }
+    if ($herbnames === [] && $visibletext !== '') {
+        foreach ($guidelineherbcategorybyname as $herbname => $herbcategory) {
+            if (!str_contains($paddedvisibletext, ' ' . $herbname . ' ')) {
+                continue;
+            }
+            $herbnames[$herbname] = true;
+            $herbcategories[$herbcategory] = true;
+            if ($primaryherbcategory === '') {
+                $primaryherbcategory = $herbcategory;
+            }
+        }
+    }
+    $yangtonifyingformula = false;
+    foreach (array_keys($formulanames) as $formulaname) {
+        if (isset($yangtonifyingformulanames[$formulaname])) {
+            $yangtonifyingformula = true;
+            break;
+        }
+    }
+    ksort($formulachapters, SORT_NUMERIC);
+    ksort($herbcategories, SORT_STRING);
+    return [
+        'formulaNames' => array_keys($formulanames),
+        'herbNames' => array_keys($herbnames),
+        'formulaChapters' => array_map('intval', array_keys($formulachapters)),
+        'herbCategories' => array_keys($herbcategories),
+        'primaryFormulaChapter' => $primaryformulachapter,
+        'primaryHerbCategory' => $primaryherbcategory,
+        'yangTonifyingFormula' => $yangtonifyingformula,
+    ];
+};
+$questioncontentfamily = static function(array $question): string {
+    $coverage = is_array($question['_contentCoverage'] ?? null)
+        ? $question['_contentCoverage']
+        : [];
+    $domainid = (string)($question['_domainid'] ?? $question['domainId'] ?? '');
+    if (in_array($domainid, ['formula_differentiation', 'formula_composition'], true)
+            && (int)($coverage['primaryFormulaChapter'] ?? 0) > 0) {
+        return 'formula-chapter-' . (int)$coverage['primaryFormulaChapter'];
+    }
+    if (in_array($domainid, ['single_herb', 'safety_dispensing'], true)
+            && (string)($coverage['primaryHerbCategory'] ?? '') !== '') {
+        return 'herb-category-' . (string)$coverage['primaryHerbCategory'];
+    }
+    return $domainid !== '' ? 'domain-' . $domainid : 'uncategorized';
+};
+foreach ($allquestions as &$contentcoveragequestion) {
+    $contentcoveragequestion['_contentCoverage'] = $questioncontentcoverage($contentcoveragequestion);
+    $contentcoveragequestion['_contentFamily'] = $questioncontentfamily($contentcoveragequestion);
+}
+unset($contentcoveragequestion);
+
 $examprojects = [];
 foreach (($revisionstore['examProjects'] ?? []) as $storedexamid => $storedexam) {
     if (!is_array($storedexam)) {
@@ -4743,6 +4912,7 @@ if (is_array($currentexamproject)) {
         'paired_patient_clinical_comparison' => max(1, (int)round($projecttarget * 0.03)),
     ];
     $projectformatcounts = array_fill_keys(array_keys($projectformatcaps), 0);
+    $projectcontentfamilycounts = [];
     $projectpromptsignature = static function(array $question): string {
         $prompt = core_text::strtolower(trim((string)($question['prompt'] ?? '')));
         return trim((string)preg_replace('/[^\p{L}\p{N}]+/u', ' ', $prompt));
@@ -4759,6 +4929,9 @@ if (is_array($currentexamproject)) {
             if ($approvedsignature !== '') {
                 $selectedprojectpromptsignatures[$approvedsignature] = true;
             }
+            $approvedcontentfamily = (string)($projectquestion['_contentFamily'] ?? 'uncategorized');
+            $projectcontentfamilycounts[$approvedcontentfamily] =
+                (int)($projectcontentfamilycounts[$approvedcontentfamily] ?? 0) + 1;
         }
     }
     // Never offer a question that students have already seen in any published
@@ -4862,9 +5035,48 @@ if (is_array($currentexamproject)) {
         $projectneed = max(0, (int)$projecttargets[$projectdomainid] - (int)$approvedbydomain[$projectdomainid]);
         $projectremainingbydomain[$projectdomainid] = $projectneed;
         $selectedprojectquestions = [];
+        $projectcontentgroups = [];
         foreach ($projecteligiblebydomain[$projectdomainid] as $eligibleprojectquestion) {
-            if (count($selectedprojectquestions) >= $projectneed) {
-                break;
+            $eligiblecontentfamily = (string)($eligibleprojectquestion['_contentFamily'] ?? 'uncategorized');
+            $projectcontentgroups[$eligiblecontentfamily][] = $eligibleprojectquestion;
+            $projectcontentfamilycounts[$eligiblecontentfamily] =
+                (int)($projectcontentfamilycounts[$eligiblecontentfamily] ?? 0);
+        }
+        while (count($selectedprojectquestions) < $projectneed && $projectcontentgroups !== []) {
+            uksort($projectcontentgroups, static function(string $leftfamily, string $rightfamily) use (
+                $projectcontentfamilycounts,
+                $projectquality,
+                $projectcontentgroups
+            ): int {
+                $leftquestion = $projectcontentgroups[$leftfamily][0] ?? [];
+                $rightquestion = $projectcontentgroups[$rightfamily][0] ?? [];
+                $leftquality = $projectquality($leftquestion);
+                $rightquality = $projectquality($rightquestion);
+                // Preserve the existing eligibility priorities (targeted work,
+                // deferral, prior selection, approval and readiness) before
+                // using Bensky coverage to break otherwise comparable groups.
+                $qualitygatecomparison = array_slice($leftquality, 0, 5)
+                    <=> array_slice($rightquality, 0, 5);
+                if ($qualitygatecomparison !== 0) {
+                    return $qualitygatecomparison;
+                }
+                $countcomparison = (int)($projectcontentfamilycounts[$leftfamily] ?? 0)
+                    <=> (int)($projectcontentfamilycounts[$rightfamily] ?? 0);
+                if ($countcomparison !== 0) {
+                    return $countcomparison;
+                }
+                $qualitycomparison = $leftquality <=> $rightquality;
+                return $qualitycomparison !== 0
+                    ? $qualitycomparison
+                    : strcmp($leftfamily, $rightfamily);
+            });
+            $eligiblecontentfamily = (string)array_key_first($projectcontentgroups);
+            $eligibleprojectquestion = array_shift($projectcontentgroups[$eligiblecontentfamily]);
+            if ($projectcontentgroups[$eligiblecontentfamily] === []) {
+                unset($projectcontentgroups[$eligiblecontentfamily]);
+            }
+            if (!is_array($eligibleprojectquestion)) {
+                continue;
             }
             $eligiblesignature = $projectpromptsignature($eligibleprojectquestion);
             if ($eligiblesignature !== ''
@@ -4880,6 +5092,8 @@ if (is_array($currentexamproject)) {
                 continue;
             }
             $selectedprojectquestions[] = $eligibleprojectquestion;
+            $projectcontentfamilycounts[$eligiblecontentfamily] =
+                (int)($projectcontentfamilycounts[$eligiblecontentfamily] ?? 0) + 1;
             if (isset($projectformatcounts[$eligibleformatfamily])) {
                 $projectformatcounts[$eligibleformatfamily]++;
             }
@@ -4908,6 +5122,7 @@ if (is_array($currentexamproject)) {
     ));
     $examprojects[$examprojectid]['formatFamilyCounts'] = $projectformatcounts;
     $examprojects[$examprojectid]['formatFamilyCaps'] = $projectformatcaps;
+    $examprojects[$examprojectid]['contentFamilyCounts'] = $projectcontentfamilycounts;
     $currentexamproject = $examprojects[$examprojectid];
 }
 
@@ -10369,8 +10584,10 @@ foreach ($activequestions as $inventoryquestion) {
 }
 
 $inventoryexamcolumns = [];
+$inventoryexamquestionids = [];
 $inventoryusedquestionids = [];
 $exam1domaincounts = array_fill_keys(array_keys($domains), 0);
+$exam1questionids = [];
 foreach ($activequestions as $inventoryquestion) {
     if ((int)($inventoryquestion['_examposition'] ?? 0) <= 0) {
         continue;
@@ -10382,6 +10599,7 @@ foreach ($activequestions as $inventoryquestion) {
     }
     if ($inventoryquestionid !== '') {
         $inventoryusedquestionids[$inventoryquestionid] = true;
+        $exam1questionids[$inventoryquestionid] = true;
     }
 }
 $inventoryexamcolumns[] = [
@@ -10394,6 +10612,7 @@ $inventoryexamcolumns[] = [
     'counts' => $exam1domaincounts,
     'total' => array_sum($exam1domaincounts),
 ];
+$inventoryexamquestionids['exam-1'] = $exam1questionids;
 
 $publishedinventoryprojectids = [];
 $publishedinventoryexamnumbers = [1 => true];
@@ -10416,6 +10635,7 @@ foreach ((array)($revisionstore['publishedExams'] ?? []) as $publishedinventoryk
         }
     }
     $publishedinventoryquestioncounts = array_fill_keys(array_keys($domains), 0);
+    $publishedinventoryquestionids = [];
     foreach ((array)($publishedinventoryexam['questions'] ?? []) as $publishedinventoryquestion) {
         if (!is_array($publishedinventoryquestion)) {
             continue;
@@ -10431,6 +10651,7 @@ foreach ((array)($revisionstore['publishedExams'] ?? []) as $publishedinventoryk
         }
         if ($publishedinventoryquestionid !== '') {
             $inventoryusedquestionids[$publishedinventoryquestionid] = true;
+            $publishedinventoryquestionids[$publishedinventoryquestionid] = true;
         }
     }
     if (array_sum($publishedinventorycounts) === 0) {
@@ -10451,12 +10672,14 @@ foreach ((array)($revisionstore['publishedExams'] ?? []) as $publishedinventoryk
         'counts' => $publishedinventorycounts,
         'total' => array_sum($publishedinventorycounts),
     ];
+    $inventoryexamquestionids['exam-' . $publishedinventorynumber] = $publishedinventoryquestionids;
 }
 
 // Exam 2 predates the general project builder.  Until it has a published
 // snapshot, expose its current review allocation as a live exam column.
 if (!isset($publishedinventoryexamnumbers[2])) {
     $exam2reviewdomaincounts = array_fill_keys(array_keys($domains), 0);
+    $exam2reviewquestionids = [];
     foreach ($allquestions as $inventoryquestion) {
         if ((int)($inventoryquestion['_exam2position'] ?? 0) <= 0 || !empty($inventoryquestion['_excluded'])) {
             continue;
@@ -10468,6 +10691,7 @@ if (!isset($publishedinventoryexamnumbers[2])) {
         }
         if ($inventoryquestionid !== '') {
             $inventoryusedquestionids[$inventoryquestionid] = true;
+            $exam2reviewquestionids[$inventoryquestionid] = true;
         }
     }
     $inventoryexamcolumns[] = [
@@ -10480,6 +10704,7 @@ if (!isset($publishedinventoryexamnumbers[2])) {
         'counts' => $exam2reviewdomaincounts,
         'total' => array_sum($exam2reviewdomaincounts),
     ];
+    $inventoryexamquestionids['exam-2-review'] = $exam2reviewquestionids;
 } else {
     // Keep the live Exam 2 allocation unavailable to the reserve while it can
     // still be reviewed and republished.
@@ -10506,6 +10731,7 @@ foreach ($examprojects as $inventoryprojectid => $inventoryproject) {
         continue;
     }
     $inventoryprojectcounts = array_fill_keys(array_keys($domains), 0);
+    $inventoryprojectquestionids = [];
     foreach ((array)($inventoryproject['approvedQuestionIds'] ?? []) as $inventoryprojectquestionid) {
         $inventoryprojectquestionid = (string)$inventoryprojectquestionid;
         if (!isset($inventoryquestionbyid[$inventoryprojectquestionid])) {
@@ -10515,6 +10741,7 @@ foreach ($examprojects as $inventoryprojectid => $inventoryproject) {
         if (isset($inventoryprojectcounts[$inventoryprojectdomainid])) {
             $inventoryprojectcounts[$inventoryprojectdomainid]++;
         }
+        $inventoryprojectquestionids[$inventoryprojectquestionid] = true;
     }
     $inventoryprojecttargetcount = max(1, (int)($inventoryproject['targetCount'] ?? 100));
     $inventoryprojecttargets = [];
@@ -10560,6 +10787,7 @@ foreach ($examprojects as $inventoryprojectid => $inventoryproject) {
         'remainingTotal' => array_sum($inventoryprojectremainingcounts),
         'target' => (int)($inventoryproject['targetCount'] ?? 0),
     ];
+    $inventoryexamquestionids['project-' . (string)$inventoryprojectid] = $inventoryprojectquestionids;
 }
 usort($inventoryexamcolumns, static function(array $left, array $right): int {
     $sortcomparison = (int)$left['sort'] <=> (int)$right['sort'];
@@ -10581,6 +10809,128 @@ foreach ($activequestions as $inventoryquestion) {
     $inventorydomainstats[$inventoryquestiondomainid]['reserve']++;
 }
 $totals['reserve'] = count($reservequestionidlookup);
+
+$inventoryexamkeys = array_map(
+    static fn(array $inventoryexamcolumn): string => (string)$inventoryexamcolumn['key'],
+    $inventoryexamcolumns
+);
+$newcontentinventorystat = static function(string $key, string $label) use ($inventoryexamkeys): array {
+    return [
+        'key' => $key,
+        'label' => $label,
+        'total' => 0,
+        'ready' => 0,
+        'reserve' => 0,
+        'exams' => array_fill_keys($inventoryexamkeys, 0),
+    ];
+};
+$incrementcontentinventorystat = static function(array &$stat, array $question) use (
+    $inventoryexamquestionids,
+    $reservequestionidlookup
+): void {
+    $questionid = (string)($question['questionId'] ?? '');
+    $stat['total']++;
+    if (!empty($question['_ready'])) {
+        $stat['ready']++;
+    }
+    if ($questionid !== '' && isset($reservequestionidlookup[$questionid])) {
+        $stat['reserve']++;
+    }
+    foreach ($stat['exams'] as $inventoryexamkey => $unused) {
+        if ($questionid !== '' && isset($inventoryexamquestionids[$inventoryexamkey][$questionid])) {
+            $stat['exams'][$inventoryexamkey]++;
+        }
+    }
+};
+$formulachapterinventorystats = [];
+ksort($guidelineformulachapterlabels, SORT_NUMERIC);
+foreach ($guidelineformulachapterlabels as $formulachapter => $formulachapterlabel) {
+    $chapterlabel = trim((string)($formulachapterlabel[$displaylang === 'es' ? 'es' : 'en'] ?? ''));
+    $formulachapterinventorystats[(int)$formulachapter] = $newcontentinventorystat(
+        'formula-chapter-' . (int)$formulachapter,
+        ($displaylang === 'es' ? 'Capítulo ' : 'Chapter ') . (int)$formulachapter . ' · ' . $chapterlabel
+    );
+}
+$herbcategoryinventorystats = [];
+foreach ($guidelineherbcategorylabels as $herbcategorycode => $herbcategorylabel) {
+    $categorylabel = trim((string)($herbcategorylabel[$displaylang === 'es' ? 'es' : 'en'] ?? ''));
+    $herbcategoryinventorystats[$herbcategorycode] = $newcontentinventorystat(
+        'herb-category-' . $herbcategorycode,
+        $categorylabel
+    );
+}
+uasort($herbcategoryinventorystats, static fn(array $left, array $right): int =>
+    strcmp((string)$left['label'], (string)$right['label'])
+);
+$yangtonifyinginventorystat = $newcontentinventorystat(
+    'yang-tonifying-formulas',
+    $displaylang === 'es'
+        ? 'Fórmulas oficiales que calientan o tonifican Yang'
+        : 'Official formulas that warm or tonify Yang'
+);
+$yangtonifyingformulastats = [];
+foreach (['shen qi wan', 'you gui wan', 'you gui yin'] as $yangformula) {
+    $yangtonifyingformulastats[$yangformula] = $newcontentinventorystat(
+        'yang-formula-' . str_replace(' ', '-', $yangformula),
+        (string)($guidelineformulanames[$yangformula] ?? ucwords($yangformula))
+    );
+}
+$contentlevelinventorystats = [
+    'formula' => $newcontentinventorystat(
+        'formula-content',
+        $displaylang === 'es' ? 'Preguntas con fórmulas identificadas' : 'Questions with identified formulas'
+    ),
+    'herb' => $newcontentinventorystat(
+        'herb-content',
+        $displaylang === 'es' ? 'Preguntas con hierbas identificadas' : 'Questions with identified herbs'
+    ),
+];
+foreach ($activequestions as $contentinventoryquestion) {
+    $coverage = (array)($contentinventoryquestion['_contentCoverage'] ?? []);
+    $formulachapters = array_values(array_unique(array_map(
+        'intval',
+        (array)($coverage['formulaChapters'] ?? [])
+    )));
+    $herbcategories = array_values(array_unique(array_map(
+        'strval',
+        (array)($coverage['herbCategories'] ?? [])
+    )));
+    if ($formulachapters !== []) {
+        $incrementcontentinventorystat($contentlevelinventorystats['formula'], $contentinventoryquestion);
+    }
+    if ($herbcategories !== []) {
+        $incrementcontentinventorystat($contentlevelinventorystats['herb'], $contentinventoryquestion);
+    }
+    foreach ($formulachapters as $formulachapter) {
+        if (isset($formulachapterinventorystats[$formulachapter])) {
+            $incrementcontentinventorystat(
+                $formulachapterinventorystats[$formulachapter],
+                $contentinventoryquestion
+            );
+        }
+    }
+    foreach ($herbcategories as $herbcategorycode) {
+        if (isset($herbcategoryinventorystats[$herbcategorycode])) {
+            $incrementcontentinventorystat(
+                $herbcategoryinventorystats[$herbcategorycode],
+                $contentinventoryquestion
+            );
+        }
+    }
+    if (!empty($coverage['yangTonifyingFormula'])) {
+        $incrementcontentinventorystat($yangtonifyinginventorystat, $contentinventoryquestion);
+    }
+    $questionformulanames = array_fill_keys(
+        array_map('strval', (array)($coverage['formulaNames'] ?? [])),
+        true
+    );
+    foreach ($yangtonifyingformulastats as $yangformula => &$yangformulastat) {
+        if (isset($questionformulanames[$yangformula])) {
+            $incrementcontentinventorystat($yangformulastat, $contentinventoryquestion);
+        }
+    }
+    unset($yangformulastat);
+}
 
 $inventorydomainsnapshot = [];
 foreach ($domains as $inventorydomainid => $inventorydomain) {
@@ -10611,11 +10961,19 @@ $inventorysnapshot = [
     ],
     'exams' => array_values($inventoryexamcolumns),
     'domains' => $inventorydomainsnapshot,
+    'contentInventory' => [
+        'levels' => array_values($contentlevelinventorystats),
+        'yangTonifying' => $yangtonifyinginventorystat,
+        'yangFormulas' => array_values($yangtonifyingformulastats),
+        'formulaChapters' => array_values($formulachapterinventorystats),
+        'herbCategories' => array_values($herbcategoryinventorystats),
+    ],
 ];
 $inventorysnapshot['version'] = hash('sha256', json_encode([
     $inventorysnapshot['totals'],
     $inventorysnapshot['exams'],
     $inventorysnapshot['domains'],
+    $inventorysnapshot['contentInventory'],
 ]));
 
 $filteredquestions = array_values(array_filter(
@@ -11563,6 +11921,7 @@ echo $OUTPUT->header();
 .question-bank__button--similar{border-color:#0b8f87;background:#eef9f6;color:#075f59!important}.question-bank__button--similar:hover,.question-bank__button--similar:focus{background:#dff5ef}
 .question-bank__inventory-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid #d7e2e7;background:#f8fbfb}.question-bank__inventory-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}.question-bank__inventory-title strong{color:#173448}.question-bank__inventory-status{color:#60758a;font-size:12px;font-weight:750}.question-bank__inventory-status.is-refreshing{color:#6d28d9}.question-bank__inventory-status.is-error{color:#b42318}.question-bank__inventory-refresh{min-height:32px;padding:5px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff;color:#24465b;font-size:12px;font-weight:850;cursor:pointer}.question-bank__inventory-refresh:hover{border-color:#0b8f87;background:#eef9f6}.question-bank__inventory-refresh:disabled{cursor:wait;opacity:.65}.question-bank__domains th[data-inventory-state="review"]{background:#f4f0ff;color:#4c1d95}.question-bank__domains th small{display:block;margin-top:2px;font-size:9px;line-height:1.2;text-transform:none}.question-bank__domains td[data-inventory-exam]{font-weight:800;color:#4c1d95}@media(max-width:700px){.question-bank__inventory-head{align-items:stretch;flex-direction:column}.question-bank__inventory-refresh{width:100%}}
 .question-bank__domains td[data-inventory-exam] small{display:block;margin-top:2px;color:#6d28d9;font-size:9px;line-height:1.15;font-weight:750}
+.question-bank__content-inventory{overflow:visible}.question-bank__content-section{overflow-x:auto;border-top:1px solid #d7e2e7}.question-bank__content-section>summary{position:sticky;left:0;padding:12px 14px;background:#f8fbfb;color:#173448;font-weight:900;cursor:pointer}.question-bank__content-section>p{position:sticky;left:0;margin:0;padding:10px 14px;color:#52677a;font-size:12px}.question-bank__content-section--yang{background:#fffaf0}.question-bank__content-section--yang>summary{background:#fff3d8;color:#8a4b08}.question-bank__content-inventory td.is-content-gap{background:#fff1f0;color:#b42318;font-weight:900}.question-bank__content-inventory td:not(:first-child){text-align:center}.question-bank__content-inventory th:not(:first-child){text-align:center}.question-bank__content-inventory table{min-width:880px}
 .question-bank__editor{margin-bottom:18px;padding:20px;border:2px solid #6d28d9;border-radius:12px;background:#faf8ff}.question-bank__editor-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px}.question-bank__editor-head h3{margin:0 0 4px;font-size:23px}.question-bank__editor-head p{margin:0;color:#66557e}.question-bank__editor-grid{display:grid;grid-template-columns:1fr;gap:14px}.question-bank__editor-panel{padding:15px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__editor-panel h4{margin:0 0 12px}.question-bank__editor-field{display:block;margin-bottom:11px}.question-bank__editor-field>span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__editor input[type=text],.question-bank__editor textarea,.question-bank__editor select{box-sizing:border-box;width:100%;padding:9px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff}.question-bank__editor textarea{min-height:92px;resize:vertical}.question-bank__editor-classification{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}.question-bank__editor-check{display:flex;align-items:flex-start;gap:9px;margin:15px 0;padding:13px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed}.question-bank__editor-check input{margin-top:4px}.question-bank__editor-actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button--primary{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__button--publish{border-color:#6d28d9;background:#6d28d9;color:#fff!important}.question-bank__button--exclude{border-color:#b42318;background:#fff1f0;color:#9f1d16!important}.question-bank__exclusion-note{margin:10px 0;padding:12px 14px;border-left:4px solid #b42318;border-radius:7px;background:#fff1f0;color:#7a271a}.question-bank__item--excluded{border-color:#f1a6a0;background:#fffafa}.question-bank__edit-link{margin-left:auto}@media(max-width:850px){.question-bank__editor-classification{grid-template-columns:1fr}.question-bank__editor-head{display:block}.question-bank__editor-head .question-bank__button{margin-top:10px}}
 .question-bank__meta form{margin:0}.question-bank__actions-row .question-bank__delete-form:first-of-type{margin-left:0}.question-bank__edit-link+.question-bank__delete-form{margin-left:0!important}
 .question-bank__decision-panel>.question-bank__decision-actions{flex-wrap:nowrap;max-width:100%;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}.question-bank__decision-panel>.question-bank__decision-actions>*{flex:0 0 auto}.question-bank__decision-panel>.question-bank__decision-actions .question-bank__button{width:auto;white-space:nowrap}
@@ -12345,6 +12704,80 @@ echo $OUTPUT->header();
                 <td><?php echo (int)$inventorydomainstats[$domainid]['reserve']; ?></td>
             </tr><?php endforeach; ?></tbody>
         </table>
+    </section>
+    <section class="question-bank__domains question-bank__content-inventory" aria-labelledby="content-inventory-title">
+        <header class="question-bank__inventory-head">
+            <div class="question-bank__inventory-title">
+                <strong id="content-inventory-title"><?php echo $displaylang === 'es' ? 'Inventario por contenido Bensky' : 'Bensky content inventory'; ?></strong>
+                <span class="question-bank__inventory-status"><?php echo $displaylang === 'es'
+                    ? 'Cuenta preguntas únicas; una comparación puede cubrir más de una categoría.'
+                    : 'Counts unique questions; a comparison may cover more than one category.'; ?></span>
+            </div>
+        </header>
+        <details open class="question-bank__content-section question-bank__content-section--yang">
+            <summary><?php echo $displaylang === 'es'
+                ? 'Calentar y tonificar Yang · inventario prioritario'
+                : 'Warm and tonify Yang · priority inventory'; ?></summary>
+            <p><?php echo $displaylang === 'es'
+                ? 'Incluye Shen Qi Wan —también cuando aparece como Jin Gui Shen Qi Wan o Ba Wei Di Huang Wan—, You Gui Wan y You Gui Yin.'
+                : 'Includes Shen Qi Wan—including Jin Gui Shen Qi Wan and Ba Wei Di Huang Wan aliases—You Gui Wan, and You Gui Yin.'; ?></p>
+            <table>
+                <thead><tr>
+                    <th><?php echo $displaylang === 'es' ? 'Familia o fórmula' : 'Family or formula'; ?></th>
+                    <th><?php echo $displaylang === 'es' ? 'Clasificadas' : 'Classified'; ?></th>
+                    <th><?php echo $displaylang === 'es' ? 'Listas' : 'Ready'; ?></th>
+                    <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): ?><th><?php echo s((string)$inventoryexamcolumn['label']); ?></th><?php endforeach; ?>
+                    <th><?php echo $displaylang === 'es' ? 'Reserva' : 'Reserve'; ?></th>
+                </tr></thead>
+                <tbody>
+                    <?php foreach (array_merge([$yangtonifyinginventorystat], array_values($yangtonifyingformulastats)) as $contentstat): ?><tr>
+                        <td><strong><?php echo s((string)$contentstat['label']); ?></strong></td>
+                        <td><?php echo (int)$contentstat['total']; ?></td>
+                        <td><?php echo (int)$contentstat['ready']; ?></td>
+                        <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): $contentexamcount = (int)($contentstat['exams'][(string)$inventoryexamcolumn['key']] ?? 0); ?><td class="<?php echo $contentexamcount === 0 ? 'is-content-gap' : ''; ?>"><?php echo $contentexamcount; ?></td><?php endforeach; ?>
+                        <td><?php echo (int)$contentstat['reserve']; ?></td>
+                    </tr><?php endforeach; ?>
+                </tbody>
+            </table>
+        </details>
+        <details open class="question-bank__content-section">
+            <summary><?php echo $displaylang === 'es' ? 'Cobertura por capítulo de fórmulas' : 'Coverage by formula chapter'; ?></summary>
+            <table>
+                <thead><tr>
+                    <th><?php echo $displaylang === 'es' ? 'Capítulo Bensky' : 'Bensky chapter'; ?></th>
+                    <th><?php echo $displaylang === 'es' ? 'Clasificadas' : 'Classified'; ?></th>
+                    <th><?php echo $displaylang === 'es' ? 'Listas' : 'Ready'; ?></th>
+                    <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): ?><th><?php echo s((string)$inventoryexamcolumn['label']); ?></th><?php endforeach; ?>
+                    <th><?php echo $displaylang === 'es' ? 'Reserva' : 'Reserve'; ?></th>
+                </tr></thead>
+                <tbody><?php foreach ($formulachapterinventorystats as $contentstat): ?><tr>
+                    <td><strong><?php echo s((string)$contentstat['label']); ?></strong></td>
+                    <td><?php echo (int)$contentstat['total']; ?></td>
+                    <td><?php echo (int)$contentstat['ready']; ?></td>
+                    <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): $contentexamcount = (int)($contentstat['exams'][(string)$inventoryexamcolumn['key']] ?? 0); ?><td class="<?php echo $contentexamcount === 0 ? 'is-content-gap' : ''; ?>"><?php echo $contentexamcount; ?></td><?php endforeach; ?>
+                    <td><?php echo (int)$contentstat['reserve']; ?></td>
+                </tr><?php endforeach; ?></tbody>
+            </table>
+        </details>
+        <details class="question-bank__content-section">
+            <summary><?php echo $displaylang === 'es' ? 'Cobertura por categoría de hierbas' : 'Coverage by herb category'; ?></summary>
+            <table>
+                <thead><tr>
+                    <th><?php echo $displaylang === 'es' ? 'Categoría Bensky' : 'Bensky category'; ?></th>
+                    <th><?php echo $displaylang === 'es' ? 'Clasificadas' : 'Classified'; ?></th>
+                    <th><?php echo $displaylang === 'es' ? 'Listas' : 'Ready'; ?></th>
+                    <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): ?><th><?php echo s((string)$inventoryexamcolumn['label']); ?></th><?php endforeach; ?>
+                    <th><?php echo $displaylang === 'es' ? 'Reserva' : 'Reserve'; ?></th>
+                </tr></thead>
+                <tbody><?php foreach ($herbcategoryinventorystats as $contentstat): ?><tr>
+                    <td><strong><?php echo s((string)$contentstat['label']); ?></strong></td>
+                    <td><?php echo (int)$contentstat['total']; ?></td>
+                    <td><?php echo (int)$contentstat['ready']; ?></td>
+                    <?php foreach ($inventoryexamcolumns as $inventoryexamcolumn): $contentexamcount = (int)($contentstat['exams'][(string)$inventoryexamcolumn['key']] ?? 0); ?><td class="<?php echo $contentexamcount === 0 ? 'is-content-gap' : ''; ?>"><?php echo $contentexamcount; ?></td><?php endforeach; ?>
+                    <td><?php echo (int)$contentstat['reserve']; ?></td>
+                </tr><?php endforeach; ?></tbody>
+            </table>
+        </details>
     </section>
     <?php if ($custompreviewids !== []): ?>
     <section id="new-question-batch-preview" class="question-bank__batch-preview" aria-label="<?php echo $displaylang === 'es' ? 'Índice del lote recién creado' : 'Newly created batch index'; ?>">
