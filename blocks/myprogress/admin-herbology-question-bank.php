@@ -17,6 +17,9 @@ $usagefilter = optional_param('usage', 'all', PARAM_ALPHANUMEXT);
 $sourcefilter = optional_param('source', 'all', PARAM_ALPHA);
 $cognitivefilter = optional_param('cognitive', 'all', PARAM_ALPHA);
 $contentfilter = optional_param('content', 'all', PARAM_ALPHANUMEXT);
+$formulacategoryfilter = optional_param('formulacategory', 'all', PARAM_ALPHANUMEXT);
+$herbcategoryfilter = optional_param('herbcategory', 'all', PARAM_ALPHANUMEXT);
+$detailfilter = optional_param('detail', 'all', PARAM_ALPHANUMEXT);
 $reviewfilter = optional_param('review', 'all', PARAM_ALPHANUMEXT);
 $aibatchfilter = optional_param('aibatch', '', PARAM_ALPHANUMEXT);
 $custompreview = trim(optional_param('custompreview', '', PARAM_RAW));
@@ -99,6 +102,13 @@ if (!in_array($cognitivefilter, ['all', 'recall', 'application', 'inference', 'a
 }
 if (!in_array($contentfilter, ['all', 'herb_properties', 'formula_hierarchy', 'herb_processing', 'clinical_case', 'other'], true)) {
     $contentfilter = 'all';
+}
+$allowedquestiondetailfilters = [
+    'all', 'actions_indications', 'contraindications', 'dosage', 'channels', 'properties',
+    'processing', 'interactions', 'pregnancy', 'hierarchy_ingredients', 'formula_modification',
+];
+if (!in_array($detailfilter, $allowedquestiondetailfilters, true)) {
+    $detailfilter = 'all';
 }
 if (!in_array($reviewfilter, [
         'all', 'needs_inference', 'needs_feedback', 'simulation_candidate',
@@ -203,6 +213,20 @@ $yangtonifyingformulanames = array_fill_keys([
     'you gui wan',
     'you gui yin',
 ], true);
+$allowedformulacategoryfilters = array_fill_keys(['all', 'yang-tonifying'], true);
+foreach (array_keys($guidelineformulachapterlabels) as $formulachapter) {
+    $allowedformulacategoryfilters['chapter-' . (int)$formulachapter] = true;
+}
+if (!isset($allowedformulacategoryfilters[$formulacategoryfilter])) {
+    $formulacategoryfilter = 'all';
+}
+$allowedherbcategoryfilters = array_fill_keys(['all'], true);
+foreach (array_keys($guidelineherbcategorylabels) as $herbcategorycode) {
+    $allowedherbcategoryfilters[(string)$herbcategorycode] = true;
+}
+if (!isset($allowedherbcategoryfilters[$herbcategoryfilter])) {
+    $herbcategoryfilter = 'all';
+}
 $scormbankpath = $CFG->dataroot . '/board-domain-banks/herbology-scorm-question-bank.json';
 $scormquestioncount = 0;
 if (is_readable($scormbankpath)) {
@@ -4539,16 +4563,17 @@ $questioncontentcoverage = static function(array $question) use (
             $primaryherbcategory = $herbcategory;
         }
     }
-    $visibletext = $normalizeguidelinename(implode(' ', array_filter([
+    $rawvisibletext = implode(' ', array_filter([
         (string)($question['prompt'] ?? ''),
         implode(' ', array_map(
-            static fn(array $option): string => (string)($option['text'] ?? ''),
+            static fn($option): string => is_array($option) ? (string)($option['text'] ?? '') : (string)$option,
             (array)($question['options'] ?? [])
         )),
         (string)($question['explanation'] ?? ''),
-    ])));
+    ]));
+    $visibletext = $normalizeguidelinename($rawvisibletext);
     $paddedvisibletext = ' ' . $visibletext . ' ';
-    if ($formulanames === [] && $visibletext !== '') {
+    if ($visibletext !== '') {
         foreach ($guidelineformulachapterbyname as $formulaname => $formulachapter) {
             if (!str_contains($paddedvisibletext, ' ' . $formulaname . ' ')) {
                 continue;
@@ -4572,7 +4597,7 @@ $questioncontentcoverage = static function(array $question) use (
             }
         }
     }
-    if ($herbnames === [] && $visibletext !== '') {
+    if ($visibletext !== '') {
         foreach ($guidelineherbcategorybyname as $herbname => $herbcategory) {
             if (!str_contains($paddedvisibletext, ' ' . $herbname . ' ')) {
                 continue;
@@ -4591,8 +4616,56 @@ $questioncontentcoverage = static function(array $question) use (
             break;
         }
     }
+    $detailtopics = [];
+    $contenttype = (string)($question['contentType'] ?? '');
+    $markdetailtopic = static function(string $topic) use (&$detailtopics): void {
+        $detailtopics[$topic] = true;
+    };
+    if (preg_match('/\b(?:action|actions|indicat|function|functions|best suited|most appropriate|therapeutic effect|'
+            . 'accion|acciones|indic|funcion|funciones|mas apropiad|efecto terapeutico)\w*\b/', $visibletext) === 1) {
+        $markdetailtopic('actions_indications');
+    }
+    if (preg_match('/\b(?:contraindicat|avoid|caution|warning|unsafe|prohibit|toxicity|toxic|'
+            . 'contraindic|evitar|precaucion|advertencia|toxicidad|toxico)\w*\b/', $visibletext) === 1) {
+        $markdetailtopic('contraindications');
+    }
+    if (preg_match('/\b(?:dose|dosage|dosing|grams?|milligrams?|mg|dosis|gramos?|miligramos?)\b/', $visibletext) === 1
+            || preg_match('/\b\d+(?:\.\d+)?\s*(?:-|–|to)\s*\d+(?:\.\d+)?\s*(?:g|mg)\b|\b\d+(?:\.\d+)?\s*(?:g|mg)\b/i', $rawvisibletext) === 1) {
+        $markdetailtopic('dosage');
+    }
+    if (preg_match('/\b(?:channel|channels|meridian|meridians|enters?|entry|canal|canales|meridiano|meridianos)\b/', $visibletext) === 1) {
+        $markdetailtopic('channels');
+    }
+    if ($contenttype === 'herb_properties'
+            || preg_match('/\b(?:property|properties|temperature|flavor|flavour|taste|acrid|bitter|sweet|salty|sour|'
+                . 'propiedad|propiedades|temperatura|sabor|acre|amargo|dulce|salado|acido)\w*\b/', $visibletext) === 1) {
+        $markdetailtopic('properties');
+    }
+    if ($contenttype === 'herb_processing'
+            || preg_match('/\b(?:process|processed|processing|prepare|prepared|preparation|honey|fried|roasted|charred|'
+                . 'proces|prepar|miel|frito|tostado|carbonizado)\w*\b/', $visibletext) === 1) {
+        $markdetailtopic('processing');
+    }
+    if (preg_match('/\b(?:interaction|interactions|interact|warfarin|inr|digoxin|anticoagulant|antiplatelet|'
+            . 'medication|medications|drug|drugs|interaccion|interacciones|medicamento|medicamentos|farmaco|farmacos)\w*\b/', $visibletext) === 1) {
+        $markdetailtopic('interactions');
+    }
+    if (preg_match('/\b(?:pregnan|pregnancy|fetus|fetal|miscarriage|gestation|embaraz|gestacion|feto|aborto)\w*\b/', $visibletext) === 1) {
+        $markdetailtopic('pregnancy');
+    }
+    if ($contenttype === 'formula_hierarchy'
+            || preg_match('/\b(?:chief|deputy|assistant|envoy|monarch|minister|hierarchy|ingredient role|'
+                . 'jun chen zuo shi|jefe|diputado|asistente|enviado|jerarquia|funcion del ingrediente)\b/', $visibletext) === 1) {
+        $markdetailtopic('hierarchy_ingredients');
+    }
+    if ((string)($question['_domainid'] ?? $question['domainId'] ?? '') === 'formula_composition'
+            || preg_match('/\b(?:modif|add|added|remove|removed|replace|base formula|composition|conversion|'
+                . 'agregar|anadir|retirar|eliminar|reemplazar|formula base|composicion|conversion)\w*\b/', $visibletext) === 1) {
+        $markdetailtopic('formula_modification');
+    }
     ksort($formulachapters, SORT_NUMERIC);
     ksort($herbcategories, SORT_STRING);
+    ksort($detailtopics, SORT_STRING);
     return [
         'formulaNames' => array_keys($formulanames),
         'herbNames' => array_keys($herbnames),
@@ -4601,6 +4674,7 @@ $questioncontentcoverage = static function(array $question) use (
         'primaryFormulaChapter' => $primaryformulachapter,
         'primaryHerbCategory' => $primaryherbcategory,
         'yangTonifyingFormula' => $yangtonifyingformula,
+        'detailTopics' => array_keys($detailtopics),
     ];
 };
 $questioncontentfamily = static function(array $question): string {
@@ -10986,6 +11060,9 @@ $filteredquestions = array_values(array_filter(
         $sourcefilter,
         $cognitivefilter,
         $contentfilter,
+        $formulacategoryfilter,
+        $herbcategoryfilter,
+        $detailfilter,
         $reviewfilter,
         $aibatchfilter,
         $custompreviewids,
@@ -11060,6 +11137,37 @@ $filteredquestions = array_values(array_filter(
             } else if ($questioncontent !== $contentfilter) {
                 return false;
             }
+        }
+        $contentcoverage = (array)($question['_contentCoverage'] ?? []);
+        if ($formulacategoryfilter === 'yang-tonifying'
+                && empty($contentcoverage['yangTonifyingFormula'])) {
+            return false;
+        }
+        if (str_starts_with($formulacategoryfilter, 'chapter-')) {
+            $requiredformulachapter = (int)substr($formulacategoryfilter, strlen('chapter-'));
+            if (!in_array(
+                $requiredformulachapter,
+                array_map('intval', (array)($contentcoverage['formulaChapters'] ?? [])),
+                true
+            )) {
+                return false;
+            }
+        }
+        if ($herbcategoryfilter !== 'all'
+                && !in_array(
+                    $herbcategoryfilter,
+                    array_map('strval', (array)($contentcoverage['herbCategories'] ?? [])),
+                    true
+                )) {
+            return false;
+        }
+        if ($detailfilter !== 'all'
+                && !in_array(
+                    $detailfilter,
+                    array_map('strval', (array)($contentcoverage['detailTopics'] ?? [])),
+                    true
+                )) {
+            return false;
         }
         if ($query !== '') {
             $translation = $question['translations']['es'] ?? [];
@@ -11143,6 +11251,9 @@ $bankmanualorderactive = $query === ''
     && $sourcefilter === 'all'
     && $cognitivefilter === 'all'
     && $contentfilter === 'all'
+    && $formulacategoryfilter === 'all'
+    && $herbcategoryfilter === 'all'
+    && $detailfilter === 'all'
     && $reviewfilter === 'all'
     && $custompreviewids === [];
 $applymanualbankmoves = static function(array $questions): array {
@@ -11259,6 +11370,9 @@ $baseparams = array_filter([
     'source' => $sourcefilter !== 'all' ? $sourcefilter : null,
     'cognitive' => $cognitivefilter !== 'all' ? $cognitivefilter : null,
     'content' => $contentfilter !== 'all' ? $contentfilter : null,
+    'formulacategory' => $formulacategoryfilter !== 'all' ? $formulacategoryfilter : null,
+    'herbcategory' => $herbcategoryfilter !== 'all' ? $herbcategoryfilter : null,
+    'detail' => $detailfilter !== 'all' ? $detailfilter : null,
     'review' => $reviewfilter !== 'all' ? $reviewfilter : null,
     'aibatch' => $aibatchfilter !== '' ? $aibatchfilter : null,
     'custompreview' => $custompreview !== '' ? $custompreview : null,
@@ -11288,11 +11402,15 @@ $clearurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php
 $filterlabels = $displaylang === 'es' ? [
     'query' => 'Búsqueda', 'domain' => 'Dominio', 'readiness' => 'Preparación',
     'usage' => 'Uso en examen', 'source' => 'Fuente', 'cognitive' => 'Nivel cognitivo',
-    'content' => 'Contenido', 'review' => 'Revisión editorial', 'batch' => 'Grupo de revisión',
+    'content' => 'Contenido', 'formulacategory' => 'Categoría de fórmulas',
+    'herbcategory' => 'Categoría de hierbas', 'detail' => 'Tema evaluado',
+    'review' => 'Revisión editorial', 'batch' => 'Grupo de revisión',
 ] : [
     'query' => 'Search', 'domain' => 'Domain', 'readiness' => 'Readiness',
     'usage' => 'Exam use', 'source' => 'Source', 'cognitive' => 'Cognitive level',
-    'content' => 'Content focus', 'review' => 'Editorial review', 'batch' => 'Review group',
+    'content' => 'Content focus', 'formulacategory' => 'Formula category',
+    'herbcategory' => 'Herb category', 'detail' => 'Tested detail',
+    'review' => 'Editorial review', 'batch' => 'Review group',
 ];
 $filtervalues = $displaylang === 'es' ? [
     'ready' => 'Lista para práctica', 'incomplete' => 'Necesita completarse',
@@ -11308,6 +11426,11 @@ $filtervalues = $displaylang === 'es' ? [
     'analysis' => 'Análisis / diferencial', 'herb_properties' => 'Propiedades de hierbas',
     'formula_hierarchy' => 'Jerarquía de fórmulas', 'herb_processing' => 'Elaboración de hierbas',
     'clinical_case' => 'Casos clínicos', 'other' => 'Otro contenido',
+    'actions_indications' => 'Acciones e indicaciones', 'contraindications' => 'Contraindicaciones',
+    'dosage' => 'Dosis', 'channels' => 'Canales y meridianos', 'properties' => 'Propiedades y temperatura',
+    'processing' => 'Procesamiento', 'interactions' => 'Interacciones con medicamentos',
+    'pregnancy' => 'Embarazo', 'hierarchy_ingredients' => 'Jerarquía y funciones de ingredientes',
+    'formula_modification' => 'Composición y modificación de fórmulas',
     'editing_drafts' => 'Ediciones guardadas', 'ai_drafts' => 'Grupo actual de IA',
     'proposals_pending' => 'Propuestas para publicar', 'needs_inference' => 'Necesita más inferencia',
     'needs_feedback' => 'Necesita mejor feedback', 'simulation_candidate' => 'Candidata para simulación',
@@ -11328,12 +11451,28 @@ $filtervalues = $displaylang === 'es' ? [
     'analysis' => 'Analysis / differential', 'herb_properties' => 'Herb properties',
     'formula_hierarchy' => 'Formula hierarchy', 'herb_processing' => 'Herb processing',
     'clinical_case' => 'Clinical cases', 'other' => 'Other content',
+    'actions_indications' => 'Actions and indications', 'contraindications' => 'Contraindications',
+    'dosage' => 'Dosage', 'channels' => 'Channels and meridians', 'properties' => 'Properties and temperature',
+    'processing' => 'Processing', 'interactions' => 'Medication interactions',
+    'pregnancy' => 'Pregnancy', 'hierarchy_ingredients' => 'Hierarchy and ingredient roles',
+    'formula_modification' => 'Formula composition and modification',
     'editing_drafts' => 'Saved editing drafts', 'ai_drafts' => 'Current AI review group',
     'proposals_pending' => 'Publishing proposals', 'needs_inference' => 'Needs more inference',
     'needs_feedback' => 'Needs stronger feedback', 'simulation_candidate' => 'Simulation candidate',
     'reclassification_requested' => 'Reclassification requested', 'possible_exclusion' => 'Possible exclusions',
     'study_archive' => 'Mock-only questions',
     'deleted' => 'Deleted questions',
+];
+$formulacategoryfilteroptions = $guidelineformulachapterlabels;
+ksort($formulacategoryfilteroptions, SORT_NUMERIC);
+$herbcategoryfilteroptions = $guidelineherbcategorylabels;
+uasort($herbcategoryfilteroptions, static function(array $left, array $right) use ($displaylang): int {
+    $labelkey = $displaylang === 'es' ? 'es' : 'en';
+    return strcmp((string)($left[$labelkey] ?? ''), (string)($right[$labelkey] ?? ''));
+});
+$detailfilteroptions = [
+    'actions_indications', 'contraindications', 'dosage', 'channels', 'properties',
+    'processing', 'interactions', 'pregnancy', 'hierarchy_ingredients', 'formula_modification',
 ];
 $activefilters = [];
 if ($query !== '') {
@@ -11347,11 +11486,36 @@ if ($domainfilter !== 'all' && isset($domains[$domainfilter])) {
 }
 foreach ([
     [$readinessfilter, 'readiness'], [$usagefilter, 'usage'], [$sourcefilter, 'source'],
-    [$cognitivefilter, 'cognitive'], [$contentfilter, 'content'], [$reviewfilter, 'review'],
+    [$cognitivefilter, 'cognitive'], [$contentfilter, 'content'], [$detailfilter, 'detail'],
+    [$reviewfilter, 'review'],
 ] as [$filtervalue, $filtertype]) {
     if ($filtervalue !== 'all' && isset($filtervalues[$filtervalue])) {
         $activefilters[] = ['label' => $filterlabels[$filtertype], 'value' => $filtervalues[$filtervalue]];
     }
+}
+if ($formulacategoryfilter !== 'all') {
+    if ($formulacategoryfilter === 'yang-tonifying') {
+        $formulacategorylabel = $displaylang === 'es'
+            ? 'Calentar y tonificar Yang'
+            : 'Warm and tonify Yang';
+    } else {
+        $formulachapter = (int)substr($formulacategoryfilter, strlen('chapter-'));
+        $formulachapterlabel = (array)($guidelineformulachapterlabels[$formulachapter] ?? []);
+        $formulacategorylabel = ($displaylang === 'es' ? 'Capítulo ' : 'Chapter ')
+            . $formulachapter . ' · '
+            . (string)($formulachapterlabel[$displaylang === 'es' ? 'es' : 'en'] ?? '');
+    }
+    $activefilters[] = [
+        'label' => $filterlabels['formulacategory'],
+        'value' => $formulacategorylabel,
+    ];
+}
+if ($herbcategoryfilter !== 'all') {
+    $herbcategorylabel = (array)($guidelineherbcategorylabels[$herbcategoryfilter] ?? []);
+    $activefilters[] = [
+        'label' => $filterlabels['herbcategory'],
+        'value' => (string)($herbcategorylabel[$displaylang === 'es' ? 'es' : 'en'] ?? $herbcategoryfilter),
+    ];
 }
 if ($aibatchfilter !== '') {
     $activefilters[] = ['label' => $filterlabels['batch'], 'value' => $aibatchfilter];
@@ -11922,6 +12086,7 @@ echo $OUTPUT->header();
 .question-bank__inventory-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid #d7e2e7;background:#f8fbfb}.question-bank__inventory-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}.question-bank__inventory-title strong{color:#173448}.question-bank__inventory-status{color:#60758a;font-size:12px;font-weight:750}.question-bank__inventory-status.is-refreshing{color:#6d28d9}.question-bank__inventory-status.is-error{color:#b42318}.question-bank__inventory-refresh{min-height:32px;padding:5px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff;color:#24465b;font-size:12px;font-weight:850;cursor:pointer}.question-bank__inventory-refresh:hover{border-color:#0b8f87;background:#eef9f6}.question-bank__inventory-refresh:disabled{cursor:wait;opacity:.65}.question-bank__domains th[data-inventory-state="review"]{background:#f4f0ff;color:#4c1d95}.question-bank__domains th small{display:block;margin-top:2px;font-size:9px;line-height:1.2;text-transform:none}.question-bank__domains td[data-inventory-exam]{font-weight:800;color:#4c1d95}@media(max-width:700px){.question-bank__inventory-head{align-items:stretch;flex-direction:column}.question-bank__inventory-refresh{width:100%}}
 .question-bank__domains td[data-inventory-exam] small{display:block;margin-top:2px;color:#6d28d9;font-size:9px;line-height:1.15;font-weight:750}
 .question-bank__content-inventory{overflow:visible}.question-bank__content-section{overflow-x:auto;border-top:1px solid #d7e2e7}.question-bank__content-section>summary{position:sticky;left:0;padding:12px 14px;background:#f8fbfb;color:#173448;font-weight:900;cursor:pointer}.question-bank__content-section>p{position:sticky;left:0;margin:0;padding:10px 14px;color:#52677a;font-size:12px}.question-bank__content-section--yang{background:#fffaf0}.question-bank__content-section--yang>summary{background:#fff3d8;color:#8a4b08}.question-bank__content-inventory td.is-content-gap{background:#fff1f0;color:#b42318;font-weight:900}.question-bank__content-inventory td:not(:first-child){text-align:center}.question-bank__content-inventory th:not(:first-child){text-align:center}.question-bank__content-inventory table{min-width:880px}
+.question-bank__badge--classification{background:#eaf3ff;color:#28558a}
 .question-bank__editor{margin-bottom:18px;padding:20px;border:2px solid #6d28d9;border-radius:12px;background:#faf8ff}.question-bank__editor-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px}.question-bank__editor-head h3{margin:0 0 4px;font-size:23px}.question-bank__editor-head p{margin:0;color:#66557e}.question-bank__editor-grid{display:grid;grid-template-columns:1fr;gap:14px}.question-bank__editor-panel{padding:15px;border:1px solid #ded7ef;border-radius:9px;background:#fff}.question-bank__editor-panel h4{margin:0 0 12px}.question-bank__editor-field{display:block;margin-bottom:11px}.question-bank__editor-field>span{display:block;margin-bottom:5px;font-size:12px;font-weight:850}.question-bank__editor input[type=text],.question-bank__editor textarea,.question-bank__editor select{box-sizing:border-box;width:100%;padding:9px 10px;border:1px solid #b8c8d2;border-radius:7px;background:#fff}.question-bank__editor textarea{min-height:92px;resize:vertical}.question-bank__editor-classification{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}.question-bank__editor-check{display:flex;align-items:flex-start;gap:9px;margin:15px 0;padding:13px;border-left:4px solid #d97706;border-radius:7px;background:#fff7ed}.question-bank__editor-check input{margin-top:4px}.question-bank__editor-actions{display:flex;flex-wrap:wrap;gap:8px}.question-bank__button--primary{border-color:#0b8f87;background:#0b8f87;color:#fff!important}.question-bank__button--publish{border-color:#6d28d9;background:#6d28d9;color:#fff!important}.question-bank__button--exclude{border-color:#b42318;background:#fff1f0;color:#9f1d16!important}.question-bank__exclusion-note{margin:10px 0;padding:12px 14px;border-left:4px solid #b42318;border-radius:7px;background:#fff1f0;color:#7a271a}.question-bank__item--excluded{border-color:#f1a6a0;background:#fffafa}.question-bank__edit-link{margin-left:auto}@media(max-width:850px){.question-bank__editor-classification{grid-template-columns:1fr}.question-bank__editor-head{display:block}.question-bank__editor-head .question-bank__button{margin-top:10px}}
 .question-bank__meta form{margin:0}.question-bank__actions-row .question-bank__delete-form:first-of-type{margin-left:0}.question-bank__edit-link+.question-bank__delete-form{margin-left:0!important}
 .question-bank__decision-panel>.question-bank__decision-actions{flex-wrap:nowrap;max-width:100%;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}.question-bank__decision-panel>.question-bank__decision-actions>*{flex:0 0 auto}.question-bank__decision-panel>.question-bank__decision-actions .question-bank__button{width:auto;white-space:nowrap}
@@ -12659,6 +12824,9 @@ echo $OUTPUT->header();
         <label><span>Source</span><select name="source" onchange="if(this.value==='admin'&&this.form.elements.usage){this.form.elements.usage.value='all';}"><option value="all">All sources</option><option value="curated"<?php echo $sourcefilter === 'curated' ? ' selected' : ''; ?>>Curated bank</option><option value="scorm"<?php echo $sourcefilter === 'scorm' ? ' selected' : ''; ?>>SCORM modules</option><option value="admin"<?php echo $sourcefilter === 'admin' ? ' selected' : ''; ?>><?php echo $displaylang === 'es' ? 'Preguntas creadas' : 'Created questions'; ?> — <?php echo (int)$customquestiontotalcount; ?> <?php echo $displaylang === 'es' ? 'total' : 'total'; ?> · <?php echo (int)$customdraftcount; ?> <?php echo $displaylang === 'es' ? 'borradores' : 'drafts'; ?> · <?php echo (int)$customapprovedcount; ?> <?php echo $displaylang === 'es' ? 'aprobadas' : 'approved'; ?></option></select><small><?php echo $displaylang === 'es' ? 'Al elegir Preguntas creadas, Uso en examen cambia a Todos los usos. Use Preparación para separar borradores y aprobadas.' : 'Selecting Created questions changes Exam use to All uses. Use Readiness to separate drafts from approved questions.'; ?></small></label>
         <label><span>Cognitive level</span><select name="cognitive"><option value="all">All cognitive levels</option><option value="recall"<?php echo $cognitivefilter === 'recall' ? ' selected' : ''; ?>>Recall / direct</option><option value="application"<?php echo $cognitivefilter === 'application' ? ' selected' : ''; ?>>Application</option><option value="inference"<?php echo $cognitivefilter === 'inference' ? ' selected' : ''; ?>>Inference</option><option value="analysis"<?php echo $cognitivefilter === 'analysis' ? ' selected' : ''; ?>>Analysis / differential</option></select></label>
         <label><span>Content focus</span><select name="content"><option value="all">All content</option><option value="herb_properties"<?php echo $contentfilter === 'herb_properties' ? ' selected' : ''; ?>>Herb properties</option><option value="formula_hierarchy"<?php echo $contentfilter === 'formula_hierarchy' ? ' selected' : ''; ?>>Formula hierarchy</option><option value="herb_processing"<?php echo $contentfilter === 'herb_processing' ? ' selected' : ''; ?>>Herb processing</option><option value="clinical_case"<?php echo $contentfilter === 'clinical_case' ? ' selected' : ''; ?>>Clinical cases</option><option value="other"<?php echo $contentfilter === 'other' ? ' selected' : ''; ?>>Other content</option></select></label>
+        <label><span><?php echo $displaylang === 'es' ? 'Categoría de fórmulas' : 'Formula category'; ?></span><select name="formulacategory"><option value="all">—</option><option value="yang-tonifying"<?php echo $formulacategoryfilter === 'yang-tonifying' ? ' selected' : ''; ?>><?php echo $displaylang === 'es' ? 'Calentar y tonificar Yang' : 'Warm and tonify Yang'; ?></option><?php foreach ($formulacategoryfilteroptions as $formulachapter => $formulacategory): ?><option value="chapter-<?php echo (int)$formulachapter; ?>"<?php echo $formulacategoryfilter === 'chapter-' . (int)$formulachapter ? ' selected' : ''; ?>><?php echo s(($displaylang === 'es' ? 'Capítulo ' : 'Chapter ') . (int)$formulachapter . ' · ' . (string)($formulacategory[$displaylang === 'es' ? 'es' : 'en'] ?? '')); ?></option><?php endforeach; ?></select></label>
+        <label><span><?php echo $displaylang === 'es' ? 'Categoría de hierbas' : 'Herb category'; ?></span><select name="herbcategory"><option value="all">—</option><?php foreach ($herbcategoryfilteroptions as $herbcategorycode => $herbcategory): ?><option value="<?php echo s((string)$herbcategorycode); ?>"<?php echo $herbcategoryfilter === (string)$herbcategorycode ? ' selected' : ''; ?>><?php echo s((string)($herbcategory[$displaylang === 'es' ? 'es' : 'en'] ?? $herbcategorycode)); ?></option><?php endforeach; ?></select></label>
+        <label><span><?php echo $displaylang === 'es' ? 'Tema evaluado' : 'Tested detail'; ?></span><select name="detail"><option value="all">—</option><?php foreach ($detailfilteroptions as $detailfilteroption): ?><option value="<?php echo s($detailfilteroption); ?>"<?php echo $detailfilter === $detailfilteroption ? ' selected' : ''; ?>><?php echo s((string)($filtervalues[$detailfilteroption] ?? $detailfilteroption)); ?></option><?php endforeach; ?></select></label>
         <label><span>Editorial review</span><select name="review"><option value="all">All review states</option><option value="editing_drafts"<?php echo $reviewfilter === 'editing_drafts' ? ' selected' : ''; ?>>Saved editing drafts</option><option value="ai_drafts"<?php echo $reviewfilter === 'ai_drafts' ? ' selected' : ''; ?>>Current AI review group</option><option value="proposals_pending"<?php echo $reviewfilter === 'proposals_pending' ? ' selected' : ''; ?>>Publishing proposals</option><option value="needs_inference"<?php echo $reviewfilter === 'needs_inference' ? ' selected' : ''; ?>>Needs more inference</option><option value="needs_feedback"<?php echo $reviewfilter === 'needs_feedback' ? ' selected' : ''; ?>>Needs stronger feedback</option><option value="simulation_candidate"<?php echo $reviewfilter === 'simulation_candidate' ? ' selected' : ''; ?>>Simulation candidate</option><option value="reclassification_requested"<?php echo $reviewfilter === 'reclassification_requested' ? ' selected' : ''; ?>>Reclassification requested</option><option value="possible_exclusion"<?php echo $reviewfilter === 'possible_exclusion' ? ' selected' : ''; ?>>Possible exclusions</option><option value="study_archive"<?php echo $reviewfilter === 'study_archive' ? ' selected' : ''; ?>>Mock-only questions</option><option value="deleted"<?php echo $reviewfilter === 'deleted' ? ' selected' : ''; ?>>Deleted questions (recycle bin)</option></select></label>
         <?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="examview" value="<?php echo s($examprojectview); ?>"><?php endif; ?>
         <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
@@ -12965,6 +13133,30 @@ echo $OUTPUT->header();
                 : 'Exclude this question only from ' . (string)$currentexamproject['name']
                     . ' because it is similar to another? The question will remain in the bank and a replacement will be selected.')
             : '';
+        $cardcontentcoverage = (array)($question['_contentCoverage'] ?? []);
+        $cardformulacategories = [];
+        foreach ((array)($cardcontentcoverage['formulaChapters'] ?? []) as $cardformulachapter) {
+            $cardformulachapter = (int)$cardformulachapter;
+            $cardformulacategory = (array)($guidelineformulachapterlabels[$cardformulachapter] ?? []);
+            if ($cardformulachapter > 0 && $cardformulacategory !== []) {
+                $cardformulacategories[] = ($displaylang === 'es' ? 'Cap. ' : 'Ch. ')
+                    . $cardformulachapter . ' · '
+                    . (string)($cardformulacategory[$displaylang === 'es' ? 'es' : 'en'] ?? '');
+            }
+        }
+        $cardherbcategories = [];
+        foreach ((array)($cardcontentcoverage['herbCategories'] ?? []) as $cardherbcategorycode) {
+            $cardherbcategory = (array)($guidelineherbcategorylabels[(string)$cardherbcategorycode] ?? []);
+            if ($cardherbcategory !== []) {
+                $cardherbcategories[] = (string)($cardherbcategory[$displaylang === 'es' ? 'es' : 'en'] ?? '');
+            }
+        }
+        $carddetailtopics = [];
+        foreach ((array)($cardcontentcoverage['detailTopics'] ?? []) as $carddetailtopic) {
+            if (isset($filtervalues[(string)$carddetailtopic])) {
+                $carddetailtopics[] = (string)$filtervalues[(string)$carddetailtopic];
+            }
+        }
     ?><article id="question-<?php echo s($question['questionId']); ?>" class="question-bank__item<?php echo $question['_excluded'] ? ' question-bank__item--excluded' : ''; ?>">
         <?php if ($usagefilter === 'exam_project_pending' && isset($examprojectpositions[(string)$question['questionId']])): ?><div class="question-bank__temporary-order"><span><?php echo $displaylang === 'es' ? 'Orden temporal de revisión' : 'Temporary review order'; ?></span><strong><?php echo s((string)$currentexamproject['name']); ?> Question <?php echo str_pad((string)$examprojectpositions[(string)$question['questionId']], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$currentexamproject['targetCount']; ?></small></div><?php endif; ?>
         <?php if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true) && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span><?php echo $usagefilter === 'exam2_approved' ? 'Approved Exam 2 position' : 'Temporary review order'; ?></span><strong><?php echo $usagefilter === 'exam2_approved' ? 'Exam 2 Question ' : 'Proposed Exam 2 Question '; ?><?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
@@ -12975,6 +13167,9 @@ echo $OUTPUT->header();
             <span class="question-bank__badge">Domain <?php echo (int)$domain['number']; ?> · <?php echo s($domain['name']); ?></span>
             <span class="question-bank__badge<?php echo $question['_sourcekind'] === 'scorm' ? ' question-bank__badge--scorm' : ''; ?>"><?php echo s($sourcelabel); ?></span>
             <span class="question-bank__badge">Content: <?php echo s($contentlabel); ?></span>
+            <?php if ($cardformulacategories !== []): ?><span class="question-bank__badge question-bank__badge--classification"><?php echo $displaylang === 'es' ? 'Fórmulas: ' : 'Formulas: '; ?><?php echo s(implode(' · ', $cardformulacategories)); ?></span><?php endif; ?>
+            <?php if ($cardherbcategories !== []): ?><span class="question-bank__badge question-bank__badge--classification"><?php echo $displaylang === 'es' ? 'Hierbas: ' : 'Herbs: '; ?><?php echo s(implode(' · ', $cardherbcategories)); ?></span><?php endif; ?>
+            <?php if ($carddetailtopics !== []): ?><span class="question-bank__badge question-bank__badge--classification"><?php echo $displaylang === 'es' ? 'Evalúa: ' : 'Tests: '; ?><?php echo s(implode(' · ', $carddetailtopics)); ?></span><?php endif; ?>
             <span class="question-bank__badge">Cognitive: <?php echo s($cognitivelabel); ?></span>
             <?php if ($question['_sourcekind'] === 'scorm' && $question['_needsinference']): ?><span class="question-bank__badge question-bank__badge--incomplete">Needs more inference</span><?php endif; ?>
             <?php if ($question['_sourcekind'] === 'scorm' && in_array($question['_feedbackquality'], ['missing', 'brief'], true)): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo s(ucfirst($question['_feedbackquality'])); ?> feedback</span><?php endif; ?>
