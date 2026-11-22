@@ -4410,8 +4410,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
     require_sesskey();
     $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
+    $manualcustomrecord = is_array($revisionstore['customQuestions'][$questionid] ?? null)
+        ? $revisionstore['customQuestions'][$questionid]
+        : null;
     $baseentry = $findquestion($basebank, $questionid);
-    if ($baseentry === null) {
+    if ($baseentry === null && is_array($manualcustomrecord)) {
+        $manualcustomsnapshot = (string)($manualcustomrecord['status'] ?? 'draft') === 'approved'
+                && is_array($manualcustomrecord['approved'] ?? null)
+            ? $manualcustomrecord['approved']
+            : (is_array($manualcustomrecord['draft'] ?? null)
+                ? $manualcustomrecord['draft']
+                : (is_array($manualcustomrecord['approved'] ?? null)
+                    ? $manualcustomrecord['approved']
+                    : null));
+        if (is_array($manualcustomsnapshot)) {
+            $baseentry = [
+                'domainId' => (string)($manualcustomrecord['domainId']
+                    ?? $manualcustomsnapshot['domainId']
+                    ?? ''),
+                'question' => $manualcustomsnapshot,
+            ];
+        }
+    }
+    if ($baseentry === null || (string)($baseentry['domainId'] ?? '') === '') {
         throw new invalid_parameter_exception('Unknown Herbology question ID.');
     }
     $prompt = trim(required_param('prompt', PARAM_RAW));
@@ -4515,6 +4536,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
     }
     $savedat = gmdate(DATE_ATOM);
     $savedbyname = fullname($USER);
+    if (is_array($manualcustomrecord)) {
+        if (!in_array($savemode, ['draft', 'publish'], true)) {
+            throw new invalid_parameter_exception(
+                'Administrator-authored questions can be saved as a draft or published from the manual editor.'
+            );
+        }
+        $manualcustombase = (string)($manualcustomrecord['status'] ?? 'draft') === 'approved'
+                && is_array($manualcustomrecord['approved'] ?? null)
+            ? $manualcustomrecord['approved']
+            : (is_array($manualcustomrecord['draft'] ?? null)
+                ? $manualcustomrecord['draft']
+                : (is_array($manualcustomrecord['approved'] ?? null)
+                    ? $manualcustomrecord['approved']
+                    : (array)$baseentry['question']));
+        $manualcustomsnapshot = array_replace($manualcustombase, $draft);
+        $manualcustomsnapshot['questionId'] = $questionid;
+        $manualcustomsnapshot['domainId'] = (string)$baseentry['domainId'];
+        // Nomenclature extracted from an earlier generated version can still
+        // contain slash-joined pseudo-formulas after the visible options are
+        // corrected. The current validator re-derives names from visible text.
+        unset($manualcustomsnapshot['nomenclature']);
+        $manualcustomsnapshot = $normalizecreatedquestionpinyin($manualcustomsnapshot);
+        $manualcustomviolations = $findcreatedquestionguidelineviolations($manualcustomsnapshot);
+        if ($savemode === 'publish' && $manualcustomviolations !== []) {
+            throw new invalid_parameter_exception(
+                'The manual version is still outside the guideline: '
+                    . implode(' | ', $manualcustomviolations)
+            );
+        }
+        block_myprogress_herbology_override_update(static function(array $store) use (
+            $questionid,
+            $manualcustomsnapshot,
+            $manualcustomviolations,
+            $guidelinevalidationversion,
+            $savemode,
+            $savedat,
+            $savedbyname,
+            $USER
+        ): array {
+            $record = $store['customQuestions'][$questionid] ?? null;
+            if (!is_array($record)) {
+                return $store;
+            }
+            $history = is_array($record['history'] ?? null) ? $record['history'] : [];
+            $history[] = [
+                'status' => (string)($record['status'] ?? 'draft'),
+                'draft' => $record['draft'] ?? null,
+                'approved' => $record['approved'] ?? null,
+                'savedAt' => (string)($record['savedAt'] ?? ''),
+                'savedByName' => (string)($record['savedByName'] ?? ''),
+            ];
+            $record['history'] = array_slice($history, -20);
+            $record['draft'] = $manualcustomsnapshot;
+            $record['status'] = $savemode === 'publish' ? 'approved' : 'draft';
+            if ($savemode === 'publish') {
+                $record['approved'] = $manualcustomsnapshot;
+                $record['approvedAt'] = $savedat;
+                $record['approvedById'] = (int)$USER->id;
+                $record['approvedByName'] = $savedbyname;
+            }
+            $record['guidelineValidation'] = [
+                'version' => $guidelinevalidationversion,
+                'status' => $manualcustomviolations === [] ? 'verified' : 'blocked',
+                'violations' => $manualcustomviolations,
+                'checkedAt' => $savedat,
+                'herbRoster' => 'NCBAHM 2026 Appendix A · 304 herbs',
+                'formulaRoster' => 'NCBAHM 2026 Appendix C · 181 formulas',
+            ];
+            $record['manualEditAt'] = $savedat;
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $record['savedAt'] = $savedat;
+            $record['savedById'] = (int)$USER->id;
+            $record['savedByName'] = $savedbyname;
+            $store['customQuestions'][$questionid] = $record;
+            return $store;
+        });
+        $manualreturnparams = array_filter([
+            'q' => $questionid,
+            'source' => 'admin',
+            'examproject' => $editexamprojectid !== '' ? $editexamprojectid : null,
+            'examview' => $editexamprojectid !== '' ? 'included' : null,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ]);
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', $manualreturnparams),
+            $savemode === 'publish'
+                ? 'Manual changes published. Hidden nomenclature was rebuilt from the corrected visible text.'
+                : 'Manual changes saved as a draft. The previously approved version remains active.',
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
     $basequestion = $baseentry['question'];
     $original = array_intersect_key($basequestion, array_flip([
         'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
@@ -12402,10 +12515,19 @@ if ($editquestion !== null) {
     foreach ($editquestion['options'] ?? [] as $option) {
         $editoroptions[(string)($option['label'] ?? '')] = (string)($option['text'] ?? '');
     }
-    $editorrevision = $editquestion['_revision'] ?? [];
-    $editorrevisionfull = is_array($revisionstore['questions'][$editquestion['questionId']] ?? null)
-        ? $revisionstore['questions'][$editquestion['questionId']]
-        : [];
+    $editoriscustom = (string)($editquestion['_sourcekind'] ?? '') === 'admin'
+        && is_array($revisionstore['customQuestions'][$editquestion['questionId']] ?? null);
+    $editorrevisionfull = $editoriscustom
+        ? $revisionstore['customQuestions'][$editquestion['questionId']]
+        : (is_array($revisionstore['questions'][$editquestion['questionId']] ?? null)
+            ? $revisionstore['questions'][$editquestion['questionId']]
+            : []);
+    $editorrevision = $editoriscustom
+        ? [
+            'status' => (string)($editorrevisionfull['status'] ?? 'draft'),
+            'requestReclassification' => false,
+        ]
+        : ($editquestion['_revision'] ?? []);
     $editorexclusionnote = (string)($editorrevisionfull['exclusionReason']
         ?? $suggestedexclusionnotes[$editquestion['questionId']]
         ?? '');
@@ -13347,11 +13469,13 @@ echo $OUTPUT->header();
                     <label class="question-bank__editor-field"><span>Complexity</span><select name="difficultyband"><?php foreach ($difficultylabels as $value => $label): ?><option value="<?php echo s($value); ?>"<?php echo ($editquestion['difficultyBand'] ?? 'application') === $value ? ' selected' : ''; ?>><?php echo s($label); ?></option><?php endforeach; ?></select></label>
                 </div>
                 <?php if ($editquestion['_exam2position'] > 0 && !$editquestion['_excluded']): ?><?php if ($editorisaidraft): ?><details class="question-bank__rewrite-again"><summary><?php echo $editorisoutdatedaidraft ? 'Optional instructions for the updated review' : 'Request another rewrite'; ?></summary><?php endif; ?><div class="question-bank__proposal-box"><span><?php echo $editorisaidraft ? 'What should the reviewer change or emphasize?' : 'Rewrite instructions (optional)'; ?></span><textarea name="proposal" form="question-rewrite-form" placeholder="Describe the next correction. It will be added to all prior instructions."><?php echo s($editorrevisionfull['reviewProposal'] ?? ''); ?></textarea><small class="question-bank__proposal-saved">The automatic reviewer will revise the current visible version and preserve every compatible instruction from earlier corrections. Unsaved manual field changes above are not included.</small><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--publish" type="submit" form="question-rewrite-form"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $editorisoutdatedaidraft ? 'Run updated automatic review' : ($editorisaidraft ? 'Rewrite again' : 'Send to automatic review'); ?></button></div></div><?php if ($editorisaidraft): ?></details><?php endif; ?><?php endif; ?>
+                <?php if (!$editoriscustom): ?>
                 <?php if ($editorisaidraft): ?><details class="question-bank__advanced-review"><summary>Advanced: reclassification or possible exclusion</summary><?php endif; ?>
                 <label class="question-bank__editor-check"><input type="checkbox" name="requestreclassification" value="1"<?php echo !empty($editorrevision['requestReclassification']) ? ' checked' : ''; ?>><span><strong>Request reclassification after this edit</strong><br>This option applies only when you save without publishing. Check it when the wording, answer, feedback or educational objective changed enough that the domain, content type, cognitive level, complexity or exam placement should be reviewed again. Final approval always publishes the edited version and clears this request.</span></label>
                 <label class="question-bank__editor-field"><span>Possible error / exclusion note</span><textarea name="exclusionreason" placeholder="Describe the conflict, unsupported source, ambiguous answer or other reason this question may need exclusion."><?php echo s($editorexclusionnote); ?></textarea></label>
                 <?php if ($editorisaidraft): ?><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--exclude" type="submit" name="savemode" value="exclude" onclick="return confirm('Move this question to Possible exclusions and remove it from active practice and exams?');">Move to possible exclusion</button></div></details><?php endif; ?>
-                <div class="question-bank__editor-actions"><?php if ($editorstatus === 'exclusion_candidate'): ?><button class="question-bank__button question-bank__button--primary" type="submit" name="savemode" value="restore">Restore as draft</button><?php else: ?><button class="question-bank__button question-bank__button--primary" type="submit" name="savemode" value="draft"><?php echo $editorisaidraft ? 'Save manual changes' : 'Save changes without publishing'; ?></button><button class="question-bank__button question-bank__button--publish" type="submit" name="savemode" value="publish"><?php echo $editorisoutdatedaidraft ? 'Approve current version' : ($editorisaidraft ? 'Approve and continue' : 'Publish approved version'); ?></button><?php if (!$editorisaidraft): ?><button class="question-bank__button question-bank__button--exclude" type="submit" name="savemode" value="exclude" onclick="return confirm('Move this question to Possible exclusions and remove it from active practice and exams?');">Move to possible exclusion</button><?php endif; ?><?php endif; ?></div>
+                <?php endif; ?>
+                <div class="question-bank__editor-actions"><?php if ($editorstatus === 'exclusion_candidate' && !$editoriscustom): ?><button class="question-bank__button question-bank__button--primary" type="submit" name="savemode" value="restore">Restore as draft</button><?php else: ?><button class="question-bank__button question-bank__button--primary" type="submit" name="savemode" value="draft"><?php echo $editorisaidraft || $editoriscustom ? 'Save manual changes' : 'Save changes without publishing'; ?></button><button class="question-bank__button question-bank__button--publish" type="submit" name="savemode" value="publish"><?php echo $editorisoutdatedaidraft ? 'Approve current version' : ($editorisaidraft ? 'Approve and continue' : 'Publish approved version'); ?></button><?php if (!$editorisaidraft && !$editoriscustom): ?><button class="question-bank__button question-bank__button--exclude" type="submit" name="savemode" value="exclude" onclick="return confirm('Move this question to Possible exclusions and remove it from active practice and exams?');">Move to possible exclusion</button><?php endif; ?><?php endif; ?></div>
             </section>
         </div>
         <input type="hidden" name="formaction" value="editquestion"><input type="hidden" name="questionid" value="<?php echo s($editquestion['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>">
@@ -13749,7 +13873,7 @@ echo $OUTPUT->header();
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && $question['_ready'] && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['', 'original'], true)): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="publishcurrentquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><?php if (!in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><input type="hidden" name="returnorigin" value="1"><?php endif; ?><?php if ($question['_exam2position'] > 0): ?><input type="hidden" name="pinforexam2" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta pregunta lista?' : 'Approve and publish this ready question?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing && in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish this visible version now? It will be removed from pending questions.');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing && !in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta versión ahora?' : 'Approve and publish this version now?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
-            <?php if ($question['_sourcekind'] !== 'admin' && !in_array($revisionstatus, ['study_archive', 'deleted'], true) && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor">Edit manually</a><?php endif; ?>
+            <?php if (!in_array($revisionstatus, ['study_archive', 'deleted'], true) && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar manualmente' : 'Edit manually'; ?></a><?php endif; ?>
             <?php if (!$iscustomdraft && $revisionstatus !== 'deleted'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'study_archive' ? 'restoremockquestion' : 'sendtomock'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'study_archive' ? 'question-bank__button--primary' : 'question-bank__button--similar'; ?>" type="submit"<?php if ($revisionstatus !== 'study_archive'): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Enviar esta pregunta al Mock correspondiente? Se conservará completa, saldrá del banco board y se clasificará según su dominio.' : 'Send this question to the matching Mock category? It will be preserved in full, removed from the board bank and classified by its domain.'; ?>');"<?php endif; ?>><?php echo $revisionstatus === 'study_archive' ? ($displaylang === 'es' ? 'Quitar de Mock y restaurar al board' : 'Remove from Mock and restore to board') : ($displaylang === 'es' ? 'Enviar a Mock' : 'Send to Mock'); ?></button></form><?php endif; ?>
             <?php if (!$iscustomdraft): ?><form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'deleted' ? 'restoredeletedquestion' : 'deletequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'deleted' ? 'question-bank__button--primary' : 'question-bank__button--exclude'; ?>" type="submit"<?php if ($revisionstatus !== 'deleted'): ?> onclick="return confirm('Delete this question from the active bank and exams? You can restore it later from Deleted questions.');"<?php endif; ?>><?php echo $revisionstatus === 'deleted' ? 'Restore question' : 'Delete question'; ?></button></form><?php endif; ?>
             <?php endif; ?>
@@ -13810,7 +13934,7 @@ echo $OUTPUT->header();
         $sourcecardlabel = (string)($question['sourceCard'][$displaylang === 'es' ? 'labelEs' : 'label'] ?? 'Open source card');
         if ($sourcecardurl !== ''):
         ?> · <a href="<?php echo s($sourcecardurl); ?>" target="_blank" rel="noopener"><?php echo s($sourcecardlabel); ?></a><?php endif; ?></p><?php if (!$question['_ready']): ?><div class="question-bank__missing">Missing for practice readiness: <?php echo s(implode(', ', $question['_missing'])); ?>.</div><?php endif; ?>
-        <?php if ($iscustomapproved): ?><section class="question-bank__decision-panel" aria-label="Continue after approving <?php echo s($question['questionId']); ?>"><div class="question-bank__applied-summary"><strong>Question approved and active.</strong> You can edit it, create another question, or return to the complete question bank.</div><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="button" disabled>Approved and published ✓</button><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="reopencustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit">Edit this question</button></form><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create another question</a><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Return to all questions</a></div></section><?php endif; ?>
+        <?php if ($iscustomapproved): ?><section class="question-bank__decision-panel" aria-label="Continue after approving <?php echo s($question['questionId']); ?>"><div class="question-bank__applied-summary"><strong>Question approved and active.</strong> You can edit it, create another question, or return to the complete question bank.</div><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="button" disabled>Approved and published ✓</button><a class="question-bank__button question-bank__button--publish" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar esta pregunta' : 'Edit this question'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create another question</a><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Return to all questions</a></div></section><?php endif; ?>
         <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><?php if ($customguidelineverified): ?><div class="question-bank__applied-summary"><strong>Guideline check:</strong> all named herbs and formulas were verified against the current 2026 Appendix A and Appendix C rosters; Pinyin is shown without tone marks.</div><?php else: ?><div class="question-bank__publish-error"><strong>Guideline check blocked publication:</strong> <?php echo s(implode(' | ', $customguidelineviolations)); ?></div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('Approve and publish this question?');"<?php endif; ?>><?php echo $customcanpublish ? 'Approve and publish' : s($custompublishblocker); ?></button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
         <?php if ($inlineapproval): ?>
         <details class="question-bank__correction-request">
