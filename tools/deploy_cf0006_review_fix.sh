@@ -16,8 +16,10 @@ RELATIVE_FILES=(
     "blocks/myprogress/single-herb-card-index.json"
     "blocks/myprogress/formula-board-roster-2026.json"
     "blocks/menu/styles.css"
-    "study-guide/comparisons/dui-yao.html"
-    "study-guide/comparisons/dui-yao-es.html"
+)
+STATIC_GUIDE_FILES=(
+    "comparisons/dui-yao.html"
+    "comparisons/dui-yao-es.html"
 )
 STATE_REPAIR_RELATIVE="tools/repair_exam5_guideline_state.php"
 
@@ -40,10 +42,37 @@ for relative_file in "${RELATIVE_FILES[@]}"; do
     }
 done
 
+STUDY_GUIDE_ROOT="${STUDY_GUIDE_ROOT:-}"
+if [[ -z "$STUDY_GUIDE_ROOT" ]]; then
+    for candidate in \
+        "/var/www/acupuncturetests-study-guide/current" \
+        "$MOODLE_ROOT/study-guide" \
+        "$(dirname "$MOODLE_ROOT")/study-guide" \
+        "/var/www/html/study-guide"; do
+        if [[ -f "$candidate/${STATIC_GUIDE_FILES[0]}" \
+                && -f "$candidate/${STATIC_GUIDE_FILES[1]}" ]]; then
+            STUDY_GUIDE_ROOT="$candidate"
+            break
+        fi
+    done
+fi
+if [[ -z "$STUDY_GUIDE_ROOT" ]]; then
+    echo "ERROR: no se encontró el directorio público de la guía de estudio." >&2
+    echo "Defínalo con STUDY_GUIDE_ROOT=/ruta/publica antes de ejecutar el instalador." >&2
+    exit 1
+fi
+for relative_file in "${STATIC_GUIDE_FILES[@]}"; do
+    [[ -f "$STUDY_GUIDE_ROOT/$relative_file" ]] || {
+        echo "ERROR: no existe $STUDY_GUIDE_ROOT/$relative_file" >&2
+        exit 1
+    }
+done
+
 TEMP_DIR="$(mktemp -d)"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP_DIR="$BACKUP_ROOT/cf0006-review-fix-$TIMESTAMP"
 INSTALLED_FILES=()
+INSTALLED_STATIC_GUIDE_FILES=()
 OVERRIDE_STORE_PATH=""
 OVERRIDE_STORE_BACKUP=""
 OVERRIDE_STORE_OWNER_GROUP=""
@@ -52,6 +81,9 @@ cleanup() {
     rm -rf -- "$TEMP_DIR"
     for relative_file in "${RELATIVE_FILES[@]}"; do
         rm -f -- "$MOODLE_ROOT/$(dirname "$relative_file")/.$(basename "$relative_file").cf0006.$$"
+    done
+    for relative_file in "${STATIC_GUIDE_FILES[@]}"; do
+        rm -f -- "$STUDY_GUIDE_ROOT/$(dirname "$relative_file")/.$(basename "$relative_file").cf0006.$$"
     done
 }
 
@@ -62,6 +94,12 @@ on_error() {
         if [[ -f "$BACKUP_DIR/$relative_file" ]]; then
             cp -a -- "$BACKUP_DIR/$relative_file" "$MOODLE_ROOT/$relative_file"
             echo "RECUPERACIÓN: se restauró $relative_file" >&2
+        fi
+    done
+    for relative_file in "${INSTALLED_STATIC_GUIDE_FILES[@]}"; do
+        if [[ -f "$BACKUP_DIR/study-guide/$relative_file" ]]; then
+            cp -a -- "$BACKUP_DIR/study-guide/$relative_file" "$STUDY_GUIDE_ROOT/$relative_file"
+            echo "RECUPERACIÓN: se restauró study-guide/$relative_file" >&2
         fi
     done
     if [[ -n "$OVERRIDE_STORE_PATH" && -n "$OVERRIDE_STORE_BACKUP" \
@@ -99,6 +137,16 @@ for relative_file in "${RELATIVE_FILES[@]}"; do
         -o "$source_file"
 done
 
+for relative_file in "${STATIC_GUIDE_FILES[@]}"; do
+    source_file="$TEMP_DIR/study-guide/$relative_file"
+    mkdir -p "$(dirname "$source_file")"
+    curl -fsSL \
+        -H 'Cache-Control: no-cache' \
+        -H 'Pragma: no-cache' \
+        "$REPOSITORY/$REVISION/study-guide/$relative_file?revision=$REVISION" \
+        -o "$source_file"
+done
+
 QUESTION_BANK_SOURCE="$TEMP_DIR/${RELATIVE_FILES[0]}"
 OVERRIDES_SOURCE="$TEMP_DIR/${RELATIVE_FILES[1]}"
 HERBOLOGY_BOARD_SOURCE="$TEMP_DIR/${RELATIVE_FILES[2]}"
@@ -107,8 +155,8 @@ DUI_YAO_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[4]}"
 APPENDIX_A_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[5]}"
 APPENDIX_C_SOURCE_DATA="$TEMP_DIR/${RELATIVE_FILES[6]}"
 MENU_STYLES_SOURCE="$TEMP_DIR/${RELATIVE_FILES[7]}"
-DUI_YAO_GUIDE_SOURCE="$TEMP_DIR/${RELATIVE_FILES[8]}"
-DUI_YAO_GUIDE_ES_SOURCE="$TEMP_DIR/${RELATIVE_FILES[9]}"
+DUI_YAO_GUIDE_SOURCE="$TEMP_DIR/study-guide/${STATIC_GUIDE_FILES[0]}"
+DUI_YAO_GUIDE_ES_SOURCE="$TEMP_DIR/study-guide/${STATIC_GUIDE_FILES[1]}"
 php -l "$QUESTION_BANK_SOURCE" >/dev/null
 php -l "$OVERRIDES_SOURCE" >/dev/null
 php -l "$HERBOLOGY_BOARD_SOURCE" >/dev/null
@@ -309,8 +357,8 @@ grep -Fq "['track' => 'simulation', 'coverage' => 'herbs']" "$HERBOLOGY_BOARD_SO
 grep -Fq "['track' => 'simulation', 'coverage' => 'duiyao']" "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'formulas']" "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq "['track' => 'quiz', 'quizsection' => 'herbs']" "$HERBOLOGY_BOARD_SOURCE"
-grep -Fq 'Simulation Exam coverage' "$DUI_YAO_GUIDE_SOURCE"
-grep -Fq 'Cobertura del examen de simulación' "$DUI_YAO_GUIDE_ES_SOURCE"
+grep -Fq 'Return to Simulation Exams' "$DUI_YAO_GUIDE_SOURCE"
+grep -Fq 'Volver a exámenes de simulación' "$DUI_YAO_GUIDE_ES_SOURCE"
 grep -Fq '.herb-board__coverage-navigation' "$MENU_STYLES_SOURCE"
 if grep -Fq 'Warm and tonify Yang · priority coverage' "$HERBOLOGY_BOARD_SOURCE"; then
     echo 'ERROR: the removed student Yang-priority row is still present.' >&2
@@ -526,12 +574,34 @@ for relative_file in "${RELATIVE_FILES[@]}"; do
     INSTALLED_FILES+=("$relative_file")
 done
 
+for relative_file in "${STATIC_GUIDE_FILES[@]}"; do
+    target="$STUDY_GUIDE_ROOT/$relative_file"
+    source_file="$TEMP_DIR/study-guide/$relative_file"
+    backup_file="$BACKUP_DIR/study-guide/$relative_file"
+    staged_file="$STUDY_GUIDE_ROOT/$(dirname "$relative_file")/.$(basename "$relative_file").cf0006.$$"
+    mkdir -p "$(dirname "$backup_file")"
+    cp -a -- "$target" "$backup_file"
+    target_owner_group="$(stat -c '%u:%g' "$target")"
+    target_mode="$(stat -c '%a' "$target")"
+    install \
+        -o "${target_owner_group%:*}" \
+        -g "${target_owner_group#*:}" \
+        -m "$target_mode" \
+        "$source_file" \
+        "$staged_file"
+    cmp -s "$source_file" "$staged_file"
+    mv -f -- "$staged_file" "$target"
+    INSTALLED_STATIC_GUIDE_FILES+=("$relative_file")
+done
+
 cmp -s "$QUESTION_BANK_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[0]}"
 cmp -s "$OVERRIDES_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[1]}"
 cmp -s "$HERBOLOGY_BOARD_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[2]}"
 cmp -s "$SOURCE_DATA" "$MOODLE_ROOT/${RELATIVE_FILES[3]}"
 cmp -s "$DUI_YAO_SOURCE_DATA" "$MOODLE_ROOT/${RELATIVE_FILES[4]}"
 cmp -s "$MENU_STYLES_SOURCE" "$MOODLE_ROOT/${RELATIVE_FILES[7]}"
+cmp -s "$DUI_YAO_GUIDE_SOURCE" "$STUDY_GUIDE_ROOT/${STATIC_GUIDE_FILES[0]}"
+cmp -s "$DUI_YAO_GUIDE_ES_SOURCE" "$STUDY_GUIDE_ROOT/${STATIC_GUIDE_FILES[1]}"
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[0]}" >/dev/null
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[1]}" >/dev/null
 php -l "$MOODLE_ROOT/${RELATIVE_FILES[2]}" >/dev/null
@@ -773,6 +843,7 @@ echo "OK: las preguntas creadas y aprobadas pueden abrirse en Editar manualmente
 echo "OK: la vista general usa el nombre Examen de simulación y muestra la cobertura real de los cinco exámenes sin columnas administrativas."
 echo "OK: Formula Quiz y la cobertura por capítulo tienen enlaces recíprocos con apertura y desplazamiento directos."
 echo "OK: Single Herbs Quiz, Formula Quiz y Duì Yào tienen navegación de ida y vuelta con el inventario del Examen de simulación."
+echo "OK: el botón de regreso desde Duì Yào fue instalado en $STUDY_GUIDE_ROOT."
 echo "OK: $CF0126_OVERRIDE_RESULT"
 echo "OK: $EXAM5_OVERRIDE_RESULT"
 echo "OK: ${OVERRIDE_PERMISSION_RESULT:-No fue necesario reparar permisos del estado de exámenes.}"
