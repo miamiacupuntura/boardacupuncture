@@ -105,6 +105,91 @@ function block_myprogress_herbology_remove_pinyin_tones_from_question(array $que
     return $question;
 }
 
+/**
+ * Return the official Appendix A/C Pinyin display names and one reusable
+ * case-insensitive matcher. The matcher is built once per request because it
+ * is applied to thousands of questions in the administrator bank.
+ */
+function block_myprogress_herbology_official_pinyin_case_data(): array {
+    global $CFG;
+
+    static $data = null;
+    if (is_array($data)) {
+        return $data;
+    }
+    $canonicalnames = [];
+    foreach ([
+        [$CFG->dirroot . '/blocks/myprogress/single-herb-card-index.json', 'herbs'],
+        [$CFG->dirroot . '/blocks/myprogress/formula-board-roster-2026.json', 'formulas'],
+    ] as [$rosterpath, $collectionkey]) {
+        if (!is_readable($rosterpath)) {
+            continue;
+        }
+        $roster = json_decode((string)file_get_contents($rosterpath), true);
+        foreach ((array)($roster[$collectionkey] ?? []) as $record) {
+            $officialname = trim((string)($record['name'] ?? ''));
+            $lookupname = strtolower((string)preg_replace('/\s+/u', ' ', $officialname));
+            if ($lookupname !== '') {
+                $canonicalnames[$lookupname] = $officialname;
+            }
+        }
+    }
+    if ($canonicalnames === []) {
+        $data = ['names' => [], 'pattern' => ''];
+        return $data;
+    }
+    $lookupnames = array_keys($canonicalnames);
+    usort($lookupnames, static fn(string $left, string $right): int => strlen($right) <=> strlen($left));
+    $alternatives = array_map(static function(string $lookupname): string {
+        return implode('\\s+', array_map(
+            static fn(string $word): string => preg_quote($word, '/'),
+            preg_split('/\s+/u', $lookupname, -1, PREG_SPLIT_NO_EMPTY)
+        ));
+    }, $lookupnames);
+    $data = [
+        'names' => $canonicalnames,
+        'pattern' => '/(?<![A-Za-z0-9])(?:' . implode('|', $alternatives) . ')(?![A-Za-z0-9])/iu',
+    ];
+    return $data;
+}
+
+/**
+ * Restore the official capitalization of every recognized Pinyin herb and
+ * formula name without title-casing ordinary English or Spanish prose.
+ */
+function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $question): array {
+    $question = block_myprogress_herbology_remove_pinyin_tones_from_question($question);
+    $casedata = block_myprogress_herbology_official_pinyin_case_data();
+    $canonicalnames = (array)($casedata['names'] ?? []);
+    $pattern = (string)($casedata['pattern'] ?? '');
+    if ($canonicalnames === [] || $pattern === '') {
+        return $question;
+    }
+    $replace = static function($value) use (&$replace, $canonicalnames, $pattern) {
+        if (is_array($value)) {
+            foreach ($value as $key => $nestedvalue) {
+                $value[$key] = $replace($nestedvalue);
+            }
+            return $value;
+        }
+        if (!is_string($value) || $value === '') {
+            return $value;
+        }
+        $replaced = preg_replace_callback($pattern, static function(array $match) use ($canonicalnames): string {
+            $lookupname = strtolower((string)preg_replace('/\s+/u', ' ', trim((string)$match[0])));
+            return (string)($canonicalnames[$lookupname] ?? $match[0]);
+        }, $value);
+        return is_string($replaced) ? $replaced : $value;
+    };
+    foreach (['prompt', 'options', 'explanation', 'reviewSummary', 'source', 'nomenclature', 'translations',
+        'sourceCard'] as $field) {
+        if (array_key_exists($field, $question)) {
+            $question[$field] = $replace($question[$field]);
+        }
+    }
+    return $question;
+}
+
 function block_myprogress_herbology_remove_pinyin_tones_from_domains(array $domains): array {
     foreach ($domains as &$questions) {
         if (!is_array($questions)) {
@@ -112,7 +197,7 @@ function block_myprogress_herbology_remove_pinyin_tones_from_domains(array $doma
         }
         foreach ($questions as &$question) {
             if (is_array($question)) {
-                $question = block_myprogress_herbology_remove_pinyin_tones_from_question($question);
+                $question = block_myprogress_herbology_canonicalize_pinyin_case_in_question($question);
             }
         }
         unset($question);

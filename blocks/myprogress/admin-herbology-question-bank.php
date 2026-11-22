@@ -2478,7 +2478,7 @@ if ($publishedprojectrepairs !== [] || $draftprojectreuserepairs !== []) {
     $revisionstore = block_myprogress_herbology_override_load();
 }
 $normalizecreatedquestionpinyin = static function(array $question): array {
-    return block_myprogress_herbology_remove_pinyin_tones_from_question($question);
+    return block_myprogress_herbology_canonicalize_pinyin_case_in_question($question);
 };
 $stripguidelineinstructionprefixes = static function(string $normalizedname): string {
     $stripped = preg_replace(
@@ -2684,7 +2684,7 @@ if ($createdquestionpinyinrepairids !== []) {
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
-$allbankpinyinnormalizationversion = 'tone-free-pinyin-all-question-snapshots-v2';
+$allbankpinyinnormalizationversion = 'tone-free-official-case-pinyin-all-question-snapshots-v3';
 if ((string)($revisionstore['pinyinNormalizationVersion'] ?? '') !== $allbankpinyinnormalizationversion) {
     block_myprogress_herbology_override_update(static function(array $store) use (
         $allbankpinyinnormalizationversion,

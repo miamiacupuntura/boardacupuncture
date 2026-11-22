@@ -102,6 +102,33 @@ php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (($data["total"] ?? 0) !== 304 || count($data["herbs"] ?? []) !== 304) { exit(1); }' "$APPENDIX_A_SOURCE_DATA"
 php -r '$data=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); if (($data["total"] ?? 0) !== 181 || count($data["formulas"] ?? []) !== 181) { exit(1); }' "$APPENDIX_C_SOURCE_DATA"
 php -r '
+define("MOODLE_INTERNAL", true);
+$CFG=(object)["dirroot"=>$argv[2]];
+require $argv[1];
+$question=[
+    "prompt"=>"Which herb is xian mao?",
+    "options"=>[
+        ["text"=>"He tao ren (Juglandis Semen)"],
+        ["text"=>"Bu gu zhi (Psoraleae Fructus)"],
+        ["text"=>"Yi zhi ren (Alpiniae Oxyphyllae Fructus)"],
+        ["text"=>"Xian mao (Curculiginis Rhizoma)"],
+    ],
+    "translations"=>["es"=>["prompt"=>"¿Qué fórmula usa xian mao?"]],
+];
+$normalized=block_myprogress_herbology_canonicalize_pinyin_case_in_question($question);
+$expected=["He Tao Ren", "Bu Gu Zhi", "Yi Zhi Ren", "Xian Mao"];
+foreach ($expected as $index=>$name) {
+    if (strpos((string)($normalized["options"][$index]["text"] ?? ""), $name) !== 0) {
+        fwrite(STDERR, "ERROR: no se restauró la capitalización oficial de $name.\n");
+        exit(1);
+    }
+}
+if (($normalized["translations"]["es"]["prompt"] ?? "") !== "¿Qué fórmula usa Xian Mao?") {
+    fwrite(STDERR, "ERROR: la normalización Pinyin alteró los acentos españoles.\n");
+    exit(1);
+}
+' "$OVERRIDES_SOURCE" "$TEMP_DIR"
+php -r '
 $pairs=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
 $roster=json_decode(file_get_contents($argv[2]), true, 512, JSON_THROW_ON_ERROR);
 $official=[];
@@ -213,9 +240,11 @@ grep -Fq '$completequestioncandidate' "$QUESTION_BANK_SOURCE"
 grep -Fq "(?:\\d+\\.\\s*)?\\*{0,2}[A-D]" "$QUESTION_BANK_SOURCE"
 grep -Fq '$normalizecreatedquestionpinyin' "$QUESTION_BANK_SOURCE"
 grep -Fq 'pinyinTonesRemovedAt' "$QUESTION_BANK_SOURCE"
-grep -Fq 'tone-free-pinyin-all-question-snapshots-v2' "$QUESTION_BANK_SOURCE"
+grep -Fq 'tone-free-official-case-pinyin-all-question-snapshots-v3' "$QUESTION_BANK_SOURCE"
 grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_domains' "$QUESTION_BANK_SOURCE"
 grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_question' "$OVERRIDES_SOURCE"
+grep -Fq 'block_myprogress_herbology_canonicalize_pinyin_case_in_question' "$OVERRIDES_SOURCE"
+grep -Fq 'block_myprogress_herbology_official_pinyin_case_data' "$OVERRIDES_SOURCE"
 grep -Fq 'block_myprogress_herbology_remove_pinyin_tones_from_domains' "$HERBOLOGY_BOARD_SOURCE"
 grep -Fq '$findcreatedquestionguidelineviolations' "$QUESTION_BANK_SOURCE"
 grep -Fq '$stripguidelineinstructionprefixes' "$QUESTION_BANK_SOURCE"
