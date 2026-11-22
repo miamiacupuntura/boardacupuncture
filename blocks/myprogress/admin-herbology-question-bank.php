@@ -635,6 +635,50 @@ $exam5canonicalrepairs = [
             ],
         ],
     ],
+    'SCORM-SD-941383759583' => [
+        'prompt' => 'A patient has chronic daybreak diarrhea from Spleen and Kidney deficiency Cold, with epigastric distention, poor appetite, and nausea. The selected herb should warm the Middle, move Qi, bind the Intestines, and be avoided when diarrhea is caused by Damp-Heat. Which herb is most appropriate?',
+        'options' => [
+            ['label' => 'A', 'text' => 'He Zi (Chebulae Fructus)'],
+            ['label' => 'B', 'text' => 'Rou Dou Kou (Myristicae Semen)'],
+            ['label' => 'C', 'text' => 'Chun Pi (Ailanthi Cortex)'],
+            ['label' => 'D', 'text' => 'Lian Zi (Nelumbinis Semen)'],
+        ],
+        'correctLabel' => 'B',
+        'explanation' => 'Inference step 1: Chronic diarrhea with abdominal Cold, poor appetite, and nausea indicates deficiency Cold affecting the Spleen and Kidneys rather than Damp-Heat. Inference step 2: Rou Dou Kou warms the Middle, moves Qi, and binds the Intestines; its warming and astringent action makes it inappropriate for Damp-Heat diarrhea or dysentery. Option A: Incorrect. He Zi binds the Intestines and contains Lung Qi but does not provide the same Middle-warming and Qi-moving action. Option B: Correct. Rou Dou Kou matches the deficiency-Cold diarrhea, abdominal symptoms, and stated contraindication. Option C: Incorrect. Chun Pi clears Heat, dries Dampness, and stops diarrhea, which corresponds to a different mechanism. Option D: Incorrect. Lian Zi tonifies the Spleen and stops diarrhea but does not match the same warm, acrid, Qi-moving profile.',
+        'translations' => [
+            'es' => [
+                'prompt' => 'Un paciente presenta diarrea crónica al amanecer por Frío de deficiencia de Bazo y Riñón, con distensión epigástrica, poco apetito y náuseas. La hierba seleccionada debe calentar el Centro, mover el Qi, contener los Intestinos y evitarse cuando la diarrea se debe a Humedad-Calor. ¿Qué hierba es la más apropiada?',
+                'options' => [
+                    ['label' => 'A', 'text' => 'He Zi (Chebulae Fructus)'],
+                    ['label' => 'B', 'text' => 'Rou Dou Kou (Myristicae Semen)'],
+                    ['label' => 'C', 'text' => 'Chun Pi (Ailanthi Cortex)'],
+                    ['label' => 'D', 'text' => 'Lian Zi (Nelumbinis Semen)'],
+                ],
+                'explanation' => 'Paso de inferencia 1: La diarrea crónica con Frío abdominal, poco apetito y náuseas indica Frío de deficiencia que afecta al Bazo y al Riñón, no Humedad-Calor. Paso de inferencia 2: Rou Dou Kou calienta el Centro, mueve el Qi y contiene los Intestinos; su acción tibia y astringente la hace inapropiada para diarrea o disentería por Humedad-Calor. Opción A: Incorrecta. He Zi contiene los Intestinos y el Qi de Pulmón, pero no aporta la misma acción de calentar el Centro y mover el Qi. Opción B: Correcta. Rou Dou Kou corresponde a la diarrea por Frío de deficiencia, los síntomas abdominales y la contraindicación indicada. Opción C: Incorrecta. Chun Pi elimina Calor, seca la Humedad y detiene la diarrea, lo que corresponde a otro mecanismo. Opción D: Incorrecta. Lian Zi tonifica el Bazo y detiene la diarrea, pero no corresponde al mismo perfil tibio, acre y movilizador del Qi.',
+            ],
+        ],
+        'contentType' => 'safety_dispensing',
+        'cognitiveLevel' => 'infer',
+        'difficultyBand' => 'inference',
+        'nomenclature' => [
+            'herbs' => [
+                ['pinyin' => 'He Zi', 'pharmaceuticalName' => 'Chebulae Fructus'],
+                ['pinyin' => 'Rou Dou Kou', 'pharmaceuticalName' => 'Myristicae Semen'],
+                ['pinyin' => 'Chun Pi', 'pharmaceuticalName' => 'Ailanthi Cortex'],
+                ['pinyin' => 'Lian Zi', 'pharmaceuticalName' => 'Nelumbinis Semen'],
+            ],
+            'formulas' => [],
+            'feedback' => [
+                'herbs' => [
+                    ['pinyin' => 'He Zi', 'pharmaceuticalName' => 'Chebulae Fructus'],
+                    ['pinyin' => 'Rou Dou Kou', 'pharmaceuticalName' => 'Myristicae Semen'],
+                    ['pinyin' => 'Chun Pi', 'pharmaceuticalName' => 'Ailanthi Cortex'],
+                    ['pinyin' => 'Lian Zi', 'pharmaceuticalName' => 'Nelumbinis Semen'],
+                ],
+                'formulas' => [],
+            ],
+        ],
+    ],
 ];
 foreach ($bank['domains'] as &$exam5domainquestions) {
     foreach ($exam5domainquestions as &$exam5question) {
@@ -716,6 +760,47 @@ if (is_array($guidelinesafetycanonical)
         $record['savedByName'] = 'Appendix A safety-question correction';
         $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
         $store['questions'][$guidelinesafetyrepairid] = $record;
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
+$roudoukourepairid = 'SCORM-SD-941383759583';
+$roudoukoucanonical = null;
+foreach ((array)($bank['domains'] ?? []) as $roudoukouquestions) {
+    foreach ((array)$roudoukouquestions as $roudoukouquestion) {
+        if ((string)($roudoukouquestion['questionId'] ?? '') === $roudoukourepairid) {
+            $roudoukoucanonical = $roudoukouquestion;
+            break 2;
+        }
+    }
+}
+$roudoukoustored = $revisionstore['questions'][$roudoukourepairid] ?? null;
+if (is_array($roudoukoucanonical)
+        && is_array($roudoukoustored)
+        && empty($roudoukoustored['rouDouKouGuidelineRepairAt'])) {
+    $roudoukoureplacement = array_intersect_key($roudoukoucanonical, array_flip([
+        'prompt', 'options', 'correctLabel', 'explanation', 'translations',
+        'contentType', 'cognitiveLevel', 'difficultyBand', 'nomenclature',
+    ]));
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $roudoukourepairid,
+        $roudoukoureplacement
+    ): array {
+        $record = $store['questions'][$roudoukourepairid] ?? null;
+        if (!is_array($record) || !empty($record['rouDouKouGuidelineRepairAt'])) {
+            return $store;
+        }
+        foreach (['original', 'draft', 'approved'] as $snapshotkey) {
+            if (is_array($record[$snapshotkey] ?? null)) {
+                $record[$snapshotkey] = array_replace($record[$snapshotkey], $roudoukoureplacement);
+            }
+        }
+        $savedat = gmdate(DATE_ATOM);
+        $record['rouDouKouGuidelineRepairAt'] = $savedat;
+        $record['savedAt'] = $savedat;
+        $record['savedByName'] = 'Rou Dou Kou Appendix correction';
+        $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        $store['questions'][$roudoukourepairid] = $record;
         return $store;
     });
     $revisionstore = block_myprogress_herbology_override_load();
@@ -2631,8 +2716,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'updateexamquestion
     if (!in_array($returnexamview, ['candidates', 'included'], true)) {
         $returnexamview = 'candidates';
     }
-    if ($findquestion($basebank, $questionid) === null) {
+    $examquestionentry = $findquestion($basebank, $questionid);
+    if ($examquestionentry === null) {
         throw new invalid_parameter_exception('Unknown Herbology question ID.');
+    }
+    if ($examaction === 'add') {
+        $examquestionforvalidation = block_myprogress_herbology_apply_revision(
+            $examquestionentry['question'],
+            is_array($revisionstore['questions'][$questionid] ?? null)
+                ? $revisionstore['questions'][$questionid]
+                : null,
+            true
+        );
+        $examquestionforvalidation = $normalizecreatedquestionpinyin($examquestionforvalidation);
+        $examquestionguidelineviolations = $findcreatedquestionguidelineviolations(
+            $examquestionforvalidation
+        );
+        if ($examquestionguidelineviolations !== []) {
+            throw new invalid_parameter_exception(
+                'This question cannot be added to the exam because it is outside the 2026 guideline: '
+                    . implode(' | ', $examquestionguidelineviolations)
+            );
+        }
     }
     if ($examaction === 'add' && isset($questionsusedinpriorexams[$questionid])) {
         throw new invalid_parameter_exception(
@@ -12103,7 +12208,7 @@ echo $OUTPUT->header();
             <?php if ($pendingexamprojecturl !== null && ($usagefilter !== 'exam_project_pending' || $query !== '')): ?><a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo '← ' . s((string)$pendingexamproject['name']) . ($displaylang === 'es' ? ' · revisión pendiente' : ' pending review'); ?></a><?php endif; ?>
             <?php if ($query !== '' && !$inlineapproval && $pendingexamprojecturl === null): ?><a class="question-bank__button" href="<?php echo ($question['_exam2position'] > 0 ? $exam2url : $clearurl)->out(false); ?>"><?php echo $question['_exam2position'] > 0 ? ($displaylang === 'es' ? '← Volver a preguntas pendientes' : '← Return to pending questions') : ($displaylang === 'es' ? '← Volver a todas las preguntas' : '← Return to all questions'); ?></a><?php endif; ?>
             <?php if ($bankcardposition > 0 && !$inlineapproval): ?><details class="question-bank__bank-move"><summary class="question-bank__button"><?php echo $displaylang === 'es' ? 'Mover / aplazar' : 'Move / defer'; ?></summary><div class="question-bank__bank-move-panel"><strong><?php echo ($displaylang === 'es' ? 'Posición actual en el banco: ' : 'Current bank position: ') . (int)$bankcardposition . ' / ' . (int)$bankinventorycount; ?></strong><p><?php echo $displaylang === 'es' ? 'Cambie la posición o aplácela al final para mostrar otras candidatas primero. Esto no modifica ningún examen.' : 'Choose a position or defer it to the end so other candidates appear first. This does not change any exam.'; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="movebankquestion"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="currentposition" value="<?php echo (int)$bankcardposition; ?>"><input type="hidden" name="bankcount" value="<?php echo (int)$bankinventorycount; ?>"><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnexamproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><label><span><?php echo $displaylang === 'es' ? 'Nueva posición' : 'New position'; ?></span><input type="number" name="position" min="1" max="<?php echo (int)$bankinventorycount; ?>" value="<?php echo (int)$bankcardposition; ?>" required></label><button class="question-bank__button question-bank__button--primary" type="submit" name="moveaction" value="position"><?php echo $displaylang === 'es' ? 'Mover' : 'Move'; ?></button><button class="question-bank__button question-bank__button--publish" type="submit" name="moveaction" value="end"><?php echo $displaylang === 'es' ? 'Aplazar al final' : 'Defer to end'; ?></button><?php if ($bankpositionwaschanged): ?><button class="question-bank__button" type="submit" name="moveaction" value="restore"><?php echo $displaylang === 'es' ? 'Restaurar orden normal' : 'Restore normal order'; ?></button><?php endif; ?></form></div></details><?php endif; ?>
-            <?php if (is_array($currentexamproject) && $usagefilter !== 'exam_project_pending' && !$inlineapproval && !$question['_excluded'] && $question['_ready'] && ($questioninexamproject || !$questionusedinpriorexam)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
+            <?php if (is_array($currentexamproject) && $usagefilter !== 'exam_project_pending' && !$inlineapproval && !$question['_excluded'] && $question['_ready'] && ($questioninexamproject || ($cardguidelineverified && !$questionusedinpriorexam))): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar de ' : 'Remove from ') : ($displaylang === 'es' ? 'Agregar a ' : 'Add to '); ?><?php echo s((string)$currentexamproject['name']); ?><?php echo $questioninexamproject ? ' ✓' : ''; ?></button></form><?php endif; ?>
             <?php if ($isapprovedreservecandidate && $cardguidelineverified): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="add"><input type="hidden" name="returnexamview" value="candidates"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo ($displaylang === 'es' ? 'Publicar en ' : 'Publish to ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
             <?php if (is_array($currentexamproject) && $usagefilter === 'exam_project_pending' && isset($examprojectpositions[(string)$question['questionId']]) && (string)($currentexamproject['status'] ?? 'draft') !== 'published'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="excludeexamcandidate"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm(<?php echo s(json_encode($excludeexamconfirm, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); ?>);"><?php echo ($displaylang === 'es' ? 'Excluir de ' : 'Exclude from ') . s((string)$currentexamproject['name']); ?></button></form><?php endif; ?>
             <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$iscustomdraft && !$isapprovedreservecandidate): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
