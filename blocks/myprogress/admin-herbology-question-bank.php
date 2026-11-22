@@ -459,6 +459,70 @@ $exam5canonicalrepairs = [
         'cognitiveLevel' => 'apply',
         'difficultyBand' => 'application',
     ],
+    'CF-0290' => [
+        'prompt' => 'Which statement most accurately distinguishes Shen Qi Wan (Kidney Qi Pill) from Zhen Wu Tang (True Warrior Decoction) when Kidney Yang deficiency disrupts fluid metabolism?',
+        'options' => [
+            [
+                'label' => 'A',
+                'text' => 'Shen Qi Wan gently warms and tonifies Kidney Yang to restore lower-burner Qi transformation in chronic deficiency, whereas Zhen Wu Tang more directly warms Yang and promotes water metabolism when retained fluids are prominent.',
+            ],
+            [
+                'label' => 'B',
+                'text' => 'Zhen Wu Tang is the gentler chronic Kidney Qi tonic, whereas Shen Qi Wan is reserved for marked water retention with edema, heaviness, abdominal pain, or diarrhea.',
+            ],
+            [
+                'label' => 'C',
+                'text' => 'Shen Qi Wan clears Damp-Heat from the lower burner, whereas Zhen Wu Tang enriches Kidney Yin and anchors ascending Yang.',
+            ],
+            [
+                'label' => 'D',
+                'text' => 'The formulas are interchangeable whenever edema or difficult urination occurs with a deep pulse.',
+            ],
+        ],
+        'correctLabel' => 'A',
+        'explanation' => 'Inference step 1: Chronic Kidney Yang deficiency with weakness of the lower back and knees and impaired urinary Qi transformation favors Shen Qi Wan, which gently warms and tonifies the Kidney. Inference step 2: More prominent water retention from Yang deficiency, especially with edema, scanty urination, heaviness or dizziness, abdominal pain, or diarrhea, favors the stronger water-transforming strategy of Zhen Wu Tang. Option A: Correct; it preserves this difference in therapeutic emphasis. Option B: Incorrect; it reverses the formulas. Option C: Incorrect; neither description gives the principal strategy of the named formula. Option D: Incorrect; shared fluid-metabolism signs do not make the formulas interchangeable.',
+        'translations' => [
+            'es' => [
+                'prompt' => '¿Qué afirmación distingue con mayor precisión Shen Qi Wan (Píldora del Qi de Riñón) de Zhen Wu Tang (Decocción del Guerrero Verdadero) cuando la deficiencia del Yang de Riñón altera el metabolismo de los líquidos?',
+                'options' => [
+                    [
+                        'label' => 'A',
+                        'text' => 'Shen Qi Wan calienta y tonifica suavemente el Yang de Riñón para restaurar la transformación del Qi del Jiao Inferior en una deficiencia crónica, mientras Zhen Wu Tang calienta el Yang y promueve más directamente el metabolismo del agua cuando predomina la retención de líquidos.',
+                    ],
+                    [
+                        'label' => 'B',
+                        'text' => 'Zhen Wu Tang es el tónico más suave para la deficiencia crónica del Qi de Riñón, mientras Shen Qi Wan se reserva para retención marcada de agua con edema, pesadez, dolor abdominal o diarrea.',
+                    ],
+                    [
+                        'label' => 'C',
+                        'text' => 'Shen Qi Wan elimina Humedad-Calor del Jiao Inferior, mientras Zhen Wu Tang enriquece el Yin de Riñón y ancla el Yang ascendente.',
+                    ],
+                    [
+                        'label' => 'D',
+                        'text' => 'Las fórmulas son intercambiables siempre que haya edema o dificultad urinaria con un pulso profundo.',
+                    ],
+                ],
+                'explanation' => 'Paso de inferencia 1: La deficiencia crónica del Yang de Riñón con debilidad lumbar y de las rodillas y transformación urinaria alterada del Qi favorece Shen Qi Wan, que calienta y tonifica suavemente el Riñón. Paso de inferencia 2: Una retención de agua más marcada por deficiencia de Yang, especialmente con edema, orina escasa, pesadez o mareo, dolor abdominal o diarrea, favorece la estrategia más fuerte de Zhen Wu Tang para transformar el agua. Opción A: Correcta; conserva esta diferencia de énfasis terapéutico. Opción B: Incorrecta; invierte las fórmulas. Opción C: Incorrecta; ninguna descripción corresponde a la estrategia principal de la fórmula nombrada. Opción D: Incorrecta; compartir signos de alteración del metabolismo de líquidos no vuelve intercambiables las fórmulas.',
+            ],
+        ],
+        'contentType' => 'comparison',
+        'cognitiveLevel' => 'analyze',
+        'difficultyBand' => 'analysis',
+        'nomenclature' => [
+            'herbs' => [],
+            'formulas' => [
+                ['pinyin' => 'Shen Qi Wan', 'englishName' => 'Kidney Qi Pill'],
+                ['pinyin' => 'Zhen Wu Tang', 'englishName' => 'True Warrior Decoction'],
+            ],
+            'feedback' => [
+                'herbs' => [],
+                'formulas' => [
+                    ['pinyin' => 'Shen Qi Wan', 'englishName' => 'Kidney Qi Pill'],
+                    ['pinyin' => 'Zhen Wu Tang', 'englishName' => 'True Warrior Decoction'],
+                ],
+            ],
+        ],
+    ],
     'CF-0272' => [
         'prompt' => 'Two patients present with palpitations. One has an irregular or knotted pulse with deficiency of Qi, Blood, and Yin; the other has fatigue, poor appetite, insomnia, and signs of Spleen Qi and Heart Blood deficiency. Which formula assignment is most accurate?',
         'options' => [
@@ -2314,7 +2378,7 @@ $normalizecreatedquestionpinyin = static function(array $question): array {
 };
 $stripguidelineinstructionprefixes = static function(string $normalizedname): string {
     $stripped = preg_replace(
-        '/^(?:add|choose|select|use|replace|include|introduce|remove|increase|decrease|while|'
+        '/^(?:add|choose|select|use|replace|include|introduce|remove|increase|decrease|while|both|'
             . 'decoction|powder)\s+/i',
         '',
         trim($normalizedname)
