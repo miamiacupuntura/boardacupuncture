@@ -7205,14 +7205,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
 if ($_SERVER['REQUEST_METHOD'] === 'POST'
         && in_array($formaction, ['createnewquestion', 'rewritecustomquestion'], true)) {
     require_sesskey();
-    if (!$textaienabled) {
-        redirect(
-            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['newquestion' => 1]),
-            'No enabled Moodle text AI provider is available. Enable Generate text before creating a question.',
-            null,
-            \core\output\notification::NOTIFY_ERROR
-        );
-    }
     $iscustomrewrite = $formaction === 'rewritecustomquestion';
     $customquestionid = $iscustomrewrite ? required_param('questionid', PARAM_ALPHANUMEXT) : '';
     $customrecord = $iscustomrewrite
@@ -7257,20 +7249,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         '/^\s*(?:\d+\.\s*)?\*{0,2}[A-D]\.\s*\*{0,2}/imu',
         $completequestioncandidate
     );
-    $completequestioninput = $completequestionoptioncount === 4
-        && preg_match(
-            '/^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\s*:/imu',
-            $completequestioncandidate
-        ) === 1
-        && preg_match(
-            '/^\s*\*{0,2}(?:Explanation|Explicaci[oó]n)\s*:/imu',
-            $completequestioncandidate
-        ) === 1;
+    $completequestionanswercount = preg_match_all(
+        '/^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\s*:/imu',
+        $completequestioncandidate
+    );
+    $completequestionexplanationcount = preg_match_all(
+        '/^\s*\*{0,2}(?:Explanation|Explicaci[oó]n)\s*:/imu',
+        $completequestioncandidate
+    );
+    $completequestionheadingcount = preg_match_all(
+        '/^\s*(?:#{1,6}\s*)?(?:Question|Pregunta)\s+\d+\s*[.\):\-—]?\s*$/imu',
+        $completequestioncandidate
+    );
+    $completequestiondetectedcount = $completequestionoptioncount > 0
+        && $completequestionoptioncount % 4 === 0
+        ? (int)($completequestionoptioncount / 4)
+        : 0;
+    $completequestioninput = $completequestiondetectedcount >= 1
+        && $completequestiondetectedcount <= 5
+        && $completequestionanswercount === $completequestiondetectedcount
+        && $completequestionexplanationcount === $completequestiondetectedcount
+        && ($completequestiondetectedcount === 1
+            || $completequestionheadingcount === $completequestiondetectedcount);
     if ($completequestioninput) {
         $idea = $completequestioncandidate;
     }
     $preserveexactquestion = !$iscustomrewrite
         && ((bool)optional_param('preserveexactquestion', 0, PARAM_BOOL) || $completequestioninput);
+    if (!$textaienabled && !$preserveexactquestion) {
+        redirect(
+            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['newquestion' => 1]),
+            'No enabled Moodle text AI provider is available. Paste a complete question for exact import or enable Generate text.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
     $usedinstructiontemplateid = $iscustomrewrite
         ? (string)($customrecord['instructionTemplateId'] ?? '')
         : optional_param('instructiontemplateid', '', PARAM_ALPHANUMEXT);
@@ -8059,12 +8072,79 @@ PROMPT;
         }
         return $decodedbatch;
     };
-    $manager = \core\di::get(\core_ai\manager::class);
     $decodedbatch = null;
     $originalitybatch = null;
     $lastgenerationerror = null;
     $lastduplicate = null;
-    for ($generationattempt = 1; $generationattempt <= 3; $generationattempt++) {
+    if ($preserveexactquestion) {
+        $decodedbatch = [];
+        $originalitybatch = [];
+        foreach ($preservedquestionbatch as $preservedenglish) {
+            $exactsearchtext = core_text::strtolower(core_text::specialtoascii(
+                (string)$preservedenglish['prompt'] . ' '
+                . (string)$preservedenglish['explanation'] . ' '
+                . implode(' ', array_map(
+                    static fn(array $option): string => (string)($option['text'] ?? ''),
+                    (array)$preservedenglish['options']
+                ))
+            ));
+            if ($customtargetdomain !== '') {
+                $exactdomainid = $customtargetdomain;
+            } else if (preg_match(
+                '/\b(?:warfarin|anticoagul|antiplatelet|inr|digoxin|antiarrhyth|arrhythm|blood[ -]pressure|hypertension|hypokal|potassium|diabetes|glucose|medication|drug|contraindicat|monitor)\b/u',
+                $exactsearchtext
+            ) === 1) {
+                $exactdomainid = 'safety_dispensing';
+            } else if (preg_match('/\bdui\s*yao\b/u', $exactsearchtext) === 1) {
+                $exactdomainid = 'dui_yao';
+            } else if (preg_match('/\b(?:tang|wan|san|yin|jian|dan|fang)\b/u', $exactsearchtext) === 1) {
+                $exactdomainid = 'formula_differentiation';
+            } else {
+                $exactdomainid = 'single_herb';
+            }
+            $exactcontenttype = $exactdomainid === 'safety_dispensing'
+                ? 'safety_dispensing'
+                : ($exactdomainid === 'dui_yao'
+                    ? 'dui_yao'
+                    : ($exactdomainid === 'formula_differentiation'
+                        ? 'formula_selection'
+                        : 'herb_properties'));
+            $decodeditem = [
+                'domainId' => $exactdomainid,
+                'prompt' => (string)$preservedenglish['prompt'],
+                'options' => (array)$preservedenglish['options'],
+                'correctLabel' => (string)$preservedenglish['correctLabel'],
+                'explanation' => (string)$preservedenglish['explanation'],
+                'translations' => ['es' => []],
+                'contentType' => $exactcontenttype,
+                'cognitiveLevel' => 'infer',
+                'difficultyBand' => 'inference',
+                'reviewSummary' => 'Imported locally and exactly as supplied; no AI generation or rewriting was used.',
+            ];
+            $decodeditem = $normalizecreatedquestionpinyin($decodeditem);
+            $exactguidelineviolations = $findcreatedquestionguidelineviolations($decodeditem);
+            if ($exactguidelineviolations !== []) {
+                throw new invalid_parameter_exception(
+                    'Exact import is outside the current guideline: '
+                        . implode(' | ', $exactguidelineviolations)
+                );
+            }
+            if ($findprohibitedanswerchoice((array)$decodeditem['options']) !== null) {
+                throw new invalid_parameter_exception(
+                    'Exact import contains a prohibited combined answer choice.'
+                );
+            }
+            if ($hasprohibitednegativewording((string)$decodeditem['prompt'])) {
+                throw new invalid_parameter_exception(
+                    'Exact import requires a positive question stem.'
+                );
+            }
+            $decodedbatch[] = $decodeditem;
+            $originalitybatch[] = $findnearestquestion($decodeditem);
+        }
+    } else {
+        $manager = \core\di::get(\core_ai\manager::class);
+        for ($generationattempt = 1; $generationattempt <= 3; $generationattempt++) {
         try {
             $attemptprompt = $customprompt;
             if ($lastgenerationerror !== null) {
@@ -8336,6 +8416,7 @@ PROMPT;
             $decodedbatch = null;
             $originalitybatch = null;
             $lastgenerationerror = $error;
+        }
         }
     }
     if ((!is_array($decodedbatch) || !is_array($originalitybatch))
@@ -11988,7 +12069,7 @@ echo $OUTPUT->header();
                 </form>
             </details>
         </section>
-        <p>Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as <strong>### Question 1</strong> or <strong>### 2.</strong>, lines containing <strong>---</strong>, and repeated <strong>Correct answer:</strong> or <strong>Respuesta correcta:</strong> labels. It creates an independent draft for each question and immediately displays a visible index of the complete batch.</p>
+        <p>Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as <strong>Question 1</strong>, <strong>### Question 1</strong> or <strong>### 2.</strong>, lines containing <strong>---</strong>, and repeated <strong>Correct answer:</strong> or <strong>Respuesta correcta:</strong> labels. A finished batch with four A-D choices, a keyed answer and an explanation for every item is imported locally without waiting for AI generation.</p>
         <form class="question-bank__creation-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
             <?php if (is_array($selectedinstructiontemplate)): ?><div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Instrucción cargada:' : 'Loaded instruction:'; ?></strong> <?php echo s((string)$selectedinstructiontemplate['name']); ?>. <?php echo $displaylang === 'es' ? 'Puede ajustarla antes de crear los borradores.' : 'You may adjust it before creating drafts.'; ?></div><?php endif; ?>
             <textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."><?php echo s($newquestionprefillidea); ?></textarea>
@@ -11998,10 +12079,10 @@ echo $OUTPUT->header();
             <input type="hidden" name="targetexamproject" value="<?php echo s($newquestiontargetexam); ?>">
             <input type="hidden" name="needed" value="<?php echo (int)$newquestionneededcount; ?>">
             <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
-            <div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Crear y revisar borradores' : 'Create and preview drafts'; ?></button><button class="question-bank__button question-bank__button--approve" type="submit" name="preserveexactquestion" value="1"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Usar la pregunta exactamente como está escrita' : 'Use the question exactly as written'; ?></button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cancelar' : 'Cancel'; ?></a></div>
+            <div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Crear y revisar borradores' : 'Create and preview drafts'; ?></button><button class="question-bank__button question-bank__button--approve" type="submit" name="preserveexactquestion" value="1"><?php echo $displaylang === 'es' ? 'Importar preguntas terminadas' : 'Import finished questions'; ?></button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cancelar' : 'Cancel'; ?></a></div>
             <small class="question-bank__proposal-saved"><?php echo $displaylang === 'es'
-                ? 'Una pregunta completa con cuatro opciones, respuesta y explicación se detecta automáticamente y se importa sin reescribirla. El botón exacto permite exigir ese mismo comportamiento.'
-                : 'A complete question with four choices, an answer and an explanation is detected automatically and imported without rewriting it. The exact button explicitly requires the same behavior.'; ?></small>
+                ? 'Las preguntas completas con cuatro opciones, respuesta y explicación se separan e importan localmente sin reescritura ni espera por la IA. La traducción puede agregarse después desde cada tarjeta.'
+                : 'Finished questions with four choices, an answer and an explanation are split and imported locally without rewriting or waiting for AI. Translation can be added later from each card.'; ?></small>
             <?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?>
         </form>
     </section><?php endif; ?>
