@@ -2532,14 +2532,18 @@ $findprohibitedanswerchoice = static function(array $options): ?string {
             . '(?:\s+(?:are|is)\s+(?:correct|incorrect|true|false))?'
         . '|(?:all|none)\s+(?:are|is)\s+(?:correct|incorrect|true|false)'
         . '|no\s+(?:option|answer|choice|statement)\s+(?:is|are)\s+(?:correct|true)'
-        . '|both'
+        . '|both(?=\s*$)'
+        . '|both\s+(?:of\s+)?(?:them|these|the\s+above|options|answers|choices|statements)'
+        . '|both\s+(?:are|is)\s+(?:correct|incorrect|true|false)'
         . '|[A-D]\s+(?:and|&)\s+[A-D]\s+(?:are|is)\s+correct'
         . '|todos\s+ellos|todas\s+ellas|todos\s+los\s+anteriores|todas\s+las\s+anteriores'
         . '|(?:todas?|ningun[ao])\s+(?:de\s+)?(?:las?\s+)?(?:opci[oó]n(?:es)?|respuestas?|alternativas?|afirmaciones?)'
             . '(?:\s+(?:es|son)\s+(?:correct[ao]s?|incorrect[ao]s?|verdader[ao]s?|fals[ao]s?))?'
         . '|ninguno\s+de\s+(?:estos|ellos|los\s+anteriores)'
         . '|ninguna\s+de\s+(?:estas|ellas|las\s+anteriores)'
-        . '|ambos|ambas'
+        . '|amb(?:os|as)(?=\s*$)'
+        . '|amb(?:os|as)\s+de\s+(?:ellos|ellas|estos|estas|los\s+anteriores|las\s+anteriores)'
+        . '|amb(?:os|as)\s+(?:son|es)\s+(?:correct[ao]s?|incorrect[ao]s?|verdader[ao]s?|fals[ao]s?)'
         . ')\b/iu';
     $normalizedoptions = [];
     foreach ($options as $optionindex => $option) {
