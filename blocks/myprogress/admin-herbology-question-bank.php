@@ -8264,6 +8264,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $idea = $iscustomrewrite
         ? trim((string)($customrecord['idea'] ?? ''))
         : trim(required_param('idea', PARAM_RAW));
+    $returnnewquestionfailure = function(
+        string $message,
+        string $mode = 'general'
+    ) use (
+        &$SESSION,
+        &$idea,
+        &$customtargetdomain,
+        &$customtargetexamid,
+        $newquestionneededcount,
+        $displaylang
+    ): void {
+        $SESSION->ncbahm_new_question_recovery = [
+            'idea' => $idea,
+            'targetDomain' => $customtargetdomain,
+            'targetExamProject' => $customtargetexamid,
+            'needed' => $newquestionneededcount,
+            'mode' => $mode,
+            'error' => $message,
+        ];
+        $returnurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter([
+                'newquestion' => 1,
+                'targetdomain' => $customtargetdomain !== '' ? $customtargetdomain : null,
+                'targetexamproject' => $customtargetexamid !== '' ? $customtargetexamid : null,
+                'needed' => $newquestionneededcount > 0 ? $newquestionneededcount : null,
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ])
+        );
+        $returnurl->set_anchor('new-question');
+        redirect(
+            $returnurl,
+            $displaylang === 'es'
+                ? 'No se creó ninguna pregunta. El texto se conservó y abajo se muestra el fallo exacto y cómo corregirlo.'
+                : 'No question was created. Your text was preserved; the exact failure and correction are shown below.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    };
     // Text copied from rendered Markdown can contain a literal backslash at
     // the end of every visual line (or before the heading). Remove only those
     // presentation escapes before deciding whether this is a finished item.
@@ -8279,11 +8318,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $completequestioncandidate
     );
     $completequestionanswercount = preg_match_all(
-        '/^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\s*:/imu',
+        '/^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\*{0,2}\s*:/imu',
         $completequestioncandidate
     );
     $completequestionexplanationcount = preg_match_all(
-        '/^\s*\*{0,2}(?:Explanation|Explicaci[oó]n)\s*:/imu',
+        '/^\s*\*{0,2}(?:Explanation|Explicaci[oó]n)\*{0,2}\s*:?/imu',
         $completequestioncandidate
     );
     $completequestionheadingcount = preg_match_all(
@@ -8306,11 +8345,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $preserveexactquestion = !$iscustomrewrite
         && ((bool)optional_param('preserveexactquestion', 0, PARAM_BOOL) || $completequestioninput);
     if (!$textaienabled && !$preserveexactquestion) {
-        redirect(
-            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['newquestion' => 1]),
-            'No enabled Moodle text AI provider is available. Paste a complete question for exact import or enable Generate text.',
-            null,
-            \core\output\notification::NOTIFY_ERROR
+        $returnnewquestionfailure(
+            'No enabled Moodle text AI provider is available. Use exact import with a finished question, or enable the Generate text action in Moodle AI providers.',
+            'ai_generation'
         );
     }
     $usedinstructiontemplateid = $iscustomrewrite
@@ -8321,7 +8358,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     }
     $correction = $iscustomrewrite ? trim(required_param('correction', PARAM_RAW)) : '';
     if ($idea === '' || core_text::strlen($idea) > 60000) {
-        throw new invalid_parameter_exception(
+        $returnnewquestionfailure(
             'Enter one question or a batch of up to 5 questions in 60,000 characters or fewer.'
         );
     }
@@ -8418,23 +8455,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             );
         }
         if (preg_match(
-            '/^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\s*:\s*\*{0,2}\s*([A-D])\b/imu',
+            '/^\s*\*{0,2}(?:Correct\s+answer|Respuesta\s+correcta)\*{0,2}\s*:\s*\*{0,2}\s*([A-D])\b/imu',
             $block,
             $answermatch
         ) !== 1) {
             throw new invalid_parameter_exception('Exact import requires a Correct answer: A-D line.');
         }
         if (preg_match(
-            '/^\s*\*{0,2}(?:Explanation|Explicaci[oó]n)\s*:\s*\*{0,2}\s*(.+?)(?=^\s*\*{0,2}(?:Source|Fuente)\s*:|\z)/imsu',
+            '/^\s*\*{0,2}(?:Explanation|Explicaci[oó]n)\*{0,2}\s*:?\s*(.+?)'
+                . '(?=^\s*\*{0,2}(?:Source|Fuente|Suggested\s+classification|Clasificaci[oó]n\s+sugerida)\*{0,2}\s*:?[ \t]*(?:\R|\z)|\z)/imsu',
             $block,
             $explanationmatch
         ) !== 1) {
-            throw new invalid_parameter_exception('Exact import requires an Explanation: section.');
+            throw new invalid_parameter_exception(
+                'Exact import requires an Explanation: section containing the complete feedback.'
+            );
         }
         $firstoptionoffset = (int)$optionmatches[0][0][1];
         $prompt = trim(substr($block, 0, $firstoptionoffset));
         $prompt = preg_replace('/^\s*#{1,6}\s*/u', '', $prompt) ?? $prompt;
-        $prompt = preg_replace('/^\s*(?:Question|Pregunta)\s*\d+\s*[:.\-]?\s*/iu', '', $prompt) ?? $prompt;
+        $prompt = preg_replace(
+            '/^\s*\*{0,2}(?:Question|Pregunta)(?:\s+\d+)?\*{0,2}\s*[:.\-]?\s*/iu',
+            '',
+            $prompt
+        ) ?? $prompt;
         $prompt = trim($prompt, " \t\n\r\0\x0B#*");
         if ($prompt === '' || preg_match('/\?\s*$/u', $prompt) !== 1) {
             throw new invalid_parameter_exception('Exact import requires a complete interrogative stem.');
@@ -8485,14 +8529,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         );
     }
     if (count($customquestionideas) > 5) {
-        throw new invalid_parameter_exception(
-            'Create no more than 5 questions in one block. Split a larger collection into smaller batches.'
+        $returnnewquestionfailure(
+            'Create no more than 5 questions in one block. Split a larger collection into smaller batches.',
+            $preserveexactquestion ? 'exact_import' : 'ai_generation'
         );
     }
     $preservedquestionbatch = [];
     if ($preserveexactquestion) {
-        foreach ($customquestionideas as $preservedquestionblock) {
-            $preservedquestionbatch[] = $parsepreservedquestion($preservedquestionblock);
+        try {
+            foreach ($customquestionideas as $preservedquestionblock) {
+                $preservedquestionbatch[] = $parsepreservedquestion($preservedquestionblock);
+            }
+        } catch (Throwable $error) {
+            $returnnewquestionfailure($error->getMessage(), 'exact_import');
         }
     }
     $custombatchcount = count($customquestionideas);
@@ -9157,19 +9206,22 @@ PROMPT;
             $decodeditem = $normalizecreatedquestionpinyin($decodeditem);
             $exactguidelineviolations = $findcreatedquestionguidelineviolations($decodeditem);
             if ($exactguidelineviolations !== []) {
-                throw new invalid_parameter_exception(
+                $returnnewquestionfailure(
                     'Exact import is outside the current guideline: '
-                        . implode(' | ', $exactguidelineviolations)
+                        . implode(' | ', $exactguidelineviolations),
+                    'exact_import'
                 );
             }
             if ($findprohibitedanswerchoice((array)$decodeditem['options']) !== null) {
-                throw new invalid_parameter_exception(
-                    'Exact import contains a prohibited combined answer choice.'
+                $returnnewquestionfailure(
+                    'Exact import contains a prohibited combined answer choice such as Both, All or None.',
+                    'exact_import'
                 );
             }
             if ($hasprohibitednegativewording((string)$decodeditem['prompt'])) {
-                throw new invalid_parameter_exception(
-                    'Exact import requires a positive question stem.'
+                $returnnewquestionfailure(
+                    'Exact import requires a positive question stem; remove NOT, EXCEPT, incorrect or least appropriate wording.',
+                    'exact_import'
                 );
             }
             $decodedbatch[] = $decodeditem;
@@ -9521,26 +9573,13 @@ PROMPT;
         $duplicatemessage = $lastduplicate !== null
             ? ' The closest existing item was ' . $lastduplicate['questionId'] . '.'
             : '';
-        $SESSION->ncbahm_new_question_recovery = [
-            'idea' => $idea,
-            'targetDomain' => $customtargetdomain,
-            'targetExamProject' => $customtargetexamid,
-            'needed' => $newquestionneededcount,
-            'error' => $lastgenerationerror instanceof Throwable
-                ? $lastgenerationerror->getMessage()
-                : 'Question generation failed validation.',
-        ];
-        redirect(
-            new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
-                'newquestion' => 1,
-                'targetdomain' => $customtargetdomain !== '' ? $customtargetdomain : null,
-                'targetexamproject' => $customtargetexamid !== '' ? $customtargetexamid : null,
-                'needed' => $newquestionneededcount > 0 ? $newquestionneededcount : null,
-            ])),
-            'The system could not create a sufficiently distinct, valid question after three attempts.'
-                . $duplicatemessage . ' Your complete input remains in the form for correction.',
-            null,
-            \core\output\notification::NOTIFY_ERROR
+        $generationmessage = $lastgenerationerror instanceof Throwable
+            ? $lastgenerationerror->getMessage()
+            : 'Question generation failed validation.';
+        $returnnewquestionfailure(
+            'The system could not create a sufficiently distinct, valid question after three attempts. '
+                . $generationmessage . $duplicatemessage,
+            'ai_generation'
         );
     }
     $formulavduiyaoselectedbyindex = [];
@@ -12768,6 +12807,7 @@ echo $OUTPUT->header();
 .question-bank__advanced-review{margin-top:14px;border:1px solid #e5c27f;border-radius:9px;background:#fffaf0}.question-bank__advanced-review summary{padding:13px 14px;color:#8a4b08;font-weight:900;cursor:pointer}.question-bank__advanced-review>.question-bank__editor-check{margin:0;border-radius:0;border-left:0;border-top:1px solid #f0d5a1}.question-bank__advanced-review>.question-bank__editor-field{margin:0;padding:14px}.question-bank__advanced-review>.question-bank__editor-actions{padding:0 14px 14px}
 .question-bank__editor-panel--editing{border-color:#cbb9ee}.question-bank__panel-intro{margin:-6px 0 14px;color:#60758a;font-size:12px;line-height:1.45}.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:150px}.question-bank__editor-panel--editing .question-bank__editor-classification{grid-template-columns:1fr;margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__editor-panel--editing .question-bank__editor-classification h5{margin:0 0 2px}.question-bank__editor-panel--editing .question-bank__editor-classification .question-bank__panel-intro{margin:0 0 8px}.question-bank__editor-panel--editing .question-bank__editor-actions{margin-top:15px;padding-top:14px;border-top:1px solid #ded7ef}.question-bank__proposal-form{display:grid;gap:12px}.question-bank__proposal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-toolbar p{margin:0;color:#66557e}.question-bank__proposal-box{display:block;margin-top:14px;padding:14px;border:1px solid #cbb9ee;border-radius:9px;background:#faf8ff}.question-bank__proposal-box>span{display:block;margin-bottom:7px;color:#4c1d95;font-weight:900}.question-bank__proposal-box textarea{box-sizing:border-box;width:100%;min-height:150px;padding:11px 12px;border:1px solid #aebfca;border-radius:7px;background:#fff;resize:vertical}.question-bank__proposal-saved{display:block;margin-top:7px;color:#66557e;font-size:12px}.question-bank__proposal-review{margin-top:14px;padding:14px;border-left:4px solid #6d28d9;border-radius:7px;background:#f4f0ff;color:#4c1d95;white-space:pre-wrap}@media(max-width:850px){.question-bank__editor-panel--editing textarea[name=prompt],.question-bank__editor-panel--editing textarea[name=explanation]{min-height:120px}.question-bank__proposal-toolbar{align-items:stretch;flex-direction:column}}
 .question-bank__new-question{margin-bottom:18px;padding:20px;border:2px solid #0b8f87;border-radius:12px;background:#f2fbf9}.question-bank__new-question h3{margin:0 0 6px;font-size:24px}.question-bank__new-question p{margin:0 0 14px;color:#52677a}.question-bank__new-question textarea{box-sizing:border-box;width:100%;min-height:180px;padding:13px 14px;border:1px solid #9db8c3;border-radius:8px;background:#fff;resize:vertical}.question-bank__new-question .question-bank__editor-actions{margin-top:12px}
+.question-bank__creation-guidance{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}.question-bank__creation-guidance article{padding:12px 14px;border:1px solid #b8d8d2;border-radius:8px;background:#fff}.question-bank__creation-guidance strong{display:block;margin-bottom:4px;color:#075f59}.question-bank__creation-guidance p{margin:0;font-size:13px;line-height:1.45}.question-bank__creation-failure{margin:12px 0;padding:13px 15px;border:1px solid #ef4444;border-left:5px solid #b42318;border-radius:8px;background:#fff1f2;color:#7a271a}.question-bank__creation-failure h4{margin:0 0 7px;color:#991b1b}.question-bank__creation-failure p{margin:5px 0;color:#7a271a}.question-bank__creation-failure ul{margin:8px 0 0;padding-left:22px}.question-bank__creation-failure li{margin:4px 0}.question-bank__creation-failure code{color:#7a271a}@media(max-width:700px){.question-bank__creation-guidance{grid-template-columns:1fr}}
 .question-bank__instruction-form{display:grid;gap:11px;margin-top:12px}.question-bank__instruction-form label>span{display:block;margin-bottom:5px;color:#4c1d95;font-size:12px;font-weight:900}.question-bank__instruction-form input[type=text],.question-bank__instruction-form select{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #ad9bd2;border-radius:7px;background:#fff}.question-bank__new-question .question-bank__instruction-form textarea{min-height:120px}.question-bank__similarity-result.is-selected{border-color:#0b8f87;box-shadow:inset 4px 0 #0b8f87}
 .question-bank__filters label>small{display:block;margin-top:5px;color:#64748b;font-size:10px;line-height:1.3}
 .question-bank__result-context{display:flex;min-width:0;align-items:baseline;flex-wrap:wrap;gap:5px 9px}.question-bank__result-context strong{white-space:nowrap}.question-bank__result-context span{color:#52677a;font-weight:750;line-height:1.35}.question-bank__result-head>span:last-child{flex:0 0 auto;white-space:nowrap}@media(max-width:700px){.question-bank__result-head{align-items:flex-start;flex-direction:column}.question-bank__result-head>span:last-child{white-space:normal}}
@@ -13279,6 +13319,7 @@ echo $OUTPUT->header();
         $newquestionprefillidea = is_array($selectedinstructiontemplate)
             ? (string)$selectedinstructiontemplate['instruction']
             : (string)($newquestionrecovery['idea'] ?? '');
+        $newquestionrecoverymode = (string)($newquestionrecovery['mode'] ?? 'general');
     ?><section id="new-question" class="question-bank__new-question">
         <h3><?php echo $displaylang === 'es' ? 'Crear una o varias preguntas' : 'Create one or several questions'; ?></h3>
         <?php if ($newquestiontargetdomain !== ''
@@ -13298,7 +13339,28 @@ echo $OUTPUT->header();
                 : 'A general formula-versus-Dui-Yao rule can produce up to 5 drafts per attempt. Every draft will use another verified herb pair and formula whenever the source table permits it.'; ?></div>
             <?php endif; ?>
         <?php endif; ?>
-        <?php if ($newquestionrecovery !== [] && !is_array($selectedinstructiontemplate)): ?><div class="question-bank__publish-error" role="alert"><strong><?php echo $displaylang === 'es' ? 'La generación anterior no produjo un borrador válido.' : 'The previous generation did not produce a valid draft.'; ?></strong> <?php echo $displaylang === 'es' ? 'El texto completo se conservó abajo; puede corregirlo y volver a intentarlo.' : 'The complete text was preserved below; you can correct it and try again.'; ?><?php if (trim((string)($newquestionrecovery['error'] ?? '')) !== ''): ?> <small><?php echo s((string)$newquestionrecovery['error']); ?></small><?php endif; ?></div><?php endif; ?>
+        <?php if ($newquestionrecovery !== [] && !is_array($selectedinstructiontemplate)): ?>
+        <div class="question-bank__creation-failure" role="alert">
+            <h4><?php echo $displaylang === 'es' ? 'No se creó ninguna pregunta; su texto está conservado.' : 'No question was created; your text is preserved.'; ?></h4>
+            <?php if (trim((string)($newquestionrecovery['error'] ?? '')) !== ''): ?><p><strong><?php echo $displaylang === 'es' ? 'Fallo detectado:' : 'Detected failure:'; ?></strong> <?php echo s((string)$newquestionrecovery['error']); ?></p><?php endif; ?>
+            <?php if ($newquestionrecoverymode === 'exact_import'): ?>
+                <p><strong><?php echo $displaylang === 'es' ? 'Cómo corregir la importación:' : 'How to correct the import:'; ?></strong></p>
+                <ul>
+                    <li><?php echo $displaylang === 'es' ? 'El enunciado debe terminar en una pregunta directa.' : 'The stem must end in a direct question.'; ?></li>
+                    <li><?php echo $displaylang === 'es' ? 'Incluya exactamente cuatro opciones rotuladas A., B., C. y D.' : 'Include exactly four choices labelled A., B., C. and D.'; ?></li>
+                    <li><?php echo $displaylang === 'es' ? 'Añada una línea “Correct answer: A” o “Respuesta correcta: A”.' : 'Add a “Correct answer: A” or “Respuesta correcta: A” line.'; ?></li>
+                    <li><?php echo $displaylang === 'es' ? 'Añada “Explanation:” seguido de la explicación completa. También se acepta el título en negrita y sin dos puntos.' : 'Add “Explanation:” followed by complete feedback. A bold heading without a colon is also accepted.'; ?></li>
+                    <li><?php echo $displaylang === 'es' ? 'Corrija cualquier nombre fuera de los apéndices o respuesta combinada indicada en el fallo.' : 'Correct any out-of-roster name or combined answer identified above.'; ?></li>
+                </ul>
+            <?php elseif ($newquestionrecoverymode === 'ai_generation'): ?>
+                <p><strong><?php echo $displaylang === 'es' ? 'Cómo continuar:' : 'How to continue:'; ?></strong> <?php echo $displaylang === 'es'
+                    ? 'Revise el fallo indicado arriba. Si menciona el proveedor de IA, active Generate text en Moodle. Si menciona validación, duplicación o apéndices, ajuste únicamente ese dato y vuelva a intentarlo; el texto ya está nuevamente en el formulario.'
+                    : 'Read the failure above. If it mentions the AI provider, enable Generate text in Moodle. If it mentions validation, duplication or appendices, correct only that issue and try again; your text is already restored in the form.'; ?></p>
+            <?php else: ?>
+                <p><?php echo $displaylang === 'es' ? 'Corrija el dato señalado arriba y vuelva a intentarlo.' : 'Correct the issue identified above and try again.'; ?></p>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
         <section class="question-bank__decision-panel" aria-label="<?php echo $displaylang === 'es' ? 'Banco de instrucciones generales' : 'General instruction bank'; ?>">
             <h4><?php echo $displaylang === 'es' ? 'Banco de instrucciones generales' : 'General instruction bank'; ?></h4>
             <p><?php echo $displaylang === 'es'
@@ -13361,7 +13423,18 @@ echo $OUTPUT->header();
                 </form>
             </details>
         </section>
-        <p>Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as <strong>Question 1</strong>, <strong>### Question 1</strong> or <strong>### 2.</strong>, lines containing <strong>---</strong>, and repeated <strong>Correct answer:</strong> or <strong>Respuesta correcta:</strong> labels. A finished batch with four A-D choices, a keyed answer and an explanation for every item is imported locally without waiting for AI generation.</p>
+        <div class="question-bank__creation-guidance" aria-label="<?php echo $displaylang === 'es' ? 'Opciones para crear preguntas' : 'Question creation options'; ?>">
+            <article id="ai-creation-status"><strong><?php echo $displaylang === 'es' ? 'Crear y revisar borradores' : 'Create and preview drafts'; ?></strong><p><?php echo $displaylang === 'es'
+                ? 'Use esta opción para convertir una idea o apuntes incompletos en una pregunta nueva mediante la IA.'
+                : 'Use this option to turn an idea or incomplete notes into a new question with AI.'; ?> <?php echo $textaienabled
+                    ? ($displaylang === 'es' ? 'Estado: disponible.' : 'Status: available.')
+                    : ($displaylang === 'es' ? 'Estado: no disponible porque Moodle no tiene un proveedor Generate text activo.' : 'Status: unavailable because Moodle has no active Generate text provider.'); ?></p></article>
+            <article id="exact-import-status"><strong><?php echo $displaylang === 'es' ? 'Importar preguntas terminadas' : 'Import finished questions'; ?></strong><p><?php echo $displaylang === 'es'
+                ? 'Use esta opción cuando ya tenga enunciado interrogativo, opciones A-D, “Correct answer:” y “Explanation:”. No necesita IA.'
+                : 'Use this option when you already have an interrogative stem, choices A-D, “Correct answer:” and “Explanation:”. It does not require AI.'; ?></p></article>
+        </div>
+        <?php if (!$textaienabled): ?><div class="question-bank__publish-error" role="status"><strong><?php echo $displaylang === 'es' ? 'La creación con IA está desactivada.' : 'AI creation is disabled.'; ?></strong> <?php echo $displaylang === 'es' ? 'Puede importar una pregunta terminada ahora, o un administrador de Moodle debe activar un proveedor para la acción Generate text.' : 'You can import a finished question now, or a Moodle administrator must enable a provider for the Generate text action.'; ?></div><?php endif; ?>
+        <p><?php echo $displaylang === 'es' ? 'Pegue una idea o un bloque completo de hasta 5 preguntas. El sistema reconoce encabezados como Question 1, ### Question 1 o ### 2., separadores --- y las etiquetas Correct answer: o Respuesta correcta:.' : 'Paste one question idea or a complete block containing up to 5 questions. The system recognizes headings such as Question 1, ### Question 1 or ### 2., divider lines containing ---, and Correct answer: or Respuesta correcta: labels.'; ?></p>
         <form class="question-bank__creation-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
             <?php if (is_array($selectedinstructiontemplate)): ?><div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Instrucción cargada:' : 'Loaded instruction:'; ?></strong> <?php echo s((string)$selectedinstructiontemplate['name']); ?>. <?php echo $displaylang === 'es' ? 'Puede ajustarla antes de crear los borradores.' : 'You may adjust it before creating drafts.'; ?></div><?php endif; ?>
             <textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."><?php echo s($newquestionprefillidea); ?></textarea>
@@ -13371,11 +13444,10 @@ echo $OUTPUT->header();
             <input type="hidden" name="targetexamproject" value="<?php echo s($newquestiontargetexam); ?>">
             <input type="hidden" name="needed" value="<?php echo (int)$newquestionneededcount; ?>">
             <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
-            <div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Crear y revisar borradores' : 'Create and preview drafts'; ?></button><button class="question-bank__button question-bank__button--approve" type="submit" name="preserveexactquestion" value="1"><?php echo $displaylang === 'es' ? 'Importar preguntas terminadas' : 'Import finished questions'; ?></button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cancelar' : 'Cancel'; ?></a></div>
+            <div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit" aria-describedby="ai-creation-status"<?php echo $textaienabled ? '' : ' disabled title="' . s($displaylang === 'es' ? 'Moodle no tiene un proveedor Generate text activo.' : 'Moodle has no active Generate text provider.') . '"'; ?>><?php echo $displaylang === 'es' ? 'Crear y revisar borradores' : 'Create and preview drafts'; ?></button><button class="question-bank__button question-bank__button--approve" type="submit" name="preserveexactquestion" value="1" aria-describedby="exact-import-status"><?php echo $displaylang === 'es' ? 'Importar preguntas terminadas' : 'Import finished questions'; ?></button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cancelar' : 'Cancel'; ?></a></div>
             <small class="question-bank__proposal-saved"><?php echo $displaylang === 'es'
                 ? 'Las preguntas completas con cuatro opciones, respuesta y explicación se separan e importan localmente sin reescritura ni espera por la IA. La traducción puede agregarse después desde cada tarjeta.'
                 : 'Finished questions with four choices, an answer and an explanation are split and imported locally without rewriting or waiting for AI. Translation can be added later from each card.'; ?></small>
-            <?php if (!$textaienabled): ?><small class="question-bank__proposal-saved">Generate text is not enabled in Moodle AI providers.</small><?php endif; ?>
         </form>
     </section><?php endif; ?>
     <?php if ($customdraftcount > 0 && !$shownewquestionform && $usagefilter !== 'exam_project_pending'): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
