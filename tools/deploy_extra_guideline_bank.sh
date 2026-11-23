@@ -51,9 +51,9 @@ done
 
 grep -Fq 'name="saveoutsideguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Guardar en Extra guideline' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq '>Extra guideline bank</button>' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'name="formaction" value="saveextraguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Extra guideline bank (<?php echo (int)$extraguidelinecount; ?>)' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-extra_button_count="$(grep -Fc '>Extra guideline bank</button>' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php")"
+extra_button_count="$(grep -Fc 'name="formaction" value="saveextraguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php")"
 [[ "$extra_button_count" -ge 2 ]]
 grep -Fq "'status' => \$saveoutsideguideline ? 'extra_guideline' : 'draft'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '2026-11-23-extra-guideline-bank-v1' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
@@ -64,6 +64,10 @@ warning_button_count="$(grep -Fc 'Publicar con advertencia' "$TEMP_DIR/blocks/my
 [[ "$warning_button_count" -ge 3 ]]
 grep -Fq '$questionactionexamproject = is_array($currentexamproject)' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Published in the bank. Use “Add to ' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'name="reviewforextraguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Review for Extra guideline' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "\$record['reviewDestination']" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "ncbahm-mock-editor-4.6" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 
 mkdir -p "$BACKUP_DIR"
@@ -86,8 +90,8 @@ for relative in "${FILES[@]}"; do
     php -l "$MOODLE_ROOT/$relative" >/dev/null
 done
 grep -Fq 'Guardar en Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq '>Extra guideline bank</button>' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
-installed_button_count="$(grep -Fc '>Extra guideline bank</button>' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php")"
+grep -Fq 'name="formaction" value="saveextraguideline"' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+installed_button_count="$(grep -Fc 'name="formaction" value="saveextraguideline"' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php")"
 [[ "$installed_button_count" -ge 2 ]]
 grep -Fq '2026-11-23-extra-guideline-bank-v1' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "'su ye' => 'zi su ye'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
@@ -95,6 +99,10 @@ grep -Fq "'status' => 'approved_with_warning'" "$MOODLE_ROOT/blocks/myprogress/a
 grep -Fq 'Publicar con advertencia' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '$questionactionexamproject = is_array($currentexamproject)' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Published in the bank. Use “Add to ' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'name="reviewforextraguideline"' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Review for Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "\$record['reviewDestination']" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "ncbahm-mock-editor-4.6" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -118,4 +126,5 @@ echo "OK: Su Ye se reconoce como alias válido de Zi Su Ye."
 echo "OK: un administrador puede publicar con advertencia; usuario, fecha, alerta y versión quedan auditados."
 echo "OK: la excepción auditada se respeta al agregar y publicar Simulation Exams."
 echo "OK: después de un merge se conserva el contexto y se muestra Agregar al examen activo."
+echo "OK: la revisión automática puede completar una pregunta fuera del roster y dejarla lista para Extra guideline."
 echo "RESPALDO: $BACKUP_DIR"
