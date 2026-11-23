@@ -62,6 +62,8 @@ grep -Fq "'status' => 'approved_with_warning'" "$TEMP_DIR/blocks/myprogress/admi
 grep -Fq 'Publicar con advertencia' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 warning_button_count="$(grep -Fc 'Publicar con advertencia' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php")"
 [[ "$warning_button_count" -ge 3 ]]
+grep -Fq '$questionactionexamproject = is_array($currentexamproject)' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Published in the bank. Use “Add to ' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 
 mkdir -p "$BACKUP_DIR"
@@ -91,6 +93,8 @@ grep -Fq '2026-11-23-extra-guideline-bank-v1' "$MOODLE_ROOT/blocks/myprogress/ad
 grep -Fq "'su ye' => 'zi su ye'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "'status' => 'approved_with_warning'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Publicar con advertencia' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq '$questionactionexamproject = is_array($currentexamproject)' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Published in the bank. Use “Add to ' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -113,4 +117,5 @@ echo "OK: los registros creados por la versión anterior se separan automáticam
 echo "OK: Su Ye se reconoce como alias válido de Zi Su Ye."
 echo "OK: un administrador puede publicar con advertencia; usuario, fecha, alerta y versión quedan auditados."
 echo "OK: la excepción auditada se respeta al agregar y publicar Simulation Exams."
+echo "OK: después de un merge se conserva el contexto y se muestra Agregar al examen activo."
 echo "RESPALDO: $BACKUP_DIR"
