@@ -69,6 +69,8 @@ grep -Fq 'Review for Extra guideline' "$TEMP_DIR/blocks/myprogress/admin-herbolo
 grep -Fq "\$record['reviewDestination']" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "ncbahm-mock-editor-4.7" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'lastAutomaticReviewFailure' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'View Extra guideline' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Back to Exam builder' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 
 mkdir -p "$BACKUP_DIR"
@@ -105,6 +107,8 @@ grep -Fq 'Review for Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herb
 grep -Fq "\$record['reviewDestination']" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "ncbahm-mock-editor-4.7" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'lastAutomaticReviewFailure' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'View Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Back to Exam builder' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -130,4 +134,5 @@ echo "OK: la excepción auditada se respeta al agregar y publicar Simulation Exa
 echo "OK: después de un merge se conserva el contexto y se muestra Agregar al examen activo."
 echo "OK: la revisión automática puede completar una pregunta fuera del roster y dejarla lista para Extra guideline."
 echo "OK: si la revisión falla, la tarjeta conserva y muestra la causa exacta para corregirla."
+echo "OK: Exam builder muestra el total de Extra guideline y permite abrirlo y regresar."
 echo "RESPALDO: $BACKUP_DIR"
