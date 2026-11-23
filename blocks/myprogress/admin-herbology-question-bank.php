@@ -2687,7 +2687,7 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
         (string)($question['explanation'] ?? ''),
     ])));
     preg_match_all(
-        '/\b((?:\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*)(?:\s+\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*){0,6})\s*\(([^()]+)\)/u',
+        '/\b((?:\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*)(?:[ \t]+\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*){0,6})[ \t]*\(([^()]+)\)/u',
         $visibletext,
         $namedmatches,
         PREG_SET_ORDER
@@ -2738,9 +2738,14 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
                 . $displayname . ' (' . $parenthetical . ')';
         }
     }
+    // A formula name must remain inside one visible field. The question
+    // fields are joined with newlines above, so \s+ would incorrectly join
+    // the final title-cased word of option A (for example, "Blood") to the
+    // formula at the start of option B ("Shou Tai Wan"). Horizontal spacing
+    // keeps multi-word Pinyin intact without crossing an option boundary.
     preg_match_all(
-        '/\b((?:(?:[A-Z][A-Za-z]*\s+){1,7}(?:Tang|Wan|San)|(?:[A-Z][A-Za-z]*\s+){2,7}'
-            . '(?:Yin(?:\s+Zi)?|Jian|Dan|Fang)))(?!\s+[A-Z])\b/u',
+        '/\b((?:(?:[A-Z][A-Za-z]*[ \t]+){1,7}(?:Tang|Wan|San)|(?:[A-Z][A-Za-z]*[ \t]+){2,7}'
+            . '(?:Yin(?:[ \t]+Zi)?|Jian|Dan|Fang)))(?![ \t]+[A-Z])\b/u',
         $visibletext,
         $formulamatches
     );
