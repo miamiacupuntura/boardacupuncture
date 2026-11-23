@@ -4063,9 +4063,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             \core\output\notification::NOTIFY_SUCCESS
         );
     }
-    if ($isextraguidelineaction) {
-        throw new invalid_parameter_exception('Only administrator-authored questions can use Extra guideline storage.');
-    }
     $basequestion = $baseentry['question'];
     $original = array_intersect_key($basequestion, array_flip([
         'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
@@ -4082,6 +4079,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $original,
         $basesnapshot,
         $mockcategory,
+        $isextraguidelineaction,
+        $targetarchivestatus,
         $isarchiverestore,
         $savedat,
         $savedbyname,
@@ -4091,11 +4090,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             ? $store['questions'][$questionid]
             : [];
         $previousstatus = (string)($previous['status'] ?? 'original');
-        if ($isarchiverestore && $previousstatus !== 'study_archive') {
-            throw new invalid_parameter_exception('Only an archived study question can be restored.');
+        if ($isarchiverestore && $previousstatus !== $targetarchivestatus) {
+            throw new invalid_parameter_exception($isextraguidelineaction
+                ? 'Only an Extra guideline question can be restored.'
+                : 'Only an archived study question can be restored.');
         }
-        if (!$isarchiverestore && $previousstatus === 'study_archive') {
-            throw new invalid_parameter_exception('This question is already in the study archive.');
+        if (!$isarchiverestore && $previousstatus === $targetarchivestatus) {
+            throw new invalid_parameter_exception($isextraguidelineaction
+                ? 'This question is already in the Extra guideline bank.'
+                : 'This question is already in the study archive.');
         }
         $history = is_array($previous['history'] ?? null) ? $previous['history'] : [];
         if ($previous !== []) {
@@ -4122,11 +4125,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             'proposalHistory' => [],
         ];
         $record['status'] = $isarchiverestore
-            ? (string)($previous['statusBeforeStudyArchive'] ?? 'draft')
-            : 'study_archive';
+            ? (string)($previous[$isextraguidelineaction
+                ? 'statusBeforeExtraGuideline'
+                : 'statusBeforeStudyArchive'] ?? 'draft')
+            : $targetarchivestatus;
         if (!in_array($record['status'], [
                 'original', 'draft', 'approved', 'pending_reclassification', 'exclusion_candidate',
-                'study_archive',
+                'study_archive', 'extra_guideline',
             ], true)) {
             $record['status'] = 'draft';
         }
@@ -4137,11 +4142,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $record['requestReclassification'] = false;
         $record['exclusionReason'] = $isarchiverestore
             ? ''
-            : 'Mock-only educational question; not suitable as a board-style question.';
-        $record['archiveModule'] = $isarchiverestore ? '' : 'mock_only';
-        $record['mockCategory'] = $isarchiverestore ? '' : $mockcategory;
-        $record['mockPlacementStatus'] = $isarchiverestore ? '' : 'placed';
-        $record['statusBeforeStudyArchive'] = $isarchiverestore ? '' : $previousstatus;
+            : ($isextraguidelineaction
+                ? 'Stored in the Extra guideline bank; not eligible for Board, Mock, or Simulation Exams.'
+                : 'Mock-only educational question; not suitable as a board-style question.');
+        $record['archiveModule'] = $isarchiverestore
+            ? ''
+            : ($isextraguidelineaction ? 'extra_guideline' : 'mock_only');
+        $record['mockCategory'] = $isarchiverestore || $isextraguidelineaction ? '' : $mockcategory;
+        $record['mockPlacementStatus'] = $isarchiverestore || $isextraguidelineaction ? '' : 'placed';
+        $record['extraGuidelineDomain'] = !$isarchiverestore && $isextraguidelineaction
+            ? (string)$baseentry['domainId']
+            : '';
+        $record['statusBeforeStudyArchive'] = !$isextraguidelineaction && !$isarchiverestore
+            ? $previousstatus
+            : '';
+        $record['statusBeforeExtraGuideline'] = $isextraguidelineaction && !$isarchiverestore
+            ? $previousstatus
+            : '';
         $record['archivedAt'] = $isarchiverestore ? '' : $savedat;
         $record['archivedById'] = $isarchiverestore ? 0 : (int)$USER->id;
         $record['archivedByName'] = $isarchiverestore ? '' : $savedbyname;
@@ -4170,7 +4187,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         return $store;
     });
     $archiveurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', [
-        'review' => $isarchiverestore ? 'all' : 'study_archive',
+        'review' => $isarchiverestore
+            ? 'all'
+            : ($isextraguidelineaction ? 'extra_guideline' : 'study_archive'),
         'q' => $questionid,
         'lang' => $displaylang,
     ]);
@@ -4178,8 +4197,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     redirect(
         $archiveurl,
         $isarchiverestore
-            ? 'Question removed from the Mock-only bank and restored to its previous board editorial state.'
-            : 'Question sent to its Mock category and removed from board exams.',
+            ? ($isextraguidelineaction
+                ? 'Question removed from Extra guideline and restored to its previous editorial state.'
+                : 'Question removed from the Mock-only bank and restored to its previous board editorial state.')
+            : ($isextraguidelineaction
+                ? 'Question moved to Extra guideline and removed from Board, Mock, and Simulation Exams.'
+                : 'Question sent to its Mock category and removed from board exams.'),
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -5027,6 +5050,10 @@ $studyarchivecount = count(array_filter(
     $revisionstore['questions'] ?? [],
     static fn(array $revision): bool => ($revision['status'] ?? '') === 'study_archive'
 ));
+$extraguidelinecount = count(array_filter(
+    $revisionstore['questions'] ?? [],
+    static fn(array $revision): bool => ($revision['status'] ?? '') === 'extra_guideline'
+));
 $deletedquestioncount = count(array_filter(
     $revisionstore['questions'] ?? [],
     static fn(array $revision): bool => ($revision['status'] ?? '') === 'deleted'
@@ -5044,7 +5071,7 @@ $studyarchivecount += count(array_filter(
     $customquestionrecords,
     static fn(array $record): bool => (string)($record['status'] ?? '') === 'study_archive'
 ));
-$extraguidelinecount = count(array_filter(
+$extraguidelinecount += count(array_filter(
     $customquestionrecords,
     static fn(array $record): bool => (string)($record['status'] ?? '') === 'extra_guideline'
 ));
@@ -13106,7 +13133,7 @@ echo $OUTPUT->header();
     </section>
     <?php endif; ?>
     <?php if ($studyarchivecount > 0): ?><nav class="question-bank__actions" aria-label="Mock-only questions"><a class="question-bank__button question-bank__button--similar" href="<?php echo $studyarchiveurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Preguntas enviadas a Mock' : 'Mock-only questions'; ?> (<?php echo (int)$studyarchivecount; ?>)</a></nav><?php endif; ?>
-    <?php if ($extraguidelinecount > 0): ?><nav class="question-bank__actions" aria-label="Extra guideline bank"><a class="question-bank__button question-bank__button--similar" href="<?php echo $extraguidelineurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Banco Extra guideline' : 'Extra guideline bank'; ?> (<?php echo (int)$extraguidelinecount; ?>)</a></nav><?php endif; ?>
+    <nav class="question-bank__actions" aria-label="Extra guideline bank"><a class="question-bank__button question-bank__button--similar" href="<?php echo $extraguidelineurl->out(false); ?>">Extra guideline bank (<?php echo (int)$extraguidelinecount; ?>)</a></nav>
     <?php if ($displaylang === 'es'): ?><section class="question-bank__language-state"><strong>Vista en español activa</strong>Los controles principales y las traducciones disponibles se muestran en español. Cuando una pregunta todavía no tiene traducción guardada, se identifica claramente y se conserva el original inglés para evitar una traducción clínica no verificada.</section><?php endif; ?>
     <?php if (is_array($mergecomposer)):
         $mergeleft = $mergecomposer['left'];
@@ -14186,6 +14213,7 @@ echo $OUTPUT->header();
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing && !in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta versión ahora?' : 'Approve and publish this version now?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if (!in_array($revisionstatus, ['study_archive', 'extra_guideline', 'deleted'], true) && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar manualmente' : 'Edit manually'; ?></a><?php endif; ?>
             <?php if (!$iscustomdraft && $revisionstatus !== 'deleted'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'extra_guideline' ? 'restoreextraguideline' : ($revisionstatus === 'study_archive' ? 'restoremockquestion' : 'sendtomock'); ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo in_array($revisionstatus, ['study_archive', 'extra_guideline'], true) ? 'question-bank__button--primary' : 'question-bank__button--similar'; ?>" type="submit"<?php if (!in_array($revisionstatus, ['study_archive', 'extra_guideline'], true)): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Enviar esta pregunta al Mock correspondiente? Se conservará completa, saldrá del banco board y se clasificará según su dominio.' : 'Send this question to the matching Mock category? It will be preserved in full, removed from the board bank and classified by its domain.'; ?>');"<?php endif; ?>><?php echo $revisionstatus === 'extra_guideline' ? ($displaylang === 'es' ? 'Restaurar como borrador' : 'Restore as draft') : ($revisionstatus === 'study_archive' ? ($displaylang === 'es' ? 'Quitar de Mock y restaurar al board' : 'Remove from Mock and restore to board') : ($displaylang === 'es' ? 'Enviar a Mock' : 'Send to Mock')); ?></button></form><?php endif; ?>
+            <?php if (!$iscustomdraft && !in_array($revisionstatus, ['study_archive', 'extra_guideline', 'deleted'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="saveextraguideline"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--similar" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Mover esta pregunta al banco independiente Extra guideline? Se quitará de Board, Mock y Simulation Exams.' : 'Move this question to the independent Extra guideline bank? It will be removed from Board, Mock, and Simulation Exams.'; ?>');">Extra guideline bank</button></form><?php endif; ?>
             <?php if (!$iscustomdraft): ?><form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'deleted' ? 'restoredeletedquestion' : 'deletequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'deleted' ? 'question-bank__button--primary' : 'question-bank__button--exclude'; ?>" type="submit"<?php if ($revisionstatus !== 'deleted'): ?> onclick="return confirm('Delete this question from the active bank and exams? You can restore it later from Deleted questions.');"<?php endif; ?>><?php echo $revisionstatus === 'deleted' ? 'Restore question' : 'Delete question'; ?></button></form><?php endif; ?>
             <?php endif; ?>
             <?php if (!$question['_excluded']): ?><a class="question-bank__button question-bank__button--similar" href="<?php echo $questionsimilarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar preguntas similares' : 'Find similar questions'; ?></a><?php endif; ?>
