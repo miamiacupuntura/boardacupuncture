@@ -62,7 +62,7 @@ $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 20;
-$aipromptversion = 'ncbahm-mock-editor-4.7';
+$aipromptversion = 'ncbahm-mock-editor-4.8';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
@@ -5622,6 +5622,55 @@ if ($contentcoveragecachechanged) {
     }
 }
 
+$hascompleteextratext = static function(mixed $value): bool {
+    $text = trim((string)$value);
+    return $text !== ''
+        && !preg_match('/^(?:not\s+completed|pending|missing|no\s+completad[oa]|pendiente)\.?$/iu', $text);
+};
+$hascompleteextraoptions = static function(mixed $value) use ($hascompleteextratext): bool {
+    if (!is_array($value) || count($value) !== 4) {
+        return false;
+    }
+    foreach (array_values($value) as $index => $option) {
+        $expectedlabel = chr(65 + $index);
+        $label = strtoupper(trim((string)(is_array($option) ? ($option['label'] ?? '') : $expectedlabel)));
+        $text = is_array($option) ? ($option['text'] ?? '') : $option;
+        if ($label !== $expectedlabel || !$hascompleteextratext($text)) {
+            return false;
+        }
+    }
+    return true;
+};
+$isextraguidelinepublishable = static function(array $question) use (
+    $hascompleteextratext,
+    $hascompleteextraoptions
+): bool {
+    $spanish = is_array($question['translations']['es'] ?? null)
+        ? $question['translations']['es']
+        : [];
+    return $hascompleteextratext($question['prompt'] ?? '')
+        && $hascompleteextraoptions($question['options'] ?? [])
+        && in_array(strtoupper(trim((string)($question['correctLabel'] ?? ''))), ['A', 'B', 'C', 'D'], true)
+        && $hascompleteextratext($question['explanation'] ?? '')
+        && $hascompleteextratext($spanish['prompt'] ?? '')
+        && $hascompleteextraoptions($spanish['options'] ?? [])
+        && $hascompleteextratext($spanish['explanation'] ?? '');
+};
+$extraguidelinequestions = array_values(array_filter(
+    $allquestions,
+    static fn(array $question): bool => (string)($question['_revision']['status'] ?? '') === 'extra_guideline'
+));
+$extraguidelinereadyquestions = array_values(array_filter(
+    $extraguidelinequestions,
+    $isextraguidelinepublishable
+));
+$extraguidelinetotalcount = count($extraguidelinequestions);
+$extraguidelinereadycount = count($extraguidelinereadyquestions);
+$extraguidelinependingcount = max(0, $extraguidelinetotalcount - $extraguidelinereadycount);
+$publishedextraguideline = is_array($revisionstore['publishedExtraGuideline'] ?? null)
+    ? $revisionstore['publishedExtraGuideline']
+    : null;
+
 $examprojects = [];
 foreach (($revisionstore['examProjects'] ?? []) as $storedexamid => $storedexam) {
     if (!is_array($storedexam)) {
@@ -6276,6 +6325,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $rebalanceexamprojectrequested !== '
             . ($displaylang === 'es'
                 ? ' reemplazos de los dominios faltantes.'
                 : ' replacements from the missing domains.'),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishextraguideline') {
+    require_sesskey();
+    $extraguidelinereturnurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        array_filter(['lang' => $displaylang !== 'en' ? $displaylang : null]),
+        'exam-builder'
+    );
+    if ($extraguidelinereadyquestions === []) {
+        redirect(
+            $extraguidelinereturnurl,
+            $displaylang === 'es'
+                ? 'No se publicó Extra guideline: primero complete al menos una pregunta en inglés y español.'
+                : 'Extra guideline was not published: complete at least one question in English and Spanish first.',
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    }
+    $publishedextraquestions = [];
+    foreach ($extraguidelinereadyquestions as $extraindex => $extraquestion) {
+        $snapshot = array_intersect_key($extraquestion, array_flip([
+            'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
+            'translations', 'contentType', 'cognitiveLevel', 'difficultyBand', 'source', 'sourceCard',
+        ]));
+        $snapshot['extraGuidelinePosition'] = $extraindex + 1;
+        $publishedextraquestions[] = $snapshot;
+    }
+    $publishedextraat = gmdate(DATE_ATOM);
+    $publishedextrabyname = fullname($USER);
+    $publishedextrapendingcount = $extraguidelinependingcount;
+    $updatedextraguidelinestore = block_myprogress_herbology_override_update(static function(array $store) use (
+        $publishedextraquestions,
+        $publishedextrapendingcount,
+        $publishedextraat,
+        $publishedextrabyname,
+        $USER
+    ): array {
+        $previous = is_array($store['publishedExtraGuideline'] ?? null)
+            ? $store['publishedExtraGuideline']
+            : [];
+        $store['publishedExtraGuideline'] = [
+            'id' => 'extra_guideline',
+            'name' => 'Extra guideline',
+            'status' => 'published',
+            'version' => max(0, (int)($previous['version'] ?? 0)) + 1,
+            'questionCount' => count($publishedextraquestions),
+            'pendingCount' => $publishedextrapendingcount,
+            'questions' => $publishedextraquestions,
+            'publishedAt' => $publishedextraat,
+            'publishedById' => (int)$USER->id,
+            'publishedByName' => $publishedextrabyname,
+        ];
+        return $store;
+    });
+    $publishedextraversion = (int)($updatedextraguidelinestore['publishedExtraGuideline']['version'] ?? 1);
+    redirect(
+        $extraguidelinereturnurl,
+        ($displaylang === 'es'
+            ? 'Extra guideline publicado por separado con '
+            : 'Extra guideline published separately with ')
+            . count($publishedextraquestions)
+            . ($displaylang === 'es' ? ' preguntas listas. Versión ' : ' ready questions. Version ')
+            . $publishedextraversion . '.',
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -10587,6 +10703,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             }
         }
         $sourceformulanames = array_values(array_unique(array_values($sourceformulabylabel)));
+        $draftformulabylabel = [];
+        foreach ($optionsbylabel as $draftoptionlabel => $draftoptiontext) {
+            if (preg_match(
+                '/^\s*([^(:]{2,90}?\b(?:Tang|San|Wan|Dan|Yin|Gao|Pian))\b/iu',
+                $draftoptiontext,
+                $draftformulamatch
+            )) {
+                $draftformulabylabel[$draftoptionlabel] = trim((string)$draftformulamatch[1]);
+            }
+        }
+        $sourceasksformulamanifestations = preg_match(
+            '/\b(?:manifestations?|indications?|actions?|functions?|signs|symptoms)\b/iu',
+            (string)($sourcequestion['prompt'] ?? '')
+        ) === 1 && preg_match(
+            '/\b(?:Tang|San|Wan|Dan|Yin|Gao|Pian)\b/u',
+            (string)($sourcequestion['prompt'] ?? '')
+        ) === 1;
+        if ($sourceasksformulamanifestations
+                && $sourceformulabylabel === []
+                && $draftformulabylabel !== []) {
+            throw new UnexpectedValueException(
+                'The source asks which manifestations or indications fit one named formula. Keep A-D as parallel '
+                    . 'clinical finding sets; do not replace them with formula-name choices.'
+            );
+        }
         $draftingredientoptioncount = count(array_filter(
             $optionsbylabel,
             static fn(string $optiontext): bool => substr_count($optiontext, ',') >= 2
@@ -11381,6 +11522,7 @@ Editorial rules:
 0. Read reviewDestination before editing. When it is "extra_guideline", this is an editorial-completion review for the independent Extra guideline bank, not a Board-publication review. Preserve every source-supported name in outsideRosterNamesToPreserve exactly in the visible stem or choices and do not replace, remove, or relabel it merely because it is absent from Appendix A or Appendix C. Complete the question, Spanish translation, two inference steps, and option-specific feedback normally. Do not claim that the result is Board-eligible.
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer. The controlled repeated-answer transformation in rule 1B is the only exception to preserving the original answer concept; it still must preserve the keyed LETTER and use an explicit fact from sourceCardEvidence or herbProfileEvidence.
 1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection, differentiation or a source-supported formula-architecture clue that distinguishes the formula; Domain 2 must test individual-herb identification, properties, actions, indications, comparison, or a source-supported distinctive dose or processing fact; Domain 3 must test Duì Yào pairing, compatibility, synergy, antagonism or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing or dispensing principle; Domain 5 must test formula composition, chief/deputy/assistant/envoy hierarchy, ingredient roles or formula modification. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
+1AB. When the source stem names one formula and asks for its manifestations, indications, actions, functions, signs or symptoms, preserve that tested direction. Keep A-D as parallel clinical finding or therapeutic-description sets and preserve the keyed clinical concept. Do not turn the choices into four formula names and do not require the feedback to map A-D to different formulas.
 1AA. Distinguish therapeutic scope from shared ingredients. Choose a complete formula when the item tests a complete pattern architecture and its coordinated therapeutic strategy. A Duì Yào may be a core pair, a source-supported modification, or a brief prescription for a narrow objective. It is neither a commercial patent formula nor an automatic equivalent of a classical formula. Never rewrite a formula-versus-Duì-Yào scope question as a generic single-herb indication question, and never label a two-herb pair as a patent or classical formula.
 1B. Use answerRepetition to reduce redundant questions. When activeQuestionCount is at least 3, use preferredFocus as a rotation target only if sourceFeedback, sourceCardEvidence or herbProfileEvidence explicitly states the needed fact. Formula-answer groups rotate through clinical differentiation, hierarchy or ingredient role, ingredient function, composition or modification, and preparation or processing. Individual-herb groups rotate through clinical differentiation, distinctive dosage, preparation or processing, safety or contraindication, and channel or function differentiation. Preserve the correct LETTER by placing the new source-supported correct fact at that letter and rebuild all distractors in parallel form. Never infer hierarchy from ingredient order, never assign deputy/assistant/envoy roles when the source only names a chief, never invent or approximate a dose, and never invent a preparation or processing method. If preferredFocus is unsupported or conflicts with the fixed domain, retain the original objective and improve its differentiation instead. Do not transform every repeated answer: clinical occurrences remain clinical, while supported hierarchy, dosage, processing, safety and composition occurrences diversify the set.
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
@@ -11500,13 +11642,25 @@ PROMPT;
                         $preservedoutsiderosternames,
                         $reviewforextraguideline
                     );
-                    $compliancenote = $validateinstructioncompliance(
-                        $generateddraft,
-                        $sourcepayload,
-                        $administratorproposal,
-                        $latestadministratorproposal,
-                        $currentreviewversion
-                    );
+                    if (trim($administratorproposal) !== '') {
+                        $compliancenote = $validateinstructioncompliance(
+                            $generateddraft,
+                            $sourcepayload,
+                            $administratorproposal,
+                            $latestadministratorproposal,
+                            $currentreviewversion
+                        );
+                    } else {
+                        // With no administrator instruction there is nothing
+                        // semantic for a second AI judge to verify. The local
+                        // decoder has already checked the answer key, A-D
+                        // structure, both inference steps, option-specific
+                        // feedback and the complete Spanish version. Skipping
+                        // a third model pass also avoids false requirements such
+                        // as formula mapping for manifestation-only choices.
+                        $compliancenote = 'The rebuilt feedback passed the deterministic answer-key, choice-format, '
+                            . 'translation, inference and A-D feedback checks. No administrator instruction was pending.';
+                    }
                 } else {
                     $compliancenote = $reviewforextraguideline
                         ? 'The focused Extra guideline review passed the local answer-key, outside-roster-name, '
@@ -12942,6 +13096,12 @@ $extraguidelineexamurl = new moodle_url(
     ])
 );
 $extraguidelineexamurl->set_anchor('pending-questions');
+$extraguidelinestudenturl = new moodle_url(
+    '/blocks/menu/herbology-extra-guideline.php',
+    array_filter([
+        'lang' => $displaylang !== 'en' ? $displaylang : null,
+    ])
+);
 $assistanthistory = is_array($SESSION->ncbahm_question_bank_ai_history ?? null)
     ? array_slice($SESSION->ncbahm_question_bank_ai_history, -8)
     : [];
@@ -13584,6 +13744,27 @@ echo $OUTPUT->header();
         </form>
         <?php endif; ?>
         <div class="question-bank__exam-grid">
+            <?php
+            $extraguidelineprogresspercent = $extraguidelinetotalcount > 0
+                ? min(100, (int)round($extraguidelinereadycount * 100 / $extraguidelinetotalcount))
+                : 0;
+            $extraguidelineispublished = is_array($publishedextraguideline)
+                && (string)($publishedextraguideline['status'] ?? '') === 'published';
+            ?>
+            <article class="question-bank__exam-card question-bank__exam-card--extra-guideline">
+                <h4>Extra guideline</h4>
+                <div class="question-bank__exam-numbers"><span><?php echo $displaylang === 'es' ? 'Listas:' : 'Ready:'; ?> <strong><?php echo $extraguidelinereadycount; ?> / <?php echo $extraguidelinetotalcount; ?></strong></span><span><?php echo $displaylang === 'es' ? 'Pendientes:' : 'Pending:'; ?> <strong><?php echo $extraguidelinependingcount; ?></strong></span></div>
+                <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="<?php echo max(1, $extraguidelinetotalcount); ?>" aria-valuenow="<?php echo $extraguidelinereadycount; ?>"><span style="width:<?php echo $extraguidelineprogresspercent; ?>%"></span></div>
+                <div class="question-bank__publish-readiness<?php echo $extraguidelinereadycount > 0 ? ' is-ready' : ''; ?>"><?php echo $displaylang === 'es'
+                    ? 'Colección suplementaria separada. Puede publicar las preguntas completas sin incorporarlas a Board, Mock ni Simulation Exams.'
+                    : 'Separate supplemental collection. Complete questions can be published without adding them to Board, Mock, or Simulation Exams.'; ?></div>
+                <?php if ($extraguidelineispublished): ?><div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$publishedextraguideline['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)($publishedextraguideline['version'] ?? 1); ?> · <?php echo (int)($publishedextraguideline['questionCount'] ?? 0); ?> <?php echo $displaylang === 'es' ? 'preguntas' : 'questions'; ?></span></div><?php endif; ?>
+                <div class="question-bank__editor-actions">
+                    <a class="question-bank__button question-bank__button--primary" href="<?php echo $extraguidelineexamurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir y editar' : 'Open and edit'; ?> (<?php echo $extraguidelinetotalcount; ?>)</a>
+                    <?php if ($extraguidelinereadycount > 0): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" onsubmit="return confirm('<?php echo $extraguidelineispublished ? ($displaylang === 'es' ? '¿Volver a publicar Extra guideline con todas las preguntas completas actuales?' : 'Republish Extra guideline with all currently complete questions?') : ($displaylang === 'es' ? '¿Publicar las preguntas completas como una colección Extra guideline separada?' : 'Publish the complete questions as a separate Extra guideline collection?'); ?>');"><input type="hidden" name="formaction" value="publishextraguideline"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $extraguidelineispublished ? ($displaylang === 'es' ? 'Volver a publicar' : 'Republish') : ($displaylang === 'es' ? 'Publicar colección' : 'Publish collection'); ?></button></form><?php else: ?><span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $displaylang === 'es' ? 'Publicar colección' : 'Publish collection'; ?></span><?php endif; ?>
+                    <?php if ($extraguidelineispublished): ?><a class="question-bank__button" href="<?php echo $extraguidelinestudenturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?>
+                </div>
+            </article>
             <?php if ($publishedexam2 === null): ?>
             <?php $exam2progresspercent = $exam2targetcount > 0 ? min(100, (int)round($exam2reviewedcount * 100 / $exam2targetcount)) : 0; ?>
             <article class="question-bank__exam-card">

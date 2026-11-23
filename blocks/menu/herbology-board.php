@@ -605,6 +605,7 @@ if ($usesdomainbank && !is_readable($domainbankpath) && is_readable($domainseedp
 $domainbank = ['domains' => []];
 $publishedsimulationexams = [];
 $publishedsimulationexam2 = null;
+$publishedextraguideline = null;
 $questionrevisionstore = ['questions' => []];
 if ($usesdomainbank && is_readable($domainbankpath)) {
     $decodedbank = json_decode(file_get_contents($domainbankpath), true);
@@ -699,6 +700,12 @@ if ($usesdomainbank && is_readable($domaincandidatepath)) {
 }
 if ($usesdomainbank) {
     $questionrevisionstore = block_myprogress_herbology_override_load();
+    $publishedextraguidelinecandidate = $questionrevisionstore['publishedExtraGuideline'] ?? null;
+    if (is_array($publishedextraguidelinecandidate)
+            && (string)($publishedextraguidelinecandidate['status'] ?? '') === 'published'
+            && !empty($publishedextraguidelinecandidate['questions'])) {
+        $publishedextraguideline = $publishedextraguidelinecandidate;
+    }
     foreach ((array)($questionrevisionstore['publishedExams'] ?? []) as $publishedexamkey => $storedexam) {
         if (!preg_match('/^simulation_exam_(\d+)$/', (string)$publishedexamkey, $publishedmatch)
                 || !is_array($storedexam)
@@ -3450,6 +3457,20 @@ echo $OUTPUT->header();
                         <b><?php echo $ises ? 'Comenzar →' : 'Begin →'; ?></b>
                     </a>
                 </div>
+                <?php if ($publishedextraguideline !== null):
+                    $studentextraurl = new moodle_url(
+                        '/blocks/menu/herbology-extra-guideline.php',
+                        $ises ? ['lang' => 'es'] : []
+                    );
+                ?>
+                <aside class="herb-board__simulation-note">
+                    <strong>Extra guideline · <?php echo (int)($publishedextraguideline['questionCount'] ?? count((array)$publishedextraguideline['questions'])); ?> <?php echo $ises ? 'preguntas' : 'questions'; ?></strong>
+                    · <?php echo $ises
+                        ? 'Práctica suplementaria publicada por separado; no altera los exámenes de simulación ni representa el roster oficial.'
+                        : 'Supplemental practice published separately; it does not alter the Simulation Exams and does not represent the official roster.'; ?>
+                    <a class="herb-board__back" href="<?php echo $studentextraurl->out(false); ?>"><?php echo $ises ? 'Abrir Extra guideline →' : 'Open Extra guideline →'; ?></a>
+                </aside>
+                <?php endif; ?>
                 <details class="herb-board__exam-characteristics herb-board__exam-characteristics--official">
                     <summary>
                         <span><strong><?php echo $ises ? 'Composición de la nueva versión NCBAHM 2026' : 'New NCBAHM 2026 version composition'; ?></strong><small><?php echo $ises ? 'Cuatro dominios oficiales · separado de la versión actual' : 'Four official domains · separate from the current version'; ?></small></span>

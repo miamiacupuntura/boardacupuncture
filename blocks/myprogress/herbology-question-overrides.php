@@ -17,6 +17,7 @@ function block_myprogress_herbology_override_empty(): array {
         'instructionTemplates' => [],
         'examProjects' => [],
         'publishedExams' => [],
+        'publishedExtraGuideline' => null,
     ];
 }
 

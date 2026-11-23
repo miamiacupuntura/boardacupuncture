@@ -9,6 +9,11 @@ BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 FILES=(
     "blocks/myprogress/admin-herbology-question-bank.php"
     "blocks/myprogress/herbology-question-overrides.php"
+    "blocks/menu/herbology-extra-guideline.php"
+    "blocks/menu/herbology-board.php"
+)
+NEW_FILES=(
+    "blocks/menu/herbology-extra-guideline.php"
 )
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
@@ -23,8 +28,17 @@ for command in curl php grep install stat cp cmp mkdir mktemp date rm mv dirname
     }
 done
 
+is_new_file() {
+    local candidate="$1"
+    local new_file
+    for new_file in "${NEW_FILES[@]}"; do
+        [[ "$candidate" == "$new_file" ]] && return 0
+    done
+    return 1
+}
+
 for relative in "${FILES[@]}"; do
-    [[ -f "$MOODLE_ROOT/$relative" ]] || {
+    [[ -f "$MOODLE_ROOT/$relative" ]] || is_new_file "$relative" || {
         echo "ERROR: no existe $MOODLE_ROOT/$relative" >&2
         exit 1
     }
@@ -67,11 +81,18 @@ grep -Fq 'Published in the bank. Use “Add to ' "$TEMP_DIR/blocks/myprogress/ad
 grep -Fq 'name="reviewforextraguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Review for Extra guideline' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$record['reviewDestination']" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "ncbahm-mock-editor-4.7" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "ncbahm-mock-editor-4.8" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'manifestation-only choices' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'lastAutomaticReviewFailure' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'View Extra guideline' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Back to Exam builder' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'name="formaction" value="publishextraguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Publish collection' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "'publishedExtraGuideline' => null" "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
+grep -Fq 'Student view for the separately published Extra guideline collection' "$TEMP_DIR/blocks/menu/herbology-extra-guideline.php"
+grep -Fq 'Check answer' "$TEMP_DIR/blocks/menu/herbology-extra-guideline.php"
+grep -Fq 'Open Extra guideline →' "$TEMP_DIR/blocks/menu/herbology-board.php"
 
 mkdir -p "$BACKUP_DIR"
 for relative in "${FILES[@]}"; do
@@ -79,10 +100,15 @@ for relative in "${FILES[@]}"; do
     source_file="$TEMP_DIR/$relative"
     backup="$BACKUP_DIR/$relative"
     staged="$MOODLE_ROOT/$(dirname "$relative")/.$(basename "$relative").extra-guideline.$$"
-    mkdir -p "$(dirname "$backup")"
-    cp -a -- "$target" "$backup"
-    owner_group="$(stat -c '%u:%g' "$target")"
-    mode="$(stat -c '%a' "$target")"
+    if [[ -f "$target" ]]; then
+        mkdir -p "$(dirname "$backup")"
+        cp -a -- "$target" "$backup"
+        owner_group="$(stat -c '%u:%g' "$target")"
+        mode="$(stat -c '%a' "$target")"
+    else
+        owner_group="$(stat -c '%u:%g' "$(dirname "$target")")"
+        mode="0644"
+    fi
     install -o "${owner_group%:*}" -g "${owner_group#*:}" -m "$mode" "$source_file" "$staged"
     cmp -s "$source_file" "$staged"
     mv -f -- "$staged" "$target"
@@ -105,10 +131,14 @@ grep -Fq 'Published in the bank. Use “Add to ' "$MOODLE_ROOT/blocks/myprogress
 grep -Fq 'name="reviewforextraguideline"' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Review for Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$record['reviewDestination']" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "ncbahm-mock-editor-4.7" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "ncbahm-mock-editor-4.8" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'manifestation-only choices' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'lastAutomaticReviewFailure' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'View Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Back to Exam builder' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'name="formaction" value="publishextraguideline"' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Student view for the separately published Extra guideline collection' "$MOODLE_ROOT/blocks/menu/herbology-extra-guideline.php"
+grep -Fq 'Open Extra guideline →' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -135,4 +165,6 @@ echo "OK: después de un merge se conserva el contexto y se muestra Agregar al e
 echo "OK: la revisión automática puede completar una pregunta fuera del roster y dejarla lista para Extra guideline."
 echo "OK: si la revisión falla, la tarjeta conserva y muestra la causa exacta para corregirla."
 echo "OK: Exam builder muestra el total de Extra guideline y permite abrirlo y regresar."
+echo "OK: las preguntas de manifestaciones conservan opciones clínicas y no exigen un mapeo falso de fórmulas."
+echo "OK: Extra guideline se publica como una colección estudiantil separada, con versión y preguntas pendientes visibles."
 echo "RESPALDO: $BACKUP_DIR"
