@@ -57,6 +57,11 @@ extra_button_count="$(grep -Fc '>Extra guideline bank</button>' "$TEMP_DIR/block
 [[ "$extra_button_count" -ge 2 ]]
 grep -Fq "'status' => \$saveoutsideguideline ? 'extra_guideline' : 'draft'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '2026-11-23-extra-guideline-bank-v1' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "'su ye' => 'zi su ye'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "'status' => 'approved_with_warning'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Publicar con advertencia' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+warning_button_count="$(grep -Fc 'Publicar con advertencia' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php")"
+[[ "$warning_button_count" -ge 3 ]]
 grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 
 mkdir -p "$BACKUP_DIR"
@@ -83,6 +88,9 @@ grep -Fq '>Extra guideline bank</button>' "$MOODLE_ROOT/blocks/myprogress/admin-
 installed_button_count="$(grep -Fc '>Extra guideline bank</button>' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php")"
 [[ "$installed_button_count" -ge 2 ]]
 grep -Fq '2026-11-23-extra-guideline-bank-v1' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "'su ye' => 'zi su ye'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "'status' => 'approved_with_warning'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Publicar con advertencia' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -102,4 +110,7 @@ echo "OK: las preguntas fuera del roster se guardan en un banco administrativo i
 echo "OK: el acceso general y el botón de cada tarjeta se muestran en el banco y en Temporary Review Order."
 echo "OK: no se envían a Board, Mock ni Simulation Exams."
 echo "OK: los registros creados por la versión anterior se separan automáticamente de Mock."
+echo "OK: Su Ye se reconoce como alias válido de Zi Su Ye."
+echo "OK: un administrador puede publicar con advertencia; usuario, fecha, alerta y versión quedan auditados."
+echo "OK: la excepción auditada se respeta al agregar y publicar Simulation Exams."
 echo "RESPALDO: $BACKUP_DIR"
