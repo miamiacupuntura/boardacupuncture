@@ -53,6 +53,8 @@ grep -Fq 'name="saveoutsideguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbol
 grep -Fq 'Guardar en Extra guideline' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '>Extra guideline bank</button>' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Extra guideline bank (<?php echo (int)$extraguidelinecount; ?>)' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+extra_button_count="$(grep -Fc '>Extra guideline bank</button>' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php")"
+[[ "$extra_button_count" -ge 2 ]]
 grep -Fq "'status' => \$saveoutsideguideline ? 'extra_guideline' : 'draft'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '2026-11-23-extra-guideline-bank-v1' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
@@ -78,6 +80,8 @@ for relative in "${FILES[@]}"; do
 done
 grep -Fq 'Guardar en Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '>Extra guideline bank</button>' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+installed_button_count="$(grep -Fc '>Extra guideline bank</button>' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php")"
+[[ "$installed_button_count" -ge 2 ]]
 grep -Fq '2026-11-23-extra-guideline-bank-v1' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
@@ -95,7 +99,7 @@ fi
 
 echo "BANCO EXTRA GUIDELINE INSTALADO"
 echo "OK: las preguntas fuera del roster se guardan en un banco administrativo independiente."
-echo "OK: el acceso general y el botón de cada tarjeta se muestran aunque el banco esté vacío."
+echo "OK: el acceso general y el botón de cada tarjeta se muestran en el banco y en Temporary Review Order."
 echo "OK: no se envían a Board, Mock ni Simulation Exams."
 echo "OK: los registros creados por la versión anterior se separan automáticamente de Mock."
 echo "RESPALDO: $BACKUP_DIR"
