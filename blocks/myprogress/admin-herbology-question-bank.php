@@ -62,7 +62,7 @@ $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 20;
-$aipromptversion = 'ncbahm-mock-editor-4.6';
+$aipromptversion = 'ncbahm-mock-editor-4.7';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
@@ -10420,7 +10420,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         array $sourcequestion,
         string $administratorproposal,
         bool $enforcefeedbackquality = true,
-        array $preservedoutsiderosternames = []
+        array $preservedoutsiderosternames = [],
+        bool $preservesourcequestiontext = false
     ) use (
         $buildchannelherbmapping,
         $ensurechannelherbmappingfeedback,
@@ -10443,6 +10444,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $decoded = json_decode($generated, true, 512, JSON_THROW_ON_ERROR);
         if (!is_array($decoded)) {
             throw new UnexpectedValueException('The AI response is not a JSON object.');
+        }
+        if ($preservesourcequestiontext) {
+            // For Extra guideline completion, AI supplies the missing editorial
+            // material while PHP preserves the source A-D choices and key.
+            // This prevents a provider from silently normalizing an intentional
+            // outside-roster name even when it otherwise returns valid JSON.
+            $decoded['options'] = (array)($sourcequestion['options'] ?? []);
+            $decoded['correctLabel'] = (string)($sourcequestion['correctLabel'] ?? '');
         }
         $prompt = $stripdecorativeicons((string)($decoded['prompt'] ?? ''));
         $explanation = $stripdecorativeicons((string)($decoded['explanation'] ?? ''));
@@ -11407,6 +11416,33 @@ PROMPT;
             $sourcepayload,
             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
         );
+        if ($reviewforextraguideline) {
+            // Extra guideline questions do not need the expensive multi-editor
+            // Board normalization pass. Keep their outside-roster content and
+            // perform one focused completeness review instead.
+            $aiprompt = <<<'PROMPT'
+You are completing one Chinese Herbology question for the independent Extra guideline bank. Return strict JSON only. This question is intentionally outside the current NCBAHM Appendix A/C roster and must not be converted into a Board-roster question.
+
+Requirements:
+1. Preserve the tested fact, correct answer concept and correct answer letter. Preserve every name in outsideRosterNamesToPreserve exactly in the visible English stem or choices. Do not remove or replace a formula or herb merely because it is outside the roster.
+2. Keep exactly four distinct choices labelled A, B, C and D. Do not use combined-answer shortcuts such as both, all, none, A and B, or their Spanish equivalents.
+3. Improve the English stem only when needed for grammar, clarity or a direct positive question. Do not add unsupported clinical facts or change the educational objective.
+4. Write a complete English explanation with these literal headings: "Inference step 1:", "Inference step 2:", "Option A:", "Option B:", "Option C:", and "Option D:". Explain why the key fits and why each distractor is weaker.
+5. Provide a complete Spanish translation of the final stem, A-D choices and explanation. The Spanish explanation must use "Paso de inferencia 1:", "Paso de inferencia 2:", "Opción A:", "Opción B:", "Opción C:", and "Opción D:". Preserve Pinyin names and answer letters.
+6. Apply any administratorInstructionHistory that concerns this question. Do not claim the completed question is Board-eligible; its destination remains Extra guideline.
+7. Set contentType and cognitiveLevel to accurate values. Set cognitiveLevel to "infer" or "analyze".
+8. In reviewSummary, state that the explanation, distractor feedback and Spanish translation were completed for Extra guideline while the outside-roster names were preserved.
+
+Required JSON shape:
+{"prompt":"...","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"correctLabel":"A","explanation":"...","translations":{"es":{"prompt":"...","options":[{"label":"A","text":"..."},{"label":"B","text":"..."},{"label":"C","text":"..."},{"label":"D","text":"..."}],"explanation":"..."}},"contentType":"clinical_case","cognitiveLevel":"infer","reviewSummary":"..."}
+
+QUESTION TO COMPLETE:
+PROMPT;
+            $aiprompt .= "\n" . json_encode(
+                $sourcepayload,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            );
+        }
         $lasterror = null;
         for ($generationattempt = 1; $generationattempt <= 3; $generationattempt++) {
             try {
@@ -11430,18 +11466,20 @@ PROMPT;
                 $responsecontent = (string)($response->get_response_data()['generatedcontent'] ?? '');
                 $requiresdiversificationreview = (int)($answerrepetition['activeQuestionCount'] ?? 1) >= 3
                     && ($sourcecardevidence !== '' || $herbprofileevidence !== '');
-                $requiresmultistagereview = trim($administratorproposal) !== ''
-                    || $sourcefeedbackmissing
-                    || $sourceprohibitedanswerchoice !== null
-                    || $sourcemnemonicfeedback
-                    || $sourcechannelcombination
-                    || $requiresdiversificationreview;
+                $requiresmultistagereview = !$reviewforextraguideline
+                    && (trim($administratorproposal) !== ''
+                        || $sourcefeedbackmissing
+                        || $sourceprohibitedanswerchoice !== null
+                        || $sourcemnemonicfeedback
+                        || $sourcechannelcombination
+                        || $requiresdiversificationreview);
                 $generateddraft = $decodeaidraft(
                     $responsecontent,
                     $sourcequestion,
                     $administratorproposal,
                     !$requiresmultistagereview,
-                    $preservedoutsiderosternames
+                    $preservedoutsiderosternames,
+                    $reviewforextraguideline
                 );
                 if ($requiresmultistagereview) {
                     $generateddraft = $refinefeedback(
@@ -11459,7 +11497,8 @@ PROMPT;
                         $sourcequestion,
                         $administratorproposal,
                         true,
-                        $preservedoutsiderosternames
+                        $preservedoutsiderosternames,
+                        $reviewforextraguideline
                     );
                     $compliancenote = $validateinstructioncompliance(
                         $generateddraft,
@@ -11469,8 +11508,11 @@ PROMPT;
                         $currentreviewversion
                     );
                 } else {
-                    $compliancenote = 'The automatic review passed the local answer-key, structure, translation, '
-                        . 'inference and feedback checks. No special administrator instruction was pending.';
+                    $compliancenote = $reviewforextraguideline
+                        ? 'The focused Extra guideline review passed the local answer-key, outside-roster-name, '
+                            . 'structure, translation, inference and option-feedback checks.'
+                        : 'The automatic review passed the local answer-key, structure, translation, '
+                            . 'inference and feedback checks. No special administrator instruction was pending.';
                 }
                 $generateddraft['instructionCompliance'] = [
                     'status' => 'verified',
@@ -11490,6 +11532,28 @@ PROMPT;
 
     if ($generateddrafts === []) {
         if ($issinglequestionrewrite) {
+            $persistedreviewerror = core_text::substr(
+                implode(' ', $generationerrors),
+                0,
+                2400
+            );
+            block_myprogress_herbology_override_update(static function(array $store) use (
+                $rewritequestionid,
+                $reviewforextraguideline,
+                $persistedreviewerror
+            ): array {
+                $record = is_array($store['questions'][$rewritequestionid] ?? null)
+                    ? $store['questions'][$rewritequestionid]
+                    : ['questionId' => $rewritequestionid];
+                $record['status'] = (string)($record['status'] ?? 'original');
+                $record['lastAutomaticReviewFailure'] = [
+                    'destination' => $reviewforextraguideline ? 'extra_guideline' : 'board',
+                    'message' => $persistedreviewerror,
+                    'failedAt' => gmdate(DATE_ATOM),
+                ];
+                $store['questions'][$rewritequestionid] = $record;
+                return $store;
+            });
             $failurebatchid = $requestedreviewbatch;
             if ($failurebatchid === '') {
                 $existingrevision = $revisionstore['questions'][$rewritequestionid] ?? null;
@@ -11618,6 +11682,7 @@ PROMPT;
             $record['reviewGuidelineViolations'] = array_values(
                 (array)($reviewguidelineviolations[$questionid] ?? [])
             );
+            unset($record['lastAutomaticReviewFailure']);
             $record['aiBatchId'] = $batchid;
             $record['aiBatchPosition'] = $issinglequestionrewrite
                     && (string)($previous['aiBatchId'] ?? '') === $batchid
@@ -14262,6 +14327,9 @@ echo $OUTPUT->header();
             && count($visibleherbnames($question)) < $visibleherbplacementrequired;
         $cardreviewsummary = trim((string)($fullrevision['draft']['reviewSummary'] ?? ''));
         $cardreviewdestination = (string)($fullrevision['reviewDestination'] ?? '');
+        $cardreviewfailure = is_array($fullrevision['lastAutomaticReviewFailure'] ?? null)
+            ? $fullrevision['lastAutomaticReviewFailure']
+            : [];
         $cardreviewedforextraguideline = $revisionstatus === 'draft'
             && $cardreviewdestination === 'extra_guideline';
         $instructioncheck = is_array($fullrevision['draft']['instructionCompliance'] ?? null)
@@ -14441,6 +14509,7 @@ echo $OUTPUT->header();
         </div>
         <?php if ($displaylang === 'es' && !$hasspanishtranslation): ?><div class="question-bank__translation-missing"><strong>Esta pregunta todavía no tiene traducción guardada.</strong> Se muestra el original inglés. Use <strong>Crear traducción al español</strong> para traducir solamente el texto, las respuestas y la explicación sin cambiar el contenido clínico.</div><?php endif; ?>
         <?php if ($cardguidelineoverrideactive): ?><div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Advertencia aceptada por un administrador:' : 'Warning accepted by an administrator:'; ?></strong> <?php echo s(implode(' | ', $cardguidelineviolations)); ?><?php if ((string)($cardguidelineoverridedetails['approvedByName'] ?? '') !== ''): ?> · <?php echo s((string)$cardguidelineoverridedetails['approvedByName']); ?><?php endif; ?><?php if ((string)($cardguidelineoverridedetails['approvedAt'] ?? '') !== ''): ?> · <?php echo s((string)$cardguidelineoverridedetails['approvedAt']); ?><?php endif; ?></div><?php elseif (!$cardguidelineverified): ?><div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'Alerta del guideline:' : 'Guideline alert:'; ?></strong> <?php echo s(implode(' | ', $cardguidelineviolations)); ?> <?php echo $displaylang === 'es' ? 'Puede corregirla, guardarla en Extra guideline o publicarla con advertencia si confirma que el contenido es válido.' : 'You may correct it, save it to Extra guideline, or publish with a warning after confirming the content is valid.'; ?></div><?php endif; ?>
+        <?php if ($cardreviewfailure !== []): ?><div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'La revisión automática no pudo terminar:' : 'Automatic review could not finish:'; ?></strong> <?php echo s((string)($cardreviewfailure['message'] ?? ($displaylang === 'es' ? 'El proveedor no devolvió una revisión válida.' : 'The provider did not return a valid review.'))); ?><br><small><?php echo $displaylang === 'es' ? 'La pregunta original no cambió. Puede intentarlo nuevamente; si vuelve a fallar, este mensaje indica exactamente qué debe corregirse.' : 'The original question was not changed. You may try again; if it fails again, this message identifies what must be corrected.'; ?></small></div><?php endif; ?>
         <?php if ($cardreviewedforextraguideline): ?><div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Revisión para Extra guideline lista:' : 'Extra guideline review ready:'; ?></strong> <?php echo $displaylang === 'es' ? 'La revisión completó la explicación y el feedback sin eliminar los nombres fuera del roster. Verifique el contenido y use Guardar revisión en Extra.' : 'The review completed the explanation and feedback without removing the outside-roster names. Verify the content, then use Save reviewed question to Extra.'; ?></div><?php endif; ?>
         <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft' && !$inlineapproval): ?><div class="question-bank__ai-draft-note"><?php echo $cardisoutdated ? 'Earlier automatic-review version. If the question is already correct, approve the current version; run the updated review only when changes are still needed.' : ($cardiscorrected ? 'Corrected version — awaiting your approval. Review the current question below; the earlier version is not shown.' : 'Current proposed version — not published. Review it below, then accept it or request a correction.'); ?></div><?php endif; ?>
         <?php if (($inlineorigin && $cardbatchid !== '') || $inlineapproval): ?>

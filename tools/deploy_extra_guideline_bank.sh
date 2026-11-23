@@ -67,7 +67,8 @@ grep -Fq 'Published in the bank. Use “Add to ' "$TEMP_DIR/blocks/myprogress/ad
 grep -Fq 'name="reviewforextraguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Review for Extra guideline' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$record['reviewDestination']" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "ncbahm-mock-editor-4.6" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "ncbahm-mock-editor-4.7" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'lastAutomaticReviewFailure' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 
 mkdir -p "$BACKUP_DIR"
@@ -102,7 +103,8 @@ grep -Fq 'Published in the bank. Use “Add to ' "$MOODLE_ROOT/blocks/myprogress
 grep -Fq 'name="reviewforextraguideline"' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Review for Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$record['reviewDestination']" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "ncbahm-mock-editor-4.6" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "ncbahm-mock-editor-4.7" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'lastAutomaticReviewFailure' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -127,4 +129,5 @@ echo "OK: un administrador puede publicar con advertencia; usuario, fecha, alert
 echo "OK: la excepción auditada se respeta al agregar y publicar Simulation Exams."
 echo "OK: después de un merge se conserva el contexto y se muestra Agregar al examen activo."
 echo "OK: la revisión automática puede completar una pregunta fuera del roster y dejarla lista para Extra guideline."
+echo "OK: si la revisión falla, la tarjeta conserva y muestra la causa exacta para corregirla."
 echo "RESPALDO: $BACKUP_DIR"
