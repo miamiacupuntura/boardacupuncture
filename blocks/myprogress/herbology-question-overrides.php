@@ -282,6 +282,17 @@ function block_myprogress_herbology_merge_custom_questions(
         }
         $status = (string)($record['status'] ?? 'draft');
         $approved = is_array($record['approved'] ?? null) ? $record['approved'] : null;
+        $isexcluded = in_array(
+            $status,
+            ['exclusion_candidate', 'study_archive', 'deleted'],
+            true
+        );
+        if ($isexcluded && !$includepending) {
+            // Mock-only and recycled administrator questions must never leak
+            // into student-facing Board practice or Simulation Exams merely
+            // because they retain an approved snapshot for safe recovery.
+            continue;
+        }
         if ($status !== 'approved' && !$includepending && $approved === null) {
             continue;
         }
@@ -302,6 +313,20 @@ function block_myprogress_herbology_merge_custom_questions(
         $question['domainId'] = $domainid;
         $question['sourceKind'] = 'admin';
         $question['_customStatus'] = $status;
+        if ($isexcluded) {
+            $question['_excludedFromUse'] = true;
+            $question['_editorialRevision'] = [
+                'status' => $status,
+                'requestReclassification' => false,
+                'exclusionReason' => (string)($record['exclusionReason'] ?? ''),
+                'savedAt' => (string)($record['savedAt'] ?? ''),
+                'savedByName' => (string)($record['savedByName'] ?? ''),
+                'revisionNumber' => (int)($record['revisionNumber'] ?? 1),
+                'archiveModule' => (string)($record['archiveModule'] ?? ''),
+                'mockCategory' => (string)($record['mockCategory'] ?? ''),
+                'mockPlacementStatus' => (string)($record['mockPlacementStatus'] ?? ''),
+            ];
+        }
         $domains[$domainid] = array_values(array_filter(
             $domains[$domainid],
             static fn(array $existing): bool => (string)($existing['questionId'] ?? '') !== $question['questionId']

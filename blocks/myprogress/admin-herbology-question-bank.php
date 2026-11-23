@@ -3897,8 +3897,113 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         throw new invalid_parameter_exception('Unknown Herbology question ID.');
     }
     $isarchiverestore = in_array($formaction, ['restorearchivedquestion', 'restoremockquestion'], true);
+    $mockcategorybydomain = [
+        'formula_differentiation' => 'formula_differentiation',
+        'single_herb' => 'single_herb',
+        'dui_yao' => 'dui_yao',
+        'safety_dispensing' => 'safety_dispensing',
+        'formula_composition' => 'formula_composition',
+        'scope_aliases' => 'scope_aliases',
+    ];
+    $mockcategory = $mockcategorybydomain[(string)$baseentry['domainId']] ?? 'safety_dispensing';
     $savedat = gmdate(DATE_ATOM);
     $savedbyname = fullname($USER);
+    $customarchiverecord = is_array($revisionstore['customQuestions'][$questionid] ?? null)
+        ? $revisionstore['customQuestions'][$questionid]
+        : null;
+    if (is_array($customarchiverecord)) {
+        $custompreviousstatus = (string)($customarchiverecord['status'] ?? 'draft');
+        if ($isarchiverestore && $custompreviousstatus !== 'study_archive') {
+            throw new invalid_parameter_exception('Only a Mock-only question can be restored.');
+        }
+        if (!$isarchiverestore && $custompreviousstatus === 'study_archive') {
+            throw new invalid_parameter_exception('This question is already in the Mock-only bank.');
+        }
+        block_myprogress_herbology_override_update(static function(array $store) use (
+            $questionid,
+            $mockcategory,
+            $isarchiverestore,
+            $savedat,
+            $savedbyname,
+            $USER
+        ): array {
+            $record = $store['customQuestions'][$questionid] ?? null;
+            if (!is_array($record)) {
+                return $store;
+            }
+            $previousstatus = (string)($record['status'] ?? 'draft');
+            $hadapprovedbeforearchive = $isarchiverestore
+                ? !empty($record['hadApprovedBeforeStudyArchive'])
+                : is_array($record['approved'] ?? null);
+            $record['status'] = $isarchiverestore
+                ? (string)($record['statusBeforeStudyArchive'] ?? 'draft')
+                : 'study_archive';
+            if (!in_array($record['status'], ['draft', 'approved', 'study_archive'], true)) {
+                $record['status'] = 'draft';
+            }
+            if (!$isarchiverestore && !is_array($record['approved'] ?? null)) {
+                $record['approved'] = is_array($record['draft'] ?? null) ? $record['draft'] : null;
+            }
+            if ($isarchiverestore && !$hadapprovedbeforearchive) {
+                // The archive snapshot preserves the complete question, but it
+                // must not become a student-visible approved version on restore.
+                $record['approved'] = null;
+            }
+            $record['exclusionReason'] = $isarchiverestore
+                ? ''
+                : ((string)($record['exclusionReason'] ?? '') !== ''
+                    ? (string)$record['exclusionReason']
+                    : 'Mock-only educational question; not suitable as a board-style question.');
+            $record['archiveModule'] = $isarchiverestore ? '' : 'mock_only';
+            $record['mockCategory'] = $isarchiverestore ? '' : $mockcategory;
+            $record['mockPlacementStatus'] = $isarchiverestore ? '' : 'placed';
+            $record['statusBeforeStudyArchive'] = $isarchiverestore ? '' : $previousstatus;
+            $record['hadApprovedBeforeStudyArchive'] = $isarchiverestore
+                ? false
+                : $hadapprovedbeforearchive;
+            $record['archivedAt'] = $isarchiverestore ? '' : $savedat;
+            $record['archivedById'] = $isarchiverestore ? 0 : (int)$USER->id;
+            $record['archivedByName'] = $isarchiverestore ? '' : $savedbyname;
+            $record['targetExamProjectId'] = '';
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $record['savedAt'] = $savedat;
+            $record['savedById'] = (int)$USER->id;
+            $record['savedByName'] = $savedbyname;
+            if (!$isarchiverestore) {
+                foreach ((array)($store['examProjects'] ?? []) as $projectid => $project) {
+                    if (!is_array($project)) {
+                        continue;
+                    }
+                    $project['questionIds'] = array_values(array_filter(
+                        array_map('strval', (array)($project['questionIds'] ?? [])),
+                        static fn(string $id): bool => $id !== $questionid
+                    ));
+                    $project['updatedAt'] = $savedat;
+                    $store['examProjects'][$projectid] = $project;
+                }
+            }
+            $store['customQuestions'][$questionid] = $record;
+            return $store;
+        });
+        $customarchiveurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter([
+                'review' => $isarchiverestore ? null : 'study_archive',
+                'q' => $questionid,
+                'source' => 'admin',
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ])
+        );
+        $customarchiveurl->set_anchor('question-' . $questionid);
+        redirect(
+            $customarchiveurl,
+            $isarchiverestore
+                ? 'Question removed from the Mock-only bank and restored as an administrator draft.'
+                : 'Question saved in its Mock category and removed from Board and Simulation Exams.',
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
     $basequestion = $baseentry['question'];
     $original = array_intersect_key($basequestion, array_flip([
         'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
@@ -3909,15 +4014,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         'prompt', 'options', 'correctLabel', 'explanation', 'translations',
         'contentType', 'cognitiveLevel', 'difficultyBand', 'source', 'sourceCard',
     ]));
-    $mockcategorybydomain = [
-        'formula_differentiation' => 'formula_differentiation',
-        'single_herb' => 'single_herb',
-        'dui_yao' => 'dui_yao',
-        'safety_dispensing' => 'safety_dispensing',
-        'formula_composition' => 'formula_composition',
-        'scope_aliases' => 'scope_aliases',
-    ];
-    $mockcategory = $mockcategorybydomain[(string)$baseentry['domainId']] ?? 'safety_dispensing';
     block_myprogress_herbology_override_update(static function(array $store) use (
         $questionid,
         $baseentry,
@@ -4882,6 +4978,10 @@ $customquestionrecords = array_filter(
     $revisionstore['customQuestions'] ?? [],
     static fn($record): bool => is_array($record)
 );
+$studyarchivecount += count(array_filter(
+    $customquestionrecords,
+    static fn(array $record): bool => (string)($record['status'] ?? '') === 'study_archive'
+));
 $customquestiontotalcount = count($customquestionrecords);
 $customdraftcount = count(array_filter(
     $customquestionrecords,
@@ -8347,8 +8447,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     if ($completequestioninput) {
         $idea = $completequestioncandidate;
     }
+    $saveoutsideguideline = !$iscustomrewrite
+        && (bool)optional_param('saveoutsideguideline', 0, PARAM_BOOL);
     $preserveexactquestion = !$iscustomrewrite
-        && ((bool)optional_param('preserveexactquestion', 0, PARAM_BOOL) || $completequestioninput);
+        && ((bool)optional_param('preserveexactquestion', 0, PARAM_BOOL)
+            || $saveoutsideguideline
+            || $completequestioninput);
     if (!$textaienabled && !$preserveexactquestion) {
         $returnnewquestionfailure(
             'No enabled Moodle text AI provider is available. Use exact import with a finished question, or enable the Generate text action in Moodle AI providers.',
@@ -9161,12 +9265,13 @@ PROMPT;
     };
     $decodedbatch = null;
     $originalitybatch = null;
+    $outsideguidelineviolationsbatch = [];
     $lastgenerationerror = null;
     $lastduplicate = null;
     if ($preserveexactquestion) {
         $decodedbatch = [];
         $originalitybatch = [];
-        foreach ($preservedquestionbatch as $preservedenglish) {
+        foreach ($preservedquestionbatch as $preservedindex => $preservedenglish) {
             $exactsearchtext = core_text::strtolower(core_text::specialtoascii(
                 (string)$preservedenglish['prompt'] . ' '
                 . (string)$preservedenglish['explanation'] . ' '
@@ -9210,7 +9315,8 @@ PROMPT;
             ];
             $decodeditem = $normalizecreatedquestionpinyin($decodeditem);
             $exactguidelineviolations = $findcreatedquestionguidelineviolations($decodeditem);
-            if ($exactguidelineviolations !== []) {
+            $outsideguidelineviolationsbatch[$preservedindex] = $exactguidelineviolations;
+            if ($exactguidelineviolations !== [] && !$saveoutsideguideline) {
                 $returnnewquestionfailure(
                     'Exact import is outside the current guideline: '
                         . implode(' | ', $exactguidelineviolations),
@@ -9699,10 +9805,12 @@ PROMPT;
                 'urlEs' => (string)($decodedsourcecard['urlEs'] ?? $sourceurles->out(false)),
             ],
             'editorial' => [
-                'simulationCandidate' => true,
+                'simulationCandidate' => !$saveoutsideguideline,
                 'inferenceUpgradeRequired' => false,
                 'feedbackQuality' => 'curated',
-                'feedbackRecommendation' => 'Administrator approval required before use.',
+                'feedbackRecommendation' => $saveoutsideguideline
+                    ? 'Mock-only question saved outside the current Board guideline.'
+                    : 'Administrator approval required before use.',
             ],
             'examTemplate' => ['globalPosition' => 0],
         ];
@@ -9732,16 +9840,24 @@ PROMPT;
         if ($correction !== '') {
             $corrections[] = $correction;
         }
+        $itemguidelineviolations = array_values(array_filter(array_map(
+            'strval',
+            (array)($outsideguidelineviolationsbatch[$decodedindex] ?? [])
+        )));
+        $mockcategory = in_array($domainid, [
+            'formula_differentiation', 'single_herb', 'dui_yao',
+            'safety_dispensing', 'formula_composition', 'scope_aliases',
+        ], true) ? $domainid : 'safety_dispensing';
         $customrecords[$itemquestionid] = [
             'questionId' => $itemquestionid,
             'domainId' => $domainid,
-            'status' => 'draft',
+            'status' => $saveoutsideguideline ? 'study_archive' : 'draft',
             'idea' => $itemidea,
             'creationBatchId' => $customcreationbatchid,
             'creationBatchPosition' => $decodedindex + 1,
             'creationBatchCount' => $custombatchcount,
             'targetDomainId' => $customtargetdomain,
-            'targetExamProjectId' => $customtargetexamid,
+            'targetExamProjectId' => $saveoutsideguideline ? '' : $customtargetexamid,
             'instructionTemplateId' => $usedinstructiontemplateid,
             'corrections' => array_slice($corrections, -20),
             'reviewSummary' => $scopereviewsummary !== ''
@@ -9759,8 +9875,8 @@ PROMPT;
             'originality' => $originalityrecord,
             'guidelineValidation' => [
                 'version' => $guidelinevalidationversion,
-                'status' => 'verified',
-                'violations' => [],
+                'status' => $itemguidelineviolations === [] ? 'verified' : 'blocked',
+                'violations' => $itemguidelineviolations,
                 'checkedAt' => $savedat,
                 'herbRoster' => 'NCBAHM 2026 Appendix A · 304 herbs',
                 'formulaRoster' => 'NCBAHM 2026 Appendix C · 181 formulas',
@@ -9768,7 +9884,23 @@ PROMPT;
             'guidelineRosterValidatedAt' => $savedat,
             'pinyinTonesRemovedAt' => $savedat,
             'draft' => $question,
-            'approved' => is_array($previous['approved'] ?? null) ? $previous['approved'] : null,
+            'approved' => $saveoutsideguideline
+                ? $question
+                : (is_array($previous['approved'] ?? null) ? $previous['approved'] : null),
+            'exclusionReason' => $saveoutsideguideline
+                ? ('Saved outside the current NCBAHM guideline for Mock-only study use.'
+                    . ($itemguidelineviolations !== []
+                        ? ' ' . implode(' | ', $itemguidelineviolations)
+                        : ' No roster violation was detected; the administrator selected Mock-only storage.'))
+                : '',
+            'archiveModule' => $saveoutsideguideline ? 'mock_only' : '',
+            'mockCategory' => $saveoutsideguideline ? $mockcategory : '',
+            'mockPlacementStatus' => $saveoutsideguideline ? 'placed' : '',
+            'statusBeforeStudyArchive' => $saveoutsideguideline ? 'draft' : '',
+            'hadApprovedBeforeStudyArchive' => false,
+            'archivedAt' => $saveoutsideguideline ? $savedat : '',
+            'archivedById' => $saveoutsideguideline ? (int)$USER->id : 0,
+            'archivedByName' => $saveoutsideguideline ? $savedbyname : '',
             'revisionNumber' => (int)($previous['revisionNumber'] ?? 0) + 1,
             'savedAt' => $savedat,
             'savedById' => (int)$USER->id,
@@ -9785,6 +9917,24 @@ PROMPT;
         return $store;
     });
     unset($SESSION->ncbahm_new_question_recovery);
+    if ($saveoutsideguideline) {
+        $mockonlyurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter([
+                'review' => 'study_archive',
+                'q' => $createdcustomquestionids[0],
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ])
+        );
+        $mockonlyurl->set_anchor('question-' . $createdcustomquestionids[0]);
+        redirect(
+            $mockonlyurl,
+            $custombatchcount . ' question' . ($custombatchcount === 1 ? '' : 's')
+                . ' saved in the Mock-only bank. They remain outside Board practice and Simulation Exams.',
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
     // Open the complete draft card immediately after creation or revision so
     // the administrator sees the stem, choices, key and feedback just produced.
     $customquestionpreviewurl = new moodle_url(
@@ -13449,7 +13599,10 @@ echo $OUTPUT->header();
             <input type="hidden" name="targetexamproject" value="<?php echo s($newquestiontargetexam); ?>">
             <input type="hidden" name="needed" value="<?php echo (int)$newquestionneededcount; ?>">
             <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
-            <div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit" aria-describedby="ai-creation-status"<?php echo $textaienabled ? '' : ' disabled title="' . s($displaylang === 'es' ? 'Moodle no tiene un proveedor Generate text activo.' : 'Moodle has no active Generate text provider.') . '"'; ?>><?php echo $displaylang === 'es' ? 'Crear y revisar borradores' : 'Create and preview drafts'; ?></button><button class="question-bank__button question-bank__button--approve" type="submit" name="preserveexactquestion" value="1" aria-describedby="exact-import-status"><?php echo $displaylang === 'es' ? 'Importar preguntas terminadas' : 'Import finished questions'; ?></button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cancelar' : 'Cancel'; ?></a></div>
+            <div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--primary" type="submit" aria-describedby="ai-creation-status"<?php echo $textaienabled ? '' : ' disabled title="' . s($displaylang === 'es' ? 'Moodle no tiene un proveedor Generate text activo.' : 'Moodle has no active Generate text provider.') . '"'; ?>><?php echo $displaylang === 'es' ? 'Crear y revisar borradores' : 'Create and preview drafts'; ?></button><button class="question-bank__button question-bank__button--approve" type="submit" name="preserveexactquestion" value="1" aria-describedby="exact-import-status"><?php echo $displaylang === 'es' ? 'Importar preguntas terminadas' : 'Import finished questions'; ?></button><button class="question-bank__button question-bank__button--similar" type="submit" name="saveoutsideguideline" value="1" aria-describedby="outside-guideline-status" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Guardar esta pregunta fuera del guideline? Se conservará en Preguntas enviadas a Mock y no podrá entrar en Board ni Simulation Exams.' : 'Save this question outside the guideline? It will remain in Mock-only questions and cannot enter Board practice or Simulation Exams.'; ?>');"><?php echo $displaylang === 'es' ? 'Guardar fuera del guideline' : 'Save outside guideline'; ?></button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Cancelar' : 'Cancel'; ?></a></div>
+            <small id="outside-guideline-status" class="question-bank__proposal-saved"><?php echo $displaylang === 'es'
+                ? 'Guardar fuera del guideline conserva una pregunta terminada en Preguntas enviadas a Mock, registra las infracciones y la excluye de Board y Simulation Exams.'
+                : 'Save outside guideline preserves a finished question in Mock-only questions, records its violations, and excludes it from Board practice and Simulation Exams.'; ?></small>
             <small class="question-bank__proposal-saved"><?php echo $displaylang === 'es'
                 ? 'Las preguntas completas con cuatro opciones, respuesta y explicación se separan e importan localmente sin reescritura ni espera por la IA. La traducción puede agregarse después desde cada tarjeta.'
                 : 'Finished questions with four choices, an answer and an explanation are split and imported locally without rewriting or waiting for AI. Translation can be added later from each card.'; ?></small>
@@ -13926,7 +14079,7 @@ echo $OUTPUT->header();
             <?php if (!empty($question['_deferredfromexam2'])): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Reservada para el próximo examen' : 'Reserved for the next exam'; ?></span><?php endif; ?>
             <span class="question-bank__badge">Complexity: <?php echo s(ucfirst((string)($question['difficultyBand'] ?? 'unclassified'))); ?></span>
             <?php if (!empty($question['_revision']['bankDeferred'])): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Aplazada en la reserva' : 'Deferred in reserve'; ?></span><?php elseif ($bankpositionwaschanged): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo ($displaylang === 'es' ? 'Movida dentro del banco' : 'Moved within bank'); ?></span><?php endif; ?>
-            <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php if ($custombatchtotal > 1): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Lote nuevo' : 'New batch'; ?> · <?php echo $custombatchposition; ?> / <?php echo $custombatchtotal; ?></span><?php endif; ?><?php elseif ($question['_sourcekind'] === 'admin'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>
+            <?php if ($iscustomdraft): ?><span class="question-bank__badge question-bank__badge--incomplete">Administrator-authored draft · not published</span><?php if ($custombatchtotal > 1): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Lote nuevo' : 'New batch'; ?> · <?php echo $custombatchposition; ?> / <?php echo $custombatchtotal; ?></span><?php endif; ?><?php elseif ($question['_sourcekind'] === 'admin' && $revisionstatus !== 'study_archive'): ?><span class="question-bank__badge question-bank__badge--ready">Administrator approved</span><?php endif; ?>
             <?php if (is_array($customtargetexamproject)): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Destino: ' : 'Target: '; ?><?php echo s((string)$customtargetexamproject['name']); ?></span><?php endif; ?>
             <?php if ($revisionstatus === 'pending_reclassification'): ?><span class="question-bank__badge question-bank__badge--incomplete">Reclassification requested · draft preview</span><?php elseif ($revisionstatus === 'exclusion_candidate'): ?><span class="question-bank__badge question-bank__badge--incomplete">Possible exclusion</span><?php elseif ($revisionstatus === 'study_archive'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Solo Mock · no es pregunta board' : 'Mock only · not a board question'; ?></span><?php elseif ($revisionstatus === 'deleted'): ?><span class="question-bank__badge question-bank__badge--incomplete">Deleted · recycle bin</span><?php elseif ($revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--incomplete">Draft preview · not published</span><?php elseif ($revisionstatus === 'approved'): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Publicada' : 'Published'; ?></span><?php endif; ?>
             <?php if ($revisionstatus === 'study_archive'): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Ubicación Mock: ' : 'Mock placement: '; ?><?php echo s((string)$domain['name']); ?></span><?php endif; ?>
@@ -14015,6 +14168,20 @@ echo $OUTPUT->header();
         ?> · <a href="<?php echo s($sourcecardurl); ?>" target="_blank" rel="noopener"><?php echo s($sourcecardlabel); ?></a><?php endif; ?></p><?php if (!$question['_ready']): ?><div class="question-bank__missing">Missing for practice readiness: <?php echo s(implode(', ', $question['_missing'])); ?>.</div><?php endif; ?>
         <?php if ($iscustomapproved): ?><section class="question-bank__decision-panel" aria-label="Continue after approving <?php echo s($question['questionId']); ?>"><div class="question-bank__applied-summary"><strong>Question approved and active.</strong> You can edit it, create another question, or return to the complete question bank.</div><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="button" disabled>Approved and published ✓</button><a class="question-bank__button question-bank__button--publish" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar esta pregunta' : 'Edit this question'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create another question</a><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Return to all questions</a></div></section><?php endif; ?>
         <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><?php if ($customguidelineverified): ?><div class="question-bank__applied-summary"><strong>Guideline check:</strong> all named herbs and formulas were verified against the current 2026 Appendix A and Appendix C rosters; Pinyin is shown without tone marks.</div><?php else: ?><div class="question-bank__publish-error"><strong>Guideline check blocked publication:</strong> <?php echo s(implode(' | ', $customguidelineviolations)); ?></div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('Approve and publish this question?');"<?php endif; ?>><?php echo $customcanpublish ? 'Approve and publish' : s($custompublishblocker); ?></button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
+        <?php if ($iscustomdraft && !$customguidelineverified): ?>
+        <section class="question-bank__decision-panel" aria-label="<?php echo $displaylang === 'es' ? 'Guardar fuera del guideline' : 'Save outside guideline'; ?>">
+            <div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'Alternativa de conservación:' : 'Preservation option:'; ?></strong> <?php echo $displaylang === 'es'
+                ? 'Puede guardar esta pregunta completa en Preguntas enviadas a Mock. Se conservarán las infracciones, pero nunca se utilizará en Board ni Simulation Exams.'
+                : 'You can preserve this complete question in Mock-only questions. Its violations remain recorded, but it will never be used in Board practice or Simulation Exams.'; ?></div>
+            <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+                <input type="hidden" name="formaction" value="sendtomock">
+                <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
+                <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
+                <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                <button class="question-bank__button question-bank__button--similar" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Guardar esta pregunta fuera del guideline en el banco exclusivo de Mock?' : 'Save this outside-guideline question in the Mock-only bank?'; ?>');"><?php echo $displaylang === 'es' ? 'Guardar fuera del guideline' : 'Save outside guideline'; ?></button>
+            </form>
+        </section>
+        <?php endif; ?>
         <?php if ($inlineapproval): ?>
         <details class="question-bank__correction-request">
             <summary><?php echo $displaylang === 'es' ? 'Solicitar otro cambio' : 'Request another change'; ?></summary>
