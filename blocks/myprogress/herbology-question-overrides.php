@@ -21,6 +21,43 @@ function block_myprogress_herbology_override_empty(): array {
 }
 
 /**
+ * Move records created by the short-lived Mock-based outside-guideline flow
+ * into the independent Extra guideline bank without touching genuine Mock
+ * questions.
+ */
+function block_myprogress_herbology_migrate_extra_guideline_store(
+    array $store,
+    string $migrationversion
+): array {
+    foreach ((array)($store['customQuestions'] ?? []) as $questionid => $record) {
+        if (!is_array($record)
+                || (string)($record['status'] ?? '') !== 'study_archive'
+                || (string)($record['archiveModule'] ?? '') !== 'mock_only'
+                || (string)($record['guidelineValidation']['status'] ?? '') !== 'blocked') {
+            continue;
+        }
+        $violations = array_values(array_filter(array_map(
+            'strval',
+            (array)($record['guidelineValidation']['violations'] ?? [])
+        )));
+        $record['status'] = 'extra_guideline';
+        $record['archiveModule'] = 'extra_guideline';
+        $record['extraGuidelineDomain'] = (string)($record['domainId'] ?? '');
+        $record['statusBeforeExtraGuideline'] = (string)($record['statusBeforeStudyArchive'] ?? 'draft');
+        $record['hadApprovedBeforeExtraGuideline'] = !empty($record['hadApprovedBeforeStudyArchive']);
+        $record['statusBeforeStudyArchive'] = '';
+        $record['hadApprovedBeforeStudyArchive'] = false;
+        $record['mockCategory'] = '';
+        $record['mockPlacementStatus'] = '';
+        $record['exclusionReason'] = 'Stored in the Extra guideline bank; not eligible for Board, Mock, or Simulation Exams.'
+            . ($violations !== [] ? ' ' . implode(' | ', $violations) : '');
+        $store['customQuestions'][$questionid] = $record;
+    }
+    $store['extraGuidelineMigrationVersion'] = $migrationversion;
+    return $store;
+}
+
+/**
  * Remove tone marks from Pinyin without removing ordinary Spanish accents.
  *
  * Replacements are discovered only in the English/source side of a question.
@@ -284,13 +321,13 @@ function block_myprogress_herbology_merge_custom_questions(
         $approved = is_array($record['approved'] ?? null) ? $record['approved'] : null;
         $isexcluded = in_array(
             $status,
-            ['exclusion_candidate', 'study_archive', 'deleted'],
+            ['exclusion_candidate', 'study_archive', 'extra_guideline', 'deleted'],
             true
         );
         if ($isexcluded && !$includepending) {
-            // Mock-only and recycled administrator questions must never leak
-            // into student-facing Board practice or Simulation Exams merely
-            // because they retain an approved snapshot for safe recovery.
+            // Mock-only, Extra guideline and recycled administrator questions
+            // must never leak into student-facing practice or Simulation Exams
+            // merely because they retain an approved snapshot for recovery.
             continue;
         }
         if ($status !== 'approved' && !$includepending && $approved === null) {
@@ -325,6 +362,7 @@ function block_myprogress_herbology_merge_custom_questions(
                 'archiveModule' => (string)($record['archiveModule'] ?? ''),
                 'mockCategory' => (string)($record['mockCategory'] ?? ''),
                 'mockPlacementStatus' => (string)($record['mockPlacementStatus'] ?? ''),
+                'extraGuidelineDomain' => (string)($record['extraGuidelineDomain'] ?? ''),
             ];
         }
         $domains[$domainid] = array_values(array_filter(
@@ -345,7 +383,11 @@ function block_myprogress_herbology_apply_revision(
         return $question;
     }
     $status = (string)($revision['status'] ?? 'draft');
-    $isexcluded = in_array($status, ['exclusion_candidate', 'study_archive', 'deleted'], true);
+    $isexcluded = in_array(
+        $status,
+        ['exclusion_candidate', 'study_archive', 'extra_guideline', 'deleted'],
+        true
+    );
     $hasbankplacement = (int)($revision['bankPosition'] ?? 0) > 0;
     $draft = null;
     if ($includepending && is_array($revision['draft'] ?? null)) {
@@ -381,6 +423,7 @@ function block_myprogress_herbology_apply_revision(
         'archiveModule' => (string)($revision['archiveModule'] ?? ''),
         'mockCategory' => (string)($revision['mockCategory'] ?? ''),
         'mockPlacementStatus' => (string)($revision['mockPlacementStatus'] ?? ''),
+        'extraGuidelineDomain' => (string)($revision['extraGuidelineDomain'] ?? ''),
         'bankPosition' => (int)($revision['bankPosition'] ?? 0),
         'bankMovedAt' => (string)($revision['bankMovedAt'] ?? ''),
         'bankMovedByName' => (string)($revision['bankMovedByName'] ?? ''),

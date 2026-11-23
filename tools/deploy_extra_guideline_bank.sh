@@ -12,7 +12,7 @@ FILES=(
 )
 
 if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
-    echo "Uso: sudo bash deploy_outside_guideline_mock_bank.sh COMMIT_DE_40_CARACTERES" >&2
+    echo "Uso: sudo bash deploy_extra_guideline_bank.sh COMMIT_DE_40_CARACTERES" >&2
     exit 1
 fi
 
@@ -31,12 +31,12 @@ for relative in "${FILES[@]}"; do
 done
 
 TEMP_DIR="$(mktemp -d)"
-BACKUP_DIR="$BACKUP_ROOT/outside-guideline-mock-bank-$(date +%Y%m%d-%H%M%S)"
+BACKUP_DIR="$BACKUP_ROOT/extra-guideline-bank-$(date +%Y%m%d-%H%M%S)"
 cleanup() {
     rm -rf -- "$TEMP_DIR"
 }
 trap cleanup EXIT
-trap 'status=$?; echo "ERROR: despliegue del banco fuera del guideline detenido en la línea $LINENO (código $status)." >&2; exit "$status"' ERR
+trap 'status=$?; echo "ERROR: despliegue de Extra guideline detenido en la línea $LINENO (código $status)." >&2; exit "$status"' ERR
 
 for relative in "${FILES[@]}"; do
     source_file="$TEMP_DIR/$relative"
@@ -50,16 +50,17 @@ for relative in "${FILES[@]}"; do
 done
 
 grep -Fq 'name="saveoutsideguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq 'Guardar fuera del guideline' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "'status' => \$saveoutsideguideline ? 'study_archive' : 'draft'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq 'Mock-only and recycled administrator questions must never leak' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
+grep -Fq 'Guardar en Extra guideline' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "'status' => \$saveoutsideguideline ? 'extra_guideline' : 'draft'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq '2026-11-23-extra-guideline-bank-v1' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 
 mkdir -p "$BACKUP_DIR"
 for relative in "${FILES[@]}"; do
     target="$MOODLE_ROOT/$relative"
     source_file="$TEMP_DIR/$relative"
     backup="$BACKUP_DIR/$relative"
-    staged="$MOODLE_ROOT/$(dirname "$relative")/.$(basename "$relative").outside-guideline.$$"
+    staged="$MOODLE_ROOT/$(dirname "$relative")/.$(basename "$relative").extra-guideline.$$"
     mkdir -p "$(dirname "$backup")"
     cp -a -- "$target" "$backup"
     owner_group="$(stat -c '%u:%g' "$target")"
@@ -73,8 +74,8 @@ done
 for relative in "${FILES[@]}"; do
     php -l "$MOODLE_ROOT/$relative" >/dev/null
 done
-grep -Fq 'name="saveoutsideguideline"' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq 'Mock-only and recycled administrator questions must never leak' "$MOODLE_ROOT/blocks/myprogress/herbology-question-overrides.php"
+grep -Fq 'Guardar en Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq '2026-11-23-extra-guideline-bank-v1' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
@@ -89,8 +90,8 @@ if command -v systemctl >/dev/null 2>&1 && systemctl is-active --quiet apache2.s
     echo "RUNTIME RECARGADO: apache2.service"
 fi
 
-echo "BANCO FUERA DEL GUIDELINE INSTALADO"
-echo "OK: las preguntas terminadas fuera del roster pueden guardarse en Preguntas enviadas a Mock."
-echo "OK: conservan pregunta, opciones, respuesta, explicación e infracciones detectadas."
-echo "OK: quedan excluidas del banco Board y de los Simulation Exams."
+echo "BANCO EXTRA GUIDELINE INSTALADO"
+echo "OK: las preguntas fuera del roster se guardan en un banco administrativo independiente."
+echo "OK: no se envían a Board, Mock ni Simulation Exams."
+echo "OK: los registros creados por la versión anterior se separan automáticamente de Mock."
 echo "RESPALDO: $BACKUP_DIR"
