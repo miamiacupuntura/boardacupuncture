@@ -5973,6 +5973,7 @@ $projecttargetdraftidsbydomain = array_fill_keys(array_keys($domains), []);
 $projecttargetdraftlookup = [];
 $projectduplicatecandidateids = [];
 $projectformatdeferredids = [];
+$projectapprovedcandidateids = [];
 if (is_array($currentexamproject)) {
     $projecttarget = (int)$currentexamproject['targetCount'];
     $projectweights = $requiredprojectdomaincounts;
@@ -6195,8 +6196,20 @@ if (is_array($currentexamproject)) {
             $projectneed - $projectcandidatecountbydomain[$projectdomainid]
         );
         foreach ($selectedprojectquestions as $projectquestion) {
-            $projectposition++;
             $projectquestionid = (string)$projectquestion['questionId'];
+            $projectguidelineviolations = $findcreatedquestionguidelineviolations($projectquestion);
+            $projectguidelineeligible = $projectguidelineviolations === []
+                || $hasactiveguidelineoverride($projectquestionid, $projectquestion);
+            // A question already approved in the bank does not need to return
+            // to Temporary Review Order. Link it to the active exam now; only
+            // unfinished questions should remain in the pending queue.
+            if ($usagefilter === 'exam_project_pending'
+                    && $isprocessedquestion($projectquestion)
+                    && $projectguidelineeligible) {
+                $projectapprovedcandidateids[] = $projectquestionid;
+                continue;
+            }
+            $projectposition++;
             $currentexamcandidateids[] = $projectquestionid;
             $examprojectpositions[$projectquestionid] = $projectposition;
         }
@@ -6212,6 +6225,80 @@ if (is_array($currentexamproject)) {
     $examprojects[$examprojectid]['formatFamilyCaps'] = $projectformatcaps;
     $examprojects[$examprojectid]['contentFamilyCounts'] = $projectcontentfamilycounts;
     $currentexamproject = $examprojects[$examprojectid];
+}
+
+if ($usagefilter === 'exam_project_pending'
+        && is_array($currentexamproject)
+        && $projectapprovedcandidateids !== []) {
+    $projectapprovedcandidateids = array_values(array_unique($projectapprovedcandidateids));
+    $projectapprovedcandidateexamid = (string)$currentexamproject['id'];
+    $projectapprovedcandidateat = gmdate(DATE_ATOM);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $projectapprovedcandidateids,
+        $projectapprovedcandidateexamid,
+        $projectapprovedcandidateat
+    ): array {
+        $project = $store['examProjects'][$projectapprovedcandidateexamid] ?? null;
+        if (!is_array($project) || (string)($project['status'] ?? 'draft') === 'published') {
+            return $store;
+        }
+        $projectquestionids = array_values(array_unique(array_filter(array_map(
+            'strval',
+            (array)($project['questionIds'] ?? [])
+        ))));
+        $projecttarget = max(1, (int)($project['targetCount'] ?? 100));
+        $linkedquestionids = [];
+        foreach ($projectapprovedcandidateids as $projectapprovedcandidateid) {
+            if (in_array($projectapprovedcandidateid, $projectquestionids, true)) {
+                continue;
+            }
+            if (count($projectquestionids) >= $projecttarget) {
+                break;
+            }
+            $projectquestionids[] = $projectapprovedcandidateid;
+            $linkedquestionids[] = $projectapprovedcandidateid;
+            if (is_array($store['questions'][$projectapprovedcandidateid] ?? null)) {
+                $store['questions'][$projectapprovedcandidateid]['examProjectId'] =
+                    $projectapprovedcandidateexamid;
+            }
+            if (is_array($store['customQuestions'][$projectapprovedcandidateid] ?? null)) {
+                $store['customQuestions'][$projectapprovedcandidateid]['assignedToTargetExamAt'] =
+                    $projectapprovedcandidateat;
+                $store['customQuestions'][$projectapprovedcandidateid]['targetExamProjectId'] =
+                    $projectapprovedcandidateexamid;
+            }
+        }
+        if ($linkedquestionids === []) {
+            return $store;
+        }
+        $project['questionIds'] = $projectquestionids;
+        $project['approvedBankQuestionsAutoLinked'] = array_values(array_unique(array_merge(
+            array_map('strval', (array)($project['approvedBankQuestionsAutoLinked'] ?? [])),
+            $linkedquestionids
+        )));
+        $project['approvedBankQuestionsAutoLinkedAt'] = $projectapprovedcandidateat;
+        $project['updatedAt'] = $projectapprovedcandidateat;
+        $store['examProjects'][$projectapprovedcandidateexamid] = $project;
+        return $store;
+    });
+    $projectapprovedcandidateurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        array_filter([
+            'usage' => 'exam_project_pending',
+            'examproject' => $projectapprovedcandidateexamid,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ])
+    );
+    $projectapprovedcandidateurl->set_anchor('pending-questions');
+    redirect(
+        $projectapprovedcandidateurl,
+        count($projectapprovedcandidateids) === 1
+            ? 'The approved question was added to the exam and removed from Temporary Review Order.'
+            : count($projectapprovedcandidateids)
+                . ' approved questions were added to the exam and removed from Temporary Review Order.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && $rebalanceexamprojectrequested !== '') {
