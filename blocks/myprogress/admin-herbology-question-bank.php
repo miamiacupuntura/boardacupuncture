@@ -3188,8 +3188,11 @@ $requestedvisibleherbcount = static function(string $instructions): int {
     if ($instructions === '') {
         return 0;
     }
+    // Mentioning an invalid "herb or formula used as a distractor" is not a
+    // request to add visible herbs. Require an explicit inclusion verb or a
+    // requirement that the stem/choices contain herb names.
     $requestsherbs = preg_match(
-        '/(?:\b(?:add|include|insert|place|put|name|incorporate|agreg\w*|añad\w*|inclu\w*|insert\w*|coloc\w*|pon\w*|mencion\w*)\b.{0,140}\b(?:herb|herbs|hierba|hierbas)\b|\b(?:herb|herbs|hierba|hierbas)\b.{0,140}\b(?:distractor|distractors|option|options|stem|question|pregunta|enunciado|opci[oó]n|opciones)\b)/iu',
+        '/(?:\b(?:add|include|insert|place|put|name|incorporate|show|list|write|use|agreg\w*|añad\w*|inclu\w*|insert\w*|coloc\w*|pon\w*|mencion\w*|mostr\w*|list\w*|escrib\w*|usa(?:r|n|ndo)?\w*)\b.{0,140}\b(?:herb|herbs|hierba|hierbas)\b|\b(?:distractor|distractors|option|options|choice|choices|stem|question|pregunta|enunciado|opci[oó]n|opciones|respuesta|respuestas)\b.{0,100}\b(?:must|should|need(?:s)?\s+to|debe(?:n)?|tiene(?:n)?\s+que)\s+(?:contain|include|show|name|use|contener|incluir|mostrar|nombrar|usar)\b.{0,80}\b(?:herb|herbs|hierba|hierbas)\b)/iu',
         $instructions
     ) === 1;
     if (!$requestsherbs) {
@@ -10457,8 +10460,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $rewriteproposal = trim(optional_param('proposal', '', PARAM_RAW));
         if ($autorepairguideline) {
             $rewriteproposal = 'Automatically make this question eligible for Board review. Replace every '
-                . 'out-of-roster herb or formula used as a distractor with one clinically plausible distractor '
-                . 'whose exact Pinyin name appears in the supplied Appendix A or Appendix C allowed-name list. '
+                . 'out-of-roster name used as a distractor with one clinically plausible distractor whose exact '
+                . 'Pinyin name appears in the supplied Appendix A or Appendix C allowed-name list. '
                 . 'Preserve the correct answer letter, correct answer concept, tested objective and fixed domain. '
                 . 'Update the English and Spanish A-D feedback so it analyzes the replacement actually shown. '
                 . 'Do not publish the question and do not send it to Extra guideline; return a checked draft for '
