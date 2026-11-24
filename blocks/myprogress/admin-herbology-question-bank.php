@@ -1212,6 +1212,11 @@ if (is_array($guibancanonical)
     $revisionstore = block_myprogress_herbology_override_load();
 }
 $builtinstructiontemplateid = 'builtin-formula-vs-dui-yao';
+$twostageduiyaoinstructiontemplateid = 'builtin-two-stage-dui-yao-formula-modification';
+$builtinstructiontemplateids = [
+    $builtinstructiontemplateid,
+    $twostageduiyaoinstructiontemplateid,
+];
 $generalinstructiontemplates = [
     $builtinstructiontemplateid => [
         'id' => $builtinstructiontemplateid,
@@ -1219,6 +1224,34 @@ $generalinstructiontemplates = [
         'instruction' => "## When to choose a formula and when to choose a Dui Yao\n\n"
             . "A Dui Yao may be a core, modification, or brief prescription for a narrow objective. "
             . "By definition, it is neither a commercial patent formula nor an automatic equivalent of a classical formula.",
+        'domainId' => 'dui_yao',
+        'builtin' => true,
+    ],
+    $twostageduiyaoinstructiontemplateid => [
+        'id' => $twostageduiyaoinstructiontemplateid,
+        'name' => 'Clinical return: modify a formula with a Dui Yao',
+        'instruction' => "## Clinical return: modify a base formula by adding a Dui Yao\n\n"
+            . "Create up to 4 independent, direct, positive multiple-choice questions in Domain 3: Dui Yao and compatibility. "
+            . "Each question must use one verified direct-addition relationship from the supplied formula-Dui Yao table.\n\n"
+            . "MANDATORY CASE STRUCTURE:\n"
+            . "1. Present an initial clinical picture that clearly requires a current Appendix C base formula.\n"
+            . "2. State that the patient begins taking that base formula.\n"
+            . "3. State that several days pass and the patient returns with new observable symptoms plus tongue or pulse findings that require modifying the formula by adding one official Appendix B Dui Yao.\n"
+            . "4. Ask which Dui Yao should be added and which current Appendix C formula results.\n"
+            . "5. Each A-D choice must pair one Dui Yao with one resulting formula; exactly one choice must be defensible.\n\n"
+            . "VERIFIED DIRECT-ADDITION RELATIONSHIPS:\n"
+            . "- Liu Wei Di Huang Wan + Zhi Mu and Huang Bai = Zhi Bai Di Huang Wan.\n"
+            . "- Liu Wei Di Huang Wan + Gou Qi Zi and Ju Hua = Qi Ju Di Huang Wan.\n"
+            . "- Si Wu Tang + Tao Ren and Hong Hua = Tao Hong Si Wu Tang.\n"
+            . "- Gui Zhi Tang + Long Gu and Mu Li = Gui Zhi Jia Long Gu Mu Li Tang.\n\n"
+            . "BOUNDARIES:\n"
+            . "Use only the four documented direct additions above. Do not describe a ratio change, substitution, structural reconstruction, missing-partner case, pair plus cofactor, or version-dependent lineage as a simple addition. "
+            . "Do not invent relationships, ingredients, doses, or safety facts. Preserve tone-free Pinyin and current Appendix A, B, and C scope.\n\n"
+            . "MANDATORY CLASSIFICATION:\n"
+            . "domainId: dui_yao; contentType: dui_yao; cognitiveLevel: infer or analyze; difficultyBand: inference or analysis.\n\n"
+            . "MANDATORY FEEDBACK:\n"
+            . "Explain stage 1 (initial findings to base formula), stage 2 (new findings to added pair), and stage 3 (how the pair changes the strategy and produces the resulting formula). "
+            . "Analyze choices A, B, C, and D separately in English and Spanish.",
         'domainId' => 'dui_yao',
         'builtin' => true,
     ],
@@ -1268,8 +1301,11 @@ foreach ((array)($revisionstore['customQuestions'] ?? []) as $classificationques
             || !in_array((string)($classificationrecord['status'] ?? 'draft'), ['draft', 'approved'], true)) {
         continue;
     }
-    $createdfromduiyaoinstruction = (string)($classificationrecord['instructionTemplateId'] ?? '')
-            === $builtinstructiontemplateid
+    $createdfromduiyaoinstruction = in_array(
+        (string)($classificationrecord['instructionTemplateId'] ?? ''),
+        $builtinstructiontemplateids,
+        true
+    )
         || (int)($classificationrecord['formulaDuiYaoPairNumber'] ?? 0) > 0;
     if (!$createdfromduiyaoinstruction) {
         continue;
@@ -3335,7 +3371,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $instructiontemplatename = trim(required_param('templatename', PARAM_TEXT));
         $instructiontemplatetext = trim(required_param('templateinstruction', PARAM_RAW));
         $instructiontemplatedomain = optional_param('templatedomain', '', PARAM_ALPHANUMEXT);
-        if ($instructiontemplateid === $builtinstructiontemplateid) {
+        if (in_array($instructiontemplateid, $builtinstructiontemplateids, true)) {
             throw new invalid_parameter_exception('The built-in instruction template cannot be overwritten.');
         }
         if (core_text::strlen($instructiontemplatename) < 2
@@ -3404,7 +3440,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         );
     }
     $instructiontemplateid = required_param('templateid', PARAM_ALPHANUMEXT);
-    if ($instructiontemplateid === $builtinstructiontemplateid
+    if (in_array($instructiontemplateid, $builtinstructiontemplateids, true)
             || !isset($generalinstructiontemplates[$instructiontemplateid])
             || !empty($generalinstructiontemplates[$instructiontemplateid]['builtin'])) {
         throw new invalid_parameter_exception('The selected instruction template cannot be deleted.');
@@ -8923,6 +8959,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     if (!isset($generalinstructiontemplates[$usedinstructiontemplateid])) {
         $usedinstructiontemplateid = '';
     }
+    $twostageduiyaomodificationrequest = $usedinstructiontemplateid
+        === $twostageduiyaoinstructiontemplateid;
+    if ($twostageduiyaomodificationrequest) {
+        $customtargetdomain = 'dui_yao';
+    }
     $correction = $iscustomrewrite ? trim(required_param('correction', PARAM_RAW)) : '';
     if ($idea === '' || core_text::strlen($idea) > 60000) {
         $returnnewquestionfailure(
@@ -8978,6 +9019,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             '/\b(?:choose|select|when|difference|distinction|scope|equivalent|core|modification|prescription|elegir|seleccionar|cu[aá]ndo|diferencia|distinci[oó]n|alcance|equivalente|central|modificaci[oó]n|prescripci[oó]n)\b/iu',
             $normalizedscopeidea
         ) === 1;
+    if ($twostageduiyaomodificationrequest) {
+        $formulavduiyaoscopeidea = true;
+    }
     if ($mahuangthreelevelsrequest) {
         $formulavduiyaoscopeidea = true;
     }
@@ -9091,7 +9135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         // batch with a different verified relationship for every item.
         $customquestionideas = array_fill(
             0,
-            min(5, $newquestionneededcount),
+            min($twostageduiyaomodificationrequest ? 4 : 5, $newquestionneededcount),
             $idea
         );
     }
@@ -9173,6 +9217,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         foreach ($duiyaosmartpairs as $scopepair) {
             $formulaenglish = trim((string)($scopepair['formulas']['en'] ?? ''));
             if ($formulaenglish === '') {
+                continue;
+            }
+            if ($twostageduiyaomodificationrequest
+                    && (string)($scopepair['formulaBridge']['kind'] ?? '') !== 'direct') {
                 continue;
             }
             $pairnumber = (int)($scopepair['number'] ?? 0);
@@ -9547,13 +9595,19 @@ PROMPT;
             . "Create exactly one direct positive question that visibly distinguishes Mǎ Huáng alone, Mǎ Huáng + Guì Zhī as a focused Duì Yào, and Mǎ Huáng Tāng as the complete formula. The clinical findings must show a complete exterior Wind-Cold excess pattern: severe chills, mild fever, absence of sweating, generalized body aches, headache, slight wheezing, and a floating-tight pulse. The keyed answer must be Mǎ Huáng Tāng. Contrast the individual herb's narrow role, the pair's focused role, and Guì Zhī Tāng for exterior deficiency. Do not substitute another herb, pair, formula, pattern, or educational objective.";
     }
     if ($formulavduiyaoscopeidea) {
-        $customprompt .= "\n\nMANDATORY FORMULA-VERSUS-DUÌ-YÀO OBJECTIVE — DO NOT SUBSTITUTE:\n"
-            . "Use every selected relationship below exactly once and create one question from each relationship. These relationships were chosen because their herbs and primary formulas are the least used in recent administrator-authored questions. Do not substitute Gui Zhi + Bai Shao or any other familiar pair unless it is explicitly present below. Put the therapeutic comparison and narrow action into a genuinely interrogative stem ending in a direct question. Keep every A-D choice short and parallel: use a concise formula/pair assignment, not a paragraph of reasoning. Never place the complete-pattern rationale, the list 'core pair, source-supported modification, or brief prescription,' or the automatic-equivalence explanation inside the keyed choice; teach those details only in the explanation. Test when the complete formula is selected for a full pattern and when its Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Show the selected formula and both herbs of the pair in the visible stem or choices. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula in the explanation. A generic single-herb action or indication question is invalid. Do not invent a formula relationship absent from the evidence."
-            . "\n\nSELECTED VERIFIED FORMULA-DUÌ-YÀO RELATIONSHIPS:\n"
-            . json_encode(
-                $formulavduiyaoscopeevidence,
-                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-            );
+        if ($twostageduiyaomodificationrequest) {
+            $customprompt .= "\n\nMANDATORY CLINICAL-RETURN MODIFICATION OBJECTIVE — DO NOT SUBSTITUTE:\n"
+                . "Use every selected direct-addition relationship below exactly once and create one question from each relationship. Stage 1 must present observable findings that justify the documented base formula and state that the patient begins taking it. Several days later, the patient must return with new observable findings that justify modifying the existing prescription by adding the documented Duì Yào. End with a direct question asking for both the pair to add and the resulting formula. Every A-D choice must contain one two-herb pair and one resulting formula, and exactly one choice may match the evidence. Do not ask merely for the initial formula, the isolated action of one herb, or an abstract formula-versus-pair distinction. Do not treat a ratio change, substitution, structural reconstruction, missing-partner relationship, pair plus cofactor, or version-dependent lineage as direct addition. The explanation must explicitly teach stage 1 (initial findings to base formula), stage 2 (new findings to added pair), and stage 3 (pair addition to resulting formula), then analyze A-D separately in English and Spanish. Do not invent another relationship."
+                . "\n\nSELECTED VERIFIED DIRECT-ADDITION RELATIONSHIPS:\n";
+        } else {
+            $customprompt .= "\n\nMANDATORY FORMULA-VERSUS-DUÌ-YÀO OBJECTIVE — DO NOT SUBSTITUTE:\n"
+                . "Use every selected relationship below exactly once and create one question from each relationship. These relationships were chosen because their herbs and primary formulas are the least used in recent administrator-authored questions. Do not substitute Gui Zhi + Bai Shao or any other familiar pair unless it is explicitly present below. Put the therapeutic comparison and narrow action into a genuinely interrogative stem ending in a direct question. Keep every A-D choice short and parallel: use a concise formula/pair assignment, not a paragraph of reasoning. Never place the complete-pattern rationale, the list 'core pair, source-supported modification, or brief prescription,' or the automatic-equivalence explanation inside the keyed choice; teach those details only in the explanation. Test when the complete formula is selected for a full pattern and when its Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Show the selected formula and both herbs of the pair in the visible stem or choices. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula in the explanation. A generic single-herb action or indication question is invalid. Do not invent a formula relationship absent from the evidence."
+                . "\n\nSELECTED VERIFIED FORMULA-DUÌ-YÀO RELATIONSHIPS:\n";
+        }
+        $customprompt .= json_encode(
+            $formulavduiyaoscopeevidence,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        );
     }
     if ($preserveexactquestion) {
         $customprompt .= "\n\nEXACT IMPORT MODE — ENGLISH CONTENT IS IMMUTABLE:\n"
@@ -9997,7 +10051,75 @@ PROMPT;
                         '/(?:not|never|neither|does\s+not|no\s+es|nunca|no\s+equivale|no\s+sustituye).{0,100}(?:equivalent|interchangeable|replace|patent|equivalente|intercambiable|sustitu|patente)/iu',
                         (string)$generatedcontent
                     ) === 1;
-                    if ((string)($decodeditem['domainId'] ?? '') !== 'dui_yao'
+                    if ($twostageduiyaomodificationrequest) {
+                        $formulaBridge = is_array($matchedevidence)
+                                && is_array($matchedevidence['formulaBridge'] ?? null)
+                            ? $matchedevidence['formulaBridge']
+                            : [];
+                        $baseformula = $normalizescopetext((string)($formulaBridge['base'] ?? ''));
+                        $resultformula = $normalizescopetext((string)($formulaBridge['result'] ?? ''));
+                        $followupvisible = preg_match(
+                            '/\b(?:days?\s+later|several\s+days|follow-up|returns?|returned|d[ií]as\s+despu[eé]s|varios\s+d[ií]as|regresa|regres[oó]|retorna|volvi[oó])\b/iu',
+                            $scopeprompt . ' ' . $scopespanishprompt
+                        ) === 1;
+                        $correctchoice = '';
+                        foreach ((array)($decodeditem['options'] ?? []) as $scopeoption) {
+                            if ((string)($scopeoption['label'] ?? '')
+                                    === (string)($decodeditem['correctLabel'] ?? '')) {
+                                $correctchoice = $normalizescopetext((string)($scopeoption['text'] ?? ''));
+                                break;
+                            }
+                        }
+                        $correctpairvisible = count(array_filter(
+                            (array)($matchedevidence['herbs'] ?? []),
+                            static fn($herb): bool => core_text::strpos(
+                                $correctchoice,
+                                $normalizescopetext((string)$herb)
+                            ) !== false
+                        )) >= 2;
+                        $englishexplanation = (string)($decodeditem['explanation'] ?? '');
+                        $spanishexplanation = (string)($decodeditem['translations']['es']['explanation'] ?? '');
+                        $threestagesvisible = preg_match(
+                            '/(?:stage|step)(?:\s+of\s+inference)?\s*1\b/iu',
+                            $englishexplanation
+                        ) === 1
+                            && preg_match(
+                                '/(?:stage|step)(?:\s+of\s+inference)?\s*2\b/iu',
+                                $englishexplanation
+                            ) === 1
+                            && preg_match(
+                                '/(?:stage|step)(?:\s+of\s+inference)?\s*3\b/iu',
+                                $englishexplanation
+                            ) === 1
+                            && preg_match(
+                                '/(?:etapa|paso)(?:\s+de\s+inferencia)?\s*1\b/iu',
+                                $spanishexplanation
+                            ) === 1
+                            && preg_match(
+                                '/(?:etapa|paso)(?:\s+de\s+inferencia)?\s*2\b/iu',
+                                $spanishexplanation
+                            ) === 1
+                            && preg_match(
+                                '/(?:etapa|paso)(?:\s+de\s+inferencia)?\s*3\b/iu',
+                                $spanishexplanation
+                            ) === 1;
+                        if ((string)($decodeditem['domainId'] ?? '') !== 'dui_yao'
+                                || (string)($decodeditem['contentType'] ?? '') !== 'dui_yao'
+                                || !is_array($matchedevidence)
+                                || (string)($formulaBridge['kind'] ?? '') !== 'direct'
+                                || $baseformula === ''
+                                || $resultformula === ''
+                                || core_text::strpos($generatedcontentlower, $baseformula) === false
+                                || core_text::strpos($generatedcontentlower, $resultformula) === false
+                                || !$followupvisible
+                                || !$correctpairvisible
+                                || core_text::strpos($correctchoice, $resultformula) === false
+                                || !$threestagesvisible) {
+                            throw new UnexpectedValueException(
+                                'The clinical-return item must show the initial base formula, a return after several days with new findings, the documented pair in the keyed choice, the resulting formula, and all three reasoning stages in English and Spanish.'
+                            );
+                        }
+                    } else if ((string)($decodeditem['domainId'] ?? '') !== 'dui_yao'
                             || (string)($decodeditem['contentType'] ?? '') !== 'dui_yao'
                             || !is_array($matchedevidence)
                             || !$hasscopelanguage
@@ -10105,6 +10227,7 @@ PROMPT;
     }
     if ((!is_array($decodedbatch) || !is_array($originalitybatch))
             && $formulavduiyaoscopeidea
+            && !$twostageduiyaomodificationrequest
             && $custombatchcount === 1
             && $formulavduiyaoscopeevidence !== []) {
         // The abstract scope rule is fully represented in the verified pair
