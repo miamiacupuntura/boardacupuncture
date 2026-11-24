@@ -51,6 +51,8 @@ $publishexamerror = optional_param('publishexamerror', '', PARAM_ALPHANUMEXT);
 $publishexamdetail = trim(optional_param('publishexamdetail', '', PARAM_TEXT));
 $examprojectid = optional_param('examproject', '', PARAM_ALPHANUMEXT);
 $examprojectview = optional_param('examview', 'candidates', PARAM_ALPHA);
+$exampositionfilter = max(0, min(100, optional_param('examposition', 0, PARAM_INT)));
+$examrecentfilter = optional_param('examrecent', '', PARAM_ALPHA) === 'last3' ? 'last3' : '';
 $newquestiontargetdomain = optional_param('targetdomain', '', PARAM_ALPHANUMEXT);
 $newquestiontargetexam = optional_param('targetexamproject', '', PARAM_ALPHANUMEXT);
 $newquestionneededcount = max(0, min(10, optional_param('needed', 0, PARAM_INT)));
@@ -5972,6 +5974,34 @@ if ($similarityexam === 'auto'
     $examprojectid = (string)$pendingexamproject['id'];
     $currentexamproject = $examprojects[$examprojectid];
     $currentexamquestionids = (array)$currentexamproject['approvedQuestionIds'];
+}
+$currentexampositionlookup = [];
+foreach (array_values(array_map('strval', $currentexamquestionids)) as $includedindex => $includedquestionid) {
+    if ($includedquestionid !== '') {
+        $currentexampositionlookup[$includedquestionid] = $includedindex + 1;
+    }
+}
+$examquestionfilteractive = false;
+$examquestionfilterlookup = [];
+if (is_array($currentexamproject) && $examrecentfilter === 'last3') {
+    $examquestionfilteractive = true;
+    $examprojectview = 'included';
+    $exampositionfilter = 0;
+    $examquestionfilterlookup = array_fill_keys(
+        array_slice(array_values(array_map('strval', $currentexamquestionids)), -3),
+        true
+    );
+} else if (is_array($currentexamproject) && $exampositionfilter > 0) {
+    $examquestionfilteractive = true;
+    $examprojectview = 'included';
+    $examrecentfilter = '';
+    $selectedexamquestionid = (string)($currentexamquestionids[$exampositionfilter - 1] ?? '');
+    if ($selectedexamquestionid !== '') {
+        $examquestionfilterlookup[$selectedexamquestionid] = true;
+    }
+} else {
+    $exampositionfilter = 0;
+    $examrecentfilter = '';
 }
 $similarityexamselection = 'all';
 if (isset($examprojects[$similarityexam])) {
@@ -13489,7 +13519,9 @@ $filteredquestions = array_values(array_filter(
         $isprocessedquestion,
         $reservequestionidlookup,
         $questionassignedtoexamlookup,
-        $extraguidelinependingreviewlookup
+        $extraguidelinependingreviewlookup,
+        $examquestionfilteractive,
+        $examquestionfilterlookup
     ): bool {
         if ($custompreviewids !== []
                 && !in_array((string)($question['questionId'] ?? ''), $custompreviewids, true)) {
@@ -13556,6 +13588,8 @@ $filteredquestions = array_values(array_filter(
                 )) return false;
         if ($examprojectid !== '' && $examprojectview === 'included'
                 && !in_array((string)$question['questionId'], $currentexamquestionids, true)) return false;
+        if ($examquestionfilteractive
+                && !isset($examquestionfilterlookup[(string)($question['questionId'] ?? '')])) return false;
         // The active bank must never show a question that already belongs to
         // Exam 1, a published Simulation Exam, or any saved exam project.
         // Exam-specific and administrative archive views remain available so
@@ -13630,7 +13664,10 @@ usort($filteredquestions, static function(array $left, array $right) use (
     $usagefilter,
     $reviewfilter,
     $examprojectpositions,
-    $custompreviewids
+    $custompreviewids,
+    $examprojectid,
+    $examprojectview,
+    $currentexampositionlookup
 ): int {
     if ($custompreviewids !== []) {
         $custompreviewpositions = array_flip($custompreviewids);
@@ -13657,6 +13694,10 @@ usort($filteredquestions, static function(array $left, array $right) use (
     if ($usagefilter === 'exam_project_pending') {
         return ($examprojectpositions[(string)$left['questionId']] ?? PHP_INT_MAX)
             <=> ($examprojectpositions[(string)$right['questionId']] ?? PHP_INT_MAX);
+    }
+    if ($examprojectid !== '' && $examprojectview === 'included') {
+        return ($currentexampositionlookup[(string)($left['questionId'] ?? '')] ?? PHP_INT_MAX)
+            <=> ($currentexampositionlookup[(string)($right['questionId'] ?? '')] ?? PHP_INT_MAX);
     }
     // Newly approved administrator questions used to sort before every CF/FD
     // item because their IDs begin with ADMIN.  That made the card just
@@ -13817,6 +13858,8 @@ $baseparams = array_filter([
     'custompreview' => $custompreview !== '' ? $custompreview : null,
     'examproject' => $examprojectid !== '' ? $examprojectid : null,
     'examview' => $examprojectid !== '' && $examprojectview !== 'candidates' ? $examprojectview : null,
+    'examposition' => $exampositionfilter > 0 ? $exampositionfilter : null,
+    'examrecent' => $examrecentfilter !== '' ? $examrecentfilter : null,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
 ]);
 $editquestion = null;
@@ -13995,6 +14038,17 @@ if (is_array($currentexamproject)) {
                 ? ($displaylang === 'es' ? ' · preguntas incluidas' : ' · included questions')
                 : ''),
     ];
+    if ($exampositionfilter > 0) {
+        $activefilters[] = [
+            'label' => $displaylang === 'es' ? 'Posición del examen' : 'Exam position',
+            'value' => (string)$exampositionfilter,
+        ];
+    } else if ($examrecentfilter === 'last3') {
+        $activefilters[] = [
+            'label' => $displaylang === 'es' ? 'Publicación reciente' : 'Recent publication',
+            'value' => $displaylang === 'es' ? 'Últimas 3 preguntas' : 'Last 3 questions',
+        ];
+    }
 }
 $resultfiltercontext = $activefilters === []
     ? [$displaylang === 'es' ? 'Preguntas disponibles' : 'Available questions']
@@ -14601,6 +14655,7 @@ echo $OUTPUT->header();
 .question-bank__similarity-finder{margin:0 0 16px;padding:16px;border:1px solid #0b8f87;border-left:5px solid #0b8f87;border-radius:11px;background:#f5fbfa}.question-bank__similarity-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.question-bank__similarity-head h3{margin:0 0 5px;color:#075f59;font-size:21px}.question-bank__similarity-head p{max-width:900px;margin:0;color:#52677a}.question-bank__similarity-form{display:grid;grid-template-columns:minmax(280px,1fr) auto;align-items:end;gap:10px;margin:14px 0 8px}.question-bank__similarity-form label span{display:block;margin-bottom:5px;font-size:12px;font-weight:900}.question-bank__similarity-form input{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #9bbdc0;border-radius:7px;background:#fff}.question-bank__similarity-note{margin:7px 0 12px;color:#52677a;font-size:13px}.question-bank__similarity-target{padding:12px;border:2px solid #6d28d9;border-radius:8px;background:#fff}.question-bank__similarity-target>span{display:block;color:#6d28d9;font-size:11px;font-weight:900;text-transform:uppercase}.question-bank__similarity-target>strong{display:block;margin:3px 0 5px;font-size:17px}.question-bank__similarity-target p{margin:0 0 7px}.question-bank__similarity-summary{margin:12px 0 8px;color:#52677a}.question-bank__similarity-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.question-bank__similarity-result{padding:12px;border:1px solid #c9dadd;border-radius:8px;background:#fff}.question-bank__similarity-result>header{display:flex;align-items:center;justify-content:space-between;gap:9px}.question-bank__similarity-result>p{margin:9px 0;color:#334e60;line-height:1.45}.question-bank__similarity-answer{margin:8px 0;padding:8px 10px;border-radius:6px;background:#eef9f6;color:#075f59}.question-bank__similarity-result>small{display:block;margin-bottom:9px;color:#66557e}.question-bank__merge-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;padding-top:9px;border-top:1px solid #e1eaed}.question-bank__merge-actions form{margin:0}@media(max-width:800px){.question-bank__similarity-results,.question-bank__similarity-form{grid-template-columns:1fr}.question-bank__similarity-head{flex-direction:column}}
 .question-bank__similarity-form{grid-template-columns:minmax(210px,.55fr) minmax(280px,1fr) auto}.question-bank__similarity-form select{box-sizing:border-box;width:100%;min-height:42px;padding:8px 10px;border:1px solid #9bbdc0;border-radius:7px;background:#fff}@media(max-width:800px){.question-bank__similarity-form{grid-template-columns:1fr}}
 .question-bank__creation-state{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:0 0 16px;padding:16px 18px;border:2px solid #0b8f87;border-radius:11px;background:#f2fbf9}.question-bank__creation-state>div{flex:1 1 auto}.question-bank__creation-state h3{margin:0 0 5px;color:#075f59;font-size:22px}.question-bank__creation-state p{margin:0;color:#52677a;line-height:1.45}.question-bank__creation-steps{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.question-bank__creation-step{padding:5px 9px;border-radius:999px;background:#e2ecef;color:#52677a;font-size:12px;font-weight:850}.question-bank__creation-step.is-current{background:#6d28d9;color:#fff}.question-bank__creation-step.is-complete{background:#dff5ef;color:#075f59}.question-bank__creation-exam-progress{max-width:620px;margin-top:13px;padding:11px 12px;border:1px solid #82cfc7;border-radius:8px;background:#fff}.question-bank__creation-exam-progress header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px;color:#075f59}.question-bank__creation-exam-progress header strong:last-child{font-size:20px}.question-bank__creation-exam-progress small{display:block;margin-top:6px;color:#52677a;font-weight:750}.question-bank--creation .question-bank__hero .question-bank__actions,.question-bank--creation>nav[aria-label="Mock-only questions"],.question-bank--creation>nav[aria-label="Extra guideline bank"],.question-bank--creation>.question-bank__language-state,.question-bank--creation>.question-bank__exam-builder,.question-bank--creation>.question-bank__technical-exports,.question-bank--creation>.question-bank__assistant,.question-bank--creation>.question-bank__similarity-finder,.question-bank--creation>.question-bank__same-answer-audit,.question-bank--creation>.question-bank__summary,.question-bank--creation>.question-bank__filters,.question-bank--creation>.question-bank__active-filters,.question-bank--creation>.question-bank__domains,.question-bank--creation>.question-bank__review-progress,.question-bank--creation>.question-bank__ai-batch,.question-bank--creation>.question-bank__editor,.question-bank--creation .question-bank__item .question-bank__meta form,.question-bank--creation .question-bank__item .question-bank__meta a.question-bank__button{display:none}.question-bank--creation-entry>.question-bank__result-head,.question-bank--creation-entry>.question-bank__items,.question-bank--creation-entry>.question-bank__pagination{display:none}@media(max-width:700px){.question-bank__creation-state{flex-direction:column}.question-bank__creation-state .question-bank__button{width:100%}}
+.question-bank__exam-position-filter{display:flex;align-items:flex-end;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid #e1d9f0}.question-bank__exam-position-filter label{display:grid;gap:4px;flex:1 1 130px;color:#3b167d;font-size:14px;font-weight:850}.question-bank__exam-position-filter input{box-sizing:border-box;width:100%;min-height:36px;padding:6px 8px;border:1px solid #ad9bd2;border-radius:7px;background:#fff;font-size:16px}.question-bank__exam-position-filter .question-bank__button{flex:0 0 auto}@media(max-width:700px){.question-bank__exam-position-filter>*{width:100%}.question-bank__exam-position-filter .question-bank__button{width:100%}}
 </style>
 <main class="question-bank<?php echo $creationmode ? ' question-bank--creation' : ''; ?><?php echo $shownewquestionform ? ' question-bank--creation-entry' : ''; ?>">
     <header class="question-bank__hero"><div><h2>NCBAHM Question Bank</h2><p>Administrator-only inventory of curated, SCORM and administrator-authored Chinese Herbology questions. Review each question before approving it for the bank or an exam.</p></div><nav class="question-bank__actions" aria-label="Question bank actions"><a class="question-bank__button" href="<?php echo $reporturl->out(false); ?>">← Student Evaluations</a><a class="question-bank__button" href="<?php echo $appendixaherbsurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Appendix A · Hierbas' : 'Appendix A · Herbs'; ?></a><a class="question-bank__button" href="<?php echo $appendixbduiyaourl->out(false); ?>">Appendix B · Dui Yao</a><a class="question-bank__button" href="<?php echo $appendixcformulasurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Appendix C · Fórmulas' : 'Appendix C · Formulas'; ?></a><a class="question-bank__button question-bank__button--publish" href="<?php echo $assistanturl->out(false); ?>#question-bank-ai">Ask AI</a><a class="question-bank__button" href="<?php echo $similarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar similares' : 'Find similar answers'; ?></a><a class="question-bank__button question-bank__button--similar" href="<?php echo $sameanswerurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Revisar respuestas repetidas' : 'Review repeated answers'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Crear examen' : 'Create exam'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create new question<?php echo $customdraftcount > 0 ? ' (' . (int)$customdraftcount . ' draft' . ($customdraftcount === 1 ? '' : 's') . ')' : ''; ?></a><?php if ($savededitingdraftcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $savededitingurl->out(false); ?>">Resume saved editing (<?php echo (int)$savededitingdraftcount; ?>)</a><?php endif; ?><?php if ($resumereviewurl !== null): ?><a class="question-bank__button" href="<?php echo $resumereviewurl->out(false); ?>"><?php echo !empty($resumebatch['hasCorrection']) ? 'Latest corrected group' : 'Latest review group'; ?> (<?php echo (int)$resumebatch['count']; ?>)</a><?php endif; ?><?php if ($pendingproposalcount > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'proposals_pending']))->out(false); ?>">Publishing proposals (<?php echo (int)$pendingproposalcount; ?>)</a><?php endif; ?><?php if ($possibleexclusioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $exclusionurl->out(false); ?>">Possible exclusions (<?php echo (int)$possibleexclusioncount; ?>)</a><?php endif; ?><?php if ($deletedquestioncount > 0): ?><a class="question-bank__button question-bank__button--exclude" href="<?php echo $deletedurl->out(false); ?>">Deleted questions (<?php echo (int)$deletedquestioncount; ?>)</a><?php endif; ?><a class="question-bank__button" href="<?php echo $languageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a></nav></header>
@@ -14975,6 +15030,13 @@ echo $OUTPUT->header();
                     'lang' => $displaylang !== 'en' ? $displaylang : null,
                 ]));
                 $projectincludedurl->set_anchor('pending-questions');
+                $projectlastthreeurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+                    'examproject' => $projectid,
+                    'examview' => 'included',
+                    'examrecent' => 'last3',
+                    'lang' => $displaylang !== 'en' ? $displaylang : null,
+                ]));
+                $projectlastthreeurl->set_anchor('pending-questions');
                 $projectcandidateediturl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
                     'examproject' => $projectid,
                     'examview' => 'candidates',
@@ -15007,6 +15069,7 @@ echo $OUTPUT->header();
                 <?php if ($projectneedsrebalance): ?><div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectrebalanceurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Corregir proporciones' : 'Fix domain proportions'; ?></a><small><?php echo $displaylang === 'es' ? 'Las preguntas excedentes permanecen aprobadas en el banco; solo se sustituyen dentro de este examen.' : 'Surplus questions remain approved in the bank; only their exam membership is replaced.'; ?></small></div><?php endif; ?>
                 <?php if ($projectispublished): ?><div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$project['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)($project['publishedVersion'] ?? 1); ?></span></div><?php endif; ?>
                 <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--primary" href="<?php echo $projectincludedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir y editar' : 'Open and edit'; ?> (<?php echo $projectcount; ?>)</a><a class="question-bank__button" href="<?php echo $projectcandidateediturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Agregar o reemplazar preguntas' : 'Add or replace questions'; ?></a><?php if (!$projectispublished): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $projectaddurl->out(false); ?>"><?php echo $projectcount > 0 ? ($displaylang === 'es' ? 'Continuar revisión' : 'Continue review') : ($displaylang === 'es' ? 'Comenzar revisión' : 'Start review'); ?></a><?php endif; ?><?php if ($projectisreadytopublish): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectpublishurl->out(false); ?>"><?php echo $projectispublished ? ($displaylang === 'es' ? 'Volver a publicar' : 'Republish') : ($displaylang === 'es' ? 'Publicar examen' : 'Publish exam'); ?></a><?php else: ?><span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $projectispublished ? ($displaylang === 'es' ? 'Volver a publicar' : 'Republish') : ($displaylang === 'es' ? 'Publicar examen' : 'Publish exam'); ?></span><?php endif; ?><?php if ($projectispublished): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => $projectexamnumber, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?><?php if ($examprojectid === $projectid): ?><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cerrar examen' : 'Close exam'; ?></a><?php endif; ?></div>
+                <?php if ($projectcount > 0): ?><form class="question-bank__exam-position-filter" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php'))->out(false); ?>"><label><?php echo $displaylang === 'es' ? 'Posición 1–' . min(100, $projecttarget) : 'Position 1–' . min(100, $projecttarget); ?><input type="number" name="examposition" min="1" max="<?php echo min(100, $projecttarget); ?>" value="<?php echo $examprojectid === $projectid && $exampositionfilter > 0 ? (int)$exampositionfilter : ''; ?>" required></label><input type="hidden" name="examproject" value="<?php echo s($projectid); ?>"><input type="hidden" name="examview" value="included"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><button class="question-bank__button" type="submit"><?php echo $displaylang === 'es' ? 'Ver posición' : 'View position'; ?></button><a class="question-bank__button question-bank__button--publish" href="<?php echo $projectlastthreeurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Últimas 3 publicadas' : 'Last 3 published'; ?></a></form><?php endif; ?>
             </article>
             <?php endforeach; ?>
         </div>
@@ -15394,7 +15457,7 @@ echo $OUTPUT->header();
         <label><span><?php echo $displaylang === 'es' ? 'Categoría de hierbas' : 'Herb category'; ?></span><select name="herbcategory"><option value="all">—</option><?php foreach ($herbcategoryfilteroptions as $herbcategorycode => $herbcategory): ?><option value="<?php echo s((string)$herbcategorycode); ?>"<?php echo $herbcategoryfilter === (string)$herbcategorycode ? ' selected' : ''; ?>><?php echo s((string)($herbcategory[$displaylang === 'es' ? 'es' : 'en'] ?? $herbcategorycode)); ?></option><?php endforeach; ?></select></label>
         <label><span><?php echo $displaylang === 'es' ? 'Tema evaluado' : 'Tested detail'; ?></span><select name="detail"><option value="all">—</option><?php foreach ($detailfilteroptions as $detailfilteroption): ?><option value="<?php echo s($detailfilteroption); ?>"<?php echo $detailfilter === $detailfilteroption ? ' selected' : ''; ?>><?php echo s((string)($filtervalues[$detailfilteroption] ?? $detailfilteroption)); ?></option><?php endforeach; ?></select></label>
         <label><span>Editorial review</span><select name="review"><option value="all">All review states</option><option value="editing_drafts"<?php echo $reviewfilter === 'editing_drafts' ? ' selected' : ''; ?>>Saved editing drafts</option><option value="ai_drafts"<?php echo $reviewfilter === 'ai_drafts' ? ' selected' : ''; ?>>Current AI review group</option><option value="proposals_pending"<?php echo $reviewfilter === 'proposals_pending' ? ' selected' : ''; ?>>Publishing proposals</option><option value="needs_inference"<?php echo $reviewfilter === 'needs_inference' ? ' selected' : ''; ?>>Needs more inference</option><option value="needs_feedback"<?php echo $reviewfilter === 'needs_feedback' ? ' selected' : ''; ?>>Needs stronger feedback</option><option value="simulation_candidate"<?php echo $reviewfilter === 'simulation_candidate' ? ' selected' : ''; ?>>Simulation candidate</option><option value="reclassification_requested"<?php echo $reviewfilter === 'reclassification_requested' ? ' selected' : ''; ?>>Reclassification requested</option><option value="possible_exclusion"<?php echo $reviewfilter === 'possible_exclusion' ? ' selected' : ''; ?>>Possible exclusions</option><option value="study_archive"<?php echo $reviewfilter === 'study_archive' ? ' selected' : ''; ?>>Mock-only questions</option><option value="extra_guideline"<?php echo $reviewfilter === 'extra_guideline' ? ' selected' : ''; ?>>Extra guideline bank</option><option value="deleted"<?php echo $reviewfilter === 'deleted' ? ' selected' : ''; ?>>Deleted questions (recycle bin)</option></select></label>
-        <?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="examview" value="<?php echo s($examprojectview); ?>"><?php endif; ?>
+        <?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="examview" value="<?php echo s($examprojectview); ?>"><?php if ($exampositionfilter > 0): ?><input type="hidden" name="examposition" value="<?php echo (int)$exampositionfilter; ?>"><?php elseif ($examrecentfilter !== ''): ?><input type="hidden" name="examrecent" value="<?php echo s($examrecentfilter); ?>"><?php endif; ?><?php endif; ?>
         <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
         <div class="question-bank__filter-actions"><button class="question-bank__button" type="submit">Apply</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Clear</a></div>
     </form>
@@ -15779,6 +15842,7 @@ echo $OUTPUT->header();
         }
     ?><article id="question-<?php echo s($question['questionId']); ?>" class="question-bank__item<?php echo $question['_excluded'] ? ' question-bank__item--excluded' : ''; ?>">
         <?php if ($usagefilter === 'exam_project_pending' && isset($examprojectpositions[(string)$question['questionId']])): ?><div class="question-bank__temporary-order"><span><?php echo $displaylang === 'es' ? 'Orden temporal de revisión' : 'Temporary review order'; ?></span><strong><?php echo s((string)$currentexamproject['name']); ?> Question <?php echo str_pad((string)$examprojectpositions[(string)$question['questionId']], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$currentexamproject['targetCount']; ?></small></div><?php endif; ?>
+        <?php if ($examprojectview === 'included' && is_array($currentexamproject) && isset($currentexampositionlookup[(string)$question['questionId']])): ?><div class="question-bank__temporary-order"><span><?php echo $displaylang === 'es' ? 'Posición en el examen' : 'Exam position'; ?></span><strong><?php echo s((string)$currentexamproject['name']); ?> Question <?php echo str_pad((string)$currentexampositionlookup[(string)$question['questionId']], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$currentexamproject['targetCount']; ?></small></div><?php endif; ?>
         <?php if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true) && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span><?php echo $usagefilter === 'exam2_approved' ? 'Approved Exam 2 position' : 'Temporary review order'; ?></span><strong><?php echo $usagefilter === 'exam2_approved' ? 'Exam 2 Question ' : 'Proposed Exam 2 Question '; ?><?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
         <div class="question-bank__meta">
             <div class="question-bank__identity-row">
