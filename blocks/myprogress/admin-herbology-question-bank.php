@@ -10128,7 +10128,7 @@ PROMPT;
             }
             if ($formulavduiyaoscopeidea && !$preserveexactquestion) {
                 $matchedscopenumbers = [];
-                foreach ($decodedbatch as $decodeditem) {
+                foreach ($decodedbatch as $decodedindex => $decodeditem) {
                     $generatedcontent = json_encode(
                         $decodeditem,
                         JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
@@ -10165,17 +10165,30 @@ PROMPT;
                             );
                         }
                     }
+                    $scopekeyedtext = '';
+                    $scopekeyedlabel = (string)($decodeditem['correctLabel'] ?? '');
+                    foreach ((array)($decodeditem['options'] ?? []) as $scopeoption) {
+                        if ((string)($scopeoption['label'] ?? '') === $scopekeyedlabel) {
+                            $scopekeyedtext .= ' ' . (string)($scopeoption['text'] ?? '');
+                        }
+                    }
+                    foreach ((array)($decodeditem['translations']['es']['options'] ?? []) as $scopeoption) {
+                        if ((string)($scopeoption['label'] ?? '') === $scopekeyedlabel) {
+                            $scopekeyedtext .= ' ' . (string)($scopeoption['text'] ?? '');
+                        }
+                    }
+                    $scopekeyedtext = $normalizescopetext($scopekeyedtext);
                     $matchedevidence = null;
                     foreach ($formulavduiyaoscopeevidence as $scopeevidence) {
                         $pairvisible = core_text::strpos(
-                            $generatedcontentlower,
+                            $scopekeyedtext,
                             $normalizescopetext((string)$scopeevidence['pair'])
                         ) !== false;
                         if (!$pairvisible) {
                             $pairvisible = count(array_filter(
                                 (array)($scopeevidence['herbs'] ?? []),
                                 static fn($herb): bool => core_text::strpos(
-                                    $generatedcontentlower,
+                                    $scopekeyedtext,
                                     $normalizescopetext((string)$herb)
                                 ) !== false
                             )) >= 2;
@@ -10189,6 +10202,105 @@ PROMPT;
                             $matchedevidence = $scopeevidence;
                             break;
                         }
+                    }
+                    if ($twostageduiyaomodificationrequest && is_array($matchedevidence)) {
+                        $autorepairbridge = is_array($matchedevidence['formulaBridge'] ?? null)
+                            ? $matchedevidence['formulaBridge']
+                            : [];
+                        $autorepairkind = (string)($autorepairbridge['kind'] ?? '');
+                        $autorepairherbs = array_values(array_map(
+                            'strval',
+                            (array)($matchedevidence['herbs'] ?? [])
+                        ));
+                        $autorepairpair = implode(' + ', $autorepairherbs);
+                        $autorepairbase = core_text::specialtoascii(
+                            trim((string)($autorepairbridge['base'] ?? ''))
+                        );
+                        $autorepairbaseevidence = is_array(
+                            $matchedevidence['baseFormulaEvidence'] ?? null
+                        ) ? $matchedevidence['baseFormulaEvidence'] : [];
+                        $autorepairclueen = trim((string)($autorepairbaseevidence['clue'] ?? ''));
+                        $autorepaircluees = trim((string)($autorepairbaseevidence['clueEs'] ?? $autorepairclueen));
+                        $autorepairactionen = rtrim(
+                            trim((string)($matchedevidence['narrowAction']['en'] ?? '')),
+                            '. '
+                        );
+                        $autorepairactiones = rtrim(
+                            trim((string)($matchedevidence['narrowAction']['es'] ?? $autorepairactionen)),
+                            '. '
+                        );
+                        if ($autorepairkind === 'direct') {
+                            $autorepairresult = core_text::specialtoascii(
+                                trim((string)($autorepairbridge['result'] ?? ''))
+                            );
+                            $autorepairoptionen = $autorepairpair
+                                . '; resulting formula: ' . $autorepairresult . '.';
+                            $autorepairoptiones = $autorepairpair
+                                . '; fórmula resultante: ' . $autorepairresult . '.';
+                            $autorepairoutcomeen = $autorepairresult;
+                            $autorepairoutcomees = $autorepairresult;
+                        } else {
+                            $autorepairoptionen = trim((string)($autorepairbridge['outcome']['en'] ?? ''));
+                            $autorepairoptiones = trim((string)($autorepairbridge['outcome']['es'] ?? ''));
+                            $autorepairoutcomeen = $autorepairoptionen;
+                            $autorepairoutcomees = $autorepairoptiones;
+                        }
+                        $autorepaircorrectlabel = strtoupper(
+                            trim((string)($decodeditem['correctLabel'] ?? ''))
+                        );
+                        foreach ((array)($decodeditem['options'] ?? []) as $autorepairoptionindex => $autorepairoption) {
+                            if ((string)($autorepairoption['label'] ?? '') === $autorepaircorrectlabel) {
+                                $decodeditem['options'][$autorepairoptionindex]['text'] = $autorepairoptionen;
+                                break;
+                            }
+                        }
+                        foreach ((array)($decodeditem['translations']['es']['options'] ?? []) as $autorepairoptionindex => $autorepairoption) {
+                            if ((string)($autorepairoption['label'] ?? '') === $autorepaircorrectlabel) {
+                                $decodeditem['translations']['es']['options'][$autorepairoptionindex]['text'] =
+                                    $autorepairoptiones;
+                                break;
+                            }
+                        }
+                        $autorepairfeedbacken = [
+                            'Inference step 1: The initial findings support ' . $autorepairbase
+                                . ' because the supplied formula profile identifies ' . lcfirst($autorepairclueen),
+                            'Inference step 2: At the return visit, the new findings call for '
+                                . $autorepairpair . ' to ' . lcfirst($autorepairactionen) . '.',
+                            'Inference step 3: The supported prescription outcome is '
+                                . $autorepairoutcomeen,
+                        ];
+                        $autorepairfeedbackes = [
+                            'Paso de inferencia 1: Los hallazgos iniciales respaldan '
+                                . $autorepairbase . ' porque el perfil de la fórmula identifica '
+                                . lcfirst($autorepaircluees),
+                            'Paso de inferencia 2: En la visita de regreso, los hallazgos nuevos requieren '
+                                . $autorepairpair . ' para ' . lcfirst($autorepairactiones) . '.',
+                            'Paso de inferencia 3: El resultado terapéutico respaldado es '
+                                . $autorepairoutcomees,
+                        ];
+                        foreach (['A', 'B', 'C', 'D'] as $autorepairlabel) {
+                            $autorepairiscorrect = $autorepairlabel === $autorepaircorrectlabel;
+                            $autorepairfeedbacken[] = 'Option ' . $autorepairlabel . ': '
+                                . ($autorepairiscorrect
+                                    ? 'Correct. It matches the selected official pair and supported prescription outcome.'
+                                    : 'Incorrect. This pair-and-outcome combination does not match the selected official relationship.');
+                            $autorepairfeedbackes[] = 'Opción ' . $autorepairlabel . ': '
+                                . ($autorepairiscorrect
+                                    ? 'Correcta. Coincide con la pareja oficial seleccionada y el resultado terapéutico respaldado.'
+                                    : 'Incorrecta. Esta combinación de pareja y resultado no coincide con la relación oficial seleccionada.');
+                        }
+                        $decodeditem['explanation'] = implode(' ', $autorepairfeedbacken);
+                        $decodeditem['translations']['es']['explanation'] = implode(
+                            ' ',
+                            $autorepairfeedbackes
+                        );
+                        $decodeditem['reviewSummary'] = 'Completed the clinical-return answer and bilingual feedback from verified formula and Dui Yao evidence.';
+                        $decodedbatch[$decodedindex] = $decodeditem;
+                        $generatedcontent = json_encode(
+                            $decodeditem,
+                            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                        );
+                        $generatedcontentlower = $normalizescopetext((string)$generatedcontent);
                     }
                     $hasscopelanguage = preg_match(
                         '/\b(?:narrow|focused|specific|brief|modification|estrech[oa]|espec[ií]fic[oa]|breve|modificaci[oó]n)\b/iu',

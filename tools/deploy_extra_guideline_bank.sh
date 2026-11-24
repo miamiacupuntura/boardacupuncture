@@ -139,6 +139,8 @@ grep -Fq 'or when a link/form lost its hidden template identifier' "$TEMP_DIR/bl
 grep -Fq '$clinicalreturnfailures' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'The clinical-return draft still needs correction:' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$decodeditem['contentType'] = 'dui_yao';" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq '$autorepairfeedbacken' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Completed the clinical-return answer and bilingual feedback' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "'publishedExtraGuideline' => null" "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq 'Student view for the separately published Extra guideline collection' "$TEMP_DIR/blocks/menu/herbology-extra-guideline.php"
@@ -221,6 +223,8 @@ grep -Fq 'or when a link/form lost its hidden template identifier' "$MOODLE_ROOT
 grep -Fq '$clinicalreturnfailures' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'The clinical-return draft still needs correction:' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$decodeditem['contentType'] = 'dui_yao';" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq '$autorepairfeedbacken' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Completed the clinical-return answer and bilingual feedback' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Student view for the separately published Extra guideline collection' "$MOODLE_ROOT/blocks/menu/herbology-extra-guideline.php"
 grep -Fq 'Open Extra guideline →' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 
@@ -263,4 +267,5 @@ echo "OK: si la respuesta correcta está fuera del roster, Automatically review 
 echo "OK: la plantilla clínica de regreso rota entre los 51 Duì Yào oficiales; usa nombre clásico solo en 4 adiciones directas y conserva las demás como prescripciones individualizadas."
 echo "OK: la plantilla clínica se reconoce por identificador o por su contenido; nunca vuelve silenciosamente al formato teórico fórmula versus pareja."
 echo "OK: la validación clínica acepta redacción equivalente y, si falla, enumera exactamente el componente que falta en lugar de exigir frases literales."
+echo "OK: el sistema completa localmente la opción correcta y el análisis bilingüe A-D con la evidencia verificada antes de validar el borrador."
 echo "RESPALDO: $BACKUP_DIR"
