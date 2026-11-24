@@ -5782,6 +5782,8 @@ $extraguidelinependingcount = max(0, $extraguidelinetotalcount - $extraguideline
 $publishedextraguideline = is_array($revisionstore['publishedExtraGuideline'] ?? null)
     ? $revisionstore['publishedExtraGuideline']
     : null;
+$extraguidelineispublished = is_array($publishedextraguideline)
+    && (string)($publishedextraguideline['status'] ?? '') === 'published';
 
 $examprojects = [];
 foreach (($revisionstore['examProjects'] ?? []) as $storedexamid => $storedexam) {
@@ -6540,11 +6542,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $rebalanceexamprojectrequested !== '
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishextraguideline') {
     require_sesskey();
-    $extraguidelinereturnurl = new moodle_url(
-        '/blocks/myprogress/admin-herbology-question-bank.php',
-        array_filter(['lang' => $displaylang !== 'en' ? $displaylang : null]),
-        'exam-builder'
-    );
+    $returntoextraguidelinebank = optional_param('returnreview', '', PARAM_ALPHANUMEXT)
+        === 'extra_guideline';
+    $extraguidelinereturnurl = $returntoextraguidelinebank
+        ? new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter([
+                'review' => 'extra_guideline',
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ]),
+            'pending-questions'
+        )
+        : new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter(['lang' => $displaylang !== 'en' ? $displaylang : null]),
+            'exam-builder'
+        );
     if ($extraguidelinereadyquestions === []) {
         redirect(
             $extraguidelinereturnurl,
@@ -14793,8 +14806,6 @@ echo $OUTPUT->header();
             $extraguidelineprogresspercent = $extraguidelinetotalcount > 0
                 ? min(100, (int)round($extraguidelinereadycount * 100 / $extraguidelinetotalcount))
                 : 0;
-            $extraguidelineispublished = is_array($publishedextraguideline)
-                && (string)($publishedextraguideline['status'] ?? '') === 'published';
             ?>
             <article class="question-bank__exam-card question-bank__exam-card--extra-guideline">
                 <h4>Extra guideline</h4>
@@ -15186,7 +15197,31 @@ echo $OUTPUT->header();
     <?php if ($customdraftcount > 0 && !$shownewquestionform && $usagefilter !== 'exam_project_pending'): ?><section class="question-bank__review-progress"><strong><?php echo (int)$customdraftcount; ?> new-question draft<?php echo $customdraftcount === 1 ? '' : 's'; ?> awaiting your approval</strong><p><a class="question-bank__button" href="<?php echo $customdrafturl->out(false); ?>">Review new drafts</a></p></section><?php endif; ?>
     <?php if ($reviewfilter === 'editing_drafts'): ?><section class="question-bank__review-progress"><strong>Saved editing drafts: <?php echo (int)$savededitingdraftcount; ?></strong><p>This view includes unfinished manual and automatic edits from earlier updates and review groups. The most recently saved drafts appear first. Continue the correction, approve the current version, edit manually or delete the question.</p></section><?php endif; ?>
     <?php if ($reviewfilter === 'study_archive'): ?><section class="question-bank__review-progress"><strong><?php echo $displaylang === 'es' ? 'Preguntas exclusivas de Mock' : 'Mock-only questions'; ?>: <?php echo (int)$studyarchivecount; ?></strong><p><?php echo $displaylang === 'es' ? 'Estas preguntas se conservan completas y se ubican automáticamente en el Mock correspondiente a su dominio. No pertenecen al banco board ni a los Simulation Exams. Puede restaurarlas al banco cuando quiera.' : 'These questions are preserved in full and automatically placed in the Mock category matching their domain. They do not belong to the board bank or Simulation Exams. You can restore them to the board bank at any time.'; ?></p></section><?php endif; ?>
-    <?php if ($reviewfilter === 'extra_guideline'): ?><section class="question-bank__review-progress question-bank__review-progress--navigation"><div><strong><?php echo $displaylang === 'es' ? 'Banco Extra guideline' : 'Extra guideline bank'; ?>: <?php echo (int)$extraguidelinecount; ?></strong><p><?php echo $displaylang === 'es' ? 'Estas preguntas se conservan en un banco administrativo independiente. No pertenecen a Board, Mock ni a los Simulation Exams. Puede restaurarlas como borradores cuando quiera revisarlas nuevamente.' : 'These questions are preserved in an independent administrative bank. They belong to neither Board, Mock, nor Simulation Exams. You can restore them as drafts whenever you want to review them again.'; ?></p></div><a class="question-bank__button" href="<?php echo $exammanagerreturnurl->out(false); ?>"><?php echo $displaylang === 'es' ? '← Volver al Exam builder' : '← Back to Exam builder'; ?></a></section><?php endif; ?>
+    <?php if ($reviewfilter === 'extra_guideline'): ?>
+    <section class="question-bank__review-progress question-bank__review-progress--navigation">
+        <div>
+            <strong><?php echo $displaylang === 'es' ? 'Banco Extra guideline' : 'Extra guideline bank'; ?>: <?php echo (int)$extraguidelinecount; ?></strong>
+            <p><?php echo $displaylang === 'es'
+                ? 'Colección independiente: ' . (int)$extraguidelinereadycount . ' lista(s) para estudiantes y ' . (int)$extraguidelinependingcount . ' pendiente(s). No se envían a Board, Mock ni Simulation Exams.'
+                : 'Independent collection: ' . (int)$extraguidelinereadycount . ' ready for students and ' . (int)$extraguidelinependingcount . ' pending. They are not sent to Board, Mock, or Simulation Exams.'; ?></p>
+        </div>
+        <div class="question-bank__editor-actions">
+            <?php if ($extraguidelinereadycount > 0): ?>
+            <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" onsubmit="return confirm('<?php echo $extraguidelineispublished ? ($displaylang === 'es' ? '¿Volver a publicar la colección Extra guideline con todas las preguntas completas actuales?' : 'Republish the Extra guideline collection with all currently complete questions?') : ($displaylang === 'es' ? '¿Publicar todas las preguntas completas en la colección Extra guideline independiente?' : 'Publish all complete questions in the independent Extra guideline collection?'); ?>');">
+                <input type="hidden" name="formaction" value="publishextraguideline">
+                <input type="hidden" name="returnreview" value="extra_guideline">
+                <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
+                <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                <button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $extraguidelineispublished ? ($displaylang === 'es' ? 'Volver a publicar colección' : 'Republish collection') : ($displaylang === 'es' ? 'Publicar colección' : 'Publish collection'); ?></button>
+            </form>
+            <?php else: ?>
+            <span class="question-bank__button question-bank__button--approve" aria-disabled="true" title="<?php echo $displaylang === 'es' ? 'Complete el inglés, español, cuatro opciones y explicación de al menos una pregunta.' : 'Complete English, Spanish, four options, and explanation for at least one question.'; ?>"><?php echo $displaylang === 'es' ? 'Publicar colección' : 'Publish collection'; ?></span>
+            <?php endif; ?>
+            <?php if ($extraguidelineispublished): ?><a class="question-bank__button" href="<?php echo $extraguidelinestudenturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?>
+            <a class="question-bank__button" href="<?php echo $exammanagerreturnurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Exam builder' : 'Exam builder'; ?></a>
+        </div>
+    </section>
+    <?php endif; ?>
     <?php if ($usagefilter === 'exam_project_pending' && $query !== '' && $resultcount === 1): $focusedquestionid = (string)$filteredquestions[0]['questionId']; ?><section class="question-bank__review-progress"><strong><?php echo s((string)$currentexamproject['name']); ?> — focused question ready</strong><p><a class="question-bank__button question-bank__button--publish" href="#question-<?php echo s($focusedquestionid); ?>"><?php echo $displaylang === 'es' ? 'Continuar, revisar y publicar esta pregunta' : 'Continue, review and publish this question'; ?></a><?php if ($pendingexamprojecturl !== null): ?> <a class="question-bank__button" href="<?php echo $pendingexamprojecturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Omitir y volver a las pendientes' : 'Skip and return to pending questions'; ?></a><?php endif; ?></p></section><?php endif; ?>
     <?php if ($usagefilter === 'exam_project_pending' && $projectduplicatecandidateids !== []): ?>
     <section class="question-bank__publish-readiness is-ready"><strong><?php echo $displaylang === 'es' ? 'Duplicados retirados de la cola:' : 'Duplicates removed from the queue:'; ?></strong>
@@ -15551,6 +15586,8 @@ echo $OUTPUT->header();
                             : ''))));
         $revision = $question['_revision'];
         $revisionstatus = (string)($revision['status'] ?? '');
+        $cardextraguidelinepublishable = $revisionstatus === 'extra_guideline'
+            && $isextraguidelinepublishable($question);
         $fullrevision = $questionrevisionrecord;
         $visibleinstructionparts = array_map(
             'strval',
@@ -15748,6 +15785,19 @@ echo $OUTPUT->header();
             <?php endif; ?>
             <?php if (!in_array($revisionstatus, ['study_archive', 'extra_guideline', 'deleted'], true) && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts') && !$inlineapproval): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar manualmente' : 'Edit manually'; ?></a><?php endif; ?>
             <?php if (!$iscustomdraft && !in_array($revisionstatus, ['study_archive', 'extra_guideline', 'deleted'], true)): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="saveextraguideline"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--similar" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Mover esta pregunta al banco independiente Extra guideline? Se quitará de Board, Mock y Simulation Exams.' : 'Move this question to the independent Extra guideline bank? It will be removed from Board, Mock, and Simulation Exams.'; ?>');"><?php echo $cardreviewedforextraguideline ? ($displaylang === 'es' ? 'Guardar revisión en Extra' : 'Save reviewed question to Extra') : 'Extra guideline bank'; ?></button></form><?php endif; ?>
+            <?php if ($revisionstatus === 'extra_guideline'): ?>
+                <?php if ($cardextraguidelinepublishable): ?>
+                <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" onsubmit="return confirm('<?php echo $displaylang === 'es' ? '¿Publicar la colección Extra guideline con todas las preguntas completas actuales?' : 'Publish the Extra guideline collection with all currently complete questions?'; ?>');">
+                    <input type="hidden" name="formaction" value="publishextraguideline">
+                    <input type="hidden" name="returnreview" value="extra_guideline">
+                    <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
+                    <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                    <button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $extraguidelineispublished ? ($displaylang === 'es' ? 'Volver a publicar Extra' : 'Republish Extra') : ($displaylang === 'es' ? 'Publicar colección Extra' : 'Publish Extra collection'); ?></button>
+                </form>
+                <?php else: ?>
+                <span class="question-bank__button question-bank__button--approve" aria-disabled="true" title="<?php echo $displaylang === 'es' ? 'Esta pregunta necesita inglés, español, cuatro opciones y explicación completos.' : 'This question needs complete English, Spanish, four choices, and explanation.'; ?>"><?php echo $displaylang === 'es' ? 'Completar antes de publicar' : 'Complete before publishing'; ?></span>
+                <?php endif; ?>
+            <?php endif; ?>
             <?php if (!$iscustomdraft && $revisionstatus !== 'deleted'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'extra_guideline' ? 'restoreextraguideline' : ($revisionstatus === 'study_archive' ? 'restoremockquestion' : 'sendtomock'); ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo in_array($revisionstatus, ['study_archive', 'extra_guideline'], true) ? 'question-bank__button--primary' : 'question-bank__button--similar'; ?>" type="submit"<?php if (!in_array($revisionstatus, ['study_archive', 'extra_guideline'], true)): ?> onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Enviar esta pregunta al Mock correspondiente? Se conservará completa, saldrá del banco board y se clasificará según su dominio.' : 'Send this question to the matching Mock category? It will be preserved in full, removed from the board bank and classified by its domain.'; ?>');"<?php endif; ?>><?php echo $revisionstatus === 'extra_guideline' ? ($displaylang === 'es' ? 'Restaurar como borrador' : 'Restore as draft') : ($revisionstatus === 'study_archive' ? ($displaylang === 'es' ? 'Quitar de Mock y restaurar al board' : 'Remove from Mock and restore to board') : ($displaylang === 'es' ? 'Enviar a Mock' : 'Send to Mock')); ?></button></form><?php endif; ?>
             <?php if (!$iscustomdraft): ?><form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="<?php echo $revisionstatus === 'deleted' ? 'restoredeletedquestion' : 'deletequestion'; ?>"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="returnusage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="returnreview" value="<?php echo s($reviewfilter); ?>"><input type="hidden" name="returnaibatch" value="<?php echo s($aibatchfilter); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $revisionstatus === 'deleted' ? 'question-bank__button--primary' : 'question-bank__button--exclude'; ?>" type="submit"<?php if ($revisionstatus !== 'deleted'): ?> onclick="return confirm('Delete this question from the active bank and exams? You can restore it later from Deleted questions.');"<?php endif; ?>><?php echo $revisionstatus === 'deleted' ? 'Restore question' : 'Delete question'; ?></button></form><?php endif; ?>
             <?php endif; ?>
@@ -15853,7 +15903,11 @@ echo $OUTPUT->header();
         $sourcecardurl = (string)($question['sourceCard'][$displaylang === 'es' ? 'urlEs' : 'url'] ?? '');
         $sourcecardlabel = (string)($question['sourceCard'][$displaylang === 'es' ? 'labelEs' : 'label'] ?? 'Open source card');
         if ($sourcecardurl !== ''):
-        ?> · <a href="<?php echo s($sourcecardurl); ?>" target="_blank" rel="noopener"><?php echo s($sourcecardlabel); ?></a><?php endif; ?></p><?php if (!$question['_ready']): ?><div class="question-bank__missing">Missing for practice readiness: <?php echo s(implode(', ', $question['_missing'])); ?>.</div><?php endif; ?>
+        ?> · <a href="<?php echo s($sourcecardurl); ?>" target="_blank" rel="noopener"><?php echo s($sourcecardlabel); ?></a><?php endif; ?></p>
+        <?php if ($revisionstatus === 'extra_guideline'): ?>
+            <?php if ($cardextraguidelinepublishable): ?><div class="question-bank__publish-readiness is-ready"><strong><?php echo $displaylang === 'es' ? 'Lista para publicar en Extra guideline.' : 'Ready for Extra guideline publication.'; ?></strong> <?php echo $displaylang === 'es' ? 'La exclusión de Board es intencional y no bloquea esta colección independiente.' : 'Its Board exclusion is intentional and does not block this independent collection.'; ?></div>
+            <?php else: ?><div class="question-bank__missing"><strong><?php echo $displaylang === 'es' ? 'Pendiente para Extra guideline:' : 'Pending for Extra guideline:'; ?></strong> <?php echo $displaylang === 'es' ? 'complete el inglés, español, cuatro opciones y explicación.' : 'complete English, Spanish, four choices, and explanation.'; ?></div><?php endif; ?>
+        <?php elseif (!$question['_ready']): ?><div class="question-bank__missing">Missing for practice readiness: <?php echo s(implode(', ', $question['_missing'])); ?>.</div><?php endif; ?>
         <?php if ($iscustomapproved): ?><section class="question-bank__decision-panel" aria-label="Continue after approving <?php echo s($question['questionId']); ?>"><div class="question-bank__applied-summary"><strong>Question approved and active.</strong> You can edit it, create another question, or return to the complete question bank.</div><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--approve" type="button" disabled>Approved and published ✓</button><a class="question-bank__button question-bank__button--publish" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar esta pregunta' : 'Edit this question'; ?></a><a class="question-bank__button question-bank__button--primary" href="<?php echo $newquestionurl->out(false); ?>#new-question">Create another question</a><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Return to all questions</a></div></section><?php endif; ?>
         <?php if ($iscustomdraft): ?><section class="question-bank__decision-panel" aria-label="Review new question <?php echo s($question['questionId']); ?>"><?php if ($customreviewsummary !== ''): ?><div class="question-bank__applied-summary"><strong>Created from your idea:</strong> <?php echo s($customreviewsummary); ?></div><?php endif; ?><?php if ($customoriginalityclear): ?><div class="question-bank__applied-summary"><strong>Originality check:</strong> compared with <?php echo (int)($customoriginality['comparedCount'] ?? 0); ?> bank questions; no near duplicate detected.<?php if (!empty($customoriginality['nearestQuestionId'])): ?> Closest item: <?php echo s((string)$customoriginality['nearestQuestionId']); ?> (<?php echo s((string)$customoriginality['similarityPercent']); ?>%).<?php endif; ?></div><?php else: ?><div class="question-bank__ai-draft-note">This draft predates the originality check. Run the check before approving it; no comment is required.</div><?php endif; ?><?php if ($customguidelineverified): ?><div class="question-bank__applied-summary"><strong>Guideline check:</strong> all named herbs and formulas were verified against the current 2026 Appendix A and Appendix C rosters; Pinyin is shown without tone marks.</div><?php else: ?><div class="question-bank__publish-error"><strong>Guideline check blocked publication:</strong> <?php echo s(implode(' | ', $customguidelineviolations)); ?></div><?php endif; ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><label>What should I change?<textarea name="correction"<?php echo $customoriginalityclear ? ' required' : ''; ?> placeholder="<?php echo $customoriginalityclear ? 'Describe only the correction you want. The revised question will return here for another review.' : 'Optional: add a correction, or leave blank to run the originality check.'; ?>"></textarea></label><input type="hidden" name="formaction" value="rewritecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $customoriginalityclear ? 'Revise draft' : 'Run originality check'; ?></button></div></form><div class="question-bank__decision-actions"><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvecustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $customcanpublish ? '' : ' disabled title="' . s($custompublishblocker) . '"'; ?><?php if ($customcanpublish): ?> onclick="return confirm('Approve and publish this question?');"<?php endif; ?>><?php echo $customcanpublish ? 'Approve and publish' : s($custompublishblocker); ?></button></form><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="discardcustomquestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--exclude" type="submit" onclick="return confirm('<?php echo $customhasapprovedversion ? 'Cancel editing and keep the previously approved version?' : 'Discard this new-question draft?'; ?>');"><?php echo $customhasapprovedversion ? 'Cancel editing' : 'Discard draft'; ?></button></form></div></section><?php endif; ?>
         <?php if ($iscustomdraft && !$customguidelineverified): ?>
