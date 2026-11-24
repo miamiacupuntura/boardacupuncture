@@ -44,6 +44,21 @@ for relative in "${FILES[@]}"; do
     }
 done
 
+php -r '
+$data = json_decode((string)file_get_contents($argv[1]), true);
+exit(count((array)($data["pairs"] ?? [])) === 51 ? 0 : 1);
+' "$MOODLE_ROOT/blocks/myprogress/dui-yao-smart-data.json" || {
+    echo "ERROR: se requiere la tabla vigente de 51 Duì Yào." >&2
+    exit 1
+}
+php -r '
+$data = json_decode((string)file_get_contents($argv[1]), true);
+exit(count((array)($data["formulas"] ?? [])) === 63 ? 0 : 1);
+' "$MOODLE_ROOT/blocks/myprogress/formulas-study-guide-data.json" || {
+    echo "ERROR: se requieren los 63 perfiles profundos de fórmulas para elegir una base compatible." >&2
+    exit 1
+}
+
 TEMP_DIR="$(mktemp -d)"
 BACKUP_DIR="$BACKUP_ROOT/extra-guideline-bank-$(date +%Y%m%d-%H%M%S)"
 cleanup() {
@@ -116,8 +131,10 @@ grep -Fq '$preservecorrectchoice' "$TEMP_DIR/blocks/myprogress/admin-herbology-q
 grep -Fq 'if ($editquestion !== null):' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'builtin-two-stage-dui-yao-formula-modification' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Clinical return: modify a formula with a Dui Yao' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq 'SELECTED VERIFIED DIRECT-ADDITION RELATIONSHIPS' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq 'The clinical-return item must show the initial base formula' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'SELECTED VERIFIED CLINICAL-RETURN EVIDENCE' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Each question must use one of the 51 official Appendix B pairs' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "'kind' => 'individualized'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'The clinical-return item must show the supplied base formula' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "'publishedExtraGuideline' => null" "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq 'Student view for the separately published Extra guideline collection' "$TEMP_DIR/blocks/menu/herbology-extra-guideline.php"
@@ -192,8 +209,10 @@ grep -Fq '$preservecorrectchoice' "$MOODLE_ROOT/blocks/myprogress/admin-herbolog
 grep -Fq 'if ($editquestion !== null):' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'builtin-two-stage-dui-yao-formula-modification' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Clinical return: modify a formula with a Dui Yao' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq 'SELECTED VERIFIED DIRECT-ADDITION RELATIONSHIPS' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq 'The clinical-return item must show the initial base formula' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'SELECTED VERIFIED CLINICAL-RETURN EVIDENCE' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Each question must use one of the 51 official Appendix B pairs' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "'kind' => 'individualized'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'The clinical-return item must show the supplied base formula' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Student view for the separately published Extra guideline collection' "$MOODLE_ROOT/blocks/menu/herbology-extra-guideline.php"
 grep -Fq 'Open Extra guideline →' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 
@@ -233,5 +252,5 @@ echo "OK: las preguntas ya aprobadas se incorporan al examen activo y no reapare
 echo "OK: la reparación de un distractor de fórmula no se confunde con una solicitud de añadir hierbas visibles."
 echo "OK: la reparación automática bloquea por código cualquier cambio de la respuesta correcta y no se ofrece cuando la respuesta correcta está fuera del guideline."
 echo "OK: si la respuesta correcta está fuera del roster, Automatically review conserva la clave y completa feedback/español en modo Extra sin publicar."
-echo "OK: el creador de Duì Yào incluye una plantilla clínica de regreso: fórmula base, varios días de tratamiento, síntomas nuevos, pareja añadida y fórmula resultante."
+echo "OK: la plantilla clínica de regreso rota entre los 51 Duì Yào oficiales; usa nombre clásico solo en 4 adiciones directas y conserva las demás como prescripciones individualizadas."
 echo "RESPALDO: $BACKUP_DIR"
