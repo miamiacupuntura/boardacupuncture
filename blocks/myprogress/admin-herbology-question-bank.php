@@ -5742,6 +5742,15 @@ foreach (($revisionstore['examProjects'] ?? []) as $storedexamid => $storedexam)
 uasort($examprojects, static function(array $left, array $right): int {
     return strcmp((string)($left['createdAt'] ?? ''), (string)($right['createdAt'] ?? ''));
 });
+$questionassignedtoexamlookup = $questionsusedinpriorexams;
+foreach ($examprojects as $storedexam) {
+    foreach ((array)($storedexam['questionIds'] ?? []) as $storedexamquestionid) {
+        $storedexamquestionid = (string)$storedexamquestionid;
+        if ($storedexamquestionid !== '') {
+            $questionassignedtoexamlookup[$storedexamquestionid] = true;
+        }
+    }
+}
 if (isset($examprojects[$similarityexam])) {
     // The selector inside the similarity finder is authoritative even when the
     // page URL still carries a previously opened exam project.
@@ -12531,7 +12540,8 @@ $filteredquestions = array_values(array_filter(
         $currentexamquestionids,
         $currentexamcandidateids,
         $isprocessedquestion,
-        $reservequestionidlookup
+        $reservequestionidlookup,
+        $questionassignedtoexamlookup
     ): bool {
         if ($custompreviewids !== []
                 && !in_array((string)($question['questionId'] ?? ''), $custompreviewids, true)) {
@@ -12594,6 +12604,13 @@ $filteredquestions = array_values(array_filter(
                 )) return false;
         if ($examprojectid !== '' && $examprojectview === 'included'
                 && !in_array((string)$question['questionId'], $currentexamquestionids, true)) return false;
+        // Candidate views must never show a question that already belongs to
+        // Exam 1, a published Simulation Exam, or any saved exam project.
+        // Included-question views remain available for editing the exam that
+        // already owns the question.
+        if ($examprojectid !== ''
+                && $examprojectview === 'candidates'
+                && isset($questionassignedtoexamlookup[(string)$question['questionId']])) return false;
         $questioncontent = (string)($question['contentType'] ?? 'other');
         if ($contentfilter !== 'all') {
             if ($contentfilter === 'other') {
