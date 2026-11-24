@@ -94,6 +94,8 @@ grep -Fq "'guide-formula-roster-title'" "$TEMP_DIR/blocks/myprogress/admin-herbo
 grep -Fq 'Appendix A · Herbs' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Appendix B · Duì Yào' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Appendix C · Formulas' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Editar distractores' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'if ($editquestion !== null):' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "'publishedExtraGuideline' => null" "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq 'Mock-only, Extra guideline and recycled administrator questions' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq 'Student view for the separately published Extra guideline collection' "$TEMP_DIR/blocks/menu/herbology-extra-guideline.php"
@@ -146,6 +148,8 @@ grep -Fq 'name="formaction" value="publishextraguideline"' "$MOODLE_ROOT/blocks/
 grep -Fq "'appendix-a-current-roster'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "'dui-yao-annex'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "'guide-formula-roster-title'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Editar distractores' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'if ($editquestion !== null):' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Student view for the separately published Extra guideline collection' "$MOODLE_ROOT/blocks/menu/herbology-extra-guideline.php"
 grep -Fq 'Open Extra guideline →' "$MOODLE_ROOT/blocks/menu/herbology-board.php"
 

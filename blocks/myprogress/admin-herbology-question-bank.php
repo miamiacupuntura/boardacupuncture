@@ -14208,7 +14208,7 @@ echo $OUTPUT->header();
     </section>
     <?php endif; ?>
     <?php if (in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true)): ?><section class="question-bank__ai-batch"><p><strong>Automatic editorial review — five questions at a time</strong><br>The reviewer prepares complete inference-focused mock questions, guideline terminology, answer choices, explicit concept-to-choice mappings, distractor analysis, feedback and classification. Repeated formula or herb answers are rotated, when their source cards support it, into ingredient hierarchy, distinctive dosage, preparation, processing, composition or modification questions. Unsupported facts are never invented. It also updates the oldest pending drafts created with an earlier reviewer while preserving their accumulated instructions. You only give the final approval, edit when necessary, or request another rewrite. Nothing is published without your approval.<?php if (!$textaienabled): ?><br><strong>Generate text is not enabled in Moodle AI providers.</strong><?php endif; ?></p><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="generateaidrafts"><?php if ($usagefilter === 'exam_project_pending' && $examprojectid !== ''): ?><input type="hidden" name="usage" value="exam_project_pending"><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>>Update or review next 5 questions</button></form></section><?php endif; ?>
-    <?php if ($editquestion !== null && ($usagefilter !== 'exam2_review' || $reviewfilter === 'ai_drafts')):
+    <?php if ($editquestion !== null):
         $editorstatus = (string)($editorrevision['status'] ?? 'original');
         $editorisaidraft = $editorstatus === 'draft'
             && !empty($editorrevisionfull['aiBatchId']);
@@ -14828,6 +14828,12 @@ echo $OUTPUT->header();
         </section>
         <?php endif; ?>
         <?php if ($inlineapproval): ?>
+        <section class="question-bank__decision-panel" aria-label="<?php echo $displaylang === 'es' ? 'Editar respuestas manualmente' : 'Edit answers manually'; ?>">
+            <div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? '¿Solo necesita cambiar un distractor?' : 'Only need to replace a distractor?'; ?></strong> <?php echo $displaylang === 'es'
+                ? 'Abra el editor manual, cambie la opción incorrecta y guarde. La pregunta permanecerá en esta revisión hasta que usted la apruebe.'
+                : 'Open the manual editor, replace the incorrect choice, and save. The question will remain in this review until you approve it.'; ?></div>
+            <div class="question-bank__decision-actions"><a class="question-bank__button question-bank__button--publish question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar distractores' : 'Edit distractors'; ?></a></div>
+        </section>
         <details class="question-bank__correction-request">
             <summary><?php echo $displaylang === 'es' ? 'Solicitar otro cambio' : 'Request another change'; ?></summary>
             <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
