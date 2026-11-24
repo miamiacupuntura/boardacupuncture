@@ -8962,10 +8962,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     if (!isset($generalinstructiontemplates[$usedinstructiontemplateid])) {
         $usedinstructiontemplateid = '';
     }
+    $normalizedinstructionidea = core_text::strtolower(core_text::specialtoascii($idea));
+    $twostageinstructioncontentdetected = core_text::strpos(
+        $normalizedinstructionidea,
+        'clinical return: modify a base formula by adding a dui yao'
+    ) !== false
+        || (
+            core_text::strpos($normalizedinstructionidea, 'several days pass') !== false
+            && core_text::strpos($normalizedinstructionidea, 'patient returns') !== false
+            && core_text::strpos($normalizedinstructionidea, 'resulting prescription') !== false
+            && core_text::strpos($normalizedinstructionidea, 'dui yao') !== false
+        );
     $twostageduiyaomodificationrequest = $usedinstructiontemplateid
-        === $twostageduiyaoinstructiontemplateid;
+            === $twostageduiyaoinstructiontemplateid
+        || $twostageinstructioncontentdetected;
     if ($twostageduiyaomodificationrequest) {
         $customtargetdomain = 'dui_yao';
+        if ($usedinstructiontemplateid === '') {
+            // Preserve the mode when an administrator pasted the built-in text,
+            // or when a link/form lost its hidden template identifier.
+            $usedinstructiontemplateid = $twostageduiyaoinstructiontemplateid;
+        }
     }
     $correction = $iscustomrewrite ? trim(required_param('correction', PARAM_RAW)) : '';
     if ($idea === '' || core_text::strlen($idea) > 60000) {
