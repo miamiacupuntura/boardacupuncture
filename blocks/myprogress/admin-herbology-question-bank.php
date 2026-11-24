@@ -175,6 +175,26 @@ foreach ((array)$guidelineherbroster['herbs'] as $guidelineherb) {
         $guidelineherblatin[$herblatin] = (string)($guidelineherb['name'] ?? '');
     }
 }
+$obsoleteherbnames = [];
+$obsoleteherblatin = [];
+foreach (block_myprogress_herbology_obsolete_substance_roster() as $obsoletesubstance) {
+    $obsoletename = trim((string)($obsoletesubstance['name'] ?? ''));
+    $obsoletelatin = trim((string)($obsoletesubstance['latin'] ?? ''));
+    $normalizedobsoletename = $normalizeguidelinename($obsoletename);
+    $normalizedobsoletelatin = $normalizeguidelinename($obsoletelatin);
+    if ($normalizedobsoletename === '' || $normalizedobsoletelatin === '') {
+        continue;
+    }
+    $obsoleterecord = ['name' => $obsoletename, 'latin' => $obsoletelatin];
+    $obsoleteherbnames[$normalizedobsoletename] = $obsoleterecord;
+    foreach ((array)($obsoletesubstance['aliases'] ?? []) as $obsoletealias) {
+        $normalizedobsoletealias = $normalizeguidelinename((string)$obsoletealias);
+        if ($normalizedobsoletealias !== '') {
+            $obsoleteherbnames[$normalizedobsoletealias] = $obsoleterecord;
+        }
+    }
+    $obsoleteherblatin[$normalizedobsoletelatin] = $obsoleterecord;
+}
 $guidelineformulanames = [];
 $guidelineformulaenglish = [];
 $guidelineformulachapterbyname = [];
@@ -2706,6 +2726,8 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
     $normalizeguidelinename,
     $guidelineherbnames,
     $guidelineherblatin,
+    $obsoleteherbnames,
+    $obsoleteherblatin,
     $guidelineformulanames,
     $guidelineformulaenglish,
     $guidelineformulaaliases,
@@ -2719,6 +2741,15 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
         $herblatin = trim((string)($herbrecord['pharmaceuticalName'] ?? ''));
         $normalizedherb = $resolveguidelineherbname($herbname);
         $normalizedlatin = $normalizeguidelinename($herblatin);
+        $obsoleterecord = $obsoleteherbnames[$normalizedherb]
+            ?? $obsoleteherblatin[$normalizedlatin]
+            ?? null;
+        if (is_array($obsoleterecord)) {
+            $violations['obsolete-herb:' . $normalizeguidelinename((string)$obsoleterecord['name'])]
+                = 'Obsolete substance outside active Appendix A: '
+                    . (string)$obsoleterecord['name'] . ' (' . (string)$obsoleterecord['latin'] . ')';
+            continue;
+        }
         if ($normalizedlatin !== '' && isset($guidelineherblatin[$normalizedlatin])) {
             $expectedherb = $normalizeguidelinename($guidelineherblatin[$normalizedlatin]);
             if ($normalizedherb !== $expectedherb) {
@@ -2769,10 +2800,21 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
         $normalizedcandidate = $stripguidelineinstructionprefixes($normalizeddisplay);
         $normalizedparenthetical = $normalizeguidelinename($parenthetical);
         $normalizedformula = $formulaaliases[$normalizedcandidate] ?? $normalizedcandidate;
+        $resolvedvisibleherb = $resolveguidelineherbname($displayname);
+        $visibleobsoleterecord = $obsoleteherbnames[$resolvedvisibleherb]
+            ?? $obsoleteherblatin[$normalizedparenthetical]
+            ?? null;
+        if (is_array($visibleobsoleterecord)) {
+            $violations['obsolete-herb:'
+                . $normalizeguidelinename((string)$visibleobsoleterecord['name'])]
+                = 'Obsolete substance outside active Appendix A: '
+                    . (string)$visibleobsoleterecord['name']
+                    . ' (' . (string)$visibleobsoleterecord['latin'] . ')';
+            continue;
+        }
         if (isset($guidelineherblatin[$normalizedparenthetical])) {
             $expectedherb = $normalizeguidelinename($guidelineherblatin[$normalizedparenthetical]);
-            $normalizedherbcandidate = $resolveguidelineherbname($displayname);
-            if ($normalizedherbcandidate !== $expectedherb) {
+            if ($resolvedvisibleherb !== $expectedherb) {
                 $violations['herb-mismatch:' . $normalizeddisplay] = 'Herb name does not match Appendix A: '
                     . $displayname . ' (' . $parenthetical . ')';
             }
@@ -2789,7 +2831,6 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
             }
             continue;
         }
-        $resolvedvisibleherb = $resolveguidelineherbname($displayname);
         if (isset($guidelineherbnames[$resolvedvisibleherb])
                 || isset($guidelineformulanames[$normalizedformula])) {
             continue;
@@ -2807,6 +2848,16 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
             $violations['formula:' . $normalizeddisplay] = 'Formula outside Appendix C: '
                 . $displayname . ' (' . $parenthetical . ')';
         }
+    }
+    $normalizedvisibletext = ' ' . $normalizeguidelinename($visibletext) . ' ';
+    foreach ($obsoleteherbnames as $normalizedobsoletename => $obsoleterecord) {
+        if ($normalizedobsoletename === ''
+                || core_text::strpos($normalizedvisibletext, ' ' . $normalizedobsoletename . ' ') === false) {
+            continue;
+        }
+        $violations['obsolete-herb:' . $normalizeguidelinename((string)$obsoleterecord['name'])]
+            = 'Obsolete substance outside active Appendix A: '
+                . (string)$obsoleterecord['name'] . ' (' . (string)$obsoleterecord['latin'] . ')';
     }
     // A formula name must remain inside one visible field. The question
     // fields are joined with newlines above, so \s+ would incorrectly join
@@ -15915,6 +15966,8 @@ echo $OUTPUT->header();
             <?php if (!in_array($revisionstatus, ['study_archive', 'extra_guideline', 'deleted'], true)): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar' : 'Edit'; ?></a><?php endif; ?>
             <?php if (is_array($questionactionexamproject) && !$inlineapproval && !$question['_excluded'] && ($question['_ready'] || $questioncanpublishdirectlytoexam) && ($questioninexamproject || (($cardguidelineverified || $cardguidelineoverrideactive) && !$questionusedinpriorexam))): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($questionactionexamprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar' : 'Remove') : ($displaylang === 'es' ? 'Agregar' : 'Add'); ?></button></form><?php endif; ?>
             <?php if (!$questioninexamproject && $questionusedinpriorexam): ?><button class="question-bank__button" type="button" disabled title="<?php echo s(($displaylang === 'es' ? 'Ya utilizada en ' : 'Already used in ') . $questionpriorexamtext); ?>"><?php echo $displaylang === 'es' ? 'Usada · ' : 'Used · '; ?><?php echo s($questionpriorexamtext); ?></button><?php endif; ?>
+            <?php if ($cardguidelineextraautoreview && !$cardreviewedforextraguideline && !$question['_excluded']): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="reviewforextraguideline" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar para Extra' : 'Review for Extra'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
+            <?php if ($cardreviewedforextraguideline): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="saveextraguideline"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--similar" type="submit"><?php echo $displaylang === 'es' ? 'Guardar en Extra' : 'Save to Extra'; ?></button></form><?php endif; ?>
             <?php if (!$question['_excluded']): ?><a class="question-bank__button question-bank__button--similar" href="<?php echo $questionsimilarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Similares' : 'Similar'; ?></a><?php endif; ?>
             <?php else: ?>
             <?php if (!$inlineapproval): ?>

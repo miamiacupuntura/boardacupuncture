@@ -144,9 +144,41 @@ function block_myprogress_herbology_remove_pinyin_tones_from_question(array $que
 }
 
 /**
- * Return the official Appendix A/C Pinyin display names and one reusable
- * case-insensitive matcher. The matcher is built once per request because it
- * is applied to thousands of questions in the administrator bank.
+ * Source-supported obsolete substances used only for safety recognition.
+ * They are deliberately not part of the active Appendix A roster.
+ */
+function block_myprogress_herbology_obsolete_substance_roster(): array {
+    return [
+        ['name' => 'Zhu Sha', 'latin' => 'Cinnabaris'],
+        ['name' => 'Ying Su Ke', 'latin' => 'Papaveris Pericarpium'],
+        ['name' => 'Ma Qian Zi', 'latin' => 'Strychni Semen'],
+        ['name' => 'Lei Gong Teng', 'latin' => 'Tripterygii wilfordii Radix'],
+        ['name' => 'Ma Dou Ling', 'latin' => 'Aristolochiae Fructus'],
+        ['name' => 'Guan Mu Tong', 'latin' => 'Aristolochiae manshuriensis Caulis'],
+        ['name' => 'Guang Fang Ji', 'latin' => 'Aristolochiae fangchi Radix'],
+        ['name' => 'Xun Gu Feng', 'latin' => 'Aristolochiae mollissimae Herba'],
+        [
+            'name' => 'Qing Fen',
+            'latin' => 'Calomelas',
+            'aliases' => ['Qi Feng'],
+            'latinAliases' => ['Calomela'],
+        ],
+        ['name' => 'Xiong Huang', 'latin' => 'Realgar'],
+        ['name' => 'Mi Tuo Seng', 'latin' => 'Lithargyrum'],
+        ['name' => 'Peng Sha', 'latin' => 'Borax'],
+        ['name' => 'Xiong Dan', 'latin' => 'Vesica Fellea Ursi'],
+        ['name' => 'Chuan Shan Jia', 'latin' => 'Manitis Squama'],
+        ['name' => 'Dai Mao', 'latin' => 'Eretmochelydis Carapax'],
+        ['name' => 'Hou Zao', 'latin' => 'Macacae mulattae Calculus'],
+        ['name' => 'Hu Gu', 'latin' => 'Tigris Os'],
+    ];
+}
+
+/**
+ * Return the official Appendix A/C Pinyin display names, the recognized
+ * obsolete safety names, and one reusable case-insensitive matcher. The
+ * matcher is built once per request because it is applied to thousands of
+ * questions in the administrator bank.
  */
 function block_myprogress_herbology_official_pinyin_case_data(): array {
     global $CFG;
@@ -170,6 +202,57 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
             preg_split('/\s+/u', trim($name), -1, PREG_SPLIT_NO_EMPTY)
         ));
     };
+    $addherbdisplay = static function(
+        string $officialname,
+        string $officiallatin,
+        array $aliases = [],
+        array $additionallatinaliases = []
+    ) use (
+        &$canonicalnames,
+        &$herbdisplays,
+        &$herbpinyinpatterns,
+        &$herblatinpatterns,
+        $pharmaceuticalparts,
+        $flexiblepattern
+    ): void {
+        $officiallatin = trim($officiallatin);
+        if (trim($officialname) === '' || $officiallatin === '') {
+            return;
+        }
+        $latinaliases = array_values(array_unique(array_merge([$officiallatin], $additionallatinaliases)));
+        $latinwords = preg_split('/\s+/u', $officiallatin, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        foreach ($latinwords as $latinindex => $latinword) {
+            if (!in_array(strtolower($latinword), $pharmaceuticalparts, true) || $latinindex === 0) {
+                continue;
+            }
+            $legacywords = $latinwords;
+            unset($legacywords[$latinindex]);
+            array_unshift($legacywords, $latinword);
+            $latinaliases[] = implode(' ', $legacywords);
+        }
+        $normalizedlatinaliases = [];
+        foreach (array_values(array_unique($latinaliases)) as $latinalias) {
+            $normalizedlatin = strtolower((string)preg_replace('/\s+/u', ' ', trim($latinalias)));
+            if ($normalizedlatin === '') {
+                continue;
+            }
+            $normalizedlatinaliases[$normalizedlatin] = true;
+            $herblatinpatterns[$normalizedlatin] = $flexiblepattern($latinalias);
+        }
+        foreach (array_values(array_unique(array_merge([$officialname], $aliases))) as $pinyinname) {
+            $lookupname = strtolower((string)preg_replace('/\s+/u', ' ', trim((string)$pinyinname)));
+            if ($lookupname === '') {
+                continue;
+            }
+            $canonicalnames[$lookupname] = $officialname;
+            $herbdisplays[$lookupname] = [
+                'name' => $officialname,
+                'latin' => $officiallatin,
+                'latinAliases' => $normalizedlatinaliases,
+            ];
+            $herbpinyinpatterns[$lookupname] = $flexiblepattern((string)$pinyinname);
+        }
+    };
     foreach ([
         [$CFG->dirroot . '/blocks/myprogress/single-herb-card-index.json', 'herbs'],
         [$CFG->dirroot . '/blocks/myprogress/formula-board-roster-2026.json', 'formulas'],
@@ -188,36 +271,16 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
                 continue;
             }
             $officiallatin = trim((string)($record['latin'] ?? ''));
-            if ($officiallatin === '') {
-                continue;
-            }
-            $latinaliases = [$officiallatin];
-            $latinwords = preg_split('/\s+/u', $officiallatin, -1, PREG_SPLIT_NO_EMPTY) ?: [];
-            foreach ($latinwords as $latinindex => $latinword) {
-                if (!in_array(strtolower($latinword), $pharmaceuticalparts, true) || $latinindex === 0) {
-                    continue;
-                }
-                $legacywords = $latinwords;
-                unset($legacywords[$latinindex]);
-                array_unshift($legacywords, $latinword);
-                $latinaliases[] = implode(' ', $legacywords);
-            }
-            $normalizedlatinaliases = [];
-            foreach (array_values(array_unique($latinaliases)) as $latinalias) {
-                $normalizedlatin = strtolower((string)preg_replace('/\s+/u', ' ', trim($latinalias)));
-                if ($normalizedlatin === '') {
-                    continue;
-                }
-                $normalizedlatinaliases[$normalizedlatin] = true;
-                $herblatinpatterns[$normalizedlatin] = $flexiblepattern($latinalias);
-            }
-            $herbdisplays[$lookupname] = [
-                'name' => $officialname,
-                'latin' => $officiallatin,
-                'latinAliases' => $normalizedlatinaliases,
-            ];
-            $herbpinyinpatterns[$lookupname] = $flexiblepattern($officialname);
+            $addherbdisplay($officialname, $officiallatin);
         }
+    }
+    foreach (block_myprogress_herbology_obsolete_substance_roster() as $obsoletesubstance) {
+        $addherbdisplay(
+            (string)($obsoletesubstance['name'] ?? ''),
+            (string)($obsoletesubstance['latin'] ?? ''),
+            (array)($obsoletesubstance['aliases'] ?? []),
+            (array)($obsoletesubstance['latinAliases'] ?? [])
+        );
     }
     if ($canonicalnames === []) {
         $data = [
