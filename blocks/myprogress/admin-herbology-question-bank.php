@@ -11318,7 +11318,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         bool $enforcefeedbackquality = true,
         array $preservedoutsiderosternames = [],
         bool $preservesourcequestiontext = false,
-        bool $preservecorrectchoice = false
+        bool $preservecorrectchoice = false,
+        array $feedbackguidelineviolations = []
     ) use (
         $buildchannelherbmapping,
         $ensurechannelherbmappingfeedback,
@@ -11342,6 +11343,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $decoded = json_decode($generated, true, 512, JSON_THROW_ON_ERROR);
         if (!is_array($decoded)) {
             throw new UnexpectedValueException('The AI response is not a JSON object.');
+        }
+        if ($feedbackguidelineviolations !== []) {
+            // Providers may copy an invalid formula or herb from the source
+            // explanation even after being told to remove it. Clean only the
+            // feedback fields before either validation pass; the stem, choices
+            // and keyed answer remain untouched.
+            $sanitizefeedback = static function(
+                string $feedback,
+                bool $spanish
+            ) use ($feedbackguidelineviolations): string {
+                foreach ($feedbackguidelineviolations as $violation) {
+                    if (preg_match(
+                        '/:\s*([^|(]+?)(?:\s*\(|$)/u',
+                        (string)$violation,
+                        $namematch
+                    ) !== 1) {
+                        continue;
+                    }
+                    $invalidname = trim((string)$namematch[1]);
+                    if ($invalidname === '') {
+                        continue;
+                    }
+                    $quotedname = preg_quote($invalidname, '/');
+                    $feedback = preg_replace(
+                        '/\s*\([^)]*' . $quotedname . '[^)]*\)/iu',
+                        '',
+                        $feedback
+                    ) ?? $feedback;
+                    $isformula = stripos((string)$violation, 'formula') === 0;
+                    $replacement = $spanish
+                        ? ($isformula ? 'esa referencia secundaria de fórmula' : 'esa referencia secundaria de hierba')
+                        : ($isformula ? 'that secondary formula reference' : 'that secondary herb reference');
+                    $feedback = preg_replace(
+                        '/(?<![\p{L}\p{N}])' . $quotedname . '(?![\p{L}\p{N}])/iu',
+                        $replacement,
+                        $feedback
+                    ) ?? $feedback;
+                }
+                $feedback = preg_replace('/[ \t]+([,.;:])/u', '$1', $feedback) ?? $feedback;
+                return trim(preg_replace('/[ \t]{2,}/u', ' ', $feedback) ?? $feedback);
+            };
+            $decoded['explanation'] = $sanitizefeedback(
+                (string)($decoded['explanation'] ?? ''),
+                false
+            );
+            if (is_array($decoded['translations']['es'] ?? null)) {
+                $decoded['translations']['es']['explanation'] = $sanitizefeedback(
+                    (string)($decoded['translations']['es']['explanation'] ?? ''),
+                    true
+                );
+            }
+            $decoded['reviewSummary'] = $sanitizefeedback(
+                (string)($decoded['reviewSummary'] ?? ''),
+                false
+            );
         }
         $sourcecorrectlabel = strtoupper(trim((string)($sourcequestion['correctLabel'] ?? '')));
         if ($preservecorrectchoice && in_array($sourcecorrectlabel, ['A', 'B', 'C', 'D'], true)) {
@@ -12497,7 +12553,8 @@ PROMPT;
                     !$requiresmultistagereview,
                     $preservedoutsiderosternames,
                     $reviewforextraguideline,
-                    $boardguidelinerepair
+                    $boardguidelinerepair,
+                    $boardguidelinerepair ? $currentexplanationguidelineviolations : []
                 );
                 if ($requiresmultistagereview) {
                     $generateddraft = $refinefeedback(
@@ -12517,7 +12574,8 @@ PROMPT;
                         true,
                         $preservedoutsiderosternames,
                         $reviewforextraguideline,
-                        $boardguidelinerepair
+                        $boardguidelinerepair,
+                        $boardguidelinerepair ? $currentexplanationguidelineviolations : []
                     );
                     if (trim($administratorproposal) !== '') {
                         $compliancenote = $validateinstructioncompliance(
