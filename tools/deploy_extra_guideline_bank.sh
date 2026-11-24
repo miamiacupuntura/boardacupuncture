@@ -8,11 +8,19 @@ MOODLE_ROOT="${MOODLE_ROOT:-/var/www/html/moodle}"
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/acupuncturetests}"
 FILES=(
     "blocks/myprogress/admin-herbology-question-bank.php"
+    "blocks/myprogress/admin-herbology-appendix-a.php"
+    "blocks/myprogress/admin-herbology-appendix-b.php"
+    "blocks/myprogress/admin-herbology-appendix-c.php"
+    "blocks/myprogress/admin-herbology-appendix-list.php"
     "blocks/myprogress/herbology-question-overrides.php"
     "blocks/menu/herbology-extra-guideline.php"
     "blocks/menu/herbology-board.php"
 )
 NEW_FILES=(
+    "blocks/myprogress/admin-herbology-appendix-a.php"
+    "blocks/myprogress/admin-herbology-appendix-b.php"
+    "blocks/myprogress/admin-herbology-appendix-c.php"
+    "blocks/myprogress/admin-herbology-appendix-list.php"
     "blocks/menu/herbology-extra-guideline.php"
 )
 
@@ -56,6 +64,20 @@ $data = json_decode((string)file_get_contents($argv[1]), true);
 exit(count((array)($data["formulas"] ?? [])) === 63 ? 0 : 1);
 ' "$MOODLE_ROOT/blocks/myprogress/formulas-study-guide-data.json" || {
     echo "ERROR: se requieren los 63 perfiles profundos de fórmulas para elegir una base compatible." >&2
+    exit 1
+}
+php -r '
+$data = json_decode((string)file_get_contents($argv[1]), true);
+exit(count((array)($data["herbs"] ?? [])) === 304 ? 0 : 1);
+' "$MOODLE_ROOT/blocks/myprogress/single-herb-properties.json" || {
+    echo "ERROR: se requiere el roster vigente de 304 hierbas." >&2
+    exit 1
+}
+php -r '
+$data = json_decode((string)file_get_contents($argv[1]), true);
+exit(count((array)($data["formulas"] ?? [])) === 181 ? 0 : 1);
+' "$MOODLE_ROOT/blocks/myprogress/formula-board-roster-2026.json" || {
+    echo "ERROR: se requiere el roster vigente de 181 fórmulas." >&2
     exit 1
 }
 
@@ -103,12 +125,15 @@ grep -Fq 'View Extra guideline' "$TEMP_DIR/blocks/myprogress/admin-herbology-que
 grep -Fq 'Back to Exam builder' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'name="formaction" value="publishextraguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Publish collection' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "'appendix-a-current-roster'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "'dui-yao-annex'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "'guide-formula-roster-title'" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'admin-herbology-appendix-a.php' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'admin-herbology-appendix-b.php' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'admin-herbology-appendix-c.php' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Appendix A · Herbs' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq 'Appendix B · Duì Yào' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Appendix B · Dui Yao' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Appendix C · Formulas' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Back to NCBAHM Question Bank' "$TEMP_DIR/blocks/myprogress/admin-herbology-appendix-list.php"
+grep -Fq 'Search this list' "$TEMP_DIR/blocks/myprogress/admin-herbology-appendix-list.php"
+grep -Fq 'appendix-list__floating-back' "$TEMP_DIR/blocks/myprogress/admin-herbology-appendix-list.php"
 grep -Fq 'name="autorepairguideline" value="1"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Corregir guideline automáticamente' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Mentioning an invalid "herb or formula used as a distractor" is not a' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
@@ -200,9 +225,12 @@ grep -Fq 'lastAutomaticReviewFailure' "$MOODLE_ROOT/blocks/myprogress/admin-herb
 grep -Fq 'View Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Back to Exam builder' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'name="formaction" value="publishextraguideline"' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "'appendix-a-current-roster'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "'dui-yao-annex'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
-grep -Fq "'guide-formula-roster-title'" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'admin-herbology-appendix-a.php' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'admin-herbology-appendix-b.php' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'admin-herbology-appendix-c.php' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Back to NCBAHM Question Bank' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-appendix-list.php"
+grep -Fq 'Search this list' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-appendix-list.php"
+grep -Fq 'appendix-list__floating-back' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-appendix-list.php"
 grep -Fq 'name="autorepairguideline" value="1"' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Corregir guideline automáticamente' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Mentioning an invalid "herb or formula used as a distractor" is not a' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
@@ -276,6 +304,7 @@ echo "OK: Exam builder muestra el total de Extra guideline y permite abrirlo y r
 echo "OK: las preguntas de manifestaciones conservan opciones clínicas y no exigen un mapeo falso de fórmulas."
 echo "OK: Extra guideline se publica como una colección estudiantil separada, con versión y preguntas pendientes visibles."
 echo "OK: el banco administrativo enlaza directamente a Appendix A, Appendix B y Appendix C y conserva el regreso."
+echo "OK: Appendix A, B y C son listas administrativas independientes, cada una con buscador y regreso fijo al Question Bank."
 echo "OK: toda revisión pendiente permite abrir el editor manual y reemplazar distractores directamente."
 echo "OK: la revisión Board reemplaza automáticamente distractores fuera del roster, vuelve a validar Appendix A/C y deja el resultado sin publicar para aprobación."
 echo "OK: las preguntas ya publicadas muestran en qué examen se usaron y explican por qué no pueden repetirse en el examen activo."
