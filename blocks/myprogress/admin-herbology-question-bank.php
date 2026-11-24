@@ -62,7 +62,7 @@ $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 20;
-$aipromptversion = 'ncbahm-mock-editor-5.0';
+$aipromptversion = 'ncbahm-mock-editor-5.1';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
@@ -3258,6 +3258,41 @@ $visibleherbnames = static function(array $question): array {
         static fn(string $name): string => core_text::strtolower(trim($name)),
         $matches[0] ?? []
     )));
+};
+$visibleboardnomenclature = static function(array $question) use (
+    $guidelineherbaliases,
+    $guidelineherbnames,
+    $guidelineformulaaliases,
+    $guidelineformulanames,
+    $normalizeguidelinename
+): array {
+    $parts = [(string)($question['prompt'] ?? '')];
+    foreach ((array)($question['options'] ?? []) as $option) {
+        $parts[] = (string)(is_array($option) ? ($option['text'] ?? '') : $option);
+    }
+    $normalizedtext = ' ' . $normalizeguidelinename(implode("\n", $parts)) . ' ';
+    $findvisible = static function(array $roster) use ($normalizedtext): array {
+        $visible = [];
+        foreach ($roster as $normalizedname => $displayname) {
+            if ($normalizedname !== ''
+                    && core_text::strpos($normalizedtext, ' ' . $normalizedname . ' ') !== false) {
+                $visible[$normalizedname] = (string)$displayname;
+            }
+        }
+        return array_values($visible);
+    };
+    $visibleherbroster = $guidelineherbnames;
+    foreach ($guidelineherbaliases as $alias => $canonicalname) {
+        $visibleherbroster[$alias] = $guidelineherbnames[$canonicalname] ?? $alias;
+    }
+    $visibleformularoster = $guidelineformulanames;
+    foreach ($guidelineformulaaliases as $alias => $canonicalname) {
+        $visibleformularoster[$alias] = $guidelineformulanames[$canonicalname] ?? $alias;
+    }
+    return [
+        'herbs' => $findvisible($visibleherbroster),
+        'formulas' => $findvisible($visibleformularoster),
+    ];
 };
 $stripdecorativeicons = static function(string $text): string {
     // Remove emoji, pictographs, dingbats, variation selectors and joiners
@@ -11327,6 +11362,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $findprohibitedanswerchoice,
         $hasprohibitednegativewording,
         $requestedvisibleherbcount,
+        $visibleboardnomenclature,
         $visibleherbnames,
         $stripdecorativeicons
     ): array {
@@ -11500,8 +11536,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         ))) !== 4) {
             throw new UnexpectedValueException('The AI answer choices must be four unique A-D options.');
         }
+        $visiblequestiontext = $prompt . "\n" . implode("\n", array_values($optionsbylabel));
         if ($preservedoutsiderosternames !== []) {
-            $visiblequestiontext = $prompt . "\n" . implode("\n", array_values($optionsbylabel));
             $missingoutsiderosternames = array_values(array_filter(
                 $preservedoutsiderosternames,
                 static fn(string $name): bool => stripos($visiblequestiontext, $name) === false
@@ -11513,19 +11549,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 );
             }
         }
+        $visiblequestion = [
+            'prompt' => $prompt,
+            'options' => array_map(
+                static fn(string $label): array => [
+                    'label' => $label,
+                    'text' => $optionsbylabel[$label],
+                ],
+                ['A', 'B', 'C', 'D']
+            ),
+        ];
+        $visiblenomenclature = $visibleboardnomenclature($visiblequestion);
+        $hasvisibleoutsiderostername = count(array_filter(
+            $preservedoutsiderosternames,
+            static fn(string $name): bool => stripos($visiblequestiontext, $name) !== false
+        )) > 0;
+        if ($visiblenomenclature['herbs'] === []
+                && $visiblenomenclature['formulas'] === []
+                && !$hasvisibleoutsiderostername) {
+            throw new UnexpectedValueException(
+                'Automatic review must show at least one source-supported herb or formula in the visible stem or '
+                    . 'A-D choices. Do not leave a herbology item with pattern or diagnosis labels only. If the '
+                    . 'choices are clinical presentations for one formula, name that formula in the stem and ask '
+                    . 'which presentation fits it.'
+            );
+        }
         $requiredvisibleherbs = $requestedvisibleherbcount($administratorproposal);
         if ($requiredvisibleherbs > 0) {
-            $visibleherbquestion = [
-                'prompt' => $prompt,
-                'options' => array_map(
-                    static fn(string $label): array => [
-                        'label' => $label,
-                        'text' => $optionsbylabel[$label],
-                    ],
-                    ['A', 'B', 'C', 'D']
-                ),
-            ];
-            $draftvisibleherbs = $visibleherbnames($visibleherbquestion);
+            $draftvisibleherbs = $visibleherbnames($visiblequestion);
             if (count($draftvisibleherbs) < $requiredvisibleherbs) {
                 throw new UnexpectedValueException(
                     'The administrator requested visible herb names in the question or distractors, but the draft '
@@ -11763,6 +11814,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         if ($spanishprompt === '' || $spanishexplanation === '' || count($spanishoptionsbylabel) !== 4) {
             throw new UnexpectedValueException('The AI draft omitted the complete Spanish translation.');
+        }
+        $spanishvisiblequestiontext = $spanishprompt . "\n"
+            . implode("\n", array_values($spanishoptionsbylabel));
+        $spanishnomenclature = $visibleboardnomenclature([
+            'prompt' => $spanishprompt,
+            'options' => array_map(
+                static fn(string $label): array => [
+                    'label' => $label,
+                    'text' => $spanishoptionsbylabel[$label],
+                ],
+                ['A', 'B', 'C', 'D']
+            ),
+        ]);
+        $spanishhasoutsiderostername = count(array_filter(
+            $preservedoutsiderosternames,
+            static fn(string $name): bool => stripos($spanishvisiblequestiontext, $name) !== false
+        )) > 0;
+        if ($spanishnomenclature['herbs'] === []
+                && $spanishnomenclature['formulas'] === []
+                && !$spanishhasoutsiderostername) {
+            throw new UnexpectedValueException(
+                'The Spanish stem or A-D choices must preserve at least one visible source-supported herb or formula.'
+            );
         }
         if ($requiredchannelherbmappings !== []) {
             // This is intentionally deterministic. AI providers sometimes obey
@@ -12008,6 +12082,8 @@ When an administrator instruction asks to add, include, place or name herbs in t
 Ingredient-only choices and formula identification in the feedback are separate requirements and may coexist. When the administrator asks the feedback to name the formulas represented by the ingredient combinations, the choices must remain ingredient-only, while the English and Spanish explanations must explicitly map every option letter to its corresponding Pinyin formula name. Omitting even one requested formula name is not compliant.
 
 Apply the same inference-feedback standard even when the administrator supplied no special instruction. If a direct label was deliberately hidden in the stem or choices to create inference, the explanation must restore that hidden intermediate concept after the learner answers. For ingredient-only formula choices, explicitly map A, B, C and D to their corresponding Pinyin formula names and explain the decisive distinction. For other inference items, name the hidden pattern, action, safety rule, processing principle, hierarchy role or compatibility relationship supported by the clues, then connect it to the keyed answer and contrast every distractor. Do not approve a draft that merely repeats the correct choice.
+
+Every automatic review must visibly include at least one source-supported herb or formula in the English and Spanish stem or choices. A herbology question with only pattern or diagnosis labels is not compliant. If a stem asks “Which formula?” but its choices are clinical presentations rather than formula names, require either source-supported formula choices or a coherent reformulation that names the tested formula in the stem and asks which presentation fits it. Preserve the keyed letter and tested fact.
 
 Strong feedback is mandatory during every automatic review, even without an administrator comment. The explanation must contain a specific analysis of A, B, C and D. For ingredient-combination choices, identify the source-supported formula or therapeutic strategy represented by each combination, name at least one distinctive ingredient from that option, state its relevant action, and explain why that action fits or fails the case. A sentence such as “Option B targets phlegm” or “Option D is for food stagnation” is too vague and is not compliant. Do not invent a canonical formula name when the source does not support one; in that case name the precise therapeutic strategy and still analyze a distinctive ingredient.
 
@@ -12305,6 +12381,12 @@ PROMPT;
                 $relevantnames[] = $herb['pinyin'] . ' (' . $herb['pharmaceuticalName'] . ')';
             }
         }
+        foreach ($guidelineformulanames as $guidelineformula) {
+            if (stripos($questiontext, $guidelineformula) !== false) {
+                $relevantnames[] = $guidelineformula . ' (Appendix C formula)';
+            }
+        }
+        $relevantnames = array_values(array_unique($relevantnames));
         $latestadministratorproposal = array_key_exists($questionid, $proposaloverrides)
             ? $proposaloverrides[$questionid]
             : (string)($question['_proposal']['text'] ?? '');
@@ -12454,6 +12536,7 @@ Editorial rules:
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer. The controlled repeated-answer transformation in rule 1B is the only exception to preserving the original answer concept; it still must preserve the keyed LETTER and use an explicit fact from sourceCardEvidence or herbProfileEvidence.
 1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection, differentiation or a source-supported formula-architecture clue that distinguishes the formula; Domain 2 must test individual-herb identification, properties, actions, indications, comparison, or a source-supported distinctive dose or processing fact; Domain 3 must test Duì Yào pairing, compatibility, synergy, antagonism or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing or dispensing principle; Domain 5 must test formula composition, chief/deputy/assistant/envoy hierarchy, ingredient roles or formula modification. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
 1AB. When the source stem names one formula and asks for its manifestations, indications, actions, functions, signs or symptoms, preserve that tested direction. Keep A-D as parallel clinical finding or therapeutic-description sets and preserve the keyed clinical concept. Do not turn the choices into four formula names and do not require the feedback to map A-D to different formulas.
+1AC. Every reviewed question must visibly name at least one source-supported herb or formula in the English stem or A-D choices and preserve that Pinyin name in the Spanish version. Never return a herbology item whose visible question consists only of pattern or diagnosis labels. If the current stem asks “Which formula?” while A-D are clinical presentations, either rebuild A-D as source-supported formula choices or, when only one tested formula is documented, name that formula in the stem and ask which presentation or indication fits it. Preserve the keyed answer letter and educational objective.
 1AA. Distinguish therapeutic scope from shared ingredients. Choose a complete formula when the item tests a complete pattern architecture and its coordinated therapeutic strategy. A Duì Yào may be a core pair, a source-supported modification, or a brief prescription for a narrow objective. It is neither a commercial patent formula nor an automatic equivalent of a classical formula. Never rewrite a formula-versus-Duì-Yào scope question as a generic single-herb indication question, and never label a two-herb pair as a patent or classical formula.
 1B. Use answerRepetition to reduce redundant questions. When activeQuestionCount is at least 3, use preferredFocus as a rotation target only if sourceFeedback, sourceCardEvidence or herbProfileEvidence explicitly states the needed fact. Formula-answer groups rotate through clinical differentiation, hierarchy or ingredient role, ingredient function, composition or modification, and preparation or processing. Individual-herb groups rotate through clinical differentiation, distinctive dosage, preparation or processing, safety or contraindication, and channel or function differentiation. Preserve the correct LETTER by placing the new source-supported correct fact at that letter and rebuild all distractors in parallel form. Never infer hierarchy from ingredient order, never assign deputy/assistant/envoy roles when the source only names a chief, never invent or approximate a dose, and never invent a preparation or processing method. If preferredFocus is unsupported or conflicts with the fixed domain, retain the original objective and improve its differentiation instead. Do not transform every repeated answer: clinical occurrences remain clinical, while supported hierarchy, dosage, processing, safety and composition occurrences diversify the set.
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
