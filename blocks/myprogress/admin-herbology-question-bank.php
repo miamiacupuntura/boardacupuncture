@@ -9738,7 +9738,7 @@ PROMPT;
     if ($formulavduiyaoscopeidea) {
         if ($twostageduiyaomodificationrequest) {
             $customprompt .= "\n\nMANDATORY CLINICAL-RETURN MODIFICATION OBJECTIVE — DO NOT SUBSTITUTE:\n"
-                . "Use every selected Appendix B pair below exactly once and create one question from each evidence record. Stage 1 must use only the supplied baseFormulaEvidence to present observable findings that justify the supplied base formula, then state that the patient begins taking it. The baseFormulaEvidence ingredients confirm that neither herb of the selected pair is already present. Several days later, the patient must return while the original pattern still requires the base formula, but with new observable findings that justify adding the selected Duì Yào for its documented narrowAction. End with a direct question asking for both the pair to add and the resulting prescription outcome. Every A-D choice must contain one official two-herb pair and one prescription outcome, and exactly one choice may match the evidence. Do not ask merely for the initial formula, the isolated action of one herb, or an abstract formula-versus-pair distinction. If formulaBridge.kind is direct, use its exact named result. If formulaBridge.kind is individualized, retain the base formula and describe the outcome exactly as an individualized prescription modified with the pair; explicitly state that it has no new classical formula name. Never convert an individualized result, ratio change, substitution, structural reconstruction, missing-partner relationship, pair plus cofactor, or version-dependent lineage into a named classical formula. The explanation must explicitly teach stage 1 (initial findings to base formula), stage 2 (new findings to added pair), and stage 3 (pair addition to the supplied outcome), then analyze A-D separately in English and Spanish. Do not invent another relationship, formula name, ingredient, dose, or safety fact."
+                . "Use every selected Appendix B pair below exactly once and create one question from each evidence record. Stage 1 must use only the supplied baseFormulaEvidence to present observable findings that justify the supplied base formula, then state that the patient begins taking it. The baseFormulaEvidence ingredients confirm that neither herb of the selected pair is already present. Several days later, the patient must return while the original pattern still requires the base formula, but with new observable findings that justify adding the selected Duì Yào for its documented narrowAction. End with a direct question asking for both the pair to add and the resulting prescription outcome. Every A-D choice must contain one official two-herb pair and one prescription outcome, and exactly one choice may match the evidence. Do not ask merely for the initial formula, the isolated action of one herb, or an abstract formula-versus-pair distinction. If formulaBridge.kind is direct, use its named result. If formulaBridge.kind is individualized, retain the base formula and describe the outcome as an individualized prescription modified with the pair; explicitly state that it does not acquire a new classical formula name. Equivalent wording is allowed; do not copy a long evidence sentence merely to satisfy validation. Never convert an individualized result, ratio change, substitution, structural reconstruction, missing-partner relationship, pair plus cofactor, or version-dependent lineage into a named classical formula. The explanation must teach three reasoning parts: initial findings to base formula, new findings to added pair, and pair addition to the supplied outcome. These parts may be written naturally and do not require literal Stage 1/2/3 headings. Analyze A-D separately in English and Spanish. Do not invent another relationship, formula name, ingredient, dose, or safety fact."
                 . "\n\nSELECTED VERIFIED CLINICAL-RETURN EVIDENCE:\n";
         } else {
             $customprompt .= "\n\nMANDATORY FORMULA-VERSUS-DUÌ-YÀO OBJECTIVE — DO NOT SUBSTITUTE:\n"
@@ -10057,6 +10057,12 @@ PROMPT;
             }
             foreach ($decodedbatch as $normalizedindex => $decodeditem) {
                 $decodeditem = $normalizecreatedquestionpinyin($decodeditem);
+                if ($twostageduiyaomodificationrequest) {
+                    // The selected instruction fixes the educational objective;
+                    // do not waste a generation retry on metadata wording.
+                    $decodeditem['domainId'] = 'dui_yao';
+                    $decodeditem['contentType'] = 'dui_yao';
+                }
                 $guidelineviolations = $findcreatedquestionguidelineviolations($decodeditem);
                 if ($guidelineviolations !== []) {
                     throw new UnexpectedValueException(
@@ -10200,12 +10206,6 @@ PROMPT;
                         $bridgekind = (string)($formulaBridge['kind'] ?? '');
                         $baseformula = $normalizescopetext((string)($formulaBridge['base'] ?? ''));
                         $resultformula = $normalizescopetext((string)($formulaBridge['result'] ?? ''));
-                        $individualizedoutcome = $normalizescopetext(
-                            (string)($formulaBridge['outcome']['en'] ?? '')
-                        );
-                        $individualizedoutcomees = $normalizescopetext(
-                            (string)($formulaBridge['outcome']['es'] ?? '')
-                        );
                         $followupvisible = preg_match(
                             '/\b(?:days?\s+later|several\s+days|follow-up|returns?|returned|d[ií]as\s+despu[eé]s|varios\s+d[ií]as|regresa|regres[oó]|retorna|volvi[oó])\b/iu',
                             $scopeprompt . ' ' . $scopespanishprompt
@@ -10242,57 +10242,107 @@ PROMPT;
                                 $normalizescopetext((string)$herb)
                             ) !== false
                         )) >= 2;
-                        $correctoutcomevisible = $bridgekind === 'direct'
-                            ? $resultformula !== ''
-                                && core_text::strpos($correctchoice, $resultformula) !== false
-                                && core_text::strpos($correctchoicespanish, $resultformula) !== false
-                            : $bridgekind === 'individualized'
-                                && $individualizedoutcome !== ''
-                                && $individualizedoutcomees !== ''
-                                && core_text::strpos($correctchoice, $individualizedoutcome) !== false
-                                && core_text::strpos(
-                                    $correctchoicespanish,
-                                    $individualizedoutcomees
-                                ) !== false;
                         $englishexplanation = (string)($decodeditem['explanation'] ?? '');
                         $spanishexplanation = (string)($decodeditem['translations']['es']['explanation'] ?? '');
-                        $threestagesvisible = preg_match(
-                            '/(?:stage|step)(?:\s+of\s+inference)?\s*1\b/iu',
-                            $englishexplanation
-                        ) === 1
-                            && preg_match(
-                                '/(?:stage|step)(?:\s+of\s+inference)?\s*2\b/iu',
+                        $normalizedenglishexplanation = $normalizescopetext($englishexplanation);
+                        $normalizedspanishexplanation = $normalizescopetext($spanishexplanation);
+                        $correctoutcomevisible = false;
+                        $explanationoutcomevisible = false;
+                        if ($bridgekind === 'direct') {
+                            $correctoutcomevisible = $resultformula !== ''
+                                && core_text::strpos($correctchoice, $resultformula) !== false
+                                && core_text::strpos($correctchoicespanish, $resultformula) !== false;
+                            $explanationoutcomevisible = $resultformula !== ''
+                                && core_text::strpos($normalizedenglishexplanation, $resultformula) !== false
+                                && core_text::strpos($normalizedspanishexplanation, $resultformula) !== false;
+                        } else if ($bridgekind === 'individualized') {
+                            $correctoutcomevisible = core_text::strpos($correctchoice, $baseformula) !== false
+                                && core_text::strpos($correctchoicespanish, $baseformula) !== false
+                                && preg_match('/\b(?:add|adding|modif\w*|individualiz\w*)\b/iu', $correctchoice) === 1
+                                && preg_match('/\b(?:anad\w*|agreg\w*|modific\w*|individualiz\w*)\b/iu', $correctchoicespanish) === 1;
+                            $individualizedboundaryenglish = preg_match(
+                                '/\b(?:no|not|without|does\s+not)\b.{0,90}\b(?:new\s+)?(?:named\s+|classical\s+)?formula(?:\s+name)?\b/iu',
                                 $englishexplanation
-                            ) === 1
-                            && preg_match(
-                                '/(?:stage|step)(?:\s+of\s+inference)?\s*3\b/iu',
-                                $englishexplanation
-                            ) === 1
-                            && preg_match(
-                                '/(?:etapa|paso)(?:\s+de\s+inferencia)?\s*1\b/iu',
-                                $spanishexplanation
-                            ) === 1
-                            && preg_match(
-                                '/(?:etapa|paso)(?:\s+de\s+inferencia)?\s*2\b/iu',
-                                $spanishexplanation
-                            ) === 1
-                            && preg_match(
-                                '/(?:etapa|paso)(?:\s+de\s+inferencia)?\s*3\b/iu',
+                            ) === 1;
+                            $individualizedboundaryspanish = preg_match(
+                                '/\b(?:no|sin)\b.{0,90}\b(?:nuevo\s+)?(?:nombre\s+de\s+)?f[oó]rmula(?:\s+cl[aá]sica)?\b/iu',
                                 $spanishexplanation
                             ) === 1;
+                            $explanationoutcomevisible = preg_match(
+                                '/\b(?:add|adding|modif\w*|individualiz\w*)\b/iu',
+                                $englishexplanation
+                            ) === 1
+                                && preg_match(
+                                    '/\b(?:a[nñ]ad\w*|agreg\w*|modific\w*|individualiz\w*)\b/iu',
+                                    $spanishexplanation
+                                ) === 1
+                                && $individualizedboundaryenglish
+                                && $individualizedboundaryspanish;
+                        }
+                        $explanationbasevisible = $baseformula !== ''
+                            && core_text::strpos($normalizedenglishexplanation, $baseformula) !== false
+                            && core_text::strpos($normalizedspanishexplanation, $baseformula) !== false;
+                        $explanationpairvisible = count(array_filter(
+                            (array)($matchedevidence['herbs'] ?? []),
+                            static fn($herb): bool => core_text::strpos(
+                                $normalizedenglishexplanation,
+                                $normalizescopetext((string)$herb)
+                            ) !== false
+                                && core_text::strpos(
+                                    $normalizedspanishexplanation,
+                                    $normalizescopetext((string)$herb)
+                                ) !== false
+                        )) >= 2;
+                        $allchoicesexplained = true;
+                        foreach (['A', 'B', 'C', 'D'] as $feedbacklabel) {
+                            $englishlabelvisible = preg_match(
+                                '/(?:\b(?:option|choice)\s+' . $feedbacklabel . '\b|(?:^|\s)'
+                                    . $feedbacklabel . '\s*:)/iu',
+                                $englishexplanation
+                            ) === 1;
+                            $spanishlabelvisible = preg_match(
+                                '/(?:\bopci[oó]n\s+' . $feedbacklabel . '\b|(?:^|\s)'
+                                    . $feedbacklabel . '\s*:)/iu',
+                                $spanishexplanation
+                            ) === 1;
+                            if (!$englishlabelvisible || !$spanishlabelvisible) {
+                                $allchoicesexplained = false;
+                                break;
+                            }
+                        }
+                        $clinicalreturnfailures = [];
                         if ((string)($decodeditem['domainId'] ?? '') !== 'dui_yao'
-                                || (string)($decodeditem['contentType'] ?? '') !== 'dui_yao'
-                                || !is_array($matchedevidence)
-                                || !in_array($bridgekind, ['direct', 'individualized'], true)
-                                || $baseformula === ''
-                                || core_text::strpos($generatedcontentlower, $baseformula) === false
-                                || !$followupvisible
-                                || !$correctpairvisible
-                                || !$correctpairvisiblespanish
-                                || !$correctoutcomevisible
-                                || !$threestagesvisible) {
+                                || (string)($decodeditem['contentType'] ?? '') !== 'dui_yao') {
+                            $clinicalreturnfailures[] = 'classification must be Domain 3 with contentType dui_yao';
+                        }
+                        if (!is_array($matchedevidence)
+                                || !in_array($bridgekind, ['direct', 'individualized'], true)) {
+                            $clinicalreturnfailures[] = 'the draft did not preserve one supplied Appendix B relationship';
+                        }
+                        if ($baseformula === ''
+                                || core_text::strpos($generatedcontentlower, $baseformula) === false) {
+                            $clinicalreturnfailures[] = 'the supplied base formula is missing';
+                        }
+                        if (!$followupvisible) {
+                            $clinicalreturnfailures[] = 'the stem must show that the patient returns after several days';
+                        }
+                        if (!$correctpairvisible || !$correctpairvisiblespanish) {
+                            $clinicalreturnfailures[] = 'the keyed choice must name both herbs in English and Spanish';
+                        }
+                        if (!$correctoutcomevisible) {
+                            $clinicalreturnfailures[] = 'the keyed choice must state the supported prescription outcome in both languages';
+                        }
+                        if (!$explanationbasevisible || !$explanationpairvisible
+                                || !$explanationoutcomevisible) {
+                            $clinicalreturnfailures[] = 'the explanation must connect the base formula, new pair, and outcome in both languages';
+                        }
+                        if (!$allchoicesexplained) {
+                            $clinicalreturnfailures[] = 'the explanation must analyze A, B, C, and D in both languages';
+                        }
+                        if ($clinicalreturnfailures !== []) {
                             throw new UnexpectedValueException(
-                                'The clinical-return item must show the supplied base formula, a return after several days with new findings, the documented pair and exact supplied outcome in the keyed choice, and all three reasoning stages in English and Spanish. Named classical results are allowed only for a direct bridge; every other pair must remain an individualized modified prescription.'
+                                'The clinical-return draft still needs correction: '
+                                    . implode('; ', $clinicalreturnfailures) . '.'
                             );
                         }
                     } else if ((string)($decodeditem['domainId'] ?? '') !== 'dui_yao'
