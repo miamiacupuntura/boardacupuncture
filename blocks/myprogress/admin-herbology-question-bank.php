@@ -1245,6 +1245,9 @@ $generalinstructiontemplates = [
             . "- Liu Wei Di Huang Wan + Gou Qi Zi and Ju Hua = Qi Ju Di Huang Wan.\n"
             . "- Si Wu Tang + Tao Ren and Hong Hua = Tao Hong Si Wu Tang.\n"
             . "- Gui Zhi Tang + Long Gu and Mu Li = Gui Zhi Jia Long Gu Mu Li Tang.\n\n"
+            . "MANDATORY CREATION ORDER:\n"
+            . "First exhaust the four named classical direct additions above. Do not create an individualized modification until all four classical conversions have been created with this instruction. "
+            . "If only some classical conversions remain, create only those remaining items in the current batch.\n\n"
             . "- Individualized result: for every other official pair, identify the outcome as the original base formula modified with that Dui Yao. State explicitly that this is an individualized modified prescription and not a newly named classical formula.\n\n"
             . "BOUNDARIES:\n"
             . "The selected base formula must not already contain either herb of the pair. The original pattern must still require the base formula when the new branch appears. "
@@ -8984,6 +8987,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $usedinstructiontemplateid = $twostageduiyaoinstructiontemplateid;
         }
     }
+    $twostagedirectpairnumbers = [12, 28, 34, 50];
+    $twostageusedpairnumbers = [];
+    $twostageremainingdirectpairnumbers = [];
+    $twostageremainingpairnumbers = [];
+    if ($twostageduiyaomodificationrequest) {
+        foreach ((array)($revisionstore['customQuestions'] ?? []) as $existingcustomid => $existingcustomrecord) {
+            if (!is_array($existingcustomrecord)
+                    || (string)$existingcustomid === $customquestionid
+                    || (string)($existingcustomrecord['status'] ?? '') === 'deleted') {
+                continue;
+            }
+            $existinginstructionid = (string)($existingcustomrecord['instructionTemplateId'] ?? '');
+            $existinginstructionidea = core_text::strtolower(core_text::specialtoascii(
+                (string)($existingcustomrecord['idea'] ?? '')
+            ));
+            $isexistingtwostagequestion = $existinginstructionid === $twostageduiyaoinstructiontemplateid
+                || core_text::strpos(
+                    $existinginstructionidea,
+                    'clinical return: modify a base formula by adding a dui yao'
+                ) !== false;
+            $existingpairnumber = (int)($existingcustomrecord['formulaDuiYaoPairNumber'] ?? 0);
+            if ($isexistingtwostagequestion && $existingpairnumber > 0) {
+                $twostageusedpairnumbers[$existingpairnumber] = true;
+            }
+        }
+        $twostageremainingdirectpairnumbers = array_values(array_filter(
+            $twostagedirectpairnumbers,
+            static fn(int $pairnumber): bool => !isset($twostageusedpairnumbers[$pairnumber])
+        ));
+        $twostageallpairnumbers = array_values(array_filter(array_map(
+            static fn(array $pair): int => (int)($pair['number'] ?? 0),
+            $duiyaosmartpairs
+        )));
+        $twostageremainingpairnumbers = array_values(array_filter(
+            $twostageallpairnumbers,
+            static fn(int $pairnumber): bool => !isset($twostageusedpairnumbers[$pairnumber])
+        ));
+    }
     $correction = $iscustomrewrite ? trim(required_param('correction', PARAM_RAW)) : '';
     if ($idea === '' || core_text::strlen($idea) > 60000) {
         $returnnewquestionfailure(
@@ -9152,11 +9193,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             && $newquestionneededcount > 1) {
         // A reusable Duì Yào instruction can fill an exam shortage with a
         // manageable batch and a different verified pair for every item.
-        $customquestionideas = array_fill(
-            0,
-            min(5, $newquestionneededcount),
-            $idea
-        );
+        $custombatchlimit = min(5, $newquestionneededcount);
+        if ($twostageduiyaomodificationrequest && $twostageremainingdirectpairnumbers !== []) {
+            // The first phase contains only the verified named conversions.
+            // Never fill the rest of that batch with individualized outcomes.
+            $custombatchlimit = min(
+                $custombatchlimit,
+                count($twostageremainingdirectpairnumbers)
+            );
+        }
+        $customquestionideas = array_fill(0, $custombatchlimit, $idea);
     }
     if (count($customquestionideas) > 5) {
         $returnnewquestionfailure(
@@ -9281,6 +9327,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $pairnumber = (int)($scopepair['number'] ?? 0);
             if ($mahuangthreelevelsrequest && $pairnumber !== 1) {
                 continue;
+            }
+            if ($twostageduiyaomodificationrequest) {
+                $allowedtwostagepairnumbers = $twostageremainingdirectpairnumbers !== []
+                    ? $twostageremainingdirectpairnumbers
+                    : $twostageremainingpairnumbers;
+                if ($allowedtwostagepairnumbers !== []
+                        && !in_array($pairnumber, $allowedtwostagepairnumbers, true)) {
+                    continue;
+                }
             }
             $scopeherbs = array_values((array)($scopepair['herbs'] ?? []));
             $scopeherbsinguideline = count($scopeherbs) === 2
