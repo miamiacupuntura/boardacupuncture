@@ -10064,7 +10064,7 @@ PROMPT;
                     $decodeditem['contentType'] = 'dui_yao';
                 }
                 $guidelineviolations = $findcreatedquestionguidelineviolations($decodeditem);
-                if ($guidelineviolations !== []) {
+                if ($guidelineviolations !== [] && !$twostageduiyaomodificationrequest) {
                     throw new UnexpectedValueException(
                         'Every named herb and formula must belong to the current NCBAHM guideline. '
                             . implode(' | ', $guidelineviolations)
@@ -10248,19 +10248,103 @@ PROMPT;
                         $autorepaircorrectlabel = strtoupper(
                             trim((string)($decodeditem['correctLabel'] ?? ''))
                         );
-                        foreach ((array)($decodeditem['options'] ?? []) as $autorepairoptionindex => $autorepairoption) {
-                            if ((string)($autorepairoption['label'] ?? '') === $autorepaircorrectlabel) {
-                                $decodeditem['options'][$autorepairoptionindex]['text'] = $autorepairoptionen;
+                        $autorepairbaseingredienttext = ' ' . preg_replace(
+                            '/[^a-z0-9]+/u',
+                            ' ',
+                            $normalizescopetext(
+                                (string)($autorepairbaseevidence['ingredients'] ?? '')
+                            )
+                        ) . ' ';
+                        $autorepairdistractors = [];
+                        $autorepairusedpairs = [
+                            (int)($matchedevidence['pairNumber'] ?? 0) => true,
+                        ];
+                        $autorepairadddistractor = static function(array $candidate) use (
+                            &$autorepairdistractors,
+                            &$autorepairusedpairs,
+                            $autorepairbaseingredienttext,
+                            $normalizescopetext
+                        ): void {
+                            $candidatepairnumber = (int)($candidate['pairNumber'] ?? $candidate['number'] ?? 0);
+                            $candidateherbs = array_values(array_map(
+                                'strval',
+                                (array)($candidate['herbs'] ?? [])
+                            ));
+                            if ($candidatepairnumber <= 0 || isset($autorepairusedpairs[$candidatepairnumber])
+                                    || count($candidateherbs) !== 2) {
+                                return;
+                            }
+                            foreach ($candidateherbs as $candidateherb) {
+                                $candidateherbkey = trim((string)preg_replace(
+                                    '/[^a-z0-9]+/u',
+                                    ' ',
+                                    $normalizescopetext($candidateherb)
+                                ));
+                                if ($candidateherbkey !== '' && core_text::strpos(
+                                    $autorepairbaseingredienttext,
+                                    ' ' . $candidateherbkey . ' '
+                                ) !== false) {
+                                    return;
+                                }
+                            }
+                            $autorepairusedpairs[$candidatepairnumber] = true;
+                            $autorepairdistractors[] = [
+                                'pairNumber' => $candidatepairnumber,
+                                'herbs' => $candidateherbs,
+                            ];
+                        };
+                        foreach ($formulavduiyaoscopefallbackpool as $autorepaircandidate) {
+                            $autorepairadddistractor($autorepaircandidate);
+                            if (count($autorepairdistractors) >= 3) {
                                 break;
                             }
                         }
-                        foreach ((array)($decodeditem['translations']['es']['options'] ?? []) as $autorepairoptionindex => $autorepairoption) {
-                            if ((string)($autorepairoption['label'] ?? '') === $autorepaircorrectlabel) {
-                                $decodeditem['translations']['es']['options'][$autorepairoptionindex]['text'] =
-                                    $autorepairoptiones;
-                                break;
+                        if (count($autorepairdistractors) < 3) {
+                            foreach ($duiyaosmartpairs as $autorepaircandidate) {
+                                $autorepairadddistractor($autorepaircandidate);
+                                if (count($autorepairdistractors) >= 3) {
+                                    break;
+                                }
                             }
                         }
+                        if (count($autorepairdistractors) < 3) {
+                            throw new UnexpectedValueException(
+                                'The clinical-return repair could not select three official distractor pairs that are absent from the base formula.'
+                            );
+                        }
+                        $autorepairoptionsen = [];
+                        $autorepairoptionses = [];
+                        $autorepairdistractorindex = 0;
+                        foreach (['A', 'B', 'C', 'D'] as $autorepairlabel) {
+                            if ($autorepairlabel === $autorepaircorrectlabel) {
+                                $autorepairchoicetexten = $autorepairoptionen;
+                                $autorepairchoicetextes = $autorepairoptiones;
+                            } else {
+                                $autorepairdistractor = $autorepairdistractors[
+                                    $autorepairdistractorindex++
+                                ];
+                                $autorepairdistractorpair = implode(
+                                    ' + ',
+                                    (array)$autorepairdistractor['herbs']
+                                );
+                                $autorepairchoicetexten = $autorepairbase . ' modified with '
+                                    . $autorepairdistractorpair
+                                    . ' as an individualized prescription; no new classical formula name.';
+                                $autorepairchoicetextes = $autorepairbase . ' modificada con '
+                                    . $autorepairdistractorpair
+                                    . ' como prescripción individualizada; sin un nuevo nombre de fórmula clásica.';
+                            }
+                            $autorepairoptionsen[] = [
+                                'label' => $autorepairlabel,
+                                'text' => $autorepairchoicetexten,
+                            ];
+                            $autorepairoptionses[] = [
+                                'label' => $autorepairlabel,
+                                'text' => $autorepairchoicetextes,
+                            ];
+                        }
+                        $decodeditem['options'] = $autorepairoptionsen;
+                        $decodeditem['translations']['es']['options'] = $autorepairoptionses;
                         $autorepairfeedbacken = [
                             'Inference step 1: The initial findings support ' . $autorepairbase
                                 . ' because the supplied formula profile identifies ' . lcfirst($autorepairclueen),
@@ -10295,6 +10379,15 @@ PROMPT;
                             $autorepairfeedbackes
                         );
                         $decodeditem['reviewSummary'] = 'Completed the clinical-return answer and bilingual feedback from verified formula and Dui Yao evidence.';
+                        $autorepairguidelineviolations = $findcreatedquestionguidelineviolations(
+                            $decodeditem
+                        );
+                        if ($autorepairguidelineviolations !== []) {
+                            throw new UnexpectedValueException(
+                                'The locally repaired clinical-return draft still contains a name outside the current guideline: '
+                                    . implode(' | ', $autorepairguidelineviolations)
+                            );
+                        }
                         $decodedbatch[$decodedindex] = $decodeditem;
                         $generatedcontent = json_encode(
                             $decodeditem,
