@@ -181,4 +181,5 @@ echo "OK: Exam builder muestra el total de Extra guideline y permite abrirlo y r
 echo "OK: las preguntas de manifestaciones conservan opciones clínicas y no exigen un mapeo falso de fórmulas."
 echo "OK: Extra guideline se publica como una colección estudiantil separada, con versión y preguntas pendientes visibles."
 echo "OK: el banco administrativo enlaza directamente a Appendix A, Appendix B y Appendix C y conserva el regreso."
+echo "OK: toda revisión pendiente permite abrir el editor manual y reemplazar distractores directamente."
 echo "RESPALDO: $BACKUP_DIR"
