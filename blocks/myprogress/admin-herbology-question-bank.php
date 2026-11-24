@@ -11067,15 +11067,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     if ($issinglequestionrewrite) {
         $rewritequestionid = required_param('questionid', PARAM_ALPHANUMEXT);
         $rewriteproposal = trim(optional_param('proposal', '', PARAM_RAW));
-        if ($autorepairguideline) {
-            $rewriteproposal = 'Automatically make this question eligible for Board review. Replace every '
-                . 'out-of-roster name used as a distractor with one clinically plausible distractor whose exact '
-                . 'Pinyin name appears in the supplied Appendix A or Appendix C allowed-name list. '
-                . 'Preserve the correct answer letter, correct answer concept, tested objective and fixed domain. '
-                . 'Update the English and Spanish A-D feedback so it analyzes the replacement actually shown. '
-                . 'Do not publish the question and do not send it to Extra guideline; return a checked draft for '
-                . 'administrator review.';
-        }
         if (core_text::strlen($rewriteproposal) > 12000) {
             throw new invalid_parameter_exception('Rewrite instructions must be 12,000 characters or fewer.');
         }
@@ -11086,6 +11077,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         ));
         if ($pendingquestions === []) {
             throw new invalid_parameter_exception('Unknown or unavailable question draft.');
+        }
+        if ($autorepairguideline) {
+            $repairquestion = $pendingquestions[0];
+            $repairchoiceviolations = $findcreatedquestionguidelineviolations([
+                'prompt' => (string)($repairquestion['prompt'] ?? ''),
+                'options' => (array)($repairquestion['options'] ?? []),
+                'explanation' => '',
+            ]);
+            $repairexplanationviolations = $findcreatedquestionguidelineviolations([
+                'prompt' => '',
+                'options' => [],
+                'explanation' => (string)($repairquestion['explanation'] ?? ''),
+            ]);
+            if ($repairchoiceviolations === [] && $repairexplanationviolations !== []) {
+                $rewriteproposal = 'Automatically make this question eligible for Board review. The visible stem '
+                    . 'and A-D choices are already roster-safe; do not replace or relabel them merely to demonstrate '
+                    . 'a repair. Remove every out-of-roster herb or formula reference from the English and Spanish '
+                    . 'explanations, including any parenthetical example inherited from the source. Restate the '
+                    . 'reasoning with the observable findings, therapeutic actions, patterns and exact Appendix A/C '
+                    . 'names already present in the valid choices. Preserve the correct answer letter, concept, tested '
+                    . 'objective and fixed domain. Expand the two inference steps and analyze A, B, C and D separately. '
+                    . 'Do not publish the question and do not send it to Extra guideline; return a checked draft for '
+                    . 'administrator review.';
+            } else {
+                $rewriteproposal = 'Automatically make this question eligible for Board review. Replace every '
+                    . 'out-of-roster name used in a distractor with one clinically plausible distractor whose exact '
+                    . 'Pinyin name appears in the supplied Appendix A or Appendix C allowed-name list. If a violation '
+                    . 'appears only in the explanation, remove or rewrite that reference instead of changing a valid '
+                    . 'choice. Preserve the correct answer letter, correct answer concept, tested objective and fixed '
+                    . 'domain. Update the English and Spanish A-D feedback so it analyzes the final choices actually '
+                    . 'shown. Do not publish the question and do not send it to Extra guideline; return a checked '
+                    . 'draft for administrator review.';
+            }
         }
         $proposaloverrides[$rewritequestionid] = $rewriteproposal;
     } else {
@@ -11915,6 +11939,8 @@ Compare the visible DRAFT itself with every ADMINISTRATOR INSTRUCTION and the SO
 
 Set compliant to true only when every compatible instruction is visibly implemented without changing the source-supported correct answer concept or letter. A requested conversion from a negative item to a positive item is a permitted exception: preserve the keyed LETTER and educational objective, rewrite the keyed option as a true source-supported statement, and rebuild the distractors. If the administrator requested ingredient-based choices, the choices themselves must contain ingredients or ingredient combinations rather than formula names. If the administrator requested observable manifestations instead of a named diagnosis, the stem must contain those findings and must not name the diagnosis. If any requested change is missing, vague, merely mentioned in the summary, or contradicted by the draft, set compliant to false and explain the exact correction required.
 
+For an automatic Board roster repair, inspect guidelineViolationsInStemOrChoices separately from guidelineViolationsInExplanation. If the violations occur only in the explanation, compliance requires removing those invalid names from the English and Spanish feedback while preserving already roster-safe choices. Do not demand a replacement distractor or a changed choice when no choice contains the invalid name. If a violation occurs in a distractor, require the final visible choice and its A-D feedback to use the roster-safe replacement.
+
 Positive wording is mandatory for every final question, even without an administrator instruction. The English and Spanish stems must not test through NOT-correct, incorrect, EXCEPT, inaccurate, false, error, or least-appropriate framing. Do not accept the administrator's instruction as the explanation; require genuine educational feedback.
 
 Instructions are cumulative. When one instruction requests ingredients in the choices and a later instruction requests improved feedback or explanation, compliant can be true only if the explanation discusses the clinical role of the decisive ingredients and connects those roles to the answer. Merely listing ingredients in the choices or discussing only the formula names is not compliant.
@@ -12069,6 +12095,7 @@ Requirements:
 10. Use plain educational prose only. Never copy emoji, pictographs, decorative arrows, icon bullets, “Mnemonic,” “Memory Tip,” or “Quick Match” formatting from the source. When the source uses a mnemonic list, retain its supported herb facts but rebuild them as option-specific clinical reasoning.
 11. When channelCombinationRequiresHerbMapping is true, identify in every Option A-D paragraph the source-supported herb represented by that exact channel set, in both English and Spanish. When requiredChannelHerbMappings is nonempty, reproduce the exact mapped herb name for its corresponding letter. Use the Pinyin and Pharmaceutical Latin form from relevantGuidelineNames when available. Explain the distinguishing channel or action; a generic statement that a choice merely lacks or adds a channel is insufficient. Do not invent a mapping absent from sourceFeedback.
 12. For a repeated-answer diversification item, explain the tested hierarchy role, exact dosage, preparation, processing, ingredient function or modification using only the explicit sourceFeedback, sourceCardEvidence or herbProfileEvidence. Do not add other hierarchy assignments, dose ranges or processing instructions that the supplied evidence does not state.
+13. During an automatic Board roster repair, inspect guidelineViolationsInExplanation. Do not repeat an out-of-roster herb or formula from that list merely because it appears in sourceFeedback. If the invalid name occurs only in the old explanation and the final choices are roster-safe, teach the distinction with the visible herbs, observable findings and therapeutic actions instead of introducing a replacement formula. Apply the same removal in English and Spanish.
 
 Required JSON:
 {"explanation":"Complete English feedback.","spanishExplanation":"Complete Spanish feedback.","feedbackSummary":"One concise sentence describing the substantive feedback improvement."}
@@ -12145,6 +12172,16 @@ PROMPT;
         $questionid = (string)$question['questionId'];
         $currentguidelineviolations = $findcreatedquestionguidelineviolations($question);
         $currentkeyedanswerviolations = $findkeyedanswerguidelineviolations($question);
+        $currentstemchoiceguidelineviolations = $findcreatedquestionguidelineviolations([
+            'prompt' => (string)($question['prompt'] ?? ''),
+            'options' => (array)($question['options'] ?? []),
+            'explanation' => '',
+        ]);
+        $currentexplanationguidelineviolations = $findcreatedquestionguidelineviolations([
+            'prompt' => '',
+            'options' => [],
+            'explanation' => (string)($question['explanation'] ?? ''),
+        ]);
         if ($autorepairguideline && $currentguidelineviolations === []) {
             throw new invalid_parameter_exception(
                 'Automatic guideline repair is available only when the current question has a guideline alert.'
@@ -12338,6 +12375,12 @@ PROMPT;
             'guidelineViolationsToRepair' => $boardguidelinerepair
                 ? $currentguidelineviolations
                 : [],
+            'guidelineViolationsInStemOrChoices' => $boardguidelinerepair
+                ? $currentstemchoiceguidelineviolations
+                : [],
+            'guidelineViolationsInExplanation' => $boardguidelinerepair
+                ? $currentexplanationguidelineviolations
+                : [],
             'allowedAppendixAHerbs' => $boardguidelinerepair
                 ? array_values($guidelineherbnames)
                 : [],
@@ -12351,7 +12394,7 @@ You are a senior NCBAHM Chinese Herbology mock-exam item editor. Return one revi
 
 Editorial rules:
 0. Read reviewDestination before editing. When it is "extra_guideline", this is an editorial-completion review for the independent Extra guideline bank, not a Board-publication review. Preserve every source-supported name in outsideRosterNamesToPreserve exactly in the visible stem or choices and do not replace, remove, or relabel it merely because it is absent from Appendix A or Appendix C. Complete the question, Spanish translation, two inference steps, and option-specific feedback normally. Do not claim that the result is Board-eligible.
-0A. When reviewDestination is "board" and guidelineViolationsToRepair is nonempty, this is an automatic roster repair. Replace each invalid distractor named there with a clinically plausible distractor selected only from allowedAppendixAHerbs or allowedAppendixCFormulas, as appropriate. Copy the allowed Pinyin name exactly. Preserve the keyed answer letter, correct answer concept, tested objective and fixed domain. Rewrite the English and Spanish explanation so every Option A-D paragraph analyzes the final visible choice. Do not preserve an invalid distractor merely because it appeared in the source, and do not publish the result.
+0A. When reviewDestination is "board" and guidelineViolationsToRepair is nonempty, this is an automatic roster repair. Use guidelineViolationsInStemOrChoices and guidelineViolationsInExplanation to repair the field where each problem actually occurs. Replace an invalid distractor only when it is present in the stem or choices, selecting a clinically plausible alternative only from allowedAppendixAHerbs or allowedAppendixCFormulas and copying its Pinyin exactly. When an invalid name appears only in the explanation, remove or rewrite that reference in both languages; do not change already roster-safe choices merely to demonstrate a replacement. Preserve the keyed answer letter, correct answer concept, tested objective and fixed domain. Rewrite the English and Spanish explanation so every Option A-D paragraph analyzes the final visible choice. Do not preserve an invalid name merely because it appeared in the source, and do not publish the result.
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer. The controlled repeated-answer transformation in rule 1B is the only exception to preserving the original answer concept; it still must preserve the keyed LETTER and use an explicit fact from sourceCardEvidence or herbProfileEvidence.
 1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection, differentiation or a source-supported formula-architecture clue that distinguishes the formula; Domain 2 must test individual-herb identification, properties, actions, indications, comparison, or a source-supported distinctive dose or processing fact; Domain 3 must test Duì Yào pairing, compatibility, synergy, antagonism or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing or dispensing principle; Domain 5 must test formula composition, chief/deputy/assistant/envoy hierarchy, ingredient roles or formula modification. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
 1AB. When the source stem names one formula and asks for its manifestations, indications, actions, functions, signs or symptoms, preserve that tested direction. Keep A-D as parallel clinical finding or therapeutic-description sets and preserve the keyed clinical concept. Do not turn the choices into four formula names and do not require the feedback to map A-D to different formulas.
