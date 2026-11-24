@@ -5784,6 +5784,57 @@ $publishedextraguideline = is_array($revisionstore['publishedExtraGuideline'] ??
     : null;
 $extraguidelineispublished = is_array($publishedextraguideline)
     && (string)($publishedextraguideline['status'] ?? '') === 'published';
+$extraguidelinefingerprint = static function(array $question): string {
+    $payload = [];
+    foreach ([
+        'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
+        'translations', 'contentType', 'cognitiveLevel', 'difficultyBand', 'source', 'sourceCard',
+    ] as $field) {
+        $payload[$field] = $question[$field] ?? null;
+    }
+    return hash('sha256', (string)json_encode(
+        $payload,
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+    ));
+};
+$publishedextraguidelinefingerprints = [];
+foreach ((array)($publishedextraguideline['questions'] ?? []) as $publishedextraquestion) {
+    if (!is_array($publishedextraquestion)) {
+        continue;
+    }
+    $publishedextraquestionid = (string)($publishedextraquestion['questionId'] ?? '');
+    if ($publishedextraquestionid !== '') {
+        $publishedextraguidelinefingerprints[$publishedextraquestionid] =
+            $extraguidelinefingerprint($publishedextraquestion);
+    }
+}
+$extraguidelinependingreviewquestions = array_values(array_filter(
+    $extraguidelinequestions,
+    static function(array $question) use (
+        $publishedextraguidelinefingerprints,
+        $extraguidelinefingerprint
+    ): bool {
+        $questionid = (string)($question['questionId'] ?? '');
+        return $questionid === ''
+            || !isset($publishedextraguidelinefingerprints[$questionid])
+            || $publishedextraguidelinefingerprints[$questionid]
+                !== $extraguidelinefingerprint($question);
+    }
+));
+$extraguidelinependingreviewlookup = array_fill_keys(array_map(
+    static fn(array $question): string => (string)($question['questionId'] ?? ''),
+    $extraguidelinependingreviewquestions
+), true);
+unset($extraguidelinependingreviewlookup['']);
+$extraguidelinependingreviewcount = count($extraguidelinependingreviewquestions);
+$extraguidelinependingreviewreadycount = count(array_filter(
+    $extraguidelinependingreviewquestions,
+    $isextraguidelinepublishable
+));
+$extraguidelinepublishedcurrentcount = max(
+    0,
+    $extraguidelinetotalcount - $extraguidelinependingreviewcount
+);
 
 $examprojects = [];
 foreach (($revisionstore['examProjects'] ?? []) as $storedexamid => $storedexam) {
@@ -13437,7 +13488,8 @@ $filteredquestions = array_values(array_filter(
         $currentexamcandidateids,
         $isprocessedquestion,
         $reservequestionidlookup,
-        $questionassignedtoexamlookup
+        $questionassignedtoexamlookup,
+        $extraguidelinependingreviewlookup
     ): bool {
         if ($custompreviewids !== []
                 && !in_array((string)($question['questionId'] ?? ''), $custompreviewids, true)) {
@@ -13483,6 +13535,10 @@ $filteredquestions = array_values(array_filter(
                 && ($question['_revision']['status'] ?? '') !== 'study_archive') return false;
         if ($reviewfilter === 'extra_guideline'
                 && ($question['_revision']['status'] ?? '') !== 'extra_guideline') return false;
+        if ($reviewfilter === 'extra_guideline'
+                && !isset($extraguidelinependingreviewlookup[(string)($question['questionId'] ?? '')])) {
+            return false;
+        }
         if ($reviewfilter === 'deleted'
                 && ($question['_revision']['status'] ?? '') !== 'deleted') return false;
         if ($reviewfilter === 'proposals_pending'
@@ -14596,7 +14652,7 @@ echo $OUTPUT->header();
     </section>
     <?php endif; ?>
     <?php if ($studyarchivecount > 0): ?><nav class="question-bank__actions" aria-label="Mock-only questions"><a class="question-bank__button question-bank__button--similar" href="<?php echo $studyarchiveurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Preguntas enviadas a Mock' : 'Mock-only questions'; ?> (<?php echo (int)$studyarchivecount; ?>)</a></nav><?php endif; ?>
-    <nav class="question-bank__actions" aria-label="Extra guideline bank"><a class="question-bank__button question-bank__button--similar" href="<?php echo $extraguidelineurl->out(false); ?>">Extra guideline bank (<?php echo (int)$extraguidelinecount; ?>)</a></nav>
+    <nav class="question-bank__actions" aria-label="Extra guideline bank"><a class="question-bank__button question-bank__button--similar" href="<?php echo $extraguidelineurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Extra guideline pendientes' : 'Pending Extra guideline'; ?> (<?php echo (int)$extraguidelinependingreviewcount; ?>)</a></nav>
     <?php if ($displaylang === 'es'): ?><section class="question-bank__language-state"><strong>Vista en español activa</strong>Los controles principales y las traducciones disponibles se muestran en español. Cuando una pregunta todavía no tiene traducción guardada, se identifica claramente y se conserva el original inglés para evitar una traducción clínica no verificada.</section><?php endif; ?>
     <?php if (is_array($mergecomposer)):
         $mergeleft = $mergecomposer['left'];
@@ -14788,7 +14844,7 @@ echo $OUTPUT->header();
     </section>
     <?php endif; ?>
     <section id="exam-builder" class="question-bank__exam-builder" aria-label="<?php echo $displaylang === 'es' ? 'Administrador de exámenes' : 'Exam builder'; ?>">
-        <header class="question-bank__exam-builder-head"><div><h3><?php echo $displaylang === 'es' ? 'Administrador de exámenes' : 'Exam builder'; ?></h3><p><?php echo $displaylang === 'es' ? 'Crea, abre y edita exámenes guardados; el progreso muestra cuántas preguntas están listas y cuántas faltan.' : 'Create, open and edit saved exams; progress shows how many questions are ready and how many are still missing.'; ?></p></div><div class="question-bank__exam-builder-head-actions"><a class="question-bank__button question-bank__button--similar" href="<?php echo $extraguidelineexamurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver Extra guideline' : 'View Extra guideline'; ?> (<?php echo (int)$extraguidelinecount; ?>)</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? '+ Crear examen' : '+ Create exam'; ?></a><button class="question-bank__button" type="button" onclick="this.closest('.question-bank__exam-builder').hidden=true"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></button></div></header>
+        <header class="question-bank__exam-builder-head"><div><h3><?php echo $displaylang === 'es' ? 'Administrador de exámenes' : 'Exam builder'; ?></h3><p><?php echo $displaylang === 'es' ? 'Crea, abre y edita exámenes guardados; el progreso muestra cuántas preguntas están listas y cuántas faltan.' : 'Create, open and edit saved exams; progress shows how many questions are ready and how many are still missing.'; ?></p></div><div class="question-bank__exam-builder-head-actions"><a class="question-bank__button question-bank__button--similar" href="<?php echo $extraguidelineexamurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Revisar Extra guideline' : 'Review Extra guideline'; ?> (<?php echo (int)$extraguidelinependingreviewcount; ?>)</a><a class="question-bank__button question-bank__button--publish" href="<?php echo $createexamurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? '+ Crear examen' : '+ Create exam'; ?></a><button class="question-bank__button" type="button" onclick="this.closest('.question-bank__exam-builder').hidden=true"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></button></div></header>
         <?php if ($targetedapprovedassignmentcount > 0): ?>
         <div class="question-bank__publish-readiness is-ready"><strong><?php echo $displaylang === 'es' ? 'Asignación reparada:' : 'Assignment repaired:'; ?></strong> <?php echo $displaylang === 'es'
             ? $targetedapprovedassignmentcount . ' pregunta' . ($targetedapprovedassignmentcount === 1 ? '' : 's') . ' ya publicada' . ($targetedapprovedassignmentcount === 1 ? '' : 's') . ' se incorporó' . ($targetedapprovedassignmentcount === 1 ? '' : 'n') . ' al examen para el que ' . ($targetedapprovedassignmentcount === 1 ? 'fue creada' : 'fueron creadas') . '. El total fue recalculado.'
@@ -15200,13 +15256,13 @@ echo $OUTPUT->header();
     <?php if ($reviewfilter === 'extra_guideline'): ?>
     <section class="question-bank__review-progress question-bank__review-progress--navigation">
         <div>
-            <strong><?php echo $displaylang === 'es' ? 'Banco Extra guideline' : 'Extra guideline bank'; ?>: <?php echo (int)$extraguidelinecount; ?></strong>
+            <strong><?php echo $displaylang === 'es' ? 'Extra guideline pendientes' : 'Pending Extra guideline'; ?>: <?php echo (int)$extraguidelinependingreviewcount; ?></strong>
             <p><?php echo $displaylang === 'es'
-                ? 'Colección independiente: ' . (int)$extraguidelinereadycount . ' lista(s) para estudiantes y ' . (int)$extraguidelinependingcount . ' pendiente(s). No se envían a Board, Mock ni Simulation Exams.'
-                : 'Independent collection: ' . (int)$extraguidelinereadycount . ' ready for students and ' . (int)$extraguidelinependingcount . ' pending. They are not sent to Board, Mock, or Simulation Exams.'; ?></p>
+                ? (int)$extraguidelinepublishedcurrentcount . ' ya publicadas y ocultas de esta cola; ' . (int)$extraguidelinependingreviewcount . ' nuevas, modificadas o incompletas requieren revisión. No se envían a Board, Mock ni Simulation Exams.'
+                : (int)$extraguidelinepublishedcurrentcount . ' already published and hidden from this queue; ' . (int)$extraguidelinependingreviewcount . ' new, changed, or incomplete questions require review. They are not sent to Board, Mock, or Simulation Exams.'; ?></p>
         </div>
         <div class="question-bank__editor-actions">
-            <?php if ($extraguidelinereadycount > 0): ?>
+            <?php if ($extraguidelinependingreviewreadycount > 0): ?>
             <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" onsubmit="return confirm('<?php echo $extraguidelineispublished ? ($displaylang === 'es' ? '¿Volver a publicar la colección Extra guideline con todas las preguntas completas actuales?' : 'Republish the Extra guideline collection with all currently complete questions?') : ($displaylang === 'es' ? '¿Publicar todas las preguntas completas en la colección Extra guideline independiente?' : 'Publish all complete questions in the independent Extra guideline collection?'); ?>');">
                 <input type="hidden" name="formaction" value="publishextraguideline">
                 <input type="hidden" name="returnreview" value="extra_guideline">
@@ -15214,8 +15270,10 @@ echo $OUTPUT->header();
                 <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
                 <button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $extraguidelineispublished ? ($displaylang === 'es' ? 'Volver a publicar colección' : 'Republish collection') : ($displaylang === 'es' ? 'Publicar colección' : 'Publish collection'); ?></button>
             </form>
-            <?php else: ?>
+            <?php elseif ($extraguidelinependingreviewcount > 0): ?>
             <span class="question-bank__button question-bank__button--approve" aria-disabled="true" title="<?php echo $displaylang === 'es' ? 'Complete el inglés, español, cuatro opciones y explicación de al menos una pregunta.' : 'Complete English, Spanish, four options, and explanation for at least one question.'; ?>"><?php echo $displaylang === 'es' ? 'Publicar colección' : 'Publish collection'; ?></span>
+            <?php else: ?>
+            <span class="question-bank__button question-bank__button--approve" aria-disabled="true"><?php echo $displaylang === 'es' ? 'Colección actualizada' : 'Collection up to date'; ?></span>
             <?php endif; ?>
             <?php if ($extraguidelineispublished): ?><a class="question-bank__button" href="<?php echo $extraguidelinestudenturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?>
             <a class="question-bank__button" href="<?php echo $exammanagerreturnurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Volver al Exam builder' : 'Back to Exam builder'; ?></a>
