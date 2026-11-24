@@ -67,7 +67,8 @@ $aipromptversion = 'ncbahm-mock-editor-5.1';
 if (!in_array($examprojectview, ['candidates', 'included'], true)) {
     $examprojectview = 'candidates';
 }
-if ($examprojectid !== '' && $examprojectview === 'included') {
+if (($examprojectid !== '' && $examprojectview === 'included')
+        || in_array($usagefilter, ['exam1', 'exam2_approved'], true)) {
     // An exam is a bounded list of at most 100 questions. Show it as one
     // searchable sequence instead of making the administrator locate a
     // position at a time or move through unrelated result pages.
@@ -13663,13 +13664,20 @@ usort($filteredquestions, static function(array $left, array $right) use (
             return $savedcomparison;
         }
     }
+    if ($usagefilter === 'exam1') {
+        $exam1ordercomparison = (int)$left['_examposition'] <=> (int)$right['_examposition'];
+        return $examordersort === 'desc' ? -$exam1ordercomparison : $exam1ordercomparison;
+    }
     if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true)) {
         $leftapproved = ($left['_revision']['status'] ?? '') === 'approved' ? 1 : 0;
         $rightapproved = ($right['_revision']['status'] ?? '') === 'approved' ? 1 : 0;
         if ($leftapproved !== $rightapproved) {
             return $leftapproved <=> $rightapproved;
         }
-        return $left['_exam2position'] <=> $right['_exam2position'];
+        $exam2ordercomparison = $left['_exam2position'] <=> $right['_exam2position'];
+        return $usagefilter === 'exam2_approved' && $examordersort === 'desc'
+            ? -$exam2ordercomparison
+            : $exam2ordercomparison;
     }
     if ($usagefilter === 'exam_project_pending') {
         return ($examprojectpositions[(string)$left['questionId']] ?? PHP_INT_MAX)
@@ -13839,7 +13847,8 @@ $baseparams = array_filter([
     'custompreview' => $custompreview !== '' ? $custompreview : null,
     'examproject' => $examprojectid !== '' ? $examprojectid : null,
     'examview' => $examprojectid !== '' && $examprojectview !== 'candidates' ? $examprojectview : null,
-    'examorder' => $examprojectid !== '' && $examprojectview === 'included' && $examordersort === 'desc'
+    'examorder' => (($examprojectid !== '' && $examprojectview === 'included')
+            || in_array($usagefilter, ['exam1', 'exam2_approved'], true)) && $examordersort === 'desc'
         ? 'desc'
         : null,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
@@ -14029,6 +14038,14 @@ if (is_array($currentexamproject)) {
         ];
     }
 }
+if (in_array($usagefilter, ['exam1', 'exam2_approved'], true)) {
+    $activefilters[] = [
+        'label' => $displaylang === 'es' ? 'Orden guardado' : 'Saved order',
+        'value' => $examordersort === 'desc'
+            ? ($displaylang === 'es' ? '100 a 1' : '100 to 1')
+            : ($displaylang === 'es' ? '1 a 100' : '1 to 100'),
+    ];
+}
 $resultfiltercontext = $activefilters === []
     ? [$displaylang === 'es' ? 'Preguntas disponibles' : 'Available questions']
     : array_map(
@@ -14064,6 +14081,11 @@ $studyarchiveurl = new moodle_url('/blocks/myprogress/admin-herbology-question-b
 $extraguidelineurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'extra_guideline']);
 $deletedurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['review' => 'deleted']);
 $exclusionqueueurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', ['download' => 'exclusion_queue']);
+$exam1listurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+    'usage' => 'exam1',
+    'lang' => $displaylang !== 'en' ? $displaylang : null,
+]));
+$exam1listurl->set_anchor('pending-questions');
 $exam2url = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'usage' => 'exam2_review',
     'lang' => $displaylang !== 'en' ? $displaylang : null,
@@ -14073,6 +14095,7 @@ $exam2approvedurl = new moodle_url('/blocks/myprogress/admin-herbology-question-
     'usage' => 'exam2_approved',
     'lang' => $displaylang !== 'en' ? $displaylang : null,
 ]));
+$exam2approvedurl->set_anchor('pending-questions');
 $pendingexamprojecturl = null;
 if (is_array($pendingexamproject)) {
     $pendingexamprojecturl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
@@ -14892,6 +14915,22 @@ echo $OUTPUT->header();
         </form>
         <?php endif; ?>
         <div class="question-bank__exam-grid">
+            <article class="question-bank__exam-card">
+                <h4>Exam 1</h4>
+                <div class="question-bank__exam-numbers"><span><?php echo $displaylang === 'es' ? 'Preguntas:' : 'Questions:'; ?> <strong><?php echo (int)$totals['exam1']; ?> / 100</strong></span><span><?php echo $displaylang === 'es' ? 'Estado:' : 'Status:'; ?> <strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?></strong></span></div>
+                <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo min(100, (int)$totals['exam1']); ?>"><span style="width:<?php echo min(100, (int)$totals['exam1']); ?>%"></span></div>
+                <div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo (int)$totals['exam1']; ?> <?php echo $displaylang === 'es' ? 'preguntas en el orden guardado' : 'questions in saved order'; ?></span></div>
+                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--primary" href="<?php echo $exam1listurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver preguntas del examen' : 'View exam questions'; ?> (<?php echo (int)$totals['exam1']; ?>)</a></div>
+            </article>
+            <?php if ($publishedexam2 !== null): ?>
+            <article class="question-bank__exam-card">
+                <h4>Exam 2</h4>
+                <div class="question-bank__exam-numbers"><span><?php echo $displaylang === 'es' ? 'Preguntas:' : 'Questions:'; ?> <strong><?php echo count($exam2positions); ?> / 100</strong></span><span><?php echo $displaylang === 'es' ? 'Estado:' : 'Status:'; ?> <strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?></strong></span></div>
+                <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo min(100, count($exam2positions)); ?>"><span style="width:<?php echo min(100, count($exam2positions)); ?>%"></span></div>
+                <div class="question-bank__published-exam"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$publishedexam2['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)($publishedexam2['version'] ?? 1); ?></span></div>
+                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--primary" href="<?php echo $exam2approvedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Ver preguntas del examen' : 'View exam questions'; ?> (<?php echo count($exam2positions); ?>)</a></div>
+            </article>
+            <?php endif; ?>
             <?php
             $extraguidelineprogresspercent = $extraguidelinetotalcount > 0
                 ? min(100, (int)round($extraguidelinereadycount * 100 / $extraguidelinetotalcount))
@@ -15429,6 +15468,7 @@ echo $OUTPUT->header();
         <label><span><?php echo $displaylang === 'es' ? 'Tema evaluado' : 'Tested detail'; ?></span><select name="detail"><option value="all">—</option><?php foreach ($detailfilteroptions as $detailfilteroption): ?><option value="<?php echo s($detailfilteroption); ?>"<?php echo $detailfilter === $detailfilteroption ? ' selected' : ''; ?>><?php echo s((string)($filtervalues[$detailfilteroption] ?? $detailfilteroption)); ?></option><?php endforeach; ?></select></label>
         <label><span>Editorial review</span><select name="review"><option value="all">All review states</option><option value="editing_drafts"<?php echo $reviewfilter === 'editing_drafts' ? ' selected' : ''; ?>>Saved editing drafts</option><option value="ai_drafts"<?php echo $reviewfilter === 'ai_drafts' ? ' selected' : ''; ?>>Current AI review group</option><option value="proposals_pending"<?php echo $reviewfilter === 'proposals_pending' ? ' selected' : ''; ?>>Publishing proposals</option><option value="needs_inference"<?php echo $reviewfilter === 'needs_inference' ? ' selected' : ''; ?>>Needs more inference</option><option value="needs_feedback"<?php echo $reviewfilter === 'needs_feedback' ? ' selected' : ''; ?>>Needs stronger feedback</option><option value="simulation_candidate"<?php echo $reviewfilter === 'simulation_candidate' ? ' selected' : ''; ?>>Simulation candidate</option><option value="reclassification_requested"<?php echo $reviewfilter === 'reclassification_requested' ? ' selected' : ''; ?>>Reclassification requested</option><option value="possible_exclusion"<?php echo $reviewfilter === 'possible_exclusion' ? ' selected' : ''; ?>>Possible exclusions</option><option value="study_archive"<?php echo $reviewfilter === 'study_archive' ? ' selected' : ''; ?>>Mock-only questions</option><option value="extra_guideline"<?php echo $reviewfilter === 'extra_guideline' ? ' selected' : ''; ?>>Extra guideline bank</option><option value="deleted"<?php echo $reviewfilter === 'deleted' ? ' selected' : ''; ?>>Deleted questions (recycle bin)</option></select></label>
         <?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="examview" value="<?php echo s($examprojectview); ?>"><?php if ($examprojectview === 'included'): ?><input type="hidden" name="examorder" value="<?php echo s($examordersort); ?>"><?php endif; ?><?php endif; ?>
+        <?php if (in_array($usagefilter, ['exam1', 'exam2_approved'], true)): ?><input type="hidden" name="examorder" value="<?php echo s($examordersort); ?>"><?php endif; ?>
         <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
         <div class="question-bank__filter-actions"><button class="question-bank__button" type="submit">Apply</button><a class="question-bank__button" href="<?php echo $clearurl->out(false); ?>">Clear</a></div>
     </form>
@@ -15571,6 +15611,23 @@ echo $OUTPUT->header();
         <input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><input type="hidden" name="examview" value="included"><input type="hidden" name="examorder" value="<?php echo s($examordersort); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
         <button class="question-bank__button question-bank__button--primary" type="submit"><?php echo $displaylang === 'es' ? 'Buscar' : 'Search'; ?></button>
         <a class="question-bank__button question-bank__exam-order-button" href="<?php echo $examordertoggleurl->out(false); ?>" aria-label="<?php echo $examordersort === 'asc' ? ($displaylang === 'es' ? 'Mostrar las preguntas más recientes primero' : 'Show newest questions first') : ($displaylang === 'es' ? 'Mostrar las primeras preguntas primero' : 'Show oldest questions first'); ?>"><span aria-hidden="true"><?php echo $examordersort === 'asc' ? '↓' : '↑'; ?></span><?php echo $examordersort === 'asc' ? ($displaylang === 'es' ? 'Más recientes primero' : 'Newest first') : ($displaylang === 'es' ? 'Primeras primero' : 'Oldest first'); ?></a>
+    </form><?php endif; ?>
+    <?php if (in_array($usagefilter, ['exam1', 'exam2_approved'], true)):
+        $legacyexamname = $usagefilter === 'exam1' ? 'Exam 1' : 'Exam 2';
+        $legacyexamtotal = $usagefilter === 'exam1' ? (int)$totals['exam1'] : count($exam2positions);
+        $legacyexamordertoggleurl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
+            'usage' => $usagefilter,
+            'examorder' => $examordersort === 'asc' ? 'desc' : 'asc',
+            'q' => $query !== '' ? $query : null,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ]));
+        $legacyexamordertoggleurl->set_anchor('pending-questions');
+    ?><form class="question-bank__exam-list-toolbar" method="get" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+        <div class="question-bank__exam-list-title"><strong><?php echo $legacyexamname; ?> · <?php echo $legacyexamtotal; ?> <?php echo $displaylang === 'es' ? 'preguntas del examen' : 'exam questions'; ?></strong><small><?php echo $displaylang === 'es' ? 'Ordenadas según la secuencia guardada del examen.' : 'Ordered by the exam’s saved sequence.'; ?></small></div>
+        <label><span><?php echo $displaylang === 'es' ? 'Buscar dentro del examen' : 'Search within this exam'; ?></span><input type="search" name="q" value="<?php echo s($query); ?>" placeholder="<?php echo $displaylang === 'es' ? 'ID, fórmula, hierba o texto' : 'ID, formula, herb, or text'; ?>"></label>
+        <input type="hidden" name="usage" value="<?php echo s($usagefilter); ?>"><input type="hidden" name="examorder" value="<?php echo s($examordersort); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
+        <button class="question-bank__button question-bank__button--primary" type="submit"><?php echo $displaylang === 'es' ? 'Buscar' : 'Search'; ?></button>
+        <a class="question-bank__button question-bank__exam-order-button" href="<?php echo $legacyexamordertoggleurl->out(false); ?>" aria-label="<?php echo $examordersort === 'asc' ? ($displaylang === 'es' ? 'Ordenar de 100 a 1' : 'Sort from 100 to 1') : ($displaylang === 'es' ? 'Ordenar de 1 a 100' : 'Sort from 1 to 100'); ?>"><span aria-hidden="true"><?php echo $examordersort === 'asc' ? '↓' : '↑'; ?></span><?php echo $examordersort === 'asc' ? ($displaylang === 'es' ? 'Orden 100 a 1' : 'Order 100 to 1') : ($displaylang === 'es' ? 'Orden 1 a 100' : 'Order 1 to 100'); ?></a>
     </form><?php endif; ?>
     <div id="pending-questions" class="question-bank__result-head"><div class="question-bank__result-context" data-result-filter-context><strong><?php echo $displaylang === 'es' ? 'Preguntas mostradas:' : 'Questions shown:'; ?></strong><span><?php echo s(implode(' · ', $resultfiltercontext)); ?></span></div><span data-inventory-result-count><?php echo (int)$resultcount; ?> <?php echo $displaylang === 'es' ? ($resultcount === 1 ? 'resultado' : 'resultados') : ('result' . ($resultcount === 1 ? '' : 's')); ?></span></div>
     <?php if ($pagequestions === []): ?><div class="question-bank__item"><?php echo $displaylang === 'es' ? 'Ninguna pregunta coincide con estos filtros.' : 'No questions match these filters.'; ?></div><?php else: ?>
@@ -15828,9 +15885,10 @@ echo $OUTPUT->header();
             }
         }
     ?><article id="question-<?php echo s($question['questionId']); ?>" class="question-bank__item<?php echo $question['_excluded'] ? ' question-bank__item--excluded' : ''; ?>">
+        <?php if ($usagefilter === 'exam1' && (int)$question['_examposition'] > 0): ?><div class="question-bank__temporary-order"><span><?php echo $displaylang === 'es' ? 'Orden guardado' : 'Saved order'; ?></span><strong>Exam 1 · <?php echo $displaylang === 'es' ? 'Pregunta' : 'Question'; ?> <?php echo str_pad((string)$question['_examposition'], 3, '0', STR_PAD_LEFT); ?></strong><small><?php echo $displaylang === 'es' ? 'de' : 'of'; ?> <?php echo (int)$totals['exam1']; ?></small></div><?php endif; ?>
         <?php if ($usagefilter === 'exam_project_pending' && isset($examprojectpositions[(string)$question['questionId']])): ?><div class="question-bank__temporary-order"><span><?php echo $displaylang === 'es' ? 'Orden temporal de revisión' : 'Temporary review order'; ?></span><strong><?php echo s((string)$currentexamproject['name']); ?> Question <?php echo str_pad((string)$examprojectpositions[(string)$question['questionId']], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$currentexamproject['targetCount']; ?></small></div><?php endif; ?>
         <?php if ($examprojectview === 'included' && is_array($currentexamproject) && isset($currentexampositionlookup[(string)$question['questionId']])): ?><div class="question-bank__temporary-order"><span><?php echo $displaylang === 'es' ? 'Orden de incorporación' : 'Added order'; ?></span><strong><?php echo s((string)$currentexamproject['name']); ?> · <?php echo $displaylang === 'es' ? 'Pregunta' : 'Question'; ?> <?php echo str_pad((string)$currentexampositionlookup[(string)$question['questionId']], 3, '0', STR_PAD_LEFT); ?></strong><small><?php echo $displaylang === 'es' ? 'de' : 'of'; ?> <?php echo count($currentexamquestionids); ?></small></div><?php endif; ?>
-        <?php if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true) && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span><?php echo $usagefilter === 'exam2_approved' ? 'Approved Exam 2 position' : 'Temporary review order'; ?></span><strong><?php echo $usagefilter === 'exam2_approved' ? 'Exam 2 Question ' : 'Proposed Exam 2 Question '; ?><?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small>of <?php echo (int)$exam2targetcount; ?></small></div><?php endif; ?>
+        <?php if (in_array($usagefilter, ['exam2_review', 'exam2_approved'], true) && $question['_exam2position'] > 0): ?><div class="question-bank__temporary-order"><span><?php echo $usagefilter === 'exam2_approved' ? ($displaylang === 'es' ? 'Orden guardado' : 'Saved order') : ($displaylang === 'es' ? 'Orden temporal de revisión' : 'Temporary review order'); ?></span><strong><?php echo $usagefilter === 'exam2_approved' ? 'Exam 2 · ' . ($displaylang === 'es' ? 'Pregunta ' : 'Question ') : ($displaylang === 'es' ? 'Pregunta propuesta de Exam 2 ' : 'Proposed Exam 2 Question '); ?><?php echo str_pad((string)$question['_exam2position'], 3, '0', STR_PAD_LEFT); ?></strong><small><?php echo $displaylang === 'es' ? 'de' : 'of'; ?> <?php echo $usagefilter === 'exam2_approved' ? count($exam2positions) : (int)$exam2targetcount; ?></small></div><?php endif; ?>
         <div class="question-bank__meta">
             <div class="question-bank__identity-row">
             <span class="question-bank__id"><?php echo s($question['questionId'] ?? 'Unnumbered'); ?></span>
