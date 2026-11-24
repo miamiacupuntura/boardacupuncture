@@ -15218,7 +15218,7 @@ echo $OUTPUT->header();
             <span class="question-bank__button question-bank__button--approve" aria-disabled="true" title="<?php echo $displaylang === 'es' ? 'Complete el inglés, español, cuatro opciones y explicación de al menos una pregunta.' : 'Complete English, Spanish, four options, and explanation for at least one question.'; ?>"><?php echo $displaylang === 'es' ? 'Publicar colección' : 'Publish collection'; ?></span>
             <?php endif; ?>
             <?php if ($extraguidelineispublished): ?><a class="question-bank__button" href="<?php echo $extraguidelinestudenturl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Abrir como estudiante' : 'Open as student'; ?></a><?php endif; ?>
-            <a class="question-bank__button" href="<?php echo $exammanagerreturnurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Exam builder' : 'Exam builder'; ?></a>
+            <a class="question-bank__button" href="<?php echo $exammanagerreturnurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Volver al Exam builder' : 'Back to Exam builder'; ?></a>
         </div>
     </section>
     <?php endif; ?>
