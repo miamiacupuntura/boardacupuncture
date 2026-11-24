@@ -156,6 +156,20 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
         return $data;
     }
     $canonicalnames = [];
+    $herbdisplays = [];
+    $herbpinyinpatterns = [];
+    $herblatinpatterns = [];
+    $pharmaceuticalparts = [
+        'bulbus', 'calculus', 'caulis', 'cortex', 'flos', 'folium', 'fructus', 'herba',
+        'pericarpium', 'radix', 'ramulus', 'resina', 'rhizoma', 'semen', 'spora', 'stigma',
+        'tuber',
+    ];
+    $flexiblepattern = static function(string $name): string {
+        return implode('\\s+', array_map(
+            static fn(string $word): string => preg_quote($word, '/'),
+            preg_split('/\s+/u', trim($name), -1, PREG_SPLIT_NO_EMPTY)
+        ));
+    };
     foreach ([
         [$CFG->dirroot . '/blocks/myprogress/single-herb-card-index.json', 'herbs'],
         [$CFG->dirroot . '/blocks/myprogress/formula-board-roster-2026.json', 'formulas'],
@@ -170,14 +184,60 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
             if ($lookupname !== '') {
                 $canonicalnames[$lookupname] = $officialname;
             }
+            if ($collectionkey !== 'herbs' || $lookupname === '') {
+                continue;
+            }
+            $officiallatin = trim((string)($record['latin'] ?? ''));
+            if ($officiallatin === '') {
+                continue;
+            }
+            $latinaliases = [$officiallatin];
+            $latinwords = preg_split('/\s+/u', $officiallatin, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+            foreach ($latinwords as $latinindex => $latinword) {
+                if (!in_array(strtolower($latinword), $pharmaceuticalparts, true) || $latinindex === 0) {
+                    continue;
+                }
+                $legacywords = $latinwords;
+                unset($legacywords[$latinindex]);
+                array_unshift($legacywords, $latinword);
+                $latinaliases[] = implode(' ', $legacywords);
+            }
+            $normalizedlatinaliases = [];
+            foreach (array_values(array_unique($latinaliases)) as $latinalias) {
+                $normalizedlatin = strtolower((string)preg_replace('/\s+/u', ' ', trim($latinalias)));
+                if ($normalizedlatin === '') {
+                    continue;
+                }
+                $normalizedlatinaliases[$normalizedlatin] = true;
+                $herblatinpatterns[$normalizedlatin] = $flexiblepattern($latinalias);
+            }
+            $herbdisplays[$lookupname] = [
+                'name' => $officialname,
+                'latin' => $officiallatin,
+                'latinAliases' => $normalizedlatinaliases,
+            ];
+            $herbpinyinpatterns[$lookupname] = $flexiblepattern($officialname);
         }
     }
     if ($canonicalnames === []) {
-        $data = ['names' => [], 'pattern' => ''];
+        $data = [
+            'names' => [],
+            'pattern' => '',
+            'herbDisplays' => [],
+            'legacyHerbPattern' => '',
+        ];
         return $data;
     }
     $lookupnames = array_keys($canonicalnames);
     usort($lookupnames, static fn(string $left, string $right): int => strlen($right) <=> strlen($left));
+    uksort(
+        $herbpinyinpatterns,
+        static fn(string $left, string $right): int => strlen($right) <=> strlen($left)
+    );
+    uksort(
+        $herblatinpatterns,
+        static fn(string $left, string $right): int => strlen($right) <=> strlen($left)
+    );
     $alternatives = array_map(static function(string $lookupname): string {
         return implode('\\s+', array_map(
             static fn(string $word): string => preg_quote($word, '/'),
@@ -187,6 +247,12 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
     $data = [
         'names' => $canonicalnames,
         'pattern' => '/(?<![A-Za-z0-9])(?:' . implode('|', $alternatives) . ')(?![A-Za-z0-9])/iu',
+        'herbDisplays' => $herbdisplays,
+        'legacyHerbPattern' => $herbpinyinpatterns === [] || $herblatinpatterns === []
+            ? ''
+            : '/(?<![A-Za-z0-9])(?<pinyin>' . implode('|', array_values($herbpinyinpatterns)) . ')'
+                . '\s*[-\x{2013}\x{2014}]\s*[^\/\r\n]{1,80}?\s*\/\s*'
+                . '(?<latin>' . implode('|', array_values($herblatinpatterns)) . ')(?![A-Za-z0-9])/iu',
     ];
     return $data;
 }
@@ -200,10 +266,18 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
     $casedata = block_myprogress_herbology_official_pinyin_case_data();
     $canonicalnames = (array)($casedata['names'] ?? []);
     $pattern = (string)($casedata['pattern'] ?? '');
+    $herbdisplays = (array)($casedata['herbDisplays'] ?? []);
+    $legacyherbpattern = (string)($casedata['legacyHerbPattern'] ?? '');
     if ($canonicalnames === [] || $pattern === '') {
         return $question;
     }
-    $replace = static function($value) use (&$replace, $canonicalnames, $pattern) {
+    $replace = static function($value) use (
+        &$replace,
+        $canonicalnames,
+        $pattern,
+        $herbdisplays,
+        $legacyherbpattern
+    ) {
         if (is_array($value)) {
             foreach ($value as $key => $nestedvalue) {
                 $value[$key] = $replace($nestedvalue);
@@ -212,6 +286,32 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         }
         if (!is_string($value) || $value === '') {
             return $value;
+        }
+        if ($legacyherbpattern !== '' && $herbdisplays !== []) {
+            $legacyreplaced = preg_replace_callback(
+                $legacyherbpattern,
+                static function(array $match) use ($herbdisplays): string {
+                    $pinyin = strtolower((string)preg_replace(
+                        '/\s+/u',
+                        ' ',
+                        trim((string)($match['pinyin'] ?? ''))
+                    ));
+                    $latin = strtolower((string)preg_replace(
+                        '/\s+/u',
+                        ' ',
+                        trim((string)($match['latin'] ?? ''))
+                    ));
+                    $official = (array)($herbdisplays[$pinyin] ?? []);
+                    if ($official === [] || !isset($official['latinAliases'][$latin])) {
+                        return (string)$match[0];
+                    }
+                    return (string)$official['name'] . ' (' . (string)$official['latin'] . ')';
+                },
+                $value
+            );
+            if (is_string($legacyreplaced)) {
+                $value = $legacyreplaced;
+            }
         }
         $replaced = preg_replace_callback($pattern, static function(array $match) use ($canonicalnames): string {
             $lookupname = strtolower((string)preg_replace('/\s+/u', ' ', trim((string)$match[0])));
@@ -224,6 +324,33 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         if (array_key_exists($field, $question)) {
             $question[$field] = $replace($question[$field]);
         }
+    }
+    foreach ([['nomenclature', 'herbs'], ['nomenclature', 'feedback', 'herbs']] as $herbpath) {
+        $herbrecords = &$question;
+        foreach ($herbpath as $herbpathkey) {
+            if (!is_array($herbrecords[$herbpathkey] ?? null)) {
+                unset($herbrecords);
+                continue 2;
+            }
+            $herbrecords = &$herbrecords[$herbpathkey];
+        }
+        foreach ($herbrecords as &$herbrecord) {
+            if (!is_array($herbrecord)) {
+                continue;
+            }
+            $recordpinyin = trim((string)($herbrecord['pinyin'] ?? ''));
+            if (preg_match('/^(.+?)\s*\([^()]+\)$/u', $recordpinyin, $displaymatch) === 1) {
+                $recordpinyin = trim((string)$displaymatch[1]);
+            }
+            $lookuppinyin = strtolower((string)preg_replace('/\s+/u', ' ', $recordpinyin));
+            $official = (array)($herbdisplays[$lookuppinyin] ?? []);
+            if ($official === []) {
+                continue;
+            }
+            $herbrecord['pinyin'] = (string)$official['name'];
+            $herbrecord['pharmaceuticalName'] = (string)$official['latin'];
+        }
+        unset($herbrecord, $herbrecords);
     }
     return $question;
 }

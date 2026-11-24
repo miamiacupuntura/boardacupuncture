@@ -32,6 +32,10 @@ $publication = is_array($store['publishedExtraGuideline'] ?? null)
 $questions = is_array($publication['questions'] ?? null)
     ? array_values(array_filter($publication['questions'], 'is_array'))
     : [];
+$questions = array_map(
+    'block_myprogress_herbology_canonicalize_pinyin_case_in_question',
+    $questions
+);
 $questioncount = count($questions);
 $pagecount = max(1, (int)ceil($questioncount / $pagesize));
 $pagenumber = min($pagenumber, $pagecount - 1);
