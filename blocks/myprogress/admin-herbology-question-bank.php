@@ -12604,12 +12604,15 @@ $filteredquestions = array_values(array_filter(
                 )) return false;
         if ($examprojectid !== '' && $examprojectview === 'included'
                 && !in_array((string)$question['questionId'], $currentexamquestionids, true)) return false;
-        // Candidate views must never show a question that already belongs to
+        // The active bank must never show a question that already belongs to
         // Exam 1, a published Simulation Exam, or any saved exam project.
-        // Included-question views remain available for editing the exam that
-        // already owns the question.
-        if ($examprojectid !== ''
-                && $examprojectview === 'candidates'
+        // Exam-specific and administrative archive views remain available so
+        // administrators can inspect the exam that already owns the question.
+        $showassignedexamquestions = $usagefilter === 'exam1'
+            || $usagefilter === 'exam2_approved'
+            || ($examprojectid !== '' && $examprojectview === 'included')
+            || in_array($reviewfilter, ['study_archive', 'extra_guideline', 'deleted'], true);
+        if (!$showassignedexamquestions
                 && isset($questionassignedtoexamlookup[(string)$question['questionId']])) return false;
         $questioncontent = (string)($question['contentType'] ?? 'other');
         if ($contentfilter !== 'all') {
@@ -13048,7 +13051,7 @@ if (is_array($currentexamproject)) {
     ];
 }
 $resultfiltercontext = $activefilters === []
-    ? [$displaylang === 'es' ? 'Todas las preguntas' : 'All questions']
+    ? [$displaylang === 'es' ? 'Preguntas disponibles' : 'Available questions']
     : array_map(
         static fn(array $filter): string => (string)$filter['label'] . ': ' . (string)$filter['value'],
         $activefilters
@@ -14428,7 +14431,7 @@ echo $OUTPUT->header();
     <section class="question-bank__active-filters" aria-label="<?php echo $displaylang === 'es' ? 'Filtros actuales' : 'Current filters'; ?>">
         <span class="question-bank__active-filters-title"><?php echo $displaylang === 'es' ? 'Filtros actuales:' : 'Current filters:'; ?></span>
         <?php if ($activefilters === []): ?>
-            <span class="question-bank__active-filter"><?php echo $displaylang === 'es' ? 'Todas las preguntas' : 'All questions'; ?></span>
+            <span class="question-bank__active-filter"><?php echo $displaylang === 'es' ? 'Preguntas disponibles' : 'Available questions'; ?></span>
         <?php else: ?>
             <?php foreach ($activefilters as $activefilter): ?><span class="question-bank__active-filter"><strong><?php echo s($activefilter['label']); ?>:</strong> <?php echo s($activefilter['value']); ?></span><?php endforeach; ?>
         <?php endif; ?>
