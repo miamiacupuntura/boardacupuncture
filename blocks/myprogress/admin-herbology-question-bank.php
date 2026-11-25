@@ -6978,10 +6978,12 @@ if ($usagefilter === 'exam_project_pending'
     $projectapprovedcandidateids = array_values(array_unique($projectapprovedcandidateids));
     $projectapprovedcandidateexamid = (string)$currentexamproject['id'];
     $projectapprovedcandidateat = gmdate(DATE_ATOM);
-    block_myprogress_herbology_override_update(static function(array $store) use (
+    $projectautolinkstore = block_myprogress_herbology_override_update(static function(array $store) use (
         $projectapprovedcandidateids,
         $projectapprovedcandidateexamid,
-        $projectapprovedcandidateat
+        $projectapprovedcandidateat,
+        $findreplaceableexamplaceholder,
+        $USER
     ): array {
         $project = $store['examProjects'][$projectapprovedcandidateexamid] ?? null;
         if (!is_array($project) || (string)($project['status'] ?? 'draft') === 'published') {
@@ -6998,9 +7000,48 @@ if ($usagefilter === 'exam_project_pending'
                 continue;
             }
             if (count($projectquestionids) >= $projecttarget) {
-                break;
+                $candidatequestionrecord = (array)(
+                    $store['questions'][$projectapprovedcandidateid]
+                        ?? $store['customQuestions'][$projectapprovedcandidateid]
+                        ?? []
+                );
+                $replacementquestionid = $findreplaceableexamplaceholder(
+                    $store,
+                    $project,
+                    $projectapprovedcandidateid,
+                    (string)($candidatequestionrecord['domainId'] ?? '')
+                );
+                $replacementindex = $replacementquestionid !== ''
+                    ? array_search($replacementquestionid, $projectquestionids, true)
+                    : false;
+                if ($replacementindex === false) {
+                    continue;
+                }
+                $projectquestionids[(int)$replacementindex] = $projectapprovedcandidateid;
+                if ((string)($store['questions'][$replacementquestionid]['examProjectId'] ?? '')
+                        === $projectapprovedcandidateexamid) {
+                    unset($store['questions'][$replacementquestionid]['examProjectId']);
+                    $store['questions'][$replacementquestionid]['bankDeferred'] = true;
+                }
+                if ((string)($store['customQuestions'][$replacementquestionid]['targetExamProjectId'] ?? '')
+                        === $projectapprovedcandidateexamid) {
+                    $store['customQuestions'][$replacementquestionid]['targetExamProjectId'] = '';
+                    $store['customQuestions'][$replacementquestionid]['bankDeferred'] = true;
+                }
+                $project['automaticPendingSlotReplacements'][] = [
+                    'removedQuestionId' => $replacementquestionid,
+                    'approvedQuestionId' => $projectapprovedcandidateid,
+                    'replacedAt' => $projectapprovedcandidateat,
+                    'replacedById' => (int)$USER->id,
+                    'replacedByName' => fullname($USER),
+                ];
+                $project['automaticPendingSlotReplacements'] = array_slice(
+                    (array)$project['automaticPendingSlotReplacements'],
+                    -100
+                );
+            } else {
+                $projectquestionids[] = $projectapprovedcandidateid;
             }
-            $projectquestionids[] = $projectapprovedcandidateid;
             $linkedquestionids[] = $projectapprovedcandidateid;
             if (is_array($store['questions'][$projectapprovedcandidateid] ?? null)) {
                 $store['questions'][$projectapprovedcandidateid]['examProjectId'] =
@@ -7026,6 +7067,24 @@ if ($usagefilter === 'exam_project_pending'
         $store['examProjects'][$projectapprovedcandidateexamid] = $project;
         return $store;
     });
+    $projectautolinkedquestionids = array_values(array_filter(
+        $projectapprovedcandidateids,
+        static fn(string $questionid): bool => in_array(
+            $questionid,
+            array_map(
+                'strval',
+                (array)($projectautolinkstore['examProjects'][$projectapprovedcandidateexamid]['questionIds'] ?? [])
+            ),
+            true
+        )
+    ));
+    if ($projectautolinkedquestionids === []) {
+        // Nothing changed. Rendering the current page is essential here: an
+        // unconditional redirect would request the same pending queue again
+        // and produce ERR_TOO_MANY_REDIRECTS in the browser.
+        $projectapprovedcandidateids = [];
+    }
+    if ($projectautolinkedquestionids !== []) {
     $projectapprovedcandidateurl = new moodle_url(
         '/blocks/myprogress/admin-herbology-question-bank.php',
         array_filter([
@@ -7037,13 +7096,14 @@ if ($usagefilter === 'exam_project_pending'
     $projectapprovedcandidateurl->set_anchor('pending-questions');
     redirect(
         $projectapprovedcandidateurl,
-        count($projectapprovedcandidateids) === 1
+        count($projectautolinkedquestionids) === 1
             ? 'The approved question was added to the exam and removed from Temporary Review Order.'
-            : count($projectapprovedcandidateids)
+            : count($projectautolinkedquestionids)
                 . ' approved questions were added to the exam and removed from Temporary Review Order.',
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && $rebalanceexamprojectrequested !== '') {
