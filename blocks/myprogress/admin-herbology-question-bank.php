@@ -11560,7 +11560,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         array $preservedoutsiderosternames = [],
         bool $preservesourcequestiontext = false,
         bool $preservecorrectchoice = false,
-        array $feedbackguidelineviolations = []
+        array $feedbackguidelineviolations = [],
+        bool $relocateprohibitedcorrectanswer = false
     ) use (
         $buildchannelherbmapping,
         $ensurechannelherbmappingfeedback,
@@ -11643,6 +11644,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             );
         }
         $sourcecorrectlabel = strtoupper(trim((string)($sourcequestion['correctLabel'] ?? '')));
+        $decodedcorrectlabel = strtoupper(trim((string)($decoded['correctLabel'] ?? '')));
+        if ($relocateprohibitedcorrectanswer
+                && in_array($sourcecorrectlabel, ['A', 'B', 'C', 'D'], true)
+                && in_array($decodedcorrectlabel, ['A', 'B', 'C', 'D'], true)
+                && $decodedcorrectlabel !== $sourcecorrectlabel) {
+            // A combined source key such as "Both of them" must be rewritten,
+            // but its saved letter is immutable. If the provider moved the
+            // correct concept, swap that complete choice back into the source
+            // letter in both languages instead of rejecting an otherwise
+            // usable draft or silently changing the exam answer key.
+            $swapchoiceletters = static function(
+                array &$options,
+                string $firstlabel,
+                string $secondlabel
+            ): void {
+                $firstindex = null;
+                $secondindex = null;
+                foreach ($options as $optionindex => $option) {
+                    if (!is_array($option)) {
+                        continue;
+                    }
+                    $optionlabel = strtoupper(trim((string)($option['label'] ?? '')));
+                    if ($optionlabel === $firstlabel) {
+                        $firstindex = $optionindex;
+                    } elseif ($optionlabel === $secondlabel) {
+                        $secondindex = $optionindex;
+                    }
+                }
+                if ($firstindex === null || $secondindex === null) {
+                    return;
+                }
+                $firsttext = (string)($options[$firstindex]['text'] ?? '');
+                $options[$firstindex]['text'] = (string)($options[$secondindex]['text'] ?? '');
+                $options[$secondindex]['text'] = $firsttext;
+            };
+            if (is_array($decoded['options'] ?? null)) {
+                $swapchoiceletters($decoded['options'], $sourcecorrectlabel, $decodedcorrectlabel);
+            }
+            if (is_array($decoded['translations']['es']['options'] ?? null)) {
+                $swapchoiceletters(
+                    $decoded['translations']['es']['options'],
+                    $sourcecorrectlabel,
+                    $decodedcorrectlabel
+                );
+            }
+            $decoded['correctLabel'] = $sourcecorrectlabel;
+        }
         if ($preservecorrectchoice && in_array($sourcecorrectlabel, ['A', 'B', 'C', 'D'], true)) {
             $sourcecorrecttext = '';
             foreach ((array)($sourcequestion['options'] ?? []) as $sourceoption) {
@@ -11684,9 +11732,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $requiredchannelherbmappings = $buildchannelherbmapping(
             (array)($sourcequestion['options'] ?? [])
         );
-        if ($prompt === '' || $explanation === '' || $reviewsummary === ''
-                || $correctlabel !== $sourcecorrectlabel) {
-            throw new UnexpectedValueException('The AI draft changed the answer key or omitted required text.');
+        if ($prompt === '' || $explanation === '' || $reviewsummary === '') {
+            throw new UnexpectedValueException('The AI draft omitted the question, explanation or review summary.');
+        }
+        if ($correctlabel !== $sourcecorrectlabel) {
+            throw new UnexpectedValueException('The AI draft did not preserve the required answer-key letter.');
         }
         if ($hasprohibitednegativewording($prompt)) {
             throw new UnexpectedValueException(
@@ -12880,7 +12930,8 @@ PROMPT;
                     $preservedoutsiderosternames,
                     $reviewforextraguideline,
                     $boardguidelinerepair,
-                    $boardguidelinerepair ? $currentexplanationguidelineviolations : []
+                    $boardguidelinerepair ? $currentexplanationguidelineviolations : [],
+                    $sourceprohibitedanswerchoice !== null
                 );
                 if ($requiresmultistagereview) {
                     $generateddraft = $refinefeedback(
@@ -12901,7 +12952,8 @@ PROMPT;
                         $preservedoutsiderosternames,
                         $reviewforextraguideline,
                         $boardguidelinerepair,
-                        $boardguidelinerepair ? $currentexplanationguidelineviolations : []
+                        $boardguidelinerepair ? $currentexplanationguidelineviolations : [],
+                        $sourceprohibitedanswerchoice !== null
                     );
                     if (trim($administratorproposal) !== '') {
                         $compliancenote = $validateinstructioncompliance(
