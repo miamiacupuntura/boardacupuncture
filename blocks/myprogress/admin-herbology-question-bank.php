@@ -2570,7 +2570,11 @@ $guidelineherbaliases = [
 ];
 $stripguidelineinstructionprefixes = static function(string $normalizedname): string {
     $stripped = preg_replace(
-        '/^(?:(?:add|choose|select|use|replace|include|introduce|remove|increase|decrease|while|both|'
+        '/^(?:(?:add(?:s|ed|ing)?|choos(?:e|es|ing)|chose|chosen|select(?:s|ed|ing)?|'
+            . 'us(?:e|es|ed|ing)|replac(?:e|es|ed|ing)|includ(?:e|es|ed|ing)|'
+            . 'introduc(?:e|es|ed|ing)|remov(?:e|es|ed|ing)|eliminat(?:e|es|ed|ing)|'
+            . 'omit(?:s|ted|ting)?|substitut(?:e|es|ed|ing)|retain(?:s|ed|ing)?|'
+            . 'increas(?:e|es|ed|ing)|decreas(?:e|es|ed|ing)|while|both|'
             . 'decoction|powder|raw|prepared|processed|honey\s+fried|honey\s+frying|'
             . 'honey\s+prepared|wine\s+fried|vinegar\s+fried|salt\s+fried|ginger\s+prepared)\s+)+/i',
         '',
