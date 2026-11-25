@@ -4686,6 +4686,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
     $returneditingdrafts = (bool)optional_param('returneditingdrafts', 0, PARAM_BOOL);
     $returneditingpage = max(0, optional_param('returneditingpage', 0, PARAM_INT));
     $guidelineoverride = (bool)optional_param('guidelineoverride', 0, PARAM_BOOL);
+    $approvalerrorurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        array_filter([
+            'q' => $questionid,
+            'examproject' => $examprojectid !== '' ? $examprojectid : null,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ])
+    );
+    $approvalerrorurl->set_anchor('question-' . $questionid);
+    $redirectapprovalerror = static function(string $message) use ($approvalerrorurl): void {
+        redirect(
+            $approvalerrorurl,
+            $message,
+            null,
+            \core\output\notification::NOTIFY_ERROR
+        );
+    };
     $approvalguidelineviolations = [];
     $approvalexamprojectid = $examprojectid !== ''
         ? $examprojectid
@@ -4699,16 +4716,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
     }
     $pinforexam2 = $usagefilter === 'exam2_review' && $approvalexamprojectid === '';
     if ($findquestion($basebank, $questionid) === null) {
-        throw new invalid_parameter_exception('Unknown Herbology question ID.');
+        $redirectapprovalerror('Publication could not continue because the Herbology question ID is no longer available.');
     }
-    $approvaldraft = $revisionstore['questions'][$questionid]['draft'] ?? null;
+    $approvalstoredrecord = is_array($revisionstore['questions'][$questionid] ?? null)
+        ? $revisionstore['questions'][$questionid]
+        : [];
+    if (!in_array((string)($approvalstoredrecord['status'] ?? ''), ['draft', 'pending_reclassification'], true)
+            || !is_array($approvalstoredrecord['draft'] ?? null)) {
+        $redirectapprovalerror(
+            'This review is no longer an approvable draft. Refresh the question and use the action shown on its current card.'
+        );
+    }
+    if ($approvalexamprojectid !== '') {
+        $approvalproject = $revisionstore['examProjects'][$approvalexamprojectid];
+        $approvalprojectquestionids = array_values(array_unique(array_map(
+            'strval',
+            (array)($approvalproject['questionIds'] ?? [])
+        )));
+        if (!in_array($questionid, $approvalprojectquestionids, true)
+                && count($approvalprojectquestionids) >= (int)($approvalproject['targetCount'] ?? 100)) {
+            $redirectapprovalerror(
+                'This exam already contains its target number of questions. Remove or replace one before publishing another.'
+            );
+        }
+    }
+    $approvaldraft = $approvalstoredrecord['draft'];
     if (is_array($approvaldraft)) {
         $approvaldraft = $normalizecreatedquestionpinyin($approvaldraft);
         $approvalguidelineviolations = $findcreatedquestionguidelineviolations($approvaldraft);
         if ($approvalguidelineviolations !== [] && !$guidelineoverride) {
-            throw new invalid_parameter_exception(
-                'This question cannot be published because its herb or formula names are outside the 2026 guideline: '
-                    . implode(' | ', $approvalguidelineviolations)
+            $redirectapprovalerror(
+                'This question requires “Publish with warning” or “Extra guideline bank” because its herb or formula '
+                    . 'names are outside the 2026 guideline: ' . implode(' | ', $approvalguidelineviolations)
             );
         }
     }
@@ -4721,7 +4760,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
         );
     }
     if ($prohibitedanswerchoice !== null) {
-        throw new invalid_parameter_exception(
+        $redirectapprovalerror(
             'This question cannot be approved until the combined answer choice “'
                 . $prohibitedanswerchoice . '” is replaced with one specific distractor.'
         );
@@ -4731,7 +4770,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
                 || $hasprohibitednegativewording(
                     (string)($approvaldraft['translations']['es']['prompt'] ?? '')
                 ))) {
-        throw new invalid_parameter_exception(
+        $redirectapprovalerror(
             'This question cannot be approved until the negative stem is rewritten as a positive question.'
         );
     }
@@ -4750,7 +4789,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
     if ($approvalrequiredherbs > 0
             && (!is_array($approvaldraft)
                 || count($visibleherbnames($approvaldraft)) < $approvalrequiredherbs)) {
-        throw new invalid_parameter_exception(
+        $redirectapprovalerror(
             'This correction cannot be approved because the requested herb names are still missing from the stem '
                 . 'and answer choices. Complete the correction first.'
         );
@@ -4766,65 +4805,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
             $savedbyname
         )
         : null;
-    block_myprogress_herbology_override_update(static function(array $store) use (
-        $questionid,
-        $approvalexamprojectid,
-        $pinforexam2,
-        $approvaldraft,
-        $approvalguidelineoverride,
-        $savedat,
-        $savedbyname,
-        $USER
-    ): array {
-        $previous = is_array($store['questions'][$questionid] ?? null)
-            ? $store['questions'][$questionid]
-            : [];
-        if (!in_array((string)($previous['status'] ?? ''), ['draft', 'pending_reclassification'], true)
-                || !is_array($previous['draft'] ?? null)) {
-            throw new invalid_parameter_exception('Only a visible review draft can be approved.');
-        }
-        $history = is_array($previous['history'] ?? null) ? $previous['history'] : [];
-        $history[] = array_diff_key($previous, ['history' => true, 'original' => true]);
-        $previous['history'] = array_slice($history, -20);
-        $previous['status'] = 'approved';
-        $previous['draft'] = $approvaldraft;
-        $previous['approved'] = $approvaldraft;
-        $previous['requestReclassification'] = false;
-        $previous['proposalStatus'] = 'reviewed';
-        if (is_array($approvalguidelineoverride)) {
-            $previous['guidelineOverride'] = $approvalguidelineoverride;
-        } else {
-            unset($previous['guidelineOverride']);
-        }
-        if ($pinforexam2) {
-            $previous['exam2Pinned'] = true;
-        }
-        if ($approvalexamprojectid !== '') {
-            $previous['examProjectId'] = $approvalexamprojectid;
-            $project = $store['examProjects'][$approvalexamprojectid];
-            $projectquestionids = array_values(array_unique(array_map(
-                'strval',
-                is_array($project['questionIds'] ?? null) ? $project['questionIds'] : []
-            )));
-            if (!in_array($questionid, $projectquestionids, true)) {
-                if (count($projectquestionids) >= (int)($project['targetCount'] ?? 100)) {
-                    throw new invalid_parameter_exception(
-                        'This exam already contains its target number of questions. Remove one before adding another.'
-                    );
-                }
-                $projectquestionids[] = $questionid;
+    try {
+        block_myprogress_herbology_override_update(static function(array $store) use (
+            $questionid,
+            $approvalexamprojectid,
+            $pinforexam2,
+            $approvaldraft,
+            $approvalguidelineoverride,
+            $savedat,
+            $savedbyname,
+            $USER
+        ): array {
+            $previous = is_array($store['questions'][$questionid] ?? null)
+                ? $store['questions'][$questionid]
+                : [];
+            if (!in_array((string)($previous['status'] ?? ''), ['draft', 'pending_reclassification'], true)
+                    || !is_array($previous['draft'] ?? null)) {
+                throw new invalid_parameter_exception('Only a visible review draft can be approved.');
             }
-            $project['questionIds'] = $projectquestionids;
-            $project['updatedAt'] = $savedat;
-            $store['examProjects'][$approvalexamprojectid] = $project;
-        }
-        $previous['revisionNumber'] = (int)($previous['revisionNumber'] ?? 0) + 1;
-        $previous['savedAt'] = $savedat;
-        $previous['savedById'] = (int)$USER->id;
-        $previous['savedByName'] = $savedbyname;
-        $store['questions'][$questionid] = $previous;
-        return $store;
-    });
+            $history = is_array($previous['history'] ?? null) ? $previous['history'] : [];
+            $history[] = array_diff_key($previous, ['history' => true, 'original' => true]);
+            $previous['history'] = array_slice($history, -20);
+            $previous['status'] = 'approved';
+            $previous['draft'] = $approvaldraft;
+            $previous['approved'] = $approvaldraft;
+            $previous['requestReclassification'] = false;
+            $previous['proposalStatus'] = 'reviewed';
+            if (is_array($approvalguidelineoverride)) {
+                $previous['guidelineOverride'] = $approvalguidelineoverride;
+            } else {
+                unset($previous['guidelineOverride']);
+            }
+            if ($pinforexam2) {
+                $previous['exam2Pinned'] = true;
+            }
+            if ($approvalexamprojectid !== '') {
+                $previous['examProjectId'] = $approvalexamprojectid;
+                $project = $store['examProjects'][$approvalexamprojectid];
+                $projectquestionids = array_values(array_unique(array_map(
+                    'strval',
+                    is_array($project['questionIds'] ?? null) ? $project['questionIds'] : []
+                )));
+                if (!in_array($questionid, $projectquestionids, true)) {
+                    if (count($projectquestionids) >= (int)($project['targetCount'] ?? 100)) {
+                        throw new invalid_parameter_exception(
+                            'This exam already contains its target number of questions. Remove one before adding another.'
+                        );
+                    }
+                    $projectquestionids[] = $questionid;
+                }
+                $project['questionIds'] = $projectquestionids;
+                $project['updatedAt'] = $savedat;
+                $store['examProjects'][$approvalexamprojectid] = $project;
+            }
+            $previous['revisionNumber'] = (int)($previous['revisionNumber'] ?? 0) + 1;
+            $previous['savedAt'] = $savedat;
+            $previous['savedById'] = (int)$USER->id;
+            $previous['savedByName'] = $savedbyname;
+            $store['questions'][$questionid] = $previous;
+            return $store;
+        });
+    } catch (Throwable $approvalerror) {
+        debugging(
+            'Herbology question publication failed for ' . $questionid . ': ' . $approvalerror->getMessage(),
+            DEBUG_DEVELOPER
+        );
+        $redirectapprovalerror(
+            'Publication could not be saved: ' . $approvalerror->getMessage()
+        );
+    }
 
     $approvalreturnfilters = $questionbankreturnfilterparams($questionid);
     if ($hasquestionbankselectionfilters($approvalreturnfilters)) {
