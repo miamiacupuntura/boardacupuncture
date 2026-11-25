@@ -12124,16 +12124,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         if (!is_array($decoded)) {
             throw new UnexpectedValueException('The AI response is not a JSON object.');
         }
-        if ($feedbackguidelineviolations !== []) {
-            // Providers may copy an invalid formula or herb from the source
-            // explanation even after being told to remove it. Clean only the
-            // feedback fields before either validation pass; the stem, choices
-            // and keyed answer remain untouched.
-            $sanitizefeedback = static function(
-                string $feedback,
-                bool $spanish
-            ) use ($feedbackguidelineviolations): string {
-                foreach ($feedbackguidelineviolations as $violation) {
+        // Providers may copy or invent an invalid formula or herb in feedback.
+        // Keep this deterministic cleaner available for both source violations
+        // and names introduced by the generated explanation itself.
+        $sanitizefeedback = static function(
+            string $feedback,
+            bool $spanish,
+            array $guidelineviolations
+        ): string {
+                foreach ($guidelineviolations as $violation) {
                     if (preg_match(
                         '/:\s*([^|(]+?)(?:\s*\(|$)/u',
                         (string)$violation,
@@ -12156,6 +12155,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                         ? ($isformula ? 'esa referencia secundaria de fórmula' : 'esa referencia secundaria de hierba')
                         : ($isformula ? 'that secondary formula reference' : 'that secondary herb reference');
                     $feedback = preg_replace(
+                        '/(?<![\p{L}\p{N}])' . $quotedname . '\s*\([^)]*\)/iu',
+                        $replacement,
+                        $feedback
+                    ) ?? $feedback;
+                    $feedback = preg_replace(
                         '/(?<![\p{L}\p{N}])' . $quotedname . '(?![\p{L}\p{N}])/iu',
                         $replacement,
                         $feedback
@@ -12163,20 +12167,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 }
                 $feedback = preg_replace('/[ \t]+([,.;:])/u', '$1', $feedback) ?? $feedback;
                 return trim(preg_replace('/[ \t]{2,}/u', ' ', $feedback) ?? $feedback);
-            };
+        };
+        if ($feedbackguidelineviolations !== []) {
+            // Clean only the feedback fields before either validation pass;
+            // the stem, choices and keyed answer remain untouched.
             $decoded['explanation'] = $sanitizefeedback(
                 (string)($decoded['explanation'] ?? ''),
-                false
+                false,
+                $feedbackguidelineviolations
             );
             if (is_array($decoded['translations']['es'] ?? null)) {
                 $decoded['translations']['es']['explanation'] = $sanitizefeedback(
                     (string)($decoded['translations']['es']['explanation'] ?? ''),
-                    true
+                    true,
+                    $feedbackguidelineviolations
                 );
             }
             $decoded['reviewSummary'] = $sanitizefeedback(
                 (string)($decoded['reviewSummary'] ?? ''),
-                false
+                false,
+                $feedbackguidelineviolations
             );
         }
         $sourcecorrectlabel = strtoupper(trim((string)($sourcequestion['correctLabel'] ?? '')));
@@ -12945,6 +12955,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $cognitivelevel = strtolower(trim((string)($decoded['cognitiveLevel'] ?? 'infer')));
         if (!in_array($cognitivelevel, ['infer', 'analyze'], true)) {
             $cognitivelevel = 'infer';
+        }
+        if (!$preservesourcequestiontext) {
+            $generatedstemchoiceviolations = array_values(array_unique(array_merge(
+                $findcreatedquestionguidelineviolations([
+                    'prompt' => $prompt,
+                    'options' => array_map(
+                        static fn(string $label): array => [
+                            'label' => $label,
+                            'text' => $optionsbylabel[$label],
+                        ],
+                        ['A', 'B', 'C', 'D']
+                    ),
+                    'explanation' => '',
+                ]),
+                $findcreatedquestionguidelineviolations([
+                    'prompt' => $spanishprompt,
+                    'options' => array_map(
+                        static fn(string $label): array => [
+                            'label' => $label,
+                            'text' => $spanishoptionsbylabel[$label],
+                        ],
+                        ['A', 'B', 'C', 'D']
+                    ),
+                    'explanation' => '',
+                ])
+            )));
+            $generatedfeedbackviolations = array_values(array_unique(array_merge(
+                $findcreatedquestionguidelineviolations([
+                    'prompt' => '',
+                    'options' => [],
+                    'explanation' => $explanation,
+                ]),
+                $findcreatedquestionguidelineviolations([
+                    'prompt' => '',
+                    'options' => [],
+                    'explanation' => $spanishexplanation,
+                ])
+            )));
+            if ($generatedstemchoiceviolations === [] && $generatedfeedbackviolations !== []) {
+                // An invalid name introduced only in feedback must not block an
+                // otherwise valid Board question. Remove that unsupported
+                // reference in both languages, then run the full validation.
+                $explanation = $sanitizefeedback(
+                    $explanation,
+                    false,
+                    $generatedfeedbackviolations
+                );
+                $spanishexplanation = $sanitizefeedback(
+                    $spanishexplanation,
+                    true,
+                    $generatedfeedbackviolations
+                );
+                $reviewsummary = $sanitizefeedback(
+                    $reviewsummary,
+                    false,
+                    $generatedfeedbackviolations
+                );
+            }
         }
         $validateddraft = [
             'prompt' => $prompt,
