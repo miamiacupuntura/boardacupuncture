@@ -11828,10 +11828,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             ),
         ];
         $visiblenomenclature = $visibleboardnomenclature($visiblequestion);
+        $sourcevisiblenomenclature = $visibleboardnomenclature($sourcequestion);
+        $sourcevisibleguidelinenames = array_values(array_unique(array_merge(
+            (array)($sourcevisiblenomenclature['herbs'] ?? []),
+            (array)($sourcevisiblenomenclature['formulas'] ?? [])
+        )));
+        $draftvisibleguidelinenames = array_values(array_unique(array_merge(
+            (array)($visiblenomenclature['herbs'] ?? []),
+            (array)($visiblenomenclature['formulas'] ?? [])
+        )));
         $hasvisibleoutsiderostername = count(array_filter(
             $preservedoutsiderosternames,
             static fn(string $name): bool => stripos($visiblequestiontext, $name) !== false
         )) > 0;
+        if ($sourcevisibleguidelinenames !== []
+                && array_intersect($sourcevisibleguidelinenames, $draftvisibleguidelinenames) === []) {
+            throw new UnexpectedValueException(
+                'Automatic review removed every source-supported Appendix A/C name. Keep at least one exact visible '
+                    . 'name from the source in the English and Spanish stem or A-D choices: '
+                    . implode(', ', $sourcevisibleguidelinenames) . '.'
+            );
+        }
         if ($visiblenomenclature['herbs'] === []
                 && $visiblenomenclature['formulas'] === []
                 && !$hasvisibleoutsiderostername) {
@@ -12767,6 +12784,11 @@ PROMPT;
         $sourceprohibitedanswerchoice = $findprohibitedanswerchoice(
             (array)($sourcequestion['options'] ?? [])
         );
+        $sourcevisiblenomenclature = $visibleboardnomenclature($sourcequestion);
+        $sourcevisibleguidelinenames = array_values(array_unique(array_merge(
+            (array)($sourcevisiblenomenclature['herbs'] ?? []),
+            (array)($sourcevisiblenomenclature['formulas'] ?? [])
+        )));
         $questionsourcecard = is_array($sourcequestion['sourceCard'] ?? null)
             ? $sourcequestion['sourceCard']
             : [];
@@ -12794,6 +12816,7 @@ PROMPT;
             'channelCombinationRequiresHerbMapping' => $sourcechannelcombination,
             'requiredChannelHerbMappings' => $sourcechannelherbmapping,
             'prohibitedSourceAnswerChoice' => $sourceprohibitedanswerchoice,
+            'sourceVisibleGuidelineNames' => $sourcevisibleguidelinenames,
             'source' => $sourcequestion['source'] ?? [],
             'sourceCard' => $sourcequestion['sourceCard'] ?? [],
             'sourceCardEvidence' => $sourcecardevidence,
@@ -12835,7 +12858,7 @@ Editorial rules:
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer. The controlled repeated-answer transformation in rule 1B is the only exception to preserving the original answer concept; it still must preserve the keyed LETTER and use an explicit fact from sourceCardEvidence or herbProfileEvidence.
 1A. The rewritten item must genuinely assess its fixed domain, not merely retain the domain label. Domain 1 must test formula selection, differentiation or a source-supported formula-architecture clue that distinguishes the formula; Domain 2 must test individual-herb identification, properties, actions, indications, comparison, or a source-supported distinctive dose or processing fact; Domain 3 must test Duì Yào pairing, compatibility, synergy, antagonism or ingredient relationships; Domain 4 must test a source-supported preparation method, dosage, contraindication, toxicity, interaction, incompatibility, storage, processing or dispensing principle; Domain 5 must test formula composition, chief/deputy/assistant/envoy hierarchy, ingredient roles or formula modification. Do not turn a Domain 4 source into a simple herb-identification item. The decisive inference must match the domain's educational objective.
 1AB. When the source stem names one formula and asks for its manifestations, indications, actions, functions, signs or symptoms, preserve that tested direction. Keep A-D as parallel clinical finding or therapeutic-description sets and preserve the keyed clinical concept. Do not turn the choices into four formula names and do not require the feedback to map A-D to different formulas.
-1AC. Every reviewed question must visibly name at least one source-supported herb or formula in the English stem or A-D choices and preserve that Pinyin name in the Spanish version. Never return a herbology item whose visible question consists only of pattern or diagnosis labels. If the current stem asks “Which formula?” while A-D are clinical presentations, either rebuild A-D as source-supported formula choices or, when only one tested formula is documented, name that formula in the stem and ask which presentation or indication fits it. Preserve the keyed answer letter and educational objective.
+1AC. Every reviewed question must visibly name at least one source-supported herb or formula in the English stem or A-D choices and preserve that Pinyin name in the Spanish version. When sourceVisibleGuidelineNames is nonempty, retain at least one exact name from that list in the visible English and Spanish stem or choices; do not remove all listed names merely to create inference. This includes roster-boundary and protected-substance safety questions, where a current Appendix A comparison herb may remain visible while the historical or prohibited substance is tested. Never return a herbology item whose visible question consists only of pattern or diagnosis labels. If the current stem asks “Which formula?” while A-D are clinical presentations, either rebuild A-D as source-supported formula choices or, when only one tested formula is documented, name that formula in the stem and ask which presentation or indication fits it. Preserve the keyed answer letter and educational objective.
 1AA. Distinguish therapeutic scope from shared ingredients. Choose a complete formula when the item tests a complete pattern architecture and its coordinated therapeutic strategy. A Duì Yào may be a core pair, a source-supported modification, or a brief prescription for a narrow objective. It is neither a commercial patent formula nor an automatic equivalent of a classical formula. Never rewrite a formula-versus-Duì-Yào scope question as a generic single-herb indication question, and never label a two-herb pair as a patent or classical formula.
 1B. Use answerRepetition to reduce redundant questions. When activeQuestionCount is at least 3, use preferredFocus as a rotation target only if sourceFeedback, sourceCardEvidence or herbProfileEvidence explicitly states the needed fact. Formula-answer groups rotate through clinical differentiation, hierarchy or ingredient role, ingredient function, composition or modification, and preparation or processing. Individual-herb groups rotate through clinical differentiation, distinctive dosage, preparation or processing, safety or contraindication, and channel or function differentiation. Preserve the correct LETTER by placing the new source-supported correct fact at that letter and rebuild all distractors in parallel form. Never infer hierarchy from ingredient order, never assign deputy/assistant/envoy roles when the source only names a chief, never invent or approximate a dose, and never invent a preparation or processing method. If preferredFocus is unsupported or conflicts with the fixed domain, retain the original objective and improve its differentiation instead. Do not transform every repeated answer: clinical occurrences remain clinical, while supported hierarchy, dosage, processing, safety and composition occurrences diversify the set.
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
