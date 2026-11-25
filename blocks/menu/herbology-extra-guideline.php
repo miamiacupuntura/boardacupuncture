@@ -99,7 +99,7 @@ JS);
 echo $OUTPUT->header();
 ?>
 <style>
-.extra-guideline{max-width:1180px;margin:0 auto 3rem;color:#082f49}.extra-guideline__toolbar{display:flex;justify-content:space-between;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem}.extra-guideline__toolbar-group{display:flex;gap:.6rem;flex-wrap:wrap}.extra-guideline__button{display:inline-flex;align-items:center;justify-content:center;border:1px solid #b8cbd8;border-radius:.6rem;padding:.6rem .9rem;background:#fff;color:#083b5c;font-weight:700;text-decoration:none}.extra-guideline__button:hover{background:#f1f7fa;text-decoration:none}.extra-guideline__button--primary{background:#087f6b;border-color:#087f6b;color:#fff}.extra-guideline__hero{border:1px solid #b8d8d1;border-left:6px solid #087f6b;border-radius:.85rem;background:#eefaf6;padding:1.25rem 1.4rem;margin-bottom:1rem}.extra-guideline__hero h2{margin:0 0 .35rem}.extra-guideline__hero p{margin:.35rem 0}.extra-guideline__warning{border:1px solid #e6b34b;border-radius:.7rem;background:#fff8e7;padding:.8rem 1rem;margin-top:1rem}.extra-guideline__meta{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.8rem;color:#38566b}.extra-guideline__list{display:grid;gap:1rem}.extra-guideline__card{border:1px solid #cbdbe5;border-radius:.85rem;background:#fff;padding:1.2rem}.extra-guideline__card h3{font-size:1.12rem;line-height:1.45;margin:.2rem 0 1rem}.extra-guideline__eyebrow{font-size:.78rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#087f6b}.extra-guideline__choices{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}.extra-guideline__choice{display:flex;gap:.55rem;border:1px solid #d5e1e8;border-radius:.55rem;background:#f8fafc;padding:.75rem;cursor:pointer}.extra-guideline__choice.is-correct{border-color:#16a085;background:#eaf8f3}.extra-guideline__choice.is-incorrect{border-color:#df5c5c;background:#fff0f0}.extra-guideline__actions{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:1rem}.extra-guideline__result{font-weight:800}.extra-guideline__result.is-correct{color:#087f5b}.extra-guideline__result.is-incorrect{color:#b42318}.extra-guideline__result.is-warning{color:#9a5b00}.extra-guideline__explanation{margin-top:1rem;border-left:4px solid #0e9f9a;background:#edf9f7;padding:.85rem 1rem}.extra-guideline__pagination{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-top:1.3rem}.extra-guideline__empty{border:1px solid #cbdbe5;border-radius:.8rem;background:#fff;padding:1.4rem}@media(max-width:760px){.extra-guideline__choices{grid-template-columns:1fr}.extra-guideline__card{padding:.9rem}}
+.extra-guideline{max-width:1180px;margin:0 auto 3rem;color:#082f49}.extra-guideline__toolbar{display:flex;justify-content:space-between;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem}.extra-guideline__toolbar-group{display:flex;gap:.6rem;flex-wrap:wrap}.extra-guideline__button{display:inline-flex;align-items:center;justify-content:center;border:1px solid #b8cbd8;border-radius:.6rem;padding:.6rem .9rem;background:#fff;color:#083b5c;font-weight:700;text-decoration:none}.extra-guideline__button:hover{background:#f1f7fa;text-decoration:none}.extra-guideline__button--primary{background:#087f6b;border-color:#087f6b;color:#fff}.extra-guideline__hero{border:1px solid #b8d8d1;border-left:6px solid #087f6b;border-radius:.85rem;background:#eefaf6;padding:1.25rem 1.4rem;margin-bottom:1rem}.extra-guideline__hero h2{margin:0 0 .35rem}.extra-guideline__hero p{margin:.35rem 0}.extra-guideline__warning{border:1px solid #e6b34b;border-radius:.7rem;background:#fff8e7;padding:.8rem 1rem;margin-top:1rem}.extra-guideline__meta{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.8rem;color:#38566b}.extra-guideline__list{display:grid;gap:1rem}.extra-guideline__card{border:1px solid #cbdbe5;border-radius:.85rem;background:#fff;padding:1.2rem}.extra-guideline__card h3{font-size:1.12rem;line-height:1.45;margin:.2rem 0 1rem}.extra-guideline__eyebrow{font-size:.78rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#087f6b}.extra-guideline__scope-note{border-left:4px solid #e6a700;background:#fff8e7;padding:.65rem .8rem;margin:.65rem 0 .9rem;color:#704500}.extra-guideline__choices{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}.extra-guideline__choice{display:flex;gap:.55rem;border:1px solid #d5e1e8;border-radius:.55rem;background:#f8fafc;padding:.75rem;cursor:pointer}.extra-guideline__choice.is-correct{border-color:#16a085;background:#eaf8f3}.extra-guideline__choice.is-incorrect{border-color:#df5c5c;background:#fff0f0}.extra-guideline__actions{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:1rem}.extra-guideline__result{font-weight:800}.extra-guideline__result.is-correct{color:#087f5b}.extra-guideline__result.is-incorrect{color:#b42318}.extra-guideline__result.is-warning{color:#9a5b00}.extra-guideline__explanation{margin-top:1rem;border-left:4px solid #0e9f9a;background:#edf9f7;padding:.85rem 1rem}.extra-guideline__pagination{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-top:1.3rem}.extra-guideline__empty{border:1px solid #cbdbe5;border-radius:.8rem;background:#fff;padding:1.4rem}@media(max-width:760px){.extra-guideline__choices{grid-template-columns:1fr}.extra-guideline__card{padding:.9rem}}
 </style>
 <main class="extra-guideline">
     <nav class="extra-guideline__toolbar" aria-label="<?php echo $ises ? 'Navegación' : 'Navigation'; ?>">
@@ -128,11 +128,43 @@ echo $OUTPUT->header();
             $prompt = $ises ? (string)($translation['prompt'] ?? $question['prompt'] ?? '') : (string)($question['prompt'] ?? '');
             $options = $ises && is_array($translation['options'] ?? null) ? $translation['options'] : ($question['options'] ?? []);
             $explanation = $ises ? (string)($translation['explanation'] ?? $question['explanation'] ?? '') : (string)($question['explanation'] ?? '');
+            $guidelineviolations = array_values(array_filter(array_map(
+                'strval',
+                (array)($question['guidelineViolations'] ?? [])
+            )));
+            $outsiderosternames = [];
+            foreach ($guidelineviolations as $guidelineviolation) {
+                if (preg_match('/:\s*([^|]+?)\s*$/u', $guidelineviolation, $namematch)) {
+                    $outsiderostername = trim((string)$namematch[1]);
+                    if ($outsiderostername !== '') {
+                        $outsiderosternames[] = $outsiderostername;
+                    }
+                }
+            }
+            $outsiderosternames = array_values(array_unique($outsiderosternames));
+            if ($outsiderosternames !== []) {
+                $outsiderosterlabel = implode(', ', $outsiderosternames);
+                $statuspresent = $ises
+                    ? stripos($explanation, 'fuera del roster') !== false
+                    : stripos($explanation, 'outside the current NCBAHM') !== false;
+                if (!$statuspresent) {
+                    $explanation = rtrim($explanation) . ($ises
+                        ? ' Estado del guideline: ' . $outsiderosterlabel
+                            . ' está fuera del roster vigente de los Appendix A/C de NCBAHM; esta pregunta se '
+                            . 'conserva únicamente en el banco independiente Extra guideline.'
+                        : ' Guideline status: ' . $outsiderosterlabel
+                            . ' is outside the current NCBAHM Appendix A/C roster; this question is preserved only '
+                            . 'in the independent Extra guideline bank.');
+                }
+            }
             $correctlabel = strtoupper((string)($question['correctLabel'] ?? ''));
             $cardid = 'extra-guideline-question-' . $position;
         ?>
             <article id="<?php echo s($cardid); ?>" class="extra-guideline__card" data-extra-question data-correct-label="<?php echo s($correctlabel); ?>" data-choose-message="<?php echo s($ises ? 'Seleccione una respuesta primero.' : 'Choose an answer first.'); ?>" data-correct-message="<?php echo s($ises ? 'Respuesta correcta.' : 'Correct answer.'); ?>" data-incorrect-message="<?php echo s($ises ? 'Respuesta incorrecta. La respuesta correcta es' : 'Incorrect. The correct answer is'); ?>">
                 <div class="extra-guideline__eyebrow"><?php echo $ises ? 'Pregunta' : 'Question'; ?> <?php echo $position; ?> <?php echo $ises ? 'de' : 'of'; ?> <?php echo $questioncount; ?></div>
+                <div class="extra-guideline__scope-note"><strong><?php echo $ises ? 'Contenido suplementario:' : 'Supplemental content:'; ?></strong> <?php echo $ises
+                    ? 'Esta pregunta puede incluir hierbas o fórmulas fuera del Appendix A/C vigente. Después de comprobar la respuesta, la explicación identifica cuáles están fuera del guideline.'
+                    : 'This question may include herbs or formulas outside the current Appendix A/C. After you check the answer, the explanation identifies which names are outside the guideline.'; ?></div>
                 <h3><?php echo s($prompt); ?></h3>
                 <div class="extra-guideline__choices">
                 <?php foreach (array_values((array)$options) as $optionindex => $option):

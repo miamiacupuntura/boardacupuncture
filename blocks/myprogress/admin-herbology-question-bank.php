@@ -3050,6 +3050,68 @@ if ((string)($revisionstore['pinyinNormalizationVersion'] ?? '') !== $allbankpin
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
+$extraguidelinedisclosureversion = 'extra-guideline-student-disclosure-v1';
+if ((string)($revisionstore['extraGuidelineDisclosureVersion'] ?? '')
+        !== $extraguidelinedisclosureversion) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $extraguidelinedisclosureversion
+    ): array {
+        foreach (['questions', 'customQuestions'] as $collectionkey) {
+            foreach ((array)($store[$collectionkey] ?? []) as $questionid => $record) {
+                if (!is_array($record)
+                        || ((string)($record['reviewDestination'] ?? '') !== 'extra_guideline'
+                            && (string)($record['status'] ?? '') !== 'extra_guideline')) {
+                    continue;
+                }
+                $violations = array_values(array_filter(array_map(
+                    'strval',
+                    (array)($record['reviewGuidelineViolations']
+                        ?? $record['guidelineValidation']['violations']
+                        ?? [])
+                )));
+                $outsiderosternames = [];
+                foreach ($violations as $violation) {
+                    if (preg_match('/:\s*([^|]+?)\s*$/u', $violation, $namematch)) {
+                        $outsiderostername = trim((string)$namematch[1]);
+                        if ($outsiderostername !== '') {
+                            $outsiderosternames[] = $outsiderostername;
+                        }
+                    }
+                }
+                $outsiderosternames = array_values(array_unique($outsiderosternames));
+                if ($outsiderosternames === []) {
+                    continue;
+                }
+                $outsiderosterlabel = implode(', ', $outsiderosternames);
+                foreach (['draft', 'approved'] as $snapshotkey) {
+                    if (!is_array($record[$snapshotkey] ?? null)) {
+                        continue;
+                    }
+                    $english = trim((string)($record[$snapshotkey]['explanation'] ?? ''));
+                    if ($english !== '' && stripos($english, 'outside the current NCBAHM') === false) {
+                        $record[$snapshotkey]['explanation'] = $english . ' Guideline status: '
+                            . $outsiderosterlabel
+                            . ' is outside the current NCBAHM Appendix A/C roster; this question is preserved only '
+                            . 'in the independent Extra guideline bank.';
+                    }
+                    $spanish = trim((string)($record[$snapshotkey]['translations']['es']['explanation'] ?? ''));
+                    if ($spanish !== '' && stripos($spanish, 'fuera del roster') === false) {
+                        $record[$snapshotkey]['translations']['es']['explanation'] = $spanish
+                            . ' Estado del guideline: ' . $outsiderosterlabel
+                            . ' está fuera del roster vigente de los Appendix A/C de NCBAHM; esta pregunta se '
+                            . 'conserva únicamente en el banco independiente Extra guideline.';
+                    }
+                }
+                $record['extraGuidelineDisclosureVersion'] = $extraguidelinedisclosureversion;
+                $store[$collectionkey][$questionid] = $record;
+            }
+        }
+        $store['extraGuidelineDisclosureVersion'] = $extraguidelinedisclosureversion;
+        $store['extraGuidelineDisclosureUpdatedAt'] = gmdate(DATE_ATOM);
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $guidelinevalidationversion = 'ncbahm-2026-appendix-a-c-v2-processing-prefixes';
 $createdquestionguidelineaudits = [];
 foreach ((array)($revisionstore['customQuestions'] ?? []) as $guidelinequestionid => $guidelinerecord) {
@@ -6701,6 +6763,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishextraguidel
             'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
             'translations', 'contentType', 'cognitiveLevel', 'difficultyBand', 'source', 'sourceCard',
         ]));
+        $snapshot['guidelineViolations'] = array_values(array_unique(array_map(
+            'strval',
+            $findcreatedquestionguidelineviolations($extraquestion)
+        )));
         $snapshot['extraGuidelinePosition'] = $extraindex + 1;
         $publishedextraquestions[] = $snapshot;
     }
@@ -11961,6 +12027,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         if ($spanishprompt === '' || $spanishexplanation === '' || count($spanishoptionsbylabel) !== 4) {
             throw new UnexpectedValueException('The AI draft omitted the complete Spanish translation.');
         }
+        if ($preservesourcequestiontext && $preservedoutsiderosternames !== []) {
+            // Extra guideline status is part of the learner-facing feedback,
+            // not merely an administrator badge.  Add it deterministically so
+            // a focused one-pass review cannot claim completion while omitting
+            // the requested outside-guideline disclosure.
+            $outsiderosterlabel = implode(', ', $preservedoutsiderosternames);
+            $englishstatuspresent = stripos($explanation, 'outside the current NCBAHM') !== false
+                && count(array_filter(
+                    $preservedoutsiderosternames,
+                    static fn(string $name): bool => stripos($explanation, $name) !== false
+                )) === count($preservedoutsiderosternames);
+            if (!$englishstatuspresent) {
+                $explanation = rtrim($explanation) . ' Guideline status: '
+                    . $outsiderosterlabel
+                    . ' is outside the current NCBAHM Appendix A/C roster; this question is preserved only in the '
+                    . 'independent Extra guideline bank.';
+            }
+            $spanishstatuspresent = stripos($spanishexplanation, 'fuera del Appendix') !== false
+                && count(array_filter(
+                    $preservedoutsiderosternames,
+                    static fn(string $name): bool => stripos($spanishexplanation, $name) !== false
+                )) === count($preservedoutsiderosternames);
+            if (!$spanishstatuspresent) {
+                $spanishexplanation = rtrim($spanishexplanation) . ' Estado del guideline: '
+                    . $outsiderosterlabel
+                    . ' está fuera del roster vigente de los Appendix A/C de NCBAHM; esta pregunta se conserva '
+                    . 'únicamente en el banco independiente Extra guideline.';
+            }
+        }
         $spanishvisiblequestiontext = $spanishprompt . "\n"
             . implode("\n", array_values($spanishoptionsbylabel));
         $spanishnomenclature = $visibleboardnomenclature([
@@ -12502,7 +12597,7 @@ PROMPT;
         $preservedoutsiderosternames = [];
         if ($reviewforextraguideline) {
             foreach ($currentguidelineviolations as $guidelineviolation) {
-                if (preg_match('/:\s*([^|(]+?)(?:\s*\(|$)/u', (string)$guidelineviolation, $namematch)) {
+                if (preg_match('/:\s*([^|]+?)\s*$/u', (string)$guidelineviolation, $namematch)) {
                     $outsiderostername = trim((string)$namematch[1]);
                     if ($outsiderostername !== '') {
                         $preservedoutsiderosternames[] = $outsiderostername;
@@ -12733,7 +12828,7 @@ Requirements:
 3. Improve the English stem only when needed for grammar, clarity or a direct positive question. Do not add unsupported clinical facts or change the educational objective.
 4. Write a complete English explanation with these literal headings: "Inference step 1:", "Inference step 2:", "Option A:", "Option B:", "Option C:", and "Option D:". Explain why the key fits and why each distractor is weaker.
 5. Provide a complete Spanish translation of the final stem, A-D choices and explanation. The Spanish explanation must use "Paso de inferencia 1:", "Paso de inferencia 2:", "Opción A:", "Opción B:", "Opción C:", and "Opción D:". Preserve Pinyin names and answer letters.
-6. Apply any administratorInstructionHistory that concerns this question. Do not claim the completed question is Board-eligible; its destination remains Extra guideline.
+6. Apply any administratorInstructionHistory that concerns this question. Do not claim the completed question is Board-eligible; its destination remains Extra guideline. The English and Spanish explanations must explicitly state that every outsideRosterNamesToPreserve entry is outside the current NCBAHM Appendix A/C roster and that the question is preserved in the independent Extra guideline bank.
 7. Set contentType and cognitiveLevel to accurate values. Set cognitiveLevel to "infer" or "analyze".
 8. In reviewSummary, state that the explanation, distractor feedback and Spanish translation were completed for Extra guideline while the outside-roster names were preserved.
 
@@ -15987,7 +16082,7 @@ echo $OUTPUT->header();
             <?php if (is_array($questionactionexamproject) && !$inlineapproval && !$question['_excluded'] && ($question['_ready'] || $questioncanpublishdirectlytoexam) && ($questioninexamproject || (($cardguidelineverified || $cardguidelineoverrideactive) && !$questionusedinpriorexam))): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($questionactionexamprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="<?php echo $questioninexamproject ? 'remove' : 'add'; ?>"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button <?php echo $questioninexamproject ? 'question-bank__button--exclude' : 'question-bank__button--approve'; ?>" type="submit"<?php echo !$questioninexamproject && $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $questioninexamproject ? ($displaylang === 'es' ? 'Quitar' : 'Remove') : ($displaylang === 'es' ? 'Agregar' : 'Add'); ?></button></form><?php endif; ?>
             <?php if (!$questioninexamproject && $questionusedinpriorexam): ?><button class="question-bank__button" type="button" disabled title="<?php echo s(($displaylang === 'es' ? 'Ya utilizada en ' : 'Already used in ') . $questionpriorexamtext); ?>"><?php echo $displaylang === 'es' ? 'Usada · ' : 'Used · '; ?><?php echo s($questionpriorexamtext); ?></button><?php endif; ?>
             <?php if ($cardguidelineextraautoreview && !$cardreviewedforextraguideline && !$question['_excluded']): ?><form class="question-bank__automatic-review-form question-bank__quick-review" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="reviewforextraguideline" value="1"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__decision-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Revisar para Extra' : 'Review for Extra'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div></form><?php endif; ?>
-            <?php if ($cardreviewedforextraguideline): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="saveextraguideline"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--similar" type="submit"><?php echo $displaylang === 'es' ? 'Guardar en Extra' : 'Save to Extra'; ?></button></form><?php endif; ?>
+            <?php if ($cardreviewedforextraguideline && !$inlineapproval): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="saveextraguideline"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--similar" type="submit"><?php echo $displaylang === 'es' ? 'Guardar en Extra' : 'Save to Extra'; ?></button></form><?php endif; ?>
             <?php if (!$question['_excluded']): ?><a class="question-bank__button question-bank__button--similar" href="<?php echo $questionsimilarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Similares' : 'Similar'; ?></a><?php endif; ?>
             <?php else: ?>
             <?php if (!$inlineapproval): ?>
@@ -16049,9 +16144,13 @@ echo $OUTPUT->header();
         </div>
         <?php if ($displaylang === 'es' && !$hasspanishtranslation): ?><div class="question-bank__translation-missing"><strong>Esta pregunta todavía no tiene traducción guardada.</strong> Se muestra el original inglés. Use <strong>Crear traducción al español</strong> para traducir solamente el texto, las respuestas y la explicación sin cambiar el contenido clínico.</div><?php endif; ?>
         <?php if ($cardguidelineoverrideactive): ?><div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Advertencia aceptada por un administrador:' : 'Warning accepted by an administrator:'; ?></strong> <?php echo s(implode(' | ', $cardguidelineviolations)); ?><?php if ((string)($cardguidelineoverridedetails['approvedByName'] ?? '') !== ''): ?> · <?php echo s((string)$cardguidelineoverridedetails['approvedByName']); ?><?php endif; ?><?php if ((string)($cardguidelineoverridedetails['approvedAt'] ?? '') !== ''): ?> · <?php echo s((string)$cardguidelineoverridedetails['approvedAt']); ?><?php endif; ?></div><?php elseif (!$cardguidelineverified): ?><div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'Alerta del guideline:' : 'Guideline alert:'; ?></strong> <?php echo s(implode(' | ', $cardguidelineviolations)); ?> <?php echo $displaylang === 'es' ? 'Puede corregirla, guardarla en Extra guideline o publicarla con advertencia si confirma que el contenido es válido.' : 'You may correct it, save it to Extra guideline, or publish with a warning after confirming the content is valid.'; ?></div><?php endif; ?>
-        <?php if (!$cardguidelineverified && $cardkeyedanswerguidelineviolations !== []): ?><div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'La reparación Board automática no está disponible:' : 'Automatic Board repair is unavailable:'; ?></strong> <?php echo $displaylang === 'es'
-            ? 'La respuesta correcta también está fuera del guideline y sustituirla cambiaría el hecho evaluado. Revisar automáticamente sí está disponible: conservará la respuesta correcta, completará la explicación y el español, y dejará la pregunta sin publicar para que elija Extra guideline o Publicar con advertencia.'
-            : 'The correct answer is also outside the guideline, and replacing it would change the tested fact. Automatically review is still available: it will preserve the correct answer, complete the explanation and Spanish, and leave the question unpublished so you can choose Extra guideline or Publish with warning.'; ?></div><?php endif; ?>
+        <?php if (!$cardguidelineverified && $cardkeyedanswerguidelineviolations !== []): ?><div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'La reparación Board automática no está disponible:' : 'Automatic Board repair is unavailable:'; ?></strong> <?php echo $cardreviewedforextraguideline
+            ? ($displaylang === 'es'
+                ? 'La respuesta correcta está fuera del guideline y sustituirla cambiaría el hecho evaluado. La revisión Extra ya está completa; guárdela en Extra guideline o publíquela con advertencia después de verificar el contenido.'
+                : 'The correct answer is outside the guideline, and replacing it would change the tested fact. The Extra review is complete; save it to Extra guideline or publish with warning after verifying the content.')
+            : ($displaylang === 'es'
+                ? 'La respuesta correcta también está fuera del guideline y sustituirla cambiaría el hecho evaluado. Revisar automáticamente sí está disponible: conservará la respuesta correcta, completará la explicación y el español, y dejará la pregunta sin publicar para que elija Extra guideline o Publicar con advertencia.'
+                : 'The correct answer is also outside the guideline, and replacing it would change the tested fact. Automatically review is still available: it will preserve the correct answer, complete the explanation and Spanish, and leave the question unpublished so you can choose Extra guideline or Publish with warning.'); ?></div><?php endif; ?>
         <?php if (is_array($questionactionexamproject) && !$questioninexamproject && $questionusedinpriorexam): ?><div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'La pregunta ya está publicada, pero no puede agregarse nuevamente:' : 'The question is already published, but it cannot be added again:'; ?></strong> <?php echo ($displaylang === 'es' ? 'Fue utilizada en ' : 'It was used in ') . s($questionpriorexamtext) . '. '; ?><?php echo ($displaylang === 'es' ? 'Para ' : 'For ') . s((string)$questionactionexamproject['name']) . ($displaylang === 'es' ? ', seleccione una pregunta no utilizada mediante “Buscar preguntas similares”.' : ', select an unused question with “Find similar questions”.'); ?></div><?php endif; ?>
         <?php if ($cardreviewfailure !== [] && $cardkeyedanswerguidelineviolations === []): ?><div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'La revisión automática no pudo terminar:' : 'Automatic review could not finish:'; ?></strong> <?php echo s((string)($cardreviewfailure['message'] ?? ($displaylang === 'es' ? 'El proveedor no devolvió una revisión válida.' : 'The provider did not return a valid review.'))); ?><br><small><?php echo $displaylang === 'es' ? 'La pregunta original no cambió. Puede intentarlo nuevamente; si vuelve a fallar, este mensaje indica exactamente qué debe corregirse.' : 'The original question was not changed. You may try again; if it fails again, this message identifies what must be corrected.'; ?></small></div><?php endif; ?>
         <?php if ($cardreviewedforextraguideline): ?><div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Revisión para Extra guideline lista:' : 'Extra guideline review ready:'; ?></strong> <?php echo $displaylang === 'es' ? 'La revisión completó la explicación y el feedback sin eliminar los nombres fuera del roster. Verifique el contenido y use Guardar revisión en Extra.' : 'The review completed the explanation and feedback without removing the outside-roster names. Verify the content, then use Save reviewed question to Extra.'; ?></div><?php endif; ?>
@@ -16112,6 +16211,7 @@ echo $OUTPUT->header();
             <?php // Keep recoverable deletion available while an AI correction is awaiting approval. ?>
             <?php if ($inlineapproval && !$iscustomdraft): ?>
             <?php if ($cardreviewfailure === []): ?>
+            <?php if (!$cardreviewedforextraguideline): ?>
             <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
                 <input type="hidden" name="formaction" value="sendtomock">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
@@ -16119,6 +16219,7 @@ echo $OUTPUT->header();
                 <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
                 <button class="question-bank__button question-bank__button--similar" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Enviar esta pregunta al Mock correspondiente? Se conservará completa, saldrá del banco board y se clasificará según su dominio.' : 'Send this question to the matching Mock category? It will be preserved in full, removed from the board bank and classified by its domain.'; ?>');"><?php echo $displaylang === 'es' ? 'Enviar a Mock' : 'Send to Mock'; ?></button>
             </form>
+            <?php endif; ?>
             <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
                 <input type="hidden" name="formaction" value="saveextraguideline">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
@@ -16184,15 +16285,15 @@ echo $OUTPUT->header();
         <section class="question-bank__decision-panel" aria-label="<?php echo $displaylang === 'es' ? 'Editar respuestas manualmente' : 'Edit answers manually'; ?>">
             <div class="question-bank__applied-summary"><strong><?php echo $cardguidelineautorepairable
                 ? ($displaylang === 'es' ? 'Corrección automática disponible.' : 'Automatic repair available.')
-                : ($cardguidelineextraautoreview
+                : ($cardguidelineextraautoreview && !$cardreviewedforextraguideline
                     ? ($displaylang === 'es' ? 'Revisión automática para Extra disponible.' : 'Automatic Extra review available.')
                     : ($displaylang === 'es' ? 'Edición manual disponible.' : 'Manual editing available.')); ?></strong> <?php echo $cardguidelineautorepairable
                 ? ($displaylang === 'es' ? 'El sistema sustituirá los distractores fuera del roster, bloqueará cualquier cambio de la respuesta correcta, comprobará otra vez Appendix A/C y dejará el resultado sin publicar para su revisión.' : 'The system will replace out-of-roster distractors, prevent any change to the correct answer, recheck Appendix A/C, and leave the result unpublished for your review.')
-                : ($cardguidelineextraautoreview
+                : ($cardguidelineextraautoreview && !$cardreviewedforextraguideline
                     ? ($displaylang === 'es' ? 'El sistema conservará la respuesta correcta fuera del roster, completará la explicación y el español, y dejará el resultado sin publicar para que usted decida entre Extra guideline y Publicar con advertencia.' : 'The system will preserve the outside-roster correct answer, complete the explanation and Spanish, and leave the result unpublished so you can choose Extra guideline or Publish with warning.')
                     : ($displaylang === 'es' ? 'Puede abrir el editor si solo necesita cambiar una opción.' : 'You can open the editor if you only need to change one choice.')); ?></div>
             <div class="question-bank__decision-actions">
-                <?php if (($cardguidelineautorepairable || $cardguidelineextraautoreview) && !$cardisoutdated): ?><form class="question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><?php if ($cardguidelineautorepairable): ?><input type="hidden" name="autorepairguideline" value="1"><?php else: ?><input type="hidden" name="reviewforextraguideline" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $cardguidelineautorepairable ? ($displaylang === 'es' ? 'Corregir automáticamente' : 'Repair automatically') : ($displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'); ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></form><?php endif; ?>
+                <?php if (($cardguidelineautorepairable || ($cardguidelineextraautoreview && !$cardreviewedforextraguideline)) && !$cardisoutdated): ?><form class="question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><?php if ($cardguidelineautorepairable): ?><input type="hidden" name="autorepairguideline" value="1"><?php else: ?><input type="hidden" name="reviewforextraguideline" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $cardguidelineautorepairable ? ($displaylang === 'es' ? 'Corregir automáticamente' : 'Repair automatically') : ($displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'); ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></form><?php endif; ?>
                 <a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar manualmente' : 'Edit manually'; ?></a>
             </div>
         </section>
