@@ -12097,8 +12097,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         array $preservedoutsiderosternames = [],
         bool $preservesourcequestiontext = false,
         bool $preservecorrectchoice = false,
-        array $feedbackguidelineviolations = [],
-        bool $relocateprohibitedcorrectanswer = false
+        array $feedbackguidelineviolations = []
     ) use (
         $buildchannelherbmapping,
         $ensurechannelherbmappingfeedback,
@@ -12182,15 +12181,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         $sourcecorrectlabel = strtoupper(trim((string)($sourcequestion['correctLabel'] ?? '')));
         $decodedcorrectlabel = strtoupper(trim((string)($decoded['correctLabel'] ?? '')));
-        if ($relocateprohibitedcorrectanswer
-                && in_array($sourcecorrectlabel, ['A', 'B', 'C', 'D'], true)
+        if (in_array($sourcecorrectlabel, ['A', 'B', 'C', 'D'], true)
                 && in_array($decodedcorrectlabel, ['A', 'B', 'C', 'D'], true)
                 && $decodedcorrectlabel !== $sourcecorrectlabel) {
-            // A combined source key such as "Both of them" must be rewritten,
-            // but its saved letter is immutable. If the provider moved the
-            // correct concept, swap that complete choice back into the source
-            // letter in both languages instead of rejecting an otherwise
-            // usable draft or silently changing the exam answer key.
+            // The stored answer-key letter is immutable for every review. If
+            // the provider only marks a different letter while leaving the
+            // source concept in place, restore the key without moving text. If
+            // the concept itself moved, move its choice and option-specific
+            // feedback back to the source letter in both languages.
+            $choiceconceptmatches = static function(string $source, string $candidate): bool {
+                $normalizeconcept = static function(string $value): string {
+                    $value = core_text::strtolower($value);
+                    $value = (string)preg_replace('/[^\p{L}\p{N}]+/u', ' ', $value);
+                    return trim((string)preg_replace('/\s+/u', ' ', $value));
+                };
+                $source = $normalizeconcept($source);
+                $candidate = $normalizeconcept($candidate);
+                if ($source === '' || $candidate === '') {
+                    return false;
+                }
+                if ($source === $candidate
+                        || (core_text::strlen($source) >= 5 && str_contains($candidate, $source))
+                        || (core_text::strlen($candidate) >= 5 && str_contains($source, $candidate))) {
+                    return true;
+                }
+                $ignoredtokens = [
+                    'and', 'the', 'of', 'or', 'for', 'with', 'both', 'from',
+                    'una', 'uno', 'las', 'los', 'del', 'con', 'para', 'por',
+                ];
+                $sourcetokens = array_values(array_unique(array_filter(
+                    preg_split('/\s+/u', $source) ?: [],
+                    static fn(string $token): bool => core_text::strlen($token) >= 3
+                        && !in_array($token, $ignoredtokens, true)
+                )));
+                $candidatetokens = array_values(array_unique(preg_split('/\s+/u', $candidate) ?: []));
+                if (count($sourcetokens) >= 2) {
+                    $matchingtokens = count(array_intersect($sourcetokens, $candidatetokens));
+                    if ($matchingtokens / count($sourcetokens) >= 0.75) {
+                        return true;
+                    }
+                }
+                similar_text($source, $candidate, $similaritypercent);
+                return $similaritypercent >= 85.0;
+            };
+            $sourcecorrecttext = '';
+            foreach ((array)($sourcequestion['options'] ?? []) as $sourceoption) {
+                if (strtoupper(trim((string)($sourceoption['label'] ?? ''))) === $sourcecorrectlabel) {
+                    $sourcecorrecttext = trim((string)($sourceoption['text'] ?? ''));
+                    break;
+                }
+            }
+            $decodedtextatsourcekey = '';
+            foreach ((array)($decoded['options'] ?? []) as $decodedoption) {
+                if (strtoupper(trim((string)($decodedoption['label'] ?? ''))) === $sourcecorrectlabel) {
+                    $decodedtextatsourcekey = trim((string)($decodedoption['text'] ?? ''));
+                    break;
+                }
+            }
+            $correctconceptmoved = !$choiceconceptmatches($sourcecorrecttext, $decodedtextatsourcekey);
             $swapchoiceletters = static function(
                 array &$options,
                 string $firstlabel,
@@ -12216,12 +12264,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 $options[$firstindex]['text'] = (string)($options[$secondindex]['text'] ?? '');
                 $options[$secondindex]['text'] = $firsttext;
             };
-            if (is_array($decoded['options'] ?? null)) {
+            $swapoptionreferences = static function(
+                string $text,
+                string $firstlabel,
+                string $secondlabel
+            ): string {
+                return (string)preg_replace_callback(
+                    '/\b(Option|Choice|Opción|Opcion)\s+([A-D])\b/iu',
+                    static function(array $match) use ($firstlabel, $secondlabel): string {
+                        $label = strtoupper((string)$match[2]);
+                        if ($label === $firstlabel) {
+                            $label = $secondlabel;
+                        } elseif ($label === $secondlabel) {
+                            $label = $firstlabel;
+                        }
+                        return (string)$match[1] . ' ' . $label;
+                    },
+                    $text
+                );
+            };
+            if ($correctconceptmoved && is_array($decoded['options'] ?? null)) {
                 $swapchoiceletters($decoded['options'], $sourcecorrectlabel, $decodedcorrectlabel);
             }
-            if (is_array($decoded['translations']['es']['options'] ?? null)) {
+            if ($correctconceptmoved && is_array($decoded['translations']['es']['options'] ?? null)) {
                 $swapchoiceletters(
                     $decoded['translations']['es']['options'],
+                    $sourcecorrectlabel,
+                    $decodedcorrectlabel
+                );
+            }
+            if ($correctconceptmoved) {
+                $decoded['explanation'] = $swapoptionreferences(
+                    (string)($decoded['explanation'] ?? ''),
+                    $sourcecorrectlabel,
+                    $decodedcorrectlabel
+                );
+                if (is_array($decoded['translations']['es'] ?? null)) {
+                    $decoded['translations']['es']['explanation'] = $swapoptionreferences(
+                        (string)($decoded['translations']['es']['explanation'] ?? ''),
+                        $sourcecorrectlabel,
+                        $decodedcorrectlabel
+                    );
+                }
+                $decoded['reviewSummary'] = $swapoptionreferences(
+                    (string)($decoded['reviewSummary'] ?? ''),
                     $sourcecorrectlabel,
                     $decodedcorrectlabel
                 );
@@ -13494,8 +13580,7 @@ PROMPT;
                     $preservedoutsiderosternames,
                     $reviewforextraguideline,
                     $boardguidelinerepair,
-                    $boardguidelinerepair ? $currentexplanationguidelineviolations : [],
-                    $sourceprohibitedanswerchoice !== null
+                    $boardguidelinerepair ? $currentexplanationguidelineviolations : []
                 );
                 if ($requiresmultistagereview) {
                     $generateddraft = $refinefeedback(
@@ -13516,8 +13601,7 @@ PROMPT;
                         $preservedoutsiderosternames,
                         $reviewforextraguideline,
                         $boardguidelinerepair,
-                        $boardguidelinerepair ? $currentexplanationguidelineviolations : [],
-                        $sourceprohibitedanswerchoice !== null
+                        $boardguidelinerepair ? $currentexplanationguidelineviolations : []
                     );
                     if (trim($administratorproposal) !== '') {
                         $compliancenote = $validateinstructioncompliance(
