@@ -4692,7 +4692,7 @@ $findreplaceableexamplaceholder = static function(
     array $project,
     string $incomingquestionid,
     string $incomingdomainid = ''
-): string {
+) use ($findquestion, $basebank): string {
     $fallbackquestionid = '';
     $projectquestionids = array_reverse(array_values(array_unique(array_filter(array_map(
         'strval',
@@ -4708,8 +4708,13 @@ $findreplaceableexamplaceholder = static function(
         $customrecord = is_array($store['customQuestions'][$projectquestionid] ?? null)
             ? $store['customQuestions'][$projectquestionid]
             : [];
-        $isapproved = (string)($revisionrecord['status'] ?? '') === 'approved'
-            || (string)($customrecord['status'] ?? '') === 'approved';
+        // A stale override can still say "approved" after its source item was
+        // removed from the active bank. The exam counter correctly excludes
+        // that orphan, so the capacity check must exclude it too.
+        $questionisavailable = $findquestion($basebank, $projectquestionid) !== null;
+        $isapproved = $questionisavailable
+            && ((string)($revisionrecord['status'] ?? '') === 'approved'
+                || (string)($customrecord['status'] ?? '') === 'approved');
         if ($isapproved) {
             continue;
         }
@@ -4812,6 +4817,8 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
             ?? ''
     );
     $approvalreplacequestionid = '';
+    $approvaldeferredfullexamid = '';
+    $approvaldeferredfullexamname = '';
     if ($approvalexamprojectid !== '') {
         $approvalproject = $revisionstore['examProjects'][$approvalexamprojectid];
         $approvalprojectquestionids = array_values(array_unique(array_map(
@@ -4827,10 +4834,12 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
                 $approvalquestiondomainid
             );
             if ($approvalreplacequestionid === '') {
-                $redirectapprovalerror(
-                    'This exam already contains its target number of approved questions. '
-                        . 'Choose a specific question to replace before publishing another.'
-                );
+                // The review itself is still valid. Approve it in the bank,
+                // but never evict one of the exam's 100 approved questions
+                // merely because the administrator opened it from that exam.
+                $approvaldeferredfullexamid = $approvalexamprojectid;
+                $approvaldeferredfullexamname = trim((string)($approvalproject['name'] ?? ''));
+                $approvalexamprojectid = '';
             }
         }
     }
@@ -4929,6 +4938,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
         $approvalupdatedstore = block_myprogress_herbology_override_update(static function(array $store) use (
             $questionid,
             $approvalexamprojectid,
+            $approvaldeferredfullexamid,
             $approvalquestiondomainid,
             $findreplaceableexamplaceholder,
             $pinforexam2,
@@ -4973,6 +4983,14 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
             }
             if ($pinforexam2) {
                 $previous['exam2Pinned'] = true;
+            }
+            if ($approvaldeferredfullexamid !== '') {
+                if ((string)($previous['examProjectId'] ?? '') === $approvaldeferredfullexamid) {
+                    unset($previous['examProjectId']);
+                }
+                $previous['bankDeferred'] = true;
+                $previous['deferredFromFullExamProjectId'] = $approvaldeferredfullexamid;
+                $previous['deferredFromFullExamAt'] = $savedat;
             }
             if ($approvalexamprojectid !== '') {
                 $previous['examProjectId'] = $approvalexamprojectid;
@@ -5076,6 +5094,11 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
         );
     }
 
+    $approvalsuccessmessage = $approvaldeferredfullexamid !== ''
+        ? 'Question approved in the bank and reserved for a later exam. '
+            . ($approvaldeferredfullexamname !== '' ? $approvaldeferredfullexamname : 'The selected exam')
+            . ' remains unchanged with its 100 approved questions.'
+        : 'Question approved and published.';
     $approvalreturnfilters = $questionbankreturnfilterparams($questionid);
     if ($hasquestionbankselectionfilters($approvalreturnfilters)) {
         $approvalfilteredurl = new moodle_url(
@@ -5085,7 +5108,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
         $approvalfilteredurl->set_anchor('pending-questions');
         redirect(
             $approvalfilteredurl,
-            'Question approved and published. Your question-bank filters remain active.',
+            $approvalsuccessmessage . ' Your question-bank filters remain active.',
             null,
             \core\output\notification::NOTIFY_SUCCESS
         );
@@ -6648,7 +6671,12 @@ if (is_array($currentexamproject)) {
             $projecteligiblebydomain[$projectdomainid],
             static fn(array $left, array $right): int => $projectquality($left) <=> $projectquality($right)
         );
-        $projectneed = max(0, (int)$projecttargets[$projectdomainid] - (int)$approvedbydomain[$projectdomainid]);
+        // Once the exam has its full approved count, domain rebalancing is an
+        // explicit management operation. Do not keep offering extra review
+        // candidates that cannot be added without replacing an approved item.
+        $projectneed = (int)($currentexamproject['currentCount'] ?? 0) >= $projecttarget
+            ? 0
+            : max(0, (int)$projecttargets[$projectdomainid] - (int)$approvedbydomain[$projectdomainid]);
         $projectremainingbydomain[$projectdomainid] = $projectneed;
         $selectedprojectquestions = [];
         $projectcontentgroups = [];
