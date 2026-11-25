@@ -288,6 +288,7 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
             'pattern' => '',
             'herbDisplays' => [],
             'legacyHerbPattern' => '',
+            'legacyHerbOptionPattern' => '',
         ];
         return $data;
     }
@@ -316,6 +317,16 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
             : '/(?<![A-Za-z0-9])(?<pinyin>' . implode('|', array_values($herbpinyinpatterns)) . ')'
                 . '\s*[-\x{2013}\x{2014}]\s*[^\/\r\n]{1,80}?\s*\/\s*'
                 . '(?<latin>' . implode('|', array_values($herblatinpatterns)) . ')(?![A-Za-z0-9])/iu',
+        // Imported SCORM choices often use an obsolete common-name display,
+        // for example "Xuan Shen - Scrophularia / Rx Scrophulariae".  Once
+        // the leading Pinyin resolves unambiguously to Appendix A, replace the
+        // complete choice with the controlling guideline display instead of
+        // requiring the historical Latin abbreviation to match exactly.
+        'legacyHerbOptionPattern' => $herbpinyinpatterns === []
+            ? ''
+            : '/^\s*(?<pinyin>' . implode('|', array_values($herbpinyinpatterns)) . ')'
+                . '\s*[-\x{2013}\x{2014}]\s*[^\/\r\n]{1,120}\s*\/\s*'
+                . '[^\r\n]{1,180}?\s*[.;]?\s*$/iu',
     ];
     return $data;
 }
@@ -331,6 +342,7 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
     $pattern = (string)($casedata['pattern'] ?? '');
     $herbdisplays = (array)($casedata['herbDisplays'] ?? []);
     $legacyherbpattern = (string)($casedata['legacyHerbPattern'] ?? '');
+    $legacyherboptionpattern = (string)($casedata['legacyHerbOptionPattern'] ?? '');
     if ($canonicalnames === [] || $pattern === '') {
         return $question;
     }
@@ -339,7 +351,8 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         $canonicalnames,
         $pattern,
         $herbdisplays,
-        $legacyherbpattern
+        $legacyherbpattern,
+        $legacyherboptionpattern
     ) {
         if (is_array($value)) {
             foreach ($value as $key => $nestedvalue) {
@@ -349,6 +362,19 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         }
         if (!is_string($value) || $value === '') {
             return $value;
+        }
+        if ($legacyherboptionpattern !== '' && $herbdisplays !== []
+                && preg_match($legacyherboptionpattern, $value, $optionmatch) === 1) {
+            $optionpinyin = strtolower((string)preg_replace(
+                '/\s+/u',
+                ' ',
+                trim((string)($optionmatch['pinyin'] ?? ''))
+            ));
+            $optionofficial = (array)($herbdisplays[$optionpinyin] ?? []);
+            if ($optionofficial !== []) {
+                $value = (string)$optionofficial['name']
+                    . ' (' . (string)$optionofficial['latin'] . ')';
+            }
         }
         if ($legacyherbpattern !== '' && $herbdisplays !== []) {
             $legacyreplaced = preg_replace_callback(

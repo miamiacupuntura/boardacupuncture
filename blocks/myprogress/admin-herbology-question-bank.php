@@ -2998,7 +2998,7 @@ if ($createdquestionpinyinrepairids !== []) {
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
-$allbankpinyinnormalizationversion = 'tone-free-official-case-pinyin-all-question-snapshots-v3';
+$allbankpinyinnormalizationversion = 'tone-free-official-case-pinyin-all-question-snapshots-v4';
 if ((string)($revisionstore['pinyinNormalizationVersion'] ?? '') !== $allbankpinyinnormalizationversion) {
     block_myprogress_herbology_override_update(static function(array $store) use (
         $allbankpinyinnormalizationversion,
@@ -3010,10 +3010,21 @@ if ((string)($revisionstore['pinyinNormalizationVersion'] ?? '') !== $allbankpin
                 if (!is_array($record)) {
                     continue;
                 }
+                $normalizedrecordchanged = false;
                 foreach (['original', 'draft', 'approved'] as $snapshotkey) {
                     if (is_array($record[$snapshotkey] ?? null)) {
-                        $record[$snapshotkey] = $normalizecreatedquestionpinyin($record[$snapshotkey]);
+                        $normalizedsnapshot = $normalizecreatedquestionpinyin($record[$snapshotkey]);
+                        $normalizedrecordchanged = $normalizedrecordchanged
+                            || $normalizedsnapshot !== $record[$snapshotkey];
+                        $record[$snapshotkey] = $normalizedsnapshot;
                     }
+                }
+                if ($normalizedrecordchanged) {
+                    // A prior review may have failed only because abbreviated
+                    // English/Latin SCORM labels remained in the choices.  The
+                    // deterministic Appendix A repair supersedes that stale
+                    // failure, so do not show it beside a corrected draft.
+                    unset($record['lastAutomaticReviewFailure']);
                 }
                 $record['pinyinTonesRemovedAt'] = $normalizedat;
                 $store[$collectionkey][$questionid] = $record;
@@ -11493,7 +11504,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $requestedvisibleherbcount,
         $visibleboardnomenclature,
         $visibleherbnames,
-        $stripdecorativeicons
+        $stripdecorativeicons,
+        $normalizecreatedquestionpinyin
     ): array {
         $generated = trim($generated);
         if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $generated, $matches)) {
@@ -11594,6 +11606,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $decoded['options'] = (array)($sourcequestion['options'] ?? []);
             $decoded['correctLabel'] = (string)($sourcequestion['correctLabel'] ?? '');
         }
+        // Do not delegate guideline display cleanup to the AI.  Normalize all
+        // four English and Spanish choices before local and semantic checks so
+        // legacy "Pinyin - English / abbreviated Latin" labels deterministically
+        // become the Appendix A form "Pinyin (Pharmaceutical Latin)".
+        $decoded = $normalizecreatedquestionpinyin($decoded);
         $prompt = $stripdecorativeicons((string)($decoded['prompt'] ?? ''));
         $explanation = $stripdecorativeicons((string)($decoded['explanation'] ?? ''));
         $reviewsummary = $stripdecorativeicons((string)($decoded['reviewSummary'] ?? ''));
@@ -12207,6 +12224,8 @@ Instructions are cumulative. When one instruction requests ingredients in the ch
 When an instruction requests ingredient-only answer choices or asks to remove formula names, inspect every choice literally. Each choice must contain only the ingredient or ingredient combination being compared. No Pinyin formula title, English formula translation, decoction name, powder name or pill name may remain in any choice. A choice such as “Ma Huang Tang (Ephedra Decoction): Ma Huang, Gui Zhi...” is not compliant; it must begin directly with the ingredient list.
 
 When an administrator instruction asks to add, include, place or name herbs in the distractors, choices, stem or question, inspect the visible stem and all four visible choices literally. Pattern names such as Blood Heat, Qi deficiency or Blood stasis do not satisfy that request. Require concrete source-supported herb names written as Pinyin (Pharmaceutical Latin); when the instruction says herbs in the plural, require at least two distinct herbs. Set compliant to false if the herbs appear only in the explanation or reviewSummary.
+
+When an instruction asks to remove English, common, botanical, abbreviated "Rx/Cx" or translated herb names, it means to standardize each herb as Pinyin (Pharmaceutical Latin). It does not mean removing the herb identity, Pinyin or controlling pharmaceutical Latin from the choices. Do not report compliant guideline-formatted herb choices as a failure to remove herb names.
 
 Ingredient-only choices and formula identification in the feedback are separate requirements and may coexist. When the administrator asks the feedback to name the formulas represented by the ingredient combinations, the choices must remain ingredient-only, while the English and Spanish explanations must explicitly map every option letter to its corresponding Pinyin formula name. Omitting even one requested formula name is not compliant.
 
@@ -15822,7 +15841,8 @@ echo $OUTPUT->header();
         $instructioncheck = is_array($fullrevision['draft']['instructionCompliance'] ?? null)
             ? $fullrevision['draft']['instructionCompliance']
             : [];
-        $instructionverified = (string)($instructioncheck['status'] ?? '') === 'verified';
+        $instructionverified = $cardreviewfailure === []
+            && (string)($instructioncheck['status'] ?? '') === 'verified';
         $cardbatchid = (string)($fullrevision['aiBatchId'] ?? '');
         $cardisoutdated = $revisionstatus === 'draft'
             && $cardbatchid !== ''
@@ -16038,12 +16058,18 @@ echo $OUTPUT->header();
         <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft' && !$inlineapproval): ?><div class="question-bank__ai-draft-note"><?php echo $cardisoutdated ? 'Earlier automatic-review version. If the question is already correct, approve the current version; run the updated review only when changes are still needed.' : ($cardiscorrected ? 'Corrected version — awaiting your approval. Review the current question below; the earlier version is not shown.' : 'Current proposed version — not published. Review it below, then accept it or request a correction.'); ?></div><?php endif; ?>
         <?php if (($inlineorigin && $cardbatchid !== '') || $inlineapproval): ?>
         <div class="question-bank__review-location">
-            <strong><?php echo $cardreviewedforextraguideline
+            <strong><?php echo $cardreviewfailure !== []
+                ? ($displaylang === 'es' ? 'Revisión automática incompleta' : 'Automatic review incomplete')
+                : ($cardreviewedforextraguideline
                 ? ($displaylang === 'es' ? 'Revisión para Extra lista' : 'Extra guideline review ready')
                 : ($revisionstatus === 'approved'
                     ? ($displaylang === 'es' ? 'Publicada' : 'Published')
-                    : ($displaylang === 'es' ? 'Corrección lista' : 'Correction ready')); ?> — <?php echo s($question['questionId']); ?></strong>
-            <span><?php echo $cardreviewedforextraguideline
+                    : ($displaylang === 'es' ? 'Corrección lista' : 'Correction ready'))); ?> — <?php echo s($question['questionId']); ?></strong>
+            <span><?php echo $cardreviewfailure !== []
+                ? ($displaylang === 'es'
+                    ? 'La última revisión no se guardó. La versión visible no puede aprobarse hasta completar nuevamente la revisión automática.'
+                    : 'The latest review was not saved. The visible version cannot be approved until automatic review completes again.')
+                : ($cardreviewedforextraguideline
                 ? ($displaylang === 'es'
                     ? 'La pregunta está completa. Revísela y guárdela en Extra guideline; no se publicará en Board.'
                     : 'The question is complete. Review it and save it to Extra guideline; it will not be published to Board.')
@@ -16066,10 +16092,10 @@ echo $OUTPUT->header();
                     ? ($displaylang === 'es' ? 'Si la versión visible está correcta, apruébala; si todavía necesita cambios, completa la corrección.' : 'Approve the visible version if it is correct; otherwise complete the correction.')
                     : ($instructionverified
                         ? ($displaylang === 'es' ? 'La IA comprobó la corrección. Solo necesitas aprobarla.' : 'The correction was checked automatically. You only need to approve it.')
-                        : ($displaylang === 'es' ? 'Apruébala si está correcta o solicita otro cambio.' : 'Approve it if correct or request another change.'))))); ?></span>
-            <?php if ($inlineapproval && $cardisoutdated && ($cardguidelineverified || $cardreviewedforextraguideline || $cardguidelineautorepairable || $cardguidelineextraautoreview)): ?><form class="question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><?php if ($cardreviewedforextraguideline || $cardguidelineextraautoreview): ?><input type="hidden" name="reviewforextraguideline" value="1"><?php elseif ($cardguidelineautorepairable): ?><input type="hidden" name="autorepairguideline" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $cardguidelineautorepairable ? ($displaylang === 'es' ? 'Corregir guideline automáticamente' : 'Fix guideline automatically') : ($displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'); ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></form><?php elseif ($inlineapproval && $prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
-            <?php if ($inlineapproval && $cardisoutdated && $prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish the visible version without running another correction?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
-            <?php if ($inlineapproval && !$cardguidelineverified && $prohibitedanswerchoice === null && !$prohibitednegativewording && !$visibleherbplacementmissing): ?>
+                        : ($displaylang === 'es' ? 'Apruébala si está correcta o solicita otro cambio.' : 'Approve it if correct or request another change.')))))); ?></span>
+            <?php if ($inlineapproval && $cardreviewfailure !== []): ?><form class="question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="proposal" value="<?php echo s((string)($fullrevision['reviewProposal'] ?? '')); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><?php if ((string)($cardreviewfailure['destination'] ?? '') === 'extra_guideline'): ?><input type="hidden" name="reviewforextraguideline" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Reintentar revisión automática' : 'Retry automatic review'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></form><?php elseif ($inlineapproval && $cardisoutdated && ($cardguidelineverified || $cardreviewedforextraguideline || $cardguidelineautorepairable || $cardguidelineextraautoreview)): ?><form class="question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><?php if ($cardreviewedforextraguideline || $cardguidelineextraautoreview): ?><input type="hidden" name="reviewforextraguideline" value="1"><?php elseif ($cardguidelineautorepairable): ?><input type="hidden" name="autorepairguideline" value="1"><?php endif; ?><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $cardguidelineautorepairable ? ($displaylang === 'es' ? 'Corregir guideline automáticamente' : 'Fix guideline automatically') : ($displaylang === 'es' ? 'Revisar automáticamente' : 'Automatically review'); ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></form><?php elseif ($inlineapproval && $prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+            <?php if ($inlineapproval && $cardreviewfailure === [] && $cardisoutdated && $prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish the visible version without running another correction?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
+            <?php if ($inlineapproval && $cardreviewfailure === [] && !$cardguidelineverified && $prohibitedanswerchoice === null && !$prohibitednegativewording && !$visibleherbplacementmissing): ?>
             <form method="post" action="<?php echo $filteractionurl->out(false); ?>">
                 <input type="hidden" name="formaction" value="approvequestion">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
@@ -16085,6 +16111,7 @@ echo $OUTPUT->header();
             <?php endif; ?>
             <?php // Keep recoverable deletion available while an AI correction is awaiting approval. ?>
             <?php if ($inlineapproval && !$iscustomdraft): ?>
+            <?php if ($cardreviewfailure === []): ?>
             <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
                 <input type="hidden" name="formaction" value="sendtomock">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
@@ -16099,6 +16126,7 @@ echo $OUTPUT->header();
                 <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
                 <button class="question-bank__button question-bank__button--similar" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Mover esta pregunta al banco independiente Extra guideline? Se quitará de Board, Mock y Simulation Exams.' : 'Move this question to the independent Extra guideline bank? It will be removed from Board, Mock, and Simulation Exams.'; ?>');"><?php echo $cardreviewedforextraguideline ? ($displaylang === 'es' ? 'Guardar revisión en Extra' : 'Save reviewed question to Extra') : 'Extra guideline bank'; ?></button>
             </form>
+            <?php endif; ?>
             <form class="question-bank__delete-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
                 <input type="hidden" name="formaction" value="deletequestion">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
