@@ -3059,7 +3059,7 @@ if ((string)($revisionstore['pinyinNormalizationVersion'] ?? '') !== $allbankpin
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
-$extraguidelinedisclosureversion = 'extra-guideline-student-disclosure-v1';
+$extraguidelinedisclosureversion = 'extra-guideline-student-disclosure-v2-pinyin-names';
 if ((string)($revisionstore['extraGuidelineDisclosureVersion'] ?? '')
         !== $extraguidelinedisclosureversion) {
     block_myprogress_herbology_override_update(static function(array $store) use (
@@ -3080,7 +3080,7 @@ if ((string)($revisionstore['extraGuidelineDisclosureVersion'] ?? '')
                 )));
                 $outsiderosternames = [];
                 foreach ($violations as $violation) {
-                    if (preg_match('/:\s*([^|]+?)\s*$/u', $violation, $namematch)) {
+                    if (preg_match('/:\s*([^|()]+?)(?:\s*\([^)]*\))?\s*$/u', $violation, $namematch)) {
                         $outsiderostername = trim((string)$namematch[1]);
                         if ($outsiderostername !== '') {
                             $outsiderosternames[] = $outsiderostername;
@@ -13199,7 +13199,11 @@ PROMPT;
         $preservedoutsiderosternames = [];
         if ($reviewforextraguideline) {
             foreach ($currentguidelineviolations as $guidelineviolation) {
-                if (preg_match('/:\s*([^|]+?)\s*$/u', (string)$guidelineviolation, $namematch)) {
+                if (preg_match(
+                    '/:\s*([^|()]+?)(?:\s*\([^)]*\))?\s*$/u',
+                    (string)$guidelineviolation,
+                    $namematch
+                )) {
                     $outsiderostername = trim((string)$namematch[1]);
                     if ($outsiderostername !== '') {
                         $preservedoutsiderosternames[] = $outsiderostername;
@@ -15862,7 +15866,7 @@ echo $OUTPUT->header();
                 <div class="question-bank__exam-progress" role="progressbar" aria-valuemin="0" aria-valuemax="<?php echo $projecttarget; ?>" aria-valuenow="<?php echo $projectcount; ?>"><span style="width:<?php echo $projectpercent; ?>%"></span></div>
                 <?php if ($projectispublished): ?><div class="question-bank__exam-status question-bank__exam-status--published"><strong><?php echo $displaylang === 'es' ? 'Publicado' : 'Published'; ?> ✓</strong><span><?php echo s(userdate((int)strtotime((string)$project['publishedAt']), get_string('strftimedatetimeshort'))); ?> · v<?php echo (int)($project['publishedVersion'] ?? 1); ?></span></div><?php else: ?><div class="question-bank__exam-status<?php echo $projectisreadytopublish ? ' question-bank__exam-status--ready' : ''; ?>"><strong><?php echo $projectisreadytopublish ? ($displaylang === 'es' ? 'Listo para publicar' : 'Ready to publish') : ($projectneedsrebalance ? ($displaylang === 'es' ? 'Necesita rebalanceo' : 'Needs rebalancing') : ($displaylang === 'es' ? 'En progreso' : 'In progress')); ?></strong></div><?php endif; ?>
                 <?php if ($projectpublisherrormessage !== ''): ?><div class="question-bank__publish-error" role="alert"><?php echo s($projectpublisherrormessage); ?></div><?php endif; ?>
-                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--primary" href="<?php echo $projectincludedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Gestionar preguntas' : 'Manage questions'; ?> (<?php echo $projectcount; ?>)</a><?php if ($projectneedsrebalance): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectrebalanceurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Rebalancear' : 'Rebalance'; ?></a><?php endif; ?><?php if (!$projectispublished): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $projectaddurl->out(false); ?>" title="<?php echo $projectaddcreatesmissing ? ($displaylang === 'es' ? 'Crear preguntas para el dominio faltante de ' : 'Create questions for the missing domain in ') . s((string)$project['name']) : ($displaylang === 'es' ? 'Agregar una pregunta nueva a ' : 'Add a new question to ') . s((string)$project['name']); ?>"><?php if ($projectaddcreatesmissing): ?><?php echo $displaylang === 'es' ? 'Crear una o varias preguntas' : 'Create one or several questions'; ?> (<?php echo $projectcreationneeded; ?>) · <?php echo s((string)$project['name']); ?><?php else: ?><?php echo $displaylang === 'es' ? 'Agregar pregunta · ' : 'Add new question · '; ?><?php echo s((string)$project['name']); ?><?php endif; ?></a><?php endif; ?><?php if ($projectisreadytopublish): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectpublishurl->out(false); ?>"><?php echo $projectispublished ? ($displaylang === 'es' ? 'Republicar' : 'Republish') : ($displaylang === 'es' ? 'Publicar' : 'Publish'); ?></a><?php endif; ?><?php if ($projectispublished): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => $projectexamnumber, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Estudiante' : 'Student'; ?></a><?php endif; ?><?php if ($examprojectid === $projectid): ?><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a><?php endif; ?></div>
+                <div class="question-bank__editor-actions"><a class="question-bank__button question-bank__button--primary" href="<?php echo $projectincludedurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Gestionar preguntas' : 'Manage questions'; ?> (<?php echo $projectcount; ?>)</a><?php if ($projectneedsrebalance): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectrebalanceurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Rebalancear' : 'Rebalance'; ?></a><?php endif; ?><?php if (!$projectispublished && $projectmissing > 0): ?><a class="question-bank__button question-bank__button--publish" href="<?php echo $projectaddurl->out(false); ?>" title="<?php echo $projectaddcreatesmissing ? ($displaylang === 'es' ? 'Crear preguntas para el dominio faltante de ' : 'Create questions for the missing domain in ') . s((string)$project['name']) : ($displaylang === 'es' ? 'Agregar una pregunta nueva a ' : 'Add a new question to ') . s((string)$project['name']); ?>"><?php if ($projectaddcreatesmissing): ?><?php echo $displaylang === 'es' ? 'Crear una o varias preguntas' : 'Create one or several questions'; ?> (<?php echo $projectcreationneeded; ?>) · <?php echo s((string)$project['name']); ?><?php else: ?><?php echo $displaylang === 'es' ? 'Agregar pregunta · ' : 'Add new question · '; ?><?php echo s((string)$project['name']); ?><?php endif; ?></a><?php endif; ?><?php if ($projectisreadytopublish): ?><a class="question-bank__button question-bank__button--approve" href="<?php echo $projectpublishurl->out(false); ?>"><?php echo $projectispublished ? ($displaylang === 'es' ? 'Republicar' : 'Republish') : ($displaylang === 'es' ? 'Publicar' : 'Publish'); ?></a><?php endif; ?><?php if ($projectispublished): ?><a class="question-bank__button" href="<?php echo (new moodle_url('/blocks/menu/herbology-board.php', ['track' => 'simulation', 'simulation' => $projectexamnumber, 'from' => 'library']))->out(false); ?>"><?php echo $displaylang === 'es' ? 'Estudiante' : 'Student'; ?></a><?php endif; ?><?php if ($examprojectid === $projectid): ?><a class="question-bank__button" href="<?php echo $exammanagerurl->out(false); ?>#exam-builder"><?php echo $displaylang === 'es' ? 'Cerrar' : 'Close'; ?></a><?php endif; ?></div>
             </article>
             <?php endforeach; ?>
         </div>
