@@ -4711,6 +4711,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $approvalexamprojectid = $examprojectid !== ''
         ? $examprojectid
         : (string)($revisionstore['questions'][$questionid]['examProjectId'] ?? '');
+    if ($approvalexamprojectid === '') {
+        foreach ((array)($revisionstore['examProjects'] ?? []) as $candidateprojectid => $candidateproject) {
+            if (!is_array($candidateproject)
+                    || (string)($candidateproject['status'] ?? 'draft') === 'published'
+                    || !in_array(
+                        $questionid,
+                        array_map('strval', (array)($candidateproject['questionIds'] ?? [])),
+                        true
+                    )) {
+                continue;
+            }
+            $approvalexamprojectid = (string)$candidateprojectid;
+            break;
+        }
+    }
     if ($approvalexamprojectid !== '' && isset($questionsusedinpriorexams[$questionid])) {
         $approvalexamprojectid = '';
     }
@@ -4753,6 +4768,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 'This question requires “Publish with warning” or “Extra guideline bank” because its herb or formula '
                     . 'names are outside the 2026 guideline: ' . implode(' | ', $approvalguidelineviolations)
             );
+        }
+        if ($guidelineoverride) {
+            $replaceextraguidelineclaim = static function(string $text): string {
+                $replacements = [
+                    '/this question is preserved only in the independent Extra guideline bank\.?/iu'
+                        => 'this question is published with an administrator-approved guideline warning.',
+                    '/esta pregunta se conserva únicamente en el banco independiente Extra guideline\.?/iu'
+                        => 'esta pregunta se publica con una advertencia del guideline aprobada por un administrador.',
+                    '/esta pregunta se conserva solo en el banco independiente Extra guideline\.?/iu'
+                        => 'esta pregunta se publica con una advertencia del guideline aprobada por un administrador.',
+                ];
+                $updatedtext = preg_replace(
+                    array_keys($replacements),
+                    array_values($replacements),
+                    $text
+                );
+                return is_string($updatedtext) ? $updatedtext : $text;
+            };
+            $approvaldraft['explanation'] = $replaceextraguidelineclaim(
+                (string)($approvaldraft['explanation'] ?? '')
+            );
+            if (is_array($approvaldraft['translations']['es'] ?? null)) {
+                $approvaldraft['translations']['es']['explanation'] = $replaceextraguidelineclaim(
+                    (string)($approvaldraft['translations']['es']['explanation'] ?? '')
+                );
+            }
         }
     }
     $prohibitedanswerchoice = is_array($approvaldraft)
@@ -4837,8 +4878,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $previous['proposalStatus'] = 'reviewed';
             if (is_array($approvalguidelineoverride)) {
                 $previous['guidelineOverride'] = $approvalguidelineoverride;
+                $previous['reviewDestination'] = 'board_with_warning';
+                $previous['publicationStatus'] = 'published_with_warning';
+                $previous['publicationAudit'] = [
+                    'status' => 'published_with_warning',
+                    'examProjectId' => $approvalexamprojectid,
+                    'publishedAt' => $savedat,
+                    'publishedById' => (int)$USER->id,
+                    'publishedByName' => $savedbyname,
+                    'violations' => array_values($approvalguidelineoverride['violations'] ?? []),
+                ];
+                unset($previous['guidelineViolationsToPreserve']);
             } else {
                 unset($previous['guidelineOverride']);
+                $previous['reviewDestination'] = 'board';
+                $previous['publicationStatus'] = 'published';
             }
             if ($pinforexam2) {
                 $previous['exam2Pinned'] = true;
@@ -4879,6 +4933,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 && (string)($approvalupdatedrecord['guidelineOverride']['status'] ?? '')
                     !== 'approved_with_warning') {
             throw new RuntimeException('The guideline warning audit was not saved.');
+        }
+        if ($guidelineoverride
+                && ((string)($approvalupdatedrecord['reviewDestination'] ?? '') !== 'board_with_warning'
+                    || (string)($approvalupdatedrecord['publicationStatus'] ?? '')
+                        !== 'published_with_warning')) {
+            throw new RuntimeException('The warning publication destination was not registered.');
         }
         if ($approvalexamprojectid !== ''
                 && !in_array(
@@ -16367,6 +16427,7 @@ echo $OUTPUT->header();
                 <input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>">
                 <input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>">
                 <input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>">
+                <?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?>
                 <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
                 <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
                 <button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Publicar con esta advertencia? Quedarán registrados su usuario, la fecha y la alerta exacta.' : 'Publish with this warning? Your user, the date, and the exact alert will be recorded.'; ?>');"><?php echo $displaylang === 'es' ? 'Publicar con advertencia' : 'Publish with warning'; ?></button>
