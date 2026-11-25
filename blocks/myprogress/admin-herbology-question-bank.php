@@ -4510,10 +4510,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         \core\output\notification::NOTIFY_SUCCESS
     );
 }
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishcurrentquestion') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST'
+        && in_array($formaction, ['publishcurrentquestion', 'publishcurrentquestionwithwarning'], true)) {
     require_sesskey();
     $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
-    $guidelineoverride = (bool)optional_param('guidelineoverride', 0, PARAM_BOOL);
+    $guidelineoverride = $formaction === 'publishcurrentquestionwithwarning'
+        || (bool)optional_param('guidelineoverride', 0, PARAM_BOOL);
     $directpinforexam2 = (bool)optional_param('pinforexam2', 0, PARAM_BOOL);
     $directexamprojectid = $examprojectid;
     if ($directexamprojectid !== '' && isset($questionsusedinpriorexams[$questionid])) {
@@ -4678,14 +4680,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'publishcurrentques
         \core\output\notification::NOTIFY_SUCCESS
     );
 }
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST'
+        && in_array($formaction, ['approvequestion', 'approvequestionwithwarning'], true)) {
     require_sesskey();
     $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
     $reviewbatch = optional_param('reviewbatch', '', PARAM_ALPHANUMEXT);
     $returnorigin = (bool)optional_param('returnorigin', 0, PARAM_BOOL);
     $returneditingdrafts = (bool)optional_param('returneditingdrafts', 0, PARAM_BOOL);
     $returneditingpage = max(0, optional_param('returneditingpage', 0, PARAM_INT));
-    $guidelineoverride = (bool)optional_param('guidelineoverride', 0, PARAM_BOOL);
+    $guidelineoverride = $formaction === 'approvequestionwithwarning'
+        || (bool)optional_param('guidelineoverride', 0, PARAM_BOOL);
     $approvalerrorurl = new moodle_url(
         '/blocks/myprogress/admin-herbology-question-bank.php',
         array_filter([
@@ -4806,7 +4810,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
         )
         : null;
     try {
-        block_myprogress_herbology_override_update(static function(array $store) use (
+        $approvalupdatedstore = block_myprogress_herbology_override_update(static function(array $store) use (
             $questionid,
             $approvalexamprojectid,
             $pinforexam2,
@@ -4865,6 +4869,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'approvequestion') 
             $store['questions'][$questionid] = $previous;
             return $store;
         });
+        $approvalupdatedrecord = is_array($approvalupdatedstore['questions'][$questionid] ?? null)
+            ? $approvalupdatedstore['questions'][$questionid]
+            : [];
+        if ((string)($approvalupdatedrecord['status'] ?? '') !== 'approved') {
+            throw new RuntimeException('The question did not reach approved status after saving.');
+        }
+        if ($guidelineoverride
+                && (string)($approvalupdatedrecord['guidelineOverride']['status'] ?? '')
+                    !== 'approved_with_warning') {
+            throw new RuntimeException('The guideline warning audit was not saved.');
+        }
+        if ($approvalexamprojectid !== ''
+                && !in_array(
+                    $questionid,
+                    array_map(
+                        'strval',
+                        (array)($approvalupdatedstore['examProjects'][$approvalexamprojectid]['questionIds'] ?? [])
+                    ),
+                    true
+                )) {
+            throw new RuntimeException('The approved question was not retained in the selected exam.');
+        }
     } catch (Throwable $approvalerror) {
         debugging(
             'Herbology question publication failed for ' . $questionid . ': ' . $approvalerror->getMessage(),
@@ -16237,7 +16263,7 @@ echo $OUTPUT->header();
             <?php if ($prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing && !in_array($usagefilter, ['exam2_review', 'exam_project_pending'], true) && !$inlineapproval && !$question['_excluded'] && !$iscustomdraft && in_array($revisionstatus, ['draft', 'pending_reclassification'], true)): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="returnorigin" value="1"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Aprobar y publicar esta versión ahora?' : 'Approve and publish this version now?'; ?>');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if (!$inlineapproval && !$question['_excluded'] && !$iscustomdraft && !$cardguidelineverified && $prohibitedanswerchoice === null && !$prohibitednegativewording && !$visibleherbplacementmissing && (($question['_ready'] && in_array($revisionstatus, ['', 'original'], true)) || in_array($revisionstatus, ['draft', 'pending_reclassification'], true))): ?>
             <form method="post" action="<?php echo $filteractionurl->out(false); ?>">
-                <input type="hidden" name="formaction" value="<?php echo in_array($revisionstatus, ['draft', 'pending_reclassification'], true) ? 'approvequestion' : 'publishcurrentquestion'; ?>">
+                <input type="hidden" name="formaction" value="<?php echo in_array($revisionstatus, ['draft', 'pending_reclassification'], true) ? 'approvequestionwithwarning' : 'publishcurrentquestionwithwarning'; ?>">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
                 <input type="hidden" name="guidelineoverride" value="1">
                 <?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?>
@@ -16334,7 +16360,7 @@ echo $OUTPUT->header();
             <?php if ($inlineapproval && $cardreviewfailure === [] && $cardisoutdated && $prohibitedanswerchoice === null && !$prohibitednegativewording && $cardguidelineverified && !$visibleherbplacementmissing): ?><form method="post" action="<?php echo $filteractionurl->out(false); ?>"><input type="hidden" name="formaction" value="approvequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="<?php echo $inlineorigin ? '1' : '0'; ?>"><input type="hidden" name="returneditingdrafts" value="<?php echo $reviewfilter === 'editing_drafts' ? '1' : '0'; ?>"><input type="hidden" name="returneditingpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('Approve and publish the visible version without running another correction?');"><?php echo $displaylang === 'es' ? 'Aprobar y publicar' : 'Approve and publish'; ?></button></form><?php endif; ?>
             <?php if ($inlineapproval && $cardreviewfailure === [] && !$cardguidelineverified && $prohibitedanswerchoice === null && !$prohibitednegativewording && !$visibleherbplacementmissing): ?>
             <form method="post" action="<?php echo $filteractionurl->out(false); ?>">
-                <input type="hidden" name="formaction" value="approvequestion">
+                <input type="hidden" name="formaction" value="approvequestionwithwarning">
                 <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
                 <input type="hidden" name="guidelineoverride" value="1">
                 <input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>">
