@@ -14926,6 +14926,25 @@ if (is_array($currentexamproject)) {
         $projectshortagecreateurls[$shortagedomainid]->set_anchor('new-question');
     }
 }
+if ($usagefilter === 'exam_project_pending'
+        && $resultcount === 0
+        && array_sum($projectshortagebydomain) > 0
+        && $projectshortagecreateurls !== []) {
+    // Do not strand the administrator on an empty replacement queue. Open the
+    // targeted creation form for the first missing domain; after those drafts
+    // are approved the same flow continues with any other missing domain.
+    $firstshortagecreateurl = reset($projectshortagecreateurls);
+    if ($firstshortagecreateurl instanceof moodle_url) {
+        redirect(
+            $firstshortagecreateurl,
+            $displaylang === 'es'
+                ? 'No hay candidatas elegibles para estas vacantes. Cree las preguntas faltantes del dominio requerido.'
+                : 'No eligible candidates remain for these vacancies. Create the missing questions for the required domain.',
+            null,
+            \core\output\notification::NOTIFY_INFO
+        );
+    }
+}
 $assistanturl = new moodle_url('/blocks/myprogress/admin-herbology-question-bank.php', array_filter([
     'aiassistant' => 1,
     'lang' => $displaylang !== 'en' ? $displaylang : null,
@@ -15928,6 +15947,25 @@ echo $OUTPUT->header();
         $newquestionprefillidea = is_array($selectedinstructiontemplate)
             ? (string)$selectedinstructiontemplate['instruction']
             : (string)($newquestionrecovery['idea'] ?? '');
+        if ($newquestionprefillidea === ''
+                && $newquestiontargetdomain !== ''
+                && isset($domains[$newquestiontargetdomain])
+                && $newquestionneededcount > 0) {
+            $creationbatchcount = min(5, $newquestionneededcount);
+            $newquestionprefillidea = 'Create ' . $creationbatchcount
+                . ' independent, direct, positive NCBAHM-style multiple-choice question(s) for Domain '
+                . (int)$domains[$newquestiontargetdomain]['number'] . ': '
+                . (string)$domains[$newquestiontargetdomain]['name'] . ".\n\n"
+                . "Use only facts supported by the verified source data available in this question bank. "
+                . "Every named herb must use the exact current Appendix A Pinyin and official Latin name; "
+                . "every named formula must use the exact current Appendix C name. Do not use obsolete, "
+                . "outside-guideline, invented, approximate, or commercial patent names. Each question must "
+                . "show at least one tested herb or formula in the visible stem or A-D choices, contain exactly "
+                . "four parallel choices with one specific correct answer, avoid combined answers and negative "
+                . "stems, and include a detailed explanation that analyzes A, B, C, and D. Create English and "
+                . "Spanish versions without changing the answer key. Use a different source-supported objective "
+                . "for every question and do not reuse a question from any earlier exam.";
+        }
         $newquestionrecoverymode = (string)($newquestionrecovery['mode'] ?? 'general');
     ?><section id="new-question" class="question-bank__new-question">
         <h3><?php echo $displaylang === 'es' ? 'Crear una o varias preguntas' : 'Create one or several questions'; ?></h3>
