@@ -4687,6 +4687,47 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
         \core\output\notification::NOTIFY_SUCCESS
     );
 }
+$findreplaceableexamplaceholder = static function(
+    array $store,
+    array $project,
+    string $incomingquestionid,
+    string $incomingdomainid = ''
+): string {
+    $fallbackquestionid = '';
+    $projectquestionids = array_reverse(array_values(array_unique(array_filter(array_map(
+        'strval',
+        (array)($project['questionIds'] ?? [])
+    )))));
+    foreach ($projectquestionids as $projectquestionid) {
+        if ($projectquestionid === '' || $projectquestionid === $incomingquestionid) {
+            continue;
+        }
+        $revisionrecord = is_array($store['questions'][$projectquestionid] ?? null)
+            ? $store['questions'][$projectquestionid]
+            : [];
+        $customrecord = is_array($store['customQuestions'][$projectquestionid] ?? null)
+            ? $store['customQuestions'][$projectquestionid]
+            : [];
+        $isapproved = (string)($revisionrecord['status'] ?? '') === 'approved'
+            || (string)($customrecord['status'] ?? '') === 'approved';
+        if ($isapproved) {
+            continue;
+        }
+        if ($fallbackquestionid === '') {
+            $fallbackquestionid = $projectquestionid;
+        }
+        $projectquestiondomainid = (string)(
+            $revisionrecord['domainId']
+                ?? $customrecord['domainId']
+                ?? ''
+        );
+        if ($incomingdomainid !== '' && $projectquestiondomainid === $incomingdomainid) {
+            return $projectquestionid;
+        }
+    }
+    return $fallbackquestionid;
+};
+
 if (($_SERVER['REQUEST_METHOD'] === 'POST'
             && in_array($formaction, ['approvequestion', 'approvequestionwithwarning'], true))
         || ($warningpublishquestionid !== '' && !$warningpublishdirect)) {
@@ -4750,7 +4791,8 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
         $approvalexamprojectid = '';
     }
     $pinforexam2 = $usagefilter === 'exam2_review' && $approvalexamprojectid === '';
-    if ($findquestion($basebank, $questionid) === null) {
+    $approvalbaseentry = $findquestion($basebank, $questionid);
+    if ($approvalbaseentry === null) {
         $redirectapprovalerror('Publication could not continue because the Herbology question ID is no longer available.');
     }
     $approvalstoredrecord = is_array($revisionstore['questions'][$questionid] ?? null)
@@ -4762,6 +4804,14 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
             'This review is no longer an approvable draft. Refresh the question and use the action shown on its current card.'
         );
     }
+    $approvaldraft = $approvalstoredrecord['draft'];
+    $approvalquestiondomainid = (string)(
+        $approvalstoredrecord['domainId']
+            ?? $approvaldraft['domainId']
+            ?? $approvalbaseentry['domainId']
+            ?? ''
+    );
+    $approvalreplacequestionid = '';
     if ($approvalexamprojectid !== '') {
         $approvalproject = $revisionstore['examProjects'][$approvalexamprojectid];
         $approvalprojectquestionids = array_values(array_unique(array_map(
@@ -4770,12 +4820,20 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
         )));
         if (!in_array($questionid, $approvalprojectquestionids, true)
                 && count($approvalprojectquestionids) >= (int)($approvalproject['targetCount'] ?? 100)) {
-            $redirectapprovalerror(
-                'This exam already contains its target number of questions. Remove or replace one before publishing another.'
+            $approvalreplacequestionid = $findreplaceableexamplaceholder(
+                $revisionstore,
+                $approvalproject,
+                $questionid,
+                $approvalquestiondomainid
             );
+            if ($approvalreplacequestionid === '') {
+                $redirectapprovalerror(
+                    'This exam already contains its target number of approved questions. '
+                        . 'Choose a specific question to replace before publishing another.'
+                );
+            }
         }
     }
-    $approvaldraft = $approvalstoredrecord['draft'];
     if (is_array($approvaldraft)) {
         $approvaldraft = $normalizecreatedquestionpinyin($approvaldraft);
         $approvalguidelineviolations = $findcreatedquestionguidelineviolations($approvaldraft);
@@ -4871,6 +4929,8 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
         $approvalupdatedstore = block_myprogress_herbology_override_update(static function(array $store) use (
             $questionid,
             $approvalexamprojectid,
+            $approvalquestiondomainid,
+            $findreplaceableexamplaceholder,
             $pinforexam2,
             $approvaldraft,
             $approvalguidelineoverride,
@@ -4923,11 +4983,49 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
                 )));
                 if (!in_array($questionid, $projectquestionids, true)) {
                     if (count($projectquestionids) >= (int)($project['targetCount'] ?? 100)) {
-                        throw new invalid_parameter_exception(
-                            'This exam already contains its target number of questions. Remove one before adding another.'
+                        // Re-evaluate under the storage lock. This guarantees
+                        // that a slot that became approved in another request
+                        // is never displaced by this publication.
+                        $replacequestionid = $findreplaceableexamplaceholder(
+                            $store,
+                            $project,
+                            $questionid,
+                            $approvalquestiondomainid
                         );
+                        $replaceindex = $replacequestionid !== ''
+                            ? array_search($replacequestionid, $projectquestionids, true)
+                            : false;
+                        if ($replaceindex === false) {
+                            throw new invalid_parameter_exception(
+                                'This exam already contains its target number of approved questions. '
+                                    . 'Choose a specific question to replace before publishing another.'
+                            );
+                        }
+                        $projectquestionids[(int)$replaceindex] = $questionid;
+                        if ((string)($store['questions'][$replacequestionid]['examProjectId'] ?? '')
+                                === $approvalexamprojectid) {
+                            unset($store['questions'][$replacequestionid]['examProjectId']);
+                            $store['questions'][$replacequestionid]['bankDeferred'] = true;
+                        }
+                        if ((string)($store['customQuestions'][$replacequestionid]['targetExamProjectId'] ?? '')
+                                === $approvalexamprojectid) {
+                            $store['customQuestions'][$replacequestionid]['targetExamProjectId'] = '';
+                            $store['customQuestions'][$replacequestionid]['bankDeferred'] = true;
+                        }
+                        $project['pendingSlotReplacements'][] = [
+                            'removedQuestionId' => $replacequestionid,
+                            'approvedQuestionId' => $questionid,
+                            'replacedAt' => $savedat,
+                            'replacedById' => (int)$USER->id,
+                            'replacedByName' => $savedbyname,
+                        ];
+                        $project['pendingSlotReplacements'] = array_slice(
+                            (array)$project['pendingSlotReplacements'],
+                            -100
+                        );
+                    } else {
+                        $projectquestionids[] = $questionid;
                     }
-                    $projectquestionids[] = $questionid;
                 }
                 $project['questionIds'] = $projectquestionids;
                 $project['updatedAt'] = $savedat;
