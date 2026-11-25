@@ -63,6 +63,7 @@ $inventoryjson = (bool)optional_param('inventoryjson', 0, PARAM_BOOL);
 $displaylang = optional_param('lang', 'en', PARAM_ALPHA) === 'es' ? 'es' : 'en';
 $warningpublishquestionid = optional_param('publishwarning', '', PARAM_ALPHANUMEXT);
 $warningpublishdirect = (bool)optional_param('publishwarningdirect', 0, PARAM_BOOL);
+$warningpublisherror = trim(optional_param('publisherror', '', PARAM_TEXT));
 $page = max(0, optional_param('page', 0, PARAM_INT));
 $perpage = in_array($reviewfilter, ['ai_drafts', 'editing_drafts'], true) ? 5 : 20;
 $aipromptversion = 'ncbahm-mock-editor-5.1';
@@ -4710,8 +4711,13 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
     );
     $approvalerrorurl->set_anchor('question-' . $questionid);
     $redirectapprovalerror = static function(string $message) use ($approvalerrorurl): void {
+        // Some Moodle themes do not render redirect notifications on this page.
+        // Keep the rejection on the question URL as well so the administrator
+        // can see the exact publication blocker after the redirect.
+        $visibleerrorurl = new moodle_url($approvalerrorurl);
+        $visibleerrorurl->param('publisherror', core_text::substr($message, 0, 600));
         redirect(
-            $approvalerrorurl,
+            $visibleerrorurl,
             $message,
             null,
             \core\output\notification::NOTIFY_ERROR
@@ -16381,6 +16387,7 @@ echo $OUTPUT->header();
         </div>
         <?php if ($displaylang === 'es' && !$hasspanishtranslation): ?><div class="question-bank__translation-missing"><strong>Esta pregunta todavía no tiene traducción guardada.</strong> Se muestra el original inglés. Use <strong>Crear traducción al español</strong> para traducir solamente el texto, las respuestas y la explicación sin cambiar el contenido clínico.</div><?php endif; ?>
         <?php if ($cardguidelineoverrideactive): ?><div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Advertencia aceptada por un administrador:' : 'Warning accepted by an administrator:'; ?></strong> <?php echo s(implode(' | ', $cardguidelineviolations)); ?><?php if ((string)($cardguidelineoverridedetails['approvedByName'] ?? '') !== ''): ?> · <?php echo s((string)$cardguidelineoverridedetails['approvedByName']); ?><?php endif; ?><?php if ((string)($cardguidelineoverridedetails['approvedAt'] ?? '') !== ''): ?> · <?php echo s((string)$cardguidelineoverridedetails['approvedAt']); ?><?php endif; ?></div><?php elseif (!$cardguidelineverified): ?><div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'Alerta del guideline:' : 'Guideline alert:'; ?></strong> <?php echo s(implode(' | ', $cardguidelineviolations)); ?> <?php echo $displaylang === 'es' ? 'Puede corregirla, guardarla en Extra guideline o publicarla con advertencia si confirma que el contenido es válido.' : 'You may correct it, save it to Extra guideline, or publish with a warning after confirming the content is valid.'; ?></div><?php endif; ?>
+        <?php if ($warningpublisherror !== '' && ($query === '' || $query === (string)$question['questionId'])): ?><div class="question-bank__publish-error" role="alert"><strong><?php echo $displaylang === 'es' ? 'La publicación no se guardó:' : 'Publication was not saved:'; ?></strong> <?php echo s($warningpublisherror); ?></div><?php endif; ?>
         <?php if (!$cardguidelineverified && $cardkeyedanswerguidelineviolations !== []): ?><div class="question-bank__publish-error"><strong><?php echo $displaylang === 'es' ? 'La reparación Board automática no está disponible:' : 'Automatic Board repair is unavailable:'; ?></strong> <?php echo $cardreviewedforextraguideline
             ? ($displaylang === 'es'
                 ? 'La respuesta correcta está fuera del guideline y sustituirla cambiaría el hecho evaluado. La revisión Extra ya está completa; guárdela en Extra guideline o publíquela con advertencia después de verificar el contenido.'
