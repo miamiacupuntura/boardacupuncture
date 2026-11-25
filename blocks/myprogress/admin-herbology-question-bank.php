@@ -4711,10 +4711,26 @@ $findreplaceableexamplaceholder = static function(
         // A stale override can still say "approved" after its source item was
         // removed from the active bank. The exam counter correctly excludes
         // that orphan, so the capacity check must exclude it too.
-        $questionisavailable = $findquestion($basebank, $projectquestionid) !== null;
-        $isapproved = $questionisavailable
-            && ((string)($revisionrecord['status'] ?? '') === 'approved'
-                || (string)($customrecord['status'] ?? '') === 'approved');
+        $availableentry = $findquestion($basebank, $projectquestionid);
+        $availablequestion = is_array($availableentry)
+            ? (array)($availableentry['question'] ?? [])
+            : [];
+        $editorialstatus = (string)(
+            $availablequestion['_editorialRevision']['status']
+                ?? $revisionrecord['status']
+                ?? ''
+        );
+        $customstatus = (string)(
+            $availablequestion['_customStatus']
+                ?? $customrecord['status']
+                ?? ''
+        );
+        $sourcekind = (string)($availablequestion['sourceKind'] ?? 'curated');
+        $questionisactive = $availablequestion !== []
+            && !in_array($editorialstatus, ['study_archive', 'extra_guideline', 'deleted'], true);
+        $isapproved = $questionisactive
+            && ($editorialstatus === 'approved'
+                || ($sourcekind === 'admin' && $customstatus === 'approved'));
         if ($isapproved) {
             continue;
         }
@@ -6339,6 +6355,180 @@ foreach ($examprojects as &$storedexam) {
     $storedexam['missingCount'] = max(0, (int)$storedexam['targetCount'] - $storedexam['currentCount']);
 }
 unset($storedexam);
+
+// Recover approvals made while an exam had a stale raw identifier occupying
+// the vacancy reported by its active 99/100 counter. The previous publication
+// correctly approved the question in the bank and marked its intended exam;
+// replace only the inactive identifier and never an active approved question.
+$deferredfullexamrepairplans = [];
+$repairquestiondomainlookup = [];
+foreach ($allquestions as $repairquestion) {
+    $repairquestionid = (string)($repairquestion['questionId'] ?? '');
+    if ($repairquestionid !== '') {
+        $repairquestiondomainlookup[$repairquestionid] = (string)($repairquestion['_domainid'] ?? '');
+    }
+}
+$simulatedrepairexamprojects = $examprojects;
+foreach ((array)($revisionstore['questions'] ?? []) as $deferredquestionid => $deferredrecord) {
+    if (!is_array($deferredrecord)
+            || (string)($deferredrecord['status'] ?? '') !== 'approved') {
+        continue;
+    }
+    $deferredquestionid = (string)$deferredquestionid;
+    $deferredexamid = (string)($deferredrecord['deferredFromFullExamProjectId'] ?? '');
+    $deferredproject = $simulatedrepairexamprojects[$deferredexamid] ?? null;
+    if ($deferredquestionid === ''
+            || $deferredexamid === ''
+            || !isset($approvedquestionidlookup[$deferredquestionid])
+            || !is_array($deferredproject)
+            || (string)($deferredproject['status'] ?? 'draft') === 'published'
+            || in_array($deferredquestionid, (array)($deferredproject['questionIds'] ?? []), true)
+            || (int)($deferredproject['currentCount'] ?? 0)
+                >= (int)($deferredproject['targetCount'] ?? 100)) {
+        continue;
+    }
+    $incomingdomainid = (string)(
+        $deferredrecord['domainId']
+            ?? $repairquestiondomainlookup[$deferredquestionid]
+            ?? ''
+    );
+    $fallbackreplacementid = '';
+    $replacementquestionid = '';
+    foreach (array_reverse((array)($deferredproject['questionIds'] ?? [])) as $candidateid) {
+        $candidateid = (string)$candidateid;
+        if ($candidateid === '' || isset($approvedquestionidlookup[$candidateid])) {
+            continue;
+        }
+        if ($fallbackreplacementid === '') {
+            $fallbackreplacementid = $candidateid;
+        }
+        $candidateprojectrecord = (array)($revisionstore['questions'][$candidateid] ?? []);
+        $candidatecustomrecord = (array)($revisionstore['customQuestions'][$candidateid] ?? []);
+        $candidatedomainid = (string)(
+            $candidateprojectrecord['domainId']
+                ?? $candidatecustomrecord['domainId']
+                ?? $repairquestiondomainlookup[$candidateid]
+                ?? ''
+        );
+        if ($incomingdomainid !== '' && $candidatedomainid === $incomingdomainid) {
+            $replacementquestionid = $candidateid;
+            break;
+        }
+    }
+    if ($replacementquestionid === '') {
+        $replacementquestionid = $fallbackreplacementid;
+    }
+    if ($replacementquestionid === '') {
+        continue;
+    }
+    $deferredfullexamrepairplans[] = [
+        'examProjectId' => $deferredexamid,
+        'questionId' => $deferredquestionid,
+        'replacementQuestionId' => $replacementquestionid,
+    ];
+    $replacementindex = array_search(
+        $replacementquestionid,
+        (array)$deferredproject['questionIds'],
+        true
+    );
+    if ($replacementindex !== false) {
+        $deferredproject['questionIds'][(int)$replacementindex] = $deferredquestionid;
+        $deferredproject['approvedQuestionIds'][] = $deferredquestionid;
+        $deferredproject['approvedQuestionIds'] = array_values(array_unique(array_filter(
+            array_map('strval', (array)$deferredproject['approvedQuestionIds']),
+            static fn(string $id): bool => $id !== $replacementquestionid
+        )));
+        $deferredproject['currentCount'] = count($deferredproject['approvedQuestionIds']);
+        $deferredproject['missingCount'] = max(
+            0,
+            (int)$deferredproject['targetCount'] - (int)$deferredproject['currentCount']
+        );
+        $simulatedrepairexamprojects[$deferredexamid] = $deferredproject;
+    }
+}
+if ($deferredfullexamrepairplans !== []) {
+    $deferredrepairat = gmdate(DATE_ATOM);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $deferredfullexamrepairplans,
+        $deferredrepairat,
+        $USER
+    ): array {
+        foreach ($deferredfullexamrepairplans as $repairplan) {
+            $repairquestionid = (string)$repairplan['questionId'];
+            $repairexamid = (string)$repairplan['examProjectId'];
+            $replacementquestionid = (string)$repairplan['replacementQuestionId'];
+            $record = $store['questions'][$repairquestionid] ?? null;
+            $project = $store['examProjects'][$repairexamid] ?? null;
+            if (!is_array($record)
+                    || (string)($record['status'] ?? '') !== 'approved'
+                    || (string)($record['deferredFromFullExamProjectId'] ?? '') !== $repairexamid
+                    || !is_array($project)
+                    || (string)($project['status'] ?? 'draft') === 'published') {
+                continue;
+            }
+            $projectquestionids = array_values(array_unique(array_filter(array_map(
+                'strval',
+                (array)($project['questionIds'] ?? [])
+            ))));
+            if (in_array($repairquestionid, $projectquestionids, true)) {
+                unset(
+                    $record['deferredFromFullExamProjectId'],
+                    $record['deferredFromFullExamAt'],
+                    $record['bankDeferred']
+                );
+                $record['examProjectId'] = $repairexamid;
+                $store['questions'][$repairquestionid] = $record;
+                continue;
+            }
+            $replacementindex = array_search($replacementquestionid, $projectquestionids, true);
+            if ($replacementindex === false) {
+                continue;
+            }
+            $projectquestionids[(int)$replacementindex] = $repairquestionid;
+            $project['questionIds'] = $projectquestionids;
+            $project['deferredApprovalRecoveries'][] = [
+                'removedQuestionId' => $replacementquestionid,
+                'approvedQuestionId' => $repairquestionid,
+                'recoveredAt' => $deferredrepairat,
+                'recoveredById' => (int)$USER->id,
+                'recoveredByName' => fullname($USER),
+            ];
+            $project['deferredApprovalRecoveries'] = array_slice(
+                (array)$project['deferredApprovalRecoveries'],
+                -100
+            );
+            $project['updatedAt'] = $deferredrepairat;
+            $record['examProjectId'] = $repairexamid;
+            $record['recoveredIntoExamAt'] = $deferredrepairat;
+            unset(
+                $record['deferredFromFullExamProjectId'],
+                $record['deferredFromFullExamAt'],
+                $record['bankDeferred']
+            );
+            if ((string)($store['questions'][$replacementquestionid]['examProjectId'] ?? '')
+                    === $repairexamid) {
+                unset($store['questions'][$replacementquestionid]['examProjectId']);
+            }
+            $store['questions'][$repairquestionid] = $record;
+            $store['examProjects'][$repairexamid] = $project;
+        }
+        return $store;
+    });
+    $deferredrepairurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        array_filter(['lang' => $displaylang !== 'en' ? $displaylang : null])
+    );
+    $deferredrepairurl->set_anchor('exam-builder');
+    redirect(
+        $deferredrepairurl,
+        count($deferredfullexamrepairplans) === 1
+            ? 'The approved question was recovered into the open exam vacancy.'
+            : count($deferredfullexamrepairplans)
+                . ' approved questions were recovered into their open exam vacancies.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
 $creationtargetexam = $creationtargetexamid !== ''
     ? ($examprojects[$creationtargetexamid] ?? null)
     : null;
