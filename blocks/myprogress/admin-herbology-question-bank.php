@@ -6950,6 +6950,7 @@ if (is_array($currentexamproject)) {
             // unfinished questions should remain in the pending queue.
             if ($usagefilter === 'exam_project_pending'
                     && $isprocessedquestion($projectquestion)
+                    && isset($approvedquestionidlookup[$projectquestionid])
                     && $projectguidelineeligible) {
                 $projectapprovedcandidateids[] = $projectquestionid;
                 continue;
