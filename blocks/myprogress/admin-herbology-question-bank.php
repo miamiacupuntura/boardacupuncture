@@ -2565,6 +2565,8 @@ $guidelineherbaliases = [
     // Bensky formula ingredient lists commonly shorten Zi Su Ye to Su Ye.
     // The pharmaceutical name remains Perillae Folium in both forms.
     'su ye' => 'zi su ye',
+    // Imported sources use generic Niu Xi for the Appendix A Huai species.
+    'niu xi' => 'huai niu xi',
 ];
 $stripguidelineinstructionprefixes = static function(string $normalizedname): string {
     $stripped = preg_replace(

@@ -191,6 +191,12 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
     $herbdisplays = [];
     $herbpinyinpatterns = [];
     $herblatinpatterns = [];
+    $appendixaherbaliases = [
+        // Imported sources commonly abbreviate Huai Niu Xi to generic Niu Xi.
+        // Appendix A distinguishes it from Chuan Niu Xi; the attached
+        // Achyranthis bidentatae Radix identity resolves the abbreviation.
+        'Huai Niu Xi' => ['Niu Xi'],
+    ];
     $pharmaceuticalparts = [
         'bulbus', 'calculus', 'caulis', 'cortex', 'flos', 'folium', 'fructus', 'herba',
         'pericarpium', 'radix', 'ramulus', 'resina', 'rhizoma', 'semen', 'spora', 'stigma',
@@ -271,7 +277,11 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
                 continue;
             }
             $officiallatin = trim((string)($record['latin'] ?? ''));
-            $addherbdisplay($officialname, $officiallatin);
+            $addherbdisplay(
+                $officialname,
+                $officiallatin,
+                (array)($appendixaherbaliases[$officialname] ?? [])
+            );
         }
     }
     foreach (block_myprogress_herbology_obsolete_substance_roster() as $obsoletesubstance) {
@@ -287,6 +297,7 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
             'names' => [],
             'pattern' => '',
             'herbDisplays' => [],
+            'parentheticalHerbPattern' => '',
             'legacyHerbPattern' => '',
             'legacyHerbOptionPattern' => '',
         ];
@@ -312,6 +323,11 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
         'names' => $canonicalnames,
         'pattern' => '/(?<![A-Za-z0-9])(?:' . implode('|', $alternatives) . ')(?![A-Za-z0-9])/iu',
         'herbDisplays' => $herbdisplays,
+        'parentheticalHerbPattern' => $herbpinyinpatterns === [] || $herblatinpatterns === []
+            ? ''
+            : '/(?<![A-Za-z0-9])(?<pinyin>' . implode('|', array_values($herbpinyinpatterns)) . ')'
+                . '\s*\(\s*(?<latin>' . implode('|', array_values($herblatinpatterns)) . ')\s*\)'
+                . '(?![A-Za-z0-9])/iu',
         'legacyHerbPattern' => $herbpinyinpatterns === [] || $herblatinpatterns === []
             ? ''
             : '/(?<![A-Za-z0-9])(?<pinyin>' . implode('|', array_values($herbpinyinpatterns)) . ')'
@@ -341,6 +357,7 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
     $canonicalnames = (array)($casedata['names'] ?? []);
     $pattern = (string)($casedata['pattern'] ?? '');
     $herbdisplays = (array)($casedata['herbDisplays'] ?? []);
+    $parentheticalherbpattern = (string)($casedata['parentheticalHerbPattern'] ?? '');
     $legacyherbpattern = (string)($casedata['legacyHerbPattern'] ?? '');
     $legacyherboptionpattern = (string)($casedata['legacyHerbOptionPattern'] ?? '');
     if ($canonicalnames === [] || $pattern === '') {
@@ -351,6 +368,7 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         $canonicalnames,
         $pattern,
         $herbdisplays,
+        $parentheticalherbpattern,
         $legacyherbpattern,
         $legacyherboptionpattern
     ) {
@@ -362,6 +380,32 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         }
         if (!is_string($value) || $value === '') {
             return $value;
+        }
+        if ($parentheticalherbpattern !== '' && $herbdisplays !== []) {
+            $parentheticalreplaced = preg_replace_callback(
+                $parentheticalherbpattern,
+                static function(array $match) use ($herbdisplays): string {
+                    $pinyin = strtolower((string)preg_replace(
+                        '/\s+/u',
+                        ' ',
+                        trim((string)($match['pinyin'] ?? ''))
+                    ));
+                    $latin = strtolower((string)preg_replace(
+                        '/\s+/u',
+                        ' ',
+                        trim((string)($match['latin'] ?? ''))
+                    ));
+                    $official = (array)($herbdisplays[$pinyin] ?? []);
+                    if ($official === [] || !isset($official['latinAliases'][$latin])) {
+                        return (string)$match[0];
+                    }
+                    return (string)$official['name'] . ' (' . (string)$official['latin'] . ')';
+                },
+                $value
+            );
+            if (is_string($parentheticalreplaced)) {
+                $value = $parentheticalreplaced;
+            }
         }
         if ($legacyherboptionpattern !== '' && $herbdisplays !== []
                 && preg_match($legacyherboptionpattern, $value, $optionmatch) === 1) {
