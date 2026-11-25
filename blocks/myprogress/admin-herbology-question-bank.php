@@ -4831,7 +4831,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $approvalinstructionparts[] = (string)($approvalrevision['reviewProposal'] ?? '');
     $approvalinstructions = implode("\n", array_filter(array_map('trim', $approvalinstructionparts)));
     $approvalrequiredherbs = $requestedvisibleherbcount($approvalinstructions);
-    if ($approvalrequiredherbs > 0
+    if (!$guidelineoverride
+            && $approvalrequiredherbs > 0
             && (!is_array($approvaldraft)
                 || count($visibleherbnames($approvaldraft)) < $approvalrequiredherbs)) {
         $redirectapprovalerror(
