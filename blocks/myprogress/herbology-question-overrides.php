@@ -493,18 +493,26 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         if (!is_string($value) || $value === '') {
             return $value;
         }
-        // Some imported source questions incorrectly split this legacy
-        // formula display into an herb plus a formula fragment.  Treat the
-        // complete source name as one unit: the pharmaceutical name for Huo
-        // Xiang must not be inserted in the middle of the formula name.
-        $embeddedherbformularepaired = preg_replace(
+        // Some imported source questions incorrectly split a complete legacy
+        // formula display into an herb plus a formula fragment. Treat each
+        // complete source name as one unit: the pharmaceutical name of a
+        // component herb must never be inserted into the formula name.
+        $embeddedherbformularepairs = [
             '/(?<![A-Za-z0-9])Huo\s+Xiang\s*\(\s*Pogostemonis\/Agastaches\s+Herba\s*\)'
-                . '\s+Zheng\s+Qi\s+Tang(?![A-Za-z0-9])/iu',
-            'Huo Xiang Zheng Qi Tang',
-            $value
-        );
-        if (is_string($embeddedherbformularepaired)) {
-            $value = $embeddedherbformularepaired;
+                . '\s+Zheng\s+Qi\s+Tang(?![A-Za-z0-9])/iu' => 'Huo Xiang Zheng Qi Tang',
+            '/(?<![A-Za-z0-9])Ling\s+Jiao\s+Gou\s+Teng\s*'
+                . '\(\s*Uncariae\s+Ramulus\s+cum\s+Uncis\s*\)'
+                . '\s+Tang(?![A-Za-z0-9])/iu' => 'Ling Jiao Gou Teng Tang',
+        ];
+        foreach ($embeddedherbformularepairs as $embeddedpattern => $completeformulaname) {
+            $embeddedherbformularepaired = preg_replace(
+                $embeddedpattern,
+                $completeformulaname,
+                $value
+            );
+            if (is_string($embeddedherbformularepaired)) {
+                $value = $embeddedherbformularepaired;
+            }
         }
         if ($parentheticalformulapattern !== '' && $formuladisplays !== []) {
             $formulareplaced = preg_replace_callback(
@@ -644,12 +652,14 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
                 $protectedsegments[$placeholder] = (string)$match[0];
                 return $placeholder;
             };
-            // Preserve the complete imported source formula while expanding
-            // ordinary standalone herbs to Pinyin (Latin). The imported Tang
-            // spelling is accepted as an alias of the Appendix C San entry,
-            // while its source wording remains visible for administrator review.
+            // Preserve complete imported source formulas while expanding
+            // ordinary standalone herbs to Pinyin (Latin). Their imported
+            // Tang spellings are accepted as aliases of the corresponding
+            // Appendix C entries, while the source wording remains visible
+            // for administrator review.
             $legacyformulaprotected = preg_replace_callback(
-                '/(?<![A-Za-z0-9])Huo\s+Xiang\s+Zheng\s+Qi\s+Tang(?![A-Za-z0-9])/iu',
+                '/(?<![A-Za-z0-9])(?:Huo\s+Xiang\s+Zheng\s+Qi\s+Tang|'
+                    . 'Ling\s+Jiao\s+Gou\s+Teng\s+Tang)(?![A-Za-z0-9])/iu',
                 $protectsegment,
                 $value
             );
