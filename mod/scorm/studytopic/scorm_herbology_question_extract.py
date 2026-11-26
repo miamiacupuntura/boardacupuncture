@@ -213,6 +213,118 @@ def load_questions(packagepath: Path) -> list[Any]:
     return questions
 
 
+def deterministic_rank(seed: str, value: str) -> str:
+    """Return a stable pseudo-random rank without depending on process state."""
+    return hashlib.sha256(f"{seed}\n{normalize(value)}".encode("utf-8")).hexdigest()
+
+
+def matching_multiple_choice_questions(
+    source: dict[str, Any],
+    placement: dict[str, Any],
+    question_number: int,
+) -> tuple[list[dict[str, Any]], Counter[str]]:
+    """Convert one SCORM matching table into independent four-choice items.
+
+    The answer key and every distractor come from the same SCORM table. The
+    Moodle source package remains untouched.
+    """
+    left_column = source.get("LeftColumn") or []
+    right_column = source.get("RightColumn") or []
+    skipped: Counter[str] = Counter()
+    if not isinstance(left_column, list) or not isinstance(right_column, list):
+        return [], Counter({"matching question has invalid columns": 1})
+
+    right_by_id: dict[str, str] = {}
+    right_values: list[str] = []
+    right_value_keys: set[str] = set()
+    for item in right_column:
+        if not isinstance(item, dict):
+            continue
+        text = source_text(answer_text(item))
+        item_id = normalize(item.get("Id"))
+        if not text:
+            continue
+        if item_id and item_id not in right_by_id:
+            right_by_id[item_id] = text
+        text_key = normalize(text)
+        if text_key not in right_value_keys:
+            right_value_keys.add(text_key)
+            right_values.append(text)
+
+    base_prompt = source_text(source.get("QuestionText"))
+    source_feedback = feedback_text(source)
+    converted: list[dict[str, Any]] = []
+    for item_number, item in enumerate(left_column, start=1):
+        if not isinstance(item, dict):
+            skipped["invalid matching left-column item"] += 1
+            continue
+        left_text = source_text(answer_text(item))
+        item_id = normalize(item.get("Id"))
+        correct_text = right_by_id.get(item_id, "")
+        if not correct_text and item_number <= len(right_column):
+            correct_text = source_text(answer_text(right_column[item_number - 1]))
+        if not left_text or not correct_text:
+            skipped["matching answer key not found"] += 1
+            continue
+
+        distractors = [
+            value for value in right_values
+            if normalize(value) != normalize(correct_text)
+        ]
+        seed = f"{placement.get('contenthash')}:{question_number}:{item_number}:{left_text}"
+        distractors.sort(key=lambda value: deterministic_rank(seed, value))
+        if len(distractors) < 3:
+            skipped["matching item has fewer than three source distractors"] += 1
+            continue
+
+        option_texts = [correct_text, *distractors[:3]]
+        option_texts.sort(key=lambda value: deterministic_rank(f"option:{seed}", value))
+        if base_prompt:
+            prompt = f"{base_prompt}\n\nWhich option correctly matches {left_text}?"
+        else:
+            prompt = f"Which hierarchy description correctly matches {left_text}?"
+        explanation_parts = [source_feedback] if source_feedback else []
+        explanation_parts.append(f"Correct match: {left_text} — {correct_text}.")
+        generated_source = {
+            "__type": "MultipleChoiceQuestion",
+            "QuestionText": prompt,
+            "Answers": [
+                {"Content": text, "Correct": normalize(text) == normalize(correct_text)}
+                for text in option_texts
+            ],
+            "Feedback": [{"Content": "\n\n".join(explanation_parts)}],
+        }
+        question, reason = extract_question(generated_source, placement, question_number)
+        if question is None:
+            skipped[reason or "converted matching item was not extractable"] += 1
+            continue
+        question["review"]["notes"] = (
+            "Converted deterministically from a SCORM matching table. The correct answer and "
+            "all distractors come from that same source table; the Moodle package was not changed."
+        )
+        question["scorm"].update({
+            "questionType": "MatchingQuestion",
+            "convertedFrom": "MatchingQuestion",
+            "matchingItemNumber": item_number,
+            "matchingItem": left_text,
+        })
+        converted.append(question)
+    return converted, skipped
+
+
+def extract_source_questions(
+    source: dict[str, Any],
+    placement: dict[str, Any],
+    question_number: int,
+) -> tuple[list[dict[str, Any]], Counter[str]]:
+    if str(source.get("__type") or "") == "MatchingQuestion":
+        return matching_multiple_choice_questions(source, placement, question_number)
+    question, reason = extract_question(source, placement, question_number)
+    if question is None:
+        return [], Counter({reason or "not extractable": 1})
+    return [question], Counter()
+
+
 def extract_question(
     source: dict[str, Any],
     placement: dict[str, Any],
@@ -325,9 +437,16 @@ def build_bank(
     inventory: dict[str, Any],
     courses: list[int],
     static_bank: Path | None,
+    module_pattern: re.Pattern[str] | None = None,
 ) -> dict[str, Any]:
     dataroot = Path(str(inventory["dataroot"])).resolve()
-    grouped = choose_placements(inventory.get("records") or [], courses)
+    records = inventory.get("records") or []
+    if module_pattern is not None:
+        records = [
+            record for record in records
+            if module_pattern.search(str(record.get("scormname") or ""))
+        ]
+    grouped = choose_placements(records, courses)
     static_fingerprints, static_ids = load_static_fingerprints(static_bank)
     domains: dict[str, list[dict[str, Any]]] = {domain_id: [] for domain_id in DOMAIN_IDS}
     seen_fingerprints: set[str] = set()
@@ -348,22 +467,23 @@ def build_bank(
             if not isinstance(source_question, dict):
                 skipped["invalid question record"] += 1
                 continue
-            question, reason = extract_question(source_question, placement, number)
-            if question is None:
-                skipped[reason or "not extractable"] += 1
-                continue
-            fingerprint = str(question["scorm"]["fingerprint"])
-            if fingerprint in static_fingerprints:
-                skipped["duplicate of classified bank"] += 1
-                continue
-            if fingerprint in seen_fingerprints:
-                skipped["duplicate SCORM question"] += 1
-                continue
-            if question["questionId"] in static_ids:
-                skipped["duplicate question ID"] += 1
-                continue
-            seen_fingerprints.add(fingerprint)
-            domains[str(question["domainId"])].append(question)
+            extracted, extraction_skips = extract_source_questions(
+                source_question, placement, number
+            )
+            skipped.update(extraction_skips)
+            for question in extracted:
+                fingerprint = str(question["scorm"]["fingerprint"])
+                if fingerprint in static_fingerprints:
+                    skipped["duplicate of classified bank"] += 1
+                    continue
+                if fingerprint in seen_fingerprints:
+                    skipped["duplicate SCORM question"] += 1
+                    continue
+                if question["questionId"] in static_ids:
+                    skipped["duplicate question ID"] += 1
+                    continue
+                seen_fingerprints.add(fingerprint)
+                domains[str(question["domainId"])].append(question)
 
     for questions in domains.values():
         questions.sort(key=lambda question: (
@@ -371,7 +491,36 @@ def build_bank(
             int(question["scorm"]["questionNumber"]),
             str(question["questionId"]),
         ))
+    return summarize_bank(
+        domains,
+        courses=courses,
+        module_count=module_count,
+        skipped=skipped,
+        errors=errors,
+        module_pattern=module_pattern.pattern if module_pattern else "",
+    )
+
+
+def summarize_bank(
+    domains: dict[str, list[dict[str, Any]]],
+    *,
+    courses: list[int],
+    module_count: int | None = None,
+    skipped: Counter[str] | dict[str, int] | None = None,
+    errors: list[dict[str, str]] | None = None,
+    module_pattern: str = "",
+) -> dict[str, Any]:
+    for domain_id in DOMAIN_IDS:
+        domains.setdefault(domain_id, [])
     all_questions = [question for questions in domains.values() for question in questions]
+    if module_count is None:
+        module_count = len({
+            (
+                int(question.get("source", {}).get("courseId") or 0),
+                int(question.get("source", {}).get("courseModuleId") or 0),
+            )
+            for question in all_questions
+        })
     content_counts = Counter(str(question["contentType"]) for question in all_questions)
     cognitive_counts = Counter(str(question["cognitiveLevel"]) for question in all_questions)
     feedback_counts = Counter(str(question["editorial"]["feedbackQuality"]) for question in all_questions)
@@ -387,6 +536,7 @@ def build_bank(
         "source": "Moodle SCORM Herbology activities",
         "sourceReadOnly": True,
         "courseIds": courses,
+        "modulePattern": module_pattern,
         "moduleCount": module_count,
         "questionCount": len(all_questions),
         "domainCounts": domain_counts,
@@ -395,10 +545,79 @@ def build_bank(
         "feedbackQualityCounts": dict(sorted(feedback_counts.items())),
         "inferenceUpgradeCount": inference_upgrade_count,
         "simulationCandidateCount": simulation_candidate_count,
-        "skipped": dict(sorted(skipped.items())),
-        "errors": errors,
+        "skipped": dict(sorted((skipped or {}).items())),
+        "errors": errors or [],
         "domains": domains,
     }
+
+
+def merge_bank(
+    existing: dict[str, Any],
+    targeted: dict[str, Any],
+    courses: list[int],
+    module_pattern: re.Pattern[str] | None,
+) -> dict[str, Any]:
+    """Replace only selected course/modules while preserving the rest."""
+    course_set = set(courses)
+    domains: dict[str, list[dict[str, Any]]] = {domain_id: [] for domain_id in DOMAIN_IDS}
+    seen: set[str] = set()
+
+    def is_replaced(question: dict[str, Any]) -> bool:
+        source = question.get("source") or {}
+        if int(source.get("courseId") or 0) not in course_set:
+            return False
+        if module_pattern is None:
+            return True
+        title = str(source.get("title") or "")
+        locator = str(source.get("locator") or "")
+        return bool(module_pattern.search(title) or module_pattern.search(locator))
+
+    for domain_id in DOMAIN_IDS:
+        for question in (existing.get("domains") or {}).get(domain_id) or []:
+            if not isinstance(question, dict) or is_replaced(question):
+                continue
+            key = str(question.get("questionId") or question_fingerprint(
+                str(question.get("prompt") or ""),
+                [str(option.get("text") or "") for option in question.get("options") or []],
+            ))
+            if key not in seen:
+                seen.add(key)
+                domains[domain_id].append(question)
+        for question in (targeted.get("domains") or {}).get(domain_id) or []:
+            if not isinstance(question, dict):
+                continue
+            key = str(question.get("questionId") or "")
+            if key and key not in seen:
+                seen.add(key)
+                domains[domain_id].append(question)
+        domains[domain_id].sort(key=lambda question: (
+            str(question.get("source", {}).get("title") or "").casefold(),
+            int(question.get("scorm", {}).get("questionNumber") or 0),
+            int(question.get("scorm", {}).get("matchingItemNumber") or 0),
+            str(question.get("questionId") or ""),
+        ))
+
+    merged_courses = sorted({
+        *[int(value) for value in existing.get("courseIds") or []],
+        *courses,
+    })
+    return summarize_bank(
+        domains,
+        courses=merged_courses,
+        skipped=targeted.get("skipped") or {},
+        errors=targeted.get("errors") or [],
+    )
+
+
+def write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False, prefix=f".{path.name}-"
+    ) as handle:
+        json.dump(payload, handle, ensure_ascii=False, indent=2)
+        handle.write("\n")
+        temporary = Path(handle.name)
+    temporary.replace(path)
 
 
 def parse_args() -> argparse.Namespace:
@@ -407,6 +626,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--php-bin", default="php")
     parser.add_argument("--inventory", type=Path)
     parser.add_argument("--static-bank", type=Path, default=DEFAULT_STATIC_BANK)
+    parser.add_argument("--no-static-dedupe", action="store_true")
+    parser.add_argument("--module-pattern", help="Regular expression matched against SCORM activity names")
+    parser.add_argument("--merge-existing", action="store_true")
+    parser.add_argument("--target-export", type=Path)
     parser.add_argument("--output", type=Path)
     return parser.parse_args()
 
@@ -421,21 +644,27 @@ def main() -> int:
         if args.inventory
         else load_inventory(args.php_bin, courses)
     )
-    bank = build_bank(inventory, courses, args.static_bank.resolve() if args.static_bank else None)
+    try:
+        module_pattern = re.compile(args.module_pattern, re.IGNORECASE) if args.module_pattern else None
+    except re.error as error:
+        raise SystemExit(f"Invalid --module-pattern: {error}") from error
+    static_bank = None if args.no_static_dedupe else (
+        args.static_bank.resolve() if args.static_bank else None
+    )
+    bank = build_bank(inventory, courses, static_bank, module_pattern)
     dataroot = Path(str(inventory["dataroot"])).resolve()
     output = args.output.resolve() if args.output else (
         dataroot / "board-domain-banks" / "herbology-scorm-question-bank.json"
     )
-    output.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(
-        "w", encoding="utf-8", dir=output.parent, delete=False, prefix=f".{output.name}-"
-    ) as handle:
-        json.dump(bank, handle, ensure_ascii=False, indent=2)
-        handle.write("\n")
-        temporary = Path(handle.name)
-    temporary.replace(output)
+    if args.target_export:
+        write_json_atomic(args.target_export.resolve(), bank)
+    if args.merge_existing and output.is_file():
+        existing = json.loads(output.read_text(encoding="utf-8"))
+        bank = merge_bank(existing, bank, courses, module_pattern)
+    write_json_atomic(output, bank)
     print(json.dumps({
         "output": str(output),
+        "targetExport": str(args.target_export.resolve()) if args.target_export else "",
         "modules": bank["moduleCount"],
         "questions": bank["questionCount"],
         "domains": bank["domainCounts"],
