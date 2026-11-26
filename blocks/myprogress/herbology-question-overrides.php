@@ -438,6 +438,21 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
  */
 function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $question): array {
     $question = block_myprogress_herbology_remove_pinyin_tones_from_question($question);
+    $latinidentificationprompts = [
+        trim((string)($question['prompt'] ?? '')),
+        trim((string)($question['translations']['es']['prompt'] ?? '')),
+    ];
+    $islatintopinyinquestion = false;
+    foreach ($latinidentificationprompts as $latinidentificationprompt) {
+        if ($latinidentificationprompt !== '' && preg_match(
+            '/\b(?:official\s+)?(?:latin|pharmaceutical|scientific)\s+name\b|'
+                . '\bnombre\s+(?:latino|farmac[eé]utico|cient[ií]fico)\b/iu',
+            $latinidentificationprompt
+        ) === 1) {
+            $islatintopinyinquestion = true;
+            break;
+        }
+    }
     $casedata = block_myprogress_herbology_official_pinyin_case_data();
     $canonicalnames = (array)($casedata['names'] ?? []);
     $pattern = (string)($casedata['pattern'] ?? '');
@@ -717,6 +732,61 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         $question['translations']['es']['options'] = $expandbareherboptions(
             $question['translations']['es']['options']
         );
+    }
+    if ($islatintopinyinquestion) {
+        // In a Latin-to-Pinyin identification item, the Latin clue belongs in
+        // the stem only. The normal display canonicalizer expands every herb
+        // to "Pinyin (Latin)", which would repeat the clue in the correct
+        // choice and disclose the answer. Keep the official Pinyin spelling
+        // and any instructional descriptor, but remove the roster Latin name
+        // from A-D after all ordinary canonicalization has completed.
+        $stripofficiallatinfromchoices = static function(array $options) use ($herbdisplays): array {
+            foreach ($options as &$option) {
+                if (!is_array($option)) {
+                    continue;
+                }
+                $optiontext = trim((string)($option['text'] ?? ''));
+                if ($optiontext === '') {
+                    continue;
+                }
+                foreach ($herbdisplays as $official) {
+                    $officialname = trim((string)($official['name'] ?? ''));
+                    $officiallatin = trim((string)($official['latin'] ?? ''));
+                    if ($officialname === '' || $officiallatin === '') {
+                        continue;
+                    }
+                    $namepattern = implode('\\s+', array_map(
+                        static fn(string $word): string => preg_quote($word, '/'),
+                        preg_split('/\\s+/u', $officialname, -1, PREG_SPLIT_NO_EMPTY) ?: []
+                    ));
+                    $latinpattern = implode('\\s+', array_map(
+                        static fn(string $word): string => preg_quote($word, '/'),
+                        preg_split('/\\s+/u', $officiallatin, -1, PREG_SPLIT_NO_EMPTY) ?: []
+                    ));
+                    $stripped = preg_replace(
+                        '/^\\s*' . $namepattern . '\\s*\\(\\s*' . $latinpattern
+                            . '\\s*\\)(?=\\s*(?:[-\\x{2013}\\x{2014}]|$))/iu',
+                        $officialname,
+                        $optiontext,
+                        1
+                    );
+                    if (is_string($stripped) && $stripped !== $optiontext) {
+                        $option['text'] = $stripped;
+                        break;
+                    }
+                }
+            }
+            unset($option);
+            return $options;
+        };
+        if (is_array($question['options'] ?? null)) {
+            $question['options'] = $stripofficiallatinfromchoices($question['options']);
+        }
+        if (is_array($question['translations']['es']['options'] ?? null)) {
+            $question['translations']['es']['options'] = $stripofficiallatinfromchoices(
+                $question['translations']['es']['options']
+            );
+        }
     }
     foreach ([['nomenclature', 'herbs'], ['nomenclature', 'feedback', 'herbs']] as $herbpath) {
         $herbrecords = &$question;
