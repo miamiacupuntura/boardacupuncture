@@ -4737,17 +4737,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     );
 }
 if (($_SERVER['REQUEST_METHOD'] === 'POST'
-            && in_array($formaction, ['publishcurrentquestion', 'publishcurrentquestionwithwarning'], true))
+            && in_array($formaction, [
+                'publishcurrentquestion',
+                'publishcurrentquestionwithwarning',
+                'republishquestion',
+                'republishquestionwithwarning',
+            ], true))
         || ($warningpublishquestionid !== '' && $warningpublishdirect)) {
     require_sesskey();
     $questionid = $warningpublishquestionid !== ''
         ? $warningpublishquestionid
         : required_param('questionid', PARAM_ALPHANUMEXT);
     $guidelineoverride = $warningpublishquestionid !== ''
-        || $formaction === 'publishcurrentquestionwithwarning'
+        || in_array($formaction, ['publishcurrentquestionwithwarning', 'republishquestionwithwarning'], true)
         || (bool)optional_param('guidelineoverride', 0, PARAM_BOOL);
+    $directrepublish = in_array(
+        $formaction,
+        ['republishquestion', 'republishquestionwithwarning'],
+        true
+    );
     $directpinforexam2 = (bool)optional_param('pinforexam2', 0, PARAM_BOOL);
-    $directexamprojectid = $examprojectid;
+    // Republishing refreshes the bank version only. A surrounding exam filter
+    // must not silently add, replace, or reorder an exam question.
+    $directexamprojectid = $directrepublish ? '' : $examprojectid;
     if ($directexamprojectid !== '' && isset($questionsusedinpriorexams[$questionid])) {
         $directexamprojectid = '';
     }
@@ -4819,6 +4831,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
         $directexamprojectid,
         $directpinforexam2,
         $directguidelineoverride,
+        $directrepublish,
         $savedat,
         $savedbyname,
         $USER
@@ -4827,7 +4840,12 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
             ? $store['questions'][$questionid]
             : [];
         $previousstatus = (string)($previous['status'] ?? 'original');
-        if (!in_array($previousstatus, ['', 'original'], true)) {
+        if ($directrepublish && $previousstatus !== 'approved') {
+            throw new invalid_parameter_exception(
+                'Only an approved question can be republished from this action.'
+            );
+        }
+        if (!$directrepublish && !in_array($previousstatus, ['', 'original'], true)) {
             throw new invalid_parameter_exception(
                 'This question has another editorial state. Publish or resolve its visible version instead.'
             );
@@ -4853,6 +4871,11 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
         $record['history'] = $history;
         $record['proposalStatus'] = 'reviewed';
         $record['directApproval'] = true;
+        if ($directrepublish) {
+            $record['republishedAt'] = $savedat;
+            $record['republishedById'] = (int)$USER->id;
+            $record['republishedByName'] = $savedbyname;
+        }
         if (is_array($directguidelineoverride)) {
             $record['guidelineOverride'] = $directguidelineoverride;
         } else {
@@ -4901,11 +4924,15 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
     $nextpendingurl->set_anchor('pending-questions');
     redirect(
         $nextpendingurl,
-        $directreturnstofilters
+        $directrepublish
+            ? ($displaylang === 'es'
+                ? 'La versión visible se volvió a publicar correctamente.'
+                : 'The visible version was republished successfully.')
+            : ($directreturnstofilters
             ? 'Question approved and published. Your question-bank filters remain active.'
             : ($returnqueueexamid !== ''
             ? 'Question approved and published. Continue with the next pending exam question.'
-            : 'Question approved and published. It was removed from the publication screen.'),
+            : 'Question approved and published. It was removed from the publication screen.')),
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
@@ -17520,6 +17547,13 @@ echo $OUTPUT->header();
                     && !$visibleherbplacementmissing
                     && (($question['_ready'] && in_array($revisionstatus, ['', 'original'], true))
                         || in_array($revisionstatus, ['draft', 'pending_reclassification'], true))));
+        $cardrepublishavailable = !$inlineapproval
+            && !$question['_excluded']
+            && !$iscustomdraft
+            && !$iscustomapproved
+            && $revisionstatus === 'approved'
+            && $prohibitedanswerchoice === null
+            && !$prohibitednegativewording;
         $cardpublishcontrolshown = $iscustomdraft
             || $customapprovedwarningeligible
             || ($inlineapproval && $cardreviewfailure === [])
@@ -17528,7 +17562,8 @@ echo $OUTPUT->header();
             || $standardexampublishshown
             || ($isapprovedreservecandidate
                 && ($cardguidelineverified || $cardguidelineoverrideactive))
-            || $standardapprovalshown;
+            || $standardapprovalshown
+            || $cardrepublishavailable;
         $excludeexamconfirm = is_array($currentexamproject)
             ? ($displaylang === 'es'
                 ? '¿Excluir esta pregunta solamente de ' . (string)$currentexamproject['name']
@@ -17636,6 +17671,23 @@ echo $OUTPUT->header();
                 <?php if ($questionactionexamprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($questionactionexamprojectid); ?>"><?php endif; ?>
                 <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
                 <button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Conservar esta pregunta aprobada y aceptar la alerta del guideline? Quedarán registrados su usuario, la fecha y la alerta exacta.' : 'Keep this approved question and accept the guideline warning? Your user, the date, and the exact alert will be recorded.'; ?>');"><?php echo ($displaylang === 'es' ? 'Publicar con advertencia' : 'Publish with warning') . (is_array($questionactionexamproject) ? ' · ' . s((string)$questionactionexamproject['name']) : ''); ?></button>
+            </form>
+            <?php endif; ?>
+            <?php if ($cardrepublishavailable): ?>
+            <form method="post" action="<?php echo $filteractionurl->out(false); ?>">
+                <input type="hidden" name="formaction" value="<?php echo $cardguidelineverified ? 'republishquestion' : 'republishquestionwithwarning'; ?>">
+                <input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>">
+                <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
+                <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                <button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es'
+                    ? ($cardguidelineverified
+                        ? '¿Volver a publicar la versión visible de esta pregunta?'
+                        : '¿Volver a publicar la versión visible y aceptar la alerta del guideline? La advertencia quedará registrada.')
+                    : ($cardguidelineverified
+                        ? 'Republish the visible version of this question?'
+                        : 'Republish the visible version and accept the guideline warning? The warning will be recorded.'); ?>');"><?php echo $displaylang === 'es'
+                    ? ($cardguidelineverified ? 'Volver a publicar' : 'Volver a publicar con advertencia')
+                    : ($cardguidelineverified ? 'Republish' : 'Republish with warning'); ?></button>
             </form>
             <?php endif; ?>
             <?php if ($examquestionmanagementview): ?>

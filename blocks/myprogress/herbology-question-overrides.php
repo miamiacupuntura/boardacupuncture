@@ -690,6 +690,37 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         }
         unset($herbrecord, $herbrecords);
     }
+    foreach ([['nomenclature', 'formulas'], ['nomenclature', 'feedback', 'formulas']] as $formulapath) {
+        $formularecords = &$question;
+        foreach ($formulapath as $formulapathkey) {
+            if (!is_array($formularecords[$formulapathkey] ?? null)) {
+                unset($formularecords);
+                continue 2;
+            }
+            $formularecords = &$formularecords[$formulapathkey];
+        }
+        foreach ($formularecords as &$formularecord) {
+            if (!is_array($formularecord)) {
+                continue;
+            }
+            $recordpinyin = trim((string)($formularecord['pinyin'] ?? ''));
+            if (preg_match('/^(.+?)\s*\([^()]+\)$/u', $recordpinyin, $displaymatch) === 1) {
+                $recordpinyin = trim((string)$displaymatch[1]);
+            }
+            $lookupformula = strtolower((string)preg_replace('/\s+/u', ' ', $recordpinyin));
+            $official = (array)($formuladisplays[$lookupformula] ?? []);
+            if ($official === []) {
+                continue;
+            }
+            // Structured nomenclature stores the identity and display name in
+            // separate fields. Keep parentheses only in visible prose so the
+            // guideline validator does not read "Pinyin (English)" as a new
+            // formula name and append the English name a second time.
+            $formularecord['pinyin'] = (string)$official['name'];
+            $formularecord['englishName'] = (string)$official['english'];
+        }
+        unset($formularecord, $formularecords);
+    }
     return $question;
 }
 
