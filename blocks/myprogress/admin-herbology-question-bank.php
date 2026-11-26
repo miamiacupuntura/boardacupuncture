@@ -3584,6 +3584,172 @@ $ensurechannelherbmappingfeedback = static function(
 };
 
 $formaction = optional_param('formaction', '', PARAM_ALPHANUMEXT);
+$guidelineviolationnames = static function(array $violations): array {
+    $names = [];
+    foreach ($violations as $violation) {
+        $violation = trim((string)$violation);
+        if ($violation === '') {
+            continue;
+        }
+        if (preg_match('/:\s*([^|()]+?)(?:\s*\([^)]*\))?\s*$/u', $violation, $match) === 1) {
+            $name = trim((string)$match[1]);
+            if ($name !== '') {
+                $names[] = $name;
+                continue;
+            }
+        }
+        $names[] = $violation;
+    }
+    return array_values(array_unique($names));
+};
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'addguidelinefeedbacknotice') {
+    require_sesskey();
+    $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
+    $baseentry = $findquestion($basebank, $questionid);
+    if ($baseentry === null) {
+        throw new invalid_parameter_exception('Unknown Herbology question ID.');
+    }
+    $feedbackquestion = $normalizecreatedquestionpinyin((array)$baseentry['question']);
+    $feedbackviolations = $findcreatedquestionguidelineviolations($feedbackquestion);
+    if ($feedbackviolations === []) {
+        throw new invalid_parameter_exception(
+            'This question has no current Appendix A/C guideline alert to add to the feedback.'
+        );
+    }
+    $feedbacknames = $guidelineviolationnames($feedbackviolations);
+    $feedbacklabel = implode(', ', $feedbacknames !== [] ? $feedbacknames : $feedbackviolations);
+    $feedbackoriginalsnapshot = array_intersect_key($feedbackquestion, array_flip([
+        'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
+        'translations', 'contentType', 'cognitiveLevel', 'difficultyBand', 'source',
+        'sourceCard', 'examTemplate',
+    ]));
+    $englishnotice = 'Guideline status: ' . $feedbacklabel
+        . (count($feedbacknames) === 1 ? ' is' : ' are')
+        . ' outside the current NCBAHM Appendix A/C roster. This status is disclosed for study and administrative '
+        . 'review and does not make the item eligible for the active Board guideline.';
+    $spanishnotice = 'Estado del guideline: ' . $feedbacklabel
+        . (count($feedbacknames) === 1 ? ' está' : ' están')
+        . ' fuera del roster vigente de los Appendix A/C de NCBAHM. Este estado se informa para estudio y revisión '
+        . 'administrativa y no convierte la pregunta en elegible para el guideline Board activo.';
+    $englishexplanation = trim((string)($feedbackquestion['explanation'] ?? ''));
+    $englishnoticecomplete = stripos(
+        $englishexplanation,
+        'outside the current NCBAHM Appendix A/C roster'
+    ) !== false && count(array_filter(
+        $feedbacknames,
+        static fn(string $name): bool => stripos($englishexplanation, $name) !== false
+    )) === count($feedbacknames);
+    if (!$englishnoticecomplete) {
+        $feedbackquestion['explanation'] = trim($englishexplanation . ' ' . $englishnotice);
+    }
+    $spanishexplanation = trim((string)($feedbackquestion['translations']['es']['explanation'] ?? ''));
+    $spanishnoticecomplete = stripos(
+        $spanishexplanation,
+        'fuera del roster vigente de los Appendix A/C de NCBAHM'
+    ) !== false && count(array_filter(
+        $feedbacknames,
+        static fn(string $name): bool => stripos($spanishexplanation, $name) !== false
+    )) === count($feedbacknames);
+    if (!$spanishnoticecomplete) {
+        $feedbackquestion['translations']['es']['explanation'] = trim(
+            $spanishexplanation . ' ' . $spanishnotice
+        );
+    }
+    $feedbacksnapshot = array_intersect_key($feedbackquestion, array_flip([
+        'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
+        'translations', 'contentType', 'cognitiveLevel', 'difficultyBand', 'source',
+        'sourceCard', 'examTemplate',
+    ]));
+    $feedbacksavedat = gmdate(DATE_ATOM);
+    $feedbacksavedbyname = fullname($USER);
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $questionid,
+        $baseentry,
+        $feedbackoriginalsnapshot,
+        $feedbacksnapshot,
+        $feedbackviolations,
+        $feedbacknames,
+        $feedbacksavedat,
+        $feedbacksavedbyname,
+        $USER
+    ): array {
+        $audit = [
+            'status' => 'added',
+            'violations' => array_values($feedbackviolations),
+            'names' => array_values($feedbacknames),
+            'addedAt' => $feedbacksavedat,
+            'addedById' => (int)$USER->id,
+            'addedByName' => $feedbacksavedbyname,
+        ];
+        if (is_array($store['customQuestions'][$questionid] ?? null)) {
+            $record = $store['customQuestions'][$questionid];
+            $record['draft'] = array_replace(
+                is_array($record['draft'] ?? null) ? $record['draft'] : [],
+                $feedbacksnapshot
+            );
+            if ((string)($record['status'] ?? 'draft') === 'approved'
+                    || is_array($record['approved'] ?? null)) {
+                $record['approved'] = array_replace(
+                    is_array($record['approved'] ?? null) ? $record['approved'] : [],
+                    $feedbacksnapshot
+                );
+            }
+            $record['guidelineFeedbackNotice'] = $audit;
+            $record['savedAt'] = $feedbacksavedat;
+            $record['savedById'] = (int)$USER->id;
+            $record['savedByName'] = $feedbacksavedbyname;
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $store['customQuestions'][$questionid] = $record;
+            return $store;
+        }
+        $record = is_array($store['questions'][$questionid] ?? null)
+            ? $store['questions'][$questionid]
+            : [];
+        $status = (string)($record['status'] ?? 'original');
+        $record['questionId'] = $questionid;
+        $record['domainId'] = (string)($record['domainId'] ?? $baseentry['domainId']);
+        $record['original'] = is_array($record['original'] ?? null)
+            ? $record['original']
+            : $feedbackoriginalsnapshot;
+        $record['draft'] = array_replace(
+            is_array($record['draft'] ?? null) ? $record['draft'] : [],
+            $feedbacksnapshot
+        );
+        if ($status === 'approved' || is_array($record['approved'] ?? null)) {
+            $record['approved'] = array_replace(
+                is_array($record['approved'] ?? null) ? $record['approved'] : [],
+                $feedbacksnapshot
+            );
+        }
+        if (in_array($status, ['', 'original'], true)) {
+            $record['status'] = 'draft';
+        }
+        $record['guidelineFeedbackNotice'] = $audit;
+        $record['savedAt'] = $feedbacksavedat;
+        $record['savedById'] = (int)$USER->id;
+        $record['savedByName'] = $feedbacksavedbyname;
+        $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        $store['questions'][$questionid] = $record;
+        return $store;
+    });
+    $feedbackreturnurl = new moodle_url(
+        '/blocks/myprogress/admin-herbology-question-bank.php',
+        array_filter([
+            'q' => $questionid,
+            'examproject' => $examprojectid !== '' ? $examprojectid : null,
+            'lang' => $displaylang !== 'en' ? $displaylang : null,
+        ])
+    );
+    $feedbackreturnurl->set_anchor('question-' . $questionid);
+    redirect(
+        $feedbackreturnurl,
+        $displaylang === 'es'
+            ? 'El aviso del guideline se agregó al feedback en inglés y español.'
+            : 'The guideline notice was added to the English and Spanish feedback.',
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST'
         && in_array($formaction, ['saveinstructiontemplate', 'deleteinstructiontemplate'], true)) {
     require_sesskey();
@@ -17011,6 +17177,26 @@ echo $OUTPUT->header();
         ) || $hasprohibitednegativewording((string)($spanishtranslation['prompt'] ?? ''));
         $cardguidelineviolations = $findcreatedquestionguidelineviolations($question);
         $cardguidelineverified = $cardguidelineviolations === [];
+        $cardguidelinefeedbacknames = $guidelineviolationnames($cardguidelineviolations);
+        $cardenglishfeedback = (string)($question['explanation'] ?? '');
+        $cardspanishfeedback = (string)($question['translations']['es']['explanation'] ?? '');
+        $cardguidelinefeedbacknoticepresent = !$cardguidelineverified
+            && stripos(
+                $cardenglishfeedback,
+                'outside the current NCBAHM Appendix A/C roster'
+            ) !== false
+            && stripos(
+                $cardspanishfeedback,
+                'fuera del roster vigente de los Appendix A/C de NCBAHM'
+            ) !== false
+            && count(array_filter(
+                $cardguidelinefeedbacknames,
+                static fn(string $name): bool => stripos($cardenglishfeedback, $name) !== false
+            )) === count($cardguidelinefeedbacknames)
+            && count(array_filter(
+                $cardguidelinefeedbacknames,
+                static fn(string $name): bool => stripos($cardspanishfeedback, $name) !== false
+            )) === count($cardguidelinefeedbacknames);
         $cardkeyedanswerguidelineviolations = $findkeyedanswerguidelineviolations($question);
         $cardguidelineautorepairable = !$cardguidelineverified
             && $cardkeyedanswerguidelineviolations === [];
@@ -17347,6 +17533,23 @@ echo $OUTPUT->header();
             </div>
             <div class="question-bank__actions-row" aria-label="<?php echo $displaylang === 'es' ? 'Acciones de la pregunta' : 'Question actions'; ?>">
             <?php if ($hasspanishtranslation): ?><a class="question-bank__button question-bank__button--language" href="<?php echo $questionlanguageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a><?php elseif ($revisionstatus !== 'extra_guideline'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="translatequestion"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--language" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Crear español' : 'Create Spanish'; ?></button></form><?php if ($displaylang === 'es'): ?><a class="question-bank__button" href="<?php echo $questionlanguageurl->out(false); ?>">English</a><?php endif; ?><?php endif; ?>
+            <?php if (!$cardguidelineverified && $revisionstatus !== 'deleted'): ?>
+            <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+                <input type="hidden" name="formaction" value="addguidelinefeedbacknotice">
+                <input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>">
+                <?php if ($examprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($examprojectid); ?>"><?php endif; ?>
+                <input type="hidden" name="lang" value="<?php echo s($displaylang); ?>">
+                <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                <button class="question-bank__button question-bank__button--similar" type="submit"<?php echo $cardguidelinefeedbacknoticepresent ? ' disabled' : ''; ?><?php if (!$cardguidelinefeedbacknoticepresent): ?> onclick="return confirm(<?php echo s(json_encode(
+                    $displaylang === 'es'
+                        ? '¿Agregar al feedback inglés y español que ' . implode(', ', $cardguidelinefeedbacknames) . ' está fuera del guideline?'
+                        : 'Add to the English and Spanish feedback that ' . implode(', ', $cardguidelinefeedbacknames) . ' is outside the guideline?',
+                    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                )); ?>);"<?php endif; ?>><?php echo $cardguidelinefeedbacknoticepresent
+                    ? ($displaylang === 'es' ? 'Aviso agregado al feedback ✓' : 'Guideline notice added ✓')
+                    : ($displaylang === 'es' ? 'Agregar aviso al feedback' : 'Add guideline notice to feedback'); ?></button>
+            </form>
+            <?php endif; ?>
             <?php if (!$inlineapproval && $customapprovedwarningeligible): ?>
             <form method="post" action="<?php echo $filteractionurl->out(false); ?>">
                 <input type="hidden" name="formaction" value="approvecustomquestion">
