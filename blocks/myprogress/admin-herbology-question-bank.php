@@ -18116,7 +18116,11 @@ echo $OUTPUT->header();
             && !$cardguidelineverified
             && $prohibitedanswerchoice === null
             && !$prohibitednegativewording
-            && !$visibleherbplacementmissing
+            // Publishing with warning is the administrator's audited override.
+            // A stale AI/editorial request for additional visible herbs must
+            // not hide this decision when the tested outside-roster substance
+            // is already visible. The publication handler still blocks
+            // negative stems and prohibited combined answers.
             && (($question['_ready'] && in_array($revisionstatus, ['', 'original'], true))
                 || in_array($revisionstatus, ['draft', 'pending_reclassification'], true));
         $standardexampublishshown = !$examquestionmanagementview
