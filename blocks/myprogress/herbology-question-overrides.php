@@ -297,6 +297,19 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
             (array)($obsoletesubstance['latinAliases'] ?? [])
         );
     }
+    // These source-supported Bensky teaching herbs are intentionally not
+    // promoted into Appendix A eligibility.  Registering their display names
+    // here only lets legacy SCORM choices use the same Pinyin + pharmaceutical
+    // Latin presentation as current-roster choices.
+    foreach ([
+        ['name' => 'Nan Gua Zi', 'latin' => 'Cucurbitae moschatae Semen'],
+        ['name' => 'Da Suan', 'latin' => 'Allii sativi Bulbus'],
+    ] as $legacyteachingherb) {
+        $addherbdisplay(
+            (string)$legacyteachingherb['name'],
+            (string)$legacyteachingherb['latin']
+        );
+    }
     if ($canonicalnames === []) {
         $data = [
             'names' => [],
@@ -490,6 +503,33 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         if (array_key_exists($field, $question)) {
             $question[$field] = $replace($question[$field]);
         }
+    }
+    $expandbareherboptions = static function(array $options) use ($herbdisplays): array {
+        foreach ($options as &$option) {
+            if (!is_array($option)) {
+                continue;
+            }
+            $optiontext = trim((string)($option['text'] ?? ''));
+            if ($optiontext === '' || str_contains($optiontext, '(')) {
+                continue;
+            }
+            $optionlookup = strtolower((string)preg_replace('/\s+/u', ' ', $optiontext));
+            $official = (array)($herbdisplays[$optionlookup] ?? []);
+            if ($official === []) {
+                continue;
+            }
+            $option['text'] = (string)$official['name'] . ' (' . (string)$official['latin'] . ')';
+        }
+        unset($option);
+        return $options;
+    };
+    if (is_array($question['options'] ?? null)) {
+        $question['options'] = $expandbareherboptions($question['options']);
+    }
+    if (is_array($question['translations']['es']['options'] ?? null)) {
+        $question['translations']['es']['options'] = $expandbareherboptions(
+            $question['translations']['es']['options']
+        );
     }
     foreach ([['nomenclature', 'herbs'], ['nomenclature', 'feedback', 'herbs']] as $herbpath) {
         $herbrecords = &$question;
