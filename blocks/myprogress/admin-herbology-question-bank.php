@@ -13617,6 +13617,14 @@ PROMPT;
         $sourceprohibitedanswerchoice = $findprohibitedanswerchoice(
             (array)($sourcequestion['options'] ?? [])
         );
+        // A Board roster repair normally preserves the exact keyed choice so
+        // the provider cannot change the tested fact while fixing a name.
+        // Combined shortcuts are the exception: preserving text such as
+        // "Both of them" after the provider rebuilt A-D reintroduces the very
+        // defect that the automatic review must remove. Keep the source key
+        // letter immutable, but allow its text to be rebuilt in that case.
+        $preservecorrectchoiceforboardrepair = $boardguidelinerepair
+            && $sourceprohibitedanswerchoice === null;
         $sourcevisiblenomenclature = $visibleboardnomenclature($sourcequestion);
         $sourcevisibleguidelinenames = array_values(array_unique(array_merge(
             (array)($sourcevisiblenomenclature['herbs'] ?? []),
@@ -13791,7 +13799,7 @@ PROMPT;
                     !$requiresmultistagereview,
                     $preservedoutsiderosternames,
                     $reviewforextraguideline,
-                    $boardguidelinerepair,
+                    $preservecorrectchoiceforboardrepair,
                     $boardguidelinerepair ? $currentexplanationguidelineviolations : []
                 );
                 if ($requiresmultistagereview) {
@@ -13812,7 +13820,7 @@ PROMPT;
                         true,
                         $preservedoutsiderosternames,
                         $reviewforextraguideline,
-                        $boardguidelinerepair,
+                        $preservecorrectchoiceforboardrepair,
                         $boardguidelinerepair ? $currentexplanationguidelineviolations : []
                     );
                     if (trim($administratorproposal) !== '') {
