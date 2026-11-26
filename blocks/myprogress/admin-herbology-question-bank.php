@@ -10745,7 +10745,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 '_herbUsage' => true,
                 '_rotation' => true,
             ]),
-            array_slice($scopecandidates, 0, min(12, count($scopecandidates)))
+            // Keep every roster-verified relationship available to the local
+            // fallback. Only the selected batch is sent to the AI prompt, so
+            // this larger reserve does not increase provider context size.
+            $scopecandidates
         );
         // Supply exactly one unused relationship per requested question. This
         // prevents the model from repeatedly choosing the most familiar pair
@@ -11072,6 +11075,7 @@ PROMPT;
         } else {
             $customprompt .= "\n\nMANDATORY FORMULA-VERSUS-DUÌ-YÀO OBJECTIVE — DO NOT SUBSTITUTE:\n"
                 . "Use every selected relationship below exactly once and create one question from each relationship. These relationships were chosen because their herbs and primary formulas are the least used in recent administrator-authored questions. Do not substitute Gui Zhi + Bai Shao or any other familiar pair unless it is explicitly present below. Put the therapeutic comparison and narrow action into a genuinely interrogative stem ending in a direct question. Keep every A-D choice short and parallel: use a concise formula/pair assignment, not a paragraph of reasoning. Never place the complete-pattern rationale, the list 'core pair, source-supported modification, or brief prescription,' or the automatic-equivalence explanation inside the keyed choice; teach those details only in the explanation. Test when the complete formula is selected for a full pattern and when its Duì Yào is limited to a narrow objective, a source-supported modification, or a brief prescription. Show the selected formula and both herbs of the pair in the visible stem or choices. Explicitly reject treating the pair as a commercial patent formula or an automatic equivalent of the classical formula in the explanation. A generic single-herb action or indication question is invalid. Do not invent a formula relationship absent from the evidence."
+                . " Copy every formulaContext name exactly as supplied; never shorten Xiao Chai Hu Tang or Da Chai Hu Tang to the invalid name Chai Hu Tang."
                 . "\n\nSELECTED VERIFIED FORMULA-DUÌ-YÀO RELATIONSHIPS:\n";
         }
         $customprompt .= json_encode(
@@ -12011,6 +12015,15 @@ PROMPT;
             $decodedbatch = null;
             $originalitybatch = null;
             $lastgenerationerror = $error;
+            if ($formulavduiyaoscopeidea
+                    && !$twostageduiyaomodificationrequest
+                    && preg_match('/outside\s+Appendix\s+[AC]/iu', $error->getMessage()) === 1) {
+                // The evidence pool is already restricted to the official
+                // Appendix A/C rosters. Do not spend two more provider calls
+                // asking the model to repair an invented or shortened name;
+                // continue immediately with the deterministic evidence build.
+                break;
+            }
         }
         }
     }
@@ -12037,12 +12050,25 @@ PROMPT;
     if ((!is_array($decodedbatch) || !is_array($originalitybatch))
             && $formulavduiyaoscopeidea
             && !$twostageduiyaomodificationrequest
-            && $custombatchcount === 1
             && $formulavduiyaoscopeevidence !== []) {
         // The abstract scope rule is fully represented in the verified pair
-        // table.  If the language model fails validation, build a complete
-        // question from that same evidence instead of returning an empty form.
-        foreach ($formulavduiyaoscopefallbackpool as $scopefallbackevidence) {
+        // table. If the language model fails validation, build the complete
+        // requested batch from that same evidence instead of returning an
+        // empty form. This path supports the UI batch size of up to five.
+        $scopefallbackbatch = [];
+        $scopefallbackoriginalitybatch = [];
+        $scopefallbackvalidatedbatch = [];
+        $scopefallbackseenpairs = [];
+        $scopefallbackcandidates = array_merge(
+            $formulavduiyaoscopeevidence,
+            $formulavduiyaoscopefallbackpool
+        );
+        foreach ($scopefallbackcandidates as $scopefallbackevidence) {
+            $scopefallbackpairnumber = (int)($scopefallbackevidence['pairNumber'] ?? 0);
+            if ($scopefallbackpairnumber <= 0 || isset($scopefallbackseenpairs[$scopefallbackpairnumber])) {
+                continue;
+            }
+            $scopefallbackseenpairs[$scopefallbackpairnumber] = true;
             try {
                 $scopefallback = $decodecustomdraft(json_encode(
                     $buildformulavduiyaoscopefallback($scopefallbackevidence),
@@ -12058,13 +12084,67 @@ PROMPT;
                     $lastduplicate = $scopefallbackoriginality;
                     continue;
                 }
-                $decodedbatch = [$scopefallback];
-                $originalitybatch = [$scopefallbackoriginality];
-                $lastgenerationerror = null;
-                break;
+                $scopefallbackprompt = (string)($scopefallback['prompt'] ?? '');
+                $scopefallbackoptions = implode(' ', array_map(
+                    static fn(array $option): string => (string)($option['text'] ?? ''),
+                    (array)($scopefallback['options'] ?? [])
+                ));
+                $scopefallbackanswer = $correctoptiontext($scopefallback);
+                $scopefallbackprompttokens = $similaritytokens($scopefallbackprompt);
+                $scopefallbackfulltokens = $similaritytokens(
+                    $scopefallbackprompt . ' ' . $scopefallbackoptions
+                );
+                $scopefallbackanswertokens = $similaritytokens($scopefallbackanswer);
+                $scopefallbackduplicate = false;
+                foreach ($scopefallbackvalidatedbatch as $scopefallbackvalidated) {
+                    $scopefallbackpromptscore = $jaccardsimilarity(
+                        $scopefallbackprompttokens,
+                        $scopefallbackvalidated['promptTokens']
+                    );
+                    $scopefallbackfullscore = $jaccardsimilarity(
+                        $scopefallbackfulltokens,
+                        $scopefallbackvalidated['fullTokens']
+                    );
+                    $scopefallbackanswerscore = $jaccardsimilarity(
+                        $scopefallbackanswertokens,
+                        $scopefallbackvalidated['answerTokens']
+                    );
+                    if ($scopefallbackpromptscore >= 0.72
+                            || $scopefallbackfullscore >= 0.78
+                            || ($scopefallbackpromptscore >= 0.50
+                                && $scopefallbackanswerscore >= 0.80)) {
+                        $scopefallbackduplicate = true;
+                        break;
+                    }
+                }
+                if ($scopefallbackduplicate) {
+                    continue;
+                }
+                $scopefallbackbatch[] = $scopefallback;
+                $scopefallbackoriginalitybatch[] = $scopefallbackoriginality;
+                $scopefallbackvalidatedbatch[] = [
+                    'promptTokens' => $scopefallbackprompttokens,
+                    'fullTokens' => $scopefallbackfulltokens,
+                    'answerTokens' => $scopefallbackanswertokens,
+                ];
+                if (count($scopefallbackbatch) >= $custombatchcount) {
+                    break;
+                }
             } catch (Throwable $scopefallbackerror) {
                 $lastgenerationerror = $scopefallbackerror;
             }
+        }
+        if (count($scopefallbackbatch) === $custombatchcount) {
+            $decodedbatch = $scopefallbackbatch;
+            $originalitybatch = $scopefallbackoriginalitybatch;
+            $lastgenerationerror = null;
+            $lastduplicate = null;
+        } else {
+            $lastgenerationerror = new UnexpectedValueException(
+                'The verified local Dui Yao fallback produced '
+                    . count($scopefallbackbatch) . ' of ' . $custombatchcount
+                    . ' required distinct questions.'
+            );
         }
     }
     if (!is_array($decodedbatch)
