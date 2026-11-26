@@ -870,6 +870,68 @@ $exam5canonicalrepairs = [
         'correctLabel' => 'C',
         'explanation' => 'Inference step 1: The question specifies progression from the immediately preceding Yin stage. Inference step 2: In Six-Stage order, Shao Yin precedes Jue Yin. Option A: Incorrect; it moves from Yin to a Yang stage and skips the requested relationship. Option B: Incorrect; it reverses the Yang-stage sequence. Option C: Correct. Option D: Incorrect; it does not describe entry into Jue Yin.',
     ],
+    'CF-1557' => [
+        'prompt' => 'Which clinical presentation most strongly indicates Bai Hu Tang (White Tiger Decoction) for a Yang Ming Qi-level disorder?',
+        'options' => [
+            [
+                'label' => 'A',
+                'text' => 'A floating-tight pulse, occipital headache, stiff neck, chills, and absence of sweating.',
+            ],
+            [
+                'label' => 'B',
+                'text' => 'High fever, profuse sweating, intense thirst, and a flooding, forceful pulse—the four great signs.',
+            ],
+            [
+                'label' => 'C',
+                'text' => 'Alternating chills and fever, bitter taste, dry throat, dizziness, and a wiry pulse.',
+            ],
+            [
+                'label' => 'D',
+                'text' => 'Abdominal fullness and intermittent pain, poor appetite, vomiting, and chronic diarrhea.',
+            ],
+        ],
+        'correctLabel' => 'B',
+        'explanation' => 'Inference step 1: High fever, profuse sweating, intense thirst, and a flooding, forceful pulse are the four great signs of blazing Yang Ming Qi-level Heat. Inference step 2: Bai Hu Tang (White Tiger Decoction) clears intense Qi-level Heat and generates fluids, so this complete cluster selects option B. Option A: Incorrect. A floating-tight pulse, chills, occipital headache, stiff neck, and absence of sweating describe an exterior Tai Yang Cold presentation rather than blazing Yang Ming Qi-level Heat. Option B: Correct. It gives the characteristic four great signs treated by Bai Hu Tang. Option C: Incorrect. Alternating chills and fever with bitter taste, dry throat, dizziness, and a wiry pulse indicate a Shao Yang presentation. Option D: Incorrect. Abdominal fullness, poor appetite, vomiting, and chronic diarrhea fit a Tai Yin Middle-Jiao deficiency presentation rather than the excess-Heat pattern treated by Bai Hu Tang.',
+        'translations' => [
+            'es' => [
+                'prompt' => '¿Qué presentación clínica indica con mayor fuerza Bai Hu Tang (Decocción del Tigre Blanco) para un trastorno del nivel Qi de Yang Ming?',
+                'options' => [
+                    [
+                        'label' => 'A',
+                        'text' => 'Pulso flotante y tenso, cefalea occipital, rigidez de nuca, escalofríos y ausencia de sudoración.',
+                    ],
+                    [
+                        'label' => 'B',
+                        'text' => 'Fiebre alta, sudoración profusa, sed intensa y pulso desbordante y fuerte: los cuatro grandes signos.',
+                    ],
+                    [
+                        'label' => 'C',
+                        'text' => 'Alternancia de escalofríos y fiebre, sabor amargo, garganta seca, mareo y pulso de cuerda.',
+                    ],
+                    [
+                        'label' => 'D',
+                        'text' => 'Plenitud y dolor abdominal intermitente, poco apetito, vómitos y diarrea crónica.',
+                    ],
+                ],
+                'explanation' => 'Paso de inferencia 1: La fiebre alta, la sudoración profusa, la sed intensa y el pulso desbordante y fuerte son los cuatro grandes signos de Calor intenso en el nivel Qi de Yang Ming. Paso de inferencia 2: Bai Hu Tang (Decocción del Tigre Blanco) elimina el Calor intenso del nivel Qi y genera líquidos; por ello, este conjunto completo selecciona la opción B. Opción A: Incorrecta. El pulso flotante y tenso, los escalofríos, la cefalea occipital, la rigidez de nuca y la ausencia de sudoración describen una presentación externa de Frío de Tai Yang, no Calor intenso del nivel Qi de Yang Ming. Opción B: Correcta. Presenta los cuatro grandes signos característicos tratados por Bai Hu Tang. Opción C: Incorrecta. La alternancia de escalofríos y fiebre con sabor amargo, garganta seca, mareo y pulso de cuerda indica una presentación de Shao Yang. Opción D: Incorrecta. La plenitud abdominal, el poco apetito, los vómitos y la diarrea crónica corresponden a una presentación de deficiencia del Jiao Medio de Tai Yin, no al patrón de Calor por exceso tratado por Bai Hu Tang.',
+            ],
+        ],
+        'contentType' => 'formula_selection',
+        'cognitiveLevel' => 'infer',
+        'difficultyBand' => 'inference',
+        'nomenclature' => [
+            'herbs' => [],
+            'formulas' => [
+                ['pinyin' => 'Bai Hu Tang', 'englishName' => 'White Tiger Decoction'],
+            ],
+            'feedback' => [
+                'herbs' => [],
+                'formulas' => [
+                    ['pinyin' => 'Bai Hu Tang', 'englishName' => 'White Tiger Decoction'],
+                ],
+            ],
+        ],
+    ],
     'CF-0255' => [
         'prompt' => 'One deficient patient has intermittent low-grade fever with abdominal pain that improves with warmth and pressure; another develops low-grade fever and marked fatigue after exertion with sinking Middle Qi. Which formula assignment is most accurate?',
         'options' => [
@@ -1239,11 +1301,18 @@ foreach ($bank['domains'] as &$exam5domainquestions) {
         $exam5question['cognitiveLevel'] = (string)($exam5repair['cognitiveLevel'] ?? 'analyze');
         $exam5question['difficultyBand'] = (string)($exam5repair['difficultyBand'] ?? 'analysis');
         $exam5question['review']['status'] = 'practice-ready';
-        $exam5question['review']['notes'] = in_array($exam5questionid, [
+        if (in_array($exam5questionid, [
             'SCORM-SA-E950B91B9650', 'SCORM-SA-0B6F0EB1C671',
-        ], true)
-            ? 'Canonical bilingual feedback repair with complete analysis of the keyed answer and distractors.'
-            : 'Exam 5 canonical comparison repair with independent choices and complete distractor feedback.';
+        ], true)) {
+            $exam5question['review']['notes'] =
+                'Canonical bilingual feedback repair with complete analysis of the keyed answer and distractors.';
+        } else if ($exam5questionid === 'CF-1557') {
+            $exam5question['review']['notes'] =
+                'Canonical Bai Hu Tang indication repair with parallel stage presentations and bilingual feedback.';
+        } else {
+            $exam5question['review']['notes'] =
+                'Exam 5 canonical comparison repair with independent choices and complete distractor feedback.';
+        }
         if (trim((string)($exam5question['sourceCard']['url'] ?? '')) === '') {
             $exam5question['sourceCard'] = [
                 'url' => '/blocks/myprogress/formulas-study-guide.php?lang=en',
