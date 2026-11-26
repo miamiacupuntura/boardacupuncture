@@ -13586,7 +13586,29 @@ PROMPT;
             $instructionhistory,
             array_keys($instructionhistory)
         ));
-        $instructionhistories[$questionid] = $instructionhistory;
+        // The automatic Board-repair directive is a system workflow
+        // instruction, not an administrator-authored correction. Keep it in
+        // the generation prompt, but exclude it from the persistent manual
+        // history and from the semantic administrator-instruction judge.
+        // Otherwise that judge can demand artificial "new evidence" for its
+        // own internal wording after the deterministic roster and feedback
+        // checks have already passed.
+        $manualinstructionhistory = array_values(array_filter(
+            $instructionhistory,
+            static fn(string $instruction): bool => !str_starts_with(
+                trim($instruction),
+                'Automatically make this question eligible for Board review.'
+            )
+        ));
+        $administratorproposalforcompliance = implode("\n", array_map(
+            static fn(string $instruction, int $index): string => ($index + 1) . '. ' . $instruction,
+            $manualinstructionhistory,
+            array_keys($manualinstructionhistory)
+        ));
+        $latestadministratorinstructionforcompliance = $autorepairguideline
+            ? ''
+            : $latestadministratorproposal;
+        $instructionhistories[$questionid] = $manualinstructionhistory;
         $currentreviewversion = null;
         if ((string)($revisionrecord['status'] ?? '') === 'draft'
                 && is_array($revisionrecord['draft'] ?? null)) {
@@ -13823,14 +13845,25 @@ PROMPT;
                         $preservecorrectchoiceforboardrepair,
                         $boardguidelinerepair ? $currentexplanationguidelineviolations : []
                     );
-                    if (trim($administratorproposal) !== '') {
+                    if (trim($administratorproposalforcompliance) !== '') {
+                        $sourcepayloadforcompliance = $sourcepayload;
+                        $sourcepayloadforcompliance['administratorProposal']
+                            = $administratorproposalforcompliance;
+                        $sourcepayloadforcompliance['administratorInstructionHistory']
+                            = $manualinstructionhistory;
+                        $sourcepayloadforcompliance['latestAdministratorInstruction']
+                            = $latestadministratorinstructionforcompliance;
                         $compliancenote = $validateinstructioncompliance(
                             $generateddraft,
-                            $sourcepayload,
-                            $administratorproposal,
-                            $latestadministratorproposal,
+                            $sourcepayloadforcompliance,
+                            $administratorproposalforcompliance,
+                            $latestadministratorinstructionforcompliance,
                             $currentreviewversion
                         );
+                    } else if ($autorepairguideline) {
+                        $compliancenote = 'The automatic Board roster repair passed the deterministic answer-key, '
+                            . 'Appendix A/C, choice-format, translation, inference and A-D feedback checks. The '
+                            . 'system repair directive was not treated as an administrator-authored instruction.';
                     } else {
                         // With no administrator instruction there is nothing
                         // semantic for a second AI judge to verify. The local
@@ -13966,6 +13999,7 @@ PROMPT;
         $savedat,
         $savedbyname,
         $issinglequestionrewrite,
+        $autorepairguideline,
         $examprojectid,
         $examprojectview,
         $exam2positionsforreview,
@@ -14014,7 +14048,17 @@ PROMPT;
             $record['administratorInstructions'] = array_values(
                 $instructionhistories[$questionid] ?? []
             );
-            if (array_key_exists($questionid, $proposaloverrides)) {
+            if ($autorepairguideline) {
+                // Do not persist the internal workflow directive as though an
+                // administrator had typed it. A later review should see only
+                // genuine manual instructions.
+                unset(
+                    $record['reviewProposal'],
+                    $record['proposalSavedAt'],
+                    $record['proposalSavedById'],
+                    $record['proposalSavedByName']
+                );
+            } else if (array_key_exists($questionid, $proposaloverrides)) {
                 $record['reviewProposal'] = $proposaloverrides[$questionid];
                 $record['proposalSavedAt'] = $savedat;
                 $record['proposalSavedById'] = (int)$USER->id;
