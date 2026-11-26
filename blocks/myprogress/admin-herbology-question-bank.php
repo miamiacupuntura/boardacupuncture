@@ -2848,12 +2848,18 @@ $guidelineherbaliases = [
     'niu xi' => 'huai niu xi',
     // Zhi Fu Zi is the processed-source label for the Appendix A Fu Zi entry.
     'zhi fu zi' => 'fu zi',
+    // Honey-prepared licorice remains the Appendix A Gan Cao substance.
+    'zhi gan cao' => 'gan cao',
+    // One imported SCORM item carries this spelling with the same controlling
+    // Glycyrrhizae Radix identity. Accept it as the same Gan Cao entry.
+    'xi gan cao' => 'gan cao',
 ];
 $stripguidelineinstructionprefixes = static function(string $normalizedname): string {
     $stripped = preg_replace(
         '/^(?:(?:add(?:s|ed|ing)?|choos(?:e|es|ing)|chose|chosen|select(?:s|ed|ing)?|'
             . 'us(?:e|es|ed|ing)|replac(?:e|es|ed|ing)|includ(?:e|es|ed|ing)|'
             . 'introduc(?:e|es|ed|ing)|remov(?:e|es|ed|ing)|eliminat(?:e|es|ed|ing)|'
+            . 'involv(?:e|es|ed|ing)|'
             . 'omit(?:s|ted|ting)?|substitut(?:e|es|ed|ing)|retain(?:s|ed|ing)?|'
             . 'increas(?:e|es|ed|ing)|decreas(?:e|es|ed|ing)|while|both|'
             . 'decoction|powder|raw|prepared|processed|honey\s+fried|honey\s+frying|'
@@ -3232,6 +3238,11 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
             $normalizeguidelinename((string)$displayformula)
         );
         $normalizedformula = $formulaaliases[$normalizedformula] ?? $normalizedformula;
+        // Some official herbs end in Wan (most notably Zi Wan). They remain
+        // herbs and must not be reclassified as formulas solely by suffix.
+        if (isset($guidelineherbnames[$resolveguidelineherbname((string)$displayformula)])) {
+            continue;
+        }
         if (!isset($guidelineformulanames[$normalizedformula])) {
             $violations['formula:' . $normalizedformula] = 'Formula outside Appendix C: '
                 . trim((string)$displayformula);
@@ -3613,6 +3624,78 @@ if ($exam5guidelinepublicationrecoveries !== []) {
             $record['examPublicationRecoveredAt'] = $recoveredat;
             $store['customQuestions'][$recoveryquestionid] = $record;
         }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
+$aliasguidelinepublicationrepairid = 'SCORM-SH-122BB537C8D7';
+$aliasguidelinepublicationrepairversion = 'gan-cao-fu-zi-zi-wan-validation-recovery-v1';
+$aliasguidelinepublicationrecord = $revisionstore['questions'][$aliasguidelinepublicationrepairid] ?? null;
+$aliasguidelinepublicationprojectid = '';
+if (is_array($aliasguidelinepublicationrecord)
+        && (string)($aliasguidelinepublicationrecord['status'] ?? '') === 'approved'
+        && (string)($aliasguidelinepublicationrecord['aliasGuidelinePublicationRecoveryVersion'] ?? '')
+            !== $aliasguidelinepublicationrepairversion) {
+    foreach ((array)($revisionstore['examProjects'] ?? []) as $candidateprojectid => $candidateproject) {
+        if (!is_array($candidateproject)
+                || (string)($candidateproject['status'] ?? 'draft') === 'published'
+                || !in_array(
+                    $aliasguidelinepublicationrepairid,
+                    array_map('strval', (array)($candidateproject['excludedQuestionIds'] ?? [])),
+                    true
+                )) {
+            continue;
+        }
+        $aliasguidelinepublicationprojectid = (string)$candidateprojectid;
+        break;
+    }
+}
+if ($aliasguidelinepublicationprojectid !== '') {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $aliasguidelinepublicationrepairid,
+        $aliasguidelinepublicationrepairversion,
+        $aliasguidelinepublicationprojectid
+    ): array {
+        $record = $store['questions'][$aliasguidelinepublicationrepairid] ?? null;
+        $project = $store['examProjects'][$aliasguidelinepublicationprojectid] ?? null;
+        if (!is_array($record)
+                || (string)($record['status'] ?? '') !== 'approved'
+                || !is_array($project)
+                || (string)($project['status'] ?? 'draft') === 'published') {
+            return $store;
+        }
+        $questionids = array_values(array_unique(array_filter(array_map(
+            'strval',
+            (array)($project['questionIds'] ?? [])
+        ))));
+        $targetcount = max(1, (int)($project['targetCount'] ?? 100));
+        if (!in_array($aliasguidelinepublicationrepairid, $questionids, true)
+                && count($questionids) < $targetcount) {
+            $questionids[] = $aliasguidelinepublicationrepairid;
+        }
+        if (!in_array($aliasguidelinepublicationrepairid, $questionids, true)) {
+            return $store;
+        }
+        $recoveredat = gmdate(DATE_ATOM);
+        $project['questionIds'] = $questionids;
+        $project['confirmedQuestionIds'] = array_values(array_unique(array_merge(
+            array_map('strval', (array)($project['confirmedQuestionIds'] ?? [])),
+            [$aliasguidelinepublicationrepairid]
+        )));
+        $project['excludedQuestionIds'] = array_values(array_filter(
+            array_map('strval', (array)($project['excludedQuestionIds'] ?? [])),
+            static fn(string $questionid): bool => $questionid !== $aliasguidelinepublicationrepairid
+        ));
+        $project['currentCount'] = count($questionids);
+        $project['missingCount'] = max(0, $targetcount - count($questionids));
+        $project['aliasGuidelinePublicationRecoveryAt'] = $recoveredat;
+        $project['updatedAt'] = $recoveredat;
+        $record['examProjectId'] = $aliasguidelinepublicationprojectid;
+        $record['aliasGuidelinePublicationRecoveryVersion'] =
+            $aliasguidelinepublicationrepairversion;
+        $record['aliasGuidelinePublicationRecoveredAt'] = $recoveredat;
+        $store['questions'][$aliasguidelinepublicationrepairid] = $record;
+        $store['examProjects'][$aliasguidelinepublicationprojectid] = $project;
         return $store;
     });
     $revisionstore = block_myprogress_herbology_override_load();

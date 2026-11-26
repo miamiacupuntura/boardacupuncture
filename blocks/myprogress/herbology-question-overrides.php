@@ -228,6 +228,9 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
         // the processed presentation of the Appendix A entry Fu Zi, not a
         // separate herb identity.
         'Fu Zi' => ['Zhi Fu Zi'],
+        // Honey-prepared licorice and one legacy imported spelling retain the
+        // same controlling Glycyrrhizae Radix identity as Appendix A Gan Cao.
+        'Gan Cao' => ['Zhi Gan Cao', 'Xi Gan Cao'],
     ];
     $pharmaceuticalparts = [
         'bulbus', 'calculus', 'caulis', 'cortex', 'flos', 'folium', 'fructus', 'herba',
