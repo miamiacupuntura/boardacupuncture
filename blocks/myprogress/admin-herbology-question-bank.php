@@ -2953,6 +2953,42 @@ $findequivalentanswerchoices = static function(array $options) use (
     }
     return null;
 };
+$findlatinnameanswerleakage = static function(string $prompt, array $options) use (
+    $normalizeguidelinename
+): ?array {
+    if (preg_match(
+        '/\b(?:official\s+)?(?:latin|pharmaceutical|scientific)\s+name\b|'
+            . '\bnombre\s+(?:latino|farmac[eé]utico|cient[ií]fico)\b/iu',
+        $prompt
+    ) !== 1) {
+        return null;
+    }
+    $normalizedprompt = ' ' . $normalizeguidelinename($prompt) . ' ';
+    foreach ($options as $option) {
+        if (!is_array($option)) {
+            continue;
+        }
+        $label = strtoupper(trim((string)($option['label'] ?? '')));
+        $text = trim((string)($option['text'] ?? ''));
+        if (!in_array($label, ['A', 'B', 'C', 'D'], true) || $text === '') {
+            continue;
+        }
+        preg_match_all('/\(([^()]{3,120})\)/u', $text, $parentheticals);
+        foreach ((array)($parentheticals[1] ?? []) as $parenthetical) {
+            $normalizedanswer = $normalizeguidelinename((string)$parenthetical);
+            if (core_text::strlen($normalizedanswer) < 8
+                    || core_text::strpos($normalizedprompt, ' ' . $normalizedanswer . ' ') === false) {
+                continue;
+            }
+            return [
+                'label' => $label,
+                'text' => $text,
+                'repeatedName' => trim((string)$parenthetical),
+            ];
+        }
+    }
+    return null;
+};
 $formuladistractorguidelinerepairs = [
     'ADMIN-HB-20261121-175513-4D36' => [
         'Mu Li Liu Wei Di Huang Wan' => 'Liu Wei Di Huang Wan with Mu Li added',
@@ -3696,6 +3732,70 @@ if ($aliasguidelinepublicationprojectid !== '') {
         $record['aliasGuidelinePublicationRecoveredAt'] = $recoveredat;
         $store['questions'][$aliasguidelinepublicationrepairid] = $record;
         $store['examProjects'][$aliasguidelinepublicationprojectid] = $project;
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
+$latinidentificationrepairid = 'ADMIN-HB-20261126-151529-03C9';
+$latinidentificationrepairversion = 'latin-name-answer-leakage-v1';
+$latinidentificationrecord = $revisionstore['customQuestions'][$latinidentificationrepairid] ?? null;
+if (is_array($latinidentificationrecord)
+        && (string)($latinidentificationrecord['status'] ?? 'draft') === 'draft'
+        && (string)($latinidentificationrecord['latinNameLeakageRepairVersion'] ?? '')
+            !== $latinidentificationrepairversion) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $latinidentificationrepairid,
+        $latinidentificationrepairversion
+    ): array {
+        $record = $store['customQuestions'][$latinidentificationrepairid] ?? null;
+        if (!is_array($record)
+                || (string)($record['status'] ?? 'draft') !== 'draft'
+                || !is_array($record['draft'] ?? null)) {
+            return $store;
+        }
+        $draft = $record['draft'];
+        $draft['prompt'] = 'In Appendix A nomenclature, which Pinyin herb name corresponds to the '
+            . 'pharmaceutical Latin name Angelicae sinensis Radix?';
+        $draft['options'] = [
+            ['label' => 'A', 'text' => 'Dang Gui — Blood-tonifying herb'],
+            ['label' => 'B', 'text' => 'Bai Shao — Blood-nourishing herb'],
+            ['label' => 'C', 'text' => 'Chuan Xiong — Blood-invigorating herb'],
+            ['label' => 'D', 'text' => 'Dan Shen — Blood-invigorating herb'],
+        ];
+        $draft['correctLabel'] = 'A';
+        $draft['explanation'] = 'Appendix A pairs Dang Gui with the pharmaceutical Latin name '
+            . 'Angelicae sinensis Radix. Option A is correct. Bai Shao corresponds to Paeoniae Radix alba; '
+            . 'Chuan Xiong corresponds to Chuanxiong Rhizoma; and Dan Shen corresponds to Salviae '
+            . 'miltiorrhizae Radix. The Latin clue appears only in the stem so the choices do not disclose '
+            . 'the answer by repeating it.';
+        $draft['translations']['es'] = [
+            'prompt' => 'En la nomenclatura del Appendix A, ¿qué nombre Pinyin de hierba corresponde al '
+                . 'nombre latino farmacéutico Angelicae sinensis Radix?',
+            'options' => [
+                ['label' => 'A', 'text' => 'Dang Gui — hierba que tonifica la Sangre'],
+                ['label' => 'B', 'text' => 'Bai Shao — hierba que nutre la Sangre'],
+                ['label' => 'C', 'text' => 'Chuan Xiong — hierba que vigoriza la Sangre'],
+                ['label' => 'D', 'text' => 'Dan Shen — hierba que vigoriza la Sangre'],
+            ],
+            'explanation' => 'El Appendix A relaciona Dang Gui con el nombre latino farmacéutico '
+                . 'Angelicae sinensis Radix. La opción A es correcta. Bai Shao corresponde a Paeoniae '
+                . 'Radix alba; Chuan Xiong corresponde a Chuanxiong Rhizoma; y Dan Shen corresponde a '
+                . 'Salviae miltiorrhizae Radix. La pista latina aparece únicamente en el enunciado para '
+                . 'que las opciones no revelen la respuesta al repetirla.',
+        ];
+        $draft['contentType'] = 'roster_aliases';
+        $draft['cognitiveLevel'] = 'recall';
+        $draft['difficultyBand'] = 'foundation';
+        $draft['reviewSummary'] = 'Removed the answer-revealing Latin names from A-D and reclassified the '
+            . 'direct nomenclature check as Recall/Foundation.';
+        $record['draft'] = $draft;
+        $record['reviewSummary'] = (string)$draft['reviewSummary'];
+        $record['latinNameLeakageRepairVersion'] = $latinidentificationrepairversion;
+        $record['latinNameLeakageRepairedAt'] = gmdate(DATE_ATOM);
+        $record['savedAt'] = gmdate(DATE_ATOM);
+        $record['savedByName'] = 'Latin-name answer-leakage repair';
+        $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+        $store['customQuestions'][$latinidentificationrepairid] = $record;
         return $store;
     });
     $revisionstore = block_myprogress_herbology_override_load();
@@ -5194,6 +5294,20 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
                 . ' are equivalent names for the same substance. Replace one with a distinct distractor.'
         );
     }
+    $latinnameanswerleakage = $findlatinnameanswerleakage(
+        (string)($snapshot['prompt'] ?? ''),
+        (array)($snapshot['options'] ?? [])
+    ) ?? $findlatinnameanswerleakage(
+        (string)($snapshot['translations']['es']['prompt'] ?? ''),
+        (array)($snapshot['translations']['es']['options'] ?? [])
+    );
+    if (is_array($latinnameanswerleakage)) {
+        throw new invalid_parameter_exception(
+            'This question cannot be published because option '
+                . (string)$latinnameanswerleakage['label']
+                . ' repeats the Latin/scientific name already supplied by the stem. Remove that name from A-D.'
+        );
+    }
     $prohibitedanswerchoice = $findprohibitedanswerchoice((array)$snapshot['options']);
     if ($prohibitedanswerchoice === null) {
         $prohibitedanswerchoice = $findprohibitedanswerchoice(
@@ -5573,6 +5687,22 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
                 . (string)$equivalentanswerchoices['firstLabel'] . ' and '
                 . (string)$equivalentanswerchoices['secondLabel']
                 . ' are equivalent names for the same substance. Replace one with a distinct distractor.'
+        );
+    }
+    $latinnameanswerleakage = is_array($approvaldraft)
+        ? ($findlatinnameanswerleakage(
+            (string)($approvaldraft['prompt'] ?? ''),
+            (array)($approvaldraft['options'] ?? [])
+        ) ?? $findlatinnameanswerleakage(
+            (string)($approvaldraft['translations']['es']['prompt'] ?? ''),
+            (array)($approvaldraft['translations']['es']['options'] ?? [])
+        ))
+        : null;
+    if (is_array($latinnameanswerleakage)) {
+        $redirectapprovalerror(
+            'This question cannot be approved because option '
+                . (string)$latinnameanswerleakage['label']
+                . ' repeats the Latin/scientific name already supplied by the stem. Remove that name from A-D.'
         );
     }
     if (is_array($approvaldraft)
@@ -10056,6 +10186,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 . ' because they are equivalent names for the same substance.'
         );
     }
+    $latinnameanswerleakage = $findlatinnameanswerleakage(
+        (string)($customdraft['prompt'] ?? ''),
+        (array)($customdraft['options'] ?? [])
+    ) ?? $findlatinnameanswerleakage(
+        (string)($customdraft['translations']['es']['prompt'] ?? ''),
+        (array)($customdraft['translations']['es']['options'] ?? [])
+    );
+    if (is_array($latinnameanswerleakage)) {
+        throw new invalid_parameter_exception(
+            'Option ' . (string)$latinnameanswerleakage['label']
+                . ' repeats the Latin/scientific name supplied in the stem. Remove that name from A-D before publishing.'
+        );
+    }
     $approvalguidelineviolations = $findcreatedquestionguidelineviolations($customdraft);
     if ($isapprovedwarningupdate && $approvalguidelineviolations === []) {
         throw new invalid_parameter_exception(
@@ -11371,6 +11514,7 @@ Requirements:
 2. Write a concise, positively worded board-style inference or analysis question with one defensible answer and exactly four parallel A-D choices. Never ask for what is NOT correct, incorrect, false, EXCEPT, or least appropriate. Apply the same rule in Spanish.
 3. Never use the word “Both” in an answer choice, including comparative statements such as “Both are acrid and warm.” Never use “All of them,” “All of the above,” “All options are incorrect,” “All answers are correct,” “None of these,” “None of the above,” “No option is correct,” or any equivalent combined-answer shortcut. Do not create a disguised combined answer by copying or joining two other options into one choice. If a source keyed a combined answer because two source statements were true, do not leave those statements as two true distractors. Rewrite all four choices: place one self-contained, source-supported comparison at the original keyed letter and make the other three independently false but plausible. Each choice must name one specific, independently assessable property, herb, formula, channel set or clinical conclusion. Apply the same prohibition to Spanish choices, including “Todos ellos,” “Todas ellas,” “Todas las opciones son incorrectas,” “Ninguna opción es correcta,” “Ninguno de estos,” “Ninguna de estas,” “Ambos,” and “Ambas.”
 4. Use NCBAHM guideline terminology. Write all Pinyin without tone marks in English and Spanish (for example, Ma Huang, Gui Zhi, Zhi Zi Chi Tang and Dui Yao). Herb names must use “tone-free Pinyin (Pharmaceutical Latin)” when herbs appear in the choices or explanation. Use only herbs from the current 304-item Appendix A and formulas from the current 181-item Appendix C; never substitute a historical, supplemental or similarly named item outside those rosters. Use standard formula names consistently.
+4A. Never repeat a Latin, pharmaceutical or scientific name from the stem inside the correct option; that discloses the answer. If the item specifically asks the learner to map a Latin name to Pinyin, place the Latin clue only in the stem and write A-D as Pinyin plus short parallel category descriptors without parenthetical Latin. The explanation may show the complete mappings after the learner answers.
 5. Do not state the diagnosis, tested action, formula, herb, hierarchy role, preparation rule, or other decisive answer in the stem when observable findings can support an inference instead.
 6. For clinical cases, use concise, memorable didactic settings when useful. Rotate real cities and countries across the United States, China, Spain and elsewhere. Real hospitals, universities or acupuncture schools may be neutral geographic or educational references only; never claim that they treated the fictional patient, hosted the fictional event, endorsed the item or supplied the answer. Every patient, student, clinician and active instructor must be fictional. Never attribute invented speech, teaching, care or affiliation to a real living professor or clinician. A historical scholar or published teaching may be named only when the administrator's idea supplies a verifiable source for it.
 7. The explanation must identify both inference steps, explain the decisive clues, justify the correct answer, and explain why every distractor is weaker. Do not introduce unrelated facts.
@@ -11476,6 +11620,7 @@ PROMPT;
     $decodecustomdraft = static function(string $generated) use (
         $domains,
         $findequivalentanswerchoices,
+        $findlatinnameanswerleakage,
         $findprohibitedanswerchoice,
         $hasprohibitednegativewording,
         $stripdecorativeicons
@@ -11530,6 +11675,20 @@ PROMPT;
                     . (string)$equivalentchoices['firstLabel'] . ' and '
                     . (string)$equivalentchoices['secondLabel']
                     . '. Replace one alias with a genuinely different distractor.'
+            );
+        }
+        $latinnameanswerleakage = $findlatinnameanswerleakage(
+            $prompt,
+            array_map(
+                static fn(string $label): array => ['label' => $label, 'text' => $optionsbylabel[$label]],
+                ['A', 'B', 'C', 'D']
+            )
+        );
+        if (is_array($latinnameanswerleakage)) {
+            throw new UnexpectedValueException(
+                'The generated draft discloses its answer: option '
+                    . (string)$latinnameanswerleakage['label']
+                    . ' repeats the Latin/scientific name supplied in the stem. Keep that clue out of A-D.'
             );
         }
         $spanish = is_array($decoded['translations']['es'] ?? null)
@@ -13296,6 +13455,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $ensurechannelherbmappingfeedback,
         $findcreatedquestionguidelineviolations,
         $findequivalentanswerchoices,
+        $findlatinnameanswerleakage,
         $findprohibitedanswerchoice,
         $hasprohibitednegativewording,
         $requestedvisibleherbcount,
@@ -13662,6 +13822,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                     . (string)$equivalentchoices['firstLabel'] . ' and '
                     . (string)$equivalentchoices['secondLabel']
                     . '. Replace one alias with a genuinely different distractor.'
+            );
+        }
+        $latinnameanswerleakage = $findlatinnameanswerleakage(
+            $prompt,
+            array_map(
+                static fn(string $label): array => ['label' => $label, 'text' => $optionsbylabel[$label]],
+                ['A', 'B', 'C', 'D']
+            )
+        );
+        if (is_array($latinnameanswerleakage)) {
+            throw new UnexpectedValueException(
+                'The AI draft discloses its answer: option '
+                    . (string)$latinnameanswerleakage['label']
+                    . ' repeats the Latin/scientific name supplied in the stem. Keep that clue out of A-D.'
             );
         }
         $visiblequestiontext = $prompt . "\n" . implode("\n", array_values($optionsbylabel));
@@ -14865,6 +15039,7 @@ Editorial rules:
 2. Convert direct recall into a two-step inference whenever the source supports it. Present only the observable signs, symptoms, tongue, pulse, preparation issue, safety fact, or ingredient relationship. Do not name the diagnosis, pattern, tested action, therapeutic function, herb, formula, or decisive label in the stem when that would reveal the answer. Phrases such as "signs of Heat-Dampness," "Damp-Heat pattern," or an equivalent named diagnosis are forbidden in the stem; replace them with at least four source-compatible observable manifestations, including tongue and pulse when supported. For example, replace "tonifies Original/Primordial Qi" with the source-grounded clinical manifestations from which that function must be inferred.
 2A. For channel-combination questions, do not invent a patient vignette, tongue, pulse or diagnosis when the source supplies only herb actions and channel relationships. Build the two-step inference directly from the supplied actions: first map each action to its organ system or burner, then select the channel set that covers those targets. Preserve standard channel abbreviations such as SP, ST and LU and the keyed answer LETTER. When channelCombinationRequiresHerbMapping is true, every Option A-D paragraph in both languages must explicitly name the source-supported herb represented by that exact channel set, using relevantGuidelineNames when available, and explain the distinguishing channel or action. When requiredChannelHerbMappings is nonempty, copy each exact mapped herb name into the matching option paragraph in both languages. Do not merely say that a distractor lacks or adds a channel. For the warm-Yang comparison, SP/ST/LU maps to Gan Jiang, HT/KI/SP maps to Fu Zi, HT/KI/LV/SP maps to Rou Gui, and SP/ST/KI/LV maps to Xiao Hui Xiang. Treat the keyed set as the best source-supported combination being tested rather than claiming it is an exhaustive monograph when the source does not establish exhaustiveness.
 3. Use exactly four plausible, parallel answer choices. Each option must stand on its own. Never use the word "Both" in an answer choice, including comparative statements such as "Both are acrid and warm," and never use "All of them," "All of the above," "All options are incorrect," "All answers are correct," "None of these," "None of the above," "No option is correct," "A and B are correct," or any equivalent combined-answer shortcut. Do not disguise a combined answer by copying, concatenating or joining two other choices into the keyed option. Apply the same prohibition to Spanish choices, including "Todos ellos," "Todas ellas," "Todas las opciones son incorrectas," "Ninguna opción es correcta," "Ninguno de estos," "Ninguna de estas," "Ambos," and "Ambas." When prohibitedSourceAnswerChoice is nonempty, that exact source choice must be replaced. Preserve its LETTER and underlying tested fact, but write one self-contained, unambiguous answer statement that assesses a single specific property, herb, formula, channel set or clinical conclusion. If the prohibited source key combined two true source statements, rewrite those statements too: do not leave either one as a true distractor. Rebuild A-D so the preserved keyed letter is the only defensible answer. For Board-destination reviews, standardize every herb name as "Pinyin (Pharmaceutical Latin)" using relevantGuidelineNames. For Extra guideline reviews, preserve outsideRosterNamesToPreserve exactly; standardize other names only when a supplied guideline term is available. Remove inconsistent forms such as "Rx", common-name strings, and botanical species when a controlling term is available.
+3AA. Never repeat a Latin, pharmaceutical or scientific name supplied in the stem inside the correct option; that visibly discloses the answer. For a Latin-to-Pinyin nomenclature item, keep the Latin clue only in the stem and use Pinyin plus short parallel category descriptors in A-D without parenthetical Latin. Full mappings belong in the feedback after the learner answers. This narrow anti-disclosure rule overrides the usual parenthetical-Latin display rule for those A-D choices only.
 3A. Every final question must be positively worded. Always remove NOT-correct, incorrect, inaccurate, false, error, EXCEPT and least-appropriate framing from the stem, even when the administrator did not explicitly request this change. Reconstruct the item rather than lightly editing it: preserve the source-supported educational objective and keyed LETTER, rewrite the keyed option into a true source-supported statement, and rebuild the other three choices as plausible false or weaker statements. Apply the same rule to the Spanish stem. The final explanation must be educational feedback, never the administrator's instruction.
 3B. When administratorInstructionHistory or latestAdministratorInstruction asks to add, include, place or name herbs in the distractors, choices, stem or question, the final visible stem or choices must contain concrete source-supported herbs rather than only pattern or diagnosis labels. Standardize each as Pinyin (Pharmaceutical Latin). If the request uses the plural “herbs” or “hierbas,” include at least two distinct herbs. Herbs mentioned only in the explanation or reviewSummary do not implement the instruction.
 4. Write mock-exam feedback in this explicit teaching sequence: "Inference step 1:", "Inference step 2:", "Option A:", "Option B:", "Option C:", and "Option D:". Step 1 must state what hidden pattern, action, processing rule, safety principle, or ingredient relationship follows from the evidence. Step 2 must explain why that conclusion selects the keyed answer. Identify which findings are decisive and which details are contextual distractors. Analyze the keyed choice and every distractor separately; never omit an option or use one generic sentence for several options. The Spanish explanation must use the parallel headings "Paso de inferencia 1:", "Paso de inferencia 2:", "Opción A:", "Opción B:", "Opción C:", and "Opción D:". Do not add unrelated formulas, ingredients, actions, or diagnoses that are absent from the stem and choices.
@@ -18182,12 +18357,24 @@ echo $OUTPUT->header();
             (array)($question['options'] ?? [])
         );
         $prohibitedanswerchoiceisequivalentalias = false;
+        $prohibitedanswerchoiceisanswerleakage = false;
         if ($prohibitedanswerchoice === null && is_array($equivalentanswerchoicecollision)) {
             // Reuse the existing publication-gating conditions below while
             // retaining a distinct, accurate message for alias collisions.
             $prohibitedanswerchoice = (string)$equivalentanswerchoicecollision['firstText']
                 . ' / ' . (string)$equivalentanswerchoicecollision['secondText'];
             $prohibitedanswerchoiceisequivalentalias = true;
+        }
+        $latinnameanswerleakage = $findlatinnameanswerleakage(
+            (string)($question['prompt'] ?? ''),
+            (array)($question['options'] ?? [])
+        ) ?? $findlatinnameanswerleakage(
+            (string)($spanishtranslation['prompt'] ?? ''),
+            $spanishoptions
+        );
+        if ($prohibitedanswerchoice === null && is_array($latinnameanswerleakage)) {
+            $prohibitedanswerchoice = (string)$latinnameanswerleakage['text'];
+            $prohibitedanswerchoiceisanswerleakage = true;
         }
         $prohibitednegativewording = $hasprohibitednegativewording(
             (string)($question['prompt'] ?? '')
@@ -18297,9 +18484,11 @@ echo $OUTPUT->header();
                             $cardguidelineviolations
                         )))))
                     : ($prohibitedanswerchoice !== null
-                        ? ($prohibitedanswerchoiceisequivalentalias
-                            ? ($displaylang === 'es' ? 'Separar alias equivalentes' : 'Replace equivalent alias first')
-                            : ($displaylang === 'es' ? 'Corregir respuesta prohibida' : 'Replace prohibited answer first'))
+                        ? ($prohibitedanswerchoiceisanswerleakage
+                            ? ($displaylang === 'es' ? 'Quitar la respuesta del enunciado' : 'Remove disclosed answer first')
+                            : ($prohibitedanswerchoiceisequivalentalias
+                                ? ($displaylang === 'es' ? 'Separar alias equivalentes' : 'Replace equivalent alias first')
+                                : ($displaylang === 'es' ? 'Corregir respuesta prohibida' : 'Replace prohibited answer first')))
                         : ($prohibitednegativewording
                             ? ($displaylang === 'es' ? 'Redactar la pregunta en positivo' : 'Rewrite as a positive question')
                             : ''))));
@@ -18573,7 +18762,9 @@ echo $OUTPUT->header();
             <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--exam">AI-assisted mock review</span><?php endif; ?>
             <?php if ($prohibitedanswerchoice !== null): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $prohibitedanswerchoiceisequivalentalias
                 ? ($displaylang === 'es' ? 'Opciones con alias equivalentes · requiere corrección' : 'Equivalent alias choices · correction required')
-                : ($displaylang === 'es' ? 'Respuesta combinada prohibida · requiere corrección' : 'Prohibited combined answer · correction required'); ?></span><?php endif; ?>
+                : ($prohibitedanswerchoiceisanswerleakage
+                    ? ($displaylang === 'es' ? 'La opción repite la respuesta del enunciado · requiere corrección' : 'Choice repeats the answer from the stem · correction required')
+                    : ($displaylang === 'es' ? 'Respuesta combinada prohibida · requiere corrección' : 'Prohibited combined answer · correction required')); ?></span><?php endif; ?>
             <?php if ($prohibitednegativewording): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $displaylang === 'es' ? 'Pregunta negativa prohibida · requiere corrección' : 'Prohibited negative stem · correction required'; ?></span><?php endif; ?>
             <?php if ($visibleherbplacementmissing): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $displaylang === 'es' ? 'Faltan las hierbas solicitadas · requiere corrección' : 'Requested herbs missing · correction required'; ?></span><?php endif; ?>
             <?php if ($cardguidelineoverrideactive): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Advertencia del guideline aceptada' : 'Guideline warning accepted'; ?></span><?php elseif (!$cardguidelineverified): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $displaylang === 'es' ? 'Alerta del guideline · requiere decisión' : 'Guideline alert · decision required'; ?></span><?php endif; ?>
