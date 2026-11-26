@@ -18,6 +18,7 @@ $fromcontext = optional_param('from', '', PARAM_ALPHA);
 $fromlibrary = $fromcontext === 'library';
 $fromchief = $fromcontext === 'chief';
 $fromingredients = $fromcontext === 'ingredients';
+$fromhierarchy = $fromcontext === 'hierarchy';
 $fromactions = $fromcontext === 'actions';
 $fromtonguepulse = $fromcontext === 'tonguepulse';
 $fromchiefmap = $fromcontext === 'chiefmap';
@@ -42,7 +43,7 @@ $baseparams = [];
 if ($ises) {
     $baseparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart || $fromformulamap || $fromformulatree) {
+if ($fromlibrary || $fromchief || $fromingredients || $fromhierarchy || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart || $fromformulamap || $fromformulatree) {
     $baseparams['from'] = $fromcontext;
 }
 if ($fromformulamap) {
@@ -74,7 +75,7 @@ $languageparams = [
 if (!$ises) {
     $languageparams['lang'] = 'es';
 }
-if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart || $fromformulamap || $fromformulatree) {
+if ($fromlibrary || $fromchief || $fromingredients || $fromhierarchy || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart || $fromformulamap || $fromformulatree) {
     $languageparams['from'] = $fromcontext;
 }
 if ($fromformulamap) {
@@ -102,6 +103,7 @@ $dashboardurl = new moodle_url('/blocks/myprogress/study-guide.php', $ises
     : ['area' => 'herbology', 'view' => 'library']);
 $chiefherbsurl = new moodle_url('/study-guide/comparisons/' . ($ises ? 'chief-herbs-property-es.html' : 'chief-herbs-property.html'));
 $formulaingredientsurl = new moodle_url('/blocks/myprogress/formula-ingredients.php', $ises ? ['lang' => 'es'] : []);
+$formulahierarchyurl = new moodle_url('/blocks/myprogress/formula-ingredient-hierarchy.php', $ises ? ['lang' => 'es'] : []);
 $formulaactionsurl = new moodle_url('/blocks/myprogress/formula-actions.php', $ises ? ['lang' => 'es'] : []);
 $formulatonguepulseurl = new moodle_url('/blocks/myprogress/formula-tongue-pulse.php', $ises ? ['lang' => 'es'] : []);
 $formulachiefmapurl = new moodle_url('/blocks/myprogress/formula-chief-herbs-map.php', $ises ? ['lang' => 'es'] : []);
@@ -470,6 +472,8 @@ echo $OUTPUT->header();
                 <a class="formula-list__button" href="<?php echo $chiefherbsurl->out(false); ?>"><?php echo $ises ? '← Volver a Chief Herbs' : '← Back to Chief Herbs'; ?></a>
             <?php } else if ($fromingredients) { ?>
                 <a class="formula-list__button" href="<?php echo $formulaingredientsurl->out(false); ?>"><?php echo $ises ? '← Volver a Fórmulas e ingredientes' : '← Back to Formula and Ingredients'; ?></a>
+            <?php } else if ($fromhierarchy) { ?>
+                <a class="formula-list__button" href="<?php echo $formulahierarchyurl->out(false); ?>"><?php echo $ises ? '← Volver a Jerarquía de ingredientes' : '← Back to Formula Ingredient Hierarchy'; ?></a>
             <?php } else if ($fromactions) { ?>
                 <a class="formula-list__button" href="<?php echo $formulaactionsurl->out(false); ?>"><?php echo $ises ? '← Volver a Fórmulas y acciones' : '← Back to Formula and Actions'; ?></a>
             <?php } else if ($fromtonguepulse) { ?>
@@ -504,7 +508,7 @@ echo $OUTPUT->header();
         <form class="formula-list__form" method="get" action="<?php echo (new moodle_url('/blocks/myprogress/formula-list.php'))->out(false); ?>">
             <input type="hidden" name="sort" value="<?php echo s($sortmode); ?>">
             <?php if ($ises) { ?><input type="hidden" name="lang" value="es"><?php } ?>
-            <?php if ($fromlibrary || $fromchief || $fromingredients || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart || $fromformulamap || $fromformulatree) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
+            <?php if ($fromlibrary || $fromchief || $fromingredients || $fromhierarchy || $fromactions || $fromtonguepulse || $fromchiefmap || $fromquiz || $fromsmart || $fromformulamap || $fromformulatree) { ?><input type="hidden" name="from" value="<?php echo s($fromcontext); ?>"><?php } ?>
             <?php if ($fromformulamap) { ?><input type="hidden" name="mapcategory" value="<?php echo s($mapcategory); ?>"><input type="hidden" name="mapmode" value="<?php echo s($mapmode); ?>"><?php if ($mapq !== '') { ?><input type="hidden" name="mapq" value="<?php echo s($mapq); ?>"><?php } ?><?php } ?>
             <?php if ($fromformulatree) { ?><input type="hidden" name="treepage" value="<?php echo $treepage; ?>"><input type="hidden" name="treemode" value="<?php echo s($treemode); ?>"><?php } ?>
             <?php if ($fromsmart) { ?><input type="hidden" name="smartmode" value="<?php echo s($smartmode); ?>"><?php if ($smartitem !== '') { ?><input type="hidden" name="smartitem" value="<?php echo s($smartitem); ?>"><?php } ?><?php if ($smartq !== '') { ?><input type="hidden" name="smartq" value="<?php echo s($smartq); ?>"><?php } ?><?php } ?>

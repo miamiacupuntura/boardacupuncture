@@ -140,6 +140,14 @@ $areas = [
                 'secondary' => true,
             ],
             [
+                'title' => 'Formula Ingredient Hierarchy',
+                'description' => 'Study Jun–Chen–Zuo–Shi roles and 19 source-supported formula architecture profiles, then open the converted legacy SCORM questions with the correct filters already applied.',
+                'path' => '/blocks/myprogress/formula-ingredient-hierarchy.php',
+                'anchor' => '',
+                'status' => 'NEW · 19 ROLE PROFILES',
+                'secondary' => true,
+            ],
+            [
                 'title' => 'Formula Families / Variations',
                 'description' => 'Study 22 formula families and their named variations. Each card shows the root formula, structural change, resulting pattern and the decisive clue for choosing each branch.',
                 'path' => '/study-guide/comparisons/families.html',
@@ -357,6 +365,9 @@ $spanishcopy = [
 
     'Formula Tongue and Pulse' => 'Lengua y pulso de fórmulas',
     'Review tongue and pulse findings for all 63 official guideline formulas, organized by formula category.' => 'Repasa los hallazgos de lengua y pulso de las 63 fórmulas oficiales del guideline, organizadas por categoría.',
+    'Formula Ingredient Hierarchy' => 'Jerarquía de ingredientes de fórmulas',
+    'Study Jun–Chen–Zuo–Shi roles and 19 source-supported formula architecture profiles, then open the converted legacy SCORM questions with the correct filters already applied.' => 'Estudia los roles Jun–Chen–Zuo–Shi y 19 perfiles de arquitectura de fórmulas respaldados por la fuente; después abre las preguntas del SCORM antiguo ya convertidas y con los filtros correctos.',
+    'NEW · 19 ROLE PROFILES' => 'NUEVO · 19 PERFILES DE ROLES',
     'Formula and Actions' => 'Fórmulas y acciones',
     'Review 63 official guideline formulas by category and principal action, with direct links to every formula card.' => 'Repasa las 63 fórmulas oficiales del guideline por categoría y acción principal, con enlaces directos a cada tarjeta.',
     'Chinese Herbology' => 'Herbología China',
