@@ -3602,6 +3602,9 @@ $guidelineviolationnames = static function(array $violations): array {
     }
     return array_values(array_unique($names));
 };
+$guidelinefeedbacktext = static function($value): string {
+    return is_scalar($value) ? trim((string)$value) : '';
+};
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'addguidelinefeedbacknotice') {
     require_sesskey();
     $questionid = required_param('questionid', PARAM_ALPHANUMEXT);
@@ -3631,7 +3634,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'addguidelinefeedba
         . (count($feedbacknames) === 1 ? ' está' : ' están')
         . ' fuera del roster vigente de los Appendix A/C de NCBAHM. Este estado se informa para estudio y revisión '
         . 'administrativa y no convierte la pregunta en elegible para el guideline Board activo.';
-    $englishexplanation = trim((string)($feedbackquestion['explanation'] ?? ''));
+    $englishexplanation = $guidelinefeedbacktext($feedbackquestion['explanation'] ?? '');
     $englishnoticecomplete = stripos(
         $englishexplanation,
         'outside the current NCBAHM Appendix A/C roster'
@@ -3642,7 +3645,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'addguidelinefeedba
     if (!$englishnoticecomplete) {
         $feedbackquestion['explanation'] = trim($englishexplanation . ' ' . $englishnotice);
     }
-    $spanishexplanation = trim((string)($feedbackquestion['translations']['es']['explanation'] ?? ''));
+    $feedbacktranslations = is_array($feedbackquestion['translations'] ?? null)
+        ? $feedbackquestion['translations']
+        : [];
+    $feedbackspanishtranslation = is_array($feedbacktranslations['es'] ?? null)
+        ? $feedbacktranslations['es']
+        : [];
+    $spanishexplanation = $guidelinefeedbacktext($feedbackspanishtranslation['explanation'] ?? '');
     $spanishnoticecomplete = stripos(
         $spanishexplanation,
         'fuera del roster vigente de los Appendix A/C de NCBAHM'
@@ -3651,10 +3660,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'addguidelinefeedba
         static fn(string $name): bool => stripos($spanishexplanation, $name) !== false
     )) === count($feedbacknames);
     if (!$spanishnoticecomplete) {
-        $feedbackquestion['translations']['es']['explanation'] = trim(
+        $feedbackspanishtranslation['explanation'] = trim(
             $spanishexplanation . ' ' . $spanishnotice
         );
     }
+    $feedbacktranslations['es'] = $feedbackspanishtranslation;
+    $feedbackquestion['translations'] = $feedbacktranslations;
     $feedbacksnapshot = array_intersect_key($feedbackquestion, array_flip([
         'questionId', 'domainId', 'prompt', 'options', 'correctLabel', 'explanation',
         'translations', 'contentType', 'cognitiveLevel', 'difficultyBand', 'source',
@@ -17178,8 +17189,11 @@ echo $OUTPUT->header();
         $cardguidelineviolations = $findcreatedquestionguidelineviolations($question);
         $cardguidelineverified = $cardguidelineviolations === [];
         $cardguidelinefeedbacknames = $guidelineviolationnames($cardguidelineviolations);
-        $cardenglishfeedback = (string)($question['explanation'] ?? '');
-        $cardspanishfeedback = (string)($question['translations']['es']['explanation'] ?? '');
+        $cardenglishfeedback = $guidelinefeedbacktext($question['explanation'] ?? '');
+        // Use the already-normalized translation. Some legacy records contain a
+        // scalar or another incomplete shape in translations, which must never
+        // make the complete pending-question view fail.
+        $cardspanishfeedback = $guidelinefeedbacktext($spanishtranslation['explanation'] ?? '');
         $cardguidelinefeedbacknoticepresent = !$cardguidelineverified
             && stripos(
                 $cardenglishfeedback,
