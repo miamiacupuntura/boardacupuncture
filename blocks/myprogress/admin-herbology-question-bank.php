@@ -3209,6 +3209,34 @@ if ($huoxiangzhengqialiasrepairneeded) {
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
+$cf0079combinedanswerrepairid = 'CF-0079';
+$cf0079combinedanswerrepairversion = 'cf-0079-specific-comparison-v1';
+$cf0079combinedanswerrepairrecord =
+    $revisionstore['questions'][$cf0079combinedanswerrepairid] ?? null;
+if (is_array($cf0079combinedanswerrepairrecord)
+        && (string)($cf0079combinedanswerrepairrecord['combinedAnswerRepairVersion'] ?? '')
+            !== $cf0079combinedanswerrepairversion) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $cf0079combinedanswerrepairid,
+        $cf0079combinedanswerrepairversion
+    ): array {
+        $record = $store['questions'][$cf0079combinedanswerrepairid] ?? null;
+        if (!is_array($record)) {
+            return $store;
+        }
+        $savedat = gmdate(DATE_ATOM);
+        $record['combinedAnswerRepairAudit'] = [
+            'lastAutomaticReviewFailure' => $record['lastAutomaticReviewFailure'] ?? null,
+            'repairedAt' => $savedat,
+        ];
+        unset($record['lastAutomaticReviewFailure']);
+        $record['combinedAnswerRepairVersion'] = $cf0079combinedanswerrepairversion;
+        $record['combinedAnswerRepairedAt'] = $savedat;
+        $store['questions'][$cf0079combinedanswerrepairid] = $record;
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $findcreatedquestionguidelineviolations = static function(array $question) use (
     $normalizeguidelinename,
     $guidelineherbnames,
@@ -13545,6 +13573,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         ), 0, 16000);
     };
 
+    $decodeaijsonobject = static function(string $generated, int $depth = 512): array {
+        $candidate = preg_replace('/^\xEF\xBB\xBF/', '', trim($generated)) ?? trim($generated);
+        if (preg_match('/```(?:json)?\s*([\[{].*[\]}])\s*```/is', $candidate, $matches)) {
+            $candidate = trim((string)$matches[1]);
+        } else {
+            $firstobject = strpos($candidate, '{');
+            $lastobject = strrpos($candidate, '}');
+            if ($firstobject !== false && $lastobject !== false && $lastobject > $firstobject) {
+                $candidate = substr($candidate, $firstobject, $lastobject - $firstobject + 1);
+            }
+        }
+        $escaperawcontrols = static function(string $json): string {
+            $repaired = '';
+            $instring = false;
+            $escaped = false;
+            $length = strlen($json);
+            for ($index = 0; $index < $length; $index++) {
+                $character = $json[$index];
+                if (!$instring) {
+                    if ($character === '"') {
+                        $instring = true;
+                    }
+                    $repaired .= $character;
+                    continue;
+                }
+                if ($escaped) {
+                    $repaired .= $character;
+                    $escaped = false;
+                    continue;
+                }
+                if ($character === '\\') {
+                    $repaired .= $character;
+                    $escaped = true;
+                    continue;
+                }
+                if ($character === '"') {
+                    $instring = false;
+                    $repaired .= $character;
+                    continue;
+                }
+                $repaired .= match ($character) {
+                    "\n" => '\\n',
+                    "\r" => '\\r',
+                    "\t" => '\\t',
+                    default => $character,
+                };
+            }
+            return $repaired;
+        };
+        $withouttrailingcommas = static function(string $json): string {
+            return preg_replace('/,\s*([}\]])/u', '$1', $json) ?? $json;
+        };
+        $attempts = [$candidate];
+        $attempts[] = $escaperawcontrols($candidate);
+        $attempts[] = $withouttrailingcommas($escaperawcontrols($candidate));
+        if (!str_contains($candidate, '"')
+                && (str_contains($candidate, '“') || str_contains($candidate, '”'))) {
+            $attempts[] = $withouttrailingcommas($escaperawcontrols(strtr(
+                $candidate,
+                ['“' => '"', '”' => '"']
+            )));
+        }
+        $jsonerror = 'Syntax error';
+        foreach (array_values(array_unique($attempts)) as $attempt) {
+            $decoded = json_decode(
+                $attempt,
+                true,
+                $depth,
+                JSON_INVALID_UTF8_SUBSTITUTE | JSON_BIGINT_AS_STRING
+            );
+            $jsonerror = json_last_error_msg();
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                return $decoded;
+            }
+        }
+        throw new UnexpectedValueException(
+            'The AI returned malformed JSON (' . $jsonerror
+                . '). Return one complete JSON object with quoted keys and no Markdown.'
+        );
+    };
+
     $decodeaidraft = static function(
         string $generated,
         array $sourcequestion,
@@ -13567,7 +13676,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $visibleboardnomenclature,
         $visibleherbnames,
         $stripdecorativeicons,
-        $normalizecreatedquestionpinyin
+        $normalizecreatedquestionpinyin,
+        $decodeaijsonobject
     ): array {
         // Text entered in the per-question instruction box activates
         // administrator discretion. Keep only structural/source-integrity
@@ -13576,20 +13686,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         if ($administratordiscretionmode) {
             $enforcefeedbackquality = false;
         }
-        $generated = trim($generated);
-        if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $generated, $matches)) {
-            $generated = $matches[1];
-        } else {
-            $firstbrace = strpos($generated, '{');
-            $lastbrace = strrpos($generated, '}');
-            if ($firstbrace !== false && $lastbrace !== false && $lastbrace > $firstbrace) {
-                $generated = substr($generated, $firstbrace, $lastbrace - $firstbrace + 1);
-            }
-        }
-        $decoded = json_decode($generated, true, 512, JSON_THROW_ON_ERROR);
-        if (!is_array($decoded)) {
-            throw new UnexpectedValueException('The AI response is not a JSON object.');
-        }
+        $decoded = $decodeaijsonobject($generated, 512);
         // Providers may copy or invent an invalid formula or herb in feedback.
         // Keep this deterministic cleaner available for both source violations
         // and names introduced by the generated explanation itself.
@@ -14613,7 +14710,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         string $administratorproposal,
         string $latestadministratorinstruction,
         ?array $previousvisibleversion
-    ) use ($manager, $systemcontext, $USER): string {
+    ) use ($manager, $systemcontext, $USER, $decodeaijsonobject): string {
         $validationprompt = <<<'PROMPT'
 You are the final quality-control reviewer for one NCBAHM Chinese Herbology mock-exam question. Return strict JSON only.
 
@@ -14674,23 +14771,10 @@ PROMPT;
                 $validationresponse->get_errormessage() ?: 'The instruction compliance check failed.'
             );
         }
-        $validationcontent = trim((string)(
+        $validationcontent = (string)(
             $validationresponse->get_response_data()['generatedcontent'] ?? ''
-        ));
-        if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $validationcontent, $matches)) {
-            $validationcontent = $matches[1];
-        } else {
-            $firstbrace = strpos($validationcontent, '{');
-            $lastbrace = strrpos($validationcontent, '}');
-            if ($firstbrace !== false && $lastbrace !== false && $lastbrace > $firstbrace) {
-                $validationcontent = substr(
-                    $validationcontent,
-                    $firstbrace,
-                    $lastbrace - $firstbrace + 1
-                );
-            }
-        }
-        $validation = json_decode($validationcontent, true, 64, JSON_THROW_ON_ERROR);
+        );
+        $validation = $decodeaijsonobject($validationcontent, 64);
         $validationreason = trim((string)($validation['reason'] ?? ''));
         $choiceevidence = is_array($validation['choiceEvidence'] ?? null)
             ? $validation['choiceEvidence']
@@ -14764,7 +14848,13 @@ PROMPT;
         string $administratorproposal,
         string $latestadministratorinstruction,
         ?array $previousvisibleversion
-    ) use ($manager, $systemcontext, $stripdecorativeicons, $USER): array {
+    ) use (
+        $manager,
+        $systemcontext,
+        $stripdecorativeicons,
+        $USER,
+        $decodeaijsonobject
+    ): array {
         $feedbackprompt = <<<'PROMPT'
 You are the dedicated NCBAHM feedback editor. The question stem, four choices and keyed answer have already been finalized by another editor. Rebuild only the English and Spanish explanations and return strict JSON only.
 
@@ -14814,23 +14904,10 @@ PROMPT;
                 $feedbackresponse->get_errormessage() ?: 'The dedicated feedback editor failed.'
             );
         }
-        $feedbackcontent = trim((string)(
+        $feedbackcontent = (string)(
             $feedbackresponse->get_response_data()['generatedcontent'] ?? ''
-        ));
-        if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $feedbackcontent, $matches)) {
-            $feedbackcontent = $matches[1];
-        } else {
-            $firstbrace = strpos($feedbackcontent, '{');
-            $lastbrace = strrpos($feedbackcontent, '}');
-            if ($firstbrace !== false && $lastbrace !== false && $lastbrace > $firstbrace) {
-                $feedbackcontent = substr(
-                    $feedbackcontent,
-                    $firstbrace,
-                    $lastbrace - $firstbrace + 1
-                );
-            }
-        }
-        $feedback = json_decode($feedbackcontent, true, 64, JSON_THROW_ON_ERROR);
+        );
+        $feedback = $decodeaijsonobject($feedbackcontent, 64);
         $englishexplanation = $stripdecorativeicons((string)($feedback['explanation'] ?? ''));
         $spanishexplanation = $stripdecorativeicons(
             (string)($feedback['spanishExplanation'] ?? '')
@@ -15180,7 +15257,7 @@ Editorial rules:
 4A. Whenever inference is created by replacing direct answer labels with observable findings, ingredient combinations, clinical roles or safety clues, the explanation must reveal and teach the hidden intermediate label after the learner answers. If formula names were removed from ingredient-based choices, keep the choices ingredient-only but explicitly map every option letter A-D to its source-supported Pinyin formula name in both English and Spanish feedback. Apply the equivalent mapping to similar questions: identify the pattern, herb action, preparation rule, hierarchy role, compatibility relationship or safety principle represented by each choice, and explain the decisive difference rather than merely restating the keyed option.
 4B. Improve the feedback automatically on every review; do not wait for the administrator to request it. Analyze A, B, C and D separately. When choices are ingredient combinations, identify the source-supported formula or precise therapeutic strategy behind each option, name at least one distinctive ingredient from each combination, explain that ingredient's relevant action, and connect it to why the option fits or fails. Generic statements such as “targets phlegm” or “is for food stagnation” are insufficient. If a combination is not a source-supported canonical formula, do not invent a formula name; describe its precise strategy instead.
 4C. When sourceFeedbackRequiresRebuild is true, the source explanation is a mnemonic, acronym list, “Memory Tip,” “Quick Match,” or icon-led note rather than final mock feedback. Treat its herb-action associations only as source evidence. Do not copy its presentation, slogan, initials, emoji, arrows or keyword list into the final explanation. Reconstruct the educational objective as a genuine two-step inference and write complete, separate clinical reasoning for A, B, C and D in both languages. The final explanation must stand on its own without the mnemonic.
-4D. When sourceFeedbackMissing is true, write the complete explanation from the source-supported stem, choices, answer key and source-card evidence; never return “Not completed” or leave the field empty. When prohibitedSourceAnswerChoice is nonempty, replace that source shortcut with one specific false or weaker statement that remains parallel to the other choices. Never copy the prohibited choice into the final English or Spanish options.
+4D. When sourceFeedbackMissing is true, write the complete explanation from the source-supported stem, choices, answer key and source-card evidence; never return “Not completed” or leave the field empty. When prohibitedSourceAnswerChoice is nonempty and it occupies the keyed letter, replace that shortcut at the same letter with one specific, source-supported correct conclusion; rebuild the other choices as plausible but false or weaker alternatives so only the preserved keyed letter is defensible. When the prohibited shortcut is a distractor, replace it with one specific false or weaker statement. Never copy the prohibited choice into the final English or Spanish options.
 5. In clinical cases, add one or two plausible contextual details when useful: age, illness duration, a relevant health history, temperature with measurement site, pulse rate, or respiratory rate. Use physiologically coherent values and include these details sparingly; they must not contradict the source, change the keyed answer, create a second defensible diagnosis, or replace the Chinese-medicine reasoning being tested.
 6. Some cases may use a realistic clinical handoff, seminar, case-history conference or teaching round. Rotate real geographic settings across the United States, China, Spain and other countries, including recognizable cities such as Miami, Boston, New York, San Francisco, Beijing, Shanghai, Chengdu, Madrid and Barcelona. A real hospital, university or acupuncture school may appear only as a neutral geographic or educational reference and never as a claim that the institution treated the fictional patient, hosted the fictional event, endorses the item or supplied the answer. Examples of safe neutral anchors include “during a fictional seminar in Boston near Massachusetts General Hospital” and “during a fictional academic exchange in Chengdu.” All patients, students, clinicians and active instructors in the scenario must have clearly fictional names. Do not attribute invented patient care, speech, teaching, affiliation or professional conduct to a real living professor, clinician, acupuncturist or public figure. A real historical Chinese-medicine scholar or a real professor's published teaching may be named only when that person and teaching are explicitly supported by the question's source metadata. When findings could require urgent conventional care, state that medical evaluation and stabilization occurred before the acupuncture visit.
 7. Vary the narrative format and use the setting as a concise didactic hook rather than filler. Some vignettes may show a fictional physician presenting a fictional case to acupuncture students during a teaching session. Others may have the physician recall a previously treated fictional patient and ask the students to reason from the historical findings. Another format may show a fictional acupuncture student presenting a case during a clinical or medical round while an instructor asks the group to complete the two inference steps. Give the student-presented case enough decisive findings for one defensible answer, optionally include one secondary contextual detail, and do not let the student or instructor state the diagnosis or answer being tested. Keep every patient case invented and use past tense where appropriate.

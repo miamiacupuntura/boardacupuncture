@@ -3390,27 +3390,27 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "Both Tian Wang Bu Xin Dan (Emperor of Heaven's Special Pi\\\\ to Tonify the Heart) and Zhi Gan Cao Tang (Prepared Licorice Decoction) tonify the Yin and blood to treat patterns manifesting with palpitations, anxiety, insomnia, and dry stools, what is their difference?",
+        "prompt": "Which statement best distinguishes Tian Wang Bu Xin Dan (Emperor of Heaven's Special Pill to Tonify the Heart) from Zhi Gan Cao Tang (Prepared Licorice Decoction) when treating deficiency patterns with palpitations?",
         "options": [
           {
             "label": "A",
-            "text": "Tian Wang Bu Xin Tang focuses on Tonifying the fluids as well as the blood in patterns where HT Yang flares upward due to deficiency. This causes the spirit to lose its anchoring in the blood, leading to insomnia, dream-disturbed sleep, anxiety, and restlessness as the main symptoms. The pulse will be thin and perhaps rapid. These problems are addressed by the inclusion of herbs that calm the spirit such as Suan Zao Ren (Ziziphi spinosae Semen), Bai Zi Ren (Platycladi Semen), and Yuan Zhi (Polygalae Radix)."
+            "text": "Tian Wang Bu Xin Dan primarily restores Heart Qi and regularizes an irregular pulse, whereas Zhi Gan Cao Tang primarily calms the spirit when insomnia and restlessness predominate."
           },
           {
             "label": "B",
-            "text": "Zhi Gan Cao Tang (Prepared Licorice Decoction), on the other hand, focuses on nourishing the blood and the Yang functions of the HT in addition to enriching the fluids. The main symptom is an irregular pulse. To address these issues, warming and Qi-tonifying herbs like Ren Shen (Ginseng Radix), Gan Cao (Glycyrrhizae Radix), and Gui Zhi (Cinnamomi Ramulus) are the key ingredients of that formula."
+            "text": "Tian Wang Bu Xin Dan primarily warms Heart Yang without nourishing Yin, whereas Zhi Gan Cao Tang clears excess Heart Fire without supplementing Qi or Blood."
           },
           {
             "label": "C",
-            "text": "Both of them"
+            "text": "Tian Wang Bu Xin Dan primarily nourishes Heart Yin and Blood and calms the spirit when insomnia, anxiety, and a thin rapid pulse predominate, whereas Zhi Gan Cao Tang supplements Heart Qi, Blood, Yin, and Yang to restore an irregular pulse."
           },
           {
             "label": "D",
-            "text": "None of them"
+            "text": "The formulas have the same primary emphasis and may be selected without distinguishing sleep and restlessness from pulse irregularity."
           }
         ],
         "correctLabel": "C",
-        "explanation": "",
+        "explanation": "Inference step 1: Distinguish a Heart Yin-Blood deficiency presentation dominated by insomnia, anxiety, restlessness, dry stools, and a thin rapid pulse from a broader Heart deficiency presentation in which an irregular pulse is the decisive finding. Inference step 2: Tian Wang Bu Xin Dan nourishes Heart Yin and Blood and calms the spirit, while Zhi Gan Cao Tang supplements Heart Qi, Blood, Yin, and Yang and restores the pulse. Option A: Incorrect; it reverses the principal emphases of the formulas. Option B: Incorrect; Tian Wang Bu Xin Dan does nourish Yin, and Zhi Gan Cao Tang supplements rather than clears excess Fire. Option C: Correct; it accurately contrasts spirit-calming Yin-Blood nourishment with broader supplementation directed at an irregular pulse. Option D: Incorrect; the formulas overlap in nourishment but are not interchangeable because their principal clinical emphases differ.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
@@ -3424,26 +3424,26 @@
         },
         "translations": {
           "es": {
-            "prompt": "Tanto Tian Wang Bu Xin Dan (Emperor of Heaven's Special Pill to Tonify the Heart) y Zhi Gan Cao Tang (Prepared Licorice Decoction) paranificar el Yin y la sangre para tratar patrones manifestados por palpitaciones, ansiedad, insomnio y heces secas. ¿Cuál es la diferencia entre ellos?",
+            "prompt": "¿Qué afirmación distingue mejor a Tian Wang Bu Xin Dan (Emperor of Heaven's Special Pill to Tonify the Heart) de Zhi Gan Cao Tang (Prepared Licorice Decoction) al tratar patrones de deficiencia con palpitaciones?",
             "options": [
               {
                 "label": "A",
-                "text": "Tian Wang Bu Xin Tang se centra en la Tonificación de los fluidos, así como la sangre en los patrones donde HT Yang bengala hacia arriba debido a la deficiencia. Esto hace que el espíritu pierda su anclaje en la sangre, conduciendo al insomnio, sueño intranquilo con abundantes sueños, ansiedad y inquietud como los principales síntomas. El pulso será delgado y quizás rápido. Estos problemas son abordados por la inclusión de hierbas que calman el espíritu como Suan Zao Ren (Ziziphi spinosae Semen), Bai Zi Ren (Platycladi Semen), y Yuan Zhi (Polygalae Radix)."
+                "text": "Tian Wang Bu Xin Dan principalmente restaura el Qi de Corazón y regulariza un pulso irregular, mientras que Zhi Gan Cao Tang principalmente calma el espíritu cuando predominan el insomnio y la inquietud."
               },
               {
                 "label": "B",
-                "text": "Zhi Gan Cao Tang (Prepared Licorice Decoction), por otro lado, se centra en nutrir la sangre y las funciones Yang del TH además de enriquecer los fluidos. El síntoma principal es un pulso irregular. Para abordar estos problemas, las hierbas calentadoras y de tono Qi como Ren Shen (Ginseng Radix), Gan Cao (Glycyrrhizae Radix) y Gui Zhi (Cinnamomi Ramulus) son los ingredientes clave de esa fórmula."
+                "text": "Tian Wang Bu Xin Dan principalmente calienta el Yang de Corazón sin nutrir el Yin, mientras que Zhi Gan Cao Tang elimina Fuego de Corazón por exceso sin suplementar Qi ni Sangre."
               },
               {
                 "label": "C",
-                "text": "Ambos."
+                "text": "Tian Wang Bu Xin Dan principalmente nutre el Yin y la Sangre de Corazón y calma el espíritu cuando predominan insomnio, ansiedad y pulso fino y rápido, mientras que Zhi Gan Cao Tang suplementa Qi, Sangre, Yin y Yang de Corazón para restaurar un pulso irregular."
               },
               {
                 "label": "D",
-                "text": "Ninguno de ellos"
+                "text": "Las fórmulas tienen el mismo énfasis principal y pueden seleccionarse sin distinguir el sueño y la inquietud de la irregularidad del pulso."
               }
             ],
-            "explanation": ""
+            "explanation": "Paso de inferencia 1: Distinga una presentación de deficiencia de Yin y Sangre de Corazón dominada por insomnio, ansiedad, inquietud, heces secas y pulso fino y rápido de una deficiencia más amplia de Corazón en la que el pulso irregular es el hallazgo decisivo. Paso de inferencia 2: Tian Wang Bu Xin Dan nutre el Yin y la Sangre de Corazón y calma el espíritu, mientras que Zhi Gan Cao Tang suplementa Qi, Sangre, Yin y Yang de Corazón y restaura el pulso. Opción A: Incorrecta; invierte los énfasis principales de las fórmulas. Opción B: Incorrecta; Tian Wang Bu Xin Dan sí nutre el Yin y Zhi Gan Cao Tang suplementa en lugar de eliminar Fuego por exceso. Opción C: Correcta; contrasta con precisión la nutrición de Yin-Sangre que calma el espíritu con una suplementación más amplia dirigida al pulso irregular. Opción D: Incorrecta; las fórmulas comparten acciones nutritivas, pero no son intercambiables porque sus énfasis clínicos principales son diferentes."
           }
         },
         "nomenclature": {

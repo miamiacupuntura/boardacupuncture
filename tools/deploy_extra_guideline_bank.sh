@@ -13,6 +13,7 @@ FILES=(
     "blocks/myprogress/admin-herbology-appendix-c.php"
     "blocks/myprogress/admin-herbology-appendix-list.php"
     "blocks/myprogress/herbology-question-overrides.php"
+    "blocks/menu/herbology-domain-candidates.json"
     "blocks/menu/herbology-extra-guideline.php"
     "blocks/menu/herbology-board.php"
 )
@@ -97,7 +98,14 @@ for relative in "${FILES[@]}"; do
         -H 'Pragma: no-cache' \
         "$REPOSITORY/$REVISION/$relative?revision=$REVISION" \
         -o "$source_file"
-    php -l "$source_file" >/dev/null
+    if [[ "$relative" == *.php ]]; then
+        php -l "$source_file" >/dev/null
+    else
+        php -r '
+$decoded = json_decode((string)file_get_contents($argv[1]), true);
+exit(is_array($decoded) && json_last_error() === JSON_ERROR_NONE ? 0 : 1);
+' "$source_file"
+    fi
 done
 
 grep -Fq 'name="saveoutsideguideline"' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
@@ -142,6 +150,11 @@ grep -Fq 'Appendix C formula-alias recovery' "$TEMP_DIR/blocks/myprogress/admin-
 grep -Fq 'administratorDiscretionMode' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Administrator discretion mode accepted the visible draft' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '<strong>Administrator discretion:</strong>' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq '$decodeaijsonobject = static function' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'The AI returned malformed JSON' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'When the prohibited shortcut is a distractor' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'cf-0079-specific-comparison-v1' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Tian Wang Bu Xin Dan primarily nourishes Heart Yin and Blood' "$TEMP_DIR/blocks/menu/herbology-domain-candidates.json"
 grep -Fq 'component herb must never be inserted into the formula name' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq "'Ling Jiao Gou Teng Tang'" "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq 'Ling\s+Jiao\s+Gou\s+Teng\s+Tang' "$TEMP_DIR/blocks/myprogress/herbology-question-overrides.php"
@@ -399,7 +412,14 @@ for relative in "${FILES[@]}"; do
 done
 
 for relative in "${FILES[@]}"; do
-    php -l "$MOODLE_ROOT/$relative" >/dev/null
+    if [[ "$relative" == *.php ]]; then
+        php -l "$MOODLE_ROOT/$relative" >/dev/null
+    else
+        php -r '
+$decoded = json_decode((string)file_get_contents($argv[1]), true);
+exit(is_array($decoded) && json_last_error() === JSON_ERROR_NONE ? 0 : 1);
+' "$MOODLE_ROOT/$relative"
+    fi
 done
 grep -Fq 'Guardar en Extra guideline' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'name="formaction" value="saveextraguideline"' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
@@ -438,6 +458,11 @@ grep -Fq 'Appendix C formula-alias recovery' "$MOODLE_ROOT/blocks/myprogress/adm
 grep -Fq 'administratorDiscretionMode' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq 'Administrator discretion mode accepted the visible draft' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '<strong>Administrator discretion:</strong>' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq '$decodeaijsonobject = static function' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'The AI returned malformed JSON' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'When the prohibited shortcut is a distractor' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'cf-0079-specific-comparison-v1' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Tian Wang Bu Xin Dan primarily nourishes Heart Yin and Blood' "$MOODLE_ROOT/blocks/menu/herbology-domain-candidates.json"
 grep -Fq 'component herb must never be inserted into the formula name' "$MOODLE_ROOT/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq "'Ling Jiao Gou Teng Tang'" "$MOODLE_ROOT/blocks/myprogress/herbology-question-overrides.php"
 grep -Fq 'Ling\s+Jiao\s+Gou\s+Teng\s+Tang' "$MOODLE_ROOT/blocks/myprogress/herbology-question-overrides.php"
