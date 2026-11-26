@@ -55310,7 +55310,7 @@
         "objectiveId": "working-formula_differentiation",
         "difficultyBand": "application",
         "cognitiveLevel": "apply",
-        "contentType": "recall",
+        "contentType": "comparison",
         "language": "en",
         "source": {
           "title": "Complete Final.docx",
@@ -55320,38 +55320,96 @@
           "status": "practice-ready",
           "notes": "Source-grounded practice preparation: Formula indication, pattern recognition or selection."
         },
-        "prompt": "Jue Yin (reverting Yin) patterns include?",
+        "prompt": "Jue Yin (reverting Yin) patterns may be Heat-predominant, Cold-predominant, or mixed. Which Appendix C formula pairing correctly distinguishes a Heat-predominant dysenteric presentation from a Cold-predominant channel presentation?",
         "options": [
           {
             "label": "A",
-            "text": "Organ patterns and transmuted patterns"
+            "text": "Bai Tou Weng Tang (Pulsatilla Decoction) for chronic cold extremities from Blood deficiency, and Dang Gui Si Ni Tang (Tangkuei Decoction for Frigid Extremities) for Heat-toxin dysentery"
           },
           {
             "label": "B",
-            "text": "Channel patterns and Bowel patterns"
+            "text": "Si Ni Tang (Frigid Extremities Decoction) for Heat-toxin dysentery, and Bai Hu Tang (White Tiger Decoction) for Blood-deficiency Cold obstructing the channels"
           },
           {
             "label": "C",
-            "text": "Cold and Heat transformation patterns"
+            "text": "Li Zhong Wan (Regulate the Middle Pill) for Heat-toxin dysentery, and Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity) for chronic cold extremities"
           },
           {
             "label": "D",
-            "text": "Heat patterns, cold patterns, and mixed Heat and cold patterns"
+            "text": "Bai Tou Weng Tang (Pulsatilla Decoction) for Heat-toxin dysentery, and Dang Gui Si Ni Tang (Tangkuei Decoction for Frigid Extremities) for chronic cold extremities from Blood deficiency with Cold obstructing the channels"
           }
         ],
         "correctLabel": "D",
-        "explanation": "",
+        "explanation": "Inference step 1: A Heat-predominant Jue Yin intestinal presentation is identified by Heat-toxin dysentery with thirst, tenesmus, anal burning, and blood in the stool, whereas a Cold-predominant channel presentation has chronically cold painful hands and feet with Blood deficiency and Cold obstructing the channels. Inference step 2: Bai Tou Weng Tang (Pulsatilla Decoction) clears Heat-toxin from the intestines, while Dang Gui Si Ni Tang (Tangkuei Decoction for Frigid Extremities) nourishes Blood, warms the channels, and disperses Cold. Option A: Incorrect; it reverses the indications of the two formulas. Option B: Incorrect; Si Ni Tang rescues devastated Yang, while Bai Hu Tang clears blazing Qi-level Heat; neither pairing matches the two presentations. Option C: Incorrect; Li Zhong Wan warms Spleen-Stomach deficiency-Cold, while Huang Lian Jie Du Tang clears severe Heat-toxin rather than chronic channel Cold. Option D: Correct; it accurately pairs the Heat branch with Bai Tou Weng Tang and the Cold channel branch with Dang Gui Si Ni Tang. Mixed Heat-Cold Jue Yin presentations require a combined clearing-and-warming strategy rather than treating only one pole.",
         "classification": {
           "method": "deterministic-rule-v1",
           "confidence": "medium",
           "reason": "Formula indication, pattern recognition or selection"
         },
+        "translations": {
+          "es": {
+            "prompt": "Los patrones Jue Yin (Yin revertido) pueden presentar predominio de Calor, predominio de Frío o una mezcla de ambos. ¿Qué par de fórmulas del Appendix C distingue correctamente una presentación disentérica con predominio de Calor de una presentación de canales con predominio de Frío?",
+            "options": [
+              {
+                "label": "A",
+                "text": "Bai Tou Weng Tang (Pulsatilla Decoction) para extremidades crónicamente frías por deficiencia de Sangre, y Dang Gui Si Ni Tang (Tangkuei Decoction for Frigid Extremities) para disentería por toxina de Calor"
+              },
+              {
+                "label": "B",
+                "text": "Si Ni Tang (Frigid Extremities Decoction) para disentería por toxina de Calor, y Bai Hu Tang (White Tiger Decoction) para Frío que obstruye los canales sobre deficiencia de Sangre"
+              },
+              {
+                "label": "C",
+                "text": "Li Zhong Wan (Regulate the Middle Pill) para disentería por toxina de Calor, y Huang Lian Jie Du Tang (Coptis Decoction to Resolve Toxicity) para extremidades crónicamente frías"
+              },
+              {
+                "label": "D",
+                "text": "Bai Tou Weng Tang (Pulsatilla Decoction) para disentería por toxina de Calor, y Dang Gui Si Ni Tang (Tangkuei Decoction for Frigid Extremities) para extremidades crónicamente frías por deficiencia de Sangre con Frío que obstruye los canales"
+              }
+            ],
+            "explanation": "Paso de inferencia 1: Una presentación intestinal Jue Yin con predominio de Calor se reconoce por disentería por toxina de Calor con sed, tenesmo, ardor anal y sangre en las heces, mientras que una presentación de canales con predominio de Frío muestra manos y pies crónicamente fríos y dolorosos, deficiencia de Sangre y Frío que obstruye los canales. Paso de inferencia 2: Bai Tou Weng Tang (Pulsatilla Decoction) elimina toxina de Calor de los intestinos, mientras que Dang Gui Si Ni Tang (Tangkuei Decoction for Frigid Extremities) nutre la Sangre, calienta los canales y dispersa el Frío. Opción A: Incorrecta; invierte las indicaciones de las dos fórmulas. Opción B: Incorrecta; Si Ni Tang rescata el Yang devastado y Bai Hu Tang aclara Calor intenso del nivel Qi; el par no corresponde a las dos presentaciones. Opción C: Incorrecta; Li Zhong Wan calienta el Frío por deficiencia de Bazo-Estómago y Huang Lian Jie Du Tang elimina toxina de Calor intensa, no Frío crónico de los canales. Opción D: Correcta; empareja con precisión la rama de Calor con Bai Tou Weng Tang y la rama fría de canales con Dang Gui Si Ni Tang. Las presentaciones Jue Yin mixtas de Calor-Frío requieren una estrategia que combine aclarar y calentar en vez de tratar un solo polo."
+          }
+        },
         "nomenclature": {
           "herbs": [],
-          "formulas": [],
+          "formulas": [
+            {
+              "pinyin": "Bai Tou Weng Tang",
+              "englishName": "Pulsatilla Decoction"
+            },
+            {
+              "pinyin": "Dang Gui Si Ni Tang",
+              "englishName": "Tangkuei Decoction for Frigid Extremities"
+            },
+            {
+              "pinyin": "Si Ni Tang",
+              "englishName": "Frigid Extremities Decoction"
+            },
+            {
+              "pinyin": "Bai Hu Tang",
+              "englishName": "White Tiger Decoction"
+            },
+            {
+              "pinyin": "Li Zhong Wan",
+              "englishName": "Regulate the Middle Pill"
+            },
+            {
+              "pinyin": "Huang Lian Jie Du Tang",
+              "englishName": "Coptis Decoction to Resolve Toxicity"
+            }
+          ],
           "feedback": {
             "herbs": [],
-            "formulas": []
+            "formulas": [
+              {
+                "pinyin": "Bai Tou Weng Tang",
+                "englishName": "Pulsatilla Decoction"
+              },
+              {
+                "pinyin": "Dang Gui Si Ni Tang",
+                "englishName": "Tangkuei Decoction for Frigid Extremities"
+              }
+            ]
           }
         }
       },

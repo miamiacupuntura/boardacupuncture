@@ -3237,6 +3237,33 @@ if (is_array($cf0079combinedanswerrepairrecord)
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
+$cf1617formularepairid = 'CF-1617';
+$cf1617formularepairversion = 'cf-1617-jue-yin-formula-comparison-v1';
+$cf1617formularepairrecord = $revisionstore['questions'][$cf1617formularepairid] ?? null;
+if (is_array($cf1617formularepairrecord)
+        && (string)($cf1617formularepairrecord['jueYinFormulaRepairVersion'] ?? '')
+            !== $cf1617formularepairversion) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $cf1617formularepairid,
+        $cf1617formularepairversion
+    ): array {
+        $record = $store['questions'][$cf1617formularepairid] ?? null;
+        if (!is_array($record)) {
+            return $store;
+        }
+        $savedat = gmdate(DATE_ATOM);
+        $record['jueYinFormulaRepairAudit'] = [
+            'lastAutomaticReviewFailure' => $record['lastAutomaticReviewFailure'] ?? null,
+            'repairedAt' => $savedat,
+        ];
+        unset($record['lastAutomaticReviewFailure']);
+        $record['jueYinFormulaRepairVersion'] = $cf1617formularepairversion;
+        $record['jueYinFormulaRepairedAt'] = $savedat;
+        $store['questions'][$cf1617formularepairid] = $record;
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $findcreatedquestionguidelineviolations = static function(array $question) use (
     $normalizeguidelinename,
     $guidelineherbnames,
