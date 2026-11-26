@@ -699,6 +699,50 @@ $exam5canonicalrepairs = [
             ],
         ],
     ],
+    'SCORM-SA-0B6F0EB1C671' => [
+        'prompt' => 'According to the source used for this item, which listed medicinal is derived from the shell of an endangered sea turtle and prohibited from medicinal trade?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Dai Mao (Eretmochelydis Carapax)'],
+            ['label' => 'B', 'text' => 'Gui Ban (Testudinis Plastrum)'],
+            ['label' => 'C', 'text' => 'Bie Jia (Trionycis Carapax)'],
+            ['label' => 'D', 'text' => 'Xue Yu Tan (Crinis Carbonisatus)'],
+        ],
+        'correctLabel' => 'A',
+        'explanation' => 'Inference step 1: The question asks specifically for a medicinal made from the shell of an endangered sea turtle. Dai Mao (Eretmochelydis Carapax) is hawksbill sea-turtle shell; the hawksbill turtle is critically endangered, and commercial international trade is generally prohibited under CITES Appendix I. Inference step 2: The other choices do not identify hawksbill sea-turtle shell, although all animal-derived medicinals still require lawful and ethical sourcing. Option A: Correct. Dai Mao is the endangered sea-turtle shell product identified by the source and is obsolete and outside the active Appendix A roster. Option B: Incorrect. Gui Ban (Testudinis Plastrum) is turtle plastron, not the hawksbill sea-turtle carapace named by the question; its sourcing and applicable regulations must still be verified. Option C: Incorrect. Bie Jia (Trionycis Carapax) is softshell-turtle carapace, not Dai Mao or hawksbill sea-turtle shell; it also requires lawful sourcing. Option D: Incorrect. Xue Yu Tan (Crinis Carbonisatus) is carbonized human hair and is unrelated to turtle shell. Guideline status: Dai Mao is an obsolete substance outside the current Appendix A roster, so the question may be kept only in the independent Extra guideline bank or published to an exam with an administrator-confirmed warning.',
+        'translations' => [
+            'es' => [
+                'prompt' => 'Según la fuente utilizada para esta pregunta, ¿qué sustancia medicinal de la lista procede del caparazón de una tortuga marina en peligro de extinción y está prohibida en el comercio medicinal?',
+                'options' => [
+                    ['label' => 'A', 'text' => 'Dai Mao (Eretmochelydis Carapax)'],
+                    ['label' => 'B', 'text' => 'Gui Ban (Testudinis Plastrum)'],
+                    ['label' => 'C', 'text' => 'Bie Jia (Trionycis Carapax)'],
+                    ['label' => 'D', 'text' => 'Xue Yu Tan (Crinis Carbonisatus)'],
+                ],
+                'explanation' => 'Paso de inferencia 1: La pregunta pide específicamente una sustancia medicinal elaborada con el caparazón de una tortuga marina en peligro de extinción. Dai Mao (Eretmochelydis Carapax) es caparazón de tortuga carey; la tortuga carey está en peligro crítico y su comercio internacional con fines comerciales está generalmente prohibido por el Apéndice I de CITES. Paso de inferencia 2: Las demás opciones no identifican el caparazón de tortuga carey, aunque toda sustancia medicinal de origen animal requiere una procedencia legal y ética. Opción A: Correcta. Dai Mao es el producto de tortuga marina en peligro identificado por la fuente y es una sustancia obsoleta fuera del roster activo del Appendix A. Opción B: Incorrecta. Gui Ban (Testudinis Plastrum) es plastrón de tortuga, no el caparazón de tortuga carey nombrado por la pregunta; aun así, deben comprobarse su procedencia y las normas aplicables. Opción C: Incorrecta. Bie Jia (Trionycis Carapax) es caparazón de tortuga de caparazón blando, no Dai Mao ni caparazón de tortuga carey; también requiere una procedencia legal. Opción D: Incorrecta. Xue Yu Tan (Crinis Carbonisatus) es cabello humano carbonizado y no guarda relación con el caparazón de tortuga. Estado del guideline: Dai Mao es una sustancia obsoleta fuera del roster actual del Appendix A, por lo que la pregunta solo puede conservarse en el banco independiente Extra guideline o publicarse en un examen con una advertencia confirmada por el administrador.',
+            ],
+        ],
+        'contentType' => 'roster_aliases',
+        'cognitiveLevel' => 'apply',
+        'difficultyBand' => 'application',
+        'nomenclature' => [
+            'herbs' => [
+                ['pinyin' => 'Dai Mao', 'pharmaceuticalName' => 'Eretmochelydis Carapax'],
+                ['pinyin' => 'Gui Ban', 'pharmaceuticalName' => 'Testudinis Plastrum'],
+                ['pinyin' => 'Bie Jia', 'pharmaceuticalName' => 'Trionycis Carapax'],
+                ['pinyin' => 'Xue Yu Tan', 'pharmaceuticalName' => 'Crinis Carbonisatus'],
+            ],
+            'formulas' => [],
+            'feedback' => [
+                'herbs' => [
+                    ['pinyin' => 'Dai Mao', 'pharmaceuticalName' => 'Eretmochelydis Carapax'],
+                    ['pinyin' => 'Gui Ban', 'pharmaceuticalName' => 'Testudinis Plastrum'],
+                    ['pinyin' => 'Bie Jia', 'pharmaceuticalName' => 'Trionycis Carapax'],
+                    ['pinyin' => 'Xue Yu Tan', 'pharmaceuticalName' => 'Crinis Carbonisatus'],
+                ],
+                'formulas' => [],
+            ],
+        ],
+    ],
     'CF-0290' => [
         'prompt' => 'Which statement most accurately distinguishes Shen Qi Wan (Kidney Qi Pill) from Zhen Wu Tang (True Warrior Decoction) when Kidney Yang deficiency disrupts fluid metabolism?',
         'options' => [
@@ -1165,7 +1209,9 @@ foreach ($bank['domains'] as &$exam5domainquestions) {
         $exam5question['cognitiveLevel'] = (string)($exam5repair['cognitiveLevel'] ?? 'analyze');
         $exam5question['difficultyBand'] = (string)($exam5repair['difficultyBand'] ?? 'analysis');
         $exam5question['review']['status'] = 'practice-ready';
-        $exam5question['review']['notes'] = $exam5questionid === 'SCORM-SA-E950B91B9650'
+        $exam5question['review']['notes'] = in_array($exam5questionid, [
+            'SCORM-SA-E950B91B9650', 'SCORM-SA-0B6F0EB1C671',
+        ], true)
             ? 'Canonical bilingual feedback repair with complete analysis of the keyed answer and distractors.'
             : 'Exam 5 canonical comparison repair with independent choices and complete distractor feedback.';
         if (trim((string)($exam5question['sourceCard']['url'] ?? '')) === '') {
@@ -2188,7 +2234,7 @@ if (is_array($fuzirouguirecord)
 }
 $reviewedcanonicalids = [
     'CF-0057', 'CF-0127', 'CF-0213', 'CF-0217', 'CF-0227', 'CF-0230', 'CF-0280', 'CF-0305', 'CF-1582',
-    'SCORM-FD-5917E7491258', 'SCORM-SA-E950B91B9650',
+    'SCORM-FD-5917E7491258', 'SCORM-SA-E950B91B9650', 'SCORM-SA-0B6F0EB1C671',
 ];
 $reviewedcanonicalquestions = [];
 foreach (($bank['domains'] ?? []) as $questions) {
@@ -2242,7 +2288,19 @@ foreach ($reviewedcanonicalquestions as $questionid => $canonicalquestion) {
                 $storedsnapshot['prompt'] ?? '',
                 $storedsnapshot['options'] ?? [],
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), 'Gui Zhi Tang') === false;
-        if ($reviewedsnapshotneedsrepair($storedsnapshot) || $missingrequiredformula) {
+        $leakedinternalfeedback = $questionid === 'SCORM-SA-0B6F0EB1C671'
+            && is_array($storedsnapshot)
+            && (stripos((string)json_encode(
+                $storedsnapshot,
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            ), 'outsideRosterNamesToPreserve') !== false
+                || stripos((string)json_encode(
+                    $storedsnapshot['options'] ?? [],
+                    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                ), 'Crinis Carbonisatus') === false);
+        if ($reviewedsnapshotneedsrepair($storedsnapshot)
+                || $missingrequiredformula
+                || $leakedinternalfeedback) {
             $repairkeys[] = $snapshotkey;
         }
     }
@@ -12656,30 +12714,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                         $feedback
                     ) ?? $feedback;
                 }
+                // Provider output must never expose internal review payload
+                // keys or instructions to students. Strip the complete
+                // sentence rather than leaving a broken fragment behind.
+                $feedback = preg_replace(
+                    '/(?:^|(?<=[.!?]))\s*[^.!?\r\n]*(?:outsideRosterNamesToPreserve|'
+                        . 'sourceVisibleGuidelineNames|administratorProposal|reviewDestination|'
+                        . 'prohibitedSourceAnswerChoice|administratorInstructionHistory)'
+                        . '[^.!?\r\n]*(?:[.!?]+|$)/iu',
+                    ' ',
+                    $feedback
+                ) ?? $feedback;
                 $feedback = preg_replace('/[ \t]+([,.;:])/u', '$1', $feedback) ?? $feedback;
                 return trim(preg_replace('/[ \t]{2,}/u', ' ', $feedback) ?? $feedback);
         };
-        if ($feedbackguidelineviolations !== []) {
-            // Clean only the feedback fields before either validation pass;
-            // the stem, choices and keyed answer remain untouched.
-            $decoded['explanation'] = $sanitizefeedback(
-                (string)($decoded['explanation'] ?? ''),
-                false,
-                $feedbackguidelineviolations
-            );
-            if (is_array($decoded['translations']['es'] ?? null)) {
-                $decoded['translations']['es']['explanation'] = $sanitizefeedback(
-                    (string)($decoded['translations']['es']['explanation'] ?? ''),
-                    true,
-                    $feedbackguidelineviolations
-                );
-            }
-            $decoded['reviewSummary'] = $sanitizefeedback(
-                (string)($decoded['reviewSummary'] ?? ''),
-                false,
+        // Clean only the feedback fields before either validation pass; the
+        // stem, choices and keyed answer remain untouched. Run this even when
+        // there are no guideline violations so internal prompt keys can never
+        // leak into an otherwise valid explanation.
+        $decoded['explanation'] = $sanitizefeedback(
+            (string)($decoded['explanation'] ?? ''),
+            false,
+            $feedbackguidelineviolations
+        );
+        if (is_array($decoded['translations']['es'] ?? null)) {
+            $decoded['translations']['es']['explanation'] = $sanitizefeedback(
+                (string)($decoded['translations']['es']['explanation'] ?? ''),
+                true,
                 $feedbackguidelineviolations
             );
         }
+        $decoded['reviewSummary'] = $sanitizefeedback(
+            (string)($decoded['reviewSummary'] ?? ''),
+            false,
+            $feedbackguidelineviolations
+        );
         $sourcecorrectlabel = strtoupper(trim((string)($sourcequestion['correctLabel'] ?? '')));
         $decodedcorrectlabel = strtoupper(trim((string)($decoded['correctLabel'] ?? '')));
         if (in_array($sourcecorrectlabel, ['A', 'B', 'C', 'D'], true)
