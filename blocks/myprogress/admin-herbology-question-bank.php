@@ -11709,13 +11709,20 @@ PROMPT;
                         }
                     }
                     $scoperequireslocalrender = false;
-                    if (!is_array($matchedevidence)
-                            && isset($formulavduiyaoscopeevidence[$decodedindex])) {
+                    if (!is_array($matchedevidence)) {
+                        $positionalscopeevidence = $formulavduiyaoscopeevidence[$decodedindex]
+                            ?? $formulavduiyaoscopefallbackpool[$decodedindex]
+                            ?? null;
+                    } else {
+                        $positionalscopeevidence = null;
+                    }
+                    if (!is_array($matchedevidence) && is_array($positionalscopeevidence)) {
                         // BATCH CREATION assigns the selected evidence in this
-                        // exact order. If verbose wording prevents reliable
-                        // name matching, use that position instead of rejecting
-                        // a relationship that the server selected itself.
-                        $matchedevidence = $formulavduiyaoscopeevidence[$decodedindex];
+                        // exact order. The full verified reserve supplies the
+                        // same position if the shorter selection was exhausted.
+                        // Never reject only because verbose wording prevented
+                        // reliable name matching.
+                        $matchedevidence = $positionalscopeevidence;
                         // Clinical-return questions have their own repair below,
                         // which preserves the base formula and result. Only the
                         // abstract scope mode uses the generic local renderer.
@@ -11749,11 +11756,6 @@ PROMPT;
                         $scopeprompt = trim((string)($decodeditem['prompt'] ?? ''));
                         $scopespanishprompt = trim(
                             (string)($decodeditem['translations']['es']['prompt'] ?? '')
-                        );
-                    } else if ($scopehasoverlongchoice
-                            && !$twostageduiyaomodificationrequest) {
-                        throw new UnexpectedValueException(
-                            'Formula-versus-Duì-Yào choices must be concise assignments; move all reasoning into the explanation.'
                         );
                     }
                     if ($twostageduiyaomodificationrequest && is_array($matchedevidence)) {
@@ -12188,14 +12190,11 @@ PROMPT;
             $lastgenerationerror = $error;
             if ($formulavduiyaoscopeidea
                     && !$twostageduiyaomodificationrequest
-                    && preg_match(
-                        '/(?:outside\s+Appendix\s+[AC]|choices\s+must\s+be\s+concise\s+assignments)/iu',
-                        $error->getMessage()
-                    ) === 1) {
+                    && preg_match('/outside\s+Appendix\s+[AC]/iu', $error->getMessage()) === 1) {
                 // The evidence pool is already restricted to the official
                 // Appendix A/C rosters and has a concise local renderer. Do
                 // not spend two more provider calls repairing an invented
-                // name or verbose A-D formatting; continue with local build.
+                // name; continue with the deterministic local build.
                 break;
             }
         }
