@@ -3114,6 +3114,101 @@ if ($formuladistractorguidelinerepairids !== []) {
     });
     $revisionstore = block_myprogress_herbology_override_load();
 }
+$huoxiangzhengqialiasrepairid = 'CF-1439';
+$huoxiangzhengqialiasrepairversion = 'huo-xiang-zheng-qi-tang-alias-v1';
+$huoxiangzhengqialiasrepairneeded = false;
+foreach (['questions', 'customQuestions'] as $huoxiangrepaircollection) {
+    $huoxiangrepairrecord = $revisionstore[$huoxiangrepaircollection][$huoxiangzhengqialiasrepairid] ?? null;
+    if (is_array($huoxiangrepairrecord)
+            && (string)($huoxiangrepairrecord['huoXiangZhengQiAliasRepairVersion'] ?? '')
+                !== $huoxiangzhengqialiasrepairversion) {
+        $huoxiangzhengqialiasrepairneeded = true;
+        break;
+    }
+}
+if ($huoxiangzhengqialiasrepairneeded) {
+    block_myprogress_herbology_override_update(static function(array $store) use (
+        $huoxiangzhengqialiasrepairid,
+        $huoxiangzhengqialiasrepairversion
+    ): array {
+        $savedat = gmdate(DATE_ATOM);
+        $removeobsoletealiasnotice = static function(string $text): string {
+            $cleaned = preg_replace(
+                '/\s*(?:Note:\s*)?(?:Guideline status:\s*)?[\x{2018}\x{2019}\x{0027}"]?'
+                    . '(?:Huo\s+Xiang\s+)?Zheng\s+Qi\s+Tang[\x{2018}\x{2019}\x{0027}"]?'
+                    . '\s+(?:is|remains)\s+outside\s+the\s+current\s+NCBAHM\s+Appendix\s+A\/C\s+roster\b'
+                    . '[^.!?]*(?:[.!?]|$)/iu',
+                ' ',
+                $text
+            );
+            $cleaned = preg_replace(
+                '/\s*This status is disclosed for study and administrative review and does not make the item '
+                    . 'eligible for the active Board guideline\.\s*/iu',
+                ' ',
+                is_string($cleaned) ? $cleaned : $text
+            );
+            $cleaned = preg_replace(
+                '/\s*Estado del guideline:\s*(?:Huo\s+Xiang\s+)?Zheng\s+Qi\s+Tang\s+'
+                    . 'est[aá]\s+fuera\s+del\s+roster\s+vigente\s+de\s+los\s+Appendix\s+A\/C\s+de\s+NCBAHM\b'
+                    . '[^.!?]*(?:[.!?]|$)/iu',
+                ' ',
+                is_string($cleaned) ? $cleaned : $text
+            );
+            $cleaned = preg_replace('/\s{2,}/u', ' ', is_string($cleaned) ? $cleaned : $text);
+            return trim(is_string($cleaned) ? $cleaned : $text);
+        };
+        foreach (['questions', 'customQuestions'] as $collectionkey) {
+            $record = $store[$collectionkey][$huoxiangzhengqialiasrepairid] ?? null;
+            if (!is_array($record)) {
+                continue;
+            }
+            foreach (['original', 'draft', 'approved'] as $snapshotkey) {
+                if (!is_array($record[$snapshotkey] ?? null)) {
+                    continue;
+                }
+                $snapshot = block_myprogress_herbology_canonicalize_pinyin_case_in_question(
+                    $record[$snapshotkey]
+                );
+                $snapshot['explanation'] = $removeobsoletealiasnotice(
+                    (string)($snapshot['explanation'] ?? '')
+                );
+                if (is_array($snapshot['translations']['es'] ?? null)) {
+                    $snapshot['translations']['es']['explanation'] = $removeobsoletealiasnotice(
+                        (string)($snapshot['translations']['es']['explanation'] ?? '')
+                    );
+                }
+                $record[$snapshotkey] = $snapshot;
+            }
+            // These fields were produced by the obsolete outside-roster
+            // interpretation. Preserve them in a compact repair audit while
+            // the active record is reevaluated through the Appendix C alias.
+            $record['huoXiangZhengQiAliasRepairAudit'] = [
+                'guidelineValidation' => $record['guidelineValidation'] ?? null,
+                'guidelineOverride' => $record['guidelineOverride'] ?? null,
+                'lastAutomaticReviewFailure' => $record['lastAutomaticReviewFailure'] ?? null,
+                'reviewGuidelineViolations' => $record['reviewGuidelineViolations'] ?? null,
+                'repairedAt' => $savedat,
+            ];
+            unset(
+                $record['guidelineValidation'],
+                $record['guidelineOverride'],
+                $record['lastAutomaticReviewFailure'],
+                $record['reviewGuidelineViolations']
+            );
+            if ((string)($record['reviewDestination'] ?? '') === 'extra_guideline') {
+                $record['reviewDestination'] = 'board';
+            }
+            $record['huoXiangZhengQiAliasRepairVersion'] = $huoxiangzhengqialiasrepairversion;
+            $record['huoXiangZhengQiAliasRepairedAt'] = $savedat;
+            $record['savedAt'] = $savedat;
+            $record['savedByName'] = 'Appendix C formula-alias recovery';
+            $record['revisionNumber'] = (int)($record['revisionNumber'] ?? 0) + 1;
+            $store[$collectionkey][$huoxiangzhengqialiasrepairid] = $record;
+        }
+        return $store;
+    });
+    $revisionstore = block_myprogress_herbology_override_load();
+}
 $findcreatedquestionguidelineviolations = static function(array $question) use (
     $normalizeguidelinename,
     $guidelineherbnames,
@@ -13454,6 +13549,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         string $generated,
         array $sourcequestion,
         string $administratorproposal,
+        bool $administratordiscretionmode = false,
         bool $enforcefeedbackquality = true,
         array $preservedoutsiderosternames = [],
         bool $preservesourcequestiontext = false,
@@ -13473,6 +13569,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $stripdecorativeicons,
         $normalizecreatedquestionpinyin
     ): array {
+        // Text entered in the per-question instruction box activates
+        // administrator discretion. Keep only structural/source-integrity
+        // gates here; the administrator will make the final publication and
+        // guideline-warning decision from the returned visible draft.
+        if ($administratordiscretionmode) {
+            $enforcefeedbackquality = false;
+        }
         $generated = trim($generated);
         if (preg_match('/```(?:json)?\s*(\{.*\})\s*```/is', $generated, $matches)) {
             $generated = $matches[1];
@@ -13761,12 +13864,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         if ($correctlabel !== $sourcecorrectlabel) {
             throw new UnexpectedValueException('The AI draft did not preserve the required answer-key letter.');
         }
-        if ($hasprohibitednegativewording($prompt)) {
+        if (!$administratordiscretionmode && $hasprohibitednegativewording($prompt)) {
             throw new UnexpectedValueException(
                 'The AI draft used a prohibited negative stem instead of a positive question.'
             );
         }
-        if (preg_match('/\b(?:heat[ -]dampness|damp[ -]heat)\b/i', $prompt)) {
+        if (!$administratordiscretionmode
+                && preg_match('/\b(?:heat[ -]dampness|damp[ -]heat)\b/i', $prompt)) {
             throw new UnexpectedValueException(
                 'The stem names the Damp-Heat diagnosis instead of presenting observable findings.'
             );
@@ -13893,7 +13997,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $preservedoutsiderosternames,
             static fn(string $name): bool => stripos($visiblequestiontext, $name) !== false
         )) > 0;
-        if ($sourcevisibleguidelinenames !== []
+        if (!$administratordiscretionmode
+                && $sourcevisibleguidelinenames !== []
                 && array_intersect($sourcevisibleguidelinenames, $draftvisibleguidelinenames) === []) {
             throw new UnexpectedValueException(
                 'Automatic review removed every source-supported Appendix A/C name. Keep at least one exact visible '
@@ -13901,7 +14006,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                     . implode(', ', $sourcevisibleguidelinenames) . '.'
             );
         }
-        if ($visiblenomenclature['herbs'] === []
+        if (!$administratordiscretionmode
+                && $visiblenomenclature['herbs'] === []
                 && $visiblenomenclature['formulas'] === []
                 && !$hasvisibleoutsiderostername
                 && !$isclassicalstagedifferentiation) {
@@ -13968,7 +14074,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             '/\b(?:Tang|San|Wan|Dan|Yin|Gao|Pian)\b/u',
             (string)($sourcequestion['prompt'] ?? '')
         ) === 1;
-        if ($sourceasksformulamanifestations
+        if (!$administratordiscretionmode
+                && $sourceasksformulamanifestations
                 && $sourceformulabylabel === []
                 && $draftformulabylabel !== []) {
             throw new UnexpectedValueException(
@@ -14198,7 +14305,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $preservedoutsiderosternames,
             static fn(string $name): bool => stripos($spanishvisiblequestiontext, $name) !== false
         )) > 0;
-        if ($spanishnomenclature['herbs'] === []
+        if (!$administratordiscretionmode
+                && $spanishnomenclature['herbs'] === []
                 && $spanishnomenclature['formulas'] === []
                 && !$spanishhasoutsiderostername
                 && !$isclassicalstagedifferentiation) {
@@ -14223,7 +14331,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 true
             );
         }
-        if ($hasprohibitednegativewording($spanishprompt)) {
+        if (!$administratordiscretionmode && $hasprohibitednegativewording($spanishprompt)) {
             throw new UnexpectedValueException(
                 'The Spanish AI draft used a prohibited negative stem.'
             );
@@ -14384,10 +14492,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $contenttype = $sourcecontenttype;
         }
         $cognitivelevel = strtolower(trim((string)($decoded['cognitiveLevel'] ?? 'infer')));
-        if (!in_array($cognitivelevel, ['infer', 'analyze'], true)) {
-            $cognitivelevel = 'infer';
+        $allowedcognitivelevels = $administratordiscretionmode
+            ? ['recall', 'apply', 'application', 'infer', 'inference', 'analyze', 'analysis']
+            : ['infer', 'analyze'];
+        if (!in_array($cognitivelevel, $allowedcognitivelevels, true)) {
+            $cognitivelevel = $administratordiscretionmode ? 'apply' : 'infer';
         }
-        if (!$preservesourcequestiontext) {
+        $cognitivelevel = match ($cognitivelevel) {
+            'application' => 'apply',
+            'inference' => 'infer',
+            'analysis' => 'analyze',
+            default => $cognitivelevel,
+        };
+        if (!$preservesourcequestiontext && !$administratordiscretionmode) {
             $generatedstemchoiceviolations = array_values(array_unique(array_merge(
                 $findcreatedquestionguidelineviolations([
                     'prompt' => $prompt,
@@ -14469,9 +14586,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             'reviewSummary' => $reviewsummary,
             'contentType' => $contenttype,
             'cognitiveLevel' => $cognitivelevel,
-            'difficultyBand' => $cognitivelevel === 'analyze' ? 'analysis' : 'inference',
+            'difficultyBand' => match ($cognitivelevel) {
+                'recall' => 'foundation',
+                'apply' => 'application',
+                'analyze' => 'analysis',
+                default => 'inference',
+            },
         ];
-        if (!$preservesourcequestiontext) {
+        if (!$preservesourcequestiontext && !$administratordiscretionmode) {
             $draftguidelineviolations = $findcreatedquestionguidelineviolations($validateddraft);
             if ($draftguidelineviolations !== []) {
                 throw new UnexpectedValueException(
@@ -14879,6 +15001,7 @@ PROMPT;
             $manualinstructionhistory,
             array_keys($manualinstructionhistory)
         ));
+        $administratordiscretionmode = trim($administratorproposalforcompliance) !== '';
         $latestadministratorinstructionforcompliance = $autorepairguideline
             ? ''
             : $latestadministratorproposal;
@@ -15001,6 +15124,7 @@ PROMPT;
             'herbProfileEvidence' => $herbprofileevidence,
             'answerRepetition' => $answerrepetition,
             'administratorProposal' => $administratorproposal,
+            'administratorDiscretionMode' => $administratordiscretionmode,
             'administratorInstructionHistory' => $instructionhistory,
             'latestAdministratorInstruction' => $latestadministratorproposal,
             'recoveredEditorialInstruction' => $recoverededitorialinstruction,
@@ -15036,6 +15160,7 @@ PROMPT;
 You are a senior NCBAHM Chinese Herbology mock-exam item editor. Return one review draft as strict JSON only; do not use Markdown or commentary.
 
 Editorial rules:
+0ADMIN. When administratorDiscretionMode is true, the administrator's latest compatible instruction has priority over optional editorial style rules below. Return a usable visible draft after one pass. Preserve source-supported facts and the answer key, return exactly four unique A-D choices, complete English and Spanish, and never expose internal prompt data. Do not reject a draft merely because it remains recall-level, names a diagnosis, uses a negative frame requested by the administrator, retains source wording, lacks the preferred two-step template, or needs a guideline warning. The administrator will decide whether to publish normally, publish with warning, edit, or send it to Extra guideline.
 0. Read reviewDestination before editing. When it is "extra_guideline", this is an editorial-completion review for the independent Extra guideline bank, not a Board-publication review. Preserve every source-supported name in outsideRosterNamesToPreserve exactly in the visible stem or choices and do not replace, remove, or relabel it merely because it is absent from Appendix A or Appendix C. Complete the question, Spanish translation, two inference steps, and option-specific feedback normally. Do not claim that the result is Board-eligible.
 0A. When reviewDestination is "board" and guidelineViolationsToRepair is nonempty, this is an automatic roster repair. Use guidelineViolationsInStemOrChoices and guidelineViolationsInExplanation to repair the field where each problem actually occurs. Replace an invalid distractor only when it is present in the stem or choices, selecting a clinically plausible alternative only from allowedAppendixAHerbs or allowedAppendixCFormulas and copying its Pinyin exactly. When an invalid name appears only in the explanation, remove or rewrite that reference in both languages; do not change already roster-safe choices merely to demonstrate a replacement. Preserve the keyed answer letter, correct answer concept, tested objective and fixed domain. Rewrite the English and Spanish explanation so every Option A-D paragraph analyzes the final visible choice. Do not preserve an invalid name merely because it appeared in the source, and do not publish the result.
 1. Preserve the source question's tested fact, fixed domain, correct answer concept, and correct answer LETTER. Do not invent a new fact or change the keyed answer. The controlled repeated-answer transformation in rule 1B is the only exception to preserving the original answer concept; it still must preserve the keyed LETTER and use an explicit fact from sourceCardEvidence or herbProfileEvidence.
@@ -15138,7 +15263,8 @@ PROMPT;
                 $responsecontent = (string)($response->get_response_data()['generatedcontent'] ?? '');
                 $requiresdiversificationreview = (int)($answerrepetition['activeQuestionCount'] ?? 1) >= 3
                     && ($sourcecardevidence !== '' || $herbprofileevidence !== '');
-                $requiresmultistagereview = !$reviewforextraguideline
+                $requiresmultistagereview = !$administratordiscretionmode
+                    && !$reviewforextraguideline
                     && (trim($administratorproposal) !== ''
                         || $sourcefeedbackmissing
                         || $sourceprohibitedanswerchoice !== null
@@ -15149,6 +15275,7 @@ PROMPT;
                     $responsecontent,
                     $decodersourcequestion,
                     $administratorproposal,
+                    $administratordiscretionmode,
                     !$requiresmultistagereview,
                     $preservedoutsiderosternames,
                     $reviewforextraguideline,
@@ -15170,6 +15297,7 @@ PROMPT;
                         ),
                         $decodersourcequestion,
                         $administratorproposal,
+                        $administratordiscretionmode,
                         true,
                         $preservedoutsiderosternames,
                         $reviewforextraguideline,
@@ -15207,11 +15335,15 @@ PROMPT;
                             . 'translation, inference and A-D feedback checks. No administrator instruction was pending.';
                     }
                 } else {
-                    $compliancenote = $reviewforextraguideline
+                    $compliancenote = $administratordiscretionmode
+                        ? 'Administrator discretion mode accepted the visible draft after the local source-integrity, '
+                            . 'answer-key, four-choice and translation checks. Final publication remains an '
+                            . 'administrator decision.'
+                        : ($reviewforextraguideline
                         ? 'The focused Extra guideline review passed the local answer-key, outside-roster-name, '
                             . 'structure, translation, inference and option-feedback checks.'
                         : 'The automatic review passed the local answer-key, structure, translation, '
-                            . 'inference and feedback checks. No special administrator instruction was pending.';
+                            . 'inference and feedback checks. No special administrator instruction was pending.');
                 }
                 $generateddraft['instructionCompliance'] = [
                     'status' => 'verified',
@@ -19106,7 +19238,7 @@ echo $OUTPUT->header();
         </details>
         <?php endif; ?>
         <?php if (!$question['_excluded'] && $reviewfilter !== 'ai_drafts' && !$inlineapproval && !$iscustomdraft): ?>
-        <details class="question-bank__rewrite-again"><summary>Special instructions for this question (optional)</summary><form class="question-bank__proposal-box question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><span>What should the automatic reviewer emphasize?</span><textarea name="proposal" placeholder="Example: Use observable clinical findings instead of naming the diagnosis or tested action. Explain both inference steps in the feedback."><?php echo s($question['_proposal']['text'] ?? ''); ?></textarea><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><?php if ($cardreviewedforextraguideline || $cardprotectedtestedfactguidelineviolations !== []): ?><input type="hidden" name="reviewforextraguideline" value="1"><?php endif; ?><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $cardreviewedforextraguideline || $cardprotectedtestedfactguidelineviolations !== [] ? 'Review for Extra guideline' : 'Review with these instructions'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div><?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><small class="question-bank__proposal-saved">Previous instructions saved<?php if (!empty($question['_proposal']['savedByName'])): ?> · by <?php echo s((string)$question['_proposal']['savedByName']); ?><?php endif; ?><?php if (!empty($question['_proposal']['savedAt'])): ?> · <?php echo s(userdate(strtotime($question['_proposal']['savedAt']))); ?><?php endif; ?></small><?php endif; ?></form></details>
+        <details class="question-bank__rewrite-again"><summary>Special instructions for this question (optional)</summary><form class="question-bank__proposal-box question-bank__automatic-review-form" method="post" action="<?php echo $pageurl->out(false); ?>" data-question-id="<?php echo s($question['questionId']); ?>"><span>What should the automatic reviewer emphasize?</span><small><strong>Administrator discretion:</strong> text entered here overrides optional editorial templates. The system keeps only source integrity, a valid answer key, four unique choices and complete English/Spanish; you make the final publication decision.</small><textarea name="proposal" placeholder="Example: Preserve the source wording and improve only the explanation. Keep the current answer and formula names."><?php echo s($question['_proposal']['text'] ?? ''); ?></textarea><input type="hidden" name="formaction" value="rewritequestion"><input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>"><input type="hidden" name="reviewbatch" value="<?php echo s($cardbatchid); ?>"><input type="hidden" name="returnorigin" value="1"><?php if ($cardreviewedforextraguideline || $cardprotectedtestedfactguidelineviolations !== []): ?><input type="hidden" name="reviewforextraguideline" value="1"><?php endif; ?><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><div class="question-bank__editor-actions"><button class="question-bank__button question-bank__button--publish" type="submit" data-review-button<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $cardreviewedforextraguideline || $cardprotectedtestedfactguidelineviolations !== [] ? 'Review for Extra guideline' : 'Review with these instructions'; ?></button><span class="question-bank__action-status" data-review-status aria-live="polite"></span></div><?php if (($question['_proposal']['status'] ?? '') === 'pending_review'): ?><small class="question-bank__proposal-saved">Previous instructions saved<?php if (!empty($question['_proposal']['savedByName'])): ?> · by <?php echo s((string)$question['_proposal']['savedByName']); ?><?php endif; ?><?php if (!empty($question['_proposal']['savedAt'])): ?> · <?php echo s(userdate(strtotime($question['_proposal']['savedAt']))); ?><?php endif; ?></small><?php endif; ?></form></details>
         <?php endif; ?>
         </article><?php endforeach; ?></section>
     <?php endif; ?>
