@@ -11657,6 +11657,7 @@ PROMPT;
                             (array)($decodeditem['translations']['es']['options'] ?? [])
                         )
                     );
+                    $scopehasoverlongchoice = false;
                     foreach ($scopeoptiontexts as $scopeoptiontext) {
                         $scopeoptionwords = preg_split(
                             '/\s+/u',
@@ -11665,9 +11666,8 @@ PROMPT;
                             PREG_SPLIT_NO_EMPTY
                         ) ?: [];
                         if (count($scopeoptionwords) > 40) {
-                            throw new UnexpectedValueException(
-                                'Formula-versus-Duì-Yào choices must be concise assignments; move all reasoning into the explanation.'
-                            );
+                            $scopehasoverlongchoice = true;
+                            break;
                         }
                     }
                     $scopekeyedtext = '';
@@ -11707,6 +11707,40 @@ PROMPT;
                             $matchedevidence = $scopeevidence;
                             break;
                         }
+                    }
+                    if ($scopehasoverlongchoice
+                            && !$twostageduiyaomodificationrequest
+                            && is_array($matchedevidence)) {
+                        // The provider preserved the verified relationship but
+                        // wrote explanatory paragraphs inside A-D. Replace the
+                        // entire item with the local concise version now; do
+                        // not spend more provider calls asking for formatting.
+                        $decodeditem = $decodecustomdraft(json_encode(
+                            $buildformulavduiyaoscopefallback($matchedevidence),
+                            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
+                        ));
+                        $decodeditem = $normalizecreatedquestionpinyin($decodeditem);
+                        $compactscopeviolations = $findcreatedquestionguidelineviolations($decodeditem);
+                        if ($compactscopeviolations !== []) {
+                            throw new UnexpectedValueException(
+                                'The locally compacted formula-versus-Dui-Yao item contains a name outside the current guideline: '
+                                    . implode(' | ', $compactscopeviolations)
+                            );
+                        }
+                        $decodedbatch[$decodedindex] = $decodeditem;
+                        $generatedcontent = json_encode(
+                            $decodeditem,
+                            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                        );
+                        $generatedcontentlower = $normalizescopetext((string)$generatedcontent);
+                        $scopeprompt = trim((string)($decodeditem['prompt'] ?? ''));
+                        $scopespanishprompt = trim(
+                            (string)($decodeditem['translations']['es']['prompt'] ?? '')
+                        );
+                    } else if ($scopehasoverlongchoice) {
+                        throw new UnexpectedValueException(
+                            'Formula-versus-Duì-Yào choices must be concise assignments; move all reasoning into the explanation.'
+                        );
                     }
                     if ($twostageduiyaomodificationrequest && is_array($matchedevidence)) {
                         $autorepairbridge = is_array($matchedevidence['formulaBridge'] ?? null)
@@ -12140,11 +12174,14 @@ PROMPT;
             $lastgenerationerror = $error;
             if ($formulavduiyaoscopeidea
                     && !$twostageduiyaomodificationrequest
-                    && preg_match('/outside\s+Appendix\s+[AC]/iu', $error->getMessage()) === 1) {
+                    && preg_match(
+                        '/(?:outside\s+Appendix\s+[AC]|choices\s+must\s+be\s+concise\s+assignments)/iu',
+                        $error->getMessage()
+                    ) === 1) {
                 // The evidence pool is already restricted to the official
-                // Appendix A/C rosters. Do not spend two more provider calls
-                // asking the model to repair an invented or shortened name;
-                // continue immediately with the deterministic evidence build.
+                // Appendix A/C rosters and has a concise local renderer. Do
+                // not spend two more provider calls repairing an invented
+                // name or verbose A-D formatting; continue with local build.
                 break;
             }
         }
