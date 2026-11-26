@@ -595,6 +595,70 @@ $exam5canonicalrepairs = [
         'cognitiveLevel' => 'apply',
         'difficultyBand' => 'application',
     ],
+    'CF-0057' => [
+        'prompt' => 'Two patients have chronic diarrhea. The first has fatigue, poor appetite, weak muscles, loose stools that may contain phlegm, and symptoms aggravated by dietary irregularity or exhaustion. The second has watery diarrhea with undigested food, coldness, fatigue, and diarrhea that occurs especially before dawn. Which formula assignment is most appropriate?',
+        'options' => [
+            [
+                'label' => 'A',
+                'text' => 'Shen Ling Bai Zhu San (Ginseng, Poria, and White Atractylodes Powder) for the first patient and also for the second patient.',
+            ],
+            [
+                'label' => 'B',
+                'text' => 'Si Shen Wan (Four-Miracle Pill) for the first patient and Shen Ling Bai Zhu San (Ginseng, Poria, and White Atractylodes Powder) for the second patient.',
+            ],
+            [
+                'label' => 'C',
+                'text' => 'Shen Ling Bai Zhu San (Ginseng, Poria, and White Atractylodes Powder) for the first patient and Si Shen Wan (Four-Miracle Pill) for the second patient.',
+            ],
+            [
+                'label' => 'D',
+                'text' => 'Si Shen Wan (Four-Miracle Pill) for the first patient and also for the second patient.',
+            ],
+        ],
+        'correctLabel' => 'C',
+        'explanation' => 'Inference step 1: The first patient has Spleen Qi deficiency with Dampness, shown by fatigue, poor appetite, weak muscles, loose stools with phlegm, and worsening after dietary irregularity or exhaustion. Shen Ling Bai Zhu San strengthens Spleen Qi and leaches Dampness. Inference step 2: The second patient has Spleen and Kidney Yang deficiency with daybreak diarrhea, undigested food, coldness, and fatigue. Si Shen Wan warms the Kidneys and Spleen and binds the Intestines. Option A: Incorrect; Shen Ling Bai Zhu San does not address the second patient\'s daybreak diarrhea from Yang deficiency. Option B: Incorrect; it reverses the appropriate assignments. Option C: Correct; it assigns each formula to its characteristic pattern. Option D: Incorrect; Si Shen Wan is too warming and astringent for the first patient\'s Spleen Qi deficiency with Dampness.',
+        'translations' => [
+            'es' => [
+                'prompt' => 'Dos pacientes presentan diarrea crónica. El primero tiene fatiga, poco apetito, músculos débiles, heces blandas que pueden contener flema y síntomas que empeoran con irregularidades dietéticas o agotamiento. El segundo tiene diarrea acuosa con alimentos no digeridos, sensación de frío, fatiga y episodios que aparecen especialmente antes del amanecer. ¿Qué asignación de fórmulas es la más apropiada?',
+                'options' => [
+                    [
+                        'label' => 'A',
+                        'text' => 'Shen Ling Bai Zhu San (Polvo de Ginseng, Poria y Atractylodes Blanco) para el primer paciente y también para el segundo.',
+                    ],
+                    [
+                        'label' => 'B',
+                        'text' => 'Si Shen Wan (Píldora de los Cuatro Milagros) para el primer paciente y Shen Ling Bai Zhu San (Polvo de Ginseng, Poria y Atractylodes Blanco) para el segundo.',
+                    ],
+                    [
+                        'label' => 'C',
+                        'text' => 'Shen Ling Bai Zhu San (Polvo de Ginseng, Poria y Atractylodes Blanco) para el primer paciente y Si Shen Wan (Píldora de los Cuatro Milagros) para el segundo.',
+                    ],
+                    [
+                        'label' => 'D',
+                        'text' => 'Si Shen Wan (Píldora de los Cuatro Milagros) para el primer paciente y también para el segundo.',
+                    ],
+                ],
+                'explanation' => 'Paso de inferencia 1: El primer paciente presenta deficiencia del Qi de Bazo con Humedad, indicada por fatiga, poco apetito, músculos débiles, heces blandas con flema y empeoramiento tras irregularidades dietéticas o agotamiento. Shen Ling Bai Zhu San fortalece el Qi de Bazo y filtra la Humedad. Paso de inferencia 2: El segundo paciente presenta deficiencia del Yang de Bazo y Riñón con diarrea al amanecer, alimentos no digeridos, frío y fatiga. Si Shen Wan calienta los Riñones y el Bazo y contiene los Intestinos. Opción A: Incorrecta; Shen Ling Bai Zhu San no trata la diarrea al amanecer por deficiencia de Yang del segundo paciente. Opción B: Incorrecta; invierte las asignaciones apropiadas. Opción C: Correcta; asigna cada fórmula a su patrón característico. Opción D: Incorrecta; Si Shen Wan es demasiado caliente y astringente para la deficiencia del Qi de Bazo con Humedad del primer paciente.',
+            ],
+        ],
+        'contentType' => 'comparison',
+        'cognitiveLevel' => 'analyze',
+        'difficultyBand' => 'analysis',
+        'nomenclature' => [
+            'herbs' => [],
+            'formulas' => [
+                ['pinyin' => 'Shen Ling Bai Zhu San', 'englishName' => 'Ginseng, Poria, and White Atractylodes Powder'],
+                ['pinyin' => 'Si Shen Wan', 'englishName' => 'Four-Miracle Pill'],
+            ],
+            'feedback' => [
+                'herbs' => [],
+                'formulas' => [
+                    ['pinyin' => 'Shen Ling Bai Zhu San', 'englishName' => 'Ginseng, Poria, and White Atractylodes Powder'],
+                    ['pinyin' => 'Si Shen Wan', 'englishName' => 'Four-Miracle Pill'],
+                ],
+            ],
+        ],
+    ],
     'CF-0290' => [
         'prompt' => 'Which statement most accurately distinguishes Shen Qi Wan (Kidney Qi Pill) from Zhen Wu Tang (True Warrior Decoction) when Kidney Yang deficiency disrupts fluid metabolism?',
         'options' => [
@@ -2081,7 +2145,7 @@ if (is_array($fuzirouguirecord)
     $revisionstore = block_myprogress_herbology_override_load();
 }
 $reviewedcanonicalids = [
-    'CF-0127', 'CF-0213', 'CF-0217', 'CF-0227', 'CF-0230', 'CF-0280', 'CF-0305', 'CF-1582',
+    'CF-0057', 'CF-0127', 'CF-0213', 'CF-0217', 'CF-0227', 'CF-0230', 'CF-0280', 'CF-0305', 'CF-1582',
     'SCORM-FD-5917E7491258',
 ];
 $reviewedcanonicalquestions = [];
