@@ -15981,6 +15981,19 @@ $PAGE->requires->js_init_code(<<<'JS'
     }
     insertButton.addEventListener('click', function() {
         var value = nameInput.value.trim();
+        var normalizedValue = value.toLocaleLowerCase().replace(/\s+/g, ' ').trim();
+        var officialOptions = document.querySelectorAll('#question-bank-scientific-names option');
+        Array.prototype.some.call(officialOptions, function(option) {
+            var candidate = (option.value || '').trim();
+            var candidatePinyin = candidate.replace(/\s*\([^()]+\)\s*$/, '').trim();
+            if (candidate.toLocaleLowerCase().replace(/\s+/g, ' ').trim() === normalizedValue
+                    || candidatePinyin.toLocaleLowerCase().replace(/\s+/g, ' ').trim() === normalizedValue) {
+                value = candidate;
+                nameInput.value = candidate;
+                return true;
+            }
+            return false;
+        });
         var target = editor.querySelector('[name="' + targetSelect.value + '"]');
         if (!value || !target || typeof target.setRangeText !== 'function') {
             if (status) {
@@ -17005,11 +17018,11 @@ echo $OUTPUT->header();
             <section class="question-bank__editor-panel question-bank__editor-panel--editing"><h4>Current version</h4>
                 <p class="question-bank__panel-intro">This is the only version shown. Edit it only when necessary, then save or approve it.</p>
                 <h5>English (required)</h5>
-                <div class="question-bank__nomenclature-helper" data-scientific-name-helper data-missing-message="<?php echo $displaylang === 'es' ? 'Escriba o seleccione primero un nombre.' : 'Enter or select a name first.'; ?>" data-added-message="<?php echo $displaylang === 'es' ? 'Nombre insertado. Guarde los cambios para conservarlo.' : 'Name inserted. Save the changes to keep it.'; ?>">
+                <div class="question-bank__nomenclature-helper" data-scientific-name-helper data-missing-message="<?php echo $displaylang === 'es' ? 'Escriba o seleccione primero un nombre.' : 'Enter or select a name first.'; ?>" data-added-message="<?php echo $displaylang === 'es' ? 'Nombre completo insertado. Guarde los cambios para conservarlo.' : 'Complete name inserted. Save the changes to keep it.'; ?>">
                     <h5><?php echo $displaylang === 'es' ? 'Insertar nombre científico o farmacéutico' : 'Insert scientific or pharmaceutical name'; ?></h5>
                     <p><?php echo $displaylang === 'es'
-                        ? 'Puede seleccionar el formato oficial Pinyin (latín farmacéutico) del Appendix A o escribir libremente otro nombre. Al guardar, las hierbas y fórmulas reconocidas se completan automáticamente como Pinyin (latín) y Pinyin (nombre inglés), respectivamente.'
-                        : 'Select the official Appendix A format Pinyin (pharmaceutical Latin), or freely type another name. When saved, recognized herbs and formulas are automatically completed as Pinyin (Latin) and Pinyin (English name), respectively.'; ?></p>
+                        ? 'Seleccione o escriba el Pinyin de una hierba o fórmula reconocida. Al pulsar Insertar nombre se completará inmediatamente como Pinyin (latín farmacéutico) o Pinyin (nombre inglés). También puede escribir libremente otro nombre.'
+                        : 'Select or type the Pinyin of a recognized herb or formula. Insert name immediately completes it as Pinyin (pharmaceutical Latin) or Pinyin (English name). You may also freely type another name.'; ?></p>
                     <label><span><?php echo $displaylang === 'es' ? 'Nombre que desea insertar' : 'Name to insert'; ?></span><input type="text" list="question-bank-scientific-names" data-scientific-name-value placeholder="<?php echo $displaylang === 'es' ? 'Ej.: Huang Qi (Astragali Radix)' : 'Example: Huang Qi (Astragali Radix)'; ?>"></label>
                     <datalist id="question-bank-scientific-names">
                         <?php foreach ((array)$guidelineherbroster['herbs'] as $editorherbrecord):
@@ -17019,6 +17032,20 @@ echo $OUTPUT->header();
                                 continue;
                             }
                         ?><option value="<?php echo s($editorherbname . ' (' . $editorherblatin . ')'); ?>"></option><?php endforeach; ?>
+                        <?php foreach (block_myprogress_herbology_supplemental_display_roster() as $editorsupplementalrecord):
+                            $editorsupplementalname = trim((string)($editorsupplementalrecord['name'] ?? ''));
+                            $editorsupplementallatin = trim((string)($editorsupplementalrecord['latin'] ?? ''));
+                            if ($editorsupplementalname === '' || $editorsupplementallatin === '') {
+                                continue;
+                            }
+                        ?><option value="<?php echo s($editorsupplementalname . ' (' . $editorsupplementallatin . ')'); ?>"></option><?php endforeach; ?>
+                        <?php foreach ((array)$guidelineformularoster['formulas'] as $editorformularecord):
+                            $editorformulaname = trim((string)($editorformularecord['name'] ?? ''));
+                            $editorformulaenglish = trim((string)($editorformularecord['englishName'] ?? ''));
+                            if ($editorformulaname === '' || $editorformulaenglish === '') {
+                                continue;
+                            }
+                        ?><option value="<?php echo s($editorformulaname . ' (' . $editorformulaenglish . ')'); ?>"></option><?php endforeach; ?>
                     </datalist>
                     <label><span><?php echo $displaylang === 'es' ? 'Insertar en' : 'Insert into'; ?></span><select data-scientific-name-target><option value="prompt"><?php echo $displaylang === 'es' ? 'Pregunta' : 'Question'; ?></option><?php foreach (['A', 'B', 'C', 'D'] as $editorhelperlabel): ?><option value="option<?php echo strtolower($editorhelperlabel); ?>"><?php echo $displaylang === 'es' ? 'Respuesta ' : 'Answer '; ?><?php echo $editorhelperlabel; ?></option><?php endforeach; ?><option value="explanation" selected><?php echo $displaylang === 'es' ? 'Feedback / explicación' : 'Feedback / explanation'; ?></option></select></label>
                     <button class="question-bank__button question-bank__button--similar" type="button" data-insert-scientific-name><?php echo $displaylang === 'es' ? 'Insertar nombre' : 'Insert name'; ?></button>

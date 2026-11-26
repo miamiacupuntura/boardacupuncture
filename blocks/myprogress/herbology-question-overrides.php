@@ -180,6 +180,18 @@ function block_myprogress_herbology_obsolete_substance_roster(): array {
 }
 
 /**
+ * Source-supported display names that are useful in editorial material but
+ * are not promoted into the active Appendix A roster.
+ */
+function block_myprogress_herbology_supplemental_display_roster(): array {
+    return [
+        ['name' => 'Nan Gua Zi', 'latin' => 'Cucurbitae moschatae Semen'],
+        ['name' => 'Da Suan', 'latin' => 'Allii sativi Bulbus'],
+        ['name' => 'Hu Po', 'latin' => 'Succinum'],
+    ];
+}
+
+/**
  * Return the official Appendix A/C Pinyin display names, the recognized
  * obsolete safety names, and one reusable case-insensitive matcher. The
  * matcher is built once per request because it is applied to thousands of
@@ -314,10 +326,7 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
     // promoted into Appendix A eligibility.  Registering their display names
     // here only lets legacy SCORM choices use the same Pinyin + pharmaceutical
     // Latin presentation as current-roster choices.
-    foreach ([
-        ['name' => 'Nan Gua Zi', 'latin' => 'Cucurbitae moschatae Semen'],
-        ['name' => 'Da Suan', 'latin' => 'Allii sativi Bulbus'],
-    ] as $legacyteachingherb) {
+    foreach (block_myprogress_herbology_supplemental_display_roster() as $legacyteachingherb) {
         $addherbdisplay(
             (string)$legacyteachingherb['name'],
             (string)$legacyteachingherb['latin']
