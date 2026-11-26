@@ -18108,6 +18108,17 @@ echo $OUTPUT->header();
             && ($question['_ready'] || $questioncanpublishdirectlytoexam)
             && ($cardguidelineverified || $cardguidelineoverrideactive)
             && !$questionusedinpriorexam;
+        $exammanagementwarningpublishshown = $examquestionmanagementview
+            && is_array($questionactionexamproject)
+            && !$inlineapproval
+            && !$question['_excluded']
+            && !$iscustomdraft
+            && !$cardguidelineverified
+            && $prohibitedanswerchoice === null
+            && !$prohibitednegativewording
+            && !$visibleherbplacementmissing
+            && (($question['_ready'] && in_array($revisionstatus, ['', 'original'], true))
+                || in_array($revisionstatus, ['draft', 'pending_reclassification'], true));
         $standardexampublishshown = !$examquestionmanagementview
             && is_array($questionactionexamproject)
             && $usagefilter !== 'exam_project_pending'
@@ -18145,6 +18156,7 @@ echo $OUTPUT->header();
             || $inlineapproval
             || $revisionstatus === 'extra_guideline'
             || $exammanagementpublishshown
+            || $exammanagementwarningpublishshown
             || $standardexampublishshown
             || ($isapprovedreservecandidate
                 && ($cardguidelineverified || $cardguidelineoverrideactive))
@@ -18278,6 +18290,7 @@ echo $OUTPUT->header();
             <?php endif; ?>
             <?php if ($examquestionmanagementview): ?>
             <?php if (!in_array($revisionstatus, ['study_archive', 'extra_guideline', 'deleted'], true)): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar' : 'Edit'; ?></a><?php endif; ?>
+            <?php if ($exammanagementwarningpublishshown): ?><a class="question-bank__button question-bank__button--approve question-bank__warning-publish-link" href="<?php echo $warningpublishurl->out(false); ?>"><?php echo ($displaylang === 'es' ? 'Publicar ahora con advertencia' : 'Publish now with warning') . ' · ' . s((string)$questionactionexamproject['name']); ?></a><?php endif; ?>
             <?php if (is_array($questionactionexamproject) && !$questioninexamproject && !$inlineapproval && !$question['_excluded'] && ($question['_ready'] || $questioncanpublishdirectlytoexam) && ($cardguidelineverified || $cardguidelineoverrideactive) && !$questionusedinpriorexam): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($questionactionexamprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="add"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $displaylang === 'es' ? 'Agregar' : 'Add'; ?></button></form><?php endif; ?>
             <?php if (is_array($currentexamproject) && (string)($currentexamproject['status'] ?? 'draft') !== 'published' && ($questioninexamproject || isset($examprojectpositions[(string)$question['questionId']]))): ?>
             <form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
