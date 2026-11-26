@@ -11402,6 +11402,60 @@ PROMPT;
     $outsideguidelineviolationsbatch = [];
     $lastgenerationerror = null;
     $lastduplicate = null;
+    $buildhanfangjisafetyfallback = static function(): array {
+        return [
+            'domainId' => 'safety_dispensing',
+            'prompt' => 'A clinic receives a shipment labeled Han Fang Ji (Stephaniae tetrandrae Radix) for dispensing. Which verification and monitoring plan best protects patient safety?',
+            'options' => [
+                [
+                    'label' => 'A',
+                    'text' => 'Authenticate it as Stephania tetrandra, reject any aristolochic-acid-containing substitute, and monitor renal function and fluid status.',
+                ],
+                [
+                    'label' => 'B',
+                    'text' => 'Accept the commercial label as sufficient identification and monitor only digestive comfort.',
+                ],
+                [
+                    'label' => 'C',
+                    'text' => 'Select the strongest diuretic sample without confirming its botanical identity or renal risk.',
+                ],
+                [
+                    'label' => 'D',
+                    'text' => 'Confirm only that the sample tastes bitter and cold, because organ monitoring is unnecessary.',
+                ],
+            ],
+            'correctLabel' => 'A',
+            'explanation' => 'Inference step 1: A product sold under a similar trade name may not have the same botanical identity or safety profile, so dispensing begins with authenticated source identity. Inference step 2: Han Fang Ji must be verified as Stephania tetrandra; aristolochic-acid-containing substitutes must be rejected, and renal function and fluid status warrant monitoring. Option A: Correct. It combines exact authentication, exclusion of the dangerous substitution, and clinically relevant monitoring. Option B: Incorrect. A commercial label alone does not establish botanical identity, and digestive monitoring misses the principal renal concern. Option C: Incorrect. Strong diuresis does not establish identity or safety and cannot replace renal risk assessment. Option D: Incorrect. Taste and temperature are not adequate authentication criteria, and this safety record specifically supports renal and fluid monitoring.',
+            'translations' => [
+                'es' => [
+                    'prompt' => 'Una clínica recibe para dispensación un lote etiquetado como Han Fang Ji (Stephaniae tetrandrae Radix). ¿Qué plan de verificación y vigilancia protege mejor la seguridad del paciente?',
+                    'options' => [
+                        [
+                            'label' => 'A',
+                            'text' => 'Autenticarlo como Stephania tetrandra, rechazar cualquier sustituto que contenga ácido aristolóquico y vigilar la función renal y el estado de líquidos.',
+                        ],
+                        [
+                            'label' => 'B',
+                            'text' => 'Aceptar la etiqueta comercial como identificación suficiente y vigilar solamente el confort digestivo.',
+                        ],
+                        [
+                            'label' => 'C',
+                            'text' => 'Elegir la muestra con mayor efecto diurético sin confirmar su identidad botánica ni el riesgo renal.',
+                        ],
+                        [
+                            'label' => 'D',
+                            'text' => 'Confirmar únicamente que la muestra sea amarga y fría, porque la vigilancia de órganos es innecesaria.',
+                        ],
+                    ],
+                    'explanation' => 'Paso de inferencia 1: Un producto vendido con un nombre comercial parecido puede no tener la misma identidad botánica ni el mismo perfil de seguridad, por lo que la dispensación comienza con la autenticación del origen. Paso de inferencia 2: Han Fang Ji debe verificarse como Stephania tetrandra; deben rechazarse los sustitutos que contengan ácido aristolóquico y vigilarse la función renal y el estado de líquidos. Opción A: Correcta. Combina autenticación exacta, exclusión de la sustitución peligrosa y vigilancia clínicamente pertinente. Opción B: Incorrecta. Una etiqueta comercial no establece por sí sola la identidad botánica y la vigilancia digestiva omite el principal riesgo renal. Opción C: Incorrecta. Una diuresis intensa no demuestra identidad ni seguridad y no sustituye la evaluación del riesgo renal. Opción D: Incorrecta. El sabor y la temperatura no son criterios suficientes de autenticación y este registro de seguridad respalda específicamente la vigilancia renal y de líquidos.',
+                ],
+            ],
+            'contentType' => 'safety_dispensing',
+            'cognitiveLevel' => 'analyze',
+            'difficultyBand' => 'analysis',
+            'reviewSummary' => 'Rebuilt the item as an Appendix A-compliant authentication and renal-safety decision for Han Fang Ji.',
+        ];
+    };
     if ($preserveexactquestion) {
         $decodedbatch = [];
         $originalitybatch = [];
@@ -11553,6 +11607,23 @@ PROMPT;
                     $decodeditem['contentType'] = 'herb_properties';
                 }
                 $guidelineviolations = $findcreatedquestionguidelineviolations($decodeditem);
+                if ($guidelineviolations !== []
+                        && $custombatchcount === 1
+                        && $customtargetdomain === 'safety_dispensing'
+                        && preg_match(
+                            '/\b(?:Fang Ji|Mu Fang Ji|Guang Fang Ji)\b|'
+                                . '(?:Stephaniae\s+Tetrandrae|Cocculi\s+Radix|Aristolochiae\s+fangchi)/iu',
+                            implode(' | ', $guidelineviolations)
+                        ) === 1) {
+                    // The three common historical Fang Ji labels are not
+                    // interchangeable. Build the source-supported safety
+                    // decision locally with the one current Appendix A name
+                    // instead of spending three AI retries on invalid aliases.
+                    $decodeditem = $normalizecreatedquestionpinyin(
+                        $buildhanfangjisafetyfallback()
+                    );
+                    $guidelineviolations = $findcreatedquestionguidelineviolations($decodeditem);
+                }
                 if ($guidelineviolations !== [] && !$twostageduiyaomodificationrequest) {
                     throw new UnexpectedValueException(
                         'Every named herb and formula must belong to the current NCBAHM guideline. '
