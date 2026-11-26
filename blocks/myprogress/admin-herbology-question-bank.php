@@ -743,6 +743,32 @@ $exam5canonicalrepairs = [
             ],
         ],
     ],
+    'SCORM-SA-839A5657D57F' => [
+        'prompt' => 'Which mineral topical agent can irritate the skin and lungs because of its alum toxicity?',
+        'options' => [
+            ['label' => 'A', 'text' => 'Ming Fan (Alumen)'],
+            ['label' => 'B', 'text' => 'Shi Gao (Gypsum fibrosum)'],
+            ['label' => 'C', 'text' => 'Long Gu (Fossilia Ossis Mastodi)'],
+            ['label' => 'D', 'text' => 'Hua Shi (Talcum)'],
+        ],
+        'correctLabel' => 'A',
+        'explanation' => 'Inference step 1: The question asks for the mineral whose alum composition accounts for caustic irritation of skin and respiratory tissue with unsafe topical handling or inhalation. Inference step 2: Ming Fan (Alumen), also called Bai Fan in some sources, is alum; those two names must never appear as separate answer choices. Option A: Correct. Ming Fan is the alum substance identified by the source-specific toxicity. Option B: Incorrect. Shi Gao (Gypsum fibrosum) is gypsum and is not alum. Option C: Incorrect. Long Gu (Fossilia Ossis Mastodi) is fossilized bone and does not have alum identity or this source-specific caustic profile. Option D: Incorrect. Hua Shi (Talcum) is talc; safe powder handling is still required, but it is chemically distinct from alum and is not the substance identified by this item.',
+        'translations' => [
+            'es' => [
+                'prompt' => '¿Qué agente mineral de uso tópico puede irritar la piel y los pulmones debido a la toxicidad propia del alumbre?',
+                'options' => [
+                    ['label' => 'A', 'text' => 'Ming Fan (Alumen)'],
+                    ['label' => 'B', 'text' => 'Shi Gao (Gypsum fibrosum)'],
+                    ['label' => 'C', 'text' => 'Long Gu (Fossilia Ossis Mastodi)'],
+                    ['label' => 'D', 'text' => 'Hua Shi (Talcum)'],
+                ],
+                'explanation' => 'Paso de inferencia 1: La pregunta busca el mineral cuya composición de alumbre explica la irritación cáustica de la piel y del tejido respiratorio cuando se manipula tópicamente de forma insegura o se inhala. Paso de inferencia 2: Ming Fan (Alumen), también llamado Bai Fan en algunas fuentes, es alumbre; esos dos nombres nunca deben aparecer como opciones de respuesta separadas. Opción A: Correcta. Ming Fan es la sustancia de alumbre identificada por la toxicidad específica de la fuente. Opción B: Incorrecta. Shi Gao (Gypsum fibrosum) es yeso y no es alumbre. Opción C: Incorrecta. Long Gu (Fossilia Ossis Mastodi) es hueso fosilizado y no comparte la identidad ni el perfil cáustico específico del alumbre. Opción D: Incorrecta. Hua Shi (Talcum) es talco; aun requiere manipulación segura del polvo, pero es químicamente distinto del alumbre y no es la sustancia identificada por esta pregunta.',
+            ],
+        ],
+        'contentType' => 'safety_dispensing',
+        'cognitiveLevel' => 'infer',
+        'difficultyBand' => 'inference',
+    ],
     'CF-0290' => [
         'prompt' => 'Which statement most accurately distinguishes Shen Qi Wan (Kidney Qi Pill) from Zhen Wu Tang (True Warrior Decoction) when Kidney Yang deficiency disrupts fluid metabolism?',
         'options' => [
@@ -2263,6 +2289,7 @@ if (is_array($fuzirouguirecord)
 $reviewedcanonicalids = [
     'CF-0057', 'CF-0127', 'CF-0213', 'CF-0217', 'CF-0227', 'CF-0230', 'CF-0280', 'CF-0305', 'CF-1582',
     'SCORM-FD-5917E7491258', 'SCORM-SA-E950B91B9650', 'SCORM-SA-0B6F0EB1C671',
+    'SCORM-SA-839A5657D57F',
 ];
 $reviewedcanonicalquestions = [];
 foreach (($bank['domains'] ?? []) as $questions) {
@@ -2326,9 +2353,20 @@ foreach ($reviewedcanonicalquestions as $questionid => $canonicalquestion) {
                     $storedsnapshot['options'] ?? [],
                     JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
                 ), 'Crinis Carbonisatus') === false);
+        $duplicatealumaliases = $questionid === 'SCORM-SA-839A5657D57F'
+            && is_array($storedsnapshot)
+            && stripos((string)json_encode(
+                $storedsnapshot['options'] ?? [],
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            ), 'Ming Fan') !== false
+            && stripos((string)json_encode(
+                $storedsnapshot['options'] ?? [],
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            ), 'Bai Fan') !== false;
         if ($reviewedsnapshotneedsrepair($storedsnapshot)
                 || $missingrequiredformula
-                || $leakedinternalfeedback) {
+                || $leakedinternalfeedback
+                || $duplicatealumaliases) {
             $repairkeys[] = $snapshotkey;
         }
     }
@@ -2849,6 +2887,65 @@ $resolveguidelineherbname = static function(string $name) use (
         return (string)$match[1];
     }
     return $normalizedherb;
+};
+$equivalentansweraliases = [
+    // Alum is called both Ming Fan and Bai Fan in imported teaching sources.
+    // They are synonyms, not two independent answer choices.
+    'ming fan' => 'alumen',
+    'bai fan' => 'alumen',
+];
+$findequivalentanswerchoices = static function(array $options) use (
+    $normalizeguidelinename,
+    $equivalentansweraliases,
+    $guidelineherbaliases,
+    $guidelineformulaaliases
+): ?array {
+    $signatures = [];
+    foreach ($options as $option) {
+        if (!is_array($option)) {
+            continue;
+        }
+        $label = strtoupper(trim((string)($option['label'] ?? '')));
+        $text = trim((string)($option['text'] ?? ''));
+        if (!in_array($label, ['A', 'B', 'C', 'D'], true) || $text === '') {
+            continue;
+        }
+        // Only treat concise identity choices as aliases. Full clinical
+        // statements may legitimately repeat a formula while contrasting its
+        // actions and must not be collapsed by this check.
+        if (preg_match(
+            '/^\s*([\p{L}\p{M}\x{2019}\x{0027}-]+(?:\s+[\p{L}\p{M}\x{2019}\x{0027}-]+){0,7})'
+                . '(?:\s*\(([^()]{2,100})\))?\s*[.!]?\s*$/u',
+            $text,
+            $match
+        ) !== 1) {
+            continue;
+        }
+        $displayname = trim((string)$match[1]);
+        $normalizedname = $normalizeguidelinename($displayname);
+        $signature = $equivalentansweraliases[$normalizedname]
+            ?? $guidelineherbaliases[$normalizedname]
+            ?? $guidelineformulaaliases[$normalizedname]
+            ?? $normalizedname;
+        $parenthetical = $normalizeguidelinename((string)($match[2] ?? ''));
+        if ($parenthetical !== '' && !isset($equivalentansweraliases[$normalizedname])) {
+            $signature = $parenthetical;
+        }
+        if ($signature === '') {
+            continue;
+        }
+        if (isset($signatures[$signature])) {
+            return [
+                'firstLabel' => (string)$signatures[$signature]['label'],
+                'secondLabel' => $label,
+                'firstText' => (string)$signatures[$signature]['text'],
+                'secondText' => $text,
+                'canonical' => $signature,
+            ];
+        }
+        $signatures[$signature] = ['label' => $label, 'text' => $text];
+    }
+    return null;
 };
 $formuladistractorguidelinerepairs = [
     'ADMIN-HB-20261121-175513-4D36' => [
@@ -5005,6 +5102,15 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
             || trim((string)($snapshot['explanation'] ?? '')) === '') {
         throw new invalid_parameter_exception('This question is incomplete and cannot be published directly.');
     }
+    $equivalentanswerchoices = $findequivalentanswerchoices((array)$snapshot['options']);
+    if (is_array($equivalentanswerchoices)) {
+        throw new invalid_parameter_exception(
+            'This question cannot be published because options '
+                . (string)$equivalentanswerchoices['firstLabel'] . ' and '
+                . (string)$equivalentanswerchoices['secondLabel']
+                . ' are equivalent names for the same substance. Replace one with a distinct distractor.'
+        );
+    }
     $prohibitedanswerchoice = $findprohibitedanswerchoice((array)$snapshot['options']);
     if ($prohibitedanswerchoice === null) {
         $prohibitedanswerchoice = $findprohibitedanswerchoice(
@@ -5373,6 +5479,17 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
         $redirectapprovalerror(
             'This question cannot be approved until the combined answer choice “'
                 . $prohibitedanswerchoice . '” is replaced with one specific distractor.'
+        );
+    }
+    $equivalentanswerchoices = is_array($approvaldraft)
+        ? $findequivalentanswerchoices((array)($approvaldraft['options'] ?? []))
+        : null;
+    if (is_array($equivalentanswerchoices)) {
+        $redirectapprovalerror(
+            'This question cannot be approved because options '
+                . (string)$equivalentanswerchoices['firstLabel'] . ' and '
+                . (string)$equivalentanswerchoices['secondLabel']
+                . ' are equivalent names for the same substance. Replace one with a distinct distractor.'
         );
     }
     if (is_array($approvaldraft)
@@ -9846,6 +9963,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         );
     }
     $customdraft = $normalizecreatedquestionpinyin($customdraft);
+    $equivalentanswerchoices = $findequivalentanswerchoices(
+        (array)($customdraft['options'] ?? [])
+    );
+    if (is_array($equivalentanswerchoices)) {
+        throw new invalid_parameter_exception(
+            'Replace one of options ' . (string)$equivalentanswerchoices['firstLabel']
+                . ' and ' . (string)$equivalentanswerchoices['secondLabel']
+                . ' because they are equivalent names for the same substance.'
+        );
+    }
     $approvalguidelineviolations = $findcreatedquestionguidelineviolations($customdraft);
     if ($isapprovedwarningupdate && $approvalguidelineviolations === []) {
         throw new invalid_parameter_exception(
@@ -11265,6 +11392,7 @@ PROMPT;
     }
     $decodecustomdraft = static function(string $generated) use (
         $domains,
+        $findequivalentanswerchoices,
         $findprohibitedanswerchoice,
         $hasprohibitednegativewording,
         $stripdecorativeicons
@@ -11308,6 +11436,18 @@ PROMPT;
             $optionsbylabel
         ))) !== 4) {
             throw new UnexpectedValueException('The generated answer choices must be four unique options.');
+        }
+        $equivalentchoices = $findequivalentanswerchoices(array_map(
+            static fn(string $label): array => ['label' => $label, 'text' => $optionsbylabel[$label]],
+            ['A', 'B', 'C', 'D']
+        ));
+        if (is_array($equivalentchoices)) {
+            throw new UnexpectedValueException(
+                'The generated answer choices use equivalent names for the same substance in options '
+                    . (string)$equivalentchoices['firstLabel'] . ' and '
+                    . (string)$equivalentchoices['secondLabel']
+                    . '. Replace one alias with a genuinely different distractor.'
+            );
         }
         $spanish = is_array($decoded['translations']['es'] ?? null)
             ? $decoded['translations']['es']
@@ -13072,6 +13212,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $buildchannelherbmapping,
         $ensurechannelherbmappingfeedback,
         $findcreatedquestionguidelineviolations,
+        $findequivalentanswerchoices,
         $findprohibitedanswerchoice,
         $hasprohibitednegativewording,
         $requestedvisibleherbcount,
@@ -13427,6 +13568,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             $optionsbylabel
         ))) !== 4) {
             throw new UnexpectedValueException('The AI answer choices must be four unique A-D options.');
+        }
+        $equivalentchoices = $findequivalentanswerchoices(array_map(
+            static fn(string $label): array => ['label' => $label, 'text' => $optionsbylabel[$label]],
+            ['A', 'B', 'C', 'D']
+        ));
+        if (is_array($equivalentchoices)) {
+            throw new UnexpectedValueException(
+                'The AI draft uses equivalent names for the same substance in options '
+                    . (string)$equivalentchoices['firstLabel'] . ' and '
+                    . (string)$equivalentchoices['secondLabel']
+                    . '. Replace one alias with a genuinely different distractor.'
+            );
         }
         $visiblequestiontext = $prompt . "\n" . implode("\n", array_values($optionsbylabel));
         if ($preservedoutsiderosternames !== []) {
@@ -17942,6 +18095,17 @@ echo $OUTPUT->header();
         if ($prohibitedanswerchoice === null) {
             $prohibitedanswerchoice = $findprohibitedanswerchoice($spanishoptions);
         }
+        $equivalentanswerchoicecollision = $findequivalentanswerchoices(
+            (array)($question['options'] ?? [])
+        );
+        $prohibitedanswerchoiceisequivalentalias = false;
+        if ($prohibitedanswerchoice === null && is_array($equivalentanswerchoicecollision)) {
+            // Reuse the existing publication-gating conditions below while
+            // retaining a distinct, accurate message for alias collisions.
+            $prohibitedanswerchoice = (string)$equivalentanswerchoicecollision['firstText']
+                . ' / ' . (string)$equivalentanswerchoicecollision['secondText'];
+            $prohibitedanswerchoiceisequivalentalias = true;
+        }
         $prohibitednegativewording = $hasprohibitednegativewording(
             (string)($question['prompt'] ?? '')
         ) || $hasprohibitednegativewording((string)($spanishtranslation['prompt'] ?? ''));
@@ -18050,7 +18214,9 @@ echo $OUTPUT->header();
                             $cardguidelineviolations
                         )))))
                     : ($prohibitedanswerchoice !== null
-                        ? ($displaylang === 'es' ? 'Corregir respuesta prohibida' : 'Replace prohibited answer first')
+                        ? ($prohibitedanswerchoiceisequivalentalias
+                            ? ($displaylang === 'es' ? 'Separar alias equivalentes' : 'Replace equivalent alias first')
+                            : ($displaylang === 'es' ? 'Corregir respuesta prohibida' : 'Replace prohibited answer first'))
                         : ($prohibitednegativewording
                             ? ($displaylang === 'es' ? 'Redactar la pregunta en positivo' : 'Rewrite as a positive question')
                             : ''))));
@@ -18322,7 +18488,9 @@ echo $OUTPUT->header();
             <?php if ($revisionstatus === 'study_archive'): ?><span class="question-bank__badge question-bank__badge--exam"><?php echo $displaylang === 'es' ? 'Ubicación Mock: ' : 'Mock placement: '; ?><?php echo s((string)$domain['name']); ?></span><?php endif; ?>
             <?php if ($revisionstatus === 'extra_guideline'): ?><span class="question-bank__badge question-bank__badge--classification"><?php echo $displaylang === 'es' ? 'Clasificación conservada: ' : 'Preserved classification: '; ?><?php echo s((string)$domain['name']); ?></span><?php endif; ?>
             <?php if (($revision['aiBatchId'] ?? '') !== '' && $revisionstatus === 'draft'): ?><span class="question-bank__badge question-bank__badge--exam">AI-assisted mock review</span><?php endif; ?>
-            <?php if ($prohibitedanswerchoice !== null): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $displaylang === 'es' ? 'Respuesta combinada prohibida · requiere corrección' : 'Prohibited combined answer · correction required'; ?></span><?php endif; ?>
+            <?php if ($prohibitedanswerchoice !== null): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $prohibitedanswerchoiceisequivalentalias
+                ? ($displaylang === 'es' ? 'Opciones con alias equivalentes · requiere corrección' : 'Equivalent alias choices · correction required')
+                : ($displaylang === 'es' ? 'Respuesta combinada prohibida · requiere corrección' : 'Prohibited combined answer · correction required'); ?></span><?php endif; ?>
             <?php if ($prohibitednegativewording): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $displaylang === 'es' ? 'Pregunta negativa prohibida · requiere corrección' : 'Prohibited negative stem · correction required'; ?></span><?php endif; ?>
             <?php if ($visibleherbplacementmissing): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $displaylang === 'es' ? 'Faltan las hierbas solicitadas · requiere corrección' : 'Requested herbs missing · correction required'; ?></span><?php endif; ?>
             <?php if ($cardguidelineoverrideactive): ?><span class="question-bank__badge question-bank__badge--ready"><?php echo $displaylang === 'es' ? 'Advertencia del guideline aceptada' : 'Guideline warning accepted'; ?></span><?php elseif (!$cardguidelineverified): ?><span class="question-bank__badge question-bank__badge--incomplete"><?php echo $displaylang === 'es' ? 'Alerta del guideline · requiere decisión' : 'Guideline alert · decision required'; ?></span><?php endif; ?>
