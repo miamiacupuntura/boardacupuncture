@@ -17305,6 +17305,10 @@ echo $OUTPUT->header();
             ? $SESSION->ncbahm_new_question_recovery
             : [];
         $newquestionrecoveryerror = trim((string)($newquestionrecovery['error'] ?? ''));
+        $newquestionrecoveryfangjiretryready = $newquestiontargetdomain === 'safety_dispensing'
+            && core_text::strpos($newquestionrecoveryerror, 'Fang Ji') !== false
+            && core_text::strpos($newquestionrecoveryerror, 'Mu Fang Ji') !== false
+            && core_text::strpos($newquestionrecoveryerror, 'Guang Fang Ji') !== false;
         if (core_text::strpos(
             $newquestionrecoveryerror,
             'Formula-versus-Duì-Yào choices must be concise ' . 'assignments'
@@ -17404,8 +17408,16 @@ echo $OUTPUT->header();
         <?php if ($newquestionrecovery !== []
                 && $newquestionrecoveryerror !== ''
                 && !is_array($selectedinstructiontemplate)): ?>
-        <div class="question-bank__creation-failure" role="alert">
-            <h4><?php echo $displaylang === 'es' ? 'No se creó ninguna pregunta; su texto está conservado.' : 'No question was created; your text is preserved.'; ?></h4>
+        <div class="<?php echo $newquestionrecoveryfangjiretryready ? 'question-bank__applied-summary' : 'question-bank__creation-failure'; ?>" role="alert">
+            <h4><?php echo $newquestionrecoveryfangjiretryready
+                ? ($displaylang === 'es' ? 'La corrección de Fang Ji está lista para aplicarse.' : 'The Fang Ji correction is ready to apply.')
+                : ($displaylang === 'es' ? 'No se creó ninguna pregunta; su texto está conservado.' : 'No question was created; your text is preserved.'); ?></h4>
+            <?php if ($newquestionrecoveryfangjiretryready): ?>
+                <p><?php echo $displaylang === 'es'
+                    ? 'Este aviso pertenece al intento anterior. Reintentar ahora creará la pregunta de Domain 4 con Han Fang Ji (Stephaniae tetrandrae Radix), autenticación y vigilancia renal, sin los nombres fuera del Appendix A.'
+                    : 'This notice belongs to the previous attempt. Retrying now will create the Domain 4 question with Han Fang Ji (Stephaniae tetrandrae Radix), authentication and renal monitoring, without the outside-Appendix A names.'; ?></p>
+                <button class="question-bank__button question-bank__button--primary" type="submit" form="new-question-entry"<?php echo $textaienabled ? '' : ' disabled title="Moodle has no active Generate text provider."'; ?>><?php echo $displaylang === 'es' ? 'Crear ahora con el texto recuperado' : 'Create now with the recovered text'; ?></button>
+            <?php else: ?>
             <?php if (trim((string)($newquestionrecovery['error'] ?? '')) !== ''): ?><p><strong><?php echo $displaylang === 'es' ? 'Fallo detectado:' : 'Detected failure:'; ?></strong> <?php echo s((string)$newquestionrecovery['error']); ?></p><?php endif; ?>
             <?php if ($newquestionrecoverymode === 'exact_import'): ?>
                 <p><strong><?php echo $displaylang === 'es' ? 'Cómo corregir la importación:' : 'How to correct the import:'; ?></strong></p>
@@ -17422,6 +17434,7 @@ echo $OUTPUT->header();
                     : 'Read the failure above. If it mentions the AI provider, enable Generate text in Moodle. If it mentions validation, duplication or appendices, correct only that issue and try again; your text is already restored in the form.'; ?></p>
             <?php else: ?>
                 <p><?php echo $displaylang === 'es' ? 'Corrija el dato señalado arriba y vuelva a intentarlo.' : 'Correct the issue identified above and try again.'; ?></p>
+            <?php endif; ?>
             <?php endif; ?>
         </div>
         <?php endif; ?>
