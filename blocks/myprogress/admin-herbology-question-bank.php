@@ -7015,6 +7015,20 @@ if ($usagefilter === 'exam_project_pending' && is_array($pendingexamproject)) {
 } else if ($usagefilter === 'exam_project_pending') {
     $usagefilter = 'all';
 }
+// A bookmarked creation URL can retain an older domain deficit (for example
+// needed=5) after other questions have already filled most of the exam. Never
+// create more drafts than the exam's current approved vacancies; in particular,
+// 99/100 must request exactly one draft for position 100.
+if ($newquestiontargetexam !== ''
+        && is_array($examprojects[$newquestiontargetexam] ?? null)
+        && (string)($examprojects[$newquestiontargetexam]['status'] ?? 'draft') !== 'published'
+        && $newquestionneededcount > 0) {
+    $newquestionactualvacancies = max(
+        0,
+        (int)($examprojects[$newquestiontargetexam]['missingCount'] ?? 0)
+    );
+    $newquestionneededcount = min($newquestionneededcount, $newquestionactualvacancies);
+}
 $similarityrequestactive = $showsimilarityfinder
     || $similaritysearch !== ''
     || $similarityquestionid !== '';
@@ -9915,7 +9929,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $targetexamquestionids = array_map('strval', (array)($targetexam['questionIds'] ?? []));
         if (!in_array($customquestionid, $targetexamquestionids, true)
                 && count($targetexamquestionids) >= (int)($targetexam['targetCount'] ?? 100)) {
-            throw new invalid_parameter_exception('The target exam is already full.');
+            $customdraftdomainid = (string)(
+                $customdraft['domainId']
+                    ?? $customrecord['domainId']
+                    ?? ''
+            );
+            $customreplacequestionid = $findreplaceableexamplaceholder(
+                $revisionstore,
+                $targetexam,
+                $customquestionid,
+                $customdraftdomainid
+            );
+            if ($customreplacequestionid === '') {
+                throw new invalid_parameter_exception(
+                    'The target exam already contains its target number of approved questions.'
+                );
+            }
         }
     }
     $savedat = gmdate(DATE_ATOM);
@@ -9939,6 +9968,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $isapprovedwarningupdate,
         $savedat,
         $savedbyname,
+        $findreplaceableexamplaceholder,
         $USER
     ): array {
         $record = $store['customQuestions'][$customquestionid] ?? null;
@@ -10004,9 +10034,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
             ))));
             if (!in_array($customquestionid, $questionids, true)) {
                 if (count($questionids) >= (int)($project['targetCount'] ?? 100)) {
-                    throw new invalid_parameter_exception('The target exam is already full.');
+                    // Re-evaluate under the storage lock. A raw 100-ID list
+                    // may still contain the inactive placeholder represented
+                    // by the visible 99/100 counter.
+                    $customdraftdomainid = (string)(
+                        $customdraft['domainId']
+                            ?? $record['domainId']
+                            ?? ''
+                    );
+                    $replacequestionid = $findreplaceableexamplaceholder(
+                        $store,
+                        $project,
+                        $customquestionid,
+                        $customdraftdomainid
+                    );
+                    $replaceindex = $replacequestionid !== ''
+                        ? array_search($replacequestionid, $questionids, true)
+                        : false;
+                    if ($replaceindex === false) {
+                        throw new invalid_parameter_exception(
+                            'The target exam already contains its target number of approved questions.'
+                        );
+                    }
+                    $questionids[(int)$replaceindex] = $customquestionid;
+                    if (is_array($store['questions'][$replacequestionid] ?? null)
+                            && (string)($store['questions'][$replacequestionid]['examProjectId'] ?? '')
+                                === $customtargetexamid) {
+                        unset($store['questions'][$replacequestionid]['examProjectId']);
+                        $store['questions'][$replacequestionid]['bankDeferred'] = true;
+                    }
+                    if (is_array($store['customQuestions'][$replacequestionid] ?? null)
+                            && (string)(
+                                $store['customQuestions'][$replacequestionid]['targetExamProjectId'] ?? ''
+                            ) === $customtargetexamid) {
+                        $store['customQuestions'][$replacequestionid]['targetExamProjectId'] = '';
+                        $store['customQuestions'][$replacequestionid]['bankDeferred'] = true;
+                    }
+                    $project['pendingSlotReplacements'][] = [
+                        'removedQuestionId' => $replacequestionid,
+                        'approvedQuestionId' => $customquestionid,
+                        'replacedAt' => $savedat,
+                        'replacedById' => (int)$USER->id,
+                        'replacedByName' => $savedbyname,
+                    ];
+                    $project['pendingSlotReplacements'] = array_slice(
+                        (array)$project['pendingSlotReplacements'],
+                        -100
+                    );
+                } else {
+                    $questionids[] = $customquestionid;
                 }
-                $questionids[] = $customquestionid;
             }
             $project['questionIds'] = $questionids;
             $project['updatedAt'] = $savedat;
