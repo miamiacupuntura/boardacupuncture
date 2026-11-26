@@ -17148,6 +17148,19 @@ echo $OUTPUT->header();
         $newquestionrecovery = is_array($SESSION->ncbahm_new_question_recovery ?? null)
             ? $SESSION->ncbahm_new_question_recovery
             : [];
+        $newquestionrecoveryerror = trim((string)($newquestionrecovery['error'] ?? ''));
+        if (core_text::strpos(
+            $newquestionrecoveryerror,
+            'Formula-versus-Duì-Yào choices must be concise ' . 'assignments'
+        ) !== false) {
+            // This validator no longer exists. Preserve the administrator's
+            // recovered idea, but do not keep presenting a historical failure
+            // as though the current code had just produced it.
+            $newquestionrecovery['error'] = '';
+            $newquestionrecovery['mode'] = 'general';
+            $SESSION->ncbahm_new_question_recovery = $newquestionrecovery;
+            $newquestionrecoveryerror = '';
+        }
         $selectedinstructiontemplate = $selectedinstructiontemplateid !== ''
             ? ($generalinstructiontemplates[$selectedinstructiontemplateid] ?? null)
             : null;
@@ -17232,7 +17245,9 @@ echo $OUTPUT->header();
                 : 'A Dui Yao instruction can produce up to 5 drafts per attempt. Every draft will use another official pair and verified formula evidence whenever the source table permits it.'; ?></div>
             <?php endif; ?>
         <?php endif; ?>
-        <?php if ($newquestionrecovery !== [] && !is_array($selectedinstructiontemplate)): ?>
+        <?php if ($newquestionrecovery !== []
+                && $newquestionrecoveryerror !== ''
+                && !is_array($selectedinstructiontemplate)): ?>
         <div class="question-bank__creation-failure" role="alert">
             <h4><?php echo $displaylang === 'es' ? 'No se creó ninguna pregunta; su texto está conservado.' : 'No question was created; your text is preserved.'; ?></h4>
             <?php if (trim((string)($newquestionrecovery['error'] ?? '')) !== ''): ?><p><strong><?php echo $displaylang === 'es' ? 'Fallo detectado:' : 'Detected failure:'; ?></strong> <?php echo s((string)$newquestionrecovery['error']); ?></p><?php endif; ?>
@@ -17349,7 +17364,7 @@ echo $OUTPUT->header();
         </div>
         <?php if (!$textaienabled): ?><div class="question-bank__publish-error" role="status"><strong><?php echo $displaylang === 'es' ? 'La creación con IA está desactivada.' : 'AI creation is disabled.'; ?></strong> <?php echo $displaylang === 'es' ? 'Puede importar una pregunta terminada ahora, o un administrador de Moodle debe activar un proveedor para la acción Generate text.' : 'You can import a finished question now, or a Moodle administrator must enable a provider for the Generate text action.'; ?></div><?php endif; ?>
         <p><?php echo $displaylang === 'es' ? 'Pegue una idea o un bloque completo de hasta 6 preguntas. El sistema reconoce encabezados como Question 1, ### Question 1 o ### 2., separadores --- y las etiquetas Correct answer: o Respuesta correcta:.' : 'Paste one question idea or a complete block containing up to 6 questions. The system recognizes headings such as Question 1, ### Question 1 or ### 2., divider lines containing ---, and Correct answer: or Respuesta correcta: labels.'; ?></p>
-        <form class="question-bank__creation-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
+        <form id="new-question-entry" class="question-bank__creation-form" method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>">
             <?php if (is_array($selectedinstructiontemplate)): ?><div class="question-bank__applied-summary"><strong><?php echo $displaylang === 'es' ? 'Instrucción cargada:' : 'Loaded instruction:'; ?></strong> <?php echo s((string)$selectedinstructiontemplate['name']); ?>. <?php echo $displaylang === 'es' ? 'Puede ajustarla antes de crear los borradores.' : 'You may adjust it before creating drafts.'; ?></div><?php endif; ?>
             <textarea name="idea" maxlength="60000" required placeholder="### Question 1&#10;Stem, four choices, correct answer and explanation...&#10;&#10;### Question 2&#10;Stem, four choices, correct answer and explanation..."><?php echo s($newquestionprefillidea); ?></textarea>
             <input type="hidden" name="formaction" value="createnewquestion">
