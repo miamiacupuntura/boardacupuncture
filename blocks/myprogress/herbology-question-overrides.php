@@ -196,6 +196,8 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
     $herbdisplays = [];
     $herbpinyinpatterns = [];
     $herblatinpatterns = [];
+    $formuladisplays = [];
+    $formulapatterns = [];
     $appendixaherbaliases = [
         // Imported sources commonly abbreviate Huai Niu Xi to generic Niu Xi.
         // Appendix A distinguishes it from Chuan Niu Xi; the attached
@@ -278,6 +280,13 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
             if ($lookupname !== '') {
                 $canonicalnames[$lookupname] = $officialname;
             }
+            if ($collectionkey === 'formulas' && $lookupname !== '') {
+                $formulapatterns[$lookupname] = $flexiblepattern($officialname);
+                $formuladisplays[$lookupname] = [
+                    'name' => $officialname,
+                    'english' => trim((string)($record['englishName'] ?? '')),
+                ];
+            }
             if ($collectionkey !== 'herbs' || $lookupname === '') {
                 continue;
             }
@@ -315,6 +324,11 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
             'names' => [],
             'pattern' => '',
             'herbDisplays' => [],
+            'formulaDisplays' => [],
+            'bareHerbPattern' => '',
+            'bareFormulaPattern' => '',
+            'formulaPattern' => '',
+            'parentheticalFormulaPattern' => '',
             'parentheticalHerbPattern' => '',
             'commonNameHerbPattern' => '',
             'legacyHerbPattern' => '',
@@ -332,6 +346,10 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
         $herblatinpatterns,
         static fn(string $left, string $right): int => strlen($right) <=> strlen($left)
     );
+    uksort(
+        $formulapatterns,
+        static fn(string $left, string $right): int => strlen($right) <=> strlen($left)
+    );
     $alternatives = array_map(static function(string $lookupname): string {
         return implode('\\s+', array_map(
             static fn(string $word): string => preg_quote($word, '/'),
@@ -342,6 +360,23 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
         'names' => $canonicalnames,
         'pattern' => '/(?<![A-Za-z0-9])(?:' . implode('|', $alternatives) . ')(?![A-Za-z0-9])/iu',
         'herbDisplays' => $herbdisplays,
+        'formulaDisplays' => $formuladisplays,
+        'bareHerbPattern' => $herbpinyinpatterns === []
+            ? ''
+            : '/(?<![A-Za-z0-9])(?<pinyin>' . implode('|', array_values($herbpinyinpatterns)) . ')'
+                . '(?![A-Za-z0-9])/iu',
+        'formulaPattern' => $formulapatterns === []
+            ? ''
+            : '/(?<![A-Za-z0-9])(?:' . implode('|', array_values($formulapatterns)) . ')'
+                . '(?![A-Za-z0-9])/iu',
+        'bareFormulaPattern' => $formulapatterns === []
+            ? ''
+            : '/(?<![A-Za-z0-9])(?<formula>' . implode('|', array_values($formulapatterns)) . ')'
+                . '(?![A-Za-z0-9]|\s*\()/iu',
+        'parentheticalFormulaPattern' => $formulapatterns === []
+            ? ''
+            : '/(?<![A-Za-z0-9])(?<formula>' . implode('|', array_values($formulapatterns)) . ')'
+                . '\s*\([^()\r\n]{1,160}\)(?![A-Za-z0-9])/iu',
         'parentheticalHerbPattern' => $herbpinyinpatterns === [] || $herblatinpatterns === []
             ? ''
             : '/(?<![A-Za-z0-9])(?<pinyin>' . implode('|', array_values($herbpinyinpatterns)) . ')'
@@ -380,6 +415,11 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
     $canonicalnames = (array)($casedata['names'] ?? []);
     $pattern = (string)($casedata['pattern'] ?? '');
     $herbdisplays = (array)($casedata['herbDisplays'] ?? []);
+    $formuladisplays = (array)($casedata['formulaDisplays'] ?? []);
+    $bareherbpattern = (string)($casedata['bareHerbPattern'] ?? '');
+    $bareformulapattern = (string)($casedata['bareFormulaPattern'] ?? '');
+    $formulapattern = (string)($casedata['formulaPattern'] ?? '');
+    $parentheticalformulapattern = (string)($casedata['parentheticalFormulaPattern'] ?? '');
     $parentheticalherbpattern = (string)($casedata['parentheticalHerbPattern'] ?? '');
     $commonnameherbpattern = (string)($casedata['commonNameHerbPattern'] ?? '');
     $legacyherbpattern = (string)($casedata['legacyHerbPattern'] ?? '');
@@ -392,6 +432,11 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         $canonicalnames,
         $pattern,
         $herbdisplays,
+        $formuladisplays,
+        $bareherbpattern,
+        $bareformulapattern,
+        $formulapattern,
+        $parentheticalformulapattern,
         $parentheticalherbpattern,
         $commonnameherbpattern,
         $legacyherbpattern,
@@ -405,6 +450,48 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         }
         if (!is_string($value) || $value === '') {
             return $value;
+        }
+        if ($parentheticalformulapattern !== '' && $formuladisplays !== []) {
+            $formulareplaced = preg_replace_callback(
+                $parentheticalformulapattern,
+                static function(array $match) use ($formuladisplays): string {
+                    $formula = strtolower((string)preg_replace(
+                        '/\s+/u',
+                        ' ',
+                        trim((string)($match['formula'] ?? ''))
+                    ));
+                    $official = (array)($formuladisplays[$formula] ?? []);
+                    if ($official === [] || trim((string)($official['english'] ?? '')) === '') {
+                        return (string)$match[0];
+                    }
+                    return (string)$official['name'] . ' (' . (string)$official['english'] . ')';
+                },
+                $value
+            );
+            if (is_string($formulareplaced)) {
+                $value = $formulareplaced;
+            }
+        }
+        if ($bareformulapattern !== '' && $formuladisplays !== []) {
+            $formulaexpanded = preg_replace_callback(
+                $bareformulapattern,
+                static function(array $match) use ($formuladisplays): string {
+                    $formula = strtolower((string)preg_replace(
+                        '/\s+/u',
+                        ' ',
+                        trim((string)($match['formula'] ?? ''))
+                    ));
+                    $official = (array)($formuladisplays[$formula] ?? []);
+                    if ($official === [] || trim((string)($official['english'] ?? '')) === '') {
+                        return (string)$match[0];
+                    }
+                    return (string)$official['name'] . ' (' . (string)$official['english'] . ')';
+                },
+                $value
+            );
+            if (is_string($formulaexpanded)) {
+                $value = $formulaexpanded;
+            }
         }
         if ($parentheticalherbpattern !== '' && $herbdisplays !== []) {
             $parentheticalreplaced = preg_replace_callback(
@@ -490,6 +577,51 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
             );
             if (is_string($legacyreplaced)) {
                 $value = $legacyreplaced;
+            }
+        }
+        if ($bareherbpattern !== '' && $herbdisplays !== []) {
+            // Protect complete formula names and herbs that already have a
+            // parenthetical display. Otherwise a herb such as Chai Hu inside
+            // Xiao Chai Hu Tang would be expanded and corrupt the formula.
+            $protectedsegments = [];
+            $protectsegment = static function(array $match) use (&$protectedsegments): string {
+                $placeholder = "\x1AHP" . count($protectedsegments) . "\x1A";
+                $protectedsegments[$placeholder] = (string)$match[0];
+                return $placeholder;
+            };
+            if ($formulapattern !== '') {
+                $protected = preg_replace_callback($formulapattern, $protectsegment, $value);
+                if (is_string($protected)) {
+                    $value = $protected;
+                }
+            }
+            if ($commonnameherbpattern !== '') {
+                $protected = preg_replace_callback($commonnameherbpattern, $protectsegment, $value);
+                if (is_string($protected)) {
+                    $value = $protected;
+                }
+            }
+            $expanded = preg_replace_callback(
+                $bareherbpattern,
+                static function(array $match) use ($herbdisplays): string {
+                    $pinyin = strtolower((string)preg_replace(
+                        '/\s+/u',
+                        ' ',
+                        trim((string)($match['pinyin'] ?? ''))
+                    ));
+                    $official = (array)($herbdisplays[$pinyin] ?? []);
+                    if ($official === []) {
+                        return (string)$match[0];
+                    }
+                    return (string)$official['name'] . ' (' . (string)$official['latin'] . ')';
+                },
+                $value
+            );
+            if (is_string($expanded)) {
+                $value = $expanded;
+            }
+            if ($protectedsegments !== []) {
+                $value = strtr($value, $protectedsegments);
             }
         }
         $replaced = preg_replace_callback($pattern, static function(array $match) use ($canonicalnames): string {

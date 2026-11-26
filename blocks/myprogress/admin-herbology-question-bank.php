@@ -5516,6 +5516,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $formaction === 'editquestion') {
         'cognitiveLevel' => $cognitivelevel,
         'difficultyBand' => $difficultyband,
     ];
+    // Manual editing follows the same visible nomenclature contract as the
+    // automatic reviewer: every recognized bare herb becomes Pinyin
+    // (official pharmaceutical Latin), and every bare formula becomes Pinyin
+    // (official English name).
+    $draft = $normalizecreatedquestionpinyin($draft);
     $requestreclassification = (bool)optional_param('requestreclassification', 0, PARAM_BOOL);
     $editexamprojectid = optional_param('examproject', '', PARAM_ALPHANUMEXT);
     if ($editexamprojectid !== '' && isset($questionsusedinpriorexams[$questionid])) {
@@ -16974,8 +16979,8 @@ echo $OUTPUT->header();
                 <div class="question-bank__nomenclature-helper" data-scientific-name-helper data-missing-message="<?php echo $displaylang === 'es' ? 'Escriba o seleccione primero un nombre.' : 'Enter or select a name first.'; ?>" data-added-message="<?php echo $displaylang === 'es' ? 'Nombre insertado. Guarde los cambios para conservarlo.' : 'Name inserted. Save the changes to keep it.'; ?>">
                     <h5><?php echo $displaylang === 'es' ? 'Insertar nombre científico o farmacéutico' : 'Insert scientific or pharmaceutical name'; ?></h5>
                     <p><?php echo $displaylang === 'es'
-                        ? 'Puede seleccionar el formato oficial Pinyin (latín farmacéutico) del Appendix A o escribir libremente otro nombre. Las fórmulas, como Yu Ping Feng San, no tienen nombre botánico: para ellas use Pinyin (traducción inglesa).'
-                        : 'Select the official Appendix A format Pinyin (pharmaceutical Latin), or freely type another name. Formulas such as Yu Ping Feng San do not have a botanical name; use Pinyin (English translation) for formulas.'; ?></p>
+                        ? 'Puede seleccionar el formato oficial Pinyin (latín farmacéutico) del Appendix A o escribir libremente otro nombre. Al guardar, las hierbas y fórmulas reconocidas se completan automáticamente como Pinyin (latín) y Pinyin (nombre inglés), respectivamente.'
+                        : 'Select the official Appendix A format Pinyin (pharmaceutical Latin), or freely type another name. When saved, recognized herbs and formulas are automatically completed as Pinyin (Latin) and Pinyin (English name), respectively.'; ?></p>
                     <label><span><?php echo $displaylang === 'es' ? 'Nombre que desea insertar' : 'Name to insert'; ?></span><input type="text" list="question-bank-scientific-names" data-scientific-name-value placeholder="<?php echo $displaylang === 'es' ? 'Ej.: Huang Qi (Astragali Radix)' : 'Example: Huang Qi (Astragali Radix)'; ?>"></label>
                     <datalist id="question-bank-scientific-names">
                         <?php foreach ((array)$guidelineherbroster['herbs'] as $editorherbrecord):
