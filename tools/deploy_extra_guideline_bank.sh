@@ -87,7 +87,7 @@ cleanup() {
     rm -rf -- "$TEMP_DIR"
 }
 trap cleanup EXIT
-trap 'status=$?; echo "ERROR: despliegue de Extra guideline detenido en la línea $LINENO (código $status)." >&2; exit "$status"' ERR
+trap 'status=$?; echo "ERROR: despliegue de Extra guideline detenido en la línea $LINENO (código $status). Comando: $BASH_COMMAND" >&2; exit "$status"' ERR
 
 for relative in "${FILES[@]}"; do
     source_file="$TEMP_DIR/$relative"
@@ -205,6 +205,9 @@ grep -Fq 'value="addguidelinefeedbacknotice"' "$TEMP_DIR/blocks/myprogress/admin
 grep -Fq 'Agregar aviso al feedback' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$record['guidelineFeedbackNotice'] = \$audit" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$cardspanishfeedback = \$guidelinefeedbacktext(\$spanishtranslation['explanation'] ?? '');" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'data-scientific-name-helper' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Insert scientific or pharmaceutical name' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "target.setRangeText(prefix + value + suffix, start, end, 'end');" "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '$currentexplanationguidelineviolations' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '$sanitizefeedback' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '$visibleboardnomenclature' "$TEMP_DIR/blocks/myprogress/admin-herbology-question-bank.php"
@@ -411,6 +414,9 @@ grep -Fq 'value="addguidelinefeedbacknotice"' "$MOODLE_ROOT/blocks/myprogress/ad
 grep -Fq 'Agregar aviso al feedback' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$record['guidelineFeedbackNotice'] = \$audit" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq "\$cardspanishfeedback = \$guidelinefeedbacktext(\$spanishtranslation['explanation'] ?? '');" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'data-scientific-name-helper' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq 'Insert scientific or pharmaceutical name' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
+grep -Fq "target.setRangeText(prefix + value + suffix, start, end, 'end');" "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '$currentexplanationguidelineviolations' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '$sanitizefeedback' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
 grep -Fq '$visibleboardnomenclature' "$MOODLE_ROOT/blocks/myprogress/admin-herbology-question-bank.php"
@@ -534,6 +540,7 @@ echo "OK: una pregunta administrativa ya aprobada puede aceptar después una adv
 echo "OK: todas las tarjetas conservan controles visibles de Publicar y Mover/aplazar; si el estado no lo permite, muestran la causa en vez de ocultarlos."
 echo "OK: un reintento fallido conserva determinísticamente la respuesta correcta original en inglés y español y mantiene Editar y Mover/aplazar disponibles."
 echo "OK: cada alerta Appendix A/C ofrece Agregar aviso al feedback y registra el texto bilingüe exacto sin cambiar la clave ni los choices."
+echo "OK: el editor manual permite insertar cualquier nombre y ofrece las 304 formas oficiales Pinyin (latín farmacéutico) del Appendix A."
 echo "OK: Review for Extra conserva el Pinyin fuera del roster sin exigir un nombre latino o inglés ausente de la pregunta."
 echo "OK: un examen completo oculta Add new question y deja Rebalance como la siguiente acción."
 echo "OK: Complete before publishing es una acción activa que completa y conserva la pregunta dentro de Extra guideline."
