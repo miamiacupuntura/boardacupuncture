@@ -645,9 +645,9 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
                 return $placeholder;
             };
             // Preserve the complete imported source formula while expanding
-            // ordinary standalone herbs to Pinyin (Latin). This formula is
-            // intentionally outside the active roster and must remain visible
-            // exactly as Huo Xiang Zheng Qi Tang for administrator review.
+            // ordinary standalone herbs to Pinyin (Latin). The imported Tang
+            // spelling is accepted as an alias of the Appendix C San entry,
+            // while its source wording remains visible for administrator review.
             $legacyformulaprotected = preg_replace_callback(
                 '/(?<![A-Za-z0-9])Huo\s+Xiang\s+Zheng\s+Qi\s+Tang(?![A-Za-z0-9])/iu',
                 $protectsegment,

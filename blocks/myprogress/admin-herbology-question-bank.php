@@ -265,6 +265,10 @@ $guidelineformulaaliases = [
     'ba wei di huang wan' => 'shen qi wan',
     'shen mai san' => 'sheng mai san',
     'ling jiao gou teng tang' => 'ling jiao gou teng yin',
+    // Imported source variant of the Appendix C formula Huo Xiang Zheng Qi San.
+    // Preserve Tang in the visible source question while validating and
+    // classifying it through the official San entry.
+    'huo xiang zheng qi tang' => 'huo xiang zheng qi san',
 ];
 $guidelineformulamatchnames = array_values(array_unique(array_merge(
     array_keys($guidelineformulachapterbyname),
