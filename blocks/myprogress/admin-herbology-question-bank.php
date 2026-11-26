@@ -9344,11 +9344,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     require_sesskey();
     $customquestionid = required_param('questionid', PARAM_ALPHANUMEXT);
     $guidelineoverride = (bool)optional_param('guidelineoverride', 0, PARAM_BOOL);
+    $reapprovewithwarning = $formaction === 'approvecustomquestion'
+        && (bool)optional_param('reapprovewithwarning', 0, PARAM_BOOL);
     $customrecord = $revisionstore['customQuestions'][$customquestionid] ?? null;
     if (!is_array($customrecord)) {
         throw new invalid_parameter_exception('Unknown administrator-authored question ID.');
     }
-    if ((string)($customrecord['status'] ?? 'draft') !== 'draft') {
+    $customrecordstatus = (string)($customrecord['status'] ?? 'draft');
+    $isapprovedwarningupdate = $reapprovewithwarning
+        && $guidelineoverride
+        && $customrecordstatus === 'approved';
+    if ($customrecordstatus !== 'draft' && !$isapprovedwarningupdate) {
         throw new invalid_parameter_exception('Only an unpublished administrator-authored draft can be changed here.');
     }
     if ($formaction === 'discardcustomquestion') {
@@ -9402,6 +9408,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     }
     $customdraft = $normalizecreatedquestionpinyin($customdraft);
     $approvalguidelineviolations = $findcreatedquestionguidelineviolations($customdraft);
+    if ($isapprovedwarningupdate && $approvalguidelineviolations === []) {
+        throw new invalid_parameter_exception(
+            'This approved question no longer has a guideline alert that requires an override.'
+        );
+    }
     if ($approvalguidelineviolations !== [] && !$guidelineoverride) {
         throw new invalid_parameter_exception(
             'Publication blocked because a named item is outside the current guideline: '
@@ -9496,8 +9507,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
                 'The target exam is no longer available for this new question.'
             );
         }
-        if (count((array)($targetexam['questionIds'] ?? []))
-                >= (int)($targetexam['targetCount'] ?? 100)) {
+        $targetexamquestionids = array_map('strval', (array)($targetexam['questionIds'] ?? []));
+        if (!in_array($customquestionid, $targetexamquestionids, true)
+                && count($targetexamquestionids) >= (int)($targetexam['targetCount'] ?? 100)) {
             throw new invalid_parameter_exception('The target exam is already full.');
         }
     }
@@ -9519,6 +9531,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         $guidelinevalidationversion,
         $approvalguidelineviolations,
         $customguidelineoverride,
+        $isapprovedwarningupdate,
         $savedat,
         $savedbyname,
         $USER
@@ -9527,7 +9540,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         if (!is_array($record) || !is_array($record['draft'] ?? null)) {
             throw new invalid_parameter_exception('Only a complete administrator-authored draft can be approved.');
         }
-        if ((string)($record['originality']['status'] ?? '') !== 'clear') {
+        if (!$isapprovedwarningupdate
+                && (string)($record['originality']['status'] ?? '') !== 'clear') {
             throw new invalid_parameter_exception(
                 'Run Revise draft once so this question passes the originality check before approval.'
             );
@@ -9545,6 +9559,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         ];
         if (is_array($customguidelineoverride)) {
             $record['guidelineOverride'] = $customguidelineoverride;
+            $record['reviewDestination'] = 'board_with_warning';
+            $record['publicationStatus'] = 'published_with_warning';
+            $record['publicationAudit'] = [
+                'status' => 'published_with_warning',
+                'examProjectId' => $customtargetexamid,
+                'publishedAt' => $savedat,
+                'publishedById' => (int)$USER->id,
+                'publishedByName' => $savedbyname,
+                'violations' => array_values($approvalguidelineviolations),
+            ];
         } else {
             unset($record['guidelineOverride']);
         }
@@ -9585,6 +9609,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
         }
         return $store;
     });
+    if ($isapprovedwarningupdate) {
+        $warningupdatedurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter([
+                'q' => $customquestionid,
+                'examproject' => $customtargetexamid !== '' ? $customtargetexamid : $examprojectid,
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ])
+        );
+        $warningupdatedurl->set_anchor('question-' . $customquestionid);
+        redirect(
+            $warningupdatedurl,
+            'The approved question was published with an audited guideline warning and kept in its exam.',
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
     $customreturnfilters = $questionbankreturnfilterparams($customquestionid);
     if ($customcreationbatchid === '' && $hasquestionbankselectionfilters($customreturnfilters)) {
         $customfilteredurl = new moodle_url(
@@ -17003,6 +17044,13 @@ echo $OUTPUT->header();
         $visibleherbplacementrequired = $requestedvisibleherbcount($visibleinstructions);
         $visibleherbplacementmissing = $visibleherbplacementrequired > 0
             && count($visibleherbnames($question)) < $visibleherbplacementrequired;
+        $customapprovedwarningeligible = $iscustomapproved
+            && $customdraftcomplete
+            && !$cardguidelineverified
+            && !$cardguidelineoverrideactive
+            && $prohibitedanswerchoice === null
+            && !$prohibitednegativewording
+            && !$visibleherbplacementmissing;
         $questioncanpublishdirectlytoexam = $revisionstatus === 'approved'
             && $questionexamblockingmissing === []
             && $prohibitedanswerchoice === null
@@ -17097,6 +17145,54 @@ echo $OUTPUT->header();
         $currentexamprojectfull = is_array($questionactionexamproject)
             && (int)$questionactionexamproject['currentCount']
                 >= (int)$questionactionexamproject['targetCount'];
+        $cardmovecontrolshown = $bankcardposition > 0
+            || ($examquestionmanagementview
+                && is_array($currentexamproject)
+                && (string)($currentexamproject['status'] ?? 'draft') !== 'published'
+                && ($questioninexamproject
+                    || isset($examprojectpositions[(string)$question['questionId']])));
+        $exammanagementpublishshown = $examquestionmanagementview
+            && is_array($questionactionexamproject)
+            && !$questioninexamproject
+            && !$inlineapproval
+            && !$question['_excluded']
+            && ($question['_ready'] || $questioncanpublishdirectlytoexam)
+            && ($cardguidelineverified || $cardguidelineoverrideactive)
+            && !$questionusedinpriorexam;
+        $standardexampublishshown = !$examquestionmanagementview
+            && is_array($questionactionexamproject)
+            && $usagefilter !== 'exam_project_pending'
+            && !$inlineapproval
+            && !$question['_excluded']
+            && ($question['_ready'] || $questioncanpublishdirectlytoexam)
+            && !$questioninexamproject
+            && ($cardguidelineverified || $cardguidelineoverrideactive)
+            && !$questionusedinpriorexam;
+        $standardapprovalshown = !$examquestionmanagementview
+            && !$inlineapproval
+            && !$question['_excluded']
+            && !$iscustomdraft
+            && $prohibitedanswerchoice === null
+            && !$prohibitednegativewording
+            && (($cardguidelineverified
+                    && $question['_ready']
+                    && in_array($revisionstatus, ['', 'original'], true))
+                || ($cardguidelineverified
+                    && !$visibleherbplacementmissing
+                    && in_array($revisionstatus, ['draft', 'pending_reclassification'], true))
+                || (!$cardguidelineverified
+                    && !$visibleherbplacementmissing
+                    && (($question['_ready'] && in_array($revisionstatus, ['', 'original'], true))
+                        || in_array($revisionstatus, ['draft', 'pending_reclassification'], true))));
+        $cardpublishcontrolshown = $iscustomdraft
+            || $customapprovedwarningeligible
+            || $inlineapproval
+            || $revisionstatus === 'extra_guideline'
+            || $exammanagementpublishshown
+            || $standardexampublishshown
+            || ($isapprovedreservecandidate
+                && ($cardguidelineverified || $cardguidelineoverrideactive))
+            || $standardapprovalshown;
         $excludeexamconfirm = is_array($currentexamproject)
             ? ($displaylang === 'es'
                 ? '¿Excluir esta pregunta solamente de ' . (string)$currentexamproject['name']
@@ -17178,6 +17274,17 @@ echo $OUTPUT->header();
             </div>
             <div class="question-bank__actions-row" aria-label="<?php echo $displaylang === 'es' ? 'Acciones de la pregunta' : 'Question actions'; ?>">
             <?php if ($hasspanishtranslation): ?><a class="question-bank__button question-bank__button--language" href="<?php echo $questionlanguageurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'English' : 'Español'; ?></a><?php elseif ($revisionstatus !== 'extra_guideline'): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="translatequestion"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--language" type="submit"<?php echo $textaienabled ? '' : ' disabled'; ?>><?php echo $displaylang === 'es' ? 'Crear español' : 'Create Spanish'; ?></button></form><?php if ($displaylang === 'es'): ?><a class="question-bank__button" href="<?php echo $questionlanguageurl->out(false); ?>">English</a><?php endif; ?><?php endif; ?>
+            <?php if (!$inlineapproval && $customapprovedwarningeligible): ?>
+            <form method="post" action="<?php echo $filteractionurl->out(false); ?>">
+                <input type="hidden" name="formaction" value="approvecustomquestion">
+                <input type="hidden" name="questionid" value="<?php echo s($question['questionId']); ?>">
+                <input type="hidden" name="guidelineoverride" value="1">
+                <input type="hidden" name="reapprovewithwarning" value="1">
+                <?php if ($questionactionexamprojectid !== ''): ?><input type="hidden" name="examproject" value="<?php echo s($questionactionexamprojectid); ?>"><?php endif; ?>
+                <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
+                <button class="question-bank__button question-bank__button--approve" type="submit" onclick="return confirm('<?php echo $displaylang === 'es' ? '¿Conservar esta pregunta aprobada y aceptar la alerta del guideline? Quedarán registrados su usuario, la fecha y la alerta exacta.' : 'Keep this approved question and accept the guideline warning? Your user, the date, and the exact alert will be recorded.'; ?>');"><?php echo ($displaylang === 'es' ? 'Publicar con advertencia' : 'Publish with warning') . (is_array($questionactionexamproject) ? ' · ' . s((string)$questionactionexamproject['name']) : ''); ?></button>
+            </form>
+            <?php endif; ?>
             <?php if ($examquestionmanagementview): ?>
             <?php if (!in_array($revisionstatus, ['study_archive', 'extra_guideline', 'deleted'], true)): ?><a class="question-bank__button question-bank__edit-link" href="<?php echo $editurl->out(false); ?>#question-editor"><?php echo $displaylang === 'es' ? 'Editar' : 'Edit'; ?></a><?php endif; ?>
             <?php if (is_array($questionactionexamproject) && !$questioninexamproject && !$inlineapproval && !$question['_excluded'] && ($question['_ready'] || $questioncanpublishdirectlytoexam) && ($cardguidelineverified || $cardguidelineoverrideactive) && !$questionusedinpriorexam): ?><form method="post" action="<?php echo $pageurl->out_omit_querystring(false); ?>"><input type="hidden" name="formaction" value="updateexamquestion"><input type="hidden" name="examproject" value="<?php echo s($questionactionexamprojectid); ?>"><input type="hidden" name="questionid" value="<?php echo s((string)$question['questionId']); ?>"><input type="hidden" name="examaction" value="add"><input type="hidden" name="returnexamview" value="<?php echo s($examprojectview); ?>"><input type="hidden" name="returnpage" value="<?php echo (int)$page; ?>"><input type="hidden" name="lang" value="<?php echo s($displaylang); ?>"><input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>"><button class="question-bank__button question-bank__button--approve" type="submit"<?php echo $currentexamprojectfull ? ' disabled' : ''; ?>><?php echo $displaylang === 'es' ? 'Agregar' : 'Add'; ?></button></form><?php endif; ?>
@@ -17285,6 +17392,8 @@ echo $OUTPUT->header();
             <?php if (!$question['_excluded']): ?><a class="question-bank__button question-bank__button--similar" href="<?php echo $questionsimilarityurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Buscar preguntas similares' : 'Find similar questions'; ?></a><?php endif; ?>
             <?php if ($custompreviewids !== []): ?><a class="question-bank__button" href="#new-question-batch-preview"><?php echo $displaylang === 'es' ? '↑ Índice del lote' : '↑ Batch index'; ?></a><?php endif; ?>
             <?php endif; ?>
+            <?php if (!$cardmovecontrolshown): ?><button class="question-bank__button" type="button" disabled title="<?php echo s($displaylang === 'es' ? 'Esta pregunta todavía no tiene una posición activa que pueda moverse.' : 'This question does not yet have an active position that can be moved.'); ?>"><?php echo $displaylang === 'es' ? 'Mover / aplazar' : 'Move / defer'; ?></button><?php endif; ?>
+            <?php if (!$cardpublishcontrolshown): ?><button class="question-bank__button question-bank__button--approve" type="button" disabled title="<?php echo s($displaylang === 'es' ? 'El estado actual no permite otra publicación directa; edite, restaure o complete la pregunta para cambiarlo.' : 'The current state does not allow another direct publication; edit, restore, or complete the question to change it.'); ?>"><?php echo ($revisionstatus === 'approved' || $iscustomapproved) ? ($displaylang === 'es' ? 'Publicada ✓' : 'Published ✓') : ($displaylang === 'es' ? 'Publicar' : 'Publish'); ?></button><?php endif; ?>
             </div>
         </div>
         <?php if ($displaylang === 'es' && !$hasspanishtranslation): ?><div class="question-bank__translation-missing"><strong>Esta pregunta todavía no tiene traducción guardada.</strong> Se muestra el original inglés. Use <strong>Crear traducción al español</strong> para traducir solamente el texto, las respuestas y la explicación sin cambiar el contenido clínico.</div><?php endif; ?>
