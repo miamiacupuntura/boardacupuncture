@@ -15983,6 +15983,7 @@ $PAGE->requires->js_init_code(<<<'JS'
         var value = nameInput.value.trim();
         var normalizedValue = value.toLocaleLowerCase().replace(/\s+/g, ' ').trim();
         var officialOptions = document.querySelectorAll('#question-bank-scientific-names option');
+        var resolvedCompleteName = false;
         Array.prototype.some.call(officialOptions, function(option) {
             var candidate = (option.value || '').trim();
             var candidatePinyin = candidate.replace(/\s*\([^()]+\)\s*$/, '').trim();
@@ -15990,6 +15991,7 @@ $PAGE->requires->js_init_code(<<<'JS'
                     || candidatePinyin.toLocaleLowerCase().replace(/\s+/g, ' ').trim() === normalizedValue) {
                 value = candidate;
                 nameInput.value = candidate;
+                resolvedCompleteName = true;
                 return true;
             }
             return false;
@@ -16011,7 +16013,10 @@ $PAGE->requires->js_init_code(<<<'JS'
         target.dispatchEvent(new Event('input', {bubbles: true}));
         target.focus();
         if (status) {
-            status.textContent = helper.getAttribute('data-added-message') || 'Name inserted.';
+            status.textContent = resolvedCompleteName
+                ? (helper.getAttribute('data-added-message') || 'Complete name inserted.')
+                : (helper.getAttribute('data-unrecognized-message')
+                    || 'Name inserted as written; no official or supplemental match was found.');
         }
     });
 })();
@@ -17018,7 +17023,7 @@ echo $OUTPUT->header();
             <section class="question-bank__editor-panel question-bank__editor-panel--editing"><h4>Current version</h4>
                 <p class="question-bank__panel-intro">This is the only version shown. Edit it only when necessary, then save or approve it.</p>
                 <h5>English (required)</h5>
-                <div class="question-bank__nomenclature-helper" data-scientific-name-helper data-missing-message="<?php echo $displaylang === 'es' ? 'Escriba o seleccione primero un nombre.' : 'Enter or select a name first.'; ?>" data-added-message="<?php echo $displaylang === 'es' ? 'Nombre completo insertado. Guarde los cambios para conservarlo.' : 'Complete name inserted. Save the changes to keep it.'; ?>">
+                <div class="question-bank__nomenclature-helper" data-scientific-name-helper data-missing-message="<?php echo $displaylang === 'es' ? 'Escriba o seleccione primero un nombre.' : 'Enter or select a name first.'; ?>" data-added-message="<?php echo $displaylang === 'es' ? 'Nombre completo insertado. Guarde los cambios para conservarlo.' : 'Complete name inserted. Save the changes to keep it.'; ?>" data-unrecognized-message="<?php echo $displaylang === 'es' ? 'Nombre insertado tal como fue escrito; no se encontró una coincidencia oficial o complementaria.' : 'Name inserted as written; no official or supplemental match was found.'; ?>">
                     <h5><?php echo $displaylang === 'es' ? 'Insertar nombre científico o farmacéutico' : 'Insert scientific or pharmaceutical name'; ?></h5>
                     <p><?php echo $displaylang === 'es'
                         ? 'Seleccione o escriba el Pinyin de una hierba o fórmula reconocida. Al pulsar Insertar nombre se completará inmediatamente como Pinyin (latín farmacéutico) o Pinyin (nombre inglés). También puede escribir libremente otro nombre.'

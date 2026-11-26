@@ -188,6 +188,10 @@ function block_myprogress_herbology_supplemental_display_roster(): array {
         ['name' => 'Nan Gua Zi', 'latin' => 'Cucurbitae moschatae Semen'],
         ['name' => 'Da Suan', 'latin' => 'Allii sativi Bulbus'],
         ['name' => 'Hu Po', 'latin' => 'Succinum'],
+        // Source-chapter recognition herbs intentionally outside Appendix A.
+        ['name' => 'Hong Da Ji', 'latin' => 'Knoxiae Radix'],
+        ['name' => 'Yuan Hua', 'latin' => 'Genkwa Flos'],
+        ['name' => 'Qian Niu Zi', 'latin' => 'Pharbitidis Semen'],
     ];
 }
 
