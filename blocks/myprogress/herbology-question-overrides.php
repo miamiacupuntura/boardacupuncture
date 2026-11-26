@@ -395,7 +395,7 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
             // Appendix C English names may contain one nested parenthetical,
             // for example "Two-Aged (Herb) Decoction".
             : '/(?<![A-Za-z0-9])(?<formula>' . implode('|', array_values($formulapatterns)) . ')'
-                . '\s*\((?:[^()\r\n]{1,160}|\([^()\r\n]{0,120}\)){1,8}\)(?![A-Za-z0-9])/iu',
+                . '\s*\((?:[^()\r\n]++|\([^()\r\n]*+\))*\)(?![A-Za-z0-9])/iu',
         'parentheticalHerbPattern' => $herbpinyinpatterns === [] || $herblatinpatterns === []
             ? ''
             : '/(?<![A-Za-z0-9])(?<pinyin>' . implode('|', array_values($herbpinyinpatterns)) . ')'

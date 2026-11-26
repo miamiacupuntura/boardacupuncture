@@ -552,9 +552,13 @@ grep -Fq 'Open Extra guideline →' "$MOODLE_ROOT/blocks/menu/herbology-board.ph
 
 if [[ -f "$MOODLE_ROOT/admin/cli/purge_caches.php" ]]; then
     if command -v runuser >/dev/null 2>&1 && id www-data >/dev/null 2>&1; then
-        runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"
+        if ! runuser -u www-data -- php "$MOODLE_ROOT/admin/cli/purge_caches.php"; then
+            echo "ADVERTENCIA: los archivos se instalaron, pero Moodle no pudo purgar la caché. Verifique la conexión a la base de datos y purgue la caché después." >&2
+        fi
     else
-        php "$MOODLE_ROOT/admin/cli/purge_caches.php"
+        if ! php "$MOODLE_ROOT/admin/cli/purge_caches.php"; then
+            echo "ADVERTENCIA: los archivos se instalaron, pero Moodle no pudo purgar la caché. Verifique la conexión a la base de datos y purgue la caché después." >&2
+        fi
     fi
 fi
 
@@ -653,4 +657,5 @@ echo "OK: el botón Publicar con advertencia envía una acción POST limpia y mu
 echo "OK: una publicación con advertencia no vuelve a aplicar el requisito Board de hierbas visibles del Appendix A."
 echo "OK: Publicar con advertencia usa un enlace administrativo firmado y no depende del envío de formularios."
 echo "OK: el enlace de publicación no depende de una ventana JavaScript de confirmación."
+echo "OK: una base de datos temporalmente inaccesible ya no convierte el paso opcional de purgar caché en un falso fallo de instalación."
 echo "RESPALDO: $BACKUP_DIR"
