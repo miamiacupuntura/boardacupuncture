@@ -15565,16 +15565,18 @@ PROMPT;
                     $failurebatchid = (string)($existingrevision['aiBatchId'] ?? '');
                 }
             }
-            // A focused automatic review must return by question ID without the
-            // old readiness, domain, source or usage filters. The generated
-            // draft may legitimately change those classifications, and keeping
-            // the filters would make the same question disappear after review.
+            // Preserve the administrator's working queue after a focused
+            // review. A search such as "Hierarchy of Ingredients" and its
+            // Domain/Content/Source filters must survive the first item.
+            $failureoriginfilters = $questionbankreturnfilterparams($rewritequestionid);
             $failureparams = $returnorigin
-                ? array_filter([
-                    'q' => $rewritequestionid,
-                    'examproject' => $examprojectid !== '' ? $examprojectid : null,
-                    'lang' => $displaylang !== 'en' ? $displaylang : null,
-                ])
+                ? ($hasquestionbankselectionfilters($failureoriginfilters)
+                    ? $failureoriginfilters
+                    : array_filter([
+                        'q' => $rewritequestionid,
+                        'examproject' => $examprojectid !== '' ? $examprojectid : null,
+                        'lang' => $displaylang !== 'en' ? $displaylang : null,
+                    ]))
                 : ($returneditingdrafts ? array_filter([
                     'review' => 'editing_drafts',
                     'q' => $rewritequestionid,
@@ -15750,15 +15752,18 @@ PROMPT;
     if ($generationerrors !== []) {
         $message .= ' ' . count($generationerrors) . ' question(s) could not be generated and remain pending.';
     }
-    // Always show the exact question that just completed automatic review.
-    // Old filters are intentionally removed because the new draft can move to
-    // another readiness or classification state during the review itself.
+    // Return to the same filtered work queue. The anchor still targets the
+    // reviewed card when it remains in the result set; after publication, the
+    // same filters expose the next matching question automatically.
+    $revieworiginfilters = $questionbankreturnfilterparams($rewritequestionid);
     $reviewurlparams = $returnorigin
-        ? array_filter([
-            'q' => $rewritequestionid,
-            'examproject' => $examprojectid !== '' ? $examprojectid : null,
-            'lang' => $displaylang !== 'en' ? $displaylang : null,
-        ])
+        ? ($hasquestionbankselectionfilters($revieworiginfilters)
+            ? $revieworiginfilters
+            : array_filter([
+                'q' => $rewritequestionid,
+                'examproject' => $examprojectid !== '' ? $examprojectid : null,
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ]))
         : ($returneditingdrafts ? array_filter([
             'review' => 'editing_drafts',
             'q' => $rewritequestionid,
