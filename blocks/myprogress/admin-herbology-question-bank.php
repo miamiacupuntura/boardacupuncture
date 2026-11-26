@@ -11710,14 +11710,16 @@ PROMPT;
                     }
                     $scoperequireslocalrender = false;
                     if (!is_array($matchedevidence)
-                            && !$twostageduiyaomodificationrequest
                             && isset($formulavduiyaoscopeevidence[$decodedindex])) {
                         // BATCH CREATION assigns the selected evidence in this
                         // exact order. If verbose wording prevents reliable
                         // name matching, use that position instead of rejecting
                         // a relationship that the server selected itself.
                         $matchedevidence = $formulavduiyaoscopeevidence[$decodedindex];
-                        $scoperequireslocalrender = true;
+                        // Clinical-return questions have their own repair below,
+                        // which preserves the base formula and result. Only the
+                        // abstract scope mode uses the generic local renderer.
+                        $scoperequireslocalrender = !$twostageduiyaomodificationrequest;
                     }
                     if (($scopehasoverlongchoice || $scoperequireslocalrender)
                             && !$twostageduiyaomodificationrequest
@@ -11748,7 +11750,8 @@ PROMPT;
                         $scopespanishprompt = trim(
                             (string)($decodeditem['translations']['es']['prompt'] ?? '')
                         );
-                    } else if ($scopehasoverlongchoice) {
+                    } else if ($scopehasoverlongchoice
+                            && !$twostageduiyaomodificationrequest) {
                         throw new UnexpectedValueException(
                             'Formula-versus-Duì-Yào choices must be concise assignments; move all reasoning into the explanation.'
                         );
