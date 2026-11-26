@@ -676,7 +676,7 @@ echo "OK: SCORM-SA-0B6F0EB1C671 elimina instrucciones internas del feedback, com
 echo "OK: SCORM-SA-839A5657D57F reemplaza Bai Fan por Hua Shi y bloquea opciones que sean alias de la misma sustancia."
 echo "OK: Zhi Gan Cao y Xi Gan Cao se aceptan como Gan Cao; Involves Fu Zi y la hierba Zi Wan dejan de producir falsos errores de fórmula."
 echo "OK: SCORM-SH-122BB537C8D7 vuelve automáticamente al examen del que fue retirada por esos falsos positivos."
-echo "OK: ADMIN-HB-20261126-151529-03C9 deja la pista latina solo en el enunciado y ya no revela la respuesta en A-D."
+echo "OK: ADMIN-HB-20261126-151529-93C9 deja la pista latina solo en el enunciado y ya no revela la respuesta en A-D."
 echo "OK: toda pregunta futura que repita en una opción el nombre latino del enunciado queda bloqueada antes de publicarse."
 echo "OK: cualquier rechazo de publicación queda visible dentro de la tarjeta aunque el tema oculte las notificaciones Moodle."
 echo "OK: si el examen ya tiene 100 identificadores, una aprobación reemplaza solamente una posición pendiente y nunca una pregunta aprobada."
