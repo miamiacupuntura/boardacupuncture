@@ -1398,9 +1398,13 @@ $builtinstructiontemplateid = 'builtin-formula-vs-dui-yao';
 $twostageduiyaoinstructiontemplateid = 'builtin-two-stage-dui-yao-formula-modification';
 $fourlevelsinstructiontemplateid = 'builtin-four-levels-differentiation';
 $sixstagesinstructiontemplateid = 'builtin-six-stages-differentiation';
+$visualherbidentificationinstructiontemplateid = 'builtin-visual-herb-identification';
 $builtinstructiontemplateids = [
     $builtinstructiontemplateid,
     $twostageduiyaoinstructiontemplateid,
+    $fourlevelsinstructiontemplateid,
+    $sixstagesinstructiontemplateid,
+    $visualherbidentificationinstructiontemplateid,
 ];
 $generalinstructiontemplates = [
     $builtinstructiontemplateid => [
@@ -1444,6 +1448,30 @@ $generalinstructiontemplates = [
             . "Explain stage 1 (initial findings to base formula), stage 2 (new findings to added pair), and stage 3 (how the pair changes the strategy and produces the resulting formula). "
             . "Analyze choices A, B, C, and D separately in English and Spanish.",
         'domainId' => 'dui_yao',
+        'builtin' => true,
+    ],
+    $visualherbidentificationinstructiontemplateid => [
+        'id' => $visualherbidentificationinstructiontemplateid,
+        'name' => 'Visual herb identification · 5-question set',
+        'instruction' => "## Visual identification from external macroscopic characteristics\n\n"
+            . "Create up to 5 independent, direct, positive multiple-choice questions in Domain 2: Individual herbs. "
+            . "Use the verified specimens below in this exact order; when the requested batch is smaller than 5, use only the first requested specimens. Key every selected specimen exactly once.\n\n"
+            . "VERIFIED VISUAL EVIDENCE:\n"
+            . "1. Chen Pi (Citri reticulatae Pericarpium): the whole dried mature tangerine pericarp, seen as irregular curved pieces; reddish-orange to reddish-brown outer surface with numerous small oil-gland pits; pale, white, spongy inner surface. The colored outer layer is the flavedo and the white inner layer is the albedo. Distinguish it from Ju Hong (Citri reticulatae Exocarpium rubrum), which is the red outer exocarp/flavedo rather than the whole pericarp and must appear as a distractor in this first item.\n"
+            . "2. Xin Yi (Magnoliae Flos): unopened ovoid to spindle-shaped magnolia flower buds, densely covered with silky gray-white to yellowish hairs, with darker overlapping bracts at the base.\n"
+            . "3. Ding Xiang (Caryophylli Flos): dried nail-shaped flower bud, reddish-brown to dark brown, with a long cylindrical calyx tube, four triangular teeth, and a rounded unopened corolla head.\n"
+            . "4. Chan Tui (Cicadae Periostracum): light yellow-brown, translucent, hollow cicada exuvia; the whole body and jointed legs remain visible and the dorsum is split where the insect emerged.\n"
+            . "5. Hong Hua (Carthami Flos): loose orange-red to red tubular safflower florets with slender corolla tubes, five narrow terminal lobes, and yellowish anthers.\n\n"
+            . "QUESTION RULES:\n"
+            . "Describe only external, visible macroscopic traits: medicinal part, color, shape, surface, texture, cut surface, botanical structures, and arrangement. Do not use taste, odor, temperature, channels, actions, indications, dosage, safety, source plant name, common English name, Pinyin, or Pharmaceutical Latin as a decisive clue in the stem. Do not reveal the keyed herb in the stem. End by asking which herb is described. "
+            . "Use exactly four short, parallel choices in exact 'tone-free Pinyin (Pharmaceutical Latin)' format. Every choice must be a current Appendix A herb and a visually plausible distractor, preferably the same medicinal part or a similar external form.\n\n"
+            . "MANDATORY CLASSIFICATION:\n"
+            . "domainId: single_herb; contentType: herb_properties; cognitiveLevel: infer or analyze; difficultyBand: inference or analysis.\n\n"
+            . "MANDATORY FEEDBACK:\n"
+            . "Explain inference step 1 from the visible structures to the medicinal material and inference step 2 to the keyed herb. Identify the decisive visual traits and contrast A, B, C, and D separately. Provide complete English and Spanish feedback, preserving Pinyin and Pharmaceutical Latin exactly. Do not add unsupported microscopy or chemical tests.",
+        'domainId' => 'single_herb',
+        'framework' => 'visual_herb_identification',
+        'batchCount' => 5,
         'builtin' => true,
     ],
     $fourlevelsinstructiontemplateid => [
@@ -10222,6 +10250,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     if ($classicalstageframework !== '') {
         $customtargetdomain = 'formula_differentiation';
     }
+    $visualherbidentificationrequest = $usedinstructiontemplateid
+        === $visualherbidentificationinstructiontemplateid;
+    if ($visualherbidentificationrequest) {
+        $customtargetdomain = 'single_herb';
+    }
     $normalizedinstructionidea = core_text::strtolower(core_text::specialtoascii($idea));
     $twostageinstructioncontentdetected = core_text::strpos(
         $normalizedinstructionidea,
@@ -10464,6 +10497,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     if (!$iscustomrewrite && count($customquestionideas) === 1 && $classicalstageframework !== '') {
         $classicalstagebatchcount = $classicalstageframework === 'four_levels' ? 4 : 6;
         $customquestionideas = array_fill(0, $classicalstagebatchcount, $idea);
+    }
+    if (!$iscustomrewrite
+            && count($customquestionideas) === 1
+            && $visualherbidentificationrequest
+            && !$preserveexactquestion) {
+        $visualherbbatchcount = $newquestionneededcount > 0
+            ? min(5, $newquestionneededcount)
+            : 5;
+        $customquestionideas = array_fill(0, $visualherbbatchcount, $idea);
     }
     if (count($customquestionideas) > 6) {
         $returnnewquestionfailure(
@@ -11058,6 +11100,15 @@ PROMPT;
             . "or direct-recall item. Use observable clinical findings, exactly one defensible stage, and complete bilingual "
             . "A-D feedback.";
     }
+    if ($visualherbidentificationrequest) {
+        $customprompt .= "\n\nMANDATORY VISUAL HERB IDENTIFICATION — DO NOT SUBSTITUTE:\n"
+            . "Create the macroscopic identification set in the administrator instruction, in its stated specimen order. "
+            . "Use only the supplied verified visual evidence; do not invent microscopy, measurements, source species, chemistry, actions, indications, taste, odor, or safety facts. "
+            . "Every stem must stand on visible external characteristics alone and must not contain the keyed Pinyin, Pharmaceutical Latin, or English/common name. "
+            . "Every A-D choice must use exact current Appendix A Pinyin (Pharmaceutical Latin), with one visually plausible herb per choice. "
+            . "In the first item, key the whole mature pericarp as Chen Pi and include Ju Hong (the red flavedo/exocarp alone) as a distractor; explain that the visible white albedo is decisive for Chen Pi. "
+            . "Use domainId single_herb and contentType herb_properties. The explanation must teach the visible distinction from every distractor in English and Spanish.";
+    }
     if ($fuzirouguiexactrequest) {
         $customprompt .= "\n\nMANDATORY EDUCATIONAL OBJECTIVE — DO NOT GENERALIZE OR SUBSTITUTE:\n"
             . "Keep Liu Wei Di Huang Wan as the base; keep processed Fu Zi plus Rou Gui as the Duì Yào; identify the Ba Wei Di Huang Wan/Jin Gui Shen Qi Wan lineage; explain the shift toward Kidney Yang and water transformation; and preserve the source-dependent Rou Gui versus Gui Zhi distinction. "
@@ -11400,6 +11451,10 @@ PROMPT;
                     $decodeditem['domainId'] = 'formula_differentiation';
                     $decodeditem['contentType'] = $classicalstageframework;
                 }
+                if ($visualherbidentificationrequest) {
+                    $decodeditem['domainId'] = 'single_herb';
+                    $decodeditem['contentType'] = 'herb_properties';
+                }
                 $guidelineviolations = $findcreatedquestionguidelineviolations($decodeditem);
                 if ($guidelineviolations !== [] && !$twostageduiyaomodificationrequest) {
                     throw new UnexpectedValueException(
@@ -11451,6 +11506,74 @@ PROMPT;
                             'The complete framework set must key every stage exactly once. Missing or repeated: '
                                 . implode(', ', $missingclassicalstages) . '.'
                         );
+                    }
+                }
+            }
+            if ($visualherbidentificationrequest) {
+                $visualherbprofiles = [
+                    ['name' => 'Chen Pi', 'latin' => 'Citri reticulatae Pericarpium'],
+                    ['name' => 'Xin Yi', 'latin' => 'Magnoliae Flos'],
+                    ['name' => 'Ding Xiang', 'latin' => 'Caryophylli Flos'],
+                    ['name' => 'Chan Tui', 'latin' => 'Cicadae Periostracum'],
+                    ['name' => 'Hong Hua', 'latin' => 'Carthami Flos'],
+                ];
+                $visualherbprofiles = array_slice($visualherbprofiles, 0, $custombatchcount);
+                foreach ($decodedbatch as $visualindex => $decodeditem) {
+                    $expectedvisualherb = $visualherbprofiles[$visualindex] ?? null;
+                    if (!is_array($expectedvisualherb)) {
+                        throw new UnexpectedValueException(
+                            'The visual-identification batch contains an unexpected specimen.'
+                        );
+                    }
+                    $expectedvisualanswer = $expectedvisualherb['name']
+                        . ' (' . $expectedvisualherb['latin'] . ')';
+                    $keyedvisualanswer = trim($correctoptiontext($decodeditem));
+                    if ($normalizeguidelinename($keyedvisualanswer)
+                            !== $normalizeguidelinename($expectedvisualanswer)) {
+                        throw new UnexpectedValueException(
+                            'Visual-identification question ' . ($visualindex + 1)
+                                . ' must key ' . $expectedvisualanswer . ' exactly.'
+                        );
+                    }
+                    $visualprompt = (string)($decodeditem['prompt'] ?? '');
+                    if (preg_match(
+                        '/\b' . preg_quote($expectedvisualherb['name'], '/') . '\b|'
+                            . preg_quote($expectedvisualherb['latin'], '/') . '/iu',
+                        $visualprompt
+                    ) === 1) {
+                        throw new UnexpectedValueException(
+                            'A visual-identification stem must not reveal its keyed herb name.'
+                        );
+                    }
+                    if (preg_match(
+                        '/\b(?:color|colou?r|red|orange|brown|yellow|white|gray|grey|surface|outer|inner|'
+                            . 'shape|shaped|curved|ovoid|spindle|hair|hairs|bud|tube|lobe|translucent|'
+                            . 'hollow|split|flavedo|albedo|superficie|externa|interna|forma|curv|ovoide|'
+                            . 'fusiforme|vello|capullo|tubo|l[oó]bulo|transl[uú]cid|huec|abiert|rojo|'
+                            . 'naranja|marr[oó]n|amarill|blanc|gris)\w*/iu',
+                        $visualprompt
+                    ) !== 1) {
+                        throw new UnexpectedValueException(
+                            'Every visual-identification stem must contain observable macroscopic characteristics.'
+                        );
+                    }
+                    if ($visualindex === 0) {
+                        $visualoptiontexts = array_map(
+                            static fn(array $option): string => trim((string)($option['text'] ?? '')),
+                            (array)($decodeditem['options'] ?? [])
+                        );
+                        $hasjuhongdistractor = count(array_filter(
+                            $visualoptiontexts,
+                            static fn(string $optiontext): bool => $normalizeguidelinename($optiontext)
+                                === $normalizeguidelinename(
+                                    'Ju Hong (Citri reticulatae Exocarpium rubrum)'
+                                )
+                        )) === 1;
+                        if (!$hasjuhongdistractor) {
+                            throw new UnexpectedValueException(
+                                'The Chen Pi visual item must contrast the whole pericarp with the Ju Hong flavedo distractor.'
+                            );
+                        }
                     }
                 }
             }
@@ -17028,6 +17151,18 @@ echo $OUTPUT->header();
             ])
         );
         $sixstagescreationurl->set_anchor('new-question');
+        $visualherbidentificationcreationurl = new moodle_url(
+            '/blocks/myprogress/admin-herbology-question-bank.php',
+            array_filter([
+                'newquestion' => 1,
+                'instructiontemplate' => $visualherbidentificationinstructiontemplateid,
+                'targetdomain' => 'single_herb',
+                'targetexamproject' => $newquestiontargetexam !== '' ? $newquestiontargetexam : null,
+                'needed' => $newquestionneededcount > 0 ? $newquestionneededcount : null,
+                'lang' => $displaylang !== 'en' ? $displaylang : null,
+            ])
+        );
+        $visualherbidentificationcreationurl->set_anchor('new-question');
     ?><section id="new-question" class="question-bank__new-question">
         <h3><?php echo $displaylang === 'es' ? 'Crear una o varias preguntas' : 'Create one or several questions'; ?></h3>
         <?php if ($newquestiontargetdomain !== ''
@@ -17077,6 +17212,15 @@ echo $OUTPUT->header();
             <div class="question-bank__editor-actions">
                 <a class="question-bank__button question-bank__button--primary" href="<?php echo $fourlevelscreationurl->out(false); ?>">Four Levels · 4</a>
                 <a class="question-bank__button question-bank__button--primary" href="<?php echo $sixstagescreationurl->out(false); ?>">Six Stages · 6</a>
+            </div>
+        </section>
+        <section class="question-bank__decision-panel" aria-label="<?php echo $displaylang === 'es' ? 'Identificación visual de hierbas' : 'Visual herb identification'; ?>">
+            <h4><?php echo $displaylang === 'es' ? 'Crear preguntas de identificación visual de hierbas' : 'Create visual herb-identification questions'; ?></h4>
+            <p><?php echo $displaylang === 'es'
+                ? 'Crea hasta 5 borradores a partir de color, forma, superficie, textura y estructuras botánicas visibles. El primer ejemplo identifica Chen Pi por el flavedo rojizo, las glándulas de aceite y el albedo blanco.'
+                : 'Create up to 5 drafts from visible color, shape, surface, texture and botanical structures. The first example identifies Chen Pi from its reddish flavedo, oil glands and white albedo.'; ?></p>
+            <div class="question-bank__editor-actions">
+                <a class="question-bank__button question-bank__button--primary" href="<?php echo $visualherbidentificationcreationurl->out(false); ?>"><?php echo $displaylang === 'es' ? 'Identificación visual · 5' : 'Visual identification · 5'; ?></a>
             </div>
         </section>
         <section class="question-bank__decision-panel" aria-label="<?php echo $displaylang === 'es' ? 'Banco de instrucciones generales' : 'General instruction bank'; ?>">
