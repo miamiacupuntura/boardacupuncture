@@ -11708,12 +11708,23 @@ PROMPT;
                             break;
                         }
                     }
-                    if ($scopehasoverlongchoice
+                    $scoperequireslocalrender = false;
+                    if (!is_array($matchedevidence)
+                            && !$twostageduiyaomodificationrequest
+                            && isset($formulavduiyaoscopeevidence[$decodedindex])) {
+                        // BATCH CREATION assigns the selected evidence in this
+                        // exact order. If verbose wording prevents reliable
+                        // name matching, use that position instead of rejecting
+                        // a relationship that the server selected itself.
+                        $matchedevidence = $formulavduiyaoscopeevidence[$decodedindex];
+                        $scoperequireslocalrender = true;
+                    }
+                    if (($scopehasoverlongchoice || $scoperequireslocalrender)
                             && !$twostageduiyaomodificationrequest
                             && is_array($matchedevidence)) {
-                        // The provider preserved the verified relationship but
-                        // wrote explanatory paragraphs inside A-D. Replace the
-                        // entire item with the local concise version now; do
+                        // The provider either wrote explanatory paragraphs in
+                        // A-D or obscured the selected names. Replace the entire
+                        // item with the verified concise local version now; do
                         // not spend more provider calls asking for formatting.
                         $decodeditem = $decodecustomdraft(json_encode(
                             $buildformulavduiyaoscopefallback($matchedevidence),
