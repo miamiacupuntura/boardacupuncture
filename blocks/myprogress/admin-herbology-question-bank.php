@@ -5394,6 +5394,11 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST'
             $record['republishedAt'] = $savedat;
             $record['republishedById'] = (int)$USER->id;
             $record['republishedByName'] = $savedbyname;
+            // The failed automatic attempt remains recoverable in history,
+            // but it must not continue to label the successfully republished
+            // version as an incomplete review.
+            unset($record['lastAutomaticReviewFailure']);
+            $record['automaticReviewFailureClearedAt'] = $savedat;
         }
         if (is_array($directguidelineoverride)) {
             $record['guidelineOverride'] = $directguidelineoverride;

@@ -493,6 +493,19 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
         if (!is_string($value) || $value === '') {
             return $value;
         }
+        // Some imported source questions incorrectly split this legacy
+        // formula display into an herb plus a formula fragment.  Treat the
+        // complete source name as one unit: the pharmaceutical name for Huo
+        // Xiang must not be inserted in the middle of the formula name.
+        $embeddedherbformularepaired = preg_replace(
+            '/(?<![A-Za-z0-9])Huo\s+Xiang\s*\(\s*Pogostemonis\/Agastaches\s+Herba\s*\)'
+                . '\s+Zheng\s+Qi\s+Tang(?![A-Za-z0-9])/iu',
+            'Huo Xiang Zheng Qi Tang',
+            $value
+        );
+        if (is_string($embeddedherbformularepaired)) {
+            $value = $embeddedherbformularepaired;
+        }
         if ($parentheticalformulapattern !== '' && $formuladisplays !== []) {
             $formulareplaced = preg_replace_callback(
                 $parentheticalformulapattern,
@@ -631,6 +644,18 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
                 $protectedsegments[$placeholder] = (string)$match[0];
                 return $placeholder;
             };
+            // Preserve the complete imported source formula while expanding
+            // ordinary standalone herbs to Pinyin (Latin). This formula is
+            // intentionally outside the active roster and must remain visible
+            // exactly as Huo Xiang Zheng Qi Tang for administrator review.
+            $legacyformulaprotected = preg_replace_callback(
+                '/(?<![A-Za-z0-9])Huo\s+Xiang\s+Zheng\s+Qi\s+Tang(?![A-Za-z0-9])/iu',
+                $protectsegment,
+                $value
+            );
+            if (is_string($legacyformulaprotected)) {
+                $value = $legacyformulaprotected;
+            }
             if ($formulapattern !== '') {
                 $protected = preg_replace_callback($formulapattern, $protectsegment, $value);
                 if (is_string($protected)) {
