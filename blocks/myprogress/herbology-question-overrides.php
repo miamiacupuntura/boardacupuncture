@@ -203,6 +203,10 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
         // Appendix A distinguishes it from Chuan Niu Xi; the attached
         // Achyranthis bidentatae Radix identity resolves the abbreviation.
         'Huai Niu Xi' => ['Niu Xi'],
+        // Legacy SCORM sources label processed aconite as Zhi Fu Zi. It is
+        // the processed presentation of the Appendix A entry Fu Zi, not a
+        // separate herb identity.
+        'Fu Zi' => ['Zhi Fu Zi'],
     ];
     $pharmaceuticalparts = [
         'bulbus', 'calculus', 'caulis', 'cortex', 'flos', 'folium', 'fructus', 'herba',
@@ -642,6 +646,34 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
                 continue;
             }
             $optiontext = trim((string)($option['text'] ?? ''));
+            foreach ($herbdisplays as $official) {
+                $officialname = trim((string)($official['name'] ?? ''));
+                $officiallatin = trim((string)($official['latin'] ?? ''));
+                if ($officialname === '' || $officiallatin === '') {
+                    continue;
+                }
+                $namepattern = implode('\\s+', array_map(
+                    static fn(string $word): string => preg_quote($word, '/'),
+                    preg_split('/\\s+/u', $officialname, -1, PREG_SPLIT_NO_EMPTY) ?: []
+                ));
+                $latinpattern = implode('\\s+', array_map(
+                    static fn(string $word): string => preg_quote($word, '/'),
+                    preg_split('/\\s+/u', $officiallatin, -1, PREG_SPLIT_NO_EMPTY) ?: []
+                ));
+                if (preg_match(
+                    '/^\\s*' . $namepattern . '\\s*\\(\\s*' . $latinpattern
+                        . '\\s*\\)\\s*[-\\x{2013}\\x{2014}]\\s*.+?\\/\\s*(?:Rx\\.?\\s*)?.+$/iu',
+                    $optiontext
+                ) === 1) {
+                    // Imported choices sometimes append a prose definition
+                    // and a second legacy pharmaceutical name after an exact
+                    // Pinyin (Latin) identity. Keep only the official display;
+                    // the prose belongs in the explanation, not the choice.
+                    $optiontext = $officialname . ' (' . $officiallatin . ')';
+                    $option['text'] = $optiontext;
+                    break;
+                }
+            }
             if ($optiontext === '' || str_contains($optiontext, '(')) {
                 continue;
             }

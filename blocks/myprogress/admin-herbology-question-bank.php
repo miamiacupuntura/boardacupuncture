@@ -2616,6 +2616,8 @@ $guidelineherbaliases = [
     'su ye' => 'zi su ye',
     // Imported sources use generic Niu Xi for the Appendix A Huai species.
     'niu xi' => 'huai niu xi',
+    // Zhi Fu Zi is the processed-source label for the Appendix A Fu Zi entry.
+    'zhi fu zi' => 'fu zi',
 ];
 $stripguidelineinstructionprefixes = static function(string $normalizedname): string {
     $stripped = preg_replace(
