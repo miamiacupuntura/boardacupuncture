@@ -659,6 +659,46 @@ $exam5canonicalrepairs = [
             ],
         ],
     ],
+    'SCORM-SA-E950B91B9650' => [
+        // Preserve the keyed source question and answer, but replace its
+        // one-sentence note with complete educational feedback in both
+        // languages. The qualification avoids presenting a source-specific
+        // regulatory claim as a universal rule for all jurisdictions.
+        'explanation' => 'Inference step 1: According to the keyed source, Qian Niu Zi (Pharbitidis Semen) is the intended answer because it is a morning-glory seed and the source associates this type of seed with ergoline alkaloids, including lysergic acid amides, and resulting restrictions. Inference step 2: In contemporary Chinese materia medica, the more established safety concern for Qian Niu Zi is its toxic, drastic water-expelling and purgative action; restrictions concerning hallucinogenic constituents can vary by the exact botanical material and jurisdiction. Option A: Correct according to the source used for this item. Qian Niu Zi is the seed singled out by the question and is outside the active Appendix A roster. Option B: Incorrect. Suan Zao Ren (Ziziphi spinosae Semen) nourishes Heart and Liver Blood, calms the spirit, and stops sweating; it is not the seed identified by this restriction. Option C: Incorrect. Bai Zi Ren (Platycladi Semen) nourishes Heart Blood, calms the spirit, and moistens the Intestines; it does not match the source-specific restriction. Option D: Incorrect. Lian Zi (Nelumbinis Semen) tonifies the Spleen, stops diarrhea, secures Essence, and nourishes the Heart; it is not selected for hallucinogenic compounds. Guideline status: Qian Niu Zi is outside the current Appendix A roster, so this question requires an administrator warning or placement in the independent Extra guideline bank.',
+        'translations' => [
+            'es' => [
+                'prompt' => '¿Qué hierba en forma de semilla está restringida por compuestos alucinógenos?',
+                'options' => [
+                    ['label' => 'A', 'text' => 'Qian Niu Zi (Pharbitidis Semen)'],
+                    ['label' => 'B', 'text' => 'Suan Zao Ren (Ziziphi spinosae Semen)'],
+                    ['label' => 'C', 'text' => 'Bai Zi Ren (Platycladi Semen)'],
+                    ['label' => 'D', 'text' => 'Lian Zi (Nelumbinis Semen)'],
+                ],
+                'explanation' => 'Paso de inferencia 1: Según la fuente que proporciona la respuesta de esta pregunta, Qian Niu Zi (Pharbitidis Semen) es la opción prevista porque es una semilla de la familia de las campanillas y la fuente relaciona este tipo de semilla con alcaloides ergolínicos, incluidas amidas del ácido lisérgico, y las restricciones correspondientes. Paso de inferencia 2: En la materia médica china contemporánea, el riesgo de seguridad mejor establecido de Qian Niu Zi es su acción tóxica, drástica, purgante y expulsora de agua; las restricciones relacionadas con componentes alucinógenos pueden variar según el material botánico exacto y la jurisdicción. Opción A: Correcta según la fuente utilizada para esta pregunta. Qian Niu Zi es la semilla señalada por el enunciado y está fuera del roster activo del Appendix A. Opción B: Incorrecta. Suan Zao Ren (Ziziphi spinosae Semen) nutre la Sangre de Corazón e Hígado, calma el espíritu y detiene la sudoración; no es la semilla identificada por esta restricción. Opción C: Incorrecta. Bai Zi Ren (Platycladi Semen) nutre la Sangre de Corazón, calma el espíritu y humedece los Intestinos; no corresponde a la restricción específica de la fuente. Opción D: Incorrecta. Lian Zi (Nelumbinis Semen) tonifica el Bazo, detiene la diarrea, asegura la Esencia y nutre el Corazón; no se selecciona por compuestos alucinógenos. Estado del guideline: Qian Niu Zi está fuera del roster actual del Appendix A, por lo que esta pregunta requiere una advertencia del administrador o guardarse en el banco independiente Extra guideline.',
+            ],
+        ],
+        'contentType' => 'roster_aliases',
+        'cognitiveLevel' => 'apply',
+        'difficultyBand' => 'application',
+        'nomenclature' => [
+            'herbs' => [
+                ['pinyin' => 'Qian Niu Zi', 'pharmaceuticalName' => 'Pharbitidis Semen'],
+                ['pinyin' => 'Suan Zao Ren', 'pharmaceuticalName' => 'Ziziphi spinosae Semen'],
+                ['pinyin' => 'Bai Zi Ren', 'pharmaceuticalName' => 'Platycladi Semen'],
+                ['pinyin' => 'Lian Zi', 'pharmaceuticalName' => 'Nelumbinis Semen'],
+            ],
+            'formulas' => [],
+            'feedback' => [
+                'herbs' => [
+                    ['pinyin' => 'Qian Niu Zi', 'pharmaceuticalName' => 'Pharbitidis Semen'],
+                    ['pinyin' => 'Suan Zao Ren', 'pharmaceuticalName' => 'Ziziphi spinosae Semen'],
+                    ['pinyin' => 'Bai Zi Ren', 'pharmaceuticalName' => 'Platycladi Semen'],
+                    ['pinyin' => 'Lian Zi', 'pharmaceuticalName' => 'Nelumbinis Semen'],
+                ],
+                'formulas' => [],
+            ],
+        ],
+    ],
     'CF-0290' => [
         'prompt' => 'Which statement most accurately distinguishes Shen Qi Wan (Kidney Qi Pill) from Zhen Wu Tang (True Warrior Decoction) when Kidney Yang deficiency disrupts fluid metabolism?',
         'options' => [
@@ -1125,7 +1165,9 @@ foreach ($bank['domains'] as &$exam5domainquestions) {
         $exam5question['cognitiveLevel'] = (string)($exam5repair['cognitiveLevel'] ?? 'analyze');
         $exam5question['difficultyBand'] = (string)($exam5repair['difficultyBand'] ?? 'analysis');
         $exam5question['review']['status'] = 'practice-ready';
-        $exam5question['review']['notes'] = 'Exam 5 canonical comparison repair with independent choices and complete distractor feedback.';
+        $exam5question['review']['notes'] = $exam5questionid === 'SCORM-SA-E950B91B9650'
+            ? 'Canonical bilingual feedback repair with complete analysis of the keyed answer and distractors.'
+            : 'Exam 5 canonical comparison repair with independent choices and complete distractor feedback.';
         if (trim((string)($exam5question['sourceCard']['url'] ?? '')) === '') {
             $exam5question['sourceCard'] = [
                 'url' => '/blocks/myprogress/formulas-study-guide.php?lang=en',
@@ -2146,7 +2188,7 @@ if (is_array($fuzirouguirecord)
 }
 $reviewedcanonicalids = [
     'CF-0057', 'CF-0127', 'CF-0213', 'CF-0217', 'CF-0227', 'CF-0230', 'CF-0280', 'CF-0305', 'CF-1582',
-    'SCORM-FD-5917E7491258',
+    'SCORM-FD-5917E7491258', 'SCORM-SA-E950B91B9650',
 ];
 $reviewedcanonicalquestions = [];
 foreach (($bank['domains'] ?? []) as $questions) {
