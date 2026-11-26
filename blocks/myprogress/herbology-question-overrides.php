@@ -192,6 +192,11 @@ function block_myprogress_herbology_supplemental_display_roster(): array {
         ['name' => 'Hong Da Ji', 'latin' => 'Knoxiae Radix'],
         ['name' => 'Yuan Hua', 'latin' => 'Genkwa Flos'],
         ['name' => 'Qian Niu Zi', 'latin' => 'Pharbitidis Semen'],
+        // Animal-derived teaching substances retained for historical and
+        // conservation-law questions outside the active Appendix A roster.
+        ['name' => 'Lu Jiao', 'latin' => 'Cervi Cornu'],
+        ['name' => 'Hai Ma', 'latin' => 'Hippocampus'],
+        ['name' => 'Hai Gou Shen', 'latin' => 'Callorhini Testis et Penis'],
     ];
 }
 
