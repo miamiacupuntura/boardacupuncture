@@ -392,8 +392,10 @@ function block_myprogress_herbology_official_pinyin_case_data(): array {
                 . '(?![A-Za-z0-9]|\s*\()/iu',
         'parentheticalFormulaPattern' => $formulapatterns === []
             ? ''
+            // Appendix C English names may contain one nested parenthetical,
+            // for example "Two-Aged (Herb) Decoction".
             : '/(?<![A-Za-z0-9])(?<formula>' . implode('|', array_values($formulapatterns)) . ')'
-                . '\s*\([^()\r\n]{1,160}\)(?![A-Za-z0-9])/iu',
+                . '\s*\((?:[^()\r\n]{1,160}|\([^()\r\n]{0,120}\)){1,8}\)(?![A-Za-z0-9])/iu',
         'parentheticalHerbPattern' => $herbpinyinpatterns === [] || $herblatinpatterns === []
             ? ''
             : '/(?<![A-Za-z0-9])(?<pinyin>' . implode('|', array_values($herbpinyinpatterns)) . ')'
@@ -749,7 +751,9 @@ function block_myprogress_herbology_canonicalize_pinyin_case_in_question(array $
                 continue;
             }
             $recordpinyin = trim((string)($formularecord['pinyin'] ?? ''));
-            if (preg_match('/^(.+?)\s*\([^()]+\)$/u', $recordpinyin, $displaymatch) === 1) {
+            // Strip the complete display suffix even when the official English
+            // name itself contains parentheses.
+            if (preg_match('/^(.+?)\s*\(.*\)\s*$/us', $recordpinyin, $displaymatch) === 1) {
                 $recordpinyin = trim((string)$displaymatch[1]);
             }
             $lookupformula = strtolower((string)preg_replace('/\s+/u', ' ', $recordpinyin));

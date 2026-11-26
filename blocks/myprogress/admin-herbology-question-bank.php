@@ -2844,8 +2844,10 @@ $findcreatedquestionguidelineviolations = static function(array $question) use (
         )),
         (string)($question['explanation'] ?? ''),
     ])));
+    // Accept a nested parenthetical in an official formula English name.
     preg_match_all(
-        '/\b((?:\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*)(?:[ \t]+\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*){0,6})[ \t]*\(([^()]+)\)/u',
+        '/\b((?:\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*)(?:[ \t]+\p{Lu}[\p{L}\p{M}\x{2019}\x{0027}-]*){0,6})'
+            . '[ \t]*\(((?:[^()\r\n]{1,160}|\([^()\r\n]{0,120}\)){1,8})\)/u',
         $visibletext,
         $namedmatches,
         PREG_SET_ORDER
