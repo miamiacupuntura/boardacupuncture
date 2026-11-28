@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "questions": [
+    {
+      "questionId": "BAL-FD-20261128-001",
+      "domainId": "formula_differentiation",
+      "contentType": "formula",
+      "cognitiveLevel": "apply",
+      "difficultyBand": "application",
+      "prompt": "A patient has fatigue, a weak voice and poor appetite, together with a persistent bearing-down sensation and recurrent rectal prolapse. Which formula addresses both the Qi deficiency and the sinking of Middle Qi?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Si Jun Zi Tang"
+        },
+        {
+          "label": "B",
+          "text": "Bu Zhong Yi Qi Tang"
+        },
+        {
+          "label": "C",
+          "text": "Gui Pi Tang"
+        },
+        {
+          "label": "D",
+          "text": "Shi Quan Da Bu Tang"
+        }
+      ],
+      "correctLabel": "B",
+      "explanation": "The combination of weak voice, fatigue and poor appetite indicates Spleen Qi deficiency; the bearing-down sensation and prolapse identify sinking of Middle Qi. Option B: Bu Zhong Yi Qi Tang tonifies Middle Qi and raises clear Yang, addressing both components. Option A: Si Jun Zi Tang supports uncomplicated Spleen Qi deficiency but does not specifically lift sunken Qi. Option C: Gui Pi Tang treats Spleen Qi and Heart Blood deficiency, typically with insomnia, palpitations or poor memory; these are not the distinguishing findings here. Option D: Shi Quan Da Bu Tang treats Qi and Blood deficiency with mild deficiency Cold; it does not specifically address the downward displacement. The decisive clue is prolapse accompanying Qi-deficiency signs.",
+      "translations": {
+        "es": {
+          "prompt": "Un paciente presenta fatiga, voz débil y poco apetito, junto con una sensación persistente de descenso y prolapso rectal recurrente. ¿Qué fórmula trata tanto la deficiencia de Qi como el hundimiento del Qi Medio?",
+          "options": [
+            {
+              "label": "A",
+              "text": "Si Jun Zi Tang"
+            },
+            {
+              "label": "B",
+              "text": "Bu Zhong Yi Qi Tang"
+            },
+            {
+              "label": "C",
+              "text": "Gui Pi Tang"
+            },
+            {
+              "label": "D",
+              "text": "Shi Quan Da Bu Tang"
+            }
+          ],
+          "explanation": "La voz débil, la fatiga y el poco apetito indican deficiencia de Qi de Bazo; la sensación de descenso y el prolapso identifican hundimiento del Qi Medio. Opción B: Bu Zhong Yi Qi Tang tonifica el Qi Medio y eleva el Yang claro, tratando ambos componentes. Opción A: Si Jun Zi Tang trata la deficiencia simple de Qi de Bazo, pero no eleva específicamente el Qi hundido. Opción C: Gui Pi Tang trata la deficiencia de Qi de Bazo y Sangre de Corazón, habitualmente con insomnio, palpitaciones o mala memoria; estos no son los datos distintivos del caso. Opción D: Shi Quan Da Bu Tang trata la deficiencia de Qi y Sangre con Frío leve por deficiencia; no trata específicamente el desplazamiento hacia abajo. La pista decisiva es el prolapso junto con signos de deficiencia de Qi.",
+          "correctLabel": "B"
+        }
+      },
+      "source": {
+        "title": "Formula study-guide profiles",
+        "locator": "Bu Zhong Yi Qi Tang, Si Jun Zi Tang, Gui Pi Tang and Shi Quan Da Bu Tang: pattern, action and decisive clue"
+      },
+      "sourceCard": {
+        "url": "/blocks/myprogress/herbology-exam-source-note.php?question=BAL-FD-20261128-001&lang=en",
+        "urlEs": "/blocks/myprogress/herbology-exam-source-note.php?question=BAL-FD-20261128-001&lang=es",
+        "label": "Source profiles and saved explanation",
+        "labelEs": "Perfiles de origen y explicación guardada",
+        "referenceType": "published_question_review"
+      }
+    },
+    {
+      "questionId": "BAL-DY-20261128-001",
+      "domainId": "dui_yao",
+      "contentType": "dui_yao",
+      "cognitiveLevel": "apply",
+      "difficultyBand": "application",
+      "prompt": "For recurrent cramping pain with muscular tension, the treatment goal is to nourish Yin and Blood while relaxing spasm. Which pair most directly combines these actions, rather than primarily harmonizing Ying and Wei or coursing Liver Qi?",
+      "options": [
+        {
+          "label": "A",
+          "text": "Gui Zhi + Bai Shao"
+        },
+        {
+          "label": "B",
+          "text": "Chai Hu + Bai Shao"
+        },
+        {
+          "label": "C",
+          "text": "Bai Shao + Gan Cao"
+        },
+        {
+          "label": "D",
+          "text": "Jie Geng + Gan Cao"
+        }
+      ],
+      "correctLabel": "C",
+      "explanation": "Option C: Bai Shao and Gan Cao combine to nourish Yin and Blood, soften tension, relax spasm and relieve cramping pain. This directly matches the stated therapeutic goal. Option A: Gui Zhi and Bai Shao primarily harmonize nutritive and protective Qi in an Exterior-deficiency pattern; this is a different pairing objective. Option B: Chai Hu and Bai Shao course Liver Qi and nourish Blood for constraint-related pain; their central emphasis is resolving Liver constraint rather than the direct antispasmodic pairing requested. Option D: Jie Geng and Gan Cao benefit the throat and diffuse Lung Qi, with phlegm or pus in the upper burner; they do not match the muscle-spasm objective.",
+      "translations": {
+        "es": {
+          "prompt": "Ante dolor recurrente tipo calambre con tensión muscular, el objetivo terapéutico es nutrir Yin y Sangre y, a la vez, relajar el espasmo. ¿Qué pareja combina más directamente estas acciones, en lugar de centrarse en armonizar Ying y Wei o movilizar el Qi de Hígado?",
+          "options": [
+            {
+              "label": "A",
+              "text": "Gui Zhi + Bai Shao"
+            },
+            {
+              "label": "B",
+              "text": "Chai Hu + Bai Shao"
+            },
+            {
+              "label": "C",
+              "text": "Bai Shao + Gan Cao"
+            },
+            {
+              "label": "D",
+              "text": "Jie Geng + Gan Cao"
+            }
+          ],
+          "explanation": "Opción C: Bai Shao y Gan Cao se combinan para nutrir Yin y Sangre, suavizar la tensión, relajar el espasmo y aliviar el dolor tipo calambre. Esto coincide directamente con el objetivo planteado. Opción A: Gui Zhi y Bai Shao armonizan principalmente el Qi nutritivo y protector en un patrón de deficiencia del Exterior; es otro objetivo de combinación. Opción B: Chai Hu y Bai Shao movilizan el Qi de Hígado y nutren la Sangre para el dolor por estancamiento; su énfasis central es resolver el estancamiento hepático, en vez de la combinación antiespasmódica directa solicitada. Opción D: Jie Geng y Gan Cao benefician la garganta y difunden el Qi de Pulmón ante flema o pus en el Calentador Superior; no corresponden al objetivo de espasmo muscular.",
+          "correctLabel": "C"
+        }
+      },
+      "source": {
+        "title": "Verified 51-pair Dui Yao study bank",
+        "locator": "Pairs 20 (Bai Shao + Gan Cao), 4 (Gui Zhi + Bai Shao), 46 (Chai Hu + Bai Shao), 21 (Jie Geng + Gan Cao): combined actions"
+      },
+      "sourceCard": {
+        "url": "/study-guide/comparisons/bai-shao-gan-cao-dui-yao.html",
+        "urlEs": "/study-guide/comparisons/bai-shao-gan-cao-dui-yao-es.html",
+        "label": "Bai Shao + Gan Cao: pair study guide",
+        "labelEs": "Bai Shao + Gan Cao: guía de la pareja"
+      }
+    }
+  ]
+}
