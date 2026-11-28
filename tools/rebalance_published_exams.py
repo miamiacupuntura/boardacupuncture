@@ -147,7 +147,11 @@ def run(root, data, backup):
             if record.get('status') in ['deleted','study_archive','extra_guideline','exclusion_candidate']:
                 catalog[qid]={'questionId':qid,'_planExcluded':True}
     plans = planner.make_plan(raw,normalized,stats,catalog)
-    blocked = [p for p in plans if not p['structure_complete']]
+    # The hierarchy reference is an unmet content need, not a reason to stop
+    # improving the published corpus's other topics. Structural failures still
+    # block the entire write; an underfilled exam is never published.
+    blocked = [p for p in plans if p['after']['count'] != 100 or any(
+        p['after']['domains'].get(d,0) != w for d,(_,w) in audit.DOMAINS.items())]
     if blocked:
         backup.mkdir(parents=True,exist_ok=False)
         gaps = ['NO SE CAMBIÓ NINGÚN EXAMEN. Faltan preguntas ya aprobadas y bilingües:']
@@ -165,7 +169,7 @@ def run(root, data, backup):
         if not numbermatch:raise RuntimeError('Número de examen no resuelto: '+p['name'])
         number=int(numbermatch[1]); snapshotkey='simulation_exam_'+str(number)
         counts=C.Counter(q['domainId'] for q in qs)
-        if len(qs)!=100 or sum(audit.hierarchy(q) for q in qs)!=5 or any(counts[d]!=w for d,(_,w) in audit.DOMAINS.items()):raise RuntimeError('Cuotas inválidas: '+p['name'])
+        if len(qs)!=100 or sum(audit.hierarchy(q) for q in qs)>5 or any(counts[d]!=w for d,(_,w) in audit.DOMAINS.items()):raise RuntimeError('Cuotas inválidas: '+p['name'])
         if sum(not complete_es(q) for q in qs)>sum(not complete_es(q) for q in old['questions']):raise RuntimeError('Regresión de traducción: '+p['name'])
         for q in qs:
             qid=q['questionId']; stem=audit.norm(q.get('prompt'))
@@ -181,7 +185,10 @@ def run(root, data, backup):
         record=dict(oldrecord, id=snapshotkey, examNumber=number, name='Exam '+str(number), status='published',
                     version=int(oldrecord.get('version') or 0)+1, targetCount=100, domainCounts=dict(counts), questions=clean,
                     publishedAt=now, publishedByName='Authorized exam diversity rebalance', diversityBalancedAt=now,
-                    diversityPolicy={'hierarchyPer100':5,'domainWeights':[28,24,18,15,10,5],'topicSwaps':len(swaps)})
+                    diversityPolicy={'hierarchyTargetPer100':5,'hierarchyActual':sum(audit.hierarchy(q) for q in qs),
+                        'hierarchyPending':max(0,5-sum(audit.hierarchy(q) for q in qs)),
+                        'status':'hierarchy_target_met' if sum(audit.hierarchy(q) for q in qs)==5 else 'topic_balance_applied_hierarchy_pending',
+                        'domainWeights':[28,24,18,15,10,5],'topicSwaps':len(swaps)})
         store.setdefault('publishedExams',{})[snapshotkey]=record
         project=store.get('examProjects',{}).get(record.get('projectId'))
         if project is not None:
@@ -221,6 +228,13 @@ def run(root, data, backup):
     document=document.replace('No se ha cambiado ninguna pregunta, examen, intento ni publicación.',
         'Se publicaron las nuevas composiciones de los exámenes completos. No se reescribieron enunciados, respuestas ni explicaciones; no se modificaron intentos.')
     document=re.sub(r'<h2>Plan para equilibrar versiones nuevas</h2>.*?</ol>', '', document, flags=re.S)
+    pending=sum(max(0,5-e['hierarchy_count']) for e in finalstats)
+    report['balance_status']='topic_balance_applied_hierarchy_pending' if pending else 'hierarchy_target_met'
+    report['hierarchy_questions_pending']=pending
+    if pending:
+        document=document.replace('<h2>Resumen ejecutivo basado en los datos</h2>',
+            '<p class="note">Se aplicó el reparto de temas con preguntas existentes. Sigue pendiente incorporar '+str(pending)+
+            ' preguntas de jerarquía aprobadas y bilingües para llegar a cinco por examen. No se declara cumplida esa meta.</p><h2>Resumen ejecutivo basado en los datos</h2>')
     backup.mkdir(parents=True,exist_ok=False)
     for i,(path,content) in enumerate(originals.items()):(backup/(str(i)+'-'+path.name)).write_bytes(content)
     (backup/'restauracion.json').write_text(json.dumps([{'path':str(p),'backup':str(backup/(str(i)+'-'+p.name))} for i,p in enumerate(originals)],indent=2))
@@ -248,6 +262,7 @@ def run(root, data, backup):
     for e in finalstats:print(f"{e['name']}: {e['registered_questions']} preguntas; jerarquía {e['hierarchy_count']}; español incompleto {e['missing_spanish']}.",flush=True)
     print('DOMINIOS: 28 / 24 / 18 / 15 / 10 / 5. IDs compartidos: 0.')
     print('Intercambios adicionales para repartir tipos de pregunta:',len(swaps))
+    if pending:print('PENDIENTE: faltan',pending,'preguntas de jerarquía aprobadas y bilingües para llegar a cinco por examen.')
     print('Los proyectos incompletos siguen pendientes; no se publicaron como terminados.')
     print('Las tarjetas del alumno se recalculan con las nuevas preguntas al recargar.')
     print('AUDITORÍA FINAL:',backup/'auditoria-final.html')
