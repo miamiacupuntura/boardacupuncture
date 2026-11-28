@@ -27,16 +27,72 @@ def complete_es(q):
             and (not es.get('correctLabel') or es['correctLabel'] == q.get('correctLabel')))
 
 
-def student_ready(q):
+def student_issues(q):
     opts = audit.options(q)
-    return (audit.usable(q.get('prompt')) and audit.usable(q.get('explanation'))
-            and len(opts) == 4 and all(audit.usable(o['text']) for o in opts)
-            and len({audit.norm(o['text']) for o in opts}) == 4
-            and q.get('correctLabel') in {o['label'] for o in opts}
-            and bool((q.get('source') or {}).get('title'))
-            and bool((q.get('source') or {}).get('locator'))
-            and bool((q.get('sourceCard') or {}).get('url'))
-            and bool((q.get('sourceCard') or {}).get('urlEs')))
+    issues=[]
+    for field in ['prompt','explanation']:
+        if not audit.usable(q.get(field)):issues.append(field)
+    if len(opts)!=4 or not all(audit.usable(o['text']) for o in opts):issues.append('options')
+    if len({audit.norm(o['text']) for o in opts})!=4:issues.append('distinct option texts')
+    if len({o['label'] for o in opts})!=4:issues.append('distinct option labels')
+    if q.get('correctLabel') not in {o['label'] for o in opts}:issues.append('correctLabel')
+    for group,fields in [('source',['title','locator']),('sourceCard',['url','urlEs'])]:
+        record=q.get(group) if isinstance(q.get(group),dict) else {}
+        for field in fields:
+            if not audit.usable(record.get(field)):issues.append(group+'.'+field)
+    return issues
+
+
+def student_ready(q):
+    return not student_issues(q)
+
+
+def recover_source_metadata(exams, root, data, catalog, store):
+    """Fill missing references only from the same ID and same question content.
+
+    Never synthesize source URLs or transfer references between different
+    question revisions. All unresolved cases must be replaced by the planner.
+    """
+    byid=C.defaultdict(list)
+    for q in catalog.values():
+        if q.get('questionId'):byid[q['questionId']].append(q)
+    for path in [root/'blocks/menu/herbology-domain-candidates.json',root/'blocks/menu/herbology-domain-bank.json',
+                 data/'board-domain-banks/herbology-domain-bank.json',data/'board-domain-banks/herbology-scorm-question-bank.json']:
+        for questions in audit.read_json(path,optional=True).get('domains',{}).values():
+            for q in questions:
+                if isinstance(q,dict) and q.get('questionId'):byid[q['questionId']].append(q)
+    def identity(q):
+        return (audit.norm(q.get('prompt')),tuple((o['label'],audit.norm(o['text'])) for o in audit.options(q)),q.get('correctLabel'))
+    recovered=[]
+    for exam in exams:
+        for q in exam['questions']:
+            if student_ready(q):continue
+            fields=[]
+            for candidate in byid.get(q.get('questionId'),[]):
+                if identity(candidate)!=identity(q):continue
+                for group,names in [('source',['title','locator']),('sourceCard',['url','urlEs'])]:
+                    source=candidate.get(group) if isinstance(candidate.get(group),dict) else {}
+                    if not isinstance(q.get(group),dict):q[group]={}
+                    for name in names:
+                        if not audit.usable(q[group].get(name)) and audit.usable(source.get(name)):
+                            q[group][name]=source[name];fields.append(group+'.'+name)
+            if fields:
+                recovered.append({'id':q['questionId'],'exam':exam['name'],'fields':fields})
+                # Exam 1 overlays approved revisions on the source bank. Keep
+                # the same verified reference repair in that identical revision
+                # so its missing metadata cannot overwrite the repaired bank.
+                targets=[catalog.get(q['questionId'],{})]
+                for section in ['questions','customQuestions']:
+                    record=store.get(section,{}).get(q['questionId'],{})
+                    snapshot=record.get('approved') or (record.get('draft') if record.get('status')=='approved' else None)
+                    if isinstance(snapshot,dict):targets.append(snapshot)
+                for target in targets:
+                    if identity(target)!=identity(q):continue
+                    for field in fields:
+                        group,name=field.split('.')
+                        if not isinstance(target.get(group),dict):target[group]={}
+                        if not audit.usable(target[group].get(name)):target[group][name]=q[group][name]
+    return recovered
 
 
 def features(q):
@@ -127,6 +183,11 @@ def run(root, data, backup):
     if not raw:raise RuntimeError('No hay exámenes publicados completos para equilibrar.')
     # Drafts remain outside the published corpus and retain their own IDs.
     reserved = {q['questionId'] for e in all_raw if e not in raw for q in e['questions'] if q.get('questionId')}
+    catalog = planner.load_catalog(root,data)
+    recovered=recover_source_metadata(raw,root,data,catalog,store)
+    invalid={q['questionId']:student_issues(q) for e in raw for q in e['questions'] if not student_ready(q)}
+    if recovered:print('Referencias recuperadas de la misma pregunta:',len(recovered),flush=True)
+    if invalid:print('Preguntas incompletas a sustituir antes de repartir temas: '+', '.join(sorted(invalid)),flush=True)
     normalized,mode = audit.normalize_exams(raw,root,data,True)
     herbs = audit.read_json(root/'blocks/myprogress/single-herb-card-index.json')['herbs']
     formulas = audit.read_json(root/'blocks/myprogress/formula-board-roster-2026.json')['formulas']
@@ -135,7 +196,6 @@ def run(root, data, backup):
     for key in ['questions','customQuestions']:
         approved.update(qid for qid,r in store.get(key,{}).items() if r.get('status') == 'approved')
     frozen = {q['questionId']:q for e in raw for q in e['questions']}
-    catalog = planner.load_catalog(root,data)
     # Only already published snapshots or administrator-approved bank records.
     # Do not auto-approve original SCORM candidates or pending AI revisions.
     catalog = {qid:q for qid,q in catalog.items() if qid in approved and qid not in reserved
@@ -146,6 +206,10 @@ def run(root, data, backup):
         for qid,record in store.get(section,{}).items():
             if record.get('status') in ['deleted','study_archive','extra_guideline','exclusion_candidate']:
                 catalog[qid]={'questionId':qid,'_planExcluded':True}
+    # Apply the student-facing checks before retaining existing members, not
+    # just to incoming candidates. The exclusion sentinel prevents the planner
+    # from reintroducing an incomplete published snapshot from its raw pool.
+    for qid in invalid:catalog[qid]={'questionId':qid,'_planExcluded':True}
     plans = planner.make_plan(raw,normalized,stats,catalog)
     # The hierarchy reference is an unmet content need, not a reason to stop
     # improving the published corpus's other topics. Structural failures still
@@ -157,6 +221,7 @@ def run(root, data, backup):
         gaps = ['NO SE CAMBIÓ NINGÚN EXAMEN. Faltan preguntas ya aprobadas y bilingües:']
         for p in blocked:gaps.append(p['name']+': '+'; '.join(p['blocks']))
         gaps.append('Jerarquía aprobada, bilingüe y con fuente completa en el catálogo: '+str(sum(audit.hierarchy(q) for q in catalog.values())))
+        for qid,issues in sorted(invalid.items()):gaps.append(qid+': faltan o son inválidos '+', '.join(issues))
         (backup/'FALTANTES.txt').write_text('\n'.join(gaps)+'\n')
         raise RuntimeError('\n'.join(gaps)+'\nDetalle: '+str(backup/'FALTANTES.txt'))
     swaps = redistribute(plans)
@@ -231,6 +296,8 @@ def run(root, data, backup):
     pending=sum(max(0,5-e['hierarchy_count']) for e in finalstats)
     report['balance_status']='topic_balance_applied_hierarchy_pending' if pending else 'hierarchy_target_met'
     report['hierarchy_questions_pending']=pending
+    report['source_references_recovered']=recovered
+    report['incomplete_questions_replaced']=invalid
     if pending:
         document=document.replace('<h2>Resumen ejecutivo basado en los datos</h2>',
             '<p class="note">Se aplicó el reparto de temas con preguntas existentes. Sigue pendiente incorporar '+str(pending)+
