@@ -5,7 +5,7 @@ for tool in curl python3 php mktemp; do
 done
 WORK_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$WORK_DIR"' EXIT
-BASE='https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture/4851a3c50c31042c79d19446f6f00a046151e3e8/tools'
+BASE='https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture/924d0206ef200a443e307280a4160d986747a704/tools'
 for file in audit_exam_diversity.py plan_exam_versions.py rebalance_published_exams.py; do
     curl -fsSL "$BASE/$file" -o "$WORK_DIR/$file"
 done
