@@ -209,7 +209,8 @@ def run(root, data, backup):
             for qid,r in store.get('customQuestions',{}).items():
                 for state in ['approved','draft']:
                     if isinstance(r.get(state),dict):r[state]['examTemplate']=positions.get(qid,{'globalPosition':0})
-        finalexams.append(dict(old,key=snapshotkey,name=record['name'],state='publicado',version=record['version'],questions=clean))
+        finalexams.append(dict(old,key=snapshotkey,name=record['name'],state='publicado',version=record['version'],questions=clean,
+            provenance='Versión '+str(record['version'])+' publicada tras redistribuir preguntas existentes. Métricas del conjunto final de 100 preguntas.'))
     # Validate the resulting frozen cohort and render only final exam metrics.
     normalized_final,finalmode=audit.normalize_exams(finalexams,root,data,True)
     finalstats,shared,near=audit.analyze(normalized_final,finalexams,herbs,formulas)
@@ -217,6 +218,9 @@ def run(root, data, backup):
     report={'created_at':now,'normalization':finalmode,'sources':sources,'hierarchy_policy':'5 por 100: referencia acordada',
             'exams':finalstats,'shared_ids':shared,'near_stem_pairs':near}
     document,findings=audit.render(report)
+    document=document.replace('No se ha cambiado ninguna pregunta, examen, intento ni publicación.',
+        'Se publicaron las nuevas composiciones de los exámenes completos. No se reescribieron enunciados, respuestas ni explicaciones; no se modificaron intentos.')
+    document=re.sub(r'<h2>Plan para equilibrar versiones nuevas</h2>.*?</ol>', '', document, flags=re.S)
     backup.mkdir(parents=True,exist_ok=False)
     for i,(path,content) in enumerate(originals.items()):(backup/(str(i)+'-'+path.name)).write_bytes(content)
     (backup/'restauracion.json').write_text(json.dumps([{'path':str(p),'backup':str(backup/(str(i)+'-'+p.name))} for i,p in enumerate(originals)],indent=2))
