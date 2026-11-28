@@ -7,7 +7,6 @@ ASSETS=['exam-audit-classification.php','exam-audit-student-cards.php','herbolog
 
 def patch_page(source):
     marker='// Instant published-exam selection v1'
-    if marker in source:return source
     anchor="$PAGE->requires->js(new moodle_url('/blocks/menu/assessment-profile-banner.js'"
     if source.count(anchor)!=1:raise RuntimeError('No se identificó el registro de scripts; no se cambió nada.')
     block="""// Instant published-exam selection v1
@@ -17,7 +16,30 @@ if (in_array($track, ['simulation', 'exams'], true) && !$mixdomains) {
     ]));
 }
 """
-    return source.replace(anchor,block+anchor,1)
+    if marker not in source:source=source.replace(anchor,block+anchor,1)
+    inventory_marker='// Published snapshot student inventory v1'
+    if inventory_marker not in source:
+        inventory_anchor='    $studentcoveragecachepath = $CFG->dataroot'
+        if source.count(inventory_anchor)!=1:raise RuntimeError('No se identificó la caché del inventario estudiantil.')
+        inventory_block="""    // Published snapshot student inventory v1
+    require_once(__DIR__ . '/../myprogress/exam-audit-classification.php');
+    $snapshotstudentsets = block_myprogress_exam_audit_snapshot_sets($questionrevisionstore, $studentexamquestions);
+    $studentexamquestions = array_fill_keys($studentexamnumbers, []);
+    $studentexamquestionids = array_fill_keys($studentexamnumbers, []);
+    foreach ($snapshotstudentsets as $snapshotnumber => $snapshotquestions) {
+        $studentexamquestions[$snapshotnumber] = array_column($snapshotquestions, null, 'questionId');
+        $studentexamquestionids[$snapshotnumber] = array_fill_keys(array_keys($studentexamquestions[$snapshotnumber]), true);
+    }
+"""
+        source=source.replace(inventory_anchor,inventory_block+inventory_anchor,1)
+        cacheline=". '/cache/board-herbology-student-content-inventory.json';"
+        if source.count(cacheline)!=1:raise RuntimeError('No se identificó la caché del selector.')
+        source=source.replace(cacheline,". '/cache/board-herbology-student-content-inventory-' . ($ises ? 'es' : 'en') . '.json';",1)
+        source=source.replace("'version' => 'student-bensky-inventory-v3-dui-yao',","'version' => 'student-bensky-inventory-v4-published-snapshots',",1)
+        idsline="        'examQuestionIds' => array_map('array_keys', $studentexamquestionids),"
+        if source.count(idsline)!=1:raise RuntimeError('No se identificó la firma del inventario.')
+        source=source.replace(idsline,idsline+"\n        'publishedVersions' => array_map(static fn(array $record): array => [$record['version'] ?? 0, $record['publishedAt'] ?? ''], (array)($questionrevisionstore['publishedExams'] ?? [])),",1)
+    return source
 
 def patch_learning(source):
     marker='// Canonical published-exam hierarchy classification v1'
