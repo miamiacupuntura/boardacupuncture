@@ -52,6 +52,29 @@ def question_identity(q):
     return (audit.norm(q.get('prompt')),tuple((o['label'],audit.norm(o['text'])) for o in audit.options(q)),q.get('correctLabel'))
 
 
+def presentation_signature(q):
+    return (audit.norm(q.get('prompt')), tuple(sorted(audit.norm(o['text']) for o in audit.options(q))))
+
+
+def duplicate_signature(q):
+    return presentation_signature(q)+(audit.norm(audit.answer(q)),)
+
+
+def repeated_items(exams):
+    seen={};duplicates={};presentations=C.defaultdict(list)
+    for exam in exams:
+        for q in exam['questions']:
+            qid=q['questionId'];signature=duplicate_signature(q)
+            presentations[presentation_signature(q)].append((exam['name'],q))
+            if signature in seen and seen[signature]!=qid:duplicates[qid]=seen[signature]
+            else:seen[signature]=qid
+    conflicts=[]
+    for group in presentations.values():
+        if len({audit.norm(audit.answer(q)) for _,q in group})>1:
+            conflicts.append(', '.join(name+' / '+q['questionId'] for name,q in group))
+    return duplicates,conflicts
+
+
 def mirror_references(q, fields, catalog, store):
     targets=[catalog.get(q['questionId'],{})]
     for section in ['questions','customQuestions']:
@@ -138,6 +161,7 @@ def redistribute(plans):
     initial_dispersion = sum(weights[k]*sum((t[k]-cohort[k]/len(plans))**2 for t in totals) for k in range(len(weights)))
     for iteration in range(60):
         best = None; bestgain = 1e-8
+        stems=[C.Counter(audit.norm(q.get('prompt')) for q in p['items']) for p in plans]
         for a in range(len(plans)):
             for b in range(a+1, len(plans)):
                 groups = []
@@ -151,6 +175,8 @@ def redistribute(plans):
                     for qa in groups[0][group]:
                         fa = feature(qa)
                         for qb in groups[1][group]:
+                            sa=audit.norm(qa.get('prompt'));sb=audit.norm(qb.get('prompt'))
+                            if sa!=sb and (stems[a][sb] or stems[b][sa]):continue
                             fb = feature(qb)
                             delta = [y-x for x,y in zip(fa,fb)]
                             gain = sum(w*(-2*d*(totals[a][k]-totals[b][k])-2*d*d) for k,(d,w) in enumerate(zip(delta,weights)))
@@ -217,6 +243,10 @@ def run(root, data, backup):
         originals[routepath]=routepath.read_bytes() if routepath.exists() else None
         print('Fichas de referencia y explicación guardada preparadas:',len(notes),flush=True)
     invalid={q['questionId']:student_issues(q) for e in raw for q in e['questions'] if not student_ready(q)}
+    duplicate_ids,conflicts=repeated_items(raw)
+    if conflicts:
+        raise RuntimeError('NO SE CAMBIÓ NINGÚN EXAMEN. Enunciado y opciones iguales con respuestas contradictorias:\n'+'\n'.join(conflicts))
+    if duplicate_ids:print('Copias completas a sustituir: '+', '.join(sorted(duplicate_ids)),flush=True)
     if recovered:print('Referencias recuperadas de la misma pregunta:',len(recovered),flush=True)
     if invalid:print('Preguntas incompletas a sustituir antes de repartir temas: '+', '.join(sorted(invalid)),flush=True)
     normalized,mode = audit.normalize_exams(raw,root,data,True)
@@ -241,6 +271,7 @@ def run(root, data, backup):
     # just to incoming candidates. The exclusion sentinel prevents the planner
     # from reintroducing an incomplete published snapshot from its raw pool.
     for qid in invalid:catalog[qid]={'questionId':qid,'_planExcluded':True}
+    for qid in duplicate_ids:catalog[qid]={'questionId':qid,'_planExcluded':True}
     plans = planner.make_plan(raw,normalized,stats,catalog)
     # The hierarchy reference is an unmet content need, not a reason to stop
     # improving the published corpus's other topics. Structural failures still
@@ -257,7 +288,7 @@ def run(root, data, backup):
         raise RuntimeError('\n'.join(gaps)+'\nDetalle: '+str(backup/'FALTANTES.txt'))
     swaps = redistribute(plans)
     now = DT.datetime.now(DT.timezone.utc).isoformat()
-    before = {e['key']:e for e in raw}; seenids=set(); seenstems=set(); changes=[]
+    before = {e['key']:e for e in raw}; seenids=set(); seenitems=set(); changes=[]
     if notes:changes.append((routepath,template.read_bytes()))
     finalexams=[]
     for p in plans:
@@ -269,10 +300,11 @@ def run(root, data, backup):
         if len(qs)!=100 or sum(audit.hierarchy(q) for q in qs)>5 or any(counts[d]!=w for d,(_,w) in audit.DOMAINS.items()):raise RuntimeError('Cuotas inválidas: '+p['name'])
         if sum(not complete_es(q) for q in qs)>sum(not complete_es(q) for q in old['questions']):raise RuntimeError('Regresión de traducción: '+p['name'])
         for q in qs:
-            qid=q['questionId']; stem=audit.norm(q.get('prompt'))
-            if qid in seenids or stem in seenstems:raise RuntimeError('Pregunta repetida: '+qid)
+            qid=q['questionId']; signature=duplicate_signature(q)
+            if qid in seenids:raise RuntimeError('ID repetido entre exámenes: '+qid)
+            if signature in seenitems:raise RuntimeError('Pregunta completa repetida (enunciado, opciones y respuesta): '+qid)
             if not student_ready(q):raise RuntimeError('Pregunta sin estructura o tarjeta fuente completa: '+qid)
-            seenids.add(qid);seenstems.add(stem)
+            seenids.add(qid);seenitems.add(signature)
         qs.sort(key=lambda q:(list(audit.DOMAINS).index(q['domainId']),q['questionId']))
         clean=[]
         for i,q in enumerate(qs,1):
@@ -331,6 +363,16 @@ def run(root, data, backup):
     report['source_references_recovered']=recovered
     report['incomplete_questions_replaced']=invalid
     report['original_review_notes_created']=notes
+    report['complete_duplicate_questions_replaced']=duplicate_ids
+    sharedstems=C.defaultdict(list)
+    for exam in finalexams:
+        for q in exam['questions']:sharedstems[audit.norm(q.get('prompt'))].append({'exam':exam['name'],'id':q['questionId']})
+    report['shared_stems_with_different_options']=[group for group in sharedstems.values() if len(group)>1]
+    if report['shared_stems_with_different_options']:
+        evidence=audit.table(['Preguntas con enunciado compartido','Revisión'],[
+            [', '.join(item['exam']+' / '+item['id'] for item in group),'Opciones diferentes; revisar posible solapamiento de objetivos']
+            for group in report['shared_stems_with_different_options']])
+        document=document.replace('</main>', '<h2>Enunciados compartidos con opciones distintas</h2>'+evidence+'</main>')
     if pending:
         document=document.replace('<h2>Resumen ejecutivo basado en los datos</h2>',
             '<p class="note">Se aplicó el reparto de temas con preguntas existentes. Sigue pendiente incorporar '+str(pending)+
