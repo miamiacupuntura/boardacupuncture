@@ -273,6 +273,38 @@ def write_atomic(path, content):
         if os.path.exists(temp):os.unlink(temp)
 
 
+def lint_php(content):
+    with tempfile.NamedTemporaryFile(suffix='.php') as staged:
+        staged.write(content);staged.flush()
+        result=subprocess.run(['php','-l',staged.name],capture_output=True,text=True)
+        if result.returncode:raise RuntimeError('No se instaló PHP inválido: '+result.stdout+result.stderr)
+
+
+def stage_exam_one_frontend(root):
+    page=root/'blocks/menu/herbology-board.php'
+    helper=root/'blocks/myprogress/herbology-exam-one-snapshot.php'
+    template=Path(__file__).with_name(helper.name)
+    original=page.read_bytes();source=original.decode()
+    marker='// Frozen Exam 1 snapshot adapter v1'
+    anchor='$questionisready = static function(array $question): bool {'
+    if marker not in source:
+        if source.count(anchor)!=1:raise RuntimeError('No se identificó el punto de lectura de Exam 1; no se cambió ningún examen.')
+        block="""// Frozen Exam 1 snapshot adapter v1
+if ($usesdomainbank && isset($questionrevisionstore['publishedExams']['simulation_exam_1'])) {
+    require_once(__DIR__ . '/../myprogress/herbology-exam-one-snapshot.php');
+    $domainbank['domains'] = block_myprogress_herbology_apply_exam_one_snapshot(
+        $domainbank['domains'] ?? [], $questionrevisionstore
+    );
+}
+"""
+        source=source.replace(anchor,block+anchor,1)
+    elif source.count(marker)!=1:raise RuntimeError('Se encontró una integración ambigua de Exam 1.')
+    payload=template.read_bytes()
+    lint_php(payload);lint_php(source.encode())
+    originals={page:original,helper:helper.read_bytes() if helper.exists() else None}
+    return originals,[(helper,payload),(page,source.encode())]
+
+
 def run(root, data, backup):
     storepath = data/'board-domain-banks/herbology-question-overrides.json'
     basepath = root/'blocks/menu/herbology-domain-candidates.json'
@@ -283,6 +315,8 @@ def run(root, data, backup):
     all_raw,sources = audit.load_exams(root,data)
     raw = [e for e in all_raw if e['state'] in ['publicado','configurado en banco'] and len(e['questions']) == 100]
     if not raw:raise RuntimeError('No hay exámenes publicados completos para equilibrar.')
+    frontend_originals,frontend_changes=stage_exam_one_frontend(root)
+    originals.update(frontend_originals)
     # Drafts remain outside the published corpus and retain their own IDs.
     reserved = {q['questionId'] for e in all_raw if e not in raw for q in e['questions'] if q.get('questionId')}
     catalog = planner.load_catalog(root,data)
@@ -342,7 +376,7 @@ def run(root, data, backup):
         raise RuntimeError('\n'.join(gaps)+'\nDetalle: '+str(backup/'FALTANTES.txt'))
     swaps = redistribute(plans)
     now = DT.datetime.now(DT.timezone.utc).isoformat()
-    before = {e['key']:e for e in raw}; seenids=set(); seenitems=set(); changes=[]
+    before = {e['key']:e for e in raw}; seenids=set(); seenitems=set(); changes=list(frontend_changes)
     if notes or additions:changes.append((routepath,template.read_bytes()))
     finalexams=[]
     for p in plans:
@@ -378,27 +412,14 @@ def run(root, data, backup):
             project.update(status='published', questionIds=[q['questionId'] for q in clean], confirmedQuestionIds=[q['questionId'] for q in clean],
                 currentCount=100, missingCount=0, publishedVersion=record['version'], publishedAt=now,updatedAt=now)
         if number==1:
-            # Unlike later exams, Exam 1 is rendered from the live bank plus
-            # approved revisions. Refuse a historical snapshot that would be
-            # silently replaced by a different current revision on that page.
-            for q in clean:
-                qid=q['questionId']
-                revision=store.get('questions',{}).get(qid) or store.get('customQuestions',{}).get(qid) or {}
-                live=revision.get('approved') or (revision.get('draft') if revision.get('status')=='approved' else {}) or {}
-                for field in audit.FIELDSET:
-                    if field in live and live[field]!=q.get(field):
-                        raise RuntimeError('Exam 1 usaría una revisión diferente de '+qid+'; no se cambió ningún examen.')
+            # Student rendering overlays this frozen snapshot after ordinary
+            # bank revisions; never overwrite the live clinical revision.
             for path in paths:
                 if path!=storepath:
                     document=set_exam_one(audit.read_json(path),clean)
                     originals.setdefault(path,path.read_bytes())
                     # Staged below; no production write until all checks pass.
                     changes.append((path,document))
-            # Custom questions are merged over the bank before rendering.
-            positions={q['questionId']:q['examTemplate'] for q in clean}
-            for qid,r in store.get('customQuestions',{}).items():
-                for state in ['approved','draft']:
-                    if isinstance(r.get(state),dict):r[state]['examTemplate']=positions.get(qid,{'globalPosition':0})
         finalexams.append(dict(old,key=snapshotkey,name=record['name'],state='publicado',version=record['version'],questions=clean,
             provenance='Versión '+str(record['version'])+' publicada tras redistribuir preguntas existentes. Métricas del conjunto final de 100 preguntas.'))
     # Validate the resulting frozen cohort and render only final exam metrics.
