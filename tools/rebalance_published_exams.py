@@ -75,6 +75,58 @@ def repeated_items(exams):
     return duplicates,conflicts
 
 
+def prepare_reviewed_replacements(root, store, catalog):
+    """Stage the two explicitly authored, bilingual, source-reviewed additions.
+
+    These are new questions, never renamed duplicates or automatically approved
+    SCORM candidates. They are persisted only with a successful exam update.
+    """
+    path=Path(__file__).with_name('balanced-exam-replacements.json')
+    if not path.is_file():raise RuntimeError('Falta el archivo de las dos preguntas nuevas; no se cambió ningún examen.')
+    questions=audit.read_json(path).get('questions',[])
+    expected={'BAL-FD-20261128-001':'formula_differentiation','BAL-DY-20261128-001':'dui_yao'}
+    if {q.get('questionId'):q.get('domainId') for q in questions}!=expected or len(questions)!=2:
+        raise RuntimeError('El lote de sustitución no contiene las dos preguntas previstas.')
+    profilepath=root/'blocks/myprogress/formulas-study-guide-data.json'
+    pairpath=root/'blocks/myprogress/dui-yao-smart-data.json'
+    profiles={audit.norm(q['name']):q for q in audit.read_json(profilepath)['formulas']}
+    names=['Si Jun Zi Tang','Bu Zhong Yi Qi Tang','Gui Pi Tang','Shi Quan Da Bu Tang']
+    roster={audit.norm(q['name']) for q in audit.read_json(root/'blocks/myprogress/formula-board-roster-2026.json')['formulas']}
+    if any(audit.norm(n) not in profiles or audit.norm(n) not in roster for n in names):
+        raise RuntimeError('No se encontraron todos los perfiles y nombres oficiales de la sustituta de fórmulas.')
+    target=profiles[audit.norm('Bu Zhong Yi Qi Tang')]
+    if 'sinking' not in audit.norm(target.get('pattern')) or not re.search(r'\brais\w*\b',audit.norm(target.get('action'))):
+        raise RuntimeError('El perfil de Bu Zhong Yi Qi Tang no respalda las pistas preparadas; no se publica la sustituta.')
+    pairs={frozenset(audit.norm(n) for n in q['herbs']):q for q in audit.read_json(pairpath)['pairs']}
+    for herbs in [('Bai Shao','Gan Cao'),('Gui Zhi','Bai Shao'),('Chai Hu','Bai Shao'),('Jie Geng','Gan Cao')]:
+        if frozenset(map(audit.norm,herbs)) not in pairs:raise RuntimeError('Falta una pareja fuente de la pregunta nueva de Dui Yao.')
+    pair=pairs[frozenset(map(audit.norm,['Bai Shao','Gan Cao']))]
+    if 'relax spasm' not in audit.norm(pair.get('action',{}).get('en')):
+        raise RuntimeError('La pareja fuente no respalda la acción antiespasmódica; no se publica la sustituta.')
+    herb_roster={audit.norm(q['name']) for q in audit.read_json(root/'blocks/myprogress/single-herb-card-index.json')['herbs']}
+    if any(audit.norm(n) not in herb_roster for n in ['Bai Shao','Gan Cao','Gui Zhi','Chai Hu','Jie Geng']):
+        raise RuntimeError('La sustituta de Dui Yao contiene un nombre fuera del roster.')
+    reviewed=[];now=DT.datetime.now(DT.timezone.utc).isoformat()
+    for q in questions:
+        qid=q['questionId']
+        if not student_ready(q) or not complete_es(q):raise RuntimeError('Sustituta incompleta: '+qid)
+        current=store.get('customQuestions',{}).get(qid)
+        if current is not None:
+            if current.get('status')!='approved' or duplicate_signature(current.get('approved') or {})!=duplicate_signature(q):
+                raise RuntimeError('Ya existe otra revisión del ID de sustitución: '+qid)
+            catalog[qid]=dict(current['approved'],_planAlreadyReviewed=True)
+            continue
+        record={'status':'approved','domainId':q['domainId'],'revisionNumber':1,'approved':copy.deepcopy(q),
+                'savedAt':now,'savedByName':'Source-reviewed exam balancing addition',
+                'sourceReview':{'reviewer':'Assistant source review; installed by administrator command',
+                    'method':'Authored bilingual question; comparison with existing formula/pair profiles and official roster',
+                    'files':{str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in [profilepath,pairpath]}}}
+        store.setdefault('customQuestions',{})[qid]=record
+        catalog[qid]=dict(q,_planAlreadyReviewed=True)
+        reviewed.append(qid)
+    return reviewed
+
+
 def mirror_references(q, fields, catalog, store):
     targets=[catalog.get(q['questionId'],{})]
     for section in ['questions','customQuestions']:
@@ -234,11 +286,13 @@ def run(root, data, backup):
     # Drafts remain outside the published corpus and retain their own IDs.
     reserved = {q['questionId'] for e in all_raw if e not in raw for q in e['questions'] if q.get('questionId')}
     catalog = planner.load_catalog(root,data)
+    additions=prepare_reviewed_replacements(root,store,catalog)
+    if additions:print('Preguntas nuevas bilingües revisadas contra sus perfiles fuente: '+', '.join(additions),flush=True)
     recovered=recover_source_metadata(raw,root,data,catalog,store)
     notes=add_original_review_links(raw,catalog,store)
     routepath=root/'blocks/myprogress/herbology-exam-source-note.php'
     template=Path(__file__).with_name('herbology-exam-source-note.php')
-    if notes:
+    if notes or additions:
         if not template.is_file():raise RuntimeError('Falta el archivo de la ficha de consulta; no se cambió ningún examen.')
         originals[routepath]=routepath.read_bytes() if routepath.exists() else None
         print('Fichas de referencia y explicación guardada preparadas:',len(notes),flush=True)
@@ -289,7 +343,7 @@ def run(root, data, backup):
     swaps = redistribute(plans)
     now = DT.datetime.now(DT.timezone.utc).isoformat()
     before = {e['key']:e for e in raw}; seenids=set(); seenitems=set(); changes=[]
-    if notes:changes.append((routepath,template.read_bytes()))
+    if notes or additions:changes.append((routepath,template.read_bytes()))
     finalexams=[]
     for p in plans:
         qs=p['items']; key=p['key']; old=before[key]
@@ -364,6 +418,7 @@ def run(root, data, backup):
     report['incomplete_questions_replaced']=invalid
     report['original_review_notes_created']=notes
     report['complete_duplicate_questions_replaced']=duplicate_ids
+    report['new_source_reviewed_questions']=additions
     sharedstems=C.defaultdict(list)
     for exam in finalexams:
         for q in exam['questions']:sharedstems[audit.norm(q.get('prompt'))].append({'exam':exam['name'],'id':q['questionId']})
