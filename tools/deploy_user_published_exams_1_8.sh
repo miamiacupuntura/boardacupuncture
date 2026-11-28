@@ -5,7 +5,7 @@ for tool in curl python3 php mktemp; do
 done
 WORK_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$WORK_DIR"' EXIT
-BASE='https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture/204bf9ad0e728208db38bdf39c7420cc85aa24f6/tools'
+BASE='https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture/dbc45591f3dcfbd4fc5d2db397a57035f7d3354b/tools'
 for file in balance_user_published_1_8.py audit_exam_diversity.py plan_exam_versions.py rebalance_published_exams.py herbology-exam-one-snapshot.php herbology-exam-source-note.php published-exam-admin-view.php published-exam-admin.php test_published_exam_counts.php; do
     curl -fsSL "$BASE/$file" -o "$WORK_DIR/$file"
 done
@@ -15,4 +15,4 @@ for file in published-exam-admin-view.php published-exam-admin.php herbology-exa
 done
 php "$WORK_DIR/test_published_exam_counts.php" "$WORK_DIR/published-exam-admin-view.php"
 python3 -m py_compile "$WORK_DIR/balance_user_published_1_8.py"
-python3 "$WORK_DIR/balance_user_published_1_8.py" "$@"
+python3 "$WORK_DIR/balance_user_published_1_8.py" --apply-available "$@"
