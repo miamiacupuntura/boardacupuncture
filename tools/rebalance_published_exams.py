@@ -14,6 +14,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from urllib.parse import urlencode
 import audit_exam_diversity as audit
 import plan_exam_versions as planner
 
@@ -47,6 +48,43 @@ def student_ready(q):
     return not student_issues(q)
 
 
+def question_identity(q):
+    return (audit.norm(q.get('prompt')),tuple((o['label'],audit.norm(o['text'])) for o in audit.options(q)),q.get('correctLabel'))
+
+
+def mirror_references(q, fields, catalog, store):
+    targets=[catalog.get(q['questionId'],{})]
+    for section in ['questions','customQuestions']:
+        record=store.get(section,{}).get(q['questionId'],{})
+        snapshot=record.get('approved') or (record.get('draft') if record.get('status')=='approved' else None)
+        if isinstance(snapshot,dict):targets.append(snapshot)
+    for target in targets:
+        if question_identity(target)!=question_identity(q):continue
+        for field in fields:
+            group,name=field.split('.')
+            if not isinstance(target.get(group),dict):target[group]={}
+            if not audit.usable(target[group].get(name)):target[group][name]=q[group][name]
+
+
+def add_original_review_links(exams, catalog, store):
+    notes=[]
+    for exam in exams:
+        for q in exam['questions']:
+            issues=set(student_issues(q))
+            if not issues or issues-{'sourceCard.url','sourceCard.urlEs'}:continue
+            if not isinstance(q.get('sourceCard'),dict):q['sourceCard']={}
+            card=q['sourceCard']
+            for name,lang in [('url','en'),('urlEs','es')]:
+                if not audit.usable(card.get(name)):
+                    card[name]='/blocks/myprogress/herbology-exam-source-note.php?'+urlencode({'question':q['questionId'],'lang':lang})
+            for name,text in [('label','Original reference and saved explanation'),('labelEs','Referencia original y explicación guardada'),
+                              ('referenceType','published_question_review')]:
+                if not audit.usable(card.get(name)):card[name]=text
+            mirror_references(q,['sourceCard.'+name for name in ['url','urlEs','label','labelEs','referenceType']],catalog,store)
+            notes.append({'id':q['questionId'],'exam':exam['name'],'type':'original_citation_and_saved_explanation'})
+    return notes
+
+
 def recover_source_metadata(exams, root, data, catalog, store):
     """Fill missing references only from the same ID and same question content.
 
@@ -61,15 +99,13 @@ def recover_source_metadata(exams, root, data, catalog, store):
         for questions in audit.read_json(path,optional=True).get('domains',{}).values():
             for q in questions:
                 if isinstance(q,dict) and q.get('questionId'):byid[q['questionId']].append(q)
-    def identity(q):
-        return (audit.norm(q.get('prompt')),tuple((o['label'],audit.norm(o['text'])) for o in audit.options(q)),q.get('correctLabel'))
     recovered=[]
     for exam in exams:
         for q in exam['questions']:
             if student_ready(q):continue
             fields=[]
             for candidate in byid.get(q.get('questionId'),[]):
-                if identity(candidate)!=identity(q):continue
+                if question_identity(candidate)!=question_identity(q):continue
                 for group,names in [('source',['title','locator']),('sourceCard',['url','urlEs'])]:
                     source=candidate.get(group) if isinstance(candidate.get(group),dict) else {}
                     if not isinstance(q.get(group),dict):q[group]={}
@@ -78,20 +114,7 @@ def recover_source_metadata(exams, root, data, catalog, store):
                             q[group][name]=source[name];fields.append(group+'.'+name)
             if fields:
                 recovered.append({'id':q['questionId'],'exam':exam['name'],'fields':fields})
-                # Exam 1 overlays approved revisions on the source bank. Keep
-                # the same verified reference repair in that identical revision
-                # so its missing metadata cannot overwrite the repaired bank.
-                targets=[catalog.get(q['questionId'],{})]
-                for section in ['questions','customQuestions']:
-                    record=store.get(section,{}).get(q['questionId'],{})
-                    snapshot=record.get('approved') or (record.get('draft') if record.get('status')=='approved' else None)
-                    if isinstance(snapshot,dict):targets.append(snapshot)
-                for target in targets:
-                    if identity(target)!=identity(q):continue
-                    for field in fields:
-                        group,name=field.split('.')
-                        if not isinstance(target.get(group),dict):target[group]={}
-                        if not audit.usable(target[group].get(name)):target[group][name]=q[group][name]
+                mirror_references(q,fields,catalog,store)
     return recovered
 
 
@@ -160,11 +183,12 @@ def set_exam_one(doc, questions):
 
 
 def write_atomic(path, content):
-    st = path.stat()
+    exists=path.exists()
+    st = path.stat() if exists else path.parent.stat()
     fd, temp = tempfile.mkstemp(prefix='.rebalance-', dir=path.parent)
     try:
         with os.fdopen(fd, 'wb') as out:out.write(content);out.flush();os.fsync(out.fileno())
-        os.chmod(temp, st.st_mode & 0o777)
+        os.chmod(temp, (st.st_mode & 0o777) if exists else 0o644)
         os.chown(temp, st.st_uid, st.st_gid)
         os.replace(temp,path)
     finally:
@@ -185,6 +209,13 @@ def run(root, data, backup):
     reserved = {q['questionId'] for e in all_raw if e not in raw for q in e['questions'] if q.get('questionId')}
     catalog = planner.load_catalog(root,data)
     recovered=recover_source_metadata(raw,root,data,catalog,store)
+    notes=add_original_review_links(raw,catalog,store)
+    routepath=root/'blocks/myprogress/herbology-exam-source-note.php'
+    template=Path(__file__).with_name('herbology-exam-source-note.php')
+    if notes:
+        if not template.is_file():raise RuntimeError('Falta el archivo de la ficha de consulta; no se cambió ningún examen.')
+        originals[routepath]=routepath.read_bytes() if routepath.exists() else None
+        print('Fichas de referencia y explicación guardada preparadas:',len(notes),flush=True)
     invalid={q['questionId']:student_issues(q) for e in raw for q in e['questions'] if not student_ready(q)}
     if recovered:print('Referencias recuperadas de la misma pregunta:',len(recovered),flush=True)
     if invalid:print('Preguntas incompletas a sustituir antes de repartir temas: '+', '.join(sorted(invalid)),flush=True)
@@ -227,6 +258,7 @@ def run(root, data, backup):
     swaps = redistribute(plans)
     now = DT.datetime.now(DT.timezone.utc).isoformat()
     before = {e['key']:e for e in raw}; seenids=set(); seenstems=set(); changes=[]
+    if notes:changes.append((routepath,template.read_bytes()))
     finalexams=[]
     for p in plans:
         qs=p['items']; key=p['key']; old=before[key]
@@ -298,22 +330,25 @@ def run(root, data, backup):
     report['hierarchy_questions_pending']=pending
     report['source_references_recovered']=recovered
     report['incomplete_questions_replaced']=invalid
+    report['original_review_notes_created']=notes
     if pending:
         document=document.replace('<h2>Resumen ejecutivo basado en los datos</h2>',
             '<p class="note">Se aplicó el reparto de temas con preguntas existentes. Sigue pendiente incorporar '+str(pending)+
             ' preguntas de jerarquía aprobadas y bilingües para llegar a cinco por examen. No se declara cumplida esa meta.</p><h2>Resumen ejecutivo basado en los datos</h2>')
     backup.mkdir(parents=True,exist_ok=False)
-    for i,(path,content) in enumerate(originals.items()):(backup/(str(i)+'-'+path.name)).write_bytes(content)
-    (backup/'restauracion.json').write_text(json.dumps([{'path':str(p),'backup':str(backup/(str(i)+'-'+p.name))} for i,p in enumerate(originals)],indent=2))
+    for i,(path,content) in enumerate(originals.items()):
+        if content is not None:(backup/(str(i)+'-'+path.name)).write_bytes(content)
+    (backup/'restauracion.json').write_text(json.dumps([{'path':str(p),'backup':str(backup/(str(i)+'-'+p.name)) if content is not None else None} for i,(p,content) in enumerate(originals.items())],indent=2))
     store['updatedAt']=now
     changes.append((storepath,store))
     # Under the site's existing revision-store lock, refuse concurrent changes.
     for path,content in originals.items():
-        if path.read_bytes()!=content:raise RuntimeError('Cambió un archivo durante el cálculo: '+str(path))
+        current=path.read_bytes() if path.exists() else None
+        if current!=content:raise RuntimeError('Cambió un archivo durante el cálculo: '+str(path))
     installed=[]
     try:
         for path,doc in changes:
-            payload=(json.dumps(doc,ensure_ascii=False,indent=2)+'\n').encode()
+            payload=doc if isinstance(doc,bytes) else (json.dumps(doc,ensure_ascii=False,indent=2)+'\n').encode()
             write_atomic(path,payload);installed.append(path)
         actual,_=audit.load_exams(root,data)
         actualmap={e['key']:e for e in actual}
@@ -324,7 +359,9 @@ def run(root, data, backup):
         (backup/'auditoria-final.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
         (backup/'intercambios-tematicos.json').write_text(json.dumps(swaps,ensure_ascii=False,indent=2))
     except BaseException:
-        for path in reversed(installed):write_atomic(path,originals[path])
+        for path in reversed(installed):
+            if originals[path] is None:path.unlink(missing_ok=True)
+            else:write_atomic(path,originals[path])
         raise
     for e in finalstats:print(f"{e['name']}: {e['registered_questions']} preguntas; jerarquía {e['hierarchy_count']}; español incompleto {e['missing_spanish']}.",flush=True)
     print('DOMINIOS: 28 / 24 / 18 / 15 / 10 / 5. IDs compartidos: 0.')
