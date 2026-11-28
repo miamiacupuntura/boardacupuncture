@@ -24,6 +24,10 @@ def exam_number(key,record):
     match=re.search(r'(?:simulation[_ -]exam[_ -]|\b(?:exam|esam)\s*)(\d+)\b',key+' '+str(record.get('name','')),re.I)
     return int(match[1]) if match else None
 
+def clinical_hash(q):
+    fields=['questionId','domainId','contentType','prompt','options','correctLabel','explanation','translations']
+    return hashlib.sha256(json.dumps({k:q.get(k) for k in fields},sort_keys=True,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
+
 def collect(root,data,store):
     catalog=p.load_catalog(root,data)
     records=dict(store.get('questions',{}));records.update(store.get('customQuestions',{}))
@@ -42,6 +46,17 @@ def collect(root,data,store):
             if automated and not human_approval(record,actors):continue
             pool[qid]=copy.deepcopy(q);origins[qid]={'kind':'published_exam','exam':n,'version':exam.get('version')}
             members[n].add(qid)
+    for key,project in store.get('examProjects',{}).items():
+        n=exam_number(key,project)
+        if n not in range(1,10):continue
+        evidence=project.get('sourcePublicationEvidence',{})
+        for q in project.get('approvedSourceSnapshots',[]):
+            qid=q.get('questionId');proof=evidence.get(qid,{})
+            if not qid or qid in protected or (records.get(qid,{}) or {}).get('status') in EXCLUDED:continue
+            if qid.startswith('BAL-') and not human_approval(records.get(qid,{}),actors):continue
+            authenticated=(proof.get('kind')=='published_exam' and int(proof.get('exam') or 0) in range(1,9)) or (proof.get('kind')=='human_approved' and int(proof.get('actor') or 0) in actors)
+            if not authenticated or (proof.get('content_hash') and proof['content_hash']!=clinical_hash(q)):continue
+            if qid not in pool:pool[qid]=copy.deepcopy(q);origins[qid]=copy.deepcopy(proof)
     for qid,record in records.items():
         if qid in protected or not human_approval(record,actors):continue
         approved=record.get('approved') or record.get('draft')
@@ -76,6 +91,7 @@ def collect(root,data,store):
         es=a.spanish(q)
         if es.get('correctLabel') and es['correctLabel']!=q.get('correctLabel'):
             rejected[qid]=['Spanish answer key differs from the published English key'];valid.pop(qid)
+    for qid,q in valid.items():origins[qid]['content_hash']=clinical_hash(q)
     return valid,origins,members,{'conflicting_answer_keys':conflicts,'rejected':rejected,'duplicate_copies':duplicates,'links_recovered':recovered,'review_notes':notes,'publisher_ids':sorted(actors)}
 
 def allocate(pool,members,numbers):
@@ -91,11 +107,24 @@ def allocate(pool,members,numbers):
     def add(n,q):
         qid=q['questionId'];m=meta[qid];plans[n].append(copy.deepcopy(q));used.add(qid)
         stems[n].add(a.norm(q.get('prompt')));domains[n][q['domainId']]+=1;roles[n][m['role']]+=m['h'];topics[n][m['topic']]+=1;concepts[n][m['concept']]+=1
-    for target in range(5):
+    for target in range(3):
         for n in numbers:
             choices=[q for qid,q in pool.items() if qid not in used and meta[qid]['h'] and (n!=1 or meta[qid]['es']) and a.norm(q.get('prompt')) not in stems[n] and domains[n][q['domainId']]<a.DOMAINS[q['domainId']][1]]
             if choices:add(n,min(choices,key=lambda q:rank(n,q)))
     for d,(_,quota) in a.DOMAINS.items():
+        needed=sum(quota-domains[n][d] for n in numbers)
+        ordinary=sum(qid not in used and q['domainId']==d and not meta[qid]['h'] for qid,q in pool.items())
+        extra=max(0,needed-ordinary)
+        # Three is the minimum/reference, not a reason to discard approved
+        # hierarchy items when they are the only way to complete a domain.
+        while extra:
+            added=False
+            for n in numbers:
+                if not extra:break
+                if domains[n][d]>=quota:continue
+                choices=[q for qid,q in pool.items() if qid not in used and q['domainId']==d and meta[qid]['h'] and (n!=1 or meta[qid]['es']) and a.norm(q.get('prompt')) not in stems[n]]
+                if choices:add(n,min(choices,key=lambda q:rank(n,q)));extra-=1;added=True
+            if not added:break
         for n in numbers:
             while domains[n][d]<quota:
                 choices=[q for qid,q in pool.items() if qid not in used and q['domainId']==d and not meta[qid]['h'] and (n!=1 or meta[qid]['es']) and a.norm(q.get('prompt')) not in stems[n]]
@@ -187,11 +216,14 @@ def transact(updates,backup,verify=None,artifacts=None):
     for i,(path,data) in enumerate(originals.items()):
         if data is not None:(backup/(str(i)+'-'+path.name)).write_bytes(data)
     (backup/'restore.json').write_text(json.dumps([{'path':str(p),'backup':str(backup/(str(i)+'-'+p.name)) if data is not None else None} for i,(p,data) in enumerate(originals.items())],indent=2))
+    if (artifacts or {}).get('VERSION_ORIGINAL.json') is not None:
+        (backup/'VERSION_ORIGINAL.json').write_bytes(artifacts['VERSION_ORIGINAL.json'])
     installed=[]
     try:
         for path,data in updates.items():r.write_atomic(path,data);installed.append(path)
         if verify:verify()
-        for name,payload in (artifacts or {}).items():(backup/name).write_bytes(payload)
+        for name,payload in (artifacts or {}).items():
+            if name!='VERSION_ORIGINAL.json':(backup/name).write_bytes(payload)
     except BaseException:
         for path in reversed(installed):
             if originals[path] is None:path.unlink(missing_ok=True)
@@ -199,10 +231,11 @@ def transact(updates,backup,verify=None,artifacts=None):
         raise
 
 
-def run(root,data,out):
+def run(root,data,out,apply_available=False):
     print('Preparando 1–8 sólo con publicaciones del administrador; sin crear ni aprobar preguntas nuevas.',flush=True)
     storepath=data/'board-domain-banks/herbology-question-overrides.json';store=a.read_json(storepath)
     sourcehash=hashlib.sha256(storepath.read_bytes()).hexdigest()
+    original_store=copy.deepcopy(store)
     pool,origins,members,diagnostics=collect(root,data,store)
     plans,used=allocate(pool,members,list(range(1,9)))
     language_regressions=protect_existing_spanish(plans,store)
@@ -211,10 +244,17 @@ def run(root,data,out):
     asplans=[{'name':'Exam '+str(n),'items':plans[n]} for n in range(1,9)]
     swaps=r.redistribute(asplans)
     plans={n:asplans[n-1]['items'] for n in range(1,9)};stats=metrics(plans)
-    content_complete=not language_regressions and all(s['count']==100 and s['hierarchy']==5 and not any(s['missing_domains'].values()) for s in stats.values())
+    content_complete=not language_regressions and all(s['count']==100 and s['hierarchy']>=3 and not any(s['missing_domains'].values()) for s in stats.values())
+    structurally_ready={n:s['count']==100 and not any(s['missing_domains'].values()) for n,s in stats.items()}
+    can_apply=content_complete or (apply_available and not language_regressions and all(structurally_ready[n] for n in range(1,8)))
+    publish_numbers=[n for n in range(1,9) if structurally_ready[n]] if can_apply else []
+    all_eight_published=can_apply and len(publish_numbers)==8
+    start_nine=all_eight_published and content_complete
+    if can_apply and 8 not in publish_numbers and original_store.get('publishedExams',{}).get('simulation_exam_8',{}).get('status')=='published':
+        raise RuntimeError('Exam 8 ya estaba publicado; no se cambia a un borrador incompleto.')
     remaining={qid:q for qid,q in pool.items() if qid not in used}
     nine={9:[]}
-    if content_complete:nine,_=allocate(remaining,{},[9])
+    if start_nine:nine,_=allocate(remaining,{},[9])
     # The snapshot adapter keeps Exam 1 consistent with all other publications.
     frontend_originals,frontupdates=r.stage_exam_one_frontend(root)
     updates=dict(frontupdates)
@@ -225,9 +265,9 @@ def run(root,data,out):
     adminnew=patch_admin(adminold.decode()).encode();r.lint_php(adminnew);updates[admin]=adminnew
     now=DT.datetime.now(DT.timezone.utc).isoformat();provenance={qid:origins[qid] for qid in used}
     changed=[]
-    if content_complete:
+    if can_apply:
         allids=set();signatures=set()
-        for n in range(1,9):
+        for n in publish_numbers:
             qs=plans[n];qs.sort(key=lambda q:(list(a.DOMAINS).index(q['domainId']),q['questionId']))
             clean=[]
             for pos,q in enumerate(qs,1):
@@ -242,7 +282,7 @@ def run(root,data,out):
             store['publishedExams'][key]=dict(old,id=key,name='Exam '+str(n),examNumber=n,status='published',version=version,
                 targetCount=100,questions=clean,domainCounts=stats[n]['domains'],publishedAt=now,
                 publishedByName='Redistribution of administrator-published sources',projectId=projectid,
-                diversityPolicy={'hierarchyTargetPer100':5,'hierarchyActual':stats[n]['hierarchy'],'hierarchyPending':max(0,5-stats[n]['hierarchy']),
+                diversityPolicy={'hierarchyTargetPer100':3,'hierarchyActual':stats[n]['hierarchy'],'hierarchyPending':max(0,3-stats[n]['hierarchy']),
                     'sources':'administrator publications only','noNewQuestions':True})
             if projectid:
                 project=store.setdefault('examProjects',{}).setdefault(projectid,{})
@@ -255,58 +295,71 @@ def run(root,data,out):
             if n==1:
                 for path in [root/'blocks/menu/herbology-domain-candidates.json',root/'blocks/menu/herbology-domain-bank.json',data/'board-domain-banks/herbology-domain-bank.json']:
                     if path.is_file():updates[path]=(json.dumps(r.set_exam_one(a.read_json(path),clean),ensure_ascii=False,indent=2)+'\n').encode()
-        projectid=next((key for key,record in store.get('examProjects',{}).items() if exam_number(key,record)==9),'approved-balance-exam-9')
-        old9=store.get('examProjects',{}).get(projectid,{})
-        if old9.get('status')=='published':raise RuntimeError('Exam 9 ya está publicado; no se sobrescribe con un borrador.')
-        qs9=[{k:v for k,v in q.items() if not k.startswith('_')} for q in nine[9]]
-        store.setdefault('examProjects',{})[projectid]=dict(old9,id=projectid,name='Exam 9',status='draft',targetCount=100,
-            questionIds=[q['questionId'] for q in qs9],confirmedQuestionIds=[q['questionId'] for q in qs9],currentCount=len(qs9),missingCount=100-len(qs9),
-            approvedSourceSnapshots=qs9,sourcePublicationEvidence={q['questionId']:origins[q['questionId']] for q in qs9},createdAt=old9.get('createdAt',now),updatedAt=now)
-        store['approvedBalanceReserveIds']=[qid for qid in remaining if qid not in {q['questionId'] for q in qs9}]
+        if start_nine:
+            projectid=next((key for key,record in store.get('examProjects',{}).items() if exam_number(key,record)==9),'approved-balance-exam-9')
+            old9=store.get('examProjects',{}).get(projectid,{})
+            if old9.get('status')=='published':raise RuntimeError('Exam 9 ya está publicado; no se sobrescribe con un borrador.')
+            qs9=[{k:v for k,v in q.items() if not k.startswith('_')} for q in nine[9]]
+            store.setdefault('examProjects',{})[projectid]=dict(old9,id=projectid,name='Exam 9',status='draft',targetCount=100,
+                questionIds=[q['questionId'] for q in qs9],confirmedQuestionIds=[q['questionId'] for q in qs9],currentCount=len(qs9),missingCount=100-len(qs9),
+                approvedSourceSnapshots=qs9,sourcePublicationEvidence={q['questionId']:origins[q['questionId']] for q in qs9},createdAt=old9.get('createdAt',now),updatedAt=now)
+            store['approvedBalanceReserveIds']=[qid for qid in remaining if qid not in {q['questionId'] for q in qs9}]
+        if 8 not in publish_numbers:
+            project8id=next((key for key,record in store.get('examProjects',{}).items() if exam_number(key,record)==8),'approved-balance-exam-8')
+            prior8=store.get('examProjects',{}).get(project8id,{})
+            qs8=[{k:v for k,v in q.items() if not k.startswith('_')} for q in plans[8]]
+            store.setdefault('examProjects',{})[project8id]=dict(prior8,id=project8id,name='Exam 8',status='draft',targetCount=100,
+                questionIds=[q['questionId'] for q in qs8],confirmedQuestionIds=[q['questionId'] for q in qs8],
+                currentCount=len(qs8),missingCount=100-len(qs8),approvedSourceSnapshots=qs8,
+                sourcePublicationEvidence={q['questionId']:origins[q['questionId']] for q in qs8},updatedAt=now)
+            store['approvedBalanceReserveIds']=list(remaining)
         store['updatedAt']=now;updates[storepath]=(json.dumps(store,ensure_ascii=False,indent=2)+'\n').encode()
-    report={'created_at':now,'status':('published_1_8_exam9_draft' if all(x['hierarchy']==5 for x in stats.values()) else 'published_1_8_hierarchy_pending_exam9_draft') if content_complete else 'blocked_by_source_shortage_existing_exams_preserved',
+    report={'created_at':now,'status':('applied_all_8' if all_eight_published else 'applied_1_7_exam8_draft') if can_apply else 'blocked_existing_exams_preserved',
+        'hierarchy_target_per_exam':3,'published_exams_updated':publish_numbers,
         'eligible_published_questions':len(pool),'pool_domains':dict(C.Counter(q['domainId'] for q in pool.values())),
         'available_hierarchy':sum(a.hierarchy(q) for q in pool.values()),'exams':stats,'exam9':metrics(nine)[9],
         'sources':provenance,'spanish_regressions_blocking_publication':language_regressions,'diagnostics':diagnostics,'topic_swaps':swaps,'new_questions_created':0}
     if hashlib.sha256(storepath.read_bytes()).hexdigest()!=sourcehash:raise RuntimeError('Cambió el banco durante la preparación; vuelva a ejecutar.')
     if admin.read_bytes()!=adminold:raise RuntimeError('Cambió el panel durante la preparación; no se instala una copia anterior.')
-    title='Exámenes 1–8 publicados; Exam 9 en borrador' if content_complete else 'Plan pendiente; las versiones publicadas se conservaron'
+    title=(('Exámenes 1–8 publicados; Exam 9 en borrador' if start_nine else 'Exámenes 1–8 disponibles; meta de jerarquía pendiente') if all_eight_published else 'Reparto aplicado a 1–7; Exam 8 en borrador') if can_apply else 'Plan pendiente; las versiones publicadas se conservaron'
     rows=[[f'Exam {n}',s['count'],s['hierarchy'],s['spanish_incomplete'],' / '.join(str(s['domains'].get(d,0)) for d in a.DOMAINS)] for n,s in stats.items()]
     document='<meta charset="utf-8"><title>'+html.escape(title)+'</title><main style="font:16px/1.5 system-ui;max-width:1100px;margin:25px auto"><h1>'+html.escape(title)+'</h1>'
     document+='<p>Solo publicaciones del administrador; cero preguntas nuevas o aprobaciones automáticas.</p>'
-    document+='<h2>'+('Resultado aplicado' if content_complete else 'Propuesta NO publicada')+'</h2>'+a.table(['Examen','Preguntas / 100','Jerarquía / 5','Español incompleto','Dominios 28/24/18/15/10/5'],rows)
-    if not content_complete:
+    document+='<h2>'+('Resultado aplicado; exámenes incompletos en borrador' if can_apply else 'Propuesta NO publicada')+'</h2>'+a.table(['Examen','Preguntas / 100','Jerarquía / 3','Español incompleto','Dominios 28/24/18/15/10/5'],rows)
+    if not all_eight_published:
         actual=[]
         for n in range(1,9):
             published=store.get('publishedExams',{}).get('simulation_exam_'+str(n))
             actual.append([f'Exam {n}',len(published.get('questions',[])) if published else 'No publicado',published.get('version','') if published else ''])
         document+='<h2>Estado publicado que permanece disponible</h2>'+a.table(['Examen','Preguntas','Versión'],actual)
     document+='<h2>Fuentes utilizables</h2>'+a.table(['Dominio','Preguntas publicadas disponibles'],[[d,num] for d,num in report['pool_domains'].items()])
-    document+='<p>Jerarquía disponible: '+str(report['available_hierarchy'])+'; objetivo para los ocho exámenes: 40.</p></main>'
+    document+='<p>Jerarquía disponible: '+str(report['available_hierarchy'])+'; objetivo para los ocho exámenes: 24.</p></main>'
     lines=['Solo preguntas publicadas por el administrador; no se creó ni aprobó ninguna pregunta nueva.']
-    if not content_complete:lines.append('NO SE PUBLICÓ EL NUEVO LOTE. Los exámenes actuales se conservaron; se guardó el plan y se corrigió la lectura del constructor.')
+    if not can_apply:lines.append('NO SE PUBLICÓ EL NUEVO LOTE. Los exámenes actuales se conservaron; se guardó el plan y se corrigió la lectura del constructor.')
     for n,s in stats.items():
-        lines.append(f"{'PUBLICADO' if content_complete else 'PROPUESTA'} Exam {n}: {s['count']}/100; jerarquía {s['hierarchy']}/5; español incompleto {s['spanish_incomplete']}.")
-        if s['hierarchy']<5:lines.append(f"  FALTAN {5-s['hierarchy']} preguntas de jerarquía ya publicadas.")
+        lines.append(f"{'PUBLICADO' if n in publish_numbers else ('BORRADOR' if can_apply and n==8 else 'PROPUESTA')} Exam {n}: {s['count']}/100; jerarquía {s['hierarchy']}/3; español incompleto {s['spanish_incomplete']}.")
+        if s['hierarchy']<3:lines.append(f"  FALTAN {3-s['hierarchy']} preguntas de jerarquía ya publicadas.")
         for d,num in s['missing_domains'].items():
             if num:lines.append(f'  FALTAN {num} preguntas publicadas de {d}.')
-    if content_complete:lines.append(f"Exam 9: borrador con {len(nine[9])}/100 preguntas sobrantes, sin IDs compartidos con 1–8.")
+    if start_nine:lines.append(f"Exam 9: borrador con {len(nine[9])}/100 preguntas sobrantes, sin IDs compartidos con 1–8.")
     else:lines.append('Exam 9 no se inició: primero deben completarse los ocho conjuntos.')
     for n,num in language_regressions.items():lines.append(f'FALTAN {num} traducciones ya publicadas para no empeorar el español de Exam {n}.')
-    lines.append('Jerarquía pendiente para llegar a cinco por examen: '+str(sum(max(0,5-s['hierarchy']) for s in stats.values())))
-    lines.extend(['INFORME: '+str(out/'informe.html'),'DETALLE: '+str(out/'resultado.json'),'PLAN REVISABLE: '+str(out/'versiones-propuestas.json'),'RESPALDO: '+str(out)])
+    lines.append('Jerarquía pendiente para llegar a tres por examen: '+str(sum(max(0,3-s['hierarchy']) for s in stats.values())))
+    lines.extend(['INFORME: '+str(out/'informe.html'),'DETALLE: '+str(out/'resultado.json'),'PLAN REVISABLE: '+str(out/'versiones-propuestas.json'),'VERSIÓN ORIGINAL: '+str(out/'VERSION_ORIGINAL.json'),'RESPALDO: '+str(out)])
     def verify():
-        if not content_complete:return
+        if not can_apply:return
         saved=a.read_json(storepath);seen=set()
-        for n in range(1,9):
+        for n in publish_numbers:
             qs=saved['publishedExams']['simulation_exam_'+str(n)]['questions']
-            if len(qs)!=100 or sum(a.hierarchy(q) for q in qs)!=5:raise RuntimeError('Falló la comprobación de la publicación de Exam '+str(n))
+            if len(qs)!=100 or (not apply_available and sum(a.hierarchy(q) for q in qs)<3):raise RuntimeError('Falló la comprobación de la publicación de Exam '+str(n))
             for q in qs:
                 if q['questionId'] not in origins or q['questionId'] in seen:raise RuntimeError('ID ajeno o repetido después de guardar.')
                 seen.add(q['questionId'])
-        for q in saved['examProjects'][projectid]['approvedSourceSnapshots']:
-            if q['questionId'] in seen:raise RuntimeError('Exam 9 comparte una pregunta con 1–8.')
-    artifacts={'resultado.json':json.dumps(report,ensure_ascii=False,indent=2).encode(),
+        draftid=projectid if start_nine else (project8id if 8 not in publish_numbers else None)
+        if draftid:
+            for q in saved['examProjects'][draftid]['approvedSourceSnapshots']:
+                if q['questionId'] in seen:raise RuntimeError('El borrador comparte una pregunta con los exámenes publicados.')
+    artifacts={'VERSION_ORIGINAL.json':json.dumps({'saved_at':now,'original_revision_store':original_store},ensure_ascii=False,indent=2).encode(),'resultado.json':json.dumps(report,ensure_ascii=False,indent=2).encode(),
         'versiones-propuestas.json':json.dumps({str(n):qs for n,qs in plans.items()},ensure_ascii=False,indent=2).encode(),
         'informe.html':document.encode(),'RESUMEN.txt':('\n'.join(lines)+'\n').encode()}
     for path,expected in frontend_originals.items():
@@ -317,7 +370,7 @@ def run(root,data,out):
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--moodle-root',type=Path,default=Path('/var/www/html/moodle'))
     parser.add_argument('--data-root',type=Path,default=Path('/mnt/volume_nyc1_01/moodledata'))
-    parser.add_argument('--backup-root',type=Path,default=Path('/var/backups/acupuncturetests'));args=parser.parse_args()
+    parser.add_argument('--backup-root',type=Path,default=Path('/var/backups/acupuncturetests'));parser.add_argument('--apply-available',action='store_true');args=parser.parse_args()
     with (args.data_root/'board-domain-banks/herbology-question-overrides.json.lock').open('a+') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
-        run(args.moodle_root,args.data_root,args.backup_root/('approved-exams-1-8-'+DT.datetime.now(DT.timezone.utc).strftime('%Y%m%d-%H%M%S-%f')))
+        run(args.moodle_root,args.data_root,args.backup_root/('approved-exams-1-8-'+DT.datetime.now(DT.timezone.utc).strftime('%Y%m%d-%H%M%S-%f')),args.apply_available)
