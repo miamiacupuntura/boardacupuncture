@@ -12,6 +12,7 @@
             const es = config.lang === 'es';
             const t = (a, b) => es ? a : b;
             const topicName = key => config.topics[key]?.[es ? 0 : 1] || key;
+            const modeName = mode => ({linear: t('Lineal', 'Linear'), adaptive: t('Adaptativo', 'Adaptive'), officialadaptive: t('Blueprint NCBAHM', 'NCBAHM blueprint')})[mode] || mode;
             const el = (tag, text, cls) => { const node = document.createElement(tag); if (text !== undefined) { node.textContent = String(text); } if (cls) { node.className = cls; } return node; };
             const api = async (action, values = {}) => {
                 const body = new URLSearchParams({sesskey: config.sesskey, action, ...values});
@@ -36,7 +37,7 @@
             const render = (report, history) => {
                 panel.replaceChildren(); panel.hidden = false;
                 panel.append(el('h2', t('Tu informe de aprendizaje', 'Your learning report')),
-                    el('p', `${t('Examen', 'Exam')} ${report.number} · ${t('Versión', 'Version')} ${report.version} · ${report.mode} · ${(report.lang || config.lang).toUpperCase()} · ${date(report.completed)}`));
+                    el('p', `${t('Examen', 'Exam')} ${report.number} · ${t('Versión', 'Version')} ${report.version} · ${modeName(report.mode)} · ${(report.lang || config.lang).toUpperCase()} · ${date(report.completed)}`));
                 const kpis = el('div', undefined, 'hlr-kpis'), o = report.overall;
                 [t(`Aciertos: ${o.correct}/${o.total} (${percent(o)}%)`, `Correct: ${o.correct}/${o.total} (${percent(o)}%)`),
                     t(`Errores: ${o.wrong}`, `Incorrect: ${o.wrong}`), t(`Sin responder: ${o.unanswered}`, `Unanswered: ${o.unanswered}`)].forEach(x => kpis.append(el('strong', x)));
@@ -83,7 +84,7 @@
                     if (coords.length > 1) { shape('polyline', {points: coords.map(p => p.join(',')).join(' '), fill: 'none', stroke: '#007d76', 'stroke-width': 3}); }
                     coords.forEach(([x, y], i) => { const dot = shape('circle', {cx: x, cy: y, r: 5, fill: '#007d76'}); const title = document.createElementNS(ns, 'title'); title.textContent = `${date(points[i].completed)}: ${percent(points[i].metric)}% (${points[i].metric.correct}/${points[i].metric.total})`; dot.append(title); });
                     shape('text', {x: 230, y: 220, fill: '#52677a', 'font-size': 12}, t('Intentos en orden cronológico', 'Attempts in chronological order'));
-                    chart.append(svg, table([t('Fecha', 'Date'), t('Examen / versión', 'Exam / version'), t('Aciertos', 'Correct'), '%'], points.map(p => [date(p.completed), `${p.number} / ${p.version} · ${p.mode}`, `${p.metric.correct}/${p.metric.total}`, percent(p.metric)])));
+                    chart.append(svg, table([t('Fecha', 'Date'), t('Examen / versión', 'Exam / version'), t('Aciertos', 'Correct'), '%'], points.map(p => [date(p.completed), `${p.number} / ${p.version} · ${modeName(p.mode)}`, `${p.metric.correct}/${p.metric.total}`, percent(p.metric)])));
                 }; select.addEventListener('change', draw); scope.addEventListener('change', draw); draw();
                 panel.append(el('p', t('El seguimiento por tema comienza con esta actualización. Los intentos anteriores conservan su nota global, pero no se inventan detalles que no se guardaron.', 'Topic tracking starts with this update. Older attempts retain their overall score; unavailable detail is not reconstructed.'), 'hlr-note'));
                 panel.append(el('h3', t('Revisión pregunta por pregunta', 'Question-by-question review')));
@@ -114,7 +115,7 @@
                 let ready = Promise.resolve(config.token), generation = 0, visible = !result.hidden;
                 const finish = () => {
                     const seq = generation;
-                    const answers = nodes.map((node, i) => ({id: config.items[i].id, answer: node.querySelector('input[type="radio"]:checked')?.value || '', position: adaptive ? (positions.get(node) ?? null) : i + 1}));
+                    const answers = nodes.map((node, i) => ({id: config.items[i].id, answer: node.querySelector('input[type="radio"]:checked')?.value || '', position: adaptive ? (positions.get(node) ?? null) : Number(node.dataset?.displayNumber || i + 1)}));
                     panel.hidden = false; panel.replaceChildren(el('p', t('Preparando y guardando tu informe detallado…', 'Preparing and saving your detailed report…')));
                     const pending = ready;
                     const send = async () => {
