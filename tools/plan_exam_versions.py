@@ -21,6 +21,7 @@ def load_catalog(root, data):
             for q in questions:
                 if isinstance(q, dict) and q.get('questionId'):
                     catalog[q['questionId']] = dict(q, domainId=q.get('domainId') or domain)
+    for q in audit.runtime_questions(root):catalog.setdefault(q['questionId'],q)
     store = audit.read_json(data/'board-domain-banks/herbology-question-overrides.json')
     records = dict(store.get('questions', {}))
     records.update(store.get('customQuestions', {}))
@@ -144,7 +145,7 @@ def make_plan(raw, normalized, stats, catalog):
     # Pool includes retired cohort questions and unused bank material.
     for qid in removed:
         if qid in raw_by_id and not catalog.get(qid,{}).get('_planExcluded'):catalog[qid]=raw_by_id[qid]
-    pool=[q for qid,q in catalog.items() if qid and meta(q)['eligible']]
+    pool=[q for qid,q in catalog.items() if qid and meta(q)['eligible'] and meta(q)['spanish_complete']]
     def rank(p,q):
         info=meta(q);concepts=C.Counter(meta(x)['concept'] for x in p['items']);topics=C.Counter(meta(x)['topic'] for x in p['items']);keys=C.Counter(meta(x)['key'] for x in p['items']);roles=C.Counter(meta(x)['role'] for x in p['items'] if meta(x)['hierarchy'])
         return (not info['reviewed'],not info['spanish_complete'],concepts[info['concept']],
@@ -171,7 +172,7 @@ def make_plan(raw, normalized, stats, catalog):
             if sum(meta(x)['domain']==domain for x in p['items'])>=target:
                 out=max([x for x in p['items'] if meta(x)['domain']==domain and not meta(x)['hierarchy']],key=lambda x:removal_rank(p,x))
                 remove(p,out,'Sustitución por jerarquía dentro del mismo dominio, conservando su cuota')
-                if out['questionId'] not in {x['questionId'] for x in pool}:pool.append(out)
+                if meta(out)['spanish_complete'] and out['questionId'] not in {x['questionId'] for x in pool}:pool.append(out)
             add(p,q,'Completar cinco preguntas de jerarquía con diversidad de roles y respuestas')
     # Complete all remaining slots with other topics in their own domains.
     for p in plans:
@@ -192,6 +193,8 @@ def make_plan(raw, normalized, stats, catalog):
             if exam_number:q['examTemplate']['examNumber']=int(exam_number[1])
         p['after']={'count':len(p['items']),'domains':dict(C.Counter(meta(q)['domain'] for q in p['items'])),'hierarchy':sum(meta(q)['hierarchy'] for q in p['items']),
                     'topics':dict(C.Counter(meta(q)['topic'] for q in p['items'])),'spanish_incomplete':sum(not meta(q)['spanish_complete'] for q in p['items'])}
+        if p['after']['spanish_incomplete']>p['before']['missing_spanish']:
+            raise RuntimeError('La propuesta empeoraría las traducciones de '+p['name']+'; no se generará como plan aceptable.')
         p['retained_ids']=[q['questionId'] for q in p['items'] if q['questionId'] in old_ids]
         reasons=C.defaultdict(list)
         for change in p['changes']:
