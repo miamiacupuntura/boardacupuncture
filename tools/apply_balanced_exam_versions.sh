@@ -5,11 +5,12 @@ for tool in curl python3 php mktemp; do
 done
 WORK_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$WORK_DIR"' EXIT
-BASE='https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture/d95004fd708e9be530c3134a88e4c9a99ab5d1e7/tools'
-for file in audit_exam_diversity.py plan_exam_versions.py rebalance_published_exams.py herbology-exam-source-note.php; do
+BASE='https://raw.githubusercontent.com/miamiacupuntura/boardacupuncture/a2ffbd20a0e0452a21aef6e093a45afa68c1fe9c/tools'
+for file in audit_exam_diversity.py plan_exam_versions.py rebalance_published_exams.py herbology-exam-source-note.php balanced-exam-replacements.json; do
     curl -fsSL "$BASE/$file" -o "$WORK_DIR/$file"
 done
 python3 -m py_compile "$WORK_DIR/audit_exam_diversity.py" "$WORK_DIR/plan_exam_versions.py" "$WORK_DIR/rebalance_published_exams.py"
+python3 -m json.tool "$WORK_DIR/balanced-exam-replacements.json" >/dev/null
 php -l "$WORK_DIR/herbology-exam-source-note.php"
 # Exercise the new note route against isolated published/draft fixtures before
 # changing production files. Moodle's authentication/bootstrap is stubbed here.
